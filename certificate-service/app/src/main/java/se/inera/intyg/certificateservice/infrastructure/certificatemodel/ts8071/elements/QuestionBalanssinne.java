@@ -8,28 +8,28 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
-public class QuestionSjukdomshistorik {
+public class QuestionBalanssinne {
 
-  public static final ElementId QUESTION_SJUKDOMSHISTORIK_ID = new ElementId("7.2");
-  public static final FieldId QUESTION_SJUKDOMSHISTORIK_FIELD_ID = new FieldId("7.2");
+  public static final ElementId QUESTION_BALANSSINNE_ID = new ElementId("8.1");
+  public static final FieldId QUESTION_BALANSSINNE_FIELD_ID = new FieldId("8.1");
 
-  private QuestionSjukdomshistorik() {
+  private QuestionBalanssinne() {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionSjukdomshistorik(ElementSpecification... children) {
+  public static ElementSpecification questionBalanssinne(ElementSpecification... children) {
     return ElementSpecification.builder()
-        .id(QUESTION_SJUKDOMSHISTORIK_ID)
+        .id(QUESTION_BALANSSINNE_ID)
         .configuration(
             ElementConfigurationRadioBoolean.builder()
-                .id(QUESTION_SJUKDOMSHISTORIK_FIELD_ID)
+                .id(QUESTION_BALANSSINNE_FIELD_ID)
                 .description(
-                    "Exempel på sjukdomshistorik och andra omständigheter som kan påverka synfunktionerna är stroke och laserbehandling av retinopati. Det "
-                        + "kan också vara skalltrauma, hjärntumör eller prematur födsel som är av sådan grad att den kan ha påverkan på synfältet.")
+                    "Här avses överraskande anfall av balansrubbningar eller yrsel som inträffat nyligen och krävt läkarkontakt, exempelvis vid sjukdomen Morbus Menière. Balansrubbningar eller yrsel som beror på till exempel godartad lägesyrsel (kristallsjuka), lågt blodtryck eller migrän "
+                        + "behöver inte anges.")
                 .selectedText("Ja")
                 .unselectedText("Nej")
                 .name(
-                    "Finns uppgift om annan sjukdomshistorik eller andra omständigheter som kan indikera påverkan på synfunktionerna?")
+                    "Har personen överraskande anfall av balansrubbningar eller yrsel som kan innebära en trafiksäkerhetsrisk?")
                 .build()
         )
         .validations(
@@ -42,8 +42,8 @@ public class QuestionSjukdomshistorik {
         .rules(
             List.of(
                 CertificateElementRuleFactory.mandatoryExist(
-                    QUESTION_SJUKDOMSHISTORIK_ID,
-                    QUESTION_SJUKDOMSHISTORIK_FIELD_ID
+                    QUESTION_BALANSSINNE_ID,
+                    QUESTION_BALANSSINNE_FIELD_ID
                 )
             )
         )

@@ -22,6 +22,8 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategorySomnOchVakenhetsstorningar.categorySomnOchVakenhetsstorningar;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategorySynfunktion.categorySynfunktion;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategorySynskarpa.categorySynskarpa;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionBalanssinne.questionBalanssinne;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionBalanssinneBeskrivning.questionBalanssinneBeskrivning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionIdentitet.questionIdentitet;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSjukdomEllerSynnedsattning.questionSjukdomEllerSynnedsattning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSjukdomEllerSynnedsattningBeskrivning.questionSjukdomEllerSynnedsattningBeskrivning;
@@ -62,17 +64,17 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
   private static final String NAME = "Läkarintyg avseende högre körkortsbehörigheter eller taxiförarlegitimation";
   private static final String DESCRIPTION = """
       <b className="iu-fw-heading">Läkarintyg avseende högre körkortsbehörigheter eller taxiförarlegitimation</b> 1.0
-      
+            
       Transportstyrelsens läkarintyg ska användas vid förlängd giltighet av högre behörighet från 45 år, ansökan om körkortstillstånd för grupp II och III och vid ansökan om taxiförarlegitimation. Transportstyrelsens läkarintyg kan även användas när Transportstyrelsen i annat fall begärt ett allmänt läkarintyg avseende lämplighet att inneha körkort.
       """;
   private static final String DETAILED_DESCRIPTION = """
        <b className="iu-fw-heading">Läkarintyg avseende högre körkortsbehörigheter eller taxiförarlegitimation 1.0</b> 1.0
        Transportstyrelsens läkarintyg ska användas vid förlängd giltighet av högre behörighet från 45 år, ansökan om körkortstillstånd för grupp II och III och vid ansökan om taxiförarlegitimation. Transportstyrelsens läkarintyg kan även användas när Transportstyrelsen i annat fall begärt ett allmänt läkarintyg avseende lämplighet att inneha körkort.
-      
+            
        Specialistintyg finns bl.a. för alkohol, läkemedel, synfunktion, Alkolås m.m. Se www.transportstyrelsen.se.
-      
+            
        Läkaren ska uppmärksamma Transportstyrelsens föreskrifter och allmänna råd (TSFS 2010:125) om medicinska krav för innehav av körkort m.m.
-      
+            
        Intyget ska vara utfärdat tidigast 2 månader före att ansökan kom in till Transportstyrelsen och i enlighet med vad som sägs i 17 kapitlet.
       """;
   private static final String PREAMBLE_TEXT =
@@ -122,12 +124,18 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
                 ),
                 categorySynskarpa(),
                 categoryAnamnes(
-                    questionSjukdomEllerSynnedsattning(),
-                    questionSjukdomEllerSynnedsattningBeskrivning(),
-                    questionSjukdomshistorik(),
-                    questionSjukdomshistorikBeskrivning()
+                    questionSjukdomEllerSynnedsattning(
+                        questionSjukdomEllerSynnedsattningBeskrivning()
+                    ),
+                    questionSjukdomshistorik(
+                        questionSjukdomshistorikBeskrivning()
+                    )
                 ),
-                categoryBalanssinne(),
+                categoryBalanssinne(
+                    questionBalanssinne(
+                        questionBalanssinneBeskrivning()
+                    )
+                ),
                 categoryHorsel(),
                 categoryRorelseorganensFunktioner(),
                 categoryHjartOchKarlsjukdomar(),
