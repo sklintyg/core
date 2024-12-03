@@ -168,35 +168,12 @@ class CertificateModelFactoryTS8071Test {
   class CertificateSpecifications {
 
 
-    @Test
-    void shallIncludeCategoryIntygetAvser() {
+    @ParameterizedTest
+    @ValueSource(strings = {"KAT_0.0", "KAT_0.1", "KAT_0.2", "3"})
+    void shallIncludeElements(String value) {
       final var certificateModel = certificateModelFactoryTS8071.create();
 
-      final var id = new ElementId("KAT_0.0");
-      assertTrue(certificateModel.elementSpecificationExists(id),
-          "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
-              id,
-              certificateModel.elementSpecifications())
-      );
-    }
-
-    @Test
-    void shallIncludeCategoryIntygetBaseratPa() {
-      final var certificateModel = certificateModelFactoryTS8071.create();
-
-      final var id = new ElementId("KAT_0.1");
-      assertTrue(certificateModel.elementSpecificationExists(id),
-          "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
-              id,
-              certificateModel.elementSpecifications())
-      );
-    }
-
-    @Test
-    void shallIncludeCategoryIdentitet() {
-      final var certificateModel = certificateModelFactoryTS8071.create();
-
-      final var id = new ElementId("KAT_0.2");
+      final var id = new ElementId(value);
       assertTrue(certificateModel.elementSpecificationExists(id),
           "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
               id,
