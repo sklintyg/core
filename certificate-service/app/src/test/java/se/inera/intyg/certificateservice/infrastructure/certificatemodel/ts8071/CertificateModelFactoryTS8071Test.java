@@ -14,9 +14,12 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
@@ -164,6 +167,7 @@ class CertificateModelFactoryTS8071Test {
   @Nested
   class CertificateSpecifications {
 
+
     @Test
     void shallIncludeCategoryIntygetAvser() {
       final var certificateModel = certificateModelFactoryTS8071.create();
@@ -198,6 +202,18 @@ class CertificateModelFactoryTS8071Test {
               id,
               certificateModel.elementSpecifications())
       );
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"KAT_1.0", "KAT_1.1", "KAT_1.2", "KAT_2", "KAT_3", "KAT_4", "KAT_5"})
+    void shallIncludeCategories(String id) {
+      final var elementId = new ElementId(id);
+      CertificateModel certificateModel = certificateModelFactoryTS8071.create();
+
+      assertTrue(certificateModel.elementSpecificationExists(elementId),
+          "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+              elementId,
+              certificateModel.elementSpecifications()));
     }
 
   }
