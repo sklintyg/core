@@ -12,13 +12,13 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 
-class QuestionSjukdomshistorikTest {
+class QuestionBalanssinneTest {
 
-  private static final ElementId ELEMENT_ID = new ElementId("7.2");
+  private static final ElementId ELEMENT_ID = new ElementId("8.1");
 
   @Test
   void shallIncludeId() {
-    final var element = QuestionSjukdomshistorik.questionSjukdomshistorik();
+    final var element = QuestionBalanssinne.questionBalanssinne();
 
     assertEquals(ELEMENT_ID, element.id());
   }
@@ -27,16 +27,16 @@ class QuestionSjukdomshistorikTest {
   void shallIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationRadioBoolean.builder()
         .name(
-            "Finns uppgift om annan sjukdomshistorik eller andra omständigheter som kan indikera påverkan på synfunktionerna?")
+            "Har personen överraskande anfall av balansrubbningar eller yrsel som kan innebära en trafiksäkerhetsrisk?")
         .description(
-            "Exempel på sjukdomshistorik och andra omständigheter som kan påverka synfunktionerna är stroke och laserbehandling av retinopati. Det "
-                + "kan också vara skalltrauma, hjärntumör eller prematur födsel som är av sådan grad att den kan ha påverkan på synfältet.")
-        .id(new FieldId("7.2"))
+            "Här avses överraskande anfall av balansrubbningar eller yrsel som inträffat nyligen och krävt läkarkontakt, exempelvis vid sjukdomen Morbus Menière. Balansrubbningar eller yrsel som beror på till exempel godartad lägesyrsel (kristallsjuka), lågt blodtryck eller migrän "
+                + "behöver inte anges.")
+        .id(new FieldId("8.1"))
         .selectedText("Ja")
         .unselectedText("Nej")
         .build();
 
-    final var element = QuestionSjukdomshistorik.questionSjukdomshistorik();
+    final var element = QuestionBalanssinne.questionBalanssinne();
 
     assertEquals(expectedConfiguration, element.configuration());
   }
@@ -49,13 +49,13 @@ class QuestionSjukdomshistorikTest {
             .type(ElementRuleType.MANDATORY)
             .expression(
                 new RuleExpression(
-                    "exists($7.2)"
+                    "exists($8.1)"
                 )
             )
             .build()
     );
 
-    final var element = QuestionSjukdomshistorik.questionSjukdomshistorik();
+    final var element = QuestionBalanssinne.questionBalanssinne();
 
     assertEquals(expectedRule, element.rules());
   }
@@ -68,7 +68,7 @@ class QuestionSjukdomshistorikTest {
             .build()
     );
 
-    final var element = QuestionSjukdomshistorik.questionSjukdomshistorik();
+    final var element = QuestionBalanssinne.questionBalanssinne();
 
     assertEquals(expectedValidations, element.validations());
   }

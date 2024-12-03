@@ -17,14 +17,15 @@ public class QuestionSjukdomEllerSynnedsattning {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionSjukdomEllerSynnedsattning() {
+  public static ElementSpecification questionSjukdomEllerSynnedsattning(
+      ElementSpecification... children) {
     return ElementSpecification.builder()
         .id(QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_ID)
         .configuration(
             ElementConfigurationRadioBoolean.builder()
                 .id(QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_FIELD_ID)
                 .description(
-                    "Exempel på vanligt förekommande ögonsjukdomar är glaukom, retinopati och retinitis pigmentosa. Exempel på synnedsättning kan vara\n"
+                    "Exempel på vanligt förekommande ögonsjukdomar är glaukom, retinopati och retinitis pigmentosa. Exempel på synnedsättning kan vara "
                         + "dubbelseende, syn med enbart ett öga eller plötsligt nedsatt synskärpa.")
                 .selectedText("Ja")
                 .unselectedText("Nej")
@@ -46,6 +47,7 @@ public class QuestionSjukdomEllerSynnedsattning {
                 )
             )
         )
+        .children(List.of(children))
         .build();
   }
 }

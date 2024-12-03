@@ -14,13 +14,13 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpre
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 
-class QuestionSjukdomEllerSynnedsattningBeskrivningTest {
+class QuestionBalanssinneBeskrivningTest {
 
-  private static final ElementId ELEMENT_ID = new ElementId("7.1.1");
+  private static final ElementId ELEMENT_ID = new ElementId("8.1.1");
 
   @Test
   void shallIncludeId() {
-    final var element = QuestionSjukdomEllerSynnedsattningBeskrivning.questionSjukdomEllerSynnedsattningBeskrivning();
+    final var element = QuestionBalanssinneBeskrivning.questionBalanssinneBeskrivning();
 
     assertEquals(ELEMENT_ID, element.id());
   }
@@ -28,11 +28,11 @@ class QuestionSjukdomEllerSynnedsattningBeskrivningTest {
   @Test
   void shallIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationTextArea.builder()
-        .name("Ange sjukdom/synnedsättning")
-        .id(new FieldId("7.1"))
+        .name("Ange vilken typ av anfall och tidpunkt för senaste anfall")
+        .id(new FieldId("8.1"))
         .build();
 
-    final var element = QuestionSjukdomEllerSynnedsattningBeskrivning.questionSjukdomEllerSynnedsattningBeskrivning();
+    final var element = QuestionBalanssinneBeskrivning.questionBalanssinneBeskrivning();
 
     assertEquals(expectedConfiguration, element.configuration());
   }
@@ -41,14 +41,14 @@ class QuestionSjukdomEllerSynnedsattningBeskrivningTest {
   void shallIncludeRules() {
     final var expectedRules = List.of(
         ElementRuleExpression.builder()
-            .id(new ElementId("7.1"))
+            .id(new ElementId("8.1"))
             .type(ElementRuleType.SHOW)
-            .expression(new RuleExpression("$7.1"))
+            .expression(new RuleExpression("$8.1"))
             .build(),
         ElementRuleExpression.builder()
             .id(ELEMENT_ID)
             .type(ElementRuleType.MANDATORY)
-            .expression(new RuleExpression("$7.1"))
+            .expression(new RuleExpression("$8.1"))
             .build(),
         ElementRuleLimit.builder()
             .id(ELEMENT_ID)
@@ -57,7 +57,7 @@ class QuestionSjukdomEllerSynnedsattningBeskrivningTest {
             .build()
     );
 
-    final var element = QuestionSjukdomEllerSynnedsattningBeskrivning.questionSjukdomEllerSynnedsattningBeskrivning();
+    final var element = QuestionBalanssinneBeskrivning.questionBalanssinneBeskrivning();
 
     assertEquals(expectedRules, element.rules());
   }
@@ -71,7 +71,7 @@ class QuestionSjukdomEllerSynnedsattningBeskrivningTest {
             .build()
     );
 
-    final var element = QuestionSjukdomEllerSynnedsattningBeskrivning.questionSjukdomEllerSynnedsattningBeskrivning();
+    final var element = QuestionBalanssinneBeskrivning.questionBalanssinneBeskrivning();
 
     assertEquals(expectedValidations, element.validations());
   }
