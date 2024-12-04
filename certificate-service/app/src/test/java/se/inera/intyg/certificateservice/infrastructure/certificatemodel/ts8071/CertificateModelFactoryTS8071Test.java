@@ -171,7 +171,7 @@ class CertificateModelFactoryTS8071Test {
     @ValueSource(strings = {"3", "4", "7", "7.2", "7.3", "7.4", "8", "8.2", "9", "9.2",
         "9.3", "10", "10.2", "10.3", "11", "11.2", "11.3", "11.4", "11.5", "11.6", "11.7", "11.8",
         "12", "11.9", "11.10", "14", "14.2", "14.3", "14.4", "14.5", "14.6", "14.7", "14.8",
-        "14.9", "15", "15.2", "15.3",})
+        "14.9", "15", "15.2", "15.3", "16", "16.2", "16.3",})
     void shallIncludeQuestions(String value) {
       final var certificateModel = certificateModelFactoryTS8071.create();
 

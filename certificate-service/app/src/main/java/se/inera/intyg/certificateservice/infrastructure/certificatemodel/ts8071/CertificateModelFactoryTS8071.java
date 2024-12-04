@@ -26,6 +26,10 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionArytmiBeskrivning.questionArytmiBeskrivning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionBalanssinne.questionBalanssinne;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionBalanssinneBeskrivning.questionBalanssinneBeskrivning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionBaseratPa.questionBaseratPa;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionBaseratPaDatum.questionBaseratPaDatum;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionDemens.questionDemens;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionDemensBeskrivning.questionDemensBeskrivning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionDiabetes.questionDiabetes;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionEpilepsi.questionEpilepsi;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionEpilepsiAnfall.questionEpilepsiAnfall;
@@ -42,6 +46,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionHorselhjalpmedel.questionHorselhjalpmedel;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionHorselhjalpmedelPosition.questionHorselhjalpmedelPosition;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionIdentitet.questionIdentitet;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionKognitivStorning.questionKognitivStorning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMedvetandestorning.questionMedvetandestorning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMedvetandestorningTidpunkt.questionMedvetandestorningTidpunkt;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNeurologiskSjukdom.questionNeurologiskSjukdom;
@@ -145,7 +150,11 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
         .elementSpecifications(
             List.of(
                 categoryIntygetAvser(),
-                categoryIntygetBaseratPa(),
+                categoryIntygetBaseratPa( // 2 - 2.1
+                    questionBaseratPa(
+                        questionBaseratPaDatum() // 2.2 - 2.2
+                    )
+                ),
                 categoryIdentitet(
                     questionIdentitet() // 3 - 3.1
                 ),
@@ -222,7 +231,12 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
                         questionNjurtransplatationTidpunkt() // 15.3 - 15.3
                     )
                 ),
-                categoryDemensOchAndraKognitivaStorningar(),
+                categoryDemensOchAndraKognitivaStorningar(
+                    questionKognitivStorning(), // 16 - 16.1
+                    questionDemens( // 16.2 - 16.2
+                        questionDemensBeskrivning() // 16.3 - 16.3
+                    )
+                ),
                 categorySomnOchVakenhetsstorningar(),
                 categoryAlkoholNarkotikaOchLakemedel(),
                 categoryPsykiskaSjukdomarOchStorningar(),

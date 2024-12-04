@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.function.Predicate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
 public class ShouldValidateFactory {
 
@@ -32,6 +34,13 @@ public class ShouldValidateFactory {
         .map(element -> (ElementValueBoolean) element.value())
         .anyMatch(
             value -> value != null && value.value() != null && value.value() == expectedValue);
+  }
+
+  public static Predicate<List<ElementData>> codes(ElementId elementId, List<FieldId> fieldIds) {
+    return elementData -> elementData.stream()
+        .filter(data -> data.id().equals(elementId))
+        .map(element -> (ElementValueCode) element.value())
+        .anyMatch(value -> fieldIds.contains(value.codeId()));
   }
 
 }

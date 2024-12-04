@@ -26,14 +26,19 @@ public class CertificateElementRuleFactory {
   }
 
   public static ElementRule show(ElementId id, FieldId fieldId) {
+    return show(
+        id,
+        new RuleExpression(
+            singleExpression(fieldId.value())
+        )
+    );
+  }
+
+  public static ElementRule show(ElementId id, RuleExpression ruleExpression) {
     return ElementRuleExpression.builder()
         .type(ElementRuleType.SHOW)
         .id(id)
-        .expression(
-            new RuleExpression(
-                singleExpression(fieldId.value())
-            )
-        )
+        .expression(ruleExpression)
         .build();
   }
 
