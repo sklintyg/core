@@ -45,6 +45,9 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMedvetandestorning.questionMedvetandestorning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMedvetandestorningTidpunkt.questionMedvetandestorningTidpunkt;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNeurologiskSjukdom.questionNeurologiskSjukdom;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNjurfunktion.questionNjurfunktion;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNjurtransplatation.questionNjurtransplatation;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNjurtransplatationTidpunkt.questionNjurtransplatationTidpunkt;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionRorlighet.questionRorlighet;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionRorlighetBeskrivning.questionRorlighetBeskrivning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionRorlighetHjalpaPassagerare.questionRorlighetHjalpaPassagerare;
@@ -213,7 +216,12 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
                         questionMedvetandestorningTidpunkt()
                     )
                 ),
-                categoryNjursjukdomar(),
+                categoryNjursjukdomar(
+                    questionNjurfunktion(), // 15 - 15.1
+                    questionNjurtransplatation( // 15.2 - 15.2
+                        questionNjurtransplatationTidpunkt() // 15.3 - 15.3
+                    )
+                ),
                 categoryDemensOchAndraKognitivaStorningar(),
                 categorySomnOchVakenhetsstorningar(),
                 categoryAlkoholNarkotikaOchLakemedel(),
