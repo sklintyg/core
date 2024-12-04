@@ -22,9 +22,8 @@ public class CategoryHorsel {
                 .name("Hörsel")
                 .build()
         )
-        .children(
-            List.of(children)
-        )
+        .children(List.of(children))
+        // TODO: Add rules for show if specific group in q1
         .build();
   }
 }

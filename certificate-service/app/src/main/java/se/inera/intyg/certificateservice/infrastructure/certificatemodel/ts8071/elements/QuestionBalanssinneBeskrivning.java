@@ -6,6 +6,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
@@ -15,9 +16,9 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 public class QuestionBalanssinneBeskrivning {
 
   public static final ElementId QUESTION_BALANSSINNE_BESKRIVNING_ID = new ElementId(
-      "8.1.1");
+      "8.2");
   public static final FieldId QUESTION_BALANSSINNE_BESKRIVNING_FIELD_ID = new FieldId(
-      "8.1");
+      "8.2");
 
   private QuestionBalanssinneBeskrivning() {
     throw new IllegalStateException("Utility class");
@@ -49,6 +50,9 @@ public class QuestionBalanssinneBeskrivning {
         )
         .shouldValidate(
             ShouldValidateFactory.radioBoolean(QUESTION_BALANSSINNE_ID)
+        )
+        .mapping(
+            new ElementMapping(QUESTION_BALANSSINNE_ID, null)
         )
         .validations(
             List.of(

@@ -14,7 +14,7 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 
 class QuestionHorselTest {
 
-  private static final ElementId ELEMENT_ID = new ElementId("9.1");
+  private static final ElementId ELEMENT_ID = new ElementId("9");
 
   @Test
   void shallIncludeId() {

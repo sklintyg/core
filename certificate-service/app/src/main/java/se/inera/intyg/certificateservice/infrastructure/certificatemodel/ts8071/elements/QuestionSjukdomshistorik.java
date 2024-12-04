@@ -1,5 +1,8 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynfunktioner.QUESTION_SYNFUNKTIONER_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynfunktioner.QUESTION_SYNFUNKTIONER_ID;
+
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -7,6 +10,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
 
 public class QuestionSjukdomshistorik {
 
@@ -44,9 +48,14 @@ public class QuestionSjukdomshistorik {
                 CertificateElementRuleFactory.mandatoryExist(
                     QUESTION_SJUKDOMSHISTORIK_ID,
                     QUESTION_SJUKDOMSHISTORIK_FIELD_ID
+                ),
+                CertificateElementRuleFactory.showIfNot(
+                    QUESTION_SYNFUNKTIONER_ID,
+                    QUESTION_SYNFUNKTIONER_FIELD_ID
                 )
             )
         )
+        .shouldValidate(ShouldValidateFactory.radioBoolean(QUESTION_SYNFUNKTIONER_ID, false))
         .children(List.of(children))
         .build();
   }

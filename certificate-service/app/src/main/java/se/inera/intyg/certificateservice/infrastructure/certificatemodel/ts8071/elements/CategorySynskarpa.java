@@ -1,9 +1,13 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynfunktioner.QUESTION_SYNFUNKTIONER_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynfunktioner.QUESTION_SYNFUNKTIONER_ID;
+
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
 public class CategorySynskarpa {
 
@@ -21,6 +25,13 @@ public class CategorySynskarpa {
             ElementConfigurationCategory.builder()
                 .name("Synskärpa")
                 .build()
+        )
+        .rules(List.of(
+                CertificateElementRuleFactory.showIfNot(
+                    QUESTION_SYNFUNKTIONER_ID,
+                    QUESTION_SYNFUNKTIONER_FIELD_ID
+                )
+            )
         )
         .children(
             List.of(children)

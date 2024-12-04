@@ -10,7 +10,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionBalanssinne {
 
-  public static final ElementId QUESTION_BALANSSINNE_ID = new ElementId("8.1");
+  public static final ElementId QUESTION_BALANSSINNE_ID = new ElementId("8");
   public static final FieldId QUESTION_BALANSSINNE_FIELD_ID = new FieldId("8.1");
 
   private QuestionBalanssinne() {

@@ -10,7 +10,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionHorsel {
 
-  public static final ElementId QUESTION_HORSEL_ID = new ElementId("9.1");
+  public static final ElementId QUESTION_HORSEL_ID = new ElementId("9");
   public static final FieldId QUESTION_HORSEL_FIELD_ID = new FieldId("9.1");
 
   private QuestionHorsel() {

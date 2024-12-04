@@ -2,9 +2,13 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 
 class CategorySynskarpaTest {
 
@@ -26,5 +30,20 @@ class CategorySynskarpaTest {
     final var element = CategorySynskarpa.categorySynskarpa();
 
     assertEquals(expectedConfiguration, element.configuration());
+  }
+
+  @Test
+  void shallIncludeRules() {
+    final var expectedRules = List.of(
+        ElementRuleExpression.builder()
+            .id(new ElementId("4"))
+            .type(ElementRuleType.SHOW)
+            .expression(new RuleExpression("!$4.1"))
+            .build()
+    );
+
+    final var element = CategorySynskarpa.categorySynskarpa();
+
+    assertEquals(expectedRules, element.rules());
   }
 }

@@ -38,7 +38,7 @@ public class QuestionRorlighetHjalpaPassagerare {
                     .build()
             )
         )
-        .rules(
+        .rules( // TODO: Add rules for show if specific group in q1
             List.of(
                 CertificateElementRuleFactory.mandatoryExist(
                     QUESTION_RORLIGHET_HJALPA_PASSAGERARE_ID,

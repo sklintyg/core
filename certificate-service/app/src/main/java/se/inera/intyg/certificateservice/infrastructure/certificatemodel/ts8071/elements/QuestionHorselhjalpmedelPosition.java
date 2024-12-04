@@ -8,10 +8,12 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementLayout;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCode;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemPositionHearingAid;
 
@@ -56,7 +58,7 @@ public class QuestionHorselhjalpmedelPosition {
                     QUESTION_HORSELHJALPMEDEL_FIELD_ID
                 )
             )
-        ) // TODO: This one needs a should validate?
+        )
         .validations(
             List.of(
                 ElementValidationCode.builder()
@@ -64,6 +66,8 @@ public class QuestionHorselhjalpmedelPosition {
                     .build()
             )
         )
+        .shouldValidate(ShouldValidateFactory.radioBoolean(QUESTION_HORSELHJALPMEDEL_ID))
+        .mapping(new ElementMapping(QUESTION_HORSELHJALPMEDEL_ID, null))
         .children(List.of(children))
         .build();
   }
