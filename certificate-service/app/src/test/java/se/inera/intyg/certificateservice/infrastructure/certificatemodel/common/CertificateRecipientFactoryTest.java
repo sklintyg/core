@@ -29,7 +29,7 @@ class CertificateRecipientFactoryTest {
         "Logisk adress"
     );
 
-    final var response = CertificateRecipientFactory.fkassa("Logisk adress");
+    final var response = CertificateRecipientFactory.transp("Logisk adress");
 
     assertEquals(expected, response);
   }

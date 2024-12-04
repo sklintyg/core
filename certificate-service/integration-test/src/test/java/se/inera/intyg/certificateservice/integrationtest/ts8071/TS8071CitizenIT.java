@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.integrationtest.fk7809;
+package se.inera.intyg.certificateservice.integrationtest.ts8071;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -7,17 +7,16 @@ import org.springframework.test.context.DynamicPropertySource;
 import se.inera.intyg.certificateservice.integrationtest.ExistsCitizenCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCitizenCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCitizenCertificateListIT;
-import se.inera.intyg.certificateservice.integrationtest.PrintCitizenCertificateIT;
 
-class FK7809CitizenIT {
+class TS8071CitizenIT {
 
-  private static final String CERTIFICATE_TYPE = FK7809Constants.FK7809;
-  private static final String ACTIVE_VERSION = FK7809Constants.VERSION;
-  private static final String TYPE = FK7809Constants.TYPE;
+  private static final String CERTIFICATE_TYPE = TS8071Constants.TS8071;
+  private static final String ACTIVE_VERSION = TS8071Constants.VERSION;
+  private static final String TYPE = TS8071Constants.TYPE;
 
   @DynamicPropertySource
   static void testProperties(DynamicPropertyRegistry registry) {
-    registry.add("certificate.model.fk7809.v1_0.active.from", () -> "2024-01-01T00:00:00");
+    registry.add("certificate.model.ts8071.v1_0.active.from", () -> "2024-01-01T00:00:00");
   }
 
   @Nested
@@ -38,21 +37,6 @@ class FK7809CitizenIT {
   @Nested
   @DisplayName(TYPE + "Hämta intygslista för invånare")
   class GetCitizenCertificateList extends GetCitizenCertificateListIT {
-
-    @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-  }
-
-  @Nested
-  @DisplayName(TYPE + "Skriv ut intyg för invånare")
-  class PrintCitizenCertificate extends PrintCitizenCertificateIT {
 
     @Override
     protected String type() {
