@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.elements.ElementUnitContactInformation.issuingUnitContactInfo;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryAdhdAutismPsykiskUtvecklingsstorning.categoryAdhdAutismPsykiskUtvecklingsstorning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryAlkoholNarkotikaOchLakemedel.categoryAlkoholNarkotikaOchLakemedel;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryAnamnes.categoryAnamnes;
@@ -91,6 +92,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
 
   private final CertificateActionFactory certificateActionFactory;
+
   @Value("${certificate.model.ts8071.v1_0.active.from}")
   private LocalDateTime activeFrom;
 
@@ -251,7 +253,8 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
                 categoryAdhdAutismPsykiskUtvecklingsstorning(),
                 categoryOvrigMedicinering(),
                 categoryOvrigKommentar(),
-                categoryBedomning()
+                categoryBedomning(),
+                issuingUnitContactInfo()
             )
         )
         .recipient(CertificateRecipientFactory.transp(tsLogicalAddress))
