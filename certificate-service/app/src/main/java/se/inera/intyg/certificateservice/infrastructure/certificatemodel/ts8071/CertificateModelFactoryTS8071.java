@@ -60,6 +60,9 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSjukdomEllerSynnedsattningBeskrivning.questionSjukdomEllerSynnedsattningBeskrivning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSjukdomshistorik.questionSjukdomshistorik;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSjukdomshistorikBeskrivning.questionSjukdomshistorikBeskrivning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSomn.questionSomn;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSomnBehandling.questionSomnBehandling;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSomnBeskrivning.questionSomnBeskrivning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionStroke.questionStroke;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionStrokePavarkan.questionStrokePavarkan;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynfunktioner.questionSynfunktioner;
@@ -237,7 +240,12 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
                         questionDemensBeskrivning() // 16.3 - 16.3
                     )
                 ),
-                categorySomnOchVakenhetsstorningar(),
+                categorySomnOchVakenhetsstorningar(
+                    questionSomn( // 17 - 17.1
+                        questionSomnBeskrivning() // 17.2 - 17.2
+                    ),
+                    questionSomnBehandling() // 17.3 - 17.3
+                ),
                 categoryAlkoholNarkotikaOchLakemedel(),
                 categoryPsykiskaSjukdomarOchStorningar(),
                 categoryAdhdAutismPsykiskUtvecklingsstorning(),
