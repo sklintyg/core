@@ -16,10 +16,19 @@ public class ShouldValidateFactory {
     return radioBoolean(elementId, true);
   }
 
+  public static Predicate<List<ElementData>> radioBooleans(List<ElementId> elementIds) {
+    return radioBooleans(elementIds, true);
+  }
+
   public static Predicate<List<ElementData>> radioBoolean(ElementId elementId,
       boolean expectedValue) {
+    return radioBooleans(List.of(elementId), expectedValue);
+  }
+
+  public static Predicate<List<ElementData>> radioBooleans(List<ElementId> elementIds,
+      boolean expectedValue) {
     return elementData -> elementData.stream()
-        .filter(data -> data.id().equals(elementId))
+        .filter(data -> elementIds.contains(data.id()))
         .map(element -> (ElementValueBoolean) element.value())
         .anyMatch(
             value -> value != null && value.value() != null && value.value() == expectedValue);

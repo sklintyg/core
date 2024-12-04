@@ -27,6 +27,13 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionBalanssinne.questionBalanssinne;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionBalanssinneBeskrivning.questionBalanssinneBeskrivning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionDiabetes.questionDiabetes;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionEpilepsi.questionEpilepsi;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionEpilepsiAnfall.questionEpilepsiAnfall;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionEpilepsiAnfallBeskrivning.questionEpilepsiAnfallBeskrivning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionEpilepsiBeskrivning.questionEpilepsiBeskrivning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionEpilepsiMedicin.questionEpilepsiMedicin;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionEpilepsiMedicinBeskrivning.questionEpilepsiMedicinBeskrivning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionEpilepsiMedicinTidpunkt.questionEpilepsiMedicinTidpunkt;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionHjartsjukdom.questionHjartsjukdom;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionHjartsjukdomBehandlad.questionHjartsjukdomBehandlad;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionHjartsjukdomBehandladBeskrivning.questionHjartsjukdomBehandladBeskrivning;
@@ -35,6 +42,8 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionHorselhjalpmedel.questionHorselhjalpmedel;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionHorselhjalpmedelPosition.questionHorselhjalpmedelPosition;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionIdentitet.questionIdentitet;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMedvetandestorning.questionMedvetandestorning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMedvetandestorningTidpunkt.questionMedvetandestorningTidpunkt;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNeurologiskSjukdom.questionNeurologiskSjukdom;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionRorlighet.questionRorlighet;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionRorlighetBeskrivning.questionRorlighetBeskrivning;
@@ -187,9 +196,23 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
                     questionDiabetes()
                 ),
                 categoryNeurologiskaSjukdomar(
-                    questionNeurologiskSjukdom()
+                    questionNeurologiskSjukdom() // 13 - 13.1
                 ),
-                categoryEpilepsi(),
+                categoryEpilepsi(
+                    questionEpilepsi( // 14 - 14.1
+                        questionEpilepsiBeskrivning() // 14.2 - 14.2
+                    ),
+                    questionEpilepsiAnfall( // 14.3 - 14.3
+                        questionEpilepsiAnfallBeskrivning() // 14.4 - 14.4
+                    ),
+                    questionEpilepsiMedicin( // 14.5 - 14.5
+                        questionEpilepsiMedicinBeskrivning(), // 14.6 - 14.6
+                        questionEpilepsiMedicinTidpunkt() // 14.7 - 14.7
+                    ),
+                    questionMedvetandestorning( // 14.8 - 14.8
+                        questionMedvetandestorningTidpunkt()
+                    )
+                ),
                 categoryNjursjukdomar(),
                 categoryDemensOchAndraKognitivaStorningar(),
                 categorySomnOchVakenhetsstorningar(),
