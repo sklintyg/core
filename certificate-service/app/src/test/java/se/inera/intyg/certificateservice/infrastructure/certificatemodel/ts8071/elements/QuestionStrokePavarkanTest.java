@@ -16,6 +16,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementLayout;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
@@ -24,7 +25,7 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 
 class QuestionStrokePavarkanTest {
 
-  private static final ElementId ELEMENT_ID = new ElementId("11.5.1");
+  private static final ElementId ELEMENT_ID = new ElementId("11.10");
 
   @Test
   void shallIncludeId() {
@@ -36,7 +37,7 @@ class QuestionStrokePavarkanTest {
   @Test
   void shallIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationRadioMultipleCode.builder()
-        .id(new FieldId("11.5"))
+        .id(new FieldId("11.10"))
         .name(
             "Om stroke förekommit, har den inträffat i/påverkat syncentrum (occipitalloben eller synnerven)?")
         .elementLayout(ElementLayout.ROWS)
@@ -79,9 +80,9 @@ class QuestionStrokePavarkanTest {
             )
             .build(),
         ElementRuleExpression.builder()
-            .id(new ElementId("11.5"))
+            .id(new ElementId("11.9"))
             .type(ElementRuleType.SHOW)
-            .expression(new RuleExpression("$11.5"))
+            .expression(new RuleExpression("$11.9"))
             .build()
     );
 
@@ -103,6 +104,14 @@ class QuestionStrokePavarkanTest {
     assertEquals(expectedValidations, element.validations());
   }
 
+
+  @Test
+  void shallIncludeMapping() {
+    final var element = QuestionStrokePavarkan.questionStrokePavarkan();
+
+    assertEquals(new ElementMapping(new ElementId("11.9"), null), element.mapping());
+  }
+
   @Nested
   class ShouldValidate {
 
@@ -110,7 +119,7 @@ class QuestionStrokePavarkanTest {
     void shallReturnTrueIfBooleanIsTrue() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("11.5"))
+              .id(new ElementId("11.9"))
               .value(
                   ElementValueBoolean.builder()
                       .value(true)
@@ -150,7 +159,7 @@ class QuestionStrokePavarkanTest {
     void shallReturnFalseIfElementFalse() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("11.5"))
+              .id(new ElementId("11.9"))
               .value(
                   ElementValueBoolean.builder()
                       .value(false)

@@ -1,5 +1,8 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionHjartsjukdom.QUESTION_HJARTSJUKDOM_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionHjartsjukdom.QUESTION_HJARTSJUKDOM_ID;
+
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -7,11 +10,12 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
 
 public class QuestionStroke {
 
-  public static final ElementId QUESTION_STROKE_ID = new ElementId("11.5");
-  public static final FieldId QUESTION_STROKE_FIELD_ID = new FieldId("11.5");
+  public static final ElementId QUESTION_STROKE_ID = new ElementId("11.9");
+  public static final FieldId QUESTION_STROKE_FIELD_ID = new FieldId("11.9");
 
   private QuestionStroke() {
     throw new IllegalStateException("Utility class");
@@ -43,9 +47,14 @@ public class QuestionStroke {
                 CertificateElementRuleFactory.mandatoryExist(
                     QUESTION_STROKE_ID,
                     QUESTION_STROKE_FIELD_ID
+                ),
+                CertificateElementRuleFactory.show(
+                    QUESTION_HJARTSJUKDOM_ID,
+                    QUESTION_HJARTSJUKDOM_FIELD_ID
                 )
             )
         )
+        .shouldValidate(ShouldValidateFactory.radioBoolean(QUESTION_HJARTSJUKDOM_ID))
         .children(List.of(children))
         .build();
   }

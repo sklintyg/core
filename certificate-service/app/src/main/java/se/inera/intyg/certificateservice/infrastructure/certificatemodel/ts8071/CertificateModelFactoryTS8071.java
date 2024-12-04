@@ -41,6 +41,8 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSjukdomEllerSynnedsattningBeskrivning.questionSjukdomEllerSynnedsattningBeskrivning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSjukdomshistorik.questionSjukdomshistorik;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSjukdomshistorikBeskrivning.questionSjukdomshistorikBeskrivning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionStroke.questionStroke;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionStrokePavarkan.questionStrokePavarkan;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynfunktioner.questionSynfunktioner;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynkope.questionSynkope;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynkopeBeskrivning.questionSynkopeBeskrivning;
@@ -174,6 +176,9 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
                     ),
                     questionSynkope( // 11.7 - 11.7
                         questionSynkopeBeskrivning() // 11.8 - 11.8
+                    ),
+                    questionStroke( // 11.9 - 11.9
+                        questionStrokePavarkan() // 11.10 - 11.10
                     )
                 ),
                 categoryDiabetes(),

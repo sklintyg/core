@@ -8,6 +8,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementLayout;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCode;
@@ -19,9 +20,9 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 public class QuestionStrokePavarkan {
 
   public static final ElementId QUESTION_STROKE_PAVARKAN_ID = new ElementId(
-      "11.5.1");
+      "11.10");
   public static final FieldId QUESTION_STROKE_PAVARKAN_FIELD_ID = new FieldId(
-      "11.5");
+      "11.10");
 
   private QuestionStrokePavarkan() {
     throw new IllegalStateException("Utility class");
@@ -59,6 +60,7 @@ public class QuestionStrokePavarkan {
             )
         )
         .shouldValidate(ShouldValidateFactory.radioBoolean(QUESTION_STROKE_ID))
+        .mapping(new ElementMapping(QUESTION_STROKE_ID, null))
         .validations(
             List.of(
                 ElementValidationCode.builder()
