@@ -36,6 +36,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionIdentitet.questionIdentitet;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionRorlighet.questionRorlighet;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionRorlighetBeskrivning.questionRorlighetBeskrivning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionRorlighetHjalpaPassagerare.questionRorlighetHjalpaPassagerare;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSjukdomEllerSynnedsattning.questionSjukdomEllerSynnedsattning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSjukdomEllerSynnedsattningBeskrivning.questionSjukdomEllerSynnedsattningBeskrivning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSjukdomshistorik.questionSjukdomshistorik;
@@ -130,48 +131,49 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
                 categoryIntygetAvser(),
                 categoryIntygetBaseratPa(),
                 categoryIdentitet(
-                    questionIdentitet()
+                    questionIdentitet() // 3 - 3.1
                 ),
                 categorySynfunktion(
-                    questionSynfunktioner()
+                    questionSynfunktioner() // 4 - 4.1
                 ),
                 categorySynskarpa(),
                 categoryAnamnes(
-                    questionSjukdomEllerSynnedsattning(
-                        questionSjukdomEllerSynnedsattningBeskrivning()
+                    questionSjukdomEllerSynnedsattning( // 7 - 7.1
+                        questionSjukdomEllerSynnedsattningBeskrivning() // 7.2 - 7.2
                     ),
-                    questionSjukdomshistorik(
-                        questionSjukdomshistorikBeskrivning()
+                    questionSjukdomshistorik( //7.3 - 7.3
+                        questionSjukdomshistorikBeskrivning() // 7.4 - 7.4
                     )
                 ),
                 categoryBalanssinne(
-                    questionBalanssinne(
-                        questionBalanssinneBeskrivning()
+                    questionBalanssinne( // 8 - 8.1
+                        questionBalanssinneBeskrivning() // 8.2 - 8.2
                     )
                 ),
                 categoryHorsel(
-                    questionHorsel(),
-                    questionHorselhjalpmedel(
-                        questionHorselhjalpmedelPosition()
+                    questionHorsel(), // 9 - 9.1
+                    questionHorselhjalpmedel( // 9.2 - 9.2
+                        questionHorselhjalpmedelPosition() // 9.3 - 9.3
                     )
                 ),
                 categoryRorelseorganensFunktioner(
-                    questionRorlighet(
-                        questionRorlighetBeskrivning()
-                    )
+                    questionRorlighet( // 10 - 10.1
+                        questionRorlighetBeskrivning() // 10.2 - 10.2
+                    ),
+                    questionRorlighetHjalpaPassagerare() // 10.3 - 10.3
                 ),
                 categoryHjartOchKarlsjukdomar(
-                    questionHjartsjukdom(
-                        questionHjartsjukdomBeskrivning()
+                    questionHjartsjukdom( // 11 - 11.1
+                        questionHjartsjukdomBeskrivning() // 11.2
                     ),
-                    questionHjartsjukdomBehandlad(
-                        questionHjartsjukdomBehandladBeskrivning()
+                    questionHjartsjukdomBehandlad( // 11.3 - 11.3
+                        questionHjartsjukdomBehandladBeskrivning() // 11.4 - 11.4
                     ),
-                    questionArytmi(
-                        questionArytmiBeskrivning()
+                    questionArytmi( // 11.5 - 11.5
+                        questionArytmiBeskrivning() // 11.6 - 11.6
                     ),
-                    questionSynkope(
-                        questionSynkopeBeskrivning()
+                    questionSynkope( // 11.7 - 11.7
+                        questionSynkopeBeskrivning() // 11.8 - 11.8
                     )
                 ),
                 categoryDiabetes(),

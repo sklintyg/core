@@ -21,7 +21,7 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 
 class QuestionSjukdomEllerSynnedsattningBeskrivningTest {
 
-  private static final ElementId ELEMENT_ID = new ElementId("7.1.1");
+  private static final ElementId ELEMENT_ID = new ElementId("7.2");
 
   @Test
   void shallIncludeId() {
@@ -34,7 +34,7 @@ class QuestionSjukdomEllerSynnedsattningBeskrivningTest {
   void shallIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationTextArea.builder()
         .name("Ange sjukdom/synnedsättning")
-        .id(new FieldId("7.1"))
+        .id(new FieldId("7.2"))
         .build();
 
     final var element = QuestionSjukdomEllerSynnedsattningBeskrivning.questionSjukdomEllerSynnedsattningBeskrivning();
@@ -46,14 +46,14 @@ class QuestionSjukdomEllerSynnedsattningBeskrivningTest {
   void shallIncludeRules() {
     final var expectedRules = List.of(
         ElementRuleExpression.builder()
-            .id(new ElementId("7.1"))
+            .id(new ElementId("7"))
             .type(ElementRuleType.SHOW)
             .expression(new RuleExpression("$7.1"))
             .build(),
         ElementRuleExpression.builder()
             .id(ELEMENT_ID)
             .type(ElementRuleType.MANDATORY)
-            .expression(new RuleExpression("$7.1"))
+            .expression(new RuleExpression("$7.2"))
             .build(),
         ElementRuleLimit.builder()
             .id(ELEMENT_ID)
@@ -88,7 +88,7 @@ class QuestionSjukdomEllerSynnedsattningBeskrivningTest {
     void shallReturnTrueIfBooleanIsTrue() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("7.1"))
+              .id(new ElementId("7"))
               .value(
                   ElementValueBoolean.builder()
                       .value(true)
@@ -128,7 +128,7 @@ class QuestionSjukdomEllerSynnedsattningBeskrivningTest {
     void shallReturnFalseIfElementFalse() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("7.1"))
+              .id(new ElementId("7"))
               .value(
                   ElementValueBoolean.builder()
                       .value(false)

@@ -10,7 +10,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionRorlighet {
 
-  public static final ElementId QUESTION_RORLIGHET_ID = new ElementId("10.1");
+  public static final ElementId QUESTION_RORLIGHET_ID = new ElementId("10");
   public static final FieldId QUESTION_RORLIGHET_FIELD_ID = new FieldId("10.1");
 
   private QuestionRorlighet() {

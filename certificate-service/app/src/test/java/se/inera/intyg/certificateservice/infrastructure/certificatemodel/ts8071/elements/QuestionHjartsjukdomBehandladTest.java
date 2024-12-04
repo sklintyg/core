@@ -9,84 +9,78 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
-import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 
-class QuestionRorlighetBeskrivningTest {
+class QuestionHjartsjukdomBehandladTest {
 
-  private static final ElementId ELEMENT_ID = new ElementId("10.2");
+  private static final ElementId ELEMENT_ID = new ElementId("11.3");
 
   @Test
   void shallIncludeId() {
-    final var element = QuestionRorlighetBeskrivning.questionRorlighetBeskrivning();
+    final var element = QuestionHjartsjukdomBehandlad.questionHjartsjukdomBehandlad();
 
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
   void shallIncludeConfiguration() {
-    final var expectedConfiguration = ElementConfigurationTextArea.builder()
-        .name("Ange nedsättning eller sjukdom")
-        .id(new FieldId("10.2"))
+    final var expectedConfiguration = ElementConfigurationRadioBoolean.builder()
+        .name("Är tillståndet behandlat?")
+        .id(new FieldId("11.3"))
+        .selectedText("Ja")
+        .unselectedText("Nej")
         .build();
 
-    final var element = QuestionRorlighetBeskrivning.questionRorlighetBeskrivning();
+    final var element = QuestionHjartsjukdomBehandlad.questionHjartsjukdomBehandlad();
 
     assertEquals(expectedConfiguration, element.configuration());
   }
 
   @Test
   void shallIncludeRules() {
-    final var expectedRules = List.of(
-        ElementRuleExpression.builder()
-            .id(new ElementId("10"))
-            .type(ElementRuleType.SHOW)
-            .expression(new RuleExpression("$10.1"))
-            .build(),
+    final var expectedRule = List.of(
         ElementRuleExpression.builder()
             .id(ELEMENT_ID)
             .type(ElementRuleType.MANDATORY)
-            .expression(new RuleExpression("$10.2"))
+            .expression(
+                new RuleExpression(
+                    "exists($11.3)"
+                )
+            )
             .build(),
-        ElementRuleLimit.builder()
-            .id(ELEMENT_ID)
-            .type(ElementRuleType.TEXT_LIMIT)
-            .limit(new RuleLimit((short) 250))
+        ElementRuleExpression.builder()
+            .id(new ElementId("11"))
+            .type(ElementRuleType.SHOW)
+            .expression(
+                new RuleExpression(
+                    "$11.1"
+                )
+            )
             .build()
     );
 
-    final var element = QuestionRorlighetBeskrivning.questionRorlighetBeskrivning();
+    final var element = QuestionHjartsjukdomBehandlad.questionHjartsjukdomBehandlad();
 
-    assertEquals(expectedRules, element.rules());
+    assertEquals(expectedRule, element.rules());
   }
 
   @Test
-  void shallIncludeValidations() {
+  void shallIncludeValidation() {
     final var expectedValidations = List.of(
-        ElementValidationText.builder()
+        ElementValidationBoolean.builder()
             .mandatory(true)
-            .limit(250)
             .build()
     );
 
-    final var element = QuestionRorlighetBeskrivning.questionRorlighetBeskrivning();
+    final var element = QuestionHjartsjukdomBehandlad.questionHjartsjukdomBehandlad();
 
     assertEquals(expectedValidations, element.validations());
-  }
-
-  @Test
-  void shallIncludeMapping() {
-    final var element = QuestionRorlighetBeskrivning.questionRorlighetBeskrivning();
-
-    assertEquals(new ElementMapping(new ElementId("10"), null), element.mapping());
   }
 
   @Nested
@@ -96,7 +90,7 @@ class QuestionRorlighetBeskrivningTest {
     void shallReturnTrueIfBooleanIsTrue() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("10"))
+              .id(new ElementId("11"))
               .value(
                   ElementValueBoolean.builder()
                       .value(true)
@@ -105,7 +99,7 @@ class QuestionRorlighetBeskrivningTest {
               .build()
       );
 
-      final var element = QuestionRorlighetBeskrivning.questionRorlighetBeskrivning();
+      final var element = QuestionHjartsjukdomBehandlad.questionHjartsjukdomBehandlad();
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -125,7 +119,7 @@ class QuestionRorlighetBeskrivningTest {
               .build()
       );
 
-      final var element = QuestionRorlighetBeskrivning.questionRorlighetBeskrivning();
+      final var element = QuestionHjartsjukdomBehandlad.questionHjartsjukdomBehandlad();
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -136,7 +130,7 @@ class QuestionRorlighetBeskrivningTest {
     void shallReturnFalseIfElementFalse() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("10"))
+              .id(new ElementId("11"))
               .value(
                   ElementValueBoolean.builder()
                       .value(false)
@@ -145,7 +139,7 @@ class QuestionRorlighetBeskrivningTest {
               .build()
       );
 
-      final var element = QuestionRorlighetBeskrivning.questionRorlighetBeskrivning();
+      final var element = QuestionHjartsjukdomBehandlad.questionHjartsjukdomBehandlad();
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 

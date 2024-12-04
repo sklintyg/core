@@ -11,6 +11,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
@@ -21,7 +22,7 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 
 class QuestionArytmiBeskrivningTest {
 
-  private static final ElementId ELEMENT_ID = new ElementId("11.3.1");
+  private static final ElementId ELEMENT_ID = new ElementId("11.6");
 
   @Test
   void shallIncludeId() {
@@ -34,7 +35,7 @@ class QuestionArytmiBeskrivningTest {
   void shallIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationTextArea.builder()
         .name("Ange tidpunkt")
-        .id(new FieldId("11.3"))
+        .id(new FieldId("11.6"))
         .build();
 
     final var element = QuestionArytmiBeskrivning.questionArytmiBeskrivning();
@@ -46,14 +47,14 @@ class QuestionArytmiBeskrivningTest {
   void shallIncludeRules() {
     final var expectedRules = List.of(
         ElementRuleExpression.builder()
-            .id(new ElementId("11.3"))
+            .id(new ElementId("11.5"))
             .type(ElementRuleType.SHOW)
-            .expression(new RuleExpression("$11.3"))
+            .expression(new RuleExpression("$11.5"))
             .build(),
         ElementRuleExpression.builder()
             .id(ELEMENT_ID)
             .type(ElementRuleType.MANDATORY)
-            .expression(new RuleExpression("$11.3"))
+            .expression(new RuleExpression("$11.6"))
             .build(),
         ElementRuleLimit.builder()
             .id(ELEMENT_ID)
@@ -81,6 +82,13 @@ class QuestionArytmiBeskrivningTest {
     assertEquals(expectedValidations, element.validations());
   }
 
+  @Test
+  void shallIncludeMapping() {
+    final var element = QuestionArytmiBeskrivning.questionArytmiBeskrivning();
+
+    assertEquals(new ElementMapping(new ElementId("11.5"), null), element.mapping());
+  }
+
   @Nested
   class ShouldValidate {
 
@@ -88,7 +96,7 @@ class QuestionArytmiBeskrivningTest {
     void shallReturnTrueIfBooleanIsTrue() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("11.3"))
+              .id(new ElementId("11.5"))
               .value(
                   ElementValueBoolean.builder()
                       .value(true)
@@ -128,7 +136,7 @@ class QuestionArytmiBeskrivningTest {
     void shallReturnFalseIfElementFalse() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("11.3"))
+              .id(new ElementId("11.5"))
               .value(
                   ElementValueBoolean.builder()
                       .value(false)

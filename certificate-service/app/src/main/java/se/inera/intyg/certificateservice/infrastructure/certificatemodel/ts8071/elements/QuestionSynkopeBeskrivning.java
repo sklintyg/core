@@ -6,6 +6,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
@@ -15,9 +16,9 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 public class QuestionSynkopeBeskrivning {
 
   public static final ElementId QUESTION_SYNKOPE_BESKRIVNING_ID = new ElementId(
-      "11.4.1");
+      "11.8");
   public static final FieldId QUESTION_SYNKOPE_BESKRIVNING_FIELD_ID = new FieldId(
-      "11.4");
+      "11.8");
 
   private QuestionSynkopeBeskrivning() {
     throw new IllegalStateException("Utility class");
@@ -50,6 +51,7 @@ public class QuestionSynkopeBeskrivning {
         .shouldValidate(
             ShouldValidateFactory.radioBoolean(QUESTION_SYNKOPE_ID)
         )
+        .mapping(new ElementMapping(QUESTION_SYNKOPE_ID, null))
         .validations(
             List.of(
                 ElementValidationText.builder()

@@ -14,7 +14,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionSjukdomEllerSynnedsattning {
 
-  public static final ElementId QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_ID = new ElementId("7.1");
+  public static final ElementId QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_ID = new ElementId("7");
   public static final FieldId QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_FIELD_ID = new FieldId("7.1");
 
   private QuestionSjukdomEllerSynnedsattning() {

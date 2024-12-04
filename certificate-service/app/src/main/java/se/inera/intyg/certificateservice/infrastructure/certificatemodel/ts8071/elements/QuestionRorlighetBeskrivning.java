@@ -6,6 +6,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
@@ -15,9 +16,9 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 public class QuestionRorlighetBeskrivning {
 
   public static final ElementId QUESTION_RORLIGHET_BESKRIVNING_ID = new ElementId(
-      "10.1.1");
+      "10.2");
   public static final FieldId QUESTION_RORLIGHET_BESKRIVNING_FIELD_ID = new FieldId(
-      "10.1");
+      "10.2");
 
   private QuestionRorlighetBeskrivning() {
     throw new IllegalStateException("Utility class");
@@ -50,6 +51,7 @@ public class QuestionRorlighetBeskrivning {
         .shouldValidate(
             ShouldValidateFactory.radioBoolean(QUESTION_RORLIGHET_ID)
         )
+        .mapping(new ElementMapping(QUESTION_RORLIGHET_ID, null))
         .validations(
             List.of(
                 ElementValidationText.builder()

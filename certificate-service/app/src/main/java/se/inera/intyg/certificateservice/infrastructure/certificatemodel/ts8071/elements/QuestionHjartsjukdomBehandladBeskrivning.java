@@ -6,6 +6,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
@@ -15,9 +16,9 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 public class QuestionHjartsjukdomBehandladBeskrivning {
 
   public static final ElementId QUESTION_HJARTSJUKDOM_BEHANDLAD_BESKRIVNING_ID = new ElementId(
-      "11.2.1");
+      "11.4");
   public static final FieldId QUESTION_HJARTSJUKDOM_BEHANDLAD_BESKRIVNING_FIELD_ID = new FieldId(
-      "11.2");
+      "11.4");
 
   private QuestionHjartsjukdomBehandladBeskrivning() {
     throw new IllegalStateException("Utility class");
@@ -50,6 +51,7 @@ public class QuestionHjartsjukdomBehandladBeskrivning {
         .shouldValidate(
             ShouldValidateFactory.radioBoolean(QUESTION_HJARTSJUKDOM_BEHANDLAD_ID)
         )
+        .mapping(new ElementMapping(QUESTION_HJARTSJUKDOM_BEHANDLAD_ID, null))
         .validations(
             List.of(
                 ElementValidationText.builder()

@@ -14,7 +14,7 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 
 class QuestionRorlighetHjalpaPassagerareTest {
 
-  private static final ElementId ELEMENT_ID = new ElementId("10.2");
+  private static final ElementId ELEMENT_ID = new ElementId("10.3");
 
   @Test
   void shallIncludeId() {
@@ -27,9 +27,9 @@ class QuestionRorlighetHjalpaPassagerareTest {
   void shallIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationRadioBoolean.builder()
         .name(
-            " Har personen en nedsättning av rörelseförmågan som gör att personen inte kan "
+            "Har personen en nedsättning av rörelseförmågan som gör att personen inte kan "
                 + "hjälpa passagerare in och ut ur fordonet samt med bilbälte?")
-        .id(new FieldId("10.2"))
+        .id(new FieldId("10.3"))
         .selectedText("Ja")
         .unselectedText("Nej")
         .build();
@@ -47,7 +47,7 @@ class QuestionRorlighetHjalpaPassagerareTest {
             .type(ElementRuleType.MANDATORY)
             .expression(
                 new RuleExpression(
-                    "exists($10.2)"
+                    "exists($10.3)"
                 )
             )
             .build()

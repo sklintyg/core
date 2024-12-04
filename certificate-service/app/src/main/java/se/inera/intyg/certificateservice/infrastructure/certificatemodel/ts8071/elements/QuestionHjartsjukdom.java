@@ -10,7 +10,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionHjartsjukdom {
 
-  public static final ElementId QUESTION_HJARTSJUKDOM_ID = new ElementId("11.1");
+  public static final ElementId QUESTION_HJARTSJUKDOM_ID = new ElementId("11");
   public static final FieldId QUESTION_HJARTSJUKDOM_FIELD_ID = new FieldId("11.1");
 
   private QuestionHjartsjukdom() {

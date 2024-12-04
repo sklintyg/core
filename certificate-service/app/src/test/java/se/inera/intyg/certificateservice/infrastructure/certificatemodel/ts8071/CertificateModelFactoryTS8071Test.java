@@ -168,9 +168,8 @@ class CertificateModelFactoryTS8071Test {
   class CertificateSpecifications {
 
     @ParameterizedTest
-    @ValueSource(strings = {"3", "4", "7.1", "7.2", "7.1.1", "7.2.1", "8.1", "8.1.1", "9.1", "9.2",
-        "9.3", "10.1", "10.1.1", "11.1", "11.1.1", "11.2", "11.2.1", "11.3", "11.3.1", "11.4",
-        "11.4.1"})
+    @ValueSource(strings = {"3", "4", "7", "7.2", "7.3", "7.4", "8", "8.2", "9", "9.2",
+        "9.3", "10", "10.2", "10.3", "11", "11.2", "11.3", "11.4", "11.5", "11.6", "11.7", "11.8",})
     void shallIncludeQuestions(String value) {
       final var certificateModel = certificateModelFactoryTS8071.create();
 

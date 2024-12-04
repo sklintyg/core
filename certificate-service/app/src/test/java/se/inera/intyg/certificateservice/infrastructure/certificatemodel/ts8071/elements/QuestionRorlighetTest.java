@@ -14,7 +14,7 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 
 class QuestionRorlighetTest {
 
-  private static final ElementId ELEMENT_ID = new ElementId("10.1");
+  private static final ElementId ELEMENT_ID = new ElementId("10");
 
   @Test
   void shallIncludeId() {

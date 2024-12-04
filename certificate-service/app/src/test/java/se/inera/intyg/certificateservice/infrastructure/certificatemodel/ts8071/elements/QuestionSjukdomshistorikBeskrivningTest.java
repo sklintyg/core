@@ -21,7 +21,7 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 
 class QuestionSjukdomshistorikBeskrivningTest {
 
-  private static final ElementId ELEMENT_ID = new ElementId("7.2.1");
+  private static final ElementId ELEMENT_ID = new ElementId("7.4");
 
   @Test
   void shallIncludeId() {
@@ -34,7 +34,7 @@ class QuestionSjukdomshistorikBeskrivningTest {
   void shallIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationTextArea.builder()
         .name("Ange vad")
-        .id(new FieldId("7.2"))
+        .id(new FieldId("7.4"))
         .build();
 
     final var element = QuestionSjukdomshistorikBeskrivning.questionSjukdomshistorikBeskrivning();
@@ -46,14 +46,14 @@ class QuestionSjukdomshistorikBeskrivningTest {
   void shallIncludeRules() {
     final var expectedRules = List.of(
         ElementRuleExpression.builder()
-            .id(new ElementId("7.2"))
+            .id(new ElementId("7.3"))
             .type(ElementRuleType.SHOW)
-            .expression(new RuleExpression("$7.2"))
+            .expression(new RuleExpression("$7.3"))
             .build(),
         ElementRuleExpression.builder()
             .id(ELEMENT_ID)
             .type(ElementRuleType.MANDATORY)
-            .expression(new RuleExpression("$7.2"))
+            .expression(new RuleExpression("$7.4"))
             .build(),
         ElementRuleLimit.builder()
             .id(ELEMENT_ID)
@@ -88,7 +88,7 @@ class QuestionSjukdomshistorikBeskrivningTest {
     void shallReturnTrueIfBooleanIsTrue() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("7.2"))
+              .id(new ElementId("7.3"))
               .value(
                   ElementValueBoolean.builder()
                       .value(true)
@@ -128,7 +128,7 @@ class QuestionSjukdomshistorikBeskrivningTest {
     void shallReturnFalseIfElementFalse() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("7.2"))
+              .id(new ElementId("7.3"))
               .value(
                   ElementValueBoolean.builder()
                       .value(false)

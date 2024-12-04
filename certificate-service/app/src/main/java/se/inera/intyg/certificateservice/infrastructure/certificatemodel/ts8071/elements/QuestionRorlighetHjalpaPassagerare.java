@@ -10,8 +10,8 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionRorlighetHjalpaPassagerare {
 
-  public static final ElementId QUESTION_RORLIGHET_HJALPA_PASSAGERARE_ID = new ElementId("10.2");
-  public static final FieldId QUESTION_RORLIGHET_HJALPA_PASSAGERARE_FIELD_ID = new FieldId("10.2");
+  public static final ElementId QUESTION_RORLIGHET_HJALPA_PASSAGERARE_ID = new ElementId("10.3");
+  public static final FieldId QUESTION_RORLIGHET_HJALPA_PASSAGERARE_FIELD_ID = new FieldId("10.3");
 
   private QuestionRorlighetHjalpaPassagerare() {
     throw new IllegalStateException("Utility class");
@@ -27,7 +27,7 @@ public class QuestionRorlighetHjalpaPassagerare {
                 .selectedText("Ja")
                 .unselectedText("Nej")
                 .name(
-                    " Har personen en nedsättning av rörelseförmågan som gör att personen inte kan "
+                    "Har personen en nedsättning av rörelseförmågan som gör att personen inte kan "
                         + "hjälpa passagerare in och ut ur fordonet samt med bilbälte?")
                 .build()
         )

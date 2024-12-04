@@ -11,6 +11,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
@@ -21,7 +22,7 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 
 class QuestionHjartsjukdomBeskrivningTest {
 
-  private static final ElementId ELEMENT_ID = new ElementId("11.1.1");
+  private static final ElementId ELEMENT_ID = new ElementId("11.2");
 
   @Test
   void shallIncludeId() {
@@ -34,7 +35,7 @@ class QuestionHjartsjukdomBeskrivningTest {
   void shallIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationTextArea.builder()
         .name("Ange vilken sjukdom")
-        .id(new FieldId("11.1"))
+        .id(new FieldId("11.2"))
         .build();
 
     final var element = QuestionHjartsjukdomBeskrivning.questionHjartsjukdomBeskrivning();
@@ -46,14 +47,14 @@ class QuestionHjartsjukdomBeskrivningTest {
   void shallIncludeRules() {
     final var expectedRules = List.of(
         ElementRuleExpression.builder()
-            .id(new ElementId("11.1"))
+            .id(new ElementId("11"))
             .type(ElementRuleType.SHOW)
             .expression(new RuleExpression("$11.1"))
             .build(),
         ElementRuleExpression.builder()
             .id(ELEMENT_ID)
             .type(ElementRuleType.MANDATORY)
-            .expression(new RuleExpression("$11.1"))
+            .expression(new RuleExpression("$11.2"))
             .build(),
         ElementRuleLimit.builder()
             .id(ELEMENT_ID)
@@ -81,6 +82,13 @@ class QuestionHjartsjukdomBeskrivningTest {
     assertEquals(expectedValidations, element.validations());
   }
 
+  @Test
+  void shallIncludeMapping() {
+    final var element = QuestionHjartsjukdomBeskrivning.questionHjartsjukdomBeskrivning();
+
+    assertEquals(new ElementMapping(new ElementId("11"), null), element.mapping());
+  }
+
   @Nested
   class ShouldValidate {
 
@@ -88,7 +96,7 @@ class QuestionHjartsjukdomBeskrivningTest {
     void shallReturnTrueIfBooleanIsTrue() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("11.1"))
+              .id(new ElementId("11"))
               .value(
                   ElementValueBoolean.builder()
                       .value(true)
@@ -128,7 +136,7 @@ class QuestionHjartsjukdomBeskrivningTest {
     void shallReturnFalseIfElementFalse() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("11.1"))
+              .id(new ElementId("11"))
               .value(
                   ElementValueBoolean.builder()
                       .value(false)

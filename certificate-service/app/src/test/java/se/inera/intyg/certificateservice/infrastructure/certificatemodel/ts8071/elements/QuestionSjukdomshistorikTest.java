@@ -19,7 +19,7 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 
 class QuestionSjukdomshistorikTest {
 
-  private static final ElementId ELEMENT_ID = new ElementId("7.2");
+  private static final ElementId ELEMENT_ID = new ElementId("7.3");
 
   @Test
   void shallIncludeId() {
@@ -36,7 +36,7 @@ class QuestionSjukdomshistorikTest {
         .description(
             "Exempel på sjukdomshistorik och andra omständigheter som kan påverka synfunktionerna är stroke och laserbehandling av retinopati. Det "
                 + "kan också vara skalltrauma, hjärntumör eller prematur födsel som är av sådan grad att den kan ha påverkan på synfältet.")
-        .id(new FieldId("7.2"))
+        .id(new FieldId("7.3"))
         .selectedText("Ja")
         .unselectedText("Nej")
         .build();
@@ -54,7 +54,7 @@ class QuestionSjukdomshistorikTest {
             .type(ElementRuleType.MANDATORY)
             .expression(
                 new RuleExpression(
-                    "exists($7.2)"
+                    "exists($7.3)"
                 )
             ).build(),
         ElementRuleExpression.builder()
