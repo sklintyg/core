@@ -65,8 +65,7 @@ public abstract class SendCertificateIT extends BaseIntegrationIT {
     );
 
     assertAll(
-        () -> assertEquals("FKASSA", getRecipient(response).getId()),
-        () -> assertEquals("Försäkringskassan", getRecipient(response).getName()),
+        () -> assertEquals(recipient(), getRecipient(response).getId()),
         () -> assertNotNull(getRecipient(response).getSent())
     );
   }
@@ -88,8 +87,7 @@ public abstract class SendCertificateIT extends BaseIntegrationIT {
     );
 
     assertAll(
-        () -> assertEquals("FKASSA", getRecipient(response).getId()),
-        () -> assertEquals("Försäkringskassan", getRecipient(response).getName()),
+        () -> assertEquals(recipient(), getRecipient(response).getId()),
         () -> assertNotNull(getRecipient(response).getSent())
     );
   }
@@ -174,8 +172,7 @@ public abstract class SendCertificateIT extends BaseIntegrationIT {
     );
 
     assertAll(
-        () -> assertEquals("FKASSA", getRecipient(response).getId()),
-        () -> assertEquals("Försäkringskassan", getRecipient(response).getName()),
+        () -> assertEquals(recipient(), getRecipient(response).getId()),
         () -> assertNotNull(getRecipient(response).getSent())
     );
   }
@@ -195,8 +192,7 @@ public abstract class SendCertificateIT extends BaseIntegrationIT {
     );
 
     assertAll(
-        () -> assertEquals("FKASSA", getRecipient(response).getId()),
-        () -> assertEquals("Försäkringskassan", getRecipient(response).getName()),
+        () -> assertEquals(recipient(), getRecipient(response).getId()),
         () -> assertNotNull(getRecipient(response).getSent())
     );
   }
@@ -216,8 +212,7 @@ public abstract class SendCertificateIT extends BaseIntegrationIT {
     );
 
     assertAll(
-        () -> assertEquals("FKASSA", getRecipient(response).getId()),
-        () -> assertEquals("Försäkringskassan", getRecipient(response).getName()),
+        () -> assertEquals(recipient(), getRecipient(response).getId()),
         () -> assertNotNull(getRecipient(response).getSent())
     );
   }
@@ -237,8 +232,7 @@ public abstract class SendCertificateIT extends BaseIntegrationIT {
     );
 
     assertAll(
-        () -> assertEquals("FKASSA", getRecipient(response).getId()),
-        () -> assertEquals("Försäkringskassan", getRecipient(response).getName()),
+        () -> assertEquals(recipient(), getRecipient(response).getId()),
         () -> assertNotNull(getRecipient(response).getSent())
     );
   }
