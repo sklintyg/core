@@ -50,6 +50,8 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionKognitivStorning.questionKognitivStorning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionLakemedel.questionLakemedel;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionLakemedelBeskrivning.questionLakemedelBeskrivning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMedicinering.questionMedicinering;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMedicineringBeskrivning.questionMedicineringBeskrivning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMedvetandestorning.questionMedvetandestorning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMedvetandestorningTidpunkt.questionMedvetandestorningTidpunkt;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMissbruk.questionMissbruk;
@@ -283,7 +285,11 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
                     )
                 ),
                 categoryAdhdAutismPsykiskUtvecklingsstorning(),
-                categoryOvrigMedicinering(),
+                categoryOvrigMedicinering(
+                    questionMedicinering( // 21 - 21.1
+                        questionMedicineringBeskrivning() // 21.2 - 21.2
+                    )
+                ),
                 categoryOvrigKommentar(
                     questionOvrigBeskrivning() // 22 - 22.1
                 ),
