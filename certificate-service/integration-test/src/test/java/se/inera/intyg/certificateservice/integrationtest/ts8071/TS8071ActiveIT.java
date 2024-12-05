@@ -4,7 +4,7 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ALVA_VARDADMINISTRATOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ANNA_SJUKSKOTERSKA_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.BERTIL_BARNMORSKA_DTO;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionEpilepsi.QUESTION_EPILEPSI_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionOvrigBeskrivning.QUESTION_OVRIG_BESKRIVNING_ID;
 import static se.inera.intyg.certificateservice.integrationtest.ts8071.TS8071Constants.CODE;
 import static se.inera.intyg.certificateservice.integrationtest.ts8071.TS8071Constants.CODE_SYSTEM;
 
@@ -51,8 +51,8 @@ public class TS8071ActiveIT {
   private static final String ACTIVE_VERSION = TS8071Constants.VERSION;
   private static final String WRONG_VERSION = TS8071Constants.WRONG_VERSION;
   private static final String TYPE = TS8071Constants.TYPE;
-  private static final ElementId ELEMENT_ID = QUESTION_EPILEPSI_ID;
-  private static final Boolean VALUE = true;
+  private static final ElementId ELEMENT_ID = QUESTION_OVRIG_BESKRIVNING_ID;
+  private static final String VALUE = "Uppdaterad text";
 
   @DynamicPropertySource
   static void testProperties(DynamicPropertyRegistry registry) {
