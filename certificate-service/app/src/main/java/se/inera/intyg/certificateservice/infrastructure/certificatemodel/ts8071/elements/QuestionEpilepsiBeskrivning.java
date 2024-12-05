@@ -45,12 +45,11 @@ public class QuestionEpilepsiBeskrivning {
                 ),
                 CertificateElementRuleFactory.limit(
                     QUESTION_EPILEPSI_BESKRIVNING_ID,
-                    (short) 50)
+                    (short) 50
+                )
             )
         )
-        .shouldValidate(
-            ShouldValidateFactory.radioBoolean(QUESTION_EPILEPSI_ID)
-        )
+        .shouldValidate(ShouldValidateFactory.radioBoolean(QUESTION_EPILEPSI_ID))
         .mapping(
             new ElementMapping(QUESTION_EPILEPSI_ID, null)
         )

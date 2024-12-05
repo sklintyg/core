@@ -6,6 +6,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
@@ -70,5 +71,12 @@ class QuestionDemensTest {
     final var element = QuestionDemens.questionDemens();
 
     assertEquals(expectedValidations, element.validations());
+  }
+
+  @Test
+  void shallIncludeMapping() {
+    final var element = QuestionDemens.questionDemens();
+
+    assertEquals(new ElementMapping(new ElementId("16"), null), element.mapping());
   }
 }

@@ -11,6 +11,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
@@ -211,5 +212,12 @@ class QuestionEpilepsiMedicinTest {
 
       assertTrue(shouldValidate.test(elementData));
     }
+  }
+
+  @Test
+  void shallIncludeMapping() {
+    final var element = QuestionEpilepsiMedicin.questionEpilepsiMedicin();
+
+    assertEquals(new ElementMapping(new ElementId("14"), null), element.mapping());
   }
 }

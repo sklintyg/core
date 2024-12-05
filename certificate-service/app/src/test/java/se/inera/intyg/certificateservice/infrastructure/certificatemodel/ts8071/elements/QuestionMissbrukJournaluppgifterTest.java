@@ -6,6 +6,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
@@ -70,5 +71,12 @@ class QuestionMissbrukJournaluppgifterTest {
     final var element = QuestionMissbrukJournaluppgifter.questionMissbrukJournaluppgifter();
 
     assertEquals(expectedValidations, element.validations());
+  }
+
+  @Test
+  void shallIncludeMapping() {
+    final var element = QuestionMissbrukJournaluppgifter.questionMissbrukJournaluppgifter();
+
+    assertEquals(new ElementMapping(new ElementId("18"), null), element.mapping());
   }
 }

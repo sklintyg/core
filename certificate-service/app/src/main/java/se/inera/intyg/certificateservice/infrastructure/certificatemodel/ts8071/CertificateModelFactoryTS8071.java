@@ -300,10 +300,10 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
                         questionNeuropsykiatriskTidpunkt(), // 20.3 - 20.3
                         questionNeuropsykiatriskLakemedel( // 20.4 - 20.4
                             questionNeuropsykiatriskLakemedelBeskrivning() // 20.5 - 20.5
-                        ),
-                        questionPsykiskUtvecklingsstorning(
-                            questionPsykiskUtvecklingsstorningAllvarlig()
                         )
+                    ),
+                    questionPsykiskUtvecklingsstorning(
+                        questionPsykiskUtvecklingsstorningAllvarlig()
                     )
                 ),
                 categoryOvrigMedicinering(
