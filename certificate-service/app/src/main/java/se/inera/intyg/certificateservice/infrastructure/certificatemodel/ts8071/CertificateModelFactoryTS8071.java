@@ -62,6 +62,11 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMissbrukVard.questionMissbrukVard;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMissbrukVardBeskrivning.questionMissbrukVardBeskrivning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNeurologiskSjukdom.questionNeurologiskSjukdom;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNeuropsykiatrisk.questionNeuropsykiatrisk;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNeuropsykiatriskLakemedel.questionNeuropsykiatriskLakemedel;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNeuropsykiatriskLakemedelBeskrivning.questionNeuropsykiatriskLakemedelBeskrivning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNeuropsykiatriskTidpunkt.questionNeuropsykiatriskTidpunkt;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNeuropsykiatriskTrafikrisk.questionNeuropsykiatriskTrafikrisk;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNjurfunktion.questionNjurfunktion;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNjurtransplatation.questionNjurtransplatation;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNjurtransplatationTidpunkt.questionNjurtransplatationTidpunkt;
@@ -69,6 +74,8 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionPsykisk.questionPsykisk;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionPsykiskBeskrivning.questionPsykiskBeskrivning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionPsykiskTidpunkt.questionPsykiskTidpunkt;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionPsykiskUtvecklingsstorning.questionPsykiskUtvecklingsstorning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionPsykiskUtvecklingsstorningAllvarlig.questionPsykiskUtvecklingsstorningAllvarlig;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionRorlighet.questionRorlighet;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionRorlighetBeskrivning.questionRorlighetBeskrivning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionRorlighetHjalpaPassagerare.questionRorlighetHjalpaPassagerare;
@@ -284,7 +291,18 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
                         questionPsykiskTidpunkt() // 19.3 - 19.3
                     )
                 ),
-                categoryAdhdAutismPsykiskUtvecklingsstorning(),
+                categoryAdhdAutismPsykiskUtvecklingsstorning(
+                    questionNeuropsykiatrisk( // 20 - 20.1
+                        questionNeuropsykiatriskTrafikrisk(), // 20.2 - 20.2
+                        questionNeuropsykiatriskTidpunkt(), // 20.3 - 20.3
+                        questionNeuropsykiatriskLakemedel( // 20.4 - 20.4
+                            questionNeuropsykiatriskLakemedelBeskrivning() // 20.5 - 20.5
+                        ),
+                        questionPsykiskUtvecklingsstorning(
+                            questionPsykiskUtvecklingsstorningAllvarlig()
+                        )
+                    )
+                ),
                 categoryOvrigMedicinering(
                     questionMedicinering( // 21 - 21.1
                         questionMedicineringBeskrivning() // 21.2 - 21.2
