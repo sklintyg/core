@@ -63,6 +63,9 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNjurfunktion.questionNjurfunktion;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNjurtransplatation.questionNjurtransplatation;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNjurtransplatationTidpunkt.questionNjurtransplatationTidpunkt;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionPsykisk.questionPsykisk;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionPsykiskBeskrivning.questionPsykiskBeskrivning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionPsykiskTidpunkt.questionPsykiskTidpunkt;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionRorlighet.questionRorlighet;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionRorlighetBeskrivning.questionRorlighetBeskrivning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionRorlighetHjalpaPassagerare.questionRorlighetHjalpaPassagerare;
@@ -272,7 +275,12 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
                         questionLakemedelBeskrivning()
                     )
                 ),
-                categoryPsykiskaSjukdomarOchStorningar(),
+                categoryPsykiskaSjukdomarOchStorningar(
+                    questionPsykisk( // 19 - 19.1
+                        questionPsykiskBeskrivning(), // 19.2 - 19.2
+                        questionPsykiskTidpunkt() // 19.3 - 19.3
+                    )
+                ),
                 categoryAdhdAutismPsykiskUtvecklingsstorning(),
                 categoryOvrigMedicinering(),
                 categoryOvrigKommentar(),
