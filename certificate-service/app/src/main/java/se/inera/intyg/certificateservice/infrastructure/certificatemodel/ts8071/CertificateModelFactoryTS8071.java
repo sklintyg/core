@@ -29,6 +29,9 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionBalanssinneBeskrivning.questionBalanssinneBeskrivning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionBaseratPa.questionBaseratPa;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionBaseratPaDatum.questionBaseratPaDatum;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionBedomning.questionBedomning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionBedomningOkand.questionBedomningOkand;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionBedomningRisk.questionBedomningRisk;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionDemens.questionDemens;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionDemensBeskrivning.questionDemensBeskrivning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionDiabetes.questionDiabetes;
@@ -311,7 +314,12 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
                 categoryOvrigKommentar(
                     questionOvrigBeskrivning() // 22 - 22.1
                 ),
-                categoryBedomning(),
+                categoryBedomning(
+                    questionBedomning( // 23 - 23.1
+                        questionBedomningRisk(), // 23.2 - 23.2
+                        questionBedomningOkand() // 23.3 - 23.3
+                    )
+                ),
                 issuingUnitContactInfo()
             )
         )
