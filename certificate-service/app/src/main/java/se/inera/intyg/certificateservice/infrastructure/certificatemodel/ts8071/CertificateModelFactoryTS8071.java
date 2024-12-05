@@ -63,6 +63,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNjurfunktion.questionNjurfunktion;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNjurtransplatation.questionNjurtransplatation;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNjurtransplatationTidpunkt.questionNjurtransplatationTidpunkt;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionOvrigBeskrivning.questionOvrigBeskrivning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionPsykisk.questionPsykisk;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionPsykiskBeskrivning.questionPsykiskBeskrivning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionPsykiskTidpunkt.questionPsykiskTidpunkt;
@@ -283,7 +284,9 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
                 ),
                 categoryAdhdAutismPsykiskUtvecklingsstorning(),
                 categoryOvrigMedicinering(),
-                categoryOvrigKommentar(),
+                categoryOvrigKommentar(
+                    questionOvrigBeskrivning() // 22 - 22.1
+                ),
                 categoryBedomning(),
                 issuingUnitContactInfo()
             )
