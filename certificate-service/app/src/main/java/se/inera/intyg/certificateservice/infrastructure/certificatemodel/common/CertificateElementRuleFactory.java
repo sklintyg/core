@@ -114,6 +114,24 @@ public class CertificateElementRuleFactory {
         .build();
   }
 
+  public static ElementRule disableSubElements(ElementId id, List<FieldId> elementsForExpression,
+      List<FieldId> elementsToDisable) {
+    return ElementRuleExpression.builder()
+        .id(id)
+        .type(ElementRuleType.DISABLE_SUB_ELEMENT)
+        .affectedSubElements(elementsToDisable)
+        .expression(
+            new RuleExpression(
+                multipleOrExpression(
+                    elementsForExpression.stream()
+                        .map(field -> singleExpression(field.value()))
+                        .toArray(String[]::new)
+                )
+            )
+        )
+        .build();
+  }
+
   private static String singleExpression(String id) {
     return "$" + id;
   }
