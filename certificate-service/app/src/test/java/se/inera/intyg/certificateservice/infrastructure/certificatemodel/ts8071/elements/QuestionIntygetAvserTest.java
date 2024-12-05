@@ -97,6 +97,120 @@ class QuestionIntygetAvserTest {
                     "$G2 || $G23 || $GH2 || $GH23 || $UTLANDSKT || $TAXI || $ANNAT"
                 )
             )
+            .build(),
+        ElementRuleExpression.builder()
+            .id(ELEMENT_ID)
+            .type(ElementRuleType.DISABLE_SUB_ELEMENT)
+            .expression(
+                new RuleExpression(
+                    "$G2"
+                )
+            )
+            .affectedSubElements(
+                List.of(
+                    new FieldId(CodeSystemKvTs0002.G23.code()),
+                    new FieldId(CodeSystemKvTs0002.GH2.code()),
+                    new FieldId(CodeSystemKvTs0002.GH23.code()),
+                    new FieldId(CodeSystemKvTs0002.UTLANDSKT.code()),
+                    new FieldId(CodeSystemKvTs0002.TAXI.code()),
+                    new FieldId(CodeSystemKvTs0002.ANNAT.code())
+                )
+            )
+            .build(),
+        ElementRuleExpression.builder()
+            .id(ELEMENT_ID)
+            .type(ElementRuleType.DISABLE_SUB_ELEMENT)
+            .expression(
+                new RuleExpression(
+                    "$G23"
+                )
+            )
+            .affectedSubElements(
+                List.of(
+                    new FieldId(CodeSystemKvTs0002.G2.code()),
+                    new FieldId(CodeSystemKvTs0002.GH2.code()),
+                    new FieldId(CodeSystemKvTs0002.GH23.code()),
+                    new FieldId(CodeSystemKvTs0002.UTLANDSKT.code()),
+                    new FieldId(CodeSystemKvTs0002.TAXI.code()),
+                    new FieldId(CodeSystemKvTs0002.ANNAT.code())
+                )
+            )
+            .build(),
+        ElementRuleExpression.builder()
+            .id(ELEMENT_ID)
+            .type(ElementRuleType.DISABLE_SUB_ELEMENT)
+            .expression(
+                new RuleExpression(
+                    "$GH2"
+                )
+            )
+            .affectedSubElements(
+                List.of(
+                    new FieldId(CodeSystemKvTs0002.G2.code()),
+                    new FieldId(CodeSystemKvTs0002.G23.code()),
+                    new FieldId(CodeSystemKvTs0002.GH23.code()),
+                    new FieldId(CodeSystemKvTs0002.UTLANDSKT.code()),
+                    new FieldId(CodeSystemKvTs0002.TAXI.code()),
+                    new FieldId(CodeSystemKvTs0002.ANNAT.code())
+                )
+            )
+            .build(),
+        ElementRuleExpression.builder()
+            .id(ELEMENT_ID)
+            .type(ElementRuleType.DISABLE_SUB_ELEMENT)
+            .expression(
+                new RuleExpression(
+                    "$GH23"
+                )
+            )
+            .affectedSubElements(
+                List.of(
+                    new FieldId(CodeSystemKvTs0002.G2.code()),
+                    new FieldId(CodeSystemKvTs0002.G23.code()),
+                    new FieldId(CodeSystemKvTs0002.GH2.code()),
+                    new FieldId(CodeSystemKvTs0002.UTLANDSKT.code()),
+                    new FieldId(CodeSystemKvTs0002.TAXI.code()),
+                    new FieldId(CodeSystemKvTs0002.ANNAT.code())
+                )
+            )
+            .build(),
+        ElementRuleExpression.builder()
+            .id(ELEMENT_ID)
+            .type(ElementRuleType.DISABLE_SUB_ELEMENT)
+            .expression(
+                new RuleExpression(
+                    "$UTLANDSKT"
+                )
+            )
+            .affectedSubElements(
+                List.of(
+                    new FieldId(CodeSystemKvTs0002.G2.code()),
+                    new FieldId(CodeSystemKvTs0002.G23.code()),
+                    new FieldId(CodeSystemKvTs0002.GH2.code()),
+                    new FieldId(CodeSystemKvTs0002.GH23.code()),
+                    new FieldId(CodeSystemKvTs0002.TAXI.code()),
+                    new FieldId(CodeSystemKvTs0002.ANNAT.code())
+                )
+            )
+            .build(),
+        ElementRuleExpression.builder()
+            .id(ELEMENT_ID)
+            .type(ElementRuleType.DISABLE_SUB_ELEMENT)
+            .expression(
+                new RuleExpression(
+                    "$ANNAT"
+                )
+            )
+            .affectedSubElements(
+                List.of(
+                    new FieldId(CodeSystemKvTs0002.G2.code()),
+                    new FieldId(CodeSystemKvTs0002.G23.code()),
+                    new FieldId(CodeSystemKvTs0002.GH2.code()),
+                    new FieldId(CodeSystemKvTs0002.GH23.code()),
+                    new FieldId(CodeSystemKvTs0002.TAXI.code()),
+                    new FieldId(CodeSystemKvTs0002.UTLANDSKT.code())
+                )
+            )
             .build()
     );
 

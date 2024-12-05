@@ -65,6 +65,78 @@ public class QuestionIntygetAvser {
                         new FieldId(CodeSystemKvTs0002.TAXI.code()),
                         new FieldId(CodeSystemKvTs0002.ANNAT.code())
                     )
+                ),
+                CertificateElementRuleFactory.disableSubElements(
+                    INTYGET_AVSER_ID,
+                    List.of(new FieldId(CodeSystemKvTs0002.G2.code())),
+                    List.of(
+                        new FieldId(CodeSystemKvTs0002.G23.code()),
+                        new FieldId(CodeSystemKvTs0002.GH2.code()),
+                        new FieldId(CodeSystemKvTs0002.GH23.code()),
+                        new FieldId(CodeSystemKvTs0002.UTLANDSKT.code()),
+                        new FieldId(CodeSystemKvTs0002.TAXI.code()),
+                        new FieldId(CodeSystemKvTs0002.ANNAT.code())
+                    )
+                ),
+                CertificateElementRuleFactory.disableSubElements(
+                    INTYGET_AVSER_ID,
+                    List.of(new FieldId(CodeSystemKvTs0002.G23.code())),
+                    List.of(
+                        new FieldId(CodeSystemKvTs0002.G2.code()),
+                        new FieldId(CodeSystemKvTs0002.GH2.code()),
+                        new FieldId(CodeSystemKvTs0002.GH23.code()),
+                        new FieldId(CodeSystemKvTs0002.UTLANDSKT.code()),
+                        new FieldId(CodeSystemKvTs0002.TAXI.code()),
+                        new FieldId(CodeSystemKvTs0002.ANNAT.code())
+                    )
+                ),
+                CertificateElementRuleFactory.disableSubElements(
+                    INTYGET_AVSER_ID,
+                    List.of(new FieldId(CodeSystemKvTs0002.GH2.code())),
+                    List.of(
+                        new FieldId(CodeSystemKvTs0002.G2.code()),
+                        new FieldId(CodeSystemKvTs0002.G23.code()),
+                        new FieldId(CodeSystemKvTs0002.GH23.code()),
+                        new FieldId(CodeSystemKvTs0002.UTLANDSKT.code()),
+                        new FieldId(CodeSystemKvTs0002.TAXI.code()),
+                        new FieldId(CodeSystemKvTs0002.ANNAT.code())
+                    )
+                ),
+                CertificateElementRuleFactory.disableSubElements(
+                    INTYGET_AVSER_ID,
+                    List.of(new FieldId(CodeSystemKvTs0002.GH23.code())),
+                    List.of(
+                        new FieldId(CodeSystemKvTs0002.G2.code()),
+                        new FieldId(CodeSystemKvTs0002.G23.code()),
+                        new FieldId(CodeSystemKvTs0002.GH2.code()),
+                        new FieldId(CodeSystemKvTs0002.UTLANDSKT.code()),
+                        new FieldId(CodeSystemKvTs0002.TAXI.code()),
+                        new FieldId(CodeSystemKvTs0002.ANNAT.code())
+                    )
+                ),
+                CertificateElementRuleFactory.disableSubElements(
+                    INTYGET_AVSER_ID,
+                    List.of(new FieldId(CodeSystemKvTs0002.UTLANDSKT.code())),
+                    List.of(
+                        new FieldId(CodeSystemKvTs0002.G2.code()),
+                        new FieldId(CodeSystemKvTs0002.G23.code()),
+                        new FieldId(CodeSystemKvTs0002.GH2.code()),
+                        new FieldId(CodeSystemKvTs0002.GH23.code()),
+                        new FieldId(CodeSystemKvTs0002.TAXI.code()),
+                        new FieldId(CodeSystemKvTs0002.ANNAT.code())
+                    )
+                ),
+                CertificateElementRuleFactory.disableSubElements(
+                    INTYGET_AVSER_ID,
+                    List.of(new FieldId(CodeSystemKvTs0002.ANNAT.code())),
+                    List.of(
+                        new FieldId(CodeSystemKvTs0002.G2.code()),
+                        new FieldId(CodeSystemKvTs0002.G23.code()),
+                        new FieldId(CodeSystemKvTs0002.GH2.code()),
+                        new FieldId(CodeSystemKvTs0002.GH23.code()),
+                        new FieldId(CodeSystemKvTs0002.TAXI.code()),
+                        new FieldId(CodeSystemKvTs0002.UTLANDSKT.code())
+                    )
                 )
             )
         )
