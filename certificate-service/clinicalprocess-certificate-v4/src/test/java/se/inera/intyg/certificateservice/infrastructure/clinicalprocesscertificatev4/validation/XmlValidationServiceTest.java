@@ -67,31 +67,13 @@ class XmlValidationServiceTest {
       assertTrue(illegalArgumentException.getMessage().contains("Missing required parameter xml"));
     }
 
-
     @Test
-    void shallThrowIfSchematronPathIsNull() {
-      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> xmlValidationService.validate(
-              XML,
-              null,
-              CERTIFICATE_ID)
-      );
-      assertTrue(illegalArgumentException.getMessage()
-          .contains("Missing required parameter schematronPath")
-      );
-    }
-
-    @Test
-    void shallThrowIfSchematronPathIsEmpty() {
-      final var schematronPath = new SchematronPath("");
-      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> xmlValidationService.validate(
-              XML,
-              schematronPath,
-              CERTIFICATE_ID)
-      );
-      assertTrue(illegalArgumentException.getMessage()
-          .contains("Missing required parameter schematronPath")
+    void shallNotThrowIfSchematronPathIsNull() {
+      doReturn(true).when(xmlSchemaValidator).validate(CERTIFICATE_ID, XML);
+      assertDoesNotThrow(() -> xmlValidationService.validate(
+          XML,
+          null,
+          CERTIFICATE_ID)
       );
     }
 

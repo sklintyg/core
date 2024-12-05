@@ -8,7 +8,6 @@ import java.time.Period;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationMedicalInvestigationList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
@@ -20,6 +19,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldI
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationMedicalInvestigationList;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005;
 
 public class QuestionUtredningEllerUnderlag {
@@ -104,12 +104,7 @@ public class QuestionUtredningEllerUnderlag {
                     .build()
             )
         )
-        .shouldValidate(
-            elementData -> elementData.stream()
-                .filter(data -> data.id().equals(QUESTION_BASERAT_PA_ANNAT_UNDERLAG_ID))
-                .map(element -> (ElementValueBoolean) element.value())
-                .anyMatch(value -> value != null && value.value() != null && value.value())
-        )
+        .shouldValidate(ShouldValidateFactory.radioBoolean(QUESTION_BASERAT_PA_ANNAT_UNDERLAG_ID))
         .pdfConfiguration(
             PdfConfigurationMedicalInvestigationList.builder()
                 .list(

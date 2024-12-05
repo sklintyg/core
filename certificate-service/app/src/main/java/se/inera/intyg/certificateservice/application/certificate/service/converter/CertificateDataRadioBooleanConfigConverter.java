@@ -27,6 +27,7 @@ public class CertificateDataRadioBooleanConfigConverter implements CertificateDa
 
     return CertificateDataConfigRadioBoolean.builder()
         .id(configurationRadioBoolean.id().value())
+        .description(configurationRadioBoolean.description())
         .text(elementSpecification.configuration().name())
         .selectedText(configurationRadioBoolean.selectedText())
         .unselectedText(configurationRadioBoolean.unselectedText())

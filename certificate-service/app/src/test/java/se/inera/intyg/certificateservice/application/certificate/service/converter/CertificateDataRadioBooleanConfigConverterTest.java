@@ -69,6 +69,23 @@ class CertificateDataRadioBooleanConfigConverterTest {
   }
 
   @Test
+  void shallSetCorrectDescription() {
+    final var elementSpecification = ElementSpecification.builder()
+        .configuration(
+            ElementConfigurationRadioBoolean.builder()
+                .id(new FieldId("ID"))
+                .name("NAME")
+                .description("DESCRIPTION")
+                .build())
+        .build();
+
+    final var result = certificateDataRadioBooleanConfigConverter.convert(elementSpecification,
+        FK7210_CERTIFICATE);
+
+    assertEquals("DESCRIPTION", result.getDescription());
+  }
+
+  @Test
   void shallSetCorrectSelectedText() {
     final var elementSpecification = ElementSpecification.builder()
         .configuration(

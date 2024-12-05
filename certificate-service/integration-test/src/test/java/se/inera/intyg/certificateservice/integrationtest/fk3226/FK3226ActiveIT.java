@@ -58,6 +58,7 @@ import se.inera.intyg.certificateservice.integrationtest.ValidateCertificateIT;
 public class FK3226ActiveIT {
 
   private static final String CERTIFICATE_TYPE = FK3226Constants.FK3226;
+  private static final String RECIPIENT = "FKASSA";
   private static final String ACTIVE_VERSION = FK3226Constants.VERSION;
   private static final String WRONG_VERSION = FK3226Constants.WRONG_VERSION;
   private static final String TYPE = FK3226Constants.TYPE;
@@ -576,6 +577,11 @@ public class FK3226ActiveIT {
   @Nested
   @DisplayName(TYPE + "Skicka")
   class SendCertificate extends SendCertificateIT {
+
+    @Override
+    protected String recipient() {
+      return RECIPIENT;
+    }
 
     @Override
     protected String type() {
