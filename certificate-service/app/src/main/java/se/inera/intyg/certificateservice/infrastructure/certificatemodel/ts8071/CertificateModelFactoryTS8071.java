@@ -48,8 +48,17 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionHorselhjalpmedelPosition.questionHorselhjalpmedelPosition;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionIdentitet.questionIdentitet;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionKognitivStorning.questionKognitivStorning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionLakemedel.questionLakemedel;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionLakemedelBeskrivning.questionLakemedelBeskrivning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMedvetandestorning.questionMedvetandestorning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMedvetandestorningTidpunkt.questionMedvetandestorningTidpunkt;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMissbruk.questionMissbruk;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMissbrukBeskrivning.questionMissbrukBeskrivning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMissbrukJournaluppgifter.questionMissbrukJournaluppgifter;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMissbrukJournaluppgifterBeskrivning.questionMissbrukJournaluppgifterBeskrivning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMissbrukProvtagning.questionMissbrukProvtagning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMissbrukVard.questionMissbrukVard;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMissbrukVardBeskrivning.questionMissbrukVardBeskrivning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNeurologiskSjukdom.questionNeurologiskSjukdom;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNjurfunktion.questionNjurfunktion;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNjurtransplatation.questionNjurtransplatation;
@@ -248,7 +257,21 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
                     ),
                     questionSomnBehandling() // 17.3 - 17.3
                 ),
-                categoryAlkoholNarkotikaOchLakemedel(),
+                categoryAlkoholNarkotikaOchLakemedel(
+                    questionMissbruk( // 18 - 18.2
+                        questionMissbrukBeskrivning() // 18.2 - 18.2
+                    ),
+                    questionMissbrukJournaluppgifter( // 18.3 - 18.3
+                        questionMissbrukJournaluppgifterBeskrivning() // 18.4 - 18.4
+                    ),
+                    questionMissbrukProvtagning(), // 18.5 - 18.5
+                    questionMissbrukVard( // 18.6 - 18.6
+                        questionMissbrukVardBeskrivning() // 18.7 - 18.7
+                    ),
+                    questionLakemedel( // 18.8 - 18.8
+                        questionLakemedelBeskrivning()
+                    )
+                ),
                 categoryPsykiskaSjukdomarOchStorningar(),
                 categoryAdhdAutismPsykiskUtvecklingsstorning(),
                 categoryOvrigMedicinering(),
