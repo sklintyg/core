@@ -35,7 +35,7 @@ public class ElementConfigurationRadioMultipleCode implements ElementConfigurati
             .equals(elementValueCode.codeId()))
         .findFirst()
         .orElseThrow(() -> new IllegalArgumentException(
-                "Cannot find matching code for dateId '%s'".formatted(elementValueCode.codeId())
+                "Cannot find matching code for codeId '%s'".formatted(elementValueCode.codeId())
             )
         )
         .code();
