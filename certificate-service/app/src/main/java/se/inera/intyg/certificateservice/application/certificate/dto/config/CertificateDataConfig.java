@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     @Type(value = CertificateDataConfigMedicalInvestigation.class, name = "UE_MEDICAL_INVESTIGATION"),
     @Type(value = CertificateDataConfigDiagnoses.class, name = "UE_DIAGNOSES"),
     @Type(value = CertificateDataConfigCheckboxMultipleCode.class, name = "UE_CHECKBOX_MULTIPLE_CODE"),
+    @Type(value = CertificateDataConfigOcularAcuity.class, name = "UE_OCULAR_ACUITY")
 })
 public interface CertificateDataConfig {
 
