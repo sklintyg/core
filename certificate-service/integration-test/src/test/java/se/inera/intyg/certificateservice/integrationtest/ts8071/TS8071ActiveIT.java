@@ -47,6 +47,7 @@ import se.inera.intyg.certificateservice.integrationtest.ValidateCertificateIT;
 public class TS8071ActiveIT {
 
   private static final String CERTIFICATE_TYPE = TS8071Constants.TS8071;
+  private static final String RECIPIENT = "TRANSP";
   private static final String ACTIVE_VERSION = TS8071Constants.VERSION;
   private static final String WRONG_VERSION = TS8071Constants.WRONG_VERSION;
   private static final String TYPE = TS8071Constants.TYPE;
@@ -400,6 +401,11 @@ public class TS8071ActiveIT {
     @Override
     protected String type() {
       return CERTIFICATE_TYPE;
+    }
+
+    @Override
+    protected String recipient() {
+      return RECIPIENT;
     }
 
     @Override
