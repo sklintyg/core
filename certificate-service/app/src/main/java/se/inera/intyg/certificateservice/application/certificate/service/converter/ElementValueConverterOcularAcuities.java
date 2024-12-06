@@ -11,6 +11,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.value.Certi
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueOcularAcuities;
 import se.inera.intyg.certificateservice.domain.certificate.model.OcularAcuity;
+import se.inera.intyg.certificateservice.domain.certificate.model.WithCorrection;
+import se.inera.intyg.certificateservice.domain.certificate.model.WithoutCorrection;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
 @Component
@@ -31,23 +33,55 @@ public class ElementValueConverterOcularAcuities implements ElementValueConverte
     }
 
     return ElementValueOcularAcuities.builder()
-        .rightEye(OcularAcuity.builder()
-            .doubleId(new FieldId(ocularAcuities.getRightEye().getId()))
-            .withCorrection(getIfPresent(ocularAcuities.getRightEye().getWithCorrection()))
-            .withoutCorrection(getIfPresent(ocularAcuities.getRightEye().getWithoutCorrection()))
-            .build()
+        .rightEye(
+            OcularAcuity.builder()
+                .withCorrection(
+                    WithCorrection.builder()
+                        .id(new FieldId(ocularAcuities.getRightEye().getWithCorrection().getId()))
+                        .value(getIfPresent(ocularAcuities.getRightEye().getWithCorrection()))
+                        .build()
+                )
+                .withoutCorrection(
+                    WithoutCorrection.builder()
+                        .id(new FieldId(
+                            ocularAcuities.getRightEye().getWithoutCorrection().getId()))
+                        .value(getIfPresent(ocularAcuities.getRightEye().getWithoutCorrection()))
+                        .build()
+                )
+                .build()
         )
-        .leftEye(OcularAcuity.builder()
-            .doubleId(new FieldId(ocularAcuities.getLeftEye().getId()))
-            .withCorrection(getIfPresent(ocularAcuities.getLeftEye().getWithCorrection()))
-            .withoutCorrection(getIfPresent(ocularAcuities.getLeftEye().getWithoutCorrection()))
-            .build()
+        .leftEye(
+            OcularAcuity.builder()
+                .withCorrection(
+                    WithCorrection.builder()
+                        .id(new FieldId(ocularAcuities.getLeftEye().getWithCorrection().getId()))
+                        .value(getIfPresent(ocularAcuities.getLeftEye().getWithCorrection()))
+                        .build()
+                )
+                .withoutCorrection(
+                    WithoutCorrection.builder()
+                        .id(new FieldId(ocularAcuities.getLeftEye().getWithoutCorrection().getId()))
+                        .value(getIfPresent(ocularAcuities.getLeftEye().getWithoutCorrection()))
+                        .build()
+                )
+                .build()
         )
-        .binocular(OcularAcuity.builder()
-            .doubleId(new FieldId(ocularAcuities.getBinocular().getId()))
-            .withCorrection(getIfPresent(ocularAcuities.getBinocular().getWithCorrection()))
-            .withoutCorrection(getIfPresent(ocularAcuities.getBinocular().getWithoutCorrection()))
-            .build()
+        .binocular(
+            OcularAcuity.builder()
+                .withCorrection(
+                    WithCorrection.builder()
+                        .id(new FieldId(ocularAcuities.getBinocular().getWithCorrection().getId()))
+                        .value(getIfPresent(ocularAcuities.getBinocular().getWithCorrection()))
+                        .build()
+                )
+                .withoutCorrection(
+                    WithoutCorrection.builder()
+                        .id(new FieldId(
+                            ocularAcuities.getBinocular().getWithoutCorrection().getId()))
+                        .value(getIfPresent(ocularAcuities.getBinocular().getWithoutCorrection()))
+                        .build()
+                )
+                .build()
         )
         .build();
   }

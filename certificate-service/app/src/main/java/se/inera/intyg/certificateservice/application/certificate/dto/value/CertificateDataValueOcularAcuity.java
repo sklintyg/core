@@ -15,7 +15,6 @@ public class CertificateDataValueOcularAcuity implements CertificateDataValue {
 
   @Getter(onMethod = @__(@Override))
   CertificateDataValueType type = CertificateDataValueType.OCULAR_ACUITY;
-  String id;
   CertificateDataValueDouble withoutCorrection;
   CertificateDataValueDouble withCorrection;
 

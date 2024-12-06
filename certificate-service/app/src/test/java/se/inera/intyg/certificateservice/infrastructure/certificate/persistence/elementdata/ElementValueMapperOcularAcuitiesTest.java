@@ -8,6 +8,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueOcularAcuities;
 import se.inera.intyg.certificateservice.domain.certificate.model.OcularAcuity;
+import se.inera.intyg.certificateservice.domain.certificate.model.WithCorrection;
+import se.inera.intyg.certificateservice.domain.certificate.model.WithoutCorrection;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
 class ElementValueMapperOcularAcuitiesTest {
@@ -37,44 +39,104 @@ class ElementValueMapperOcularAcuitiesTest {
   @Test
   void shallMapToDomain() {
     final var expectedValue = ElementValueOcularAcuities.builder()
-        .rightEye(OcularAcuity.builder()
-            .doubleId(new FieldId("id1"))
-            .withoutCorrection(1.1)
-            .withCorrection(1.2)
-            .build()
+        .rightEye(
+            OcularAcuity.builder()
+                .withoutCorrection(
+                    WithoutCorrection.builder()
+                        .id(new FieldId("id1"))
+                        .value(1.1)
+                        .build()
+                )
+                .withCorrection(
+                    WithCorrection.builder()
+                        .id(new FieldId("id2"))
+                        .value(1.2)
+                        .build()
+                )
+                .build()
         )
-        .leftEye(OcularAcuity.builder()
-            .doubleId(new FieldId("id2"))
-            .withoutCorrection(2.1)
-            .withCorrection(2.2)
-            .build()
+        .leftEye(
+            OcularAcuity.builder()
+                .withoutCorrection(
+                    WithoutCorrection.builder()
+                        .id(new FieldId("id3"))
+                        .value(2.1)
+                        .build()
+                )
+                .withCorrection(
+                    WithCorrection.builder()
+                        .id(new FieldId("id4"))
+                        .value(2.2)
+                        .build()
+                )
+                .build()
         )
-        .binocular(OcularAcuity.builder()
-            .doubleId(new FieldId("id3"))
-            .withoutCorrection(3.1)
-            .withCorrection(3.2)
-            .build()
+        .binocular(
+            OcularAcuity.builder()
+                .withoutCorrection(
+                    WithoutCorrection.builder()
+                        .id(new FieldId("id5"))
+                        .value(3.1)
+                        .build()
+                )
+                .withCorrection(
+                    WithCorrection.builder()
+                        .id(new FieldId("id6"))
+                        .value(3.2)
+                        .build()
+                )
+                .build()
         )
         .build();
 
     final var mappedElementValueOcularAcuities = MappedElementValueOcularAcuities.builder()
-        .rightEye(MappedElementValueOcularAcuity.builder()
-            .id("id1")
-            .withoutCorrection(1.1)
-            .withCorrection(1.2)
-            .build()
+        .rightEye(
+            MappedElementValueOcularAcuity.builder()
+                .withoutCorrection(
+                    MappedElementValueDouble.builder()
+                        .id("id1")
+                        .value(1.1)
+                        .build()
+                )
+                .withCorrection(
+                    MappedElementValueDouble.builder()
+                        .id("id2")
+                        .value(1.2)
+                        .build()
+                )
+                .build()
         )
-        .leftEye(MappedElementValueOcularAcuity.builder()
-            .id("id2")
-            .withoutCorrection(2.1)
-            .withCorrection(2.2)
-            .build()
+        .leftEye(
+            MappedElementValueOcularAcuity.builder()
+                .withoutCorrection(
+                    MappedElementValueDouble.builder()
+                        .id("id3")
+                        .value(2.1)
+                        .build()
+                )
+                .withCorrection(
+                    MappedElementValueDouble.builder()
+                        .id("id4")
+                        .value(2.2)
+                        .build()
+                )
+                .build()
         )
-        .binocular(MappedElementValueOcularAcuity.builder()
-            .id("id3")
-            .withoutCorrection(3.1)
-            .withCorrection(3.2)
-            .build()
+        .binocular(
+            MappedElementValueOcularAcuity.builder()
+                .withoutCorrection(
+                    MappedElementValueDouble.builder()
+                        .id("id5")
+                        .value(3.1)
+                        .build()
+                )
+                .withCorrection(
+                    MappedElementValueDouble.builder()
+                        .id("id6")
+                        .value(3.2)
+                        .build()
+                )
+                .build()
         )
         .build();
 
@@ -87,45 +149,105 @@ class ElementValueMapperOcularAcuitiesTest {
 
   @Test
   void shallMapToMapped() {
-    final var expectedValue = MappedElementValueOcularAcuities.builder()
-        .rightEye(MappedElementValueOcularAcuity.builder()
-            .id("id1")
-            .withoutCorrection(1.1)
-            .withCorrection(1.2)
-            .build()
+    final var elementValueOcularAcuities = ElementValueOcularAcuities.builder()
+        .rightEye(
+            OcularAcuity.builder()
+                .withoutCorrection(
+                    WithoutCorrection.builder()
+                        .id(new FieldId("id1"))
+                        .value(1.1)
+                        .build()
+                )
+                .withCorrection(
+                    WithCorrection.builder()
+                        .id(new FieldId("id2"))
+                        .value(1.2)
+                        .build()
+                )
+                .build()
         )
-        .leftEye(MappedElementValueOcularAcuity.builder()
-            .id("id2")
-            .withoutCorrection(2.1)
-            .withCorrection(2.2)
-            .build()
+        .leftEye(
+            OcularAcuity.builder()
+                .withoutCorrection(
+                    WithoutCorrection.builder()
+                        .id(new FieldId("id3"))
+                        .value(2.1)
+                        .build()
+                )
+                .withCorrection(
+                    WithCorrection.builder()
+                        .id(new FieldId("id4"))
+                        .value(2.2)
+                        .build()
+                )
+                .build()
         )
-        .binocular(MappedElementValueOcularAcuity.builder()
-            .id("id3")
-            .withoutCorrection(3.1)
-            .withCorrection(3.2)
-            .build()
+        .binocular(
+            OcularAcuity.builder()
+                .withoutCorrection(
+                    WithoutCorrection.builder()
+                        .id(new FieldId("id5"))
+                        .value(3.1)
+                        .build()
+                )
+                .withCorrection(
+                    WithCorrection.builder()
+                        .id(new FieldId("id6"))
+                        .value(3.2)
+                        .build()
+                )
+                .build()
         )
         .build();
 
-    final var elementValueOcularAcuities = ElementValueOcularAcuities.builder()
-        .rightEye(OcularAcuity.builder()
-            .doubleId(new FieldId("id1"))
-            .withoutCorrection(1.1)
-            .withCorrection(1.2)
-            .build()
+    final var expectedValue = MappedElementValueOcularAcuities.builder()
+        .rightEye(
+            MappedElementValueOcularAcuity.builder()
+                .withoutCorrection(
+                    MappedElementValueDouble.builder()
+                        .id("id1")
+                        .value(1.1)
+                        .build()
+                )
+                .withCorrection(
+                    MappedElementValueDouble.builder()
+                        .id("id2")
+                        .value(1.2)
+                        .build()
+                )
+                .build()
         )
-        .leftEye(OcularAcuity.builder()
-            .doubleId(new FieldId("id2"))
-            .withoutCorrection(2.1)
-            .withCorrection(2.2)
-            .build()
+        .leftEye(
+            MappedElementValueOcularAcuity.builder()
+                .withoutCorrection(
+                    MappedElementValueDouble.builder()
+                        .id("id3")
+                        .value(2.1)
+                        .build()
+                )
+                .withCorrection(
+                    MappedElementValueDouble.builder()
+                        .id("id4")
+                        .value(2.2)
+                        .build()
+                )
+                .build()
         )
-        .binocular(OcularAcuity.builder()
-            .doubleId(new FieldId("id3"))
-            .withoutCorrection(3.1)
-            .withCorrection(3.2)
-            .build()
+        .binocular(
+            MappedElementValueOcularAcuity.builder()
+                .withoutCorrection(
+                    MappedElementValueDouble.builder()
+                        .id("id5")
+                        .value(3.1)
+                        .build()
+                )
+                .withCorrection(
+                    MappedElementValueDouble.builder()
+                        .id("id6")
+                        .value(3.2)
+                        .build()
+                )
+                .build()
         )
         .build();
 
@@ -135,5 +257,4 @@ class ElementValueMapperOcularAcuitiesTest {
 
     assertEquals(expectedValue, actualValue);
   }
-
 }

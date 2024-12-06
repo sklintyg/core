@@ -4,6 +4,8 @@ import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueOcularAcuities;
 import se.inera.intyg.certificateservice.domain.certificate.model.OcularAcuity;
+import se.inera.intyg.certificateservice.domain.certificate.model.WithCorrection;
+import se.inera.intyg.certificateservice.domain.certificate.model.WithoutCorrection;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
 @Component
@@ -20,23 +22,68 @@ public class ElementValueMapperOcularAcuities implements ElementValueMapper {
     if (mappedValue instanceof MappedElementValueOcularAcuities valueOcularAcuities) {
 
       return ElementValueOcularAcuities.builder()
-          .rightEye(OcularAcuity.builder()
-              .doubleId(new FieldId(valueOcularAcuities.getRightEye().getId()))
-              .withCorrection(valueOcularAcuities.getRightEye().getWithCorrection())
-              .withoutCorrection(valueOcularAcuities.getRightEye().getWithoutCorrection())
-              .build()
+          .rightEye(
+              OcularAcuity.builder()
+                  .withCorrection(
+                      WithCorrection.builder()
+                          .id(new FieldId(
+                              valueOcularAcuities.getRightEye().getWithCorrection().getId()))
+                          .value(valueOcularAcuities.getRightEye().getWithCorrection().getValue())
+                          .build()
+                  )
+                  .withoutCorrection(
+                      WithoutCorrection.builder()
+                          .id(new FieldId(
+                              valueOcularAcuities.getRightEye().getWithoutCorrection().getId())
+                          )
+                          .value(
+                              valueOcularAcuities.getRightEye().getWithoutCorrection().getValue()
+                          )
+                          .build()
+                  )
+                  .build()
           )
-          .leftEye(OcularAcuity.builder()
-              .doubleId(new FieldId(valueOcularAcuities.getLeftEye().getId()))
-              .withCorrection(valueOcularAcuities.getLeftEye().getWithCorrection())
-              .withoutCorrection(valueOcularAcuities.getLeftEye().getWithoutCorrection())
-              .build()
+          .leftEye(
+              OcularAcuity.builder()
+                  .withCorrection(
+                      WithCorrection.builder()
+                          .id(new FieldId(
+                              valueOcularAcuities.getLeftEye().getWithCorrection().getId()))
+                          .value(valueOcularAcuities.getLeftEye().getWithCorrection().getValue())
+                          .build()
+                  )
+                  .withoutCorrection(
+                      WithoutCorrection.builder()
+                          .id(new FieldId(
+                              valueOcularAcuities.getLeftEye().getWithoutCorrection().getId())
+                          )
+                          .value(
+                              valueOcularAcuities.getLeftEye().getWithoutCorrection().getValue()
+                          )
+                          .build()
+                  )
+                  .build()
           )
-          .binocular(OcularAcuity.builder()
-              .doubleId(new FieldId(valueOcularAcuities.getBinocular().getId()))
-              .withCorrection(valueOcularAcuities.getBinocular().getWithCorrection())
-              .withoutCorrection(valueOcularAcuities.getBinocular().getWithoutCorrection())
-              .build()
+          .binocular(
+              OcularAcuity.builder()
+                  .withCorrection(
+                      WithCorrection.builder()
+                          .id(new FieldId(
+                              valueOcularAcuities.getBinocular().getWithCorrection().getId()))
+                          .value(valueOcularAcuities.getBinocular().getWithCorrection().getValue())
+                          .build()
+                  )
+                  .withoutCorrection(
+                      WithoutCorrection.builder()
+                          .id(new FieldId(
+                              valueOcularAcuities.getBinocular().getWithoutCorrection().getId())
+                          )
+                          .value(
+                              valueOcularAcuities.getBinocular().getWithoutCorrection().getValue()
+                          )
+                          .build()
+                  )
+                  .build()
           )
           .build();
     }
@@ -48,23 +95,56 @@ public class ElementValueMapperOcularAcuities implements ElementValueMapper {
     if (value instanceof ElementValueOcularAcuities elementValueOcularAcuities) {
 
       return MappedElementValueOcularAcuities.builder()
-          .rightEye(MappedElementValueOcularAcuity.builder()
-              .id(elementValueOcularAcuities.rightEye().doubleId().value())
-              .withCorrection(elementValueOcularAcuities.rightEye().withCorrection())
-              .withoutCorrection(elementValueOcularAcuities.rightEye().withoutCorrection())
-              .build()
+          .rightEye(
+              MappedElementValueOcularAcuity.builder()
+                  .withCorrection(
+                      MappedElementValueDouble.builder()
+                          .id(elementValueOcularAcuities.rightEye().withCorrection().id().value())
+                          .value(elementValueOcularAcuities.rightEye().withCorrection().value())
+                          .build()
+                  )
+                  .withoutCorrection(
+                      MappedElementValueDouble.builder()
+                          .id(elementValueOcularAcuities.rightEye().withoutCorrection().id()
+                              .value())
+                          .value(elementValueOcularAcuities.rightEye().withoutCorrection().value())
+                          .build()
+                  )
+                  .build()
           )
-          .leftEye(MappedElementValueOcularAcuity.builder()
-              .id(elementValueOcularAcuities.leftEye().doubleId().value())
-              .withCorrection(elementValueOcularAcuities.leftEye().withCorrection())
-              .withoutCorrection(elementValueOcularAcuities.leftEye().withoutCorrection())
-              .build()
+          .leftEye(
+              MappedElementValueOcularAcuity.builder()
+                  .withCorrection(
+                      MappedElementValueDouble.builder()
+                          .id(elementValueOcularAcuities.leftEye().withCorrection().id().value())
+                          .value(elementValueOcularAcuities.leftEye().withCorrection().value())
+                          .build()
+                  )
+                  .withoutCorrection(
+                      MappedElementValueDouble.builder()
+                          .id(elementValueOcularAcuities.leftEye().withoutCorrection().id()
+                              .value())
+                          .value(elementValueOcularAcuities.leftEye().withoutCorrection().value())
+                          .build()
+                  )
+                  .build()
           )
-          .binocular(MappedElementValueOcularAcuity.builder()
-              .id(elementValueOcularAcuities.binocular().doubleId().value())
-              .withCorrection(elementValueOcularAcuities.binocular().withCorrection())
-              .withoutCorrection(elementValueOcularAcuities.binocular().withoutCorrection())
-              .build()
+          .binocular(
+              MappedElementValueOcularAcuity.builder()
+                  .withCorrection(
+                      MappedElementValueDouble.builder()
+                          .id(elementValueOcularAcuities.binocular().withCorrection().id().value())
+                          .value(elementValueOcularAcuities.binocular().withCorrection().value())
+                          .build()
+                  )
+                  .withoutCorrection(
+                      MappedElementValueDouble.builder()
+                          .id(elementValueOcularAcuities.binocular().withoutCorrection().id()
+                              .value())
+                          .value(elementValueOcularAcuities.binocular().withoutCorrection().value())
+                          .build()
+                  )
+                  .build()
           )
           .build();
     }
