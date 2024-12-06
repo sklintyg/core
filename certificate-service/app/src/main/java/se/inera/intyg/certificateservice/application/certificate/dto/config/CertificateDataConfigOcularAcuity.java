@@ -29,6 +29,11 @@ public class CertificateDataConfigOcularAcuity implements CertificateDataConfig 
   @Getter(onMethod = @__(@Override))
   Message message;
   String id;
+  String withoutCorrectionLabel;
+  String withCorrectionLabel;
+  OcularAcuity rightEye;
+  OcularAcuity leftEye;
+  OcularAcuity binocular;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class CertificateDataConfigOcularAcuityBuilder {
