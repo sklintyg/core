@@ -12,6 +12,6 @@ public class OcularAcuity implements ElementValue {
 
   @Override
   public boolean isEmpty() {
-    return withoutCorrection == null && withCorrection == null;
+    return withoutCorrection.value() == null && withCorrection.value() == null;
   }
 }
