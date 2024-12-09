@@ -55,7 +55,7 @@ class QuestionRorlighetHjalpaPassagerareTest {
         ElementRuleExpression.builder()
             .id(new ElementId("1"))
             .type(ElementRuleType.SHOW)
-            .expression(new RuleExpression("$gr_II_III || $tax_leg"))
+            .expression(new RuleExpression("exists(gr_II_III) || exists(tax_leg)"))
             .build()
     );
 

@@ -44,14 +44,14 @@ class QuestionHorselhjalpmedelPositionTest {
         .list(
             List.of(
                 new ElementConfigurationCode(
-                    new FieldId(HOGER.code()),
-                    HOGER.displayName(),
-                    HOGER
-                ),
-                new ElementConfigurationCode(
                     new FieldId(VANSTER.code()),
                     VANSTER.displayName(),
                     VANSTER
+                ),
+                new ElementConfigurationCode(
+                    new FieldId(HOGER.code()),
+                    HOGER.displayName(),
+                    HOGER
                 ),
                 new ElementConfigurationCode(
                     new FieldId(BADA_ORONEN.code()),
@@ -75,7 +75,7 @@ class QuestionHorselhjalpmedelPositionTest {
             .type(ElementRuleType.MANDATORY)
             .expression(
                 new RuleExpression(
-                    "exists($89644007) || exists($25577004) || exists($34338003)"
+                    "exists($25577004) || exists($89644007) || exists($34338003)"
                 )
             )
             .build(),

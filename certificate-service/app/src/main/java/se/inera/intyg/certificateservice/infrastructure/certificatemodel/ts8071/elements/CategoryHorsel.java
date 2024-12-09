@@ -35,7 +35,7 @@ public class CategoryHorsel {
                     QUESTION_INTYGET_AVSER_ID,
                     new RuleExpression(
                         String.format(
-                            "$%s || $%s", GR_II_III.code(), TAXI.code()
+                            "exists(%s) || exists(%s)", GR_II_III.code(), TAXI.code()
                         )
                     )
                 )

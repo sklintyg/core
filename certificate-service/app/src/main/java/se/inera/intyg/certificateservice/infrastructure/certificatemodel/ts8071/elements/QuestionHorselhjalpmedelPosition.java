@@ -31,8 +31,8 @@ public class QuestionHorselhjalpmedelPosition {
   public static ElementSpecification questionHorselhjalpmedelPosition(
       ElementSpecification... children) {
     final var radioMultipleCodes = List.of(
-        CodeFactory.elementConfigurationCode(CodeSystemPositionHearingAid.HOGER),
         CodeFactory.elementConfigurationCode(CodeSystemPositionHearingAid.VANSTER),
+        CodeFactory.elementConfigurationCode(CodeSystemPositionHearingAid.HOGER),
         CodeFactory.elementConfigurationCode(CodeSystemPositionHearingAid.BADA_ORONEN)
     );
 

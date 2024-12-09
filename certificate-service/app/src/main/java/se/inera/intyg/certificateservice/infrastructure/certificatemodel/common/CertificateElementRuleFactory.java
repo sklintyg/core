@@ -122,9 +122,9 @@ public class CertificateElementRuleFactory {
         .affectedSubElements(elementsToDisable)
         .expression(
             new RuleExpression(
-                multipleOrExpression(
+                multipleOrExpressionWithExists(
                     elementsForExpression.stream()
-                        .map(field -> singleExpression(field.value()))
+                        .map(FieldId::value)
                         .toArray(String[]::new)
                 )
             )

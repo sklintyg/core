@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     @Type(value = CertificateDataValidationText.class, name = "TEXT_VALIDATION"),
     @Type(value = CertificateDataValidationShow.class, name = "SHOW_VALIDATION"),
     @Type(value = CertificateDataValidationDisable.class, name = "DISABLE_VALIDATION"),
+    @Type(value = CertificateDataValidationDisableSubElement.class, name = "DISABLE_SUB_ELEMENT_VALIDATION"),
 })
 public interface CertificateDataValidation {
 

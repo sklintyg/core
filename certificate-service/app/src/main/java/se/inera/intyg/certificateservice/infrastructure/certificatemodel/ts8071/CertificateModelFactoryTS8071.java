@@ -127,14 +127,14 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
 
   private static final String TS_8071 = "ts8071";
   private static final String VERSION = "1.0";
-  private static final String NAME = "Läkarintyg avseende högre körkortsbehörigheter eller taxiförarlegitimation";
+  private static final String NAME = "Läkarintyg avseende högre körkortsbehörigheter, taxiförarlegitimation och på begäran av Transportstyrelsen";
   private static final String DESCRIPTION = """
-      <b className="iu-fw-heading">Läkarintyg avseende högre körkortsbehörigheter eller taxiförarlegitimation</b> 1.0
+      <b className="iu-fw-heading">Läkarintyg avseende högre körkortsbehörigheter, taxiförarlegitimation och på begäran av Transportstyrelsen</b> 1.0
             
       Transportstyrelsens läkarintyg ska användas vid förlängd giltighet av högre behörighet från 45 år, ansökan om körkortstillstånd för grupp II och III och vid ansökan om taxiförarlegitimation. Transportstyrelsens läkarintyg kan även användas när Transportstyrelsen i annat fall begärt ett allmänt läkarintyg avseende lämplighet att inneha körkort.
       """;
   private static final String DETAILED_DESCRIPTION = """
-       <b className="iu-fw-heading">Läkarintyg avseende högre körkortsbehörigheter eller taxiförarlegitimation</b> 1.0
+       <b className="iu-fw-heading">Läkarintyg avseende högre körkortsbehörigheter, taxiförarlegitimation och på begäran av Transportstyrelsen</b> 1.0
        Intyg för körkort och taxiförarlegitimation ska avges med beaktande av vad som anges i Transportstyrelsens föreskrifter och allmänna råd (TSFS 2010:125) om medicinska krav för innehav av körkort m.m. (medicinföreskrifterna). Föreskrifterna finns på Transportstyrelsen external-link och där finns också kompletterande upplysningar till vissa av kapitlen. För närvarande finns kompletterande upplysningar till kapitel 1 om bland annat läkares anmälan, kapitel 2 om synfunktionerna, kapitel 6 om diabetes och kapitel 17 om medicinska intyg.
        På  Transportstyrelsen external-link finns också blanketter för olika specialistläkarintyg, exempelvis för intyg om ADHD m.m., om hjärt- och kärlsjukdomar, om diabetes och om alkohol, narkotika och läkemedel. Om en person ska lämna något specialistläkarintyg har denne fått ett brev om saken från Transporstyrelsen. Det är därför ofta klokt att  be att få se brevet, så att intyget kommer att svara mot de frågeställningar som kan finnas hos myndigheten.
             
@@ -279,9 +279,9 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
                         questionMissbrukBeskrivning() // 18.2 - 18.2
                     ),
                     questionMissbrukJournaluppgifter( // 18.3 - 18.3
-                        questionMissbrukJournaluppgifterBeskrivning() // 18.4 - 18.4
+                        questionMissbrukJournaluppgifterBeskrivning(), // 18.4 - 18.4
+                        questionMissbrukProvtagning() // 18.5 - 18.5
                     ),
-                    questionMissbrukProvtagning(), // 18.5 - 18.5
                     questionMissbrukVard( // 18.6 - 18.6
                         questionMissbrukVardBeskrivning() // 18.7 - 18.7
                     ),

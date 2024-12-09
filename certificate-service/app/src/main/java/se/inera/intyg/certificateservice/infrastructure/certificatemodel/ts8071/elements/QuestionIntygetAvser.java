@@ -40,11 +40,11 @@ public class QuestionIntygetAvser {
             ElementConfigurationCheckboxMultipleCode.builder()
                 .id(QUESTION_INTYGET_AVSER_FIELD_ID)
                 .name("Intyget avser")
-                .elementLayout(ElementLayout.COLUMNS)
+                .elementLayout(ElementLayout.ROWS)
                 .list(checkboxes)
                 .message(
                     ElementMessage.builder()
-                        .level(MessageLevel.INFO)
+                        .level(MessageLevel.OBSERVE)
                         .includedForStatuses(List.of(Status.DRAFT))
                         .content(
                             "Endast ett alternativ kan väljas. Undantaget är om intyget avser taxiförarlegitimation, då kan två val göras.")
@@ -54,7 +54,7 @@ public class QuestionIntygetAvser {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatory(
+                CertificateElementRuleFactory.mandatoryExist(
                     QUESTION_INTYGET_AVSER_ID,
                     List.of(
                         new FieldId(CodeSystemKvTs0002.GR_II.code()),

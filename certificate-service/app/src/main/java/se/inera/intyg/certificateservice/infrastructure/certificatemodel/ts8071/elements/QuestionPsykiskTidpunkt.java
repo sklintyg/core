@@ -4,7 +4,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionPsykisk.QUESTION_PSYKISK_ID;
 
 import java.util.List;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextField;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
@@ -28,7 +28,7 @@ public class QuestionPsykiskTidpunkt {
     return ElementSpecification.builder()
         .id(QUESTION_PSYKISK_TIDPUNKT_ID)
         .configuration(
-            ElementConfigurationTextArea.builder()
+            ElementConfigurationTextField.builder()
                 .id(QUESTION_PSYKISK_TIDPUNKT_FIELD_ID)
                 .name("När hade personen senast läkarkontakt med anledning av sin diagnos?")
                 .description("Ange tidpunkt")

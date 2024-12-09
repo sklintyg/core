@@ -4,7 +4,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionEpilepsi.QUESTION_EPILEPSI_ID;
 
 import java.util.List;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextField;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
@@ -28,7 +28,7 @@ public class QuestionEpilepsiBeskrivning {
     return ElementSpecification.builder()
         .id(QUESTION_EPILEPSI_BESKRIVNING_ID)
         .configuration(
-            ElementConfigurationTextArea.builder()
+            ElementConfigurationTextField.builder()
                 .id(QUESTION_EPILEPSI_BESKRIVNING_FIELD_ID)
                 .name("Ange tidpunkt för senaste epileptiska anfall")
                 .build()

@@ -46,7 +46,8 @@ public class QuestionBaseratPaDatum {
                 CertificateElementRuleFactory.show(
                     QUESTION_BASERAT_PA_ID,
                     new RuleExpression(
-                        String.format("$%s || $%s", DISTANSKONTAKT.code(), UNDERSOKNING.code())
+                        String.format("exists(%s) || exists(%s)",
+                            DISTANSKONTAKT.code(), UNDERSOKNING.code())
                     )
                 )
             )

@@ -54,7 +54,7 @@ class QuestionBaseratPaDatumTest {
         ElementRuleExpression.builder()
             .id(new ElementId("2"))
             .type(ElementRuleType.SHOW)
-            .expression(new RuleExpression("$distkont || $undersokn"))
+            .expression(new RuleExpression("exists(distkont) || exists(undersokn)"))
             .build()
     );
 

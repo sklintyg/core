@@ -33,10 +33,10 @@ class QuestionIntygetAvserTest {
   void shallIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationCheckboxMultipleCode.builder()
         .name("Intyget avser")
-        .elementLayout(ElementLayout.COLUMNS)
+        .elementLayout(ElementLayout.ROWS)
         .id(new FieldId("1.1"))
         .message(ElementMessage.builder()
-            .level(MessageLevel.INFO)
+            .level(MessageLevel.OBSERVE)
             .includedForStatuses(List.of(Status.DRAFT))
             .content(
                 "Endast ett alternativ kan väljas. Undantaget är om intyget avser taxiförarlegitimation, då kan två val göras.")
@@ -94,7 +94,7 @@ class QuestionIntygetAvserTest {
             .type(ElementRuleType.MANDATORY)
             .expression(
                 new RuleExpression(
-                    "$gr_II || $gr_II_III || $forlang_gr_II || $forlang_gr_II_III || $utbyt_utl_kk || $tax_leg || $int_begar_ts"
+                    "exists($gr_II) || exists($gr_II_III) || exists($forlang_gr_II) || exists($forlang_gr_II_III) || exists($utbyt_utl_kk) || exists($tax_leg) || exists($int_begar_ts)"
                 )
             )
             .build(),
@@ -103,7 +103,7 @@ class QuestionIntygetAvserTest {
             .type(ElementRuleType.DISABLE_SUB_ELEMENT)
             .expression(
                 new RuleExpression(
-                    "$gr_II"
+                    "exists(gr_II)"
                 )
             )
             .affectedSubElements(
@@ -121,7 +121,7 @@ class QuestionIntygetAvserTest {
             .type(ElementRuleType.DISABLE_SUB_ELEMENT)
             .expression(
                 new RuleExpression(
-                    "$gr_II_III"
+                    "exists(gr_II_III)"
                 )
             )
             .affectedSubElements(
@@ -139,7 +139,7 @@ class QuestionIntygetAvserTest {
             .type(ElementRuleType.DISABLE_SUB_ELEMENT)
             .expression(
                 new RuleExpression(
-                    "$forlang_gr_II"
+                    "exists(forlang_gr_II)"
                 )
             )
             .affectedSubElements(
@@ -157,7 +157,7 @@ class QuestionIntygetAvserTest {
             .type(ElementRuleType.DISABLE_SUB_ELEMENT)
             .expression(
                 new RuleExpression(
-                    "$forlang_gr_II_III"
+                    "exists(forlang_gr_II_III)"
                 )
             )
             .affectedSubElements(
@@ -175,7 +175,7 @@ class QuestionIntygetAvserTest {
             .type(ElementRuleType.DISABLE_SUB_ELEMENT)
             .expression(
                 new RuleExpression(
-                    "$utbyt_utl_kk"
+                    "exists(utbyt_utl_kk)"
                 )
             )
             .affectedSubElements(
@@ -193,7 +193,7 @@ class QuestionIntygetAvserTest {
             .type(ElementRuleType.DISABLE_SUB_ELEMENT)
             .expression(
                 new RuleExpression(
-                    "$int_begar_ts"
+                    "exists(int_begar_ts)"
                 )
             )
             .affectedSubElements(

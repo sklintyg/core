@@ -4,7 +4,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionEpilepsiMedicin.QUESTION_EPILEPSI_MEDICIN_ID;
 
 import java.util.List;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextField;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
@@ -28,7 +28,7 @@ public class QuestionEpilepsiMedicinTidpunkt {
     return ElementSpecification.builder()
         .id(QUESTION_EPILEPSI_MEDICIN_TIDPUNKT_ID)
         .configuration(
-            ElementConfigurationTextArea.builder()
+            ElementConfigurationTextField.builder()
                 .id(QUESTION_EPILEPSI_MEDICIN_TIDPUNKT_FIELD_ID)
                 .name("Om läkemedelsbehandling avslutats, ange tidpunkt")
                 .build()

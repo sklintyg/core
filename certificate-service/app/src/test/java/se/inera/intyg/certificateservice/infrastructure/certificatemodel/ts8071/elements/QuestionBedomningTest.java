@@ -34,7 +34,7 @@ class QuestionBedomningTest {
         .id(new FieldId("23.1"))
         .name(
             "Bedöms personen utifrån Transportstyrelsens föreskrifter och allmänna råd (TSFS 2010:125) om medicinska krav för innehav av körkort m.m. ha en sjukdom eller medicinskt tillstånd som innebär en trafiksäkerhetsrisk?")
-        .elementLayout(ElementLayout.COLUMNS)
+        .elementLayout(ElementLayout.ROWS)
         .list(
             List.of(
                 new ElementConfigurationCode(

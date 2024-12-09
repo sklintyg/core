@@ -49,6 +49,11 @@ class QuestionHorselhjalpmedelTest {
                     "exists($9.2)"
                 )
             )
+            .build(),
+        ElementRuleExpression.builder()
+            .id(new ElementId("1"))
+            .type(ElementRuleType.SHOW)
+            .expression(new RuleExpression("exists(gr_II_III) || exists(tax_leg)"))
             .build()
     );
 
