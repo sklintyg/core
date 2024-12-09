@@ -173,7 +173,7 @@ public class CertificateUtil {
     if (response == null || response.getQuestions() == null) {
       throw new IllegalStateException("GetCertificateMessageResponse is null");
     }
-    return response.getQuestions().get(0).getLinks();
+    return response.getQuestions().getFirst().getLinks();
   }
 
   public static long version(List<CreateCertificateResponse> responses) {
@@ -197,7 +197,7 @@ public class CertificateUtil {
       return null;
     }
 
-    return certificate(responses.get(0));
+    return certificate(responses.getFirst());
   }
 
   public static CertificateDTO certificate(CreateCertificateResponse response) {
@@ -263,7 +263,7 @@ public class CertificateUtil {
     return response.getBody().getCertificate();
   }
 
-  public static CertificateRecipientDTO recipient(
+  public static CertificateRecipientDTO getRecipient(
       ResponseEntity<SendCertificateResponse> response) {
     if (response.getBody() == null || response.getBody() == null) {
       return CertificateRecipientDTO.builder().build();
@@ -320,14 +320,6 @@ public class CertificateUtil {
   }
 
   public static boolean forwarded(ForwardCertificateResponse response) {
-    if (response == null || response.getCertificate() == null) {
-      return false;
-    }
-
-    return response.getCertificate().getMetadata().isForwarded();
-  }
-
-  public static boolean forwardedMessage(ForwardCertificateResponse response) {
     if (response == null || response.getCertificate() == null) {
       return false;
     }

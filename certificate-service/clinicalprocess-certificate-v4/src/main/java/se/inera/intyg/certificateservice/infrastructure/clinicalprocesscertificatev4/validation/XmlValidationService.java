@@ -12,9 +12,10 @@ public class XmlValidationService {
   private final XmlSchemaValidator xmlSchemaValidator;
 
   public void validate(Xml xml, SchematronPath schematronPath, CertificateId certificateId) {
-    validateParameters(xml, schematronPath, certificateId);
+    validateParameters(xml, certificateId);
     final var schemaValidation = xmlSchemaValidator.validate(certificateId, xml);
-    final var schematronValidation = xmlSchematronValidator.validate(
+
+    final var schematronValidation = schematronPath == null || xmlSchematronValidator.validate(
         certificateId,
         xml,
         schematronPath
@@ -32,16 +33,10 @@ public class XmlValidationService {
     }
   }
 
-  private void validateParameters(Xml xml, SchematronPath schematronPath,
-      CertificateId certificateId) {
+  private void validateParameters(Xml xml, CertificateId certificateId) {
     if (xml == null || xml.xml() == null || xml.xml().isBlank()) {
       throw new IllegalArgumentException(
           "Missing required parameter xml: '%s'".formatted(xml)
-      );
-    }
-    if (schematronPath == null || schematronPath.value().isBlank()) {
-      throw new IllegalArgumentException(
-          "Missing required parameter schematronPath: '%s'".formatted(schematronPath)
       );
     }
     if (certificateId == null || certificateId.id().isBlank()) {

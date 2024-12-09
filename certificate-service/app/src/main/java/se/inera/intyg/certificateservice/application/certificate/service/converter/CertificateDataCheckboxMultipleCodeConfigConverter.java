@@ -5,6 +5,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.config.Cert
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigCheckboxMultipleCode;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CheckboxMultipleCode;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.Layout;
+import se.inera.intyg.certificateservice.application.certificate.dto.config.Message;
+import se.inera.intyg.certificateservice.application.certificate.dto.config.MessageLevel;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
@@ -30,6 +32,15 @@ public class CertificateDataCheckboxMultipleCodeConfigConverter implements
     return CertificateDataConfigCheckboxMultipleCode.builder()
         .text(configuration.name())
         .label(configuration.label())
+        .message(
+            shouldIncludeMessage(certificate, configuration) ?
+                Message.builder()
+                    .content(configuration.message().content())
+                    .level(MessageLevel.toMessageLevel(
+                        configuration.message().level()))
+                    .build()
+                : null
+        )
         .layout(Layout.toLayout(configuration.elementLayout()))
         .list(
             configuration.list().stream()
@@ -42,5 +53,11 @@ public class CertificateDataCheckboxMultipleCodeConfigConverter implements
                 .toList()
         )
         .build();
+  }
+
+  private static boolean shouldIncludeMessage(Certificate certificate,
+      ElementConfigurationCheckboxMultipleCode elementConfigurationCheckboxMultipleCode) {
+    return elementConfigurationCheckboxMultipleCode.message() != null
+        && elementConfigurationCheckboxMultipleCode.message().include(certificate);
   }
 }
