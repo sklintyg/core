@@ -44,24 +44,24 @@ class QuestionIntygetAvserTest {
         .list(
             List.of(
                 new ElementConfigurationCode(
-                    new FieldId(CodeSystemKvTs0002.G2.code()),
-                    CodeSystemKvTs0002.G2.displayName(),
-                    CodeSystemKvTs0002.G2
+                    new FieldId(CodeSystemKvTs0002.GR_II.code()),
+                    CodeSystemKvTs0002.GR_II.displayName(),
+                    CodeSystemKvTs0002.GR_II
                 ),
                 new ElementConfigurationCode(
-                    new FieldId(CodeSystemKvTs0002.G23.code()),
-                    CodeSystemKvTs0002.G23.displayName(),
-                    CodeSystemKvTs0002.G23
+                    new FieldId(CodeSystemKvTs0002.GR_II_III.code()),
+                    CodeSystemKvTs0002.GR_II_III.displayName(),
+                    CodeSystemKvTs0002.GR_II_III
                 ),
                 new ElementConfigurationCode(
-                    new FieldId(CodeSystemKvTs0002.GH2.code()),
-                    CodeSystemKvTs0002.GH2.displayName(),
-                    CodeSystemKvTs0002.GH2
+                    new FieldId(CodeSystemKvTs0002.FORLANG_GR_II.code()),
+                    CodeSystemKvTs0002.FORLANG_GR_II.displayName(),
+                    CodeSystemKvTs0002.FORLANG_GR_II
                 ),
                 new ElementConfigurationCode(
-                    new FieldId(CodeSystemKvTs0002.GH23.code()),
-                    CodeSystemKvTs0002.GH23.displayName(),
-                    CodeSystemKvTs0002.GH23
+                    new FieldId(CodeSystemKvTs0002.FORLANG_GR_II_III.code()),
+                    CodeSystemKvTs0002.FORLANG_GR_II_III.displayName(),
+                    CodeSystemKvTs0002.FORLANG_GR_II_III
                 ),
                 new ElementConfigurationCode(
                     new FieldId(CodeSystemKvTs0002.UTLANDSKT.code()),
@@ -94,7 +94,7 @@ class QuestionIntygetAvserTest {
             .type(ElementRuleType.MANDATORY)
             .expression(
                 new RuleExpression(
-                    "$G2 || $G23 || $GH2 || $GH23 || $UTLANDSKT || $TAXI || $ANNAT"
+                    "$gr_II || $gr_II_III || $forlang_gr_II || $forlang_gr_II_III || $utbyt_utl_kk || $tax_leg || $int_begar_ts"
                 )
             )
             .build(),
@@ -103,16 +103,15 @@ class QuestionIntygetAvserTest {
             .type(ElementRuleType.DISABLE_SUB_ELEMENT)
             .expression(
                 new RuleExpression(
-                    "$G2"
+                    "$gr_II"
                 )
             )
             .affectedSubElements(
                 List.of(
-                    new FieldId(CodeSystemKvTs0002.G23.code()),
-                    new FieldId(CodeSystemKvTs0002.GH2.code()),
-                    new FieldId(CodeSystemKvTs0002.GH23.code()),
+                    new FieldId(CodeSystemKvTs0002.GR_II_III.code()),
+                    new FieldId(CodeSystemKvTs0002.FORLANG_GR_II.code()),
+                    new FieldId(CodeSystemKvTs0002.FORLANG_GR_II_III.code()),
                     new FieldId(CodeSystemKvTs0002.UTLANDSKT.code()),
-                    new FieldId(CodeSystemKvTs0002.TAXI.code()),
                     new FieldId(CodeSystemKvTs0002.ANNAT.code())
                 )
             )
@@ -122,16 +121,15 @@ class QuestionIntygetAvserTest {
             .type(ElementRuleType.DISABLE_SUB_ELEMENT)
             .expression(
                 new RuleExpression(
-                    "$G23"
+                    "$gr_II_III"
                 )
             )
             .affectedSubElements(
                 List.of(
-                    new FieldId(CodeSystemKvTs0002.G2.code()),
-                    new FieldId(CodeSystemKvTs0002.GH2.code()),
-                    new FieldId(CodeSystemKvTs0002.GH23.code()),
+                    new FieldId(CodeSystemKvTs0002.GR_II.code()),
+                    new FieldId(CodeSystemKvTs0002.FORLANG_GR_II.code()),
+                    new FieldId(CodeSystemKvTs0002.FORLANG_GR_II_III.code()),
                     new FieldId(CodeSystemKvTs0002.UTLANDSKT.code()),
-                    new FieldId(CodeSystemKvTs0002.TAXI.code()),
                     new FieldId(CodeSystemKvTs0002.ANNAT.code())
                 )
             )
@@ -141,16 +139,15 @@ class QuestionIntygetAvserTest {
             .type(ElementRuleType.DISABLE_SUB_ELEMENT)
             .expression(
                 new RuleExpression(
-                    "$GH2"
+                    "$forlang_gr_II"
                 )
             )
             .affectedSubElements(
                 List.of(
-                    new FieldId(CodeSystemKvTs0002.G2.code()),
-                    new FieldId(CodeSystemKvTs0002.G23.code()),
-                    new FieldId(CodeSystemKvTs0002.GH23.code()),
+                    new FieldId(CodeSystemKvTs0002.GR_II.code()),
+                    new FieldId(CodeSystemKvTs0002.GR_II_III.code()),
+                    new FieldId(CodeSystemKvTs0002.FORLANG_GR_II_III.code()),
                     new FieldId(CodeSystemKvTs0002.UTLANDSKT.code()),
-                    new FieldId(CodeSystemKvTs0002.TAXI.code()),
                     new FieldId(CodeSystemKvTs0002.ANNAT.code())
                 )
             )
@@ -160,16 +157,15 @@ class QuestionIntygetAvserTest {
             .type(ElementRuleType.DISABLE_SUB_ELEMENT)
             .expression(
                 new RuleExpression(
-                    "$GH23"
+                    "$forlang_gr_II_III"
                 )
             )
             .affectedSubElements(
                 List.of(
-                    new FieldId(CodeSystemKvTs0002.G2.code()),
-                    new FieldId(CodeSystemKvTs0002.G23.code()),
-                    new FieldId(CodeSystemKvTs0002.GH2.code()),
+                    new FieldId(CodeSystemKvTs0002.GR_II.code()),
+                    new FieldId(CodeSystemKvTs0002.GR_II_III.code()),
+                    new FieldId(CodeSystemKvTs0002.FORLANG_GR_II.code()),
                     new FieldId(CodeSystemKvTs0002.UTLANDSKT.code()),
-                    new FieldId(CodeSystemKvTs0002.TAXI.code()),
                     new FieldId(CodeSystemKvTs0002.ANNAT.code())
                 )
             )
@@ -179,16 +175,15 @@ class QuestionIntygetAvserTest {
             .type(ElementRuleType.DISABLE_SUB_ELEMENT)
             .expression(
                 new RuleExpression(
-                    "$UTLANDSKT"
+                    "$utbyt_utl_kk"
                 )
             )
             .affectedSubElements(
                 List.of(
-                    new FieldId(CodeSystemKvTs0002.G2.code()),
-                    new FieldId(CodeSystemKvTs0002.G23.code()),
-                    new FieldId(CodeSystemKvTs0002.GH2.code()),
-                    new FieldId(CodeSystemKvTs0002.GH23.code()),
-                    new FieldId(CodeSystemKvTs0002.TAXI.code()),
+                    new FieldId(CodeSystemKvTs0002.GR_II.code()),
+                    new FieldId(CodeSystemKvTs0002.GR_II_III.code()),
+                    new FieldId(CodeSystemKvTs0002.FORLANG_GR_II.code()),
+                    new FieldId(CodeSystemKvTs0002.FORLANG_GR_II_III.code()),
                     new FieldId(CodeSystemKvTs0002.ANNAT.code())
                 )
             )
@@ -198,16 +193,15 @@ class QuestionIntygetAvserTest {
             .type(ElementRuleType.DISABLE_SUB_ELEMENT)
             .expression(
                 new RuleExpression(
-                    "$ANNAT"
+                    "$int_begar_ts"
                 )
             )
             .affectedSubElements(
                 List.of(
-                    new FieldId(CodeSystemKvTs0002.G2.code()),
-                    new FieldId(CodeSystemKvTs0002.G23.code()),
-                    new FieldId(CodeSystemKvTs0002.GH2.code()),
-                    new FieldId(CodeSystemKvTs0002.GH23.code()),
-                    new FieldId(CodeSystemKvTs0002.TAXI.code()),
+                    new FieldId(CodeSystemKvTs0002.GR_II.code()),
+                    new FieldId(CodeSystemKvTs0002.GR_II_III.code()),
+                    new FieldId(CodeSystemKvTs0002.FORLANG_GR_II.code()),
+                    new FieldId(CodeSystemKvTs0002.FORLANG_GR_II_III.code()),
                     new FieldId(CodeSystemKvTs0002.UTLANDSKT.code())
                 )
             )

@@ -1,5 +1,8 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs0002.GR_II_III;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs0002.TAXI;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionIntygetAvser.QUESTION_INTYGET_AVSER_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionRorlighet.QUESTION_RORLIGHET_ID;
 
 import java.util.List;
@@ -8,6 +11,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
@@ -41,11 +45,19 @@ public class QuestionRorlighetHjalpaPassagerare {
                     .build()
             )
         )
-        .rules( // TODO: Add rules for show if specific group in q1
+        .rules(
             List.of(
                 CertificateElementRuleFactory.mandatoryExist(
                     QUESTION_RORLIGHET_HJALPA_PASSAGERARE_ID,
                     QUESTION_RORLIGHET_HJALPA_PASSAGERARE_FIELD_ID
+                ),
+                CertificateElementRuleFactory.show(
+                    QUESTION_INTYGET_AVSER_ID,
+                    new RuleExpression(
+                        String.format(
+                            "$%s || $%s", GR_II_III.code(), TAXI.code()
+                        )
+                    )
                 )
             )
         )

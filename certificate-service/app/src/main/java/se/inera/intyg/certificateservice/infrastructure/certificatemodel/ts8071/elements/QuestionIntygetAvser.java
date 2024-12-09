@@ -16,8 +16,8 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionIntygetAvser {
 
-  public static final ElementId INTYGET_AVSER_ID = new ElementId("1");
-  public static final FieldId INTYGET_AVSER_FIELD_ID = new FieldId("1.1");
+  public static final ElementId QUESTION_INTYGET_AVSER_ID = new ElementId("1");
+  public static final FieldId QUESTION_INTYGET_AVSER_FIELD_ID = new FieldId("1.1");
 
   private QuestionIntygetAvser() {
     throw new IllegalStateException("Utility class");
@@ -25,20 +25,20 @@ public class QuestionIntygetAvser {
 
   public static ElementSpecification questionIntygetAvser() {
     final var checkboxes = List.of(
-        CodeFactory.elementConfigurationCode(CodeSystemKvTs0002.G2),
-        CodeFactory.elementConfigurationCode(CodeSystemKvTs0002.G23),
-        CodeFactory.elementConfigurationCode(CodeSystemKvTs0002.GH2),
-        CodeFactory.elementConfigurationCode(CodeSystemKvTs0002.GH23),
+        CodeFactory.elementConfigurationCode(CodeSystemKvTs0002.GR_II),
+        CodeFactory.elementConfigurationCode(CodeSystemKvTs0002.GR_II_III),
+        CodeFactory.elementConfigurationCode(CodeSystemKvTs0002.FORLANG_GR_II),
+        CodeFactory.elementConfigurationCode(CodeSystemKvTs0002.FORLANG_GR_II_III),
         CodeFactory.elementConfigurationCode(CodeSystemKvTs0002.UTLANDSKT),
         CodeFactory.elementConfigurationCode(CodeSystemKvTs0002.TAXI),
         CodeFactory.elementConfigurationCode(CodeSystemKvTs0002.ANNAT)
     );
 
     return ElementSpecification.builder()
-        .id(INTYGET_AVSER_ID)
+        .id(QUESTION_INTYGET_AVSER_ID)
         .configuration(
             ElementConfigurationCheckboxMultipleCode.builder()
-                .id(INTYGET_AVSER_FIELD_ID)
+                .id(QUESTION_INTYGET_AVSER_FIELD_ID)
                 .name("Intyget avser")
                 .elementLayout(ElementLayout.COLUMNS)
                 .list(checkboxes)
@@ -55,86 +55,80 @@ public class QuestionIntygetAvser {
         .rules(
             List.of(
                 CertificateElementRuleFactory.mandatory(
-                    INTYGET_AVSER_ID,
+                    QUESTION_INTYGET_AVSER_ID,
                     List.of(
-                        new FieldId(CodeSystemKvTs0002.G2.code()),
-                        new FieldId(CodeSystemKvTs0002.G23.code()),
-                        new FieldId(CodeSystemKvTs0002.GH2.code()),
-                        new FieldId(CodeSystemKvTs0002.GH23.code()),
+                        new FieldId(CodeSystemKvTs0002.GR_II.code()),
+                        new FieldId(CodeSystemKvTs0002.GR_II_III.code()),
+                        new FieldId(CodeSystemKvTs0002.FORLANG_GR_II.code()),
+                        new FieldId(CodeSystemKvTs0002.FORLANG_GR_II_III.code()),
                         new FieldId(CodeSystemKvTs0002.UTLANDSKT.code()),
                         new FieldId(CodeSystemKvTs0002.TAXI.code()),
                         new FieldId(CodeSystemKvTs0002.ANNAT.code())
                     )
                 ),
                 CertificateElementRuleFactory.disableSubElements(
-                    INTYGET_AVSER_ID,
-                    List.of(new FieldId(CodeSystemKvTs0002.G2.code())),
+                    QUESTION_INTYGET_AVSER_ID,
+                    List.of(new FieldId(CodeSystemKvTs0002.GR_II.code())),
                     List.of(
-                        new FieldId(CodeSystemKvTs0002.G23.code()),
-                        new FieldId(CodeSystemKvTs0002.GH2.code()),
-                        new FieldId(CodeSystemKvTs0002.GH23.code()),
+                        new FieldId(CodeSystemKvTs0002.GR_II_III.code()),
+                        new FieldId(CodeSystemKvTs0002.FORLANG_GR_II.code()),
+                        new FieldId(CodeSystemKvTs0002.FORLANG_GR_II_III.code()),
                         new FieldId(CodeSystemKvTs0002.UTLANDSKT.code()),
-                        new FieldId(CodeSystemKvTs0002.TAXI.code()),
                         new FieldId(CodeSystemKvTs0002.ANNAT.code())
                     )
                 ),
                 CertificateElementRuleFactory.disableSubElements(
-                    INTYGET_AVSER_ID,
-                    List.of(new FieldId(CodeSystemKvTs0002.G23.code())),
+                    QUESTION_INTYGET_AVSER_ID,
+                    List.of(new FieldId(CodeSystemKvTs0002.GR_II_III.code())),
                     List.of(
-                        new FieldId(CodeSystemKvTs0002.G2.code()),
-                        new FieldId(CodeSystemKvTs0002.GH2.code()),
-                        new FieldId(CodeSystemKvTs0002.GH23.code()),
+                        new FieldId(CodeSystemKvTs0002.GR_II.code()),
+                        new FieldId(CodeSystemKvTs0002.FORLANG_GR_II.code()),
+                        new FieldId(CodeSystemKvTs0002.FORLANG_GR_II_III.code()),
                         new FieldId(CodeSystemKvTs0002.UTLANDSKT.code()),
-                        new FieldId(CodeSystemKvTs0002.TAXI.code()),
                         new FieldId(CodeSystemKvTs0002.ANNAT.code())
                     )
                 ),
                 CertificateElementRuleFactory.disableSubElements(
-                    INTYGET_AVSER_ID,
-                    List.of(new FieldId(CodeSystemKvTs0002.GH2.code())),
+                    QUESTION_INTYGET_AVSER_ID,
+                    List.of(new FieldId(CodeSystemKvTs0002.FORLANG_GR_II.code())),
                     List.of(
-                        new FieldId(CodeSystemKvTs0002.G2.code()),
-                        new FieldId(CodeSystemKvTs0002.G23.code()),
-                        new FieldId(CodeSystemKvTs0002.GH23.code()),
+                        new FieldId(CodeSystemKvTs0002.GR_II.code()),
+                        new FieldId(CodeSystemKvTs0002.GR_II_III.code()),
+                        new FieldId(CodeSystemKvTs0002.FORLANG_GR_II_III.code()),
                         new FieldId(CodeSystemKvTs0002.UTLANDSKT.code()),
-                        new FieldId(CodeSystemKvTs0002.TAXI.code()),
                         new FieldId(CodeSystemKvTs0002.ANNAT.code())
                     )
                 ),
                 CertificateElementRuleFactory.disableSubElements(
-                    INTYGET_AVSER_ID,
-                    List.of(new FieldId(CodeSystemKvTs0002.GH23.code())),
+                    QUESTION_INTYGET_AVSER_ID,
+                    List.of(new FieldId(CodeSystemKvTs0002.FORLANG_GR_II_III.code())),
                     List.of(
-                        new FieldId(CodeSystemKvTs0002.G2.code()),
-                        new FieldId(CodeSystemKvTs0002.G23.code()),
-                        new FieldId(CodeSystemKvTs0002.GH2.code()),
+                        new FieldId(CodeSystemKvTs0002.GR_II.code()),
+                        new FieldId(CodeSystemKvTs0002.GR_II_III.code()),
+                        new FieldId(CodeSystemKvTs0002.FORLANG_GR_II.code()),
                         new FieldId(CodeSystemKvTs0002.UTLANDSKT.code()),
-                        new FieldId(CodeSystemKvTs0002.TAXI.code()),
                         new FieldId(CodeSystemKvTs0002.ANNAT.code())
                     )
                 ),
                 CertificateElementRuleFactory.disableSubElements(
-                    INTYGET_AVSER_ID,
+                    QUESTION_INTYGET_AVSER_ID,
                     List.of(new FieldId(CodeSystemKvTs0002.UTLANDSKT.code())),
                     List.of(
-                        new FieldId(CodeSystemKvTs0002.G2.code()),
-                        new FieldId(CodeSystemKvTs0002.G23.code()),
-                        new FieldId(CodeSystemKvTs0002.GH2.code()),
-                        new FieldId(CodeSystemKvTs0002.GH23.code()),
-                        new FieldId(CodeSystemKvTs0002.TAXI.code()),
+                        new FieldId(CodeSystemKvTs0002.GR_II.code()),
+                        new FieldId(CodeSystemKvTs0002.GR_II_III.code()),
+                        new FieldId(CodeSystemKvTs0002.FORLANG_GR_II.code()),
+                        new FieldId(CodeSystemKvTs0002.FORLANG_GR_II_III.code()),
                         new FieldId(CodeSystemKvTs0002.ANNAT.code())
                     )
                 ),
                 CertificateElementRuleFactory.disableSubElements(
-                    INTYGET_AVSER_ID,
+                    QUESTION_INTYGET_AVSER_ID,
                     List.of(new FieldId(CodeSystemKvTs0002.ANNAT.code())),
                     List.of(
-                        new FieldId(CodeSystemKvTs0002.G2.code()),
-                        new FieldId(CodeSystemKvTs0002.G23.code()),
-                        new FieldId(CodeSystemKvTs0002.GH2.code()),
-                        new FieldId(CodeSystemKvTs0002.GH23.code()),
-                        new FieldId(CodeSystemKvTs0002.TAXI.code()),
+                        new FieldId(CodeSystemKvTs0002.GR_II.code()),
+                        new FieldId(CodeSystemKvTs0002.GR_II_III.code()),
+                        new FieldId(CodeSystemKvTs0002.FORLANG_GR_II.code()),
+                        new FieldId(CodeSystemKvTs0002.FORLANG_GR_II_III.code()),
                         new FieldId(CodeSystemKvTs0002.UTLANDSKT.code())
                     )
                 )
@@ -150,3 +144,4 @@ public class QuestionIntygetAvser {
         .build();
   }
 }
+

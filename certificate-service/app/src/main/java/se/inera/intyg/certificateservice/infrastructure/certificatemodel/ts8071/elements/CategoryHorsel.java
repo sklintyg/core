@@ -1,9 +1,15 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs0002.GR_II_III;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs0002.TAXI;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionIntygetAvser.QUESTION_INTYGET_AVSER_ID;
+
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
 public class CategoryHorsel {
 
@@ -23,7 +29,18 @@ public class CategoryHorsel {
                 .build()
         )
         .children(List.of(children))
-        // TODO: Add rules for show if specific group in q1
+        .rules(
+            List.of(
+                CertificateElementRuleFactory.show(
+                    QUESTION_INTYGET_AVSER_ID,
+                    new RuleExpression(
+                        String.format(
+                            "$%s || $%s", GR_II_III.code(), TAXI.code()
+                        )
+                    )
+                )
+            )
+        )
         .build();
   }
 }
