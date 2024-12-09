@@ -11,6 +11,7 @@ import lombok.Value;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueOcularAcuities;
+import se.inera.intyg.certificateservice.domain.certificate.model.OcularAcuity;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
@@ -35,7 +36,63 @@ public class ElementValidationOcularAcuities implements ElementValidation {
     if (mandatory) {
       validationErrors.addAll(validateMissingValue(value, data, categoryId));
     }
+
+    if (min != null && max != null) {
+      validationErrors.addAll(validateMinAndMaxValues(value, data, categoryId));
+    }
+
     return validationErrors;
+  }
+
+  private Collection<ValidationError> validateMinAndMaxValues(
+      ElementValueOcularAcuities ocularAcuities, ElementData data, Optional<ElementId> categoryId) {
+    final var validationErrors = new ArrayList<ValidationError>();
+
+    if (ocularAcuities.rightEye() != null && outsideOfAllowedInterval(ocularAcuities.rightEye())) {
+      validationErrors.add(
+          buildValidationError(
+              ocularAcuities.rightEye().withoutCorrection().id(),
+              data,
+              categoryId,
+              ErrorMessageFactory.ocularAcuityOutsideInterval(min, max).value()
+          )
+      );
+    }
+
+    if (ocularAcuities.leftEye() != null && outsideOfAllowedInterval(ocularAcuities.leftEye())) {
+      validationErrors.add(
+          buildValidationError(
+              ocularAcuities.leftEye().withoutCorrection().id(),
+              data,
+              categoryId,
+              ErrorMessageFactory.ocularAcuityOutsideInterval(min, max).value()
+          )
+      );
+    }
+
+    if (ocularAcuities.binocular() != null && outsideOfAllowedInterval(
+        ocularAcuities.binocular())) {
+      validationErrors.add(
+          buildValidationError(
+              ocularAcuities.binocular().withoutCorrection().id(),
+              data,
+              categoryId,
+              ErrorMessageFactory.ocularAcuityOutsideInterval(min, max).value()
+          )
+      );
+    }
+
+    return validationErrors;
+  }
+
+  private boolean outsideOfAllowedInterval(OcularAcuity ocularAcuity) {
+
+    return (ocularAcuity.withoutCorrection() == null
+        || ocularAcuity.withoutCorrection().value() > min
+        || ocularAcuity.withoutCorrection().value() < max)
+        && (ocularAcuity.withCorrection() == null
+        || ocularAcuity.withCorrection().value() > min
+        || ocularAcuity.withCorrection().value() < max);
   }
 
   private Collection<ValidationError> validateMissingValue(
