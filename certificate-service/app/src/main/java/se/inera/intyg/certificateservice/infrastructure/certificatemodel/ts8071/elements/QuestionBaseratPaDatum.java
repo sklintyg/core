@@ -8,6 +8,7 @@ import java.time.Period;
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
@@ -63,7 +64,7 @@ public class QuestionBaseratPaDatum {
                 QUESTION_BASERAT_PA_ID,
                 List.of(new FieldId(DISTANSKONTAKT.code()), new FieldId(UNDERSOKNING.code())))
         )
-        // TODO: Check how we want to do with mapping
+        .mapping(new ElementMapping(QUESTION_BASERAT_PA_ID, null))
         .build();
   }
 }

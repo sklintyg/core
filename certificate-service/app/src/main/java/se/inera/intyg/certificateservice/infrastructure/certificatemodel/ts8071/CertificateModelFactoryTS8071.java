@@ -50,6 +50,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionHorselhjalpmedel.questionHorselhjalpmedel;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionHorselhjalpmedelPosition.questionHorselhjalpmedelPosition;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionIdentitet.questionIdentitet;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionIntygetAvser.questionIntygetAvser;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionKognitivStorning.questionKognitivStorning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionLakemedel.questionLakemedel;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionLakemedelBeskrivning.questionLakemedelBeskrivning;
@@ -177,7 +178,9 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
         )
         .elementSpecifications(
             List.of(
-                categoryIntygetAvser(),
+                categoryIntygetAvser(
+                    questionIntygetAvser()
+                ),
                 categoryIntygetBaseratPa( // 2 - 2.1
                     questionBaseratPa(
                         questionBaseratPaDatum() // 2.2 - 2.2
