@@ -8,10 +8,10 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
+import se.inera.intyg.certificateservice.domain.certificate.model.Correction;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueOcularAcuities;
-import se.inera.intyg.certificateservice.domain.certificate.model.OcularAcuity;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
@@ -48,7 +48,18 @@ public class ElementValidationOcularAcuities implements ElementValidation {
       ElementValueOcularAcuities ocularAcuities, ElementData data, Optional<ElementId> categoryId) {
     final var validationErrors = new ArrayList<ValidationError>();
 
-    if (ocularAcuities.rightEye() != null && outsideOfAllowedInterval(ocularAcuities.rightEye())) {
+    if (outsideOfAllowedInterval(ocularAcuities.rightEye().withCorrection())) {
+      validationErrors.add(
+          buildValidationError(
+              ocularAcuities.rightEye().withCorrection().id(),
+              data,
+              categoryId,
+              ErrorMessageFactory.ocularAcuityOutsideInterval(min, max).value()
+          )
+      );
+    }
+
+    if (outsideOfAllowedInterval(ocularAcuities.rightEye().withoutCorrection())) {
       validationErrors.add(
           buildValidationError(
               ocularAcuities.rightEye().withoutCorrection().id(),
@@ -59,7 +70,18 @@ public class ElementValidationOcularAcuities implements ElementValidation {
       );
     }
 
-    if (ocularAcuities.leftEye() != null && outsideOfAllowedInterval(ocularAcuities.leftEye())) {
+    if (outsideOfAllowedInterval(ocularAcuities.leftEye().withCorrection())) {
+      validationErrors.add(
+          buildValidationError(
+              ocularAcuities.leftEye().withCorrection().id(),
+              data,
+              categoryId,
+              ErrorMessageFactory.ocularAcuityOutsideInterval(min, max).value()
+          )
+      );
+    }
+
+    if (outsideOfAllowedInterval(ocularAcuities.leftEye().withoutCorrection())) {
       validationErrors.add(
           buildValidationError(
               ocularAcuities.leftEye().withoutCorrection().id(),
@@ -70,8 +92,18 @@ public class ElementValidationOcularAcuities implements ElementValidation {
       );
     }
 
-    if (ocularAcuities.binocular() != null && outsideOfAllowedInterval(
-        ocularAcuities.binocular())) {
+    if (outsideOfAllowedInterval(ocularAcuities.binocular().withCorrection())) {
+      validationErrors.add(
+          buildValidationError(
+              ocularAcuities.binocular().withCorrection().id(),
+              data,
+              categoryId,
+              ErrorMessageFactory.ocularAcuityOutsideInterval(min, max).value()
+          )
+      );
+    }
+
+    if (outsideOfAllowedInterval(ocularAcuities.binocular().withoutCorrection())) {
       validationErrors.add(
           buildValidationError(
               ocularAcuities.binocular().withoutCorrection().id(),
@@ -85,14 +117,8 @@ public class ElementValidationOcularAcuities implements ElementValidation {
     return validationErrors;
   }
 
-  private boolean outsideOfAllowedInterval(OcularAcuity ocularAcuity) {
-
-    return (ocularAcuity.withoutCorrection() == null
-        || ocularAcuity.withoutCorrection().value() > min
-        || ocularAcuity.withoutCorrection().value() < max)
-        && (ocularAcuity.withCorrection() == null
-        || ocularAcuity.withCorrection().value() > min
-        || ocularAcuity.withCorrection().value() < max);
+  private boolean outsideOfAllowedInterval(Correction correction) {
+    return correction != null && (correction.value() < min || correction.value() > max);
   }
 
   private Collection<ValidationError> validateMissingValue(
