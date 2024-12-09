@@ -5,6 +5,8 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIdKontroll.IDK1;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs0001.DISTANSKONTAKT;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs0001.JOURNALUPPGIFTER;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs0002.GR_II;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs0002.TAXI;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.CertificateModelFactoryTS8071.TS8071_V1_0;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionArytmi.QUESTION_ARYTMI_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionArytmiBeskrivning.QUESTION_ARYTMI_BESKRIVNING_ID;
@@ -32,6 +34,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionHorselhjalpmedel.QUESTION_HORSELHJALPMEDEL_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionHorselhjalpmedelPosition.QUESTION_HORSELHJALPMEDEL_POSITION_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionIdentitet.QUESTION_IDENTITET_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionIntygetAvser.QUESTION_INTYGET_AVSER_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionKognitivStorning.QUESTION_KOGNITIV_STORNING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionLakemedel.QUESTION_LAKEMEDEL_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionLakemedelBeskrivning.QUESTION_LAKEMEDEL_BESKRIVNING_ID;
@@ -87,6 +90,7 @@ import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCodeList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
@@ -104,8 +108,8 @@ import se.inera.intyg.certificateservice.testability.certificate.service.fillser
 public class TestabilityCertificateFillServiceTS8071 implements
     TestabilityCertificateFillService {
 
-  private static final List<ElementId> MAXIMAL_IDS = List.of(QUESTION_BASERAT_PA_ID,
-      QUESTION_BASERAT_PA_DATUM_ID,
+  private static final List<ElementId> MAXIMAL_IDS = List.of(
+      QUESTION_INTYGET_AVSER_ID, QUESTION_BASERAT_PA_ID, QUESTION_BASERAT_PA_DATUM_ID,
       QUESTION_IDENTITET_ID, QUESTION_SYNFUNKTIONER_ID, QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_ID,
       QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_BESKRIVNING_ID, QUESTION_SJUKDOMSHISTORIK_ID,
       QUESTION_SJUKDOMSHISTORIK_BESKRIVNING_ID, QUESTION_BALANSSINNE_ID,
@@ -137,7 +141,7 @@ public class TestabilityCertificateFillServiceTS8071 implements
   );
 
   private static final List<ElementId> MINIMAL_IDS = List.of(
-      QUESTION_BASERAT_PA_ID,
+      QUESTION_BASERAT_PA_ID, QUESTION_INTYGET_AVSER_ID,
       QUESTION_IDENTITET_ID, QUESTION_SYNFUNKTIONER_ID, QUESTION_BALANSSINNE_ID, QUESTION_HORSEL_ID,
       QUESTION_HORSELHJALPMEDEL_ID, QUESTION_RORLIGHET_ID,
       QUESTION_RORLIGHET_HJALPA_PASSAGERARE_ID, QUESTION_HJARTSJUKDOM_ID, QUESTION_DIABETES_ID,
@@ -221,8 +225,24 @@ public class TestabilityCertificateFillServiceTS8071 implements
           .build();
     }
 
+    if (value instanceof ElementValueCodeList elementValueCodeList) {
+      final var code = getCode(elementSpecification.id(), fillType).code();
+      return ElementData.builder()
+          .id(elementSpecification.id())
+          .value(
+              elementValueCodeList.withList(List.of(
+                  ElementValueCode.builder()
+                      .code(code)
+                      .codeId(new FieldId(code))
+                      .build()
+              ))
+          )
+          .build();
+    }
+
     return null;
   }
+
 
   private static boolean getBoolean(ElementId elementId, TestabilityFillTypeDTO fillType) {
     if (fillType == MINIMAL) {
@@ -252,6 +272,14 @@ public class TestabilityCertificateFillServiceTS8071 implements
       }
 
       return DISTANSKONTAKT;
+    }
+
+    if (elementId == QUESTION_INTYGET_AVSER_ID) {
+      if (fillType == MINIMAL) {
+        return GR_II;
+      }
+
+      return TAXI;
     }
 
     if (elementId == QUESTION_STROKE_PAVARKAN_ID) {
