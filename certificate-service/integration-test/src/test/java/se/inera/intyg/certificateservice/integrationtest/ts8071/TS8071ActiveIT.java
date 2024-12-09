@@ -35,6 +35,7 @@ import se.inera.intyg.certificateservice.integrationtest.GetUnitCertificatesInfo
 import se.inera.intyg.certificateservice.integrationtest.GetUnitCertificatesWhenSignedIT;
 import se.inera.intyg.certificateservice.integrationtest.InternalApiIT;
 import se.inera.intyg.certificateservice.integrationtest.MessagingNotAvailableIT;
+import se.inera.intyg.certificateservice.integrationtest.RenewNotAvailableIT;
 import se.inera.intyg.certificateservice.integrationtest.ReplaceCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.RevokeCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.SendCertificateIT;
@@ -352,6 +353,21 @@ public class TS8071ActiveIT {
   @Nested
   @DisplayName(TYPE + "Ärendekommunikation skall ej vara tillgänglig")
   class MessagingNotAvailable extends MessagingNotAvailableIT {
+
+    @Override
+    protected String type() {
+      return CERTIFICATE_TYPE;
+    }
+
+    @Override
+    protected String typeVersion() {
+      return ACTIVE_VERSION;
+    }
+  }
+
+  @Nested
+  @DisplayName(TYPE + "Förnya skall ej vara tillgänglig")
+  class RenewNotAvailable extends RenewNotAvailableIT {
 
     @Override
     protected String type() {

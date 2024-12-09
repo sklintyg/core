@@ -128,18 +128,6 @@ class TS8071CertificateActionSpecificationTest {
   }
 
   @Test
-  void shallIncludeCertificateActionRenew() {
-    final var expectedType = CertificateActionType.RENEW;
-
-    final var actionSpecifications = TS8071CertificateActionSpecification.create();
-
-    assertTrue(actionSpecifications.stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
-  }
-
-  @Test
   void shallIncludeCertificateActionForwardCertificate() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE)

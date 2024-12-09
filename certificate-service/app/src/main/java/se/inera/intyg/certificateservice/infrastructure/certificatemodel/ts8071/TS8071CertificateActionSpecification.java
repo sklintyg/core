@@ -48,9 +48,6 @@ public class TS8071CertificateActionSpecification {
             .certificateActionType(CertificateActionType.REPLACE_CONTINUE)
             .build(),
         CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.RENEW)
-            .build(),
-        CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE)
             .allowedRoles(List.of(Role.CARE_ADMIN, Role.MIDWIFE, Role.NURSE))
             .build(),
