@@ -19,7 +19,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 @Builder
 public class ElementValidationOcularAcuities implements ElementValidation {
 
-  private static final String ERROR_MESSAGE_ANGE_ETT_SVAR = "Ange ett svar.";
   boolean mandatory;
   Double min;
   Double max;
@@ -48,7 +47,7 @@ public class ElementValidationOcularAcuities implements ElementValidation {
               ocularAcuities.rightEye().withoutCorrection().id(),
               data,
               categoryId,
-              ERROR_MESSAGE_ANGE_ETT_SVAR
+              ErrorMessageFactory.missingAnswer().value()
           )
       );
     }
@@ -59,7 +58,7 @@ public class ElementValidationOcularAcuities implements ElementValidation {
               ocularAcuities.leftEye().withoutCorrection().id(),
               data,
               categoryId,
-              ERROR_MESSAGE_ANGE_ETT_SVAR
+              ErrorMessageFactory.missingAnswer().value()
           )
       );
     }
@@ -70,7 +69,7 @@ public class ElementValidationOcularAcuities implements ElementValidation {
               ocularAcuities.binocular().withoutCorrection().id(),
               data,
               categoryId,
-              ERROR_MESSAGE_ANGE_ETT_SVAR
+              ErrorMessageFactory.missingAnswer().value()
           )
       );
     }

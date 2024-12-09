@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.domain.validation.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -74,7 +75,7 @@ class ElementValidationOcularAcuitiesTest {
     @BeforeEach
     void setUp() {
       elementValidationOcularAcuities = new ElementValidationOcularAcuities(
-          true, 0.0, 2.0
+          true, null, null
       );
     }
 
@@ -128,12 +129,12 @@ class ElementValidationOcularAcuitiesTest {
           )
           .build();
 
-      final var actualValidationErrrors = elementValidationOcularAcuities.validate(
+      final var actualValidationErrors = elementValidationOcularAcuities.validate(
           elementData,
           CATEGORY_ID
       );
 
-      assertEquals(expectedValidationErrors, actualValidationErrrors);
+      assertEquals(expectedValidationErrors, actualValidationErrors);
     }
 
     @Test
@@ -186,12 +187,12 @@ class ElementValidationOcularAcuitiesTest {
           )
           .build();
 
-      final var actualValidationErrrors = elementValidationOcularAcuities.validate(
+      final var actualValidationErrors = elementValidationOcularAcuities.validate(
           elementData,
           CATEGORY_ID
       );
 
-      assertEquals(expectedValidationErrors, actualValidationErrrors);
+      assertEquals(expectedValidationErrors, actualValidationErrors);
     }
 
     @Test
@@ -244,12 +245,164 @@ class ElementValidationOcularAcuitiesTest {
           )
           .build();
 
-      final var actualValidationErrrors = elementValidationOcularAcuities.validate(
+      final var actualValidationErrors = elementValidationOcularAcuities.validate(
           elementData,
           CATEGORY_ID
       );
 
-      assertEquals(expectedValidationErrors, actualValidationErrrors);
+      assertEquals(expectedValidationErrors, actualValidationErrors);
+    }
+  }
+
+  @Nested
+  class NotMandatoryTests {
+
+    @BeforeEach
+    void setUp() {
+      elementValidationOcularAcuities = new ElementValidationOcularAcuities(
+          false, null, null
+      );
+    }
+
+    @Test
+    void shallNotReturnValidationErrorIfRightEyeIsMissingWithoutCorrectionIfNotMandatory() {
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueOcularAcuities.builder()
+                  .rightEye(
+                      OcularAcuity.builder()
+                          .withoutCorrection(
+                              WithoutCorrection.builder()
+                                  .id(new FieldId(RIGHT_EYE_WITHOUT_CORRECTION_ID))
+                                  .build()
+                          )
+                          .build()
+                  )
+                  .leftEye(
+                      OcularAcuity.builder()
+                          .withoutCorrection(
+                              WithoutCorrection.builder()
+                                  .id(new FieldId(LEFT_EYE_WITHOUT_CORRECTION_ID))
+                                  .value(VALUE)
+                                  .build()
+                          )
+                          .build()
+                  )
+                  .binocular(
+                      OcularAcuity.builder()
+                          .withoutCorrection(
+                              WithoutCorrection.builder()
+                                  .id(new FieldId(BINOCULAR_WITHOUT_CORRECTION_ID))
+                                  .value(VALUE)
+                                  .build()
+                          )
+                          .build()
+                  )
+                  .build()
+          )
+          .build();
+
+      final var actualValidationErrors = elementValidationOcularAcuities.validate(
+          elementData,
+          CATEGORY_ID
+      );
+
+      assertEquals(Collections.emptyList(), actualValidationErrors);
+    }
+
+    @Test
+    void shallNotReturnValidationErrorIfLeftEyeIsMissingWithoutCorrectionIfNotMandatory() {
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueOcularAcuities.builder()
+                  .rightEye(
+                      OcularAcuity.builder()
+                          .withoutCorrection(
+                              WithoutCorrection.builder()
+                                  .id(new FieldId(RIGHT_EYE_WITHOUT_CORRECTION_ID))
+                                  .value(VALUE)
+                                  .build()
+                          )
+                          .build()
+                  )
+                  .leftEye(
+                      OcularAcuity.builder()
+                          .withoutCorrection(
+                              WithoutCorrection.builder()
+                                  .id(new FieldId(LEFT_EYE_WITHOUT_CORRECTION_ID))
+                                  .build()
+                          )
+                          .build()
+                  )
+                  .binocular(
+                      OcularAcuity.builder()
+                          .withoutCorrection(
+                              WithoutCorrection.builder()
+                                  .id(new FieldId(BINOCULAR_WITHOUT_CORRECTION_ID))
+                                  .value(VALUE)
+                                  .build()
+                          )
+                          .build()
+                  )
+                  .build()
+          )
+          .build();
+
+      final var actualValidationErrors = elementValidationOcularAcuities.validate(
+          elementData,
+          CATEGORY_ID
+      );
+
+      assertEquals(Collections.emptyList(), actualValidationErrors);
+    }
+
+    @Test
+    void shallNotReturnValidationErrorIfBinocularIsMissingWithoutCorrectionIfNotMandatory() {
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueOcularAcuities.builder()
+                  .rightEye(
+                      OcularAcuity.builder()
+                          .withoutCorrection(
+                              WithoutCorrection.builder()
+                                  .id(new FieldId(RIGHT_EYE_WITHOUT_CORRECTION_ID))
+                                  .value(VALUE)
+                                  .build()
+                          )
+                          .build()
+                  )
+                  .leftEye(
+                      OcularAcuity.builder()
+                          .withoutCorrection(
+                              WithoutCorrection.builder()
+                                  .id(new FieldId(LEFT_EYE_WITHOUT_CORRECTION_ID))
+                                  .value(VALUE)
+                                  .build()
+                          )
+                          .build()
+                  )
+                  .binocular(
+                      OcularAcuity.builder()
+                          .withoutCorrection(
+                              WithoutCorrection.builder()
+                                  .id(new FieldId(BINOCULAR_WITHOUT_CORRECTION_ID))
+                                  .build()
+                          )
+                          .build()
+                  )
+                  .build()
+          )
+          .build();
+
+      final var actualValidationErrors = elementValidationOcularAcuities.validate(
+          elementData,
+          CATEGORY_ID
+      );
+
+      assertEquals(Collections.emptyList(), actualValidationErrors);
     }
   }
 }
