@@ -7,19 +7,19 @@ public class CodeSystemDecision {
   public static final String CODE_SYSTEM = "CODE_SYSTEM_KNOWLEDGE";
 
   public static final Code YES = new Code(
-      "JA",
+      "ja",
       CODE_SYSTEM,
       "Ja"
   );
 
   public static final Code NO = new Code(
-      "NEJ",
+      "nej",
       CODE_SYSTEM,
       "Nej"
   );
 
   public static final Code NO_DECISION = new Code(
-      "KAN_INTE_TA_STALLNING",
+      "ejstalln",
       CODE_SYSTEM,
       "Kan inte ta ställning"
   );

@@ -52,7 +52,7 @@ class QuestionBedomningOkandTest {
         ElementRuleExpression.builder()
             .id(new ElementId("23"))
             .type(ElementRuleType.SHOW)
-            .expression(new RuleExpression("$KAN_INTE_TA_STALLNING"))
+            .expression(new RuleExpression("$ejstalln"))
             .build()
     );
 
@@ -85,7 +85,7 @@ class QuestionBedomningOkandTest {
               .id(new ElementId("23"))
               .value(
                   ElementValueCode.builder()
-                      .codeId(new FieldId("KAN_INTE_TA_STALLNING"))
+                      .codeId(new FieldId("ejstalln"))
                       .build()
               )
               .build()
@@ -125,7 +125,7 @@ class QuestionBedomningOkandTest {
               .id(new ElementId("23"))
               .value(
                   ElementValueCode.builder()
-                      .codeId(new FieldId("NO"))
+                      .codeId(new FieldId("nej"))
                       .build()
               )
               .build()

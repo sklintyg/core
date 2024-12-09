@@ -69,7 +69,7 @@ class QuestionBedomningTest {
             .type(ElementRuleType.MANDATORY)
             .expression(
                 new RuleExpression(
-                    "exists($JA) || exists($NEJ) || exists($KAN_INTE_TA_STALLNING)"
+                    "exists($ja) || exists($nej) || exists($ejstalln)"
                 )
             )
             .build()

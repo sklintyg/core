@@ -68,7 +68,7 @@ class QuestionBaseratPaTest {
             .type(ElementRuleType.MANDATORY)
             .expression(
                 new RuleExpression(
-                    "exists($JOURNALUPPGIFTER) || exists($DISTANSKONTAKT) || exists($UNDERSOKNING)"
+                    "exists($journal) || exists($distkont) || exists($undersokn)"
                 )
             )
             .build()

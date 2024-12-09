@@ -7,19 +7,19 @@ public class CodeSystemKnowledge {
   public static final String CODE_SYSTEM = "CODE_SYSTEM_KNOWLEDGE";
 
   public static final Code YES = new Code(
-      "JA",
+      "ja",
       CODE_SYSTEM,
       "Ja"
   );
 
   public static final Code NO = new Code(
-      "NEJ",
+      "nej",
       CODE_SYSTEM,
       "Nej"
   );
 
   public static final Code NO_KNOWLEDGE = new Code(
-      "VET_EJ",
+      "vetej",
       CODE_SYSTEM,
       "Vet ej"
   );

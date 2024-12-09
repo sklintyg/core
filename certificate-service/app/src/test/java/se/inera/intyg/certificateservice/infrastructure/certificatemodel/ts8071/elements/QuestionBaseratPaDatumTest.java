@@ -54,7 +54,7 @@ class QuestionBaseratPaDatumTest {
         ElementRuleExpression.builder()
             .id(new ElementId("2"))
             .type(ElementRuleType.SHOW)
-            .expression(new RuleExpression("$DISTANSKONTAKT || $UNDERSOKNING"))
+            .expression(new RuleExpression("$distkont || $undersokn"))
             .build()
     );
 
@@ -87,7 +87,7 @@ class QuestionBaseratPaDatumTest {
               .id(new ElementId("2"))
               .value(
                   ElementValueCode.builder()
-                      .codeId(new FieldId("UNDERSOKNING"))
+                      .codeId(new FieldId("undersokn"))
                       .build()
               )
               .build()
@@ -107,7 +107,7 @@ class QuestionBaseratPaDatumTest {
               .id(new ElementId("2"))
               .value(
                   ElementValueCode.builder()
-                      .codeId(new FieldId("DISTANSKONTAKT"))
+                      .codeId(new FieldId("distkont"))
                       .build()
               )
               .build()

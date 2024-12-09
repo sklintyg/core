@@ -52,7 +52,7 @@ class QuestionBedomningRiskTest {
         ElementRuleExpression.builder()
             .id(new ElementId("23"))
             .type(ElementRuleType.SHOW)
-            .expression(new RuleExpression("$JA"))
+            .expression(new RuleExpression("$ja"))
             .build()
     );
 
@@ -85,7 +85,7 @@ class QuestionBedomningRiskTest {
               .id(new ElementId("23"))
               .value(
                   ElementValueCode.builder()
-                      .codeId(new FieldId("JA"))
+                      .codeId(new FieldId("ja"))
                       .build()
               )
               .build()

@@ -7,19 +7,19 @@ public class CodeSystemPositionHearingAid {
   public static final String CODE_SYSTEM = "CODE_SYSTEM_POSITION_HEARING_AID";
 
   public static final Code HOGER = new Code(
-      "HOGER",
+      "89644007",
       CODE_SYSTEM,
       "Höger"
   );
 
   public static final Code VANSTER = new Code(
-      "VANSTER",
+      "25577004",
       CODE_SYSTEM,
       "Vänster"
   );
 
   public static final Code BADA_ORONEN = new Code(
-      "BADA_ORONEN",
+      "34338003",
       CODE_SYSTEM,
       "Båda öronen"
   );

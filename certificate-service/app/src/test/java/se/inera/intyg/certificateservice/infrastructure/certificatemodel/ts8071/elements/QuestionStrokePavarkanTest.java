@@ -75,7 +75,7 @@ class QuestionStrokePavarkanTest {
             .type(ElementRuleType.MANDATORY)
             .expression(
                 new RuleExpression(
-                    "exists($JA) || exists($NEJ) || exists($VET_EJ)"
+                    "exists($ja) || exists($nej) || exists($vetej)"
                 )
             )
             .build(),
