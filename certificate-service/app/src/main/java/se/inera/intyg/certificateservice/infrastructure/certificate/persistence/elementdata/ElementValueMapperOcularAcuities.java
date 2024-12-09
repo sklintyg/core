@@ -1,11 +1,10 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.elementdata;
 
 import org.springframework.stereotype.Component;
+import se.inera.intyg.certificateservice.domain.certificate.model.Correction;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueOcularAcuities;
 import se.inera.intyg.certificateservice.domain.certificate.model.OcularAcuity;
-import se.inera.intyg.certificateservice.domain.certificate.model.WithCorrection;
-import se.inera.intyg.certificateservice.domain.certificate.model.WithoutCorrection;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
 @Component
@@ -25,14 +24,14 @@ public class ElementValueMapperOcularAcuities implements ElementValueMapper {
           .rightEye(
               OcularAcuity.builder()
                   .withCorrection(
-                      WithCorrection.builder()
+                      Correction.builder()
                           .id(new FieldId(
                               valueOcularAcuities.getRightEye().getWithCorrection().getId()))
                           .value(valueOcularAcuities.getRightEye().getWithCorrection().getValue())
                           .build()
                   )
                   .withoutCorrection(
-                      WithoutCorrection.builder()
+                      Correction.builder()
                           .id(new FieldId(
                               valueOcularAcuities.getRightEye().getWithoutCorrection().getId())
                           )
@@ -46,14 +45,14 @@ public class ElementValueMapperOcularAcuities implements ElementValueMapper {
           .leftEye(
               OcularAcuity.builder()
                   .withCorrection(
-                      WithCorrection.builder()
+                      Correction.builder()
                           .id(new FieldId(
                               valueOcularAcuities.getLeftEye().getWithCorrection().getId()))
                           .value(valueOcularAcuities.getLeftEye().getWithCorrection().getValue())
                           .build()
                   )
                   .withoutCorrection(
-                      WithoutCorrection.builder()
+                      Correction.builder()
                           .id(new FieldId(
                               valueOcularAcuities.getLeftEye().getWithoutCorrection().getId())
                           )
@@ -67,14 +66,14 @@ public class ElementValueMapperOcularAcuities implements ElementValueMapper {
           .binocular(
               OcularAcuity.builder()
                   .withCorrection(
-                      WithCorrection.builder()
+                      Correction.builder()
                           .id(new FieldId(
                               valueOcularAcuities.getBinocular().getWithCorrection().getId()))
                           .value(valueOcularAcuities.getBinocular().getWithCorrection().getValue())
                           .build()
                   )
                   .withoutCorrection(
-                      WithoutCorrection.builder()
+                      Correction.builder()
                           .id(new FieldId(
                               valueOcularAcuities.getBinocular().getWithoutCorrection().getId())
                           )

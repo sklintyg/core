@@ -6,10 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.domain.certificate.model.Correction;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueOcularAcuities;
 import se.inera.intyg.certificateservice.domain.certificate.model.OcularAcuity;
-import se.inera.intyg.certificateservice.domain.certificate.model.WithCorrection;
-import se.inera.intyg.certificateservice.domain.certificate.model.WithoutCorrection;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
 class ElementValueMapperOcularAcuitiesTest {
@@ -42,13 +41,13 @@ class ElementValueMapperOcularAcuitiesTest {
         .rightEye(
             OcularAcuity.builder()
                 .withoutCorrection(
-                    WithoutCorrection.builder()
+                    Correction.builder()
                         .id(new FieldId("id1"))
                         .value(1.1)
                         .build()
                 )
                 .withCorrection(
-                    WithCorrection.builder()
+                    Correction.builder()
                         .id(new FieldId("id2"))
                         .value(1.2)
                         .build()
@@ -58,13 +57,13 @@ class ElementValueMapperOcularAcuitiesTest {
         .leftEye(
             OcularAcuity.builder()
                 .withoutCorrection(
-                    WithoutCorrection.builder()
+                    Correction.builder()
                         .id(new FieldId("id3"))
                         .value(2.1)
                         .build()
                 )
                 .withCorrection(
-                    WithCorrection.builder()
+                    Correction.builder()
                         .id(new FieldId("id4"))
                         .value(2.2)
                         .build()
@@ -74,13 +73,13 @@ class ElementValueMapperOcularAcuitiesTest {
         .binocular(
             OcularAcuity.builder()
                 .withoutCorrection(
-                    WithoutCorrection.builder()
+                    Correction.builder()
                         .id(new FieldId("id5"))
                         .value(3.1)
                         .build()
                 )
                 .withCorrection(
-                    WithCorrection.builder()
+                    Correction.builder()
                         .id(new FieldId("id6"))
                         .value(3.2)
                         .build()
@@ -153,13 +152,13 @@ class ElementValueMapperOcularAcuitiesTest {
         .rightEye(
             OcularAcuity.builder()
                 .withoutCorrection(
-                    WithoutCorrection.builder()
+                    Correction.builder()
                         .id(new FieldId("id1"))
                         .value(1.1)
                         .build()
                 )
                 .withCorrection(
-                    WithCorrection.builder()
+                    Correction.builder()
                         .id(new FieldId("id2"))
                         .value(1.2)
                         .build()
@@ -169,13 +168,13 @@ class ElementValueMapperOcularAcuitiesTest {
         .leftEye(
             OcularAcuity.builder()
                 .withoutCorrection(
-                    WithoutCorrection.builder()
+                    Correction.builder()
                         .id(new FieldId("id3"))
                         .value(2.1)
                         .build()
                 )
                 .withCorrection(
-                    WithCorrection.builder()
+                    Correction.builder()
                         .id(new FieldId("id4"))
                         .value(2.2)
                         .build()
@@ -185,13 +184,13 @@ class ElementValueMapperOcularAcuitiesTest {
         .binocular(
             OcularAcuity.builder()
                 .withoutCorrection(
-                    WithoutCorrection.builder()
+                    Correction.builder()
                         .id(new FieldId("id5"))
                         .value(3.1)
                         .build()
                 )
                 .withCorrection(
-                    WithCorrection.builder()
+                    Correction.builder()
                         .id(new FieldId("id6"))
                         .value(3.2)
                         .build()

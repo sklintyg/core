@@ -6,7 +6,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
 @Value
 @Builder
-public class WithoutCorrection {
+public class Correction {
 
   FieldId id;
   Double value;

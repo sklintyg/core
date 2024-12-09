@@ -9,11 +9,10 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDouble;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueOcularAcuities;
+import se.inera.intyg.certificateservice.domain.certificate.model.Correction;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueOcularAcuities;
 import se.inera.intyg.certificateservice.domain.certificate.model.OcularAcuity;
-import se.inera.intyg.certificateservice.domain.certificate.model.WithCorrection;
-import se.inera.intyg.certificateservice.domain.certificate.model.WithoutCorrection;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
 class CertificateDataValueConverterOcularAcuitiesTest {
@@ -23,13 +22,13 @@ class CertificateDataValueConverterOcularAcuitiesTest {
   private static final double VALUE = 1.0;
   private static final OcularAcuity OCULAR_ACUITY = OcularAcuity.builder()
       .withCorrection(
-          WithCorrection.builder()
+          Correction.builder()
               .id(new FieldId(ID_1))
               .value(VALUE)
               .build()
       )
       .withoutCorrection(
-          WithoutCorrection.builder()
+          Correction.builder()
               .id(new FieldId(ID_2))
               .value(VALUE)
               .build()

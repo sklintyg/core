@@ -8,11 +8,10 @@ import se.inera.intyg.certificateservice.application.certificate.dto.value.Certi
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDouble;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueOcularAcuities;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueType;
+import se.inera.intyg.certificateservice.domain.certificate.model.Correction;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueOcularAcuities;
 import se.inera.intyg.certificateservice.domain.certificate.model.OcularAcuity;
-import se.inera.intyg.certificateservice.domain.certificate.model.WithCorrection;
-import se.inera.intyg.certificateservice.domain.certificate.model.WithoutCorrection;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
 @Component
@@ -36,13 +35,13 @@ public class ElementValueConverterOcularAcuities implements ElementValueConverte
         .rightEye(
             OcularAcuity.builder()
                 .withCorrection(
-                    WithCorrection.builder()
+                    Correction.builder()
                         .id(new FieldId(ocularAcuities.getRightEye().getWithCorrection().getId()))
                         .value(getIfPresent(ocularAcuities.getRightEye().getWithCorrection()))
                         .build()
                 )
                 .withoutCorrection(
-                    WithoutCorrection.builder()
+                    Correction.builder()
                         .id(new FieldId(
                             ocularAcuities.getRightEye().getWithoutCorrection().getId()))
                         .value(getIfPresent(ocularAcuities.getRightEye().getWithoutCorrection()))
@@ -53,13 +52,13 @@ public class ElementValueConverterOcularAcuities implements ElementValueConverte
         .leftEye(
             OcularAcuity.builder()
                 .withCorrection(
-                    WithCorrection.builder()
+                    Correction.builder()
                         .id(new FieldId(ocularAcuities.getLeftEye().getWithCorrection().getId()))
                         .value(getIfPresent(ocularAcuities.getLeftEye().getWithCorrection()))
                         .build()
                 )
                 .withoutCorrection(
-                    WithoutCorrection.builder()
+                    Correction.builder()
                         .id(new FieldId(ocularAcuities.getLeftEye().getWithoutCorrection().getId()))
                         .value(getIfPresent(ocularAcuities.getLeftEye().getWithoutCorrection()))
                         .build()
@@ -69,13 +68,13 @@ public class ElementValueConverterOcularAcuities implements ElementValueConverte
         .binocular(
             OcularAcuity.builder()
                 .withCorrection(
-                    WithCorrection.builder()
+                    Correction.builder()
                         .id(new FieldId(ocularAcuities.getBinocular().getWithCorrection().getId()))
                         .value(getIfPresent(ocularAcuities.getBinocular().getWithCorrection()))
                         .build()
                 )
                 .withoutCorrection(
-                    WithoutCorrection.builder()
+                    Correction.builder()
                         .id(new FieldId(
                             ocularAcuities.getBinocular().getWithoutCorrection().getId()))
                         .value(getIfPresent(ocularAcuities.getBinocular().getWithoutCorrection()))

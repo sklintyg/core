@@ -9,12 +9,11 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.domain.certificate.model.Correction;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueOcularAcuities;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.OcularAcuity;
-import se.inera.intyg.certificateservice.domain.certificate.model.WithCorrection;
-import se.inera.intyg.certificateservice.domain.certificate.model.WithoutCorrection;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
@@ -103,7 +102,7 @@ class ElementValidationOcularAcuitiesTest {
                   .rightEye(
                       OcularAcuity.builder()
                           .withoutCorrection(
-                              WithoutCorrection.builder()
+                              Correction.builder()
                                   .id(new FieldId(RIGHT_EYE_WITHOUT_CORRECTION_ID))
                                   .build()
                           )
@@ -112,7 +111,7 @@ class ElementValidationOcularAcuitiesTest {
                   .leftEye(
                       OcularAcuity.builder()
                           .withoutCorrection(
-                              WithoutCorrection.builder()
+                              Correction.builder()
                                   .id(new FieldId(LEFT_EYE_WITHOUT_CORRECTION_ID))
                                   .value(VALUE)
                                   .build()
@@ -122,7 +121,7 @@ class ElementValidationOcularAcuitiesTest {
                   .binocular(
                       OcularAcuity.builder()
                           .withoutCorrection(
-                              WithoutCorrection.builder()
+                              Correction.builder()
                                   .id(new FieldId(BINOCULAR_WITHOUT_CORRECTION_ID))
                                   .value(VALUE)
                                   .build()
@@ -161,7 +160,7 @@ class ElementValidationOcularAcuitiesTest {
                   .rightEye(
                       OcularAcuity.builder()
                           .withoutCorrection(
-                              WithoutCorrection.builder()
+                              Correction.builder()
                                   .id(new FieldId(RIGHT_EYE_WITHOUT_CORRECTION_ID))
                                   .value(VALUE)
                                   .build()
@@ -171,7 +170,7 @@ class ElementValidationOcularAcuitiesTest {
                   .leftEye(
                       OcularAcuity.builder()
                           .withoutCorrection(
-                              WithoutCorrection.builder()
+                              Correction.builder()
                                   .id(new FieldId(LEFT_EYE_WITHOUT_CORRECTION_ID))
                                   .build()
                           )
@@ -180,7 +179,7 @@ class ElementValidationOcularAcuitiesTest {
                   .binocular(
                       OcularAcuity.builder()
                           .withoutCorrection(
-                              WithoutCorrection.builder()
+                              Correction.builder()
                                   .id(new FieldId(BINOCULAR_WITHOUT_CORRECTION_ID))
                                   .value(VALUE)
                                   .build()
@@ -219,7 +218,7 @@ class ElementValidationOcularAcuitiesTest {
                   .rightEye(
                       OcularAcuity.builder()
                           .withoutCorrection(
-                              WithoutCorrection.builder()
+                              Correction.builder()
                                   .id(new FieldId(RIGHT_EYE_WITHOUT_CORRECTION_ID))
                                   .value(VALUE)
                                   .build()
@@ -229,7 +228,7 @@ class ElementValidationOcularAcuitiesTest {
                   .leftEye(
                       OcularAcuity.builder()
                           .withoutCorrection(
-                              WithoutCorrection.builder()
+                              Correction.builder()
                                   .id(new FieldId(LEFT_EYE_WITHOUT_CORRECTION_ID))
                                   .value(VALUE)
                                   .build()
@@ -239,7 +238,7 @@ class ElementValidationOcularAcuitiesTest {
                   .binocular(
                       OcularAcuity.builder()
                           .withoutCorrection(
-                              WithoutCorrection.builder()
+                              Correction.builder()
                                   .id(new FieldId(BINOCULAR_WITHOUT_CORRECTION_ID))
                                   .build()
                           )
@@ -277,7 +276,7 @@ class ElementValidationOcularAcuitiesTest {
                   .rightEye(
                       OcularAcuity.builder()
                           .withoutCorrection(
-                              WithoutCorrection.builder()
+                              Correction.builder()
                                   .id(new FieldId(RIGHT_EYE_WITHOUT_CORRECTION_ID))
                                   .build()
                           )
@@ -286,7 +285,7 @@ class ElementValidationOcularAcuitiesTest {
                   .leftEye(
                       OcularAcuity.builder()
                           .withoutCorrection(
-                              WithoutCorrection.builder()
+                              Correction.builder()
                                   .id(new FieldId(LEFT_EYE_WITHOUT_CORRECTION_ID))
                                   .value(VALUE)
                                   .build()
@@ -296,7 +295,7 @@ class ElementValidationOcularAcuitiesTest {
                   .binocular(
                       OcularAcuity.builder()
                           .withoutCorrection(
-                              WithoutCorrection.builder()
+                              Correction.builder()
                                   .id(new FieldId(BINOCULAR_WITHOUT_CORRECTION_ID))
                                   .value(VALUE)
                                   .build()
@@ -324,7 +323,7 @@ class ElementValidationOcularAcuitiesTest {
                   .rightEye(
                       OcularAcuity.builder()
                           .withoutCorrection(
-                              WithoutCorrection.builder()
+                              Correction.builder()
                                   .id(new FieldId(RIGHT_EYE_WITHOUT_CORRECTION_ID))
                                   .value(VALUE)
                                   .build()
@@ -334,7 +333,7 @@ class ElementValidationOcularAcuitiesTest {
                   .leftEye(
                       OcularAcuity.builder()
                           .withoutCorrection(
-                              WithoutCorrection.builder()
+                              Correction.builder()
                                   .id(new FieldId(LEFT_EYE_WITHOUT_CORRECTION_ID))
                                   .build()
                           )
@@ -343,7 +342,7 @@ class ElementValidationOcularAcuitiesTest {
                   .binocular(
                       OcularAcuity.builder()
                           .withoutCorrection(
-                              WithoutCorrection.builder()
+                              Correction.builder()
                                   .id(new FieldId(BINOCULAR_WITHOUT_CORRECTION_ID))
                                   .value(VALUE)
                                   .build()
@@ -371,7 +370,7 @@ class ElementValidationOcularAcuitiesTest {
                   .rightEye(
                       OcularAcuity.builder()
                           .withoutCorrection(
-                              WithoutCorrection.builder()
+                              Correction.builder()
                                   .id(new FieldId(RIGHT_EYE_WITHOUT_CORRECTION_ID))
                                   .value(VALUE)
                                   .build()
@@ -381,7 +380,7 @@ class ElementValidationOcularAcuitiesTest {
                   .leftEye(
                       OcularAcuity.builder()
                           .withoutCorrection(
-                              WithoutCorrection.builder()
+                              Correction.builder()
                                   .id(new FieldId(LEFT_EYE_WITHOUT_CORRECTION_ID))
                                   .value(VALUE)
                                   .build()
@@ -391,7 +390,7 @@ class ElementValidationOcularAcuitiesTest {
                   .binocular(
                       OcularAcuity.builder()
                           .withoutCorrection(
-                              WithoutCorrection.builder()
+                              Correction.builder()
                                   .id(new FieldId(BINOCULAR_WITHOUT_CORRECTION_ID))
                                   .build()
                           )
@@ -440,7 +439,7 @@ class ElementValidationOcularAcuitiesTest {
                   .rightEye(
                       OcularAcuity.builder()
                           .withoutCorrection(
-                              WithoutCorrection.builder()
+                              Correction.builder()
                                   .id(new FieldId(RIGHT_EYE_WITHOUT_CORRECTION_ID))
                                   .value(3.0)
                                   .build()
@@ -479,7 +478,7 @@ class ElementValidationOcularAcuitiesTest {
                   .rightEye(
                       OcularAcuity.builder()
                           .withCorrection(
-                              WithCorrection.builder()
+                              Correction.builder()
                                   .id(new FieldId(RIGHT_EYE_WITH_CORRECTION_ID))
                                   .value(3.0)
                                   .build()
@@ -518,7 +517,7 @@ class ElementValidationOcularAcuitiesTest {
                   .leftEye(
                       OcularAcuity.builder()
                           .withoutCorrection(
-                              WithoutCorrection.builder()
+                              Correction.builder()
                                   .id(new FieldId(LEFT_EYE_WITHOUT_CORRECTION_ID))
                                   .value(3.0)
                                   .build()
@@ -557,7 +556,7 @@ class ElementValidationOcularAcuitiesTest {
                   .leftEye(
                       OcularAcuity.builder()
                           .withCorrection(
-                              WithCorrection.builder()
+                              Correction.builder()
                                   .id(new FieldId(LEFT_EYE_WITH_CORRECTION_ID))
                                   .value(3.0)
                                   .build()
@@ -596,7 +595,7 @@ class ElementValidationOcularAcuitiesTest {
                   .binocular(
                       OcularAcuity.builder()
                           .withoutCorrection(
-                              WithoutCorrection.builder()
+                              Correction.builder()
                                   .id(new FieldId(BINOCULAR_WITHOUT_CORRECTION_ID))
                                   .value(3.0)
                                   .build()
@@ -635,7 +634,7 @@ class ElementValidationOcularAcuitiesTest {
                   .binocular(
                       OcularAcuity.builder()
                           .withCorrection(
-                              WithCorrection.builder()
+                              Correction.builder()
                                   .id(new FieldId(BINOCULAR_WITH_CORRECTION_ID))
                                   .value(3.0)
                                   .build()

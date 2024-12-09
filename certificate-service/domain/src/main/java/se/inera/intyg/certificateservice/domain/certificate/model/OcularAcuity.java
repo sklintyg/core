@@ -7,8 +7,8 @@ import lombok.Value;
 @Builder
 public class OcularAcuity implements ElementValue {
 
-  WithoutCorrection withoutCorrection;
-  WithCorrection withCorrection;
+  Correction withoutCorrection;
+  Correction withCorrection;
 
   @Override
   public boolean isEmpty() {
