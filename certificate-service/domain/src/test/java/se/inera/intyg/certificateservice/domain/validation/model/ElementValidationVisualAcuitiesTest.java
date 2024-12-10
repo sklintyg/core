@@ -446,8 +446,8 @@ class ElementValidationVisualAcuitiesTest {
                           )
                           .build()
                   )
-                  .leftEye(getDefaultVisualAcuity())
-                  .binocular(getDefaultVisualAcuity())
+                  .leftEye(getDefaultVisualActuity())
+                  .binocular(getDefaultVisualActuity())
                   .build()
           )
           .build();
@@ -487,8 +487,8 @@ class ElementValidationVisualAcuitiesTest {
                           )
                           .build()
                   )
-                  .leftEye(getDefaultVisualAcuity())
-                  .binocular(getDefaultVisualAcuity())
+                  .leftEye(getDefaultVisualActuity())
+                  .binocular(getDefaultVisualActuity())
                   .build()
           )
           .build();
@@ -518,7 +518,7 @@ class ElementValidationVisualAcuitiesTest {
           .id(ELEMENT_ID)
           .value(
               ElementValueVisualAcuities.builder()
-                  .rightEye(getDefaultVisualAcuity()
+                  .rightEye(getDefaultVisualActuity()
                   )
                   .leftEye(
                       VisualAcuity.builder()
@@ -530,7 +530,7 @@ class ElementValidationVisualAcuitiesTest {
                           )
                           .build()
                   )
-                  .binocular(getDefaultVisualAcuity())
+                  .binocular(getDefaultVisualActuity())
                   .build()
           )
           .build();
@@ -560,7 +560,7 @@ class ElementValidationVisualAcuitiesTest {
           .id(ELEMENT_ID)
           .value(
               ElementValueVisualAcuities.builder()
-                  .rightEye(getDefaultOcularAcuity())
+                  .rightEye(getDefaultVisualActuity())
                   .leftEye(
                       VisualAcuity.builder()
                           .withCorrection(
@@ -571,7 +571,7 @@ class ElementValidationVisualAcuitiesTest {
                           )
                           .build()
                   )
-                  .binocular(getDefaultOcularAcuity())
+                  .binocular(getDefaultVisualActuity())
                   .build()
           )
           .build();
@@ -601,8 +601,8 @@ class ElementValidationVisualAcuitiesTest {
           .id(ELEMENT_ID)
           .value(
               ElementValueVisualAcuities.builder()
-                  .rightEye(getDefaultOcularAcuity())
-                  .leftEye(getDefaultOcularAcuity())
+                  .rightEye(getDefaultVisualActuity())
+                  .leftEye(getDefaultVisualActuity())
                   .binocular(
                       VisualAcuity.builder()
                           .withoutCorrection(
@@ -642,8 +642,8 @@ class ElementValidationVisualAcuitiesTest {
           .id(ELEMENT_ID)
           .value(
               ElementValueVisualAcuities.builder()
-                  .rightEye(getDefaultOcularAcuity())
-                  .leftEye(getDefaultOcularAcuity())
+                  .rightEye(getDefaultVisualActuity())
+                  .leftEye(getDefaultVisualActuity())
                   .binocular(
                       VisualAcuity.builder()
                           .withCorrection(
@@ -667,7 +667,7 @@ class ElementValidationVisualAcuitiesTest {
     }
   }
 
-  private static VisualAcuity getDefaultOcularAcuity() {
+  private static VisualAcuity getDefaultVisualActuity() {
     return VisualAcuity.builder()
         .withoutCorrection(Correction.builder()
             .id(new FieldId("ID1"))

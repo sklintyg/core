@@ -1,7 +1,6 @@
 package se.inera.intyg.certificateservice.application.certificate.service.converter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +19,7 @@ class CertificateDataValueConverterVisualAcuitiesTest {
   private static final String ID_1 = "id1";
   private static final String ID_2 = "id2";
   private static final double VALUE = 1.0;
-  private static final VisualAcuity OCULAR_ACUITY = VisualAcuity.builder()
+  private static final VisualAcuity VISUAL_ACUITY = VisualAcuity.builder()
       .withCorrection(
           Correction.builder()
               .id(new FieldId(ID_1))
@@ -34,6 +33,14 @@ class CertificateDataValueConverterVisualAcuitiesTest {
               .build()
       )
       .build();
+
+  private static final ElementValueVisualAcuities VISUALL_ACUITIES =
+      ElementValueVisualAcuities.builder()
+          .leftEye(VISUAL_ACUITY)
+          .binocular(VISUAL_ACUITY)
+          .rightEye(VISUAL_ACUITY)
+          .build();
+
   private CertificateDataValueConverterVisualAcuities convertervisualAcuities;
 
   @BeforeEach
@@ -54,19 +61,6 @@ class CertificateDataValueConverterVisualAcuitiesTest {
   @Nested
   class RightEyeTests {
 
-    private static final ElementValueVisualAcuities RIGHT_EYE_ELEMENT_VALUE_OCULAR_ACUITIES =
-        ElementValueVisualAcuities.builder()
-            .rightEye(OCULAR_ACUITY)
-            .build();
-
-    @Test
-    void shallNotIncludeRightEyeIfNull() {
-      final var elementValuevisualAcuities = ElementValueVisualAcuities.builder().build();
-      final var certificateDataValue = (CertificateDataValueVisualAcuities)
-          convertervisualAcuities.convert(null, elementValuevisualAcuities);
-      assertNull(certificateDataValue.getRightEye());
-    }
-
     @Test
     void shallIncludeWithCorrection() {
       final var expectedResult = CertificateDataValueDouble.builder()
@@ -75,7 +69,7 @@ class CertificateDataValueConverterVisualAcuitiesTest {
           .build();
 
       final var certificateDataValue = (CertificateDataValueVisualAcuities)
-          convertervisualAcuities.convert(null, RIGHT_EYE_ELEMENT_VALUE_OCULAR_ACUITIES);
+          convertervisualAcuities.convert(null, VISUALL_ACUITIES);
 
       assertEquals(expectedResult, certificateDataValue.getRightEye().getWithCorrection());
     }
@@ -88,7 +82,7 @@ class CertificateDataValueConverterVisualAcuitiesTest {
           .build();
 
       final var certificateDataValue = (CertificateDataValueVisualAcuities)
-          convertervisualAcuities.convert(null, RIGHT_EYE_ELEMENT_VALUE_OCULAR_ACUITIES);
+          convertervisualAcuities.convert(null, VISUALL_ACUITIES);
 
       assertEquals(expectedResult, certificateDataValue.getRightEye().getWithoutCorrection());
     }
@@ -96,19 +90,6 @@ class CertificateDataValueConverterVisualAcuitiesTest {
 
   @Nested
   class LeftEyeTests {
-
-    private static final ElementValueVisualAcuities RIGHT_EYE_ELEMENT_VALUE_OCULAR_ACUITIES =
-        ElementValueVisualAcuities.builder()
-            .leftEye(OCULAR_ACUITY)
-            .build();
-
-    @Test
-    void shallNotIncludeLeftEyeIfNull() {
-      final var elementValuevisualAcuities = ElementValueVisualAcuities.builder().build();
-      final var certificateDataValue = (CertificateDataValueVisualAcuities)
-          convertervisualAcuities.convert(null, elementValuevisualAcuities);
-      assertNull(certificateDataValue.getLeftEye());
-    }
 
     @Test
     void shallIncludeWithCorrection() {
@@ -118,7 +99,7 @@ class CertificateDataValueConverterVisualAcuitiesTest {
           .build();
 
       final var certificateDataValue = (CertificateDataValueVisualAcuities)
-          convertervisualAcuities.convert(null, RIGHT_EYE_ELEMENT_VALUE_OCULAR_ACUITIES);
+          convertervisualAcuities.convert(null, VISUALL_ACUITIES);
 
       assertEquals(expectedResult, certificateDataValue.getLeftEye().getWithCorrection());
     }
@@ -131,7 +112,7 @@ class CertificateDataValueConverterVisualAcuitiesTest {
           .build();
 
       final var certificateDataValue = (CertificateDataValueVisualAcuities)
-          convertervisualAcuities.convert(null, RIGHT_EYE_ELEMENT_VALUE_OCULAR_ACUITIES);
+          convertervisualAcuities.convert(null, VISUALL_ACUITIES);
 
       assertEquals(expectedResult, certificateDataValue.getLeftEye().getWithoutCorrection());
     }
@@ -139,19 +120,6 @@ class CertificateDataValueConverterVisualAcuitiesTest {
 
   @Nested
   class BinocularTests {
-
-    private static final ElementValueVisualAcuities RIGHT_EYE_ELEMENT_VALUE_OCULAR_ACUITIES =
-        ElementValueVisualAcuities.builder()
-            .binocular(OCULAR_ACUITY)
-            .build();
-
-    @Test
-    void shallNotIncludeBinocularIfNull() {
-      final var elementValuevisualAcuities = ElementValueVisualAcuities.builder().build();
-      final var certificateDataValue = (CertificateDataValueVisualAcuities)
-          convertervisualAcuities.convert(null, elementValuevisualAcuities);
-      assertNull(certificateDataValue.getBinocular());
-    }
 
     @Test
     void shallIncludeWithCorrection() {
@@ -161,7 +129,7 @@ class CertificateDataValueConverterVisualAcuitiesTest {
           .build();
 
       final var certificateDataValue = (CertificateDataValueVisualAcuities)
-          convertervisualAcuities.convert(null, RIGHT_EYE_ELEMENT_VALUE_OCULAR_ACUITIES);
+          convertervisualAcuities.convert(null, VISUALL_ACUITIES);
 
       assertEquals(expectedResult, certificateDataValue.getBinocular().getWithCorrection());
     }
@@ -174,7 +142,7 @@ class CertificateDataValueConverterVisualAcuitiesTest {
           .build();
 
       final var certificateDataValue = (CertificateDataValueVisualAcuities)
-          convertervisualAcuities.convert(null, RIGHT_EYE_ELEMENT_VALUE_OCULAR_ACUITIES);
+          convertervisualAcuities.convert(null, VISUALL_ACUITIES);
 
       assertEquals(expectedResult, certificateDataValue.getBinocular().getWithoutCorrection());
     }

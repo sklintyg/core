@@ -124,9 +124,9 @@ class XmlGeneratorVisualAcuitiesTest {
           () -> assertEquals(ELEMENT_ID, actualResult.getFirst().getId()),
           () -> assertEquals(ID_1, actualResult.getFirst().getDelsvar().getFirst().getId()),
           () -> assertEquals(ID_2, actualResult.getFirst().getDelsvar().getLast().getId()),
-          () -> assertEquals(2.0,
+          () -> assertEquals("2.0",
               actualResult.getFirst().getDelsvar().getFirst().getContent().getFirst()),
-          () -> assertEquals(1.0,
+          () -> assertEquals("1.0",
               actualResult.getFirst().getDelsvar().getLast().getContent().getFirst())
       );
     }
@@ -174,9 +174,9 @@ class XmlGeneratorVisualAcuitiesTest {
           () -> assertEquals(ELEMENT_ID, actualResult.getFirst().getId()),
           () -> assertEquals(ID_1, actualResult.getFirst().getDelsvar().getFirst().getId()),
           () -> assertEquals(ID_2, actualResult.getFirst().getDelsvar().getLast().getId()),
-          () -> assertEquals(2.0,
+          () -> assertEquals("2.0",
               actualResult.getFirst().getDelsvar().getFirst().getContent().getFirst()),
-          () -> assertEquals(1.0,
+          () -> assertEquals("1.0",
               actualResult.getFirst().getDelsvar().getLast().getContent().getFirst())
       );
     }
@@ -224,9 +224,9 @@ class XmlGeneratorVisualAcuitiesTest {
           () -> assertEquals(ELEMENT_ID, actualResult.getFirst().getId()),
           () -> assertEquals(ID_1, actualResult.getFirst().getDelsvar().getFirst().getId()),
           () -> assertEquals(ID_2, actualResult.getFirst().getDelsvar().getLast().getId()),
-          () -> assertEquals(2.0,
+          () -> assertEquals("2.0",
               actualResult.getFirst().getDelsvar().getFirst().getContent().getFirst()),
-          () -> assertEquals(1.0,
+          () -> assertEquals("1.0",
               actualResult.getFirst().getDelsvar().getLast().getContent().getFirst())
       );
     }
@@ -316,17 +316,17 @@ class XmlGeneratorVisualAcuitiesTest {
           () -> assertEquals(ID_5, actualResult.getFirst().getDelsvar().get(3).getId()),
           () -> assertEquals(ID_3, actualResult.getFirst().getDelsvar().get(4).getId()),
           () -> assertEquals(ID_6, actualResult.getFirst().getDelsvar().get(5).getId()),
-          () -> assertEquals(1.0,
+          () -> assertEquals("1.0",
               actualResult.getFirst().getDelsvar().get(0).getContent().getFirst()),
-          () -> assertEquals(1.0,
+          () -> assertEquals("1.0",
               actualResult.getFirst().getDelsvar().get(1).getContent().getFirst()),
-          () -> assertEquals(1.0,
+          () -> assertEquals("1.0",
               actualResult.getFirst().getDelsvar().get(2).getContent().getFirst()),
-          () -> assertEquals(1.0,
+          () -> assertEquals("1.0",
               actualResult.getFirst().getDelsvar().get(3).getContent().getFirst()),
-          () -> assertEquals(1.0,
+          () -> assertEquals("1.0",
               actualResult.getFirst().getDelsvar().get(4).getContent().getFirst()),
-          () -> assertEquals(1.0,
+          () -> assertEquals("1.0",
               actualResult.getFirst().getDelsvar().get(5).getContent().getFirst())
       );
     }
