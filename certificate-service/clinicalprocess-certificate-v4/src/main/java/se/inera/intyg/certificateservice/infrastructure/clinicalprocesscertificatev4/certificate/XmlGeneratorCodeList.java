@@ -50,7 +50,7 @@ public class XmlGeneratorCodeList implements XmlGeneratorElementData {
               final var cvType = new CVType();
 
               final var code = configuration.code(codeValue);
-              subAnswerCode.setId(codeValue.codeId().value());
+              subAnswerCode.setId(codeListValue.id().value());
               cvType.setCode(code.code());
               cvType.setCodeSystem(code.codeSystem());
               cvType.setDisplayName(code.displayName());

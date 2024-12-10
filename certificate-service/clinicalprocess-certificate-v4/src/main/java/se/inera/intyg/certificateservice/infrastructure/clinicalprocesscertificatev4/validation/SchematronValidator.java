@@ -16,17 +16,22 @@ public class SchematronValidator implements XmlSchematronValidator {
   @Override
   public boolean validate(CertificateId certificateId, Xml xml, SchematronPath schematronPath) {
     final var xmlStream = new StreamSource(new StringReader(xml.xml()));
-    final var schematronResource = SchematronResourceSCH.fromClassPath(
-        schematronPath.value()
-    );
-    try {
-      final var schematronOutput = schematronResource.applySchematronValidationToSVRL(xmlStream);
-      return schematronResult(schematronOutput, certificateId.id());
-    } catch (Exception e) {
-      log.error("Schematron validation of certificate id {} failed with an exception.",
-          certificateId, e);
-      return false;
+
+    if (schematronPath != null) {
+      final var schematronResource = SchematronResourceSCH.fromClassPath(
+          schematronPath.value()
+      );
+      try {
+        final var schematronOutput = schematronResource.applySchematronValidationToSVRL(xmlStream);
+        return schematronResult(schematronOutput, certificateId.id());
+      } catch (Exception e) {
+        log.error("Schematron validation of certificate id {} failed with an exception.",
+            certificateId, e);
+        return false;
+      }
     }
+
+    return true;
   }
 
   private boolean schematronResult(SchematronOutputType output, String certificateId) {
