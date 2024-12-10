@@ -10,16 +10,16 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.Correction;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueOcularAcuities;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
-import se.inera.intyg.certificateservice.domain.certificate.model.OcularAcuity;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueVisualAcuities;
+import se.inera.intyg.certificateservice.domain.certificate.model.VisualAcuity;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 
-class XmlGeneratorOcularAcuitiesTest {
+class XmlGeneratorVisualAcuitiesTest {
 
   private static final String ID = "id";
   private static final ElementSpecification ELEMENT_SPECIFICATION = ElementSpecification.builder()
@@ -31,16 +31,16 @@ class XmlGeneratorOcularAcuitiesTest {
   private static final String ID_5 = "ID_5";
   private static final String ID_6 = "ID_6";
   private static final String ELEMENT_ID = "ELEMENT_ID";
-  XmlGeneratorOcularAcuities xmlGeneratorOcularAcuities;
+  XmlGeneratorVisualAcuities xmlGeneratorVisualAcuities;
 
   @BeforeEach
   void setUp() {
-    xmlGeneratorOcularAcuities = new XmlGeneratorOcularAcuities();
+    xmlGeneratorVisualAcuities = new XmlGeneratorVisualAcuities();
   }
 
   @Test
-  void shallSupportElementValueOcularAcuities() {
-    assertEquals(ElementValueOcularAcuities.class, xmlGeneratorOcularAcuities.supports());
+  void shallSupportElementValueVisualAcuities() {
+    assertEquals(ElementValueVisualAcuities.class, xmlGeneratorVisualAcuities.supports());
   }
 
   @Test
@@ -49,36 +49,36 @@ class XmlGeneratorOcularAcuitiesTest {
         .value(ElementValueText.builder().build())
         .build();
 
-    final var actualResult = xmlGeneratorOcularAcuities.generate(elementDataWithValueText,
+    final var actualResult = xmlGeneratorVisualAcuities.generate(elementDataWithValueText,
         ELEMENT_SPECIFICATION);
     assertEquals(Collections.emptyList(), actualResult);
   }
 
   @Test
-  void shallReturnEmptyListIfOcularAcuitiesIsEmpty() {
-    final var emptyOcularAcuities = ElementData.builder()
+  void shallReturnEmptyListIfVisualAcuitiesIsEmpty() {
+    final var emptyVisualAcuities = ElementData.builder()
         .value(
-            ElementValueOcularAcuities.builder()
+            ElementValueVisualAcuities.builder()
                 .rightEye(
-                    defaultEmptyOcularAcuity()
+                    defaultEmptyVisualAcuity()
                 )
                 .leftEye(
-                    defaultEmptyOcularAcuity()
+                    defaultEmptyVisualAcuity()
                 )
                 .binocular(
-                    defaultEmptyOcularAcuity()
+                    defaultEmptyVisualAcuity()
                 )
                 .build()
         )
         .build();
 
-    final var actualResult = xmlGeneratorOcularAcuities.generate(emptyOcularAcuities,
+    final var actualResult = xmlGeneratorVisualAcuities.generate(emptyVisualAcuities,
         ELEMENT_SPECIFICATION);
     assertEquals(Collections.emptyList(), actualResult);
   }
 
   @Nested
-  class TestOneOcularAcuity {
+  class TestOneVisualAcuity {
 
 
     @Test
@@ -91,12 +91,12 @@ class XmlGeneratorOcularAcuitiesTest {
           )
       );
 
-      final var emptyOcularAcuities = ElementData.builder()
+      final var emptyVisualAcuities = ElementData.builder()
           .id(new ElementId(ELEMENT_ID))
           .value(
-              ElementValueOcularAcuities.builder()
+              ElementValueVisualAcuities.builder()
                   .rightEye(
-                      OcularAcuity.builder()
+                      VisualAcuity.builder()
                           .withoutCorrection(
                               Correction.builder()
                                   .id(new FieldId(ID_1))
@@ -111,13 +111,13 @@ class XmlGeneratorOcularAcuitiesTest {
                           )
                           .build()
                   )
-                  .leftEye(defaultEmptyOcularAcuity())
-                  .binocular(defaultEmptyOcularAcuity())
+                  .leftEye(defaultEmptyVisualAcuity())
+                  .binocular(defaultEmptyVisualAcuity())
                   .build()
           )
           .build();
 
-      final var actualResult = xmlGeneratorOcularAcuities.generate(emptyOcularAcuities,
+      final var actualResult = xmlGeneratorVisualAcuities.generate(emptyVisualAcuities,
           ELEMENT_SPECIFICATION);
 
       assertAll(
@@ -141,12 +141,12 @@ class XmlGeneratorOcularAcuitiesTest {
           )
       );
 
-      final var emptyOcularAcuities = ElementData.builder()
+      final var emptyVisualAcuities = ElementData.builder()
           .id(new ElementId(ELEMENT_ID))
           .value(
-              ElementValueOcularAcuities.builder()
+              ElementValueVisualAcuities.builder()
                   .leftEye(
-                      OcularAcuity.builder()
+                      VisualAcuity.builder()
                           .withoutCorrection(
                               Correction.builder()
                                   .id(new FieldId(ID_1))
@@ -161,13 +161,13 @@ class XmlGeneratorOcularAcuitiesTest {
                           )
                           .build()
                   )
-                  .rightEye(defaultEmptyOcularAcuity())
-                  .binocular(defaultEmptyOcularAcuity())
+                  .rightEye(defaultEmptyVisualAcuity())
+                  .binocular(defaultEmptyVisualAcuity())
                   .build()
           )
           .build();
 
-      final var actualResult = xmlGeneratorOcularAcuities.generate(emptyOcularAcuities,
+      final var actualResult = xmlGeneratorVisualAcuities.generate(emptyVisualAcuities,
           ELEMENT_SPECIFICATION);
 
       assertAll(
@@ -194,9 +194,9 @@ class XmlGeneratorOcularAcuitiesTest {
       final var emptyOcularAcuities = ElementData.builder()
           .id(new ElementId(ELEMENT_ID))
           .value(
-              ElementValueOcularAcuities.builder()
+              ElementValueVisualAcuities.builder()
                   .binocular(
-                      OcularAcuity.builder()
+                      VisualAcuity.builder()
                           .withoutCorrection(
                               Correction.builder()
                                   .id(new FieldId(ID_1))
@@ -211,13 +211,13 @@ class XmlGeneratorOcularAcuitiesTest {
                           )
                           .build()
                   )
-                  .rightEye(defaultEmptyOcularAcuity())
-                  .leftEye(defaultEmptyOcularAcuity())
+                  .rightEye(defaultEmptyVisualAcuity())
+                  .leftEye(defaultEmptyVisualAcuity())
                   .build()
           )
           .build();
 
-      final var actualResult = xmlGeneratorOcularAcuities.generate(emptyOcularAcuities,
+      final var actualResult = xmlGeneratorVisualAcuities.generate(emptyOcularAcuities,
           ELEMENT_SPECIFICATION);
 
       assertAll(
@@ -252,9 +252,9 @@ class XmlGeneratorOcularAcuitiesTest {
       final var emptyOcularAcuities = ElementData.builder()
           .id(new ElementId(ELEMENT_ID))
           .value(
-              ElementValueOcularAcuities.builder()
+              ElementValueVisualAcuities.builder()
                   .rightEye(
-                      OcularAcuity.builder()
+                      VisualAcuity.builder()
                           .withoutCorrection(
                               Correction.builder()
                                   .id(new FieldId(ID_1))
@@ -270,7 +270,7 @@ class XmlGeneratorOcularAcuitiesTest {
                           .build()
                   )
                   .leftEye(
-                      OcularAcuity.builder()
+                      VisualAcuity.builder()
                           .withoutCorrection(
                               Correction.builder()
                                   .id(new FieldId(ID_2))
@@ -286,7 +286,7 @@ class XmlGeneratorOcularAcuitiesTest {
                           .build()
                   )
                   .binocular(
-                      OcularAcuity.builder()
+                      VisualAcuity.builder()
                           .withoutCorrection(
                               Correction.builder()
                                   .id(new FieldId(ID_3))
@@ -305,7 +305,7 @@ class XmlGeneratorOcularAcuitiesTest {
           )
           .build();
 
-      final var actualResult = xmlGeneratorOcularAcuities.generate(emptyOcularAcuities,
+      final var actualResult = xmlGeneratorVisualAcuities.generate(emptyOcularAcuities,
           ELEMENT_SPECIFICATION);
 
       assertAll(
@@ -339,8 +339,8 @@ class XmlGeneratorOcularAcuitiesTest {
     return subAnswer;
   }
 
-  private static OcularAcuity defaultEmptyOcularAcuity() {
-    return OcularAcuity.builder()
+  private static VisualAcuity defaultEmptyVisualAcuity() {
+    return VisualAcuity.builder()
         .withCorrection(
             Correction.builder()
                 .build()

@@ -7,39 +7,39 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.Correction;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueOcularAcuities;
-import se.inera.intyg.certificateservice.domain.certificate.model.OcularAcuity;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueVisualAcuities;
+import se.inera.intyg.certificateservice.domain.certificate.model.VisualAcuity;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
-class ElementValueMapperOcularAcuitiesTest {
+class ElementValueMapperVisualAcuitiesTest {
 
-  private ElementValueMapperOcularAcuities elementValueMapperOcularAcuities;
+  private ElementValueMapperVisualAcuities elementValueMapperVisualAcuities;
 
   @BeforeEach
   void setUp() {
-    elementValueMapperOcularAcuities = new ElementValueMapperOcularAcuities();
+    elementValueMapperVisualAcuities = new ElementValueMapperVisualAcuities();
   }
 
   @Test
-  void shallSupportClassMappedElementValueOcularAcuities() {
-    assertTrue(elementValueMapperOcularAcuities.supports(MappedElementValueOcularAcuities.class));
+  void shallSupportClassMappedElementValuevisualAcuities() {
+    assertTrue(elementValueMapperVisualAcuities.supports(MappedElementValueVisualAcuities.class));
   }
 
   @Test
-  void shallSupportClassElementValueOcularAcuities() {
-    assertTrue(elementValueMapperOcularAcuities.supports(ElementValueOcularAcuities.class));
+  void shallSupportClassElementValuevisualAcuities() {
+    assertTrue(elementValueMapperVisualAcuities.supports(ElementValueVisualAcuities.class));
   }
 
   @Test
   void shallReturnFalseForUnsupportedClass() {
-    assertFalse(elementValueMapperOcularAcuities.supports(String.class));
+    assertFalse(elementValueMapperVisualAcuities.supports(String.class));
   }
 
   @Test
   void shallMapToDomain() {
-    final var expectedValue = ElementValueOcularAcuities.builder()
+    final var expectedValue = ElementValueVisualAcuities.builder()
         .rightEye(
-            OcularAcuity.builder()
+            VisualAcuity.builder()
                 .withoutCorrection(
                     Correction.builder()
                         .id(new FieldId("id1"))
@@ -55,7 +55,7 @@ class ElementValueMapperOcularAcuitiesTest {
                 .build()
         )
         .leftEye(
-            OcularAcuity.builder()
+            VisualAcuity.builder()
                 .withoutCorrection(
                     Correction.builder()
                         .id(new FieldId("id3"))
@@ -71,7 +71,7 @@ class ElementValueMapperOcularAcuitiesTest {
                 .build()
         )
         .binocular(
-            OcularAcuity.builder()
+            VisualAcuity.builder()
                 .withoutCorrection(
                     Correction.builder()
                         .id(new FieldId("id5"))
@@ -88,9 +88,9 @@ class ElementValueMapperOcularAcuitiesTest {
         )
         .build();
 
-    final var mappedElementValueOcularAcuities = MappedElementValueOcularAcuities.builder()
+    final var mappedElementValueVisualAcuities = MappedElementValueVisualAcuities.builder()
         .rightEye(
-            MappedElementValueOcularAcuity.builder()
+            MappedElementValueVisualAcuity.builder()
                 .withoutCorrection(
                     MappedElementValueDouble.builder()
                         .id("id1")
@@ -106,7 +106,7 @@ class ElementValueMapperOcularAcuitiesTest {
                 .build()
         )
         .leftEye(
-            MappedElementValueOcularAcuity.builder()
+            MappedElementValueVisualAcuity.builder()
                 .withoutCorrection(
                     MappedElementValueDouble.builder()
                         .id("id3")
@@ -122,7 +122,7 @@ class ElementValueMapperOcularAcuitiesTest {
                 .build()
         )
         .binocular(
-            MappedElementValueOcularAcuity.builder()
+            MappedElementValueVisualAcuity.builder()
                 .withoutCorrection(
                     MappedElementValueDouble.builder()
                         .id("id5")
@@ -139,8 +139,8 @@ class ElementValueMapperOcularAcuitiesTest {
         )
         .build();
 
-    final var actualValue = elementValueMapperOcularAcuities.toDomain(
-        mappedElementValueOcularAcuities
+    final var actualValue = elementValueMapperVisualAcuities.toDomain(
+        mappedElementValueVisualAcuities
     );
 
     assertEquals(expectedValue, actualValue);
@@ -148,9 +148,9 @@ class ElementValueMapperOcularAcuitiesTest {
 
   @Test
   void shallMapToMapped() {
-    final var elementValueOcularAcuities = ElementValueOcularAcuities.builder()
+    final var elementValueVisualAcuities = ElementValueVisualAcuities.builder()
         .rightEye(
-            OcularAcuity.builder()
+            VisualAcuity.builder()
                 .withoutCorrection(
                     Correction.builder()
                         .id(new FieldId("id1"))
@@ -166,7 +166,7 @@ class ElementValueMapperOcularAcuitiesTest {
                 .build()
         )
         .leftEye(
-            OcularAcuity.builder()
+            VisualAcuity.builder()
                 .withoutCorrection(
                     Correction.builder()
                         .id(new FieldId("id3"))
@@ -182,7 +182,7 @@ class ElementValueMapperOcularAcuitiesTest {
                 .build()
         )
         .binocular(
-            OcularAcuity.builder()
+            VisualAcuity.builder()
                 .withoutCorrection(
                     Correction.builder()
                         .id(new FieldId("id5"))
@@ -199,9 +199,9 @@ class ElementValueMapperOcularAcuitiesTest {
         )
         .build();
 
-    final var expectedValue = MappedElementValueOcularAcuities.builder()
+    final var expectedValue = MappedElementValueVisualAcuities.builder()
         .rightEye(
-            MappedElementValueOcularAcuity.builder()
+            MappedElementValueVisualAcuity.builder()
                 .withoutCorrection(
                     MappedElementValueDouble.builder()
                         .id("id1")
@@ -217,7 +217,7 @@ class ElementValueMapperOcularAcuitiesTest {
                 .build()
         )
         .leftEye(
-            MappedElementValueOcularAcuity.builder()
+            MappedElementValueVisualAcuity.builder()
                 .withoutCorrection(
                     MappedElementValueDouble.builder()
                         .id("id3")
@@ -233,7 +233,7 @@ class ElementValueMapperOcularAcuitiesTest {
                 .build()
         )
         .binocular(
-            MappedElementValueOcularAcuity.builder()
+            MappedElementValueVisualAcuity.builder()
                 .withoutCorrection(
                     MappedElementValueDouble.builder()
                         .id("id5")
@@ -250,8 +250,8 @@ class ElementValueMapperOcularAcuitiesTest {
         )
         .build();
 
-    final var actualValue = elementValueMapperOcularAcuities.toMapped(
-        elementValueOcularAcuities
+    final var actualValue = elementValueMapperVisualAcuities.toMapped(
+        elementValueVisualAcuities
     );
 
     assertEquals(expectedValue, actualValue);

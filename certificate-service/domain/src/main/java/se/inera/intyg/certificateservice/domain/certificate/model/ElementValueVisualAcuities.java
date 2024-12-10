@@ -5,11 +5,11 @@ import lombok.Value;
 
 @Value
 @Builder
-public class ElementValueOcularAcuities implements ElementValue {
+public class ElementValueVisualAcuities implements ElementValue {
 
-  OcularAcuity rightEye;
-  OcularAcuity leftEye;
-  OcularAcuity binocular;
+  VisualAcuity rightEye;
+  VisualAcuity leftEye;
+  VisualAcuity binocular;
 
   @Override
   public boolean isEmpty() {

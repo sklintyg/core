@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MappedElementValueOcularAcuity implements MappedElementValue {
+public class MappedElementValueVisualAcuities implements MappedElementValue {
 
-  private MappedElementValueDouble withCorrection;
-  private MappedElementValueDouble withoutCorrection;
+  private MappedElementValueVisualAcuity rightEye;
+  private MappedElementValueVisualAcuity leftEye;
+  private MappedElementValueVisualAcuity binocular;
 
 }

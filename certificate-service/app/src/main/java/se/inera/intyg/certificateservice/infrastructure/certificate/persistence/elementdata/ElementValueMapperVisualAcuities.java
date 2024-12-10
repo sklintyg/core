@@ -3,82 +3,82 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.Correction;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueOcularAcuities;
-import se.inera.intyg.certificateservice.domain.certificate.model.OcularAcuity;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueVisualAcuities;
+import se.inera.intyg.certificateservice.domain.certificate.model.VisualAcuity;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
 @Component
-public class ElementValueMapperOcularAcuities implements ElementValueMapper {
+public class ElementValueMapperVisualAcuities implements ElementValueMapper {
 
   @Override
   public boolean supports(Class<?> c) {
-    return c.equals(MappedElementValueOcularAcuities.class)
-        || c.equals(ElementValueOcularAcuities.class);
+    return c.equals(MappedElementValueVisualAcuities.class)
+        || c.equals(ElementValueVisualAcuities.class);
   }
 
   @Override
   public ElementValue toDomain(MappedElementValue mappedValue) {
-    if (mappedValue instanceof MappedElementValueOcularAcuities valueOcularAcuities) {
+    if (mappedValue instanceof MappedElementValueVisualAcuities valueVisualAcuities) {
 
-      return ElementValueOcularAcuities.builder()
+      return ElementValueVisualAcuities.builder()
           .rightEye(
-              OcularAcuity.builder()
+              VisualAcuity.builder()
                   .withCorrection(
                       Correction.builder()
                           .id(new FieldId(
-                              valueOcularAcuities.getRightEye().getWithCorrection().getId()))
-                          .value(valueOcularAcuities.getRightEye().getWithCorrection().getValue())
+                              valueVisualAcuities.getRightEye().getWithCorrection().getId()))
+                          .value(valueVisualAcuities.getRightEye().getWithCorrection().getValue())
                           .build()
                   )
                   .withoutCorrection(
                       Correction.builder()
                           .id(new FieldId(
-                              valueOcularAcuities.getRightEye().getWithoutCorrection().getId())
+                              valueVisualAcuities.getRightEye().getWithoutCorrection().getId())
                           )
                           .value(
-                              valueOcularAcuities.getRightEye().getWithoutCorrection().getValue()
+                              valueVisualAcuities.getRightEye().getWithoutCorrection().getValue()
                           )
                           .build()
                   )
                   .build()
           )
           .leftEye(
-              OcularAcuity.builder()
+              VisualAcuity.builder()
                   .withCorrection(
                       Correction.builder()
                           .id(new FieldId(
-                              valueOcularAcuities.getLeftEye().getWithCorrection().getId()))
-                          .value(valueOcularAcuities.getLeftEye().getWithCorrection().getValue())
+                              valueVisualAcuities.getLeftEye().getWithCorrection().getId()))
+                          .value(valueVisualAcuities.getLeftEye().getWithCorrection().getValue())
                           .build()
                   )
                   .withoutCorrection(
                       Correction.builder()
                           .id(new FieldId(
-                              valueOcularAcuities.getLeftEye().getWithoutCorrection().getId())
+                              valueVisualAcuities.getLeftEye().getWithoutCorrection().getId())
                           )
                           .value(
-                              valueOcularAcuities.getLeftEye().getWithoutCorrection().getValue()
+                              valueVisualAcuities.getLeftEye().getWithoutCorrection().getValue()
                           )
                           .build()
                   )
                   .build()
           )
           .binocular(
-              OcularAcuity.builder()
+              VisualAcuity.builder()
                   .withCorrection(
                       Correction.builder()
                           .id(new FieldId(
-                              valueOcularAcuities.getBinocular().getWithCorrection().getId()))
-                          .value(valueOcularAcuities.getBinocular().getWithCorrection().getValue())
+                              valueVisualAcuities.getBinocular().getWithCorrection().getId()))
+                          .value(valueVisualAcuities.getBinocular().getWithCorrection().getValue())
                           .build()
                   )
                   .withoutCorrection(
                       Correction.builder()
                           .id(new FieldId(
-                              valueOcularAcuities.getBinocular().getWithoutCorrection().getId())
+                              valueVisualAcuities.getBinocular().getWithoutCorrection().getId())
                           )
                           .value(
-                              valueOcularAcuities.getBinocular().getWithoutCorrection().getValue()
+                              valueVisualAcuities.getBinocular().getWithoutCorrection().getValue()
                           )
                           .build()
                   )
@@ -91,56 +91,56 @@ public class ElementValueMapperOcularAcuities implements ElementValueMapper {
 
   @Override
   public MappedElementValue toMapped(ElementValue value) {
-    if (value instanceof ElementValueOcularAcuities elementValueOcularAcuities) {
+    if (value instanceof ElementValueVisualAcuities elementValueVisualAcuities) {
 
-      return MappedElementValueOcularAcuities.builder()
+      return MappedElementValueVisualAcuities.builder()
           .rightEye(
-              MappedElementValueOcularAcuity.builder()
+              MappedElementValueVisualAcuity.builder()
                   .withCorrection(
                       MappedElementValueDouble.builder()
-                          .id(elementValueOcularAcuities.rightEye().withCorrection().id().value())
-                          .value(elementValueOcularAcuities.rightEye().withCorrection().value())
+                          .id(elementValueVisualAcuities.rightEye().withCorrection().id().value())
+                          .value(elementValueVisualAcuities.rightEye().withCorrection().value())
                           .build()
                   )
                   .withoutCorrection(
                       MappedElementValueDouble.builder()
-                          .id(elementValueOcularAcuities.rightEye().withoutCorrection().id()
+                          .id(elementValueVisualAcuities.rightEye().withoutCorrection().id()
                               .value())
-                          .value(elementValueOcularAcuities.rightEye().withoutCorrection().value())
+                          .value(elementValueVisualAcuities.rightEye().withoutCorrection().value())
                           .build()
                   )
                   .build()
           )
           .leftEye(
-              MappedElementValueOcularAcuity.builder()
+              MappedElementValueVisualAcuity.builder()
                   .withCorrection(
                       MappedElementValueDouble.builder()
-                          .id(elementValueOcularAcuities.leftEye().withCorrection().id().value())
-                          .value(elementValueOcularAcuities.leftEye().withCorrection().value())
+                          .id(elementValueVisualAcuities.leftEye().withCorrection().id().value())
+                          .value(elementValueVisualAcuities.leftEye().withCorrection().value())
                           .build()
                   )
                   .withoutCorrection(
                       MappedElementValueDouble.builder()
-                          .id(elementValueOcularAcuities.leftEye().withoutCorrection().id()
+                          .id(elementValueVisualAcuities.leftEye().withoutCorrection().id()
                               .value())
-                          .value(elementValueOcularAcuities.leftEye().withoutCorrection().value())
+                          .value(elementValueVisualAcuities.leftEye().withoutCorrection().value())
                           .build()
                   )
                   .build()
           )
           .binocular(
-              MappedElementValueOcularAcuity.builder()
+              MappedElementValueVisualAcuity.builder()
                   .withCorrection(
                       MappedElementValueDouble.builder()
-                          .id(elementValueOcularAcuities.binocular().withCorrection().id().value())
-                          .value(elementValueOcularAcuities.binocular().withCorrection().value())
+                          .id(elementValueVisualAcuities.binocular().withCorrection().id().value())
+                          .value(elementValueVisualAcuities.binocular().withCorrection().value())
                           .build()
                   )
                   .withoutCorrection(
                       MappedElementValueDouble.builder()
-                          .id(elementValueOcularAcuities.binocular().withoutCorrection().id()
+                          .id(elementValueVisualAcuities.binocular().withoutCorrection().id()
                               .value())
-                          .value(elementValueOcularAcuities.binocular().withoutCorrection().value())
+                          .value(elementValueVisualAcuities.binocular().withoutCorrection().value())
                           .build()
                   )
                   .build()

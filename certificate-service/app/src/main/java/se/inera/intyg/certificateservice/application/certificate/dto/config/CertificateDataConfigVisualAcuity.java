@@ -5,15 +5,15 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
-import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigOcularAcuity.CertificateDataConfigOcularAcuityBuilder;
+import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigVisualAcuity.CertificateDataConfigVisualAcuityBuilder;
 
-@JsonDeserialize(builder = CertificateDataConfigOcularAcuityBuilder.class)
+@JsonDeserialize(builder = CertificateDataConfigVisualAcuityBuilder.class)
 @Value
 @Builder
-public class CertificateDataConfigOcularAcuity implements CertificateDataConfig {
+public class CertificateDataConfigVisualAcuity implements CertificateDataConfig {
 
   @Getter(onMethod = @__(@Override))
-  CertificateDataConfigType type = CertificateDataConfigType.UE_OCULAR_ACUITY;
+  CertificateDataConfigType type = CertificateDataConfigType.UE_VISUAL_ACUITY;
   @Getter(onMethod = @__(@Override))
   String header;
   @Getter(onMethod = @__(@Override))
@@ -31,12 +31,12 @@ public class CertificateDataConfigOcularAcuity implements CertificateDataConfig 
   String id;
   String withoutCorrectionLabel;
   String withCorrectionLabel;
-  OcularAcuity rightEye;
-  OcularAcuity leftEye;
-  OcularAcuity binocular;
+  VisualAcuity rightEye;
+  VisualAcuity leftEye;
+  VisualAcuity binocular;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class CertificateDataConfigOcularAcuityBuilder {
+  public static class CertificateDataConfigVisualAcuityBuilder {
 
   }
 }

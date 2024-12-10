@@ -5,7 +5,7 @@ import lombok.Value;
 
 @Value
 @Builder
-public class OcularAcuity implements ElementValue {
+public class VisualAcuity implements ElementValue {
 
   Correction withoutCorrection;
   Correction withCorrection;

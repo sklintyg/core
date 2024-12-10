@@ -50,7 +50,7 @@ public class ErrorMessageFactory {
     return new ErrorMessage("Fyll i fälten uppifrån och ned.");
   }
 
-  public static ErrorMessage ocularAcuityOutsideInterval(Double min, Double max) {
+  public static ErrorMessage visualAcuityOutsideInterval(Double min, Double max) {
     final var interval = "%s - %s".formatted(min, max).replace(".", ",");
     return new ErrorMessage("Ange synskärpa i intervallet %s.".formatted(interval));
   }

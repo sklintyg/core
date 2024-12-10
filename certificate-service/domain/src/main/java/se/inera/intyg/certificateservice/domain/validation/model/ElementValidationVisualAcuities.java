@@ -11,14 +11,14 @@ import lombok.Value;
 import se.inera.intyg.certificateservice.domain.certificate.model.Correction;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueOcularAcuities;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueVisualAcuities;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
 @Value
 @Getter(AccessLevel.NONE)
 @Builder
-public class ElementValidationOcularAcuities implements ElementValidation {
+public class ElementValidationVisualAcuities implements ElementValidation {
 
   boolean mandatory;
   Double min;
@@ -45,71 +45,71 @@ public class ElementValidationOcularAcuities implements ElementValidation {
   }
 
   private Collection<ValidationError> validateMinAndMaxValues(
-      ElementValueOcularAcuities ocularAcuities, ElementData data, Optional<ElementId> categoryId) {
+      ElementValueVisualAcuities visualAcuities, ElementData data, Optional<ElementId> categoryId) {
     final var validationErrors = new ArrayList<ValidationError>();
 
-    if (outsideOfAllowedInterval(ocularAcuities.rightEye().withCorrection())) {
+    if (outsideOfAllowedInterval(visualAcuities.rightEye().withCorrection())) {
       validationErrors.add(
           buildValidationError(
-              ocularAcuities.rightEye().withCorrection().id(),
+              visualAcuities.rightEye().withCorrection().id(),
               data,
               categoryId,
-              ErrorMessageFactory.ocularAcuityOutsideInterval(min, max).value()
+              ErrorMessageFactory.visualAcuityOutsideInterval(min, max).value()
           )
       );
     }
 
-    if (outsideOfAllowedInterval(ocularAcuities.rightEye().withoutCorrection())) {
+    if (outsideOfAllowedInterval(visualAcuities.rightEye().withoutCorrection())) {
       validationErrors.add(
           buildValidationError(
-              ocularAcuities.rightEye().withoutCorrection().id(),
+              visualAcuities.rightEye().withoutCorrection().id(),
               data,
               categoryId,
-              ErrorMessageFactory.ocularAcuityOutsideInterval(min, max).value()
+              ErrorMessageFactory.visualAcuityOutsideInterval(min, max).value()
           )
       );
     }
 
-    if (outsideOfAllowedInterval(ocularAcuities.leftEye().withCorrection())) {
+    if (outsideOfAllowedInterval(visualAcuities.leftEye().withCorrection())) {
       validationErrors.add(
           buildValidationError(
-              ocularAcuities.leftEye().withCorrection().id(),
+              visualAcuities.leftEye().withCorrection().id(),
               data,
               categoryId,
-              ErrorMessageFactory.ocularAcuityOutsideInterval(min, max).value()
+              ErrorMessageFactory.visualAcuityOutsideInterval(min, max).value()
           )
       );
     }
 
-    if (outsideOfAllowedInterval(ocularAcuities.leftEye().withoutCorrection())) {
+    if (outsideOfAllowedInterval(visualAcuities.leftEye().withoutCorrection())) {
       validationErrors.add(
           buildValidationError(
-              ocularAcuities.leftEye().withoutCorrection().id(),
+              visualAcuities.leftEye().withoutCorrection().id(),
               data,
               categoryId,
-              ErrorMessageFactory.ocularAcuityOutsideInterval(min, max).value()
+              ErrorMessageFactory.visualAcuityOutsideInterval(min, max).value()
           )
       );
     }
 
-    if (outsideOfAllowedInterval(ocularAcuities.binocular().withCorrection())) {
+    if (outsideOfAllowedInterval(visualAcuities.binocular().withCorrection())) {
       validationErrors.add(
           buildValidationError(
-              ocularAcuities.binocular().withCorrection().id(),
+              visualAcuities.binocular().withCorrection().id(),
               data,
               categoryId,
-              ErrorMessageFactory.ocularAcuityOutsideInterval(min, max).value()
+              ErrorMessageFactory.visualAcuityOutsideInterval(min, max).value()
           )
       );
     }
 
-    if (outsideOfAllowedInterval(ocularAcuities.binocular().withoutCorrection())) {
+    if (outsideOfAllowedInterval(visualAcuities.binocular().withoutCorrection())) {
       validationErrors.add(
           buildValidationError(
-              ocularAcuities.binocular().withoutCorrection().id(),
+              visualAcuities.binocular().withoutCorrection().id(),
               data,
               categoryId,
-              ErrorMessageFactory.ocularAcuityOutsideInterval(min, max).value()
+              ErrorMessageFactory.visualAcuityOutsideInterval(min, max).value()
           )
       );
     }
@@ -122,12 +122,12 @@ public class ElementValidationOcularAcuities implements ElementValidation {
   }
 
   private Collection<ValidationError> validateMissingValue(
-      ElementValueOcularAcuities ocularAcuities, ElementData data, Optional<ElementId> categoryId) {
+      ElementValueVisualAcuities visualAcuities, ElementData data, Optional<ElementId> categoryId) {
     final var validationErrors = new ArrayList<ValidationError>();
-    if (ocularAcuities.rightEye().withoutCorrection().value() == null) {
+    if (visualAcuities.rightEye().withoutCorrection().value() == null) {
       validationErrors.add(
           buildValidationError(
-              ocularAcuities.rightEye().withoutCorrection().id(),
+              visualAcuities.rightEye().withoutCorrection().id(),
               data,
               categoryId,
               ErrorMessageFactory.missingAnswer().value()
@@ -135,10 +135,10 @@ public class ElementValidationOcularAcuities implements ElementValidation {
       );
     }
 
-    if (ocularAcuities.leftEye().withoutCorrection().value() == null) {
+    if (visualAcuities.leftEye().withoutCorrection().value() == null) {
       validationErrors.add(
           buildValidationError(
-              ocularAcuities.leftEye().withoutCorrection().id(),
+              visualAcuities.leftEye().withoutCorrection().id(),
               data,
               categoryId,
               ErrorMessageFactory.missingAnswer().value()
@@ -146,10 +146,10 @@ public class ElementValidationOcularAcuities implements ElementValidation {
       );
     }
 
-    if (ocularAcuities.binocular().withoutCorrection().value() == null) {
+    if (visualAcuities.binocular().withoutCorrection().value() == null) {
       validationErrors.add(
           buildValidationError(
-              ocularAcuities.binocular().withoutCorrection().id(),
+              visualAcuities.binocular().withoutCorrection().id(),
               data,
               categoryId,
               ErrorMessageFactory.missingAnswer().value()
@@ -171,13 +171,13 @@ public class ElementValidationOcularAcuities implements ElementValidation {
         .build();
   }
 
-  private ElementValueOcularAcuities getValue(ElementValue value) {
+  private ElementValueVisualAcuities getValue(ElementValue value) {
     if (value == null) {
       throw new IllegalArgumentException("Element data value is null");
     }
 
-    if (value instanceof ElementValueOcularAcuities ocularAcuities) {
-      return ocularAcuities;
+    if (value instanceof ElementValueVisualAcuities visualAcuities) {
+      return visualAcuities;
     }
 
     throw new IllegalArgumentException(

@@ -7,36 +7,36 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigOcularAcuity;
+import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigVisualAcuity;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationOcularAcuities;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementOcularAcuity;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationVisualAcuities;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementVisualAcuity;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
-class CertificateDataOcularAcuitiesConfigConverterTest {
+class CertificateDataVisualAcuitiesConfigConverterTest {
 
-  private CertificateDataOcularAcuitiesConfigConverter converter;
+  private CertificateDataVisualAcuitiesConfigConverter converter;
 
   private static final ElementSpecification ELEMENT_SPECIFICATION = ElementSpecification.builder()
-      .configuration(ElementConfigurationOcularAcuities.builder()
+      .configuration(ElementConfigurationVisualAcuities.builder()
           .id(new FieldId("id"))
           .withCorrectionLabel("withCorrectionLabel")
           .withoutCorrectionLabel("withoutCorrectionLabel")
-          .rightEye(ElementOcularAcuity.builder()
+          .rightEye(ElementVisualAcuity.builder()
               .label("label1")
               .withCorrectionId("withCorrectionId1")
               .withoutCorrectionId("withoutCorrectionId1")
               .build()
           )
-          .leftEye(ElementOcularAcuity.builder()
+          .leftEye(ElementVisualAcuity.builder()
               .label("label2")
               .withCorrectionId("withCorrectionId2")
               .withoutCorrectionId("withoutCorrectionId2")
               .build()
           )
-          .binocular(ElementOcularAcuity.builder()
+          .binocular(ElementVisualAcuity.builder()
               .label("label3")
               .withCorrectionId("withCorrectionId3")
               .withoutCorrectionId("withoutCorrectionId3")
@@ -48,7 +48,7 @@ class CertificateDataOcularAcuitiesConfigConverterTest {
 
   @BeforeEach
   void setUp() {
-    converter = new CertificateDataOcularAcuitiesConfigConverter();
+    converter = new CertificateDataVisualAcuitiesConfigConverter();
   }
 
   @Test
@@ -65,13 +65,13 @@ class CertificateDataOcularAcuitiesConfigConverterTest {
   }
 
   @Test
-  void shouldReturnOcularAcuitiesType() {
-    assertEquals(ElementType.OCULAR_ACUITIES, converter.getType());
+  void shouldReturnvisualAcuitiesType() {
+    assertEquals(ElementType.VISUAL_ACUITIES, converter.getType());
   }
 
   @Test
   void shouldSetId() {
-    final CertificateDataConfigOcularAcuity result = (CertificateDataConfigOcularAcuity)
+    final CertificateDataConfigVisualAcuity result = (CertificateDataConfigVisualAcuity)
         converter.convert(ELEMENT_SPECIFICATION, FK3226_CERTIFICATE);
 
     assertEquals("id", result.getId());
@@ -79,7 +79,7 @@ class CertificateDataOcularAcuitiesConfigConverterTest {
 
   @Test
   void shouldSetWithCorrectionLabel() {
-    final CertificateDataConfigOcularAcuity result = (CertificateDataConfigOcularAcuity)
+    final CertificateDataConfigVisualAcuity result = (CertificateDataConfigVisualAcuity)
         converter.convert(ELEMENT_SPECIFICATION, FK3226_CERTIFICATE);
 
     assertEquals("withCorrectionLabel", result.getWithCorrectionLabel());
@@ -87,7 +87,7 @@ class CertificateDataOcularAcuitiesConfigConverterTest {
 
   @Test
   void shouldSetWithoutCorrectionLabel() {
-    final CertificateDataConfigOcularAcuity result = (CertificateDataConfigOcularAcuity)
+    final CertificateDataConfigVisualAcuity result = (CertificateDataConfigVisualAcuity)
         converter.convert(ELEMENT_SPECIFICATION, FK3226_CERTIFICATE);
 
     assertEquals("withoutCorrectionLabel", result.getWithoutCorrectionLabel());
@@ -98,7 +98,7 @@ class CertificateDataOcularAcuitiesConfigConverterTest {
 
     @Test
     void shouldSetWithCorrectionId() {
-      final CertificateDataConfigOcularAcuity result = (CertificateDataConfigOcularAcuity)
+      final CertificateDataConfigVisualAcuity result = (CertificateDataConfigVisualAcuity)
           converter.convert(ELEMENT_SPECIFICATION, FK3226_CERTIFICATE);
 
       assertEquals("withCorrectionId1", result.getRightEye().getWithCorrectionId());
@@ -106,7 +106,7 @@ class CertificateDataOcularAcuitiesConfigConverterTest {
 
     @Test
     void shouldSetWithoutCorrectionId() {
-      final CertificateDataConfigOcularAcuity result = (CertificateDataConfigOcularAcuity)
+      final CertificateDataConfigVisualAcuity result = (CertificateDataConfigVisualAcuity)
           converter.convert(ELEMENT_SPECIFICATION, FK3226_CERTIFICATE);
 
       assertEquals("withoutCorrectionId1", result.getRightEye().getWithoutCorrectionId());
@@ -114,7 +114,7 @@ class CertificateDataOcularAcuitiesConfigConverterTest {
 
     @Test
     void shouldSetLabel() {
-      final CertificateDataConfigOcularAcuity result = (CertificateDataConfigOcularAcuity)
+      final CertificateDataConfigVisualAcuity result = (CertificateDataConfigVisualAcuity)
           converter.convert(ELEMENT_SPECIFICATION, FK3226_CERTIFICATE);
 
       assertEquals("label1", result.getRightEye().getLabel());
@@ -126,7 +126,7 @@ class CertificateDataOcularAcuitiesConfigConverterTest {
 
     @Test
     void shouldSetWithCorrectionId() {
-      final CertificateDataConfigOcularAcuity result = (CertificateDataConfigOcularAcuity)
+      final CertificateDataConfigVisualAcuity result = (CertificateDataConfigVisualAcuity)
           converter.convert(ELEMENT_SPECIFICATION, FK3226_CERTIFICATE);
 
       assertEquals("withCorrectionId2", result.getLeftEye().getWithCorrectionId());
@@ -134,7 +134,7 @@ class CertificateDataOcularAcuitiesConfigConverterTest {
 
     @Test
     void shouldSetWithoutCorrectionId() {
-      final CertificateDataConfigOcularAcuity result = (CertificateDataConfigOcularAcuity)
+      final CertificateDataConfigVisualAcuity result = (CertificateDataConfigVisualAcuity)
           converter.convert(ELEMENT_SPECIFICATION, FK3226_CERTIFICATE);
 
       assertEquals("withoutCorrectionId2", result.getLeftEye().getWithoutCorrectionId());
@@ -142,7 +142,7 @@ class CertificateDataOcularAcuitiesConfigConverterTest {
 
     @Test
     void shouldSetLabel() {
-      final CertificateDataConfigOcularAcuity result = (CertificateDataConfigOcularAcuity)
+      final CertificateDataConfigVisualAcuity result = (CertificateDataConfigVisualAcuity)
           converter.convert(ELEMENT_SPECIFICATION, FK3226_CERTIFICATE);
 
       assertEquals("label2", result.getLeftEye().getLabel());
@@ -154,7 +154,7 @@ class CertificateDataOcularAcuitiesConfigConverterTest {
 
     @Test
     void shouldSetWithCorrectionId() {
-      final CertificateDataConfigOcularAcuity result = (CertificateDataConfigOcularAcuity)
+      final CertificateDataConfigVisualAcuity result = (CertificateDataConfigVisualAcuity)
           converter.convert(ELEMENT_SPECIFICATION, FK3226_CERTIFICATE);
 
       assertEquals("withCorrectionId3", result.getBinocular().getWithCorrectionId());
@@ -162,7 +162,7 @@ class CertificateDataOcularAcuitiesConfigConverterTest {
 
     @Test
     void shouldSetWithoutCorrectionId() {
-      final CertificateDataConfigOcularAcuity result = (CertificateDataConfigOcularAcuity)
+      final CertificateDataConfigVisualAcuity result = (CertificateDataConfigVisualAcuity)
           converter.convert(ELEMENT_SPECIFICATION, FK3226_CERTIFICATE);
 
       assertEquals("withoutCorrectionId3", result.getBinocular().getWithoutCorrectionId());
@@ -170,7 +170,7 @@ class CertificateDataOcularAcuitiesConfigConverterTest {
 
     @Test
     void shouldSetLabel() {
-      final CertificateDataConfigOcularAcuity result = (CertificateDataConfigOcularAcuity)
+      final CertificateDataConfigVisualAcuity result = (CertificateDataConfigVisualAcuity)
           converter.convert(ELEMENT_SPECIFICATION, FK3226_CERTIFICATE);
 
       assertEquals("label3", result.getBinocular().getLabel());

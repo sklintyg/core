@@ -109,4 +109,3 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
     }
   }
 }
-

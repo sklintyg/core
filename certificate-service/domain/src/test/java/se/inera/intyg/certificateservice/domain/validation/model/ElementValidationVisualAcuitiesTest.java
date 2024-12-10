@@ -11,13 +11,13 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.Correction;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueOcularAcuities;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
-import se.inera.intyg.certificateservice.domain.certificate.model.OcularAcuity;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueVisualAcuities;
+import se.inera.intyg.certificateservice.domain.certificate.model.VisualAcuity;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
-class ElementValidationOcularAcuitiesTest {
+class ElementValidationVisualAcuitiesTest {
 
   private static final Optional<ElementId> CATEGORY_ID = Optional.of(new ElementId("id"));
   private static final String LEFT_EYE_WITHOUT_CORRECTION_ID = "LEFT_EYE_WITHOUT_CORRECTION_ID";
@@ -28,14 +28,14 @@ class ElementValidationOcularAcuitiesTest {
   private static final String BINOCULAR_WITH_CORRECTION_ID = "BINOCULAR_WITH_CORRECTION_ID";
   private static final double VALUE = 1.0;
   private static final ElementId ELEMENT_ID = new ElementId("1.1");
-  ElementValidationOcularAcuities elementValidationOcularAcuities;
+  ElementValidationVisualAcuities elementValidationVisualAcuities;
 
   @Nested
   class ValidateElementData {
 
     @BeforeEach
     void setUp() {
-      elementValidationOcularAcuities = new ElementValidationOcularAcuities(
+      elementValidationVisualAcuities = new ElementValidationVisualAcuities(
           true, 0.0, 2.0
       );
     }
@@ -43,7 +43,7 @@ class ElementValidationOcularAcuitiesTest {
     @Test
     void shallThrowIfElementDataIsNull() {
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> elementValidationOcularAcuities.validate(null, CATEGORY_ID));
+          () -> elementValidationVisualAcuities.validate(null, CATEGORY_ID));
 
       assertEquals("Element data is null", illegalArgumentException.getMessage());
     }
@@ -52,7 +52,7 @@ class ElementValidationOcularAcuitiesTest {
     void shallThrowIfElementDataValueIsNull() {
       final var elementData = ElementData.builder().build();
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> elementValidationOcularAcuities.validate(elementData, CATEGORY_ID));
+          () -> elementValidationVisualAcuities.validate(elementData, CATEGORY_ID));
 
       assertEquals("Element data value is null", illegalArgumentException.getMessage());
     }
@@ -65,7 +65,7 @@ class ElementValidationOcularAcuitiesTest {
           .build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> elementValidationOcularAcuities.validate(elementData, CATEGORY_ID));
+          () -> elementValidationVisualAcuities.validate(elementData, CATEGORY_ID));
 
       assertEquals("Element data value %s is of wrong type".formatted(elementValueText.getClass()),
           illegalArgumentException.getMessage());
@@ -77,7 +77,7 @@ class ElementValidationOcularAcuitiesTest {
 
     @BeforeEach
     void setUp() {
-      elementValidationOcularAcuities = new ElementValidationOcularAcuities(
+      elementValidationVisualAcuities = new ElementValidationVisualAcuities(
           true, null, null
       );
     }
@@ -98,9 +98,9 @@ class ElementValidationOcularAcuitiesTest {
       final var elementData = ElementData.builder()
           .id(ELEMENT_ID)
           .value(
-              ElementValueOcularAcuities.builder()
+              ElementValueVisualAcuities.builder()
                   .rightEye(
-                      OcularAcuity.builder()
+                      VisualAcuity.builder()
                           .withoutCorrection(
                               Correction.builder()
                                   .id(new FieldId(RIGHT_EYE_WITHOUT_CORRECTION_ID))
@@ -109,7 +109,7 @@ class ElementValidationOcularAcuitiesTest {
                           .build()
                   )
                   .leftEye(
-                      OcularAcuity.builder()
+                      VisualAcuity.builder()
                           .withoutCorrection(
                               Correction.builder()
                                   .id(new FieldId(LEFT_EYE_WITHOUT_CORRECTION_ID))
@@ -119,7 +119,7 @@ class ElementValidationOcularAcuitiesTest {
                           .build()
                   )
                   .binocular(
-                      OcularAcuity.builder()
+                      VisualAcuity.builder()
                           .withoutCorrection(
                               Correction.builder()
                                   .id(new FieldId(BINOCULAR_WITHOUT_CORRECTION_ID))
@@ -132,7 +132,7 @@ class ElementValidationOcularAcuitiesTest {
           )
           .build();
 
-      final var actualValidationErrors = elementValidationOcularAcuities.validate(
+      final var actualValidationErrors = elementValidationVisualAcuities.validate(
           elementData,
           CATEGORY_ID
       );
@@ -156,9 +156,9 @@ class ElementValidationOcularAcuitiesTest {
       final var elementData = ElementData.builder()
           .id(ELEMENT_ID)
           .value(
-              ElementValueOcularAcuities.builder()
+              ElementValueVisualAcuities.builder()
                   .rightEye(
-                      OcularAcuity.builder()
+                      VisualAcuity.builder()
                           .withoutCorrection(
                               Correction.builder()
                                   .id(new FieldId(RIGHT_EYE_WITHOUT_CORRECTION_ID))
@@ -168,7 +168,7 @@ class ElementValidationOcularAcuitiesTest {
                           .build()
                   )
                   .leftEye(
-                      OcularAcuity.builder()
+                      VisualAcuity.builder()
                           .withoutCorrection(
                               Correction.builder()
                                   .id(new FieldId(LEFT_EYE_WITHOUT_CORRECTION_ID))
@@ -177,7 +177,7 @@ class ElementValidationOcularAcuitiesTest {
                           .build()
                   )
                   .binocular(
-                      OcularAcuity.builder()
+                      VisualAcuity.builder()
                           .withoutCorrection(
                               Correction.builder()
                                   .id(new FieldId(BINOCULAR_WITHOUT_CORRECTION_ID))
@@ -190,7 +190,7 @@ class ElementValidationOcularAcuitiesTest {
           )
           .build();
 
-      final var actualValidationErrors = elementValidationOcularAcuities.validate(
+      final var actualValidationErrors = elementValidationVisualAcuities.validate(
           elementData,
           CATEGORY_ID
       );
@@ -214,9 +214,9 @@ class ElementValidationOcularAcuitiesTest {
       final var elementData = ElementData.builder()
           .id(ELEMENT_ID)
           .value(
-              ElementValueOcularAcuities.builder()
+              ElementValueVisualAcuities.builder()
                   .rightEye(
-                      OcularAcuity.builder()
+                      VisualAcuity.builder()
                           .withoutCorrection(
                               Correction.builder()
                                   .id(new FieldId(RIGHT_EYE_WITHOUT_CORRECTION_ID))
@@ -226,7 +226,7 @@ class ElementValidationOcularAcuitiesTest {
                           .build()
                   )
                   .leftEye(
-                      OcularAcuity.builder()
+                      VisualAcuity.builder()
                           .withoutCorrection(
                               Correction.builder()
                                   .id(new FieldId(LEFT_EYE_WITHOUT_CORRECTION_ID))
@@ -236,7 +236,7 @@ class ElementValidationOcularAcuitiesTest {
                           .build()
                   )
                   .binocular(
-                      OcularAcuity.builder()
+                      VisualAcuity.builder()
                           .withoutCorrection(
                               Correction.builder()
                                   .id(new FieldId(BINOCULAR_WITHOUT_CORRECTION_ID))
@@ -248,7 +248,7 @@ class ElementValidationOcularAcuitiesTest {
           )
           .build();
 
-      final var actualValidationErrors = elementValidationOcularAcuities.validate(
+      final var actualValidationErrors = elementValidationVisualAcuities.validate(
           elementData,
           CATEGORY_ID
       );
@@ -262,7 +262,7 @@ class ElementValidationOcularAcuitiesTest {
 
     @BeforeEach
     void setUp() {
-      elementValidationOcularAcuities = new ElementValidationOcularAcuities(
+      elementValidationVisualAcuities = new ElementValidationVisualAcuities(
           false, null, null
       );
     }
@@ -272,9 +272,9 @@ class ElementValidationOcularAcuitiesTest {
       final var elementData = ElementData.builder()
           .id(ELEMENT_ID)
           .value(
-              ElementValueOcularAcuities.builder()
+              ElementValueVisualAcuities.builder()
                   .rightEye(
-                      OcularAcuity.builder()
+                      VisualAcuity.builder()
                           .withoutCorrection(
                               Correction.builder()
                                   .id(new FieldId(RIGHT_EYE_WITHOUT_CORRECTION_ID))
@@ -283,7 +283,7 @@ class ElementValidationOcularAcuitiesTest {
                           .build()
                   )
                   .leftEye(
-                      OcularAcuity.builder()
+                      VisualAcuity.builder()
                           .withoutCorrection(
                               Correction.builder()
                                   .id(new FieldId(LEFT_EYE_WITHOUT_CORRECTION_ID))
@@ -293,7 +293,7 @@ class ElementValidationOcularAcuitiesTest {
                           .build()
                   )
                   .binocular(
-                      OcularAcuity.builder()
+                      VisualAcuity.builder()
                           .withoutCorrection(
                               Correction.builder()
                                   .id(new FieldId(BINOCULAR_WITHOUT_CORRECTION_ID))
@@ -306,7 +306,7 @@ class ElementValidationOcularAcuitiesTest {
           )
           .build();
 
-      final var actualValidationErrors = elementValidationOcularAcuities.validate(
+      final var actualValidationErrors = elementValidationVisualAcuities.validate(
           elementData,
           CATEGORY_ID
       );
@@ -319,9 +319,9 @@ class ElementValidationOcularAcuitiesTest {
       final var elementData = ElementData.builder()
           .id(ELEMENT_ID)
           .value(
-              ElementValueOcularAcuities.builder()
+              ElementValueVisualAcuities.builder()
                   .rightEye(
-                      OcularAcuity.builder()
+                      VisualAcuity.builder()
                           .withoutCorrection(
                               Correction.builder()
                                   .id(new FieldId(RIGHT_EYE_WITHOUT_CORRECTION_ID))
@@ -331,7 +331,7 @@ class ElementValidationOcularAcuitiesTest {
                           .build()
                   )
                   .leftEye(
-                      OcularAcuity.builder()
+                      VisualAcuity.builder()
                           .withoutCorrection(
                               Correction.builder()
                                   .id(new FieldId(LEFT_EYE_WITHOUT_CORRECTION_ID))
@@ -340,7 +340,7 @@ class ElementValidationOcularAcuitiesTest {
                           .build()
                   )
                   .binocular(
-                      OcularAcuity.builder()
+                      VisualAcuity.builder()
                           .withoutCorrection(
                               Correction.builder()
                                   .id(new FieldId(BINOCULAR_WITHOUT_CORRECTION_ID))
@@ -353,7 +353,7 @@ class ElementValidationOcularAcuitiesTest {
           )
           .build();
 
-      final var actualValidationErrors = elementValidationOcularAcuities.validate(
+      final var actualValidationErrors = elementValidationVisualAcuities.validate(
           elementData,
           CATEGORY_ID
       );
@@ -366,9 +366,9 @@ class ElementValidationOcularAcuitiesTest {
       final var elementData = ElementData.builder()
           .id(ELEMENT_ID)
           .value(
-              ElementValueOcularAcuities.builder()
+              ElementValueVisualAcuities.builder()
                   .rightEye(
-                      OcularAcuity.builder()
+                      VisualAcuity.builder()
                           .withoutCorrection(
                               Correction.builder()
                                   .id(new FieldId(RIGHT_EYE_WITHOUT_CORRECTION_ID))
@@ -378,7 +378,7 @@ class ElementValidationOcularAcuitiesTest {
                           .build()
                   )
                   .leftEye(
-                      OcularAcuity.builder()
+                      VisualAcuity.builder()
                           .withoutCorrection(
                               Correction.builder()
                                   .id(new FieldId(LEFT_EYE_WITHOUT_CORRECTION_ID))
@@ -388,7 +388,7 @@ class ElementValidationOcularAcuitiesTest {
                           .build()
                   )
                   .binocular(
-                      OcularAcuity.builder()
+                      VisualAcuity.builder()
                           .withoutCorrection(
                               Correction.builder()
                                   .id(new FieldId(BINOCULAR_WITHOUT_CORRECTION_ID))
@@ -400,7 +400,7 @@ class ElementValidationOcularAcuitiesTest {
           )
           .build();
 
-      final var actualValidationErrors = elementValidationOcularAcuities.validate(
+      final var actualValidationErrors = elementValidationVisualAcuities.validate(
           elementData,
           CATEGORY_ID
       );
@@ -414,7 +414,7 @@ class ElementValidationOcularAcuitiesTest {
 
     @BeforeEach
     void setUp() {
-      elementValidationOcularAcuities = new ElementValidationOcularAcuities(
+      elementValidationVisualAcuities = new ElementValidationVisualAcuities(
           false, 0.0, 2.0
       );
     }
@@ -435,9 +435,9 @@ class ElementValidationOcularAcuitiesTest {
       final var elementData = ElementData.builder()
           .id(ELEMENT_ID)
           .value(
-              ElementValueOcularAcuities.builder()
+              ElementValueVisualAcuities.builder()
                   .rightEye(
-                      OcularAcuity.builder()
+                      VisualAcuity.builder()
                           .withoutCorrection(
                               Correction.builder()
                                   .id(new FieldId(RIGHT_EYE_WITHOUT_CORRECTION_ID))
@@ -446,13 +446,13 @@ class ElementValidationOcularAcuitiesTest {
                           )
                           .build()
                   )
-                  .leftEye(getDefaultOcularAcuity())
-                  .binocular(getDefaultOcularAcuity())
+                  .leftEye(getDefaultVisualAcuity())
+                  .binocular(getDefaultVisualAcuity())
                   .build()
           )
           .build();
 
-      final var actualValidationErrors = elementValidationOcularAcuities.validate(
+      final var actualValidationErrors = elementValidationVisualAcuities.validate(
           elementData,
           CATEGORY_ID
       );
@@ -476,9 +476,9 @@ class ElementValidationOcularAcuitiesTest {
       final var elementData = ElementData.builder()
           .id(ELEMENT_ID)
           .value(
-              ElementValueOcularAcuities.builder()
+              ElementValueVisualAcuities.builder()
                   .rightEye(
-                      OcularAcuity.builder()
+                      VisualAcuity.builder()
                           .withCorrection(
                               Correction.builder()
                                   .id(new FieldId(RIGHT_EYE_WITH_CORRECTION_ID))
@@ -487,13 +487,13 @@ class ElementValidationOcularAcuitiesTest {
                           )
                           .build()
                   )
-                  .leftEye(getDefaultOcularAcuity())
-                  .binocular(getDefaultOcularAcuity())
+                  .leftEye(getDefaultVisualAcuity())
+                  .binocular(getDefaultVisualAcuity())
                   .build()
           )
           .build();
 
-      final var actualValidationErrors = elementValidationOcularAcuities.validate(
+      final var actualValidationErrors = elementValidationVisualAcuities.validate(
           elementData,
           CATEGORY_ID
       );
@@ -517,11 +517,11 @@ class ElementValidationOcularAcuitiesTest {
       final var elementData = ElementData.builder()
           .id(ELEMENT_ID)
           .value(
-              ElementValueOcularAcuities.builder()
-                  .rightEye(getDefaultOcularAcuity()
+              ElementValueVisualAcuities.builder()
+                  .rightEye(getDefaultVisualAcuity()
                   )
                   .leftEye(
-                      OcularAcuity.builder()
+                      VisualAcuity.builder()
                           .withoutCorrection(
                               Correction.builder()
                                   .id(new FieldId(LEFT_EYE_WITHOUT_CORRECTION_ID))
@@ -530,12 +530,12 @@ class ElementValidationOcularAcuitiesTest {
                           )
                           .build()
                   )
-                  .binocular(getDefaultOcularAcuity())
+                  .binocular(getDefaultVisualAcuity())
                   .build()
           )
           .build();
 
-      final var actualValidationErrors = elementValidationOcularAcuities.validate(
+      final var actualValidationErrors = elementValidationVisualAcuities.validate(
           elementData,
           CATEGORY_ID
       );
@@ -559,10 +559,10 @@ class ElementValidationOcularAcuitiesTest {
       final var elementData = ElementData.builder()
           .id(ELEMENT_ID)
           .value(
-              ElementValueOcularAcuities.builder()
+              ElementValueVisualAcuities.builder()
                   .rightEye(getDefaultOcularAcuity())
                   .leftEye(
-                      OcularAcuity.builder()
+                      VisualAcuity.builder()
                           .withCorrection(
                               Correction.builder()
                                   .id(new FieldId(LEFT_EYE_WITH_CORRECTION_ID))
@@ -576,7 +576,7 @@ class ElementValidationOcularAcuitiesTest {
           )
           .build();
 
-      final var actualValidationErrors = elementValidationOcularAcuities.validate(
+      final var actualValidationErrors = elementValidationVisualAcuities.validate(
           elementData,
           CATEGORY_ID
       );
@@ -600,11 +600,11 @@ class ElementValidationOcularAcuitiesTest {
       final var elementData = ElementData.builder()
           .id(ELEMENT_ID)
           .value(
-              ElementValueOcularAcuities.builder()
+              ElementValueVisualAcuities.builder()
                   .rightEye(getDefaultOcularAcuity())
                   .leftEye(getDefaultOcularAcuity())
                   .binocular(
-                      OcularAcuity.builder()
+                      VisualAcuity.builder()
                           .withoutCorrection(
                               Correction.builder()
                                   .id(new FieldId(BINOCULAR_WITHOUT_CORRECTION_ID))
@@ -617,7 +617,7 @@ class ElementValidationOcularAcuitiesTest {
           )
           .build();
 
-      final var actualValidationErrors = elementValidationOcularAcuities.validate(
+      final var actualValidationErrors = elementValidationVisualAcuities.validate(
           elementData,
           CATEGORY_ID
       );
@@ -641,11 +641,11 @@ class ElementValidationOcularAcuitiesTest {
       final var elementData = ElementData.builder()
           .id(ELEMENT_ID)
           .value(
-              ElementValueOcularAcuities.builder()
+              ElementValueVisualAcuities.builder()
                   .rightEye(getDefaultOcularAcuity())
                   .leftEye(getDefaultOcularAcuity())
                   .binocular(
-                      OcularAcuity.builder()
+                      VisualAcuity.builder()
                           .withCorrection(
                               Correction.builder()
                                   .id(new FieldId(BINOCULAR_WITH_CORRECTION_ID))
@@ -658,7 +658,7 @@ class ElementValidationOcularAcuitiesTest {
           )
           .build();
 
-      final var actualValidationErrors = elementValidationOcularAcuities.validate(
+      final var actualValidationErrors = elementValidationVisualAcuities.validate(
           elementData,
           CATEGORY_ID
       );
@@ -667,8 +667,8 @@ class ElementValidationOcularAcuitiesTest {
     }
   }
 
-  private static OcularAcuity getDefaultOcularAcuity() {
-    return OcularAcuity.builder()
+  private static VisualAcuity getDefaultOcularAcuity() {
+    return VisualAcuity.builder()
         .withoutCorrection(Correction.builder()
             .id(new FieldId("ID1"))
             .value(1.0)

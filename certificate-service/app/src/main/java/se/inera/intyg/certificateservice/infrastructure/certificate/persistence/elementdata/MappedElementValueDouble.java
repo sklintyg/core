@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class MappedElementValueDouble implements MappedElementValue {
 
   private String id;
-  private double value;
+  private Double value;
 
 }

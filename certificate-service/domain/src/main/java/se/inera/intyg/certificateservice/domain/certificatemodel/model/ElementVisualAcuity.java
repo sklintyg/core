@@ -5,7 +5,7 @@ import lombok.Value;
 
 @Value
 @Builder
-public class ElementOcularAcuity {
+public class ElementVisualAcuity {
 
   String label;
   String withCorrectionId;

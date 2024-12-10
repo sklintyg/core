@@ -29,6 +29,11 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationVisualAcuities;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementVisualAcuity;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
@@ -131,6 +136,38 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .elementSpecifications(
             List.of(
                 categoryGrund(
+                    ElementSpecification.builder()
+                        .id(new ElementId("5"))
+                        .configuration(
+                            ElementConfigurationVisualAcuities.builder()
+                                .name("Synskärpa")
+                                .withCorrectionLabel("Med korrektion")
+                                .withoutCorrectionLabel("Utan korrektion")
+                                .id(new FieldId("5.1"))
+                                .rightEye(
+                                    ElementVisualAcuity.builder()
+                                        .label("Höger öga")
+                                        .withoutCorrectionId("5.2")
+                                        .withCorrectionId("5.5")
+                                        .build()
+                                )
+                                .leftEye(
+                                    ElementVisualAcuity.builder()
+                                        .label("Vänster öga")
+                                        .withoutCorrectionId("5.3")
+                                        .withCorrectionId("5.6")
+                                        .build()
+                                )
+                                .binocular(
+                                    ElementVisualAcuity.builder()
+                                        .label("Binokulärt")
+                                        .withoutCorrectionId("5.4")
+                                        .withCorrectionId("5.7")
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .build(),
                     questionUtlatandeBaseratPa(
                         questionUtlatandeBaseratPaAnnat()
                     )

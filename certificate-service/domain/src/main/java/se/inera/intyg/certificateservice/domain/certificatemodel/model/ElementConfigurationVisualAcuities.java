@@ -5,31 +5,31 @@ import lombok.Getter;
 import lombok.Value;
 import se.inera.intyg.certificateservice.domain.certificate.model.Correction;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueOcularAcuities;
-import se.inera.intyg.certificateservice.domain.certificate.model.OcularAcuity;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueVisualAcuities;
+import se.inera.intyg.certificateservice.domain.certificate.model.VisualAcuity;
 
 @Value
 @Builder
-public class ElementConfigurationOcularAcuities implements ElementConfiguration {
+public class ElementConfigurationVisualAcuities implements ElementConfiguration {
 
   @Getter(onMethod = @__(@Override))
   String name;
   @Getter(onMethod = @__(@Override))
-  ElementType type = ElementType.OCULAR_ACUITIES;
+  ElementType type = ElementType.VISUAL_ACUITIES;
   @Getter(onMethod = @__(@Override))
   ElementMessage message;
   FieldId id;
   String withoutCorrectionLabel;
   String withCorrectionLabel;
-  ElementOcularAcuity rightEye;
-  ElementOcularAcuity leftEye;
-  ElementOcularAcuity binocular;
+  ElementVisualAcuity rightEye;
+  ElementVisualAcuity leftEye;
+  ElementVisualAcuity binocular;
 
   @Override
   public ElementValue emptyValue() {
-    return ElementValueOcularAcuities.builder()
+    return ElementValueVisualAcuities.builder()
         .rightEye(
-            OcularAcuity.builder()
+            VisualAcuity.builder()
                 .withoutCorrection(
                     Correction.builder()
                         .id(new FieldId(rightEye.withoutCorrectionId()))
@@ -43,7 +43,7 @@ public class ElementConfigurationOcularAcuities implements ElementConfiguration 
                 .build()
         )
         .leftEye(
-            OcularAcuity.builder()
+            VisualAcuity.builder()
                 .withoutCorrection(
                     Correction.builder()
                         .id(new FieldId(leftEye.withoutCorrectionId()))
@@ -57,7 +57,7 @@ public class ElementConfigurationOcularAcuities implements ElementConfiguration 
                 .build()
         )
         .binocular(
-            OcularAcuity.builder()
+            VisualAcuity.builder()
                 .withoutCorrection(
                     Correction.builder()
                         .id(new FieldId(binocular.withoutCorrectionId()))

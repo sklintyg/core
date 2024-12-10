@@ -8,19 +8,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDouble;
-import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueOcularAcuities;
+import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueVisualAcuities;
 import se.inera.intyg.certificateservice.domain.certificate.model.Correction;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueOcularAcuities;
-import se.inera.intyg.certificateservice.domain.certificate.model.OcularAcuity;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueVisualAcuities;
+import se.inera.intyg.certificateservice.domain.certificate.model.VisualAcuity;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
-class CertificateDataValueConverterOcularAcuitiesTest {
+class CertificateDataValueConverterVisualAcuitiesTest {
 
   private static final String ID_1 = "id1";
   private static final String ID_2 = "id2";
   private static final double VALUE = 1.0;
-  private static final OcularAcuity OCULAR_ACUITY = OcularAcuity.builder()
+  private static final VisualAcuity OCULAR_ACUITY = VisualAcuity.builder()
       .withCorrection(
           Correction.builder()
               .id(new FieldId(ID_1))
@@ -34,18 +34,18 @@ class CertificateDataValueConverterOcularAcuitiesTest {
               .build()
       )
       .build();
-  private CertificateDataValueConverterOcularAcuities converterOcularAcuities;
+  private CertificateDataValueConverterVisualAcuities convertervisualAcuities;
 
   @BeforeEach
   void setUp() {
-    converterOcularAcuities = new CertificateDataValueConverterOcularAcuities();
+    convertervisualAcuities = new CertificateDataValueConverterVisualAcuities();
   }
 
   @Test
   void shallThrowIfInvalidType() {
     final var elementValueDate = ElementValueDate.builder().build();
     final var illegalStateException = assertThrows(IllegalStateException.class,
-        () -> converterOcularAcuities.convert(null,
+        () -> convertervisualAcuities.convert(null,
             elementValueDate));
     assertEquals("Invalid value type. Type was '%s'".formatted(elementValueDate.getClass()),
         illegalStateException.getMessage());
@@ -54,16 +54,16 @@ class CertificateDataValueConverterOcularAcuitiesTest {
   @Nested
   class RightEyeTests {
 
-    private static final ElementValueOcularAcuities RIGHT_EYE_ELEMENT_VALUE_OCULAR_ACUITIES =
-        ElementValueOcularAcuities.builder()
+    private static final ElementValueVisualAcuities RIGHT_EYE_ELEMENT_VALUE_OCULAR_ACUITIES =
+        ElementValueVisualAcuities.builder()
             .rightEye(OCULAR_ACUITY)
             .build();
 
     @Test
     void shallNotIncludeRightEyeIfNull() {
-      final var elementValueOcularAcuities = ElementValueOcularAcuities.builder().build();
-      final var certificateDataValue = (CertificateDataValueOcularAcuities)
-          converterOcularAcuities.convert(null, elementValueOcularAcuities);
+      final var elementValuevisualAcuities = ElementValueVisualAcuities.builder().build();
+      final var certificateDataValue = (CertificateDataValueVisualAcuities)
+          convertervisualAcuities.convert(null, elementValuevisualAcuities);
       assertNull(certificateDataValue.getRightEye());
     }
 
@@ -74,8 +74,8 @@ class CertificateDataValueConverterOcularAcuitiesTest {
           .value(VALUE)
           .build();
 
-      final var certificateDataValue = (CertificateDataValueOcularAcuities)
-          converterOcularAcuities.convert(null, RIGHT_EYE_ELEMENT_VALUE_OCULAR_ACUITIES);
+      final var certificateDataValue = (CertificateDataValueVisualAcuities)
+          convertervisualAcuities.convert(null, RIGHT_EYE_ELEMENT_VALUE_OCULAR_ACUITIES);
 
       assertEquals(expectedResult, certificateDataValue.getRightEye().getWithCorrection());
     }
@@ -87,8 +87,8 @@ class CertificateDataValueConverterOcularAcuitiesTest {
           .value(VALUE)
           .build();
 
-      final var certificateDataValue = (CertificateDataValueOcularAcuities)
-          converterOcularAcuities.convert(null, RIGHT_EYE_ELEMENT_VALUE_OCULAR_ACUITIES);
+      final var certificateDataValue = (CertificateDataValueVisualAcuities)
+          convertervisualAcuities.convert(null, RIGHT_EYE_ELEMENT_VALUE_OCULAR_ACUITIES);
 
       assertEquals(expectedResult, certificateDataValue.getRightEye().getWithoutCorrection());
     }
@@ -97,16 +97,16 @@ class CertificateDataValueConverterOcularAcuitiesTest {
   @Nested
   class LeftEyeTests {
 
-    private static final ElementValueOcularAcuities RIGHT_EYE_ELEMENT_VALUE_OCULAR_ACUITIES =
-        ElementValueOcularAcuities.builder()
+    private static final ElementValueVisualAcuities RIGHT_EYE_ELEMENT_VALUE_OCULAR_ACUITIES =
+        ElementValueVisualAcuities.builder()
             .leftEye(OCULAR_ACUITY)
             .build();
 
     @Test
     void shallNotIncludeLeftEyeIfNull() {
-      final var elementValueOcularAcuities = ElementValueOcularAcuities.builder().build();
-      final var certificateDataValue = (CertificateDataValueOcularAcuities)
-          converterOcularAcuities.convert(null, elementValueOcularAcuities);
+      final var elementValuevisualAcuities = ElementValueVisualAcuities.builder().build();
+      final var certificateDataValue = (CertificateDataValueVisualAcuities)
+          convertervisualAcuities.convert(null, elementValuevisualAcuities);
       assertNull(certificateDataValue.getLeftEye());
     }
 
@@ -117,8 +117,8 @@ class CertificateDataValueConverterOcularAcuitiesTest {
           .value(VALUE)
           .build();
 
-      final var certificateDataValue = (CertificateDataValueOcularAcuities)
-          converterOcularAcuities.convert(null, RIGHT_EYE_ELEMENT_VALUE_OCULAR_ACUITIES);
+      final var certificateDataValue = (CertificateDataValueVisualAcuities)
+          convertervisualAcuities.convert(null, RIGHT_EYE_ELEMENT_VALUE_OCULAR_ACUITIES);
 
       assertEquals(expectedResult, certificateDataValue.getLeftEye().getWithCorrection());
     }
@@ -130,8 +130,8 @@ class CertificateDataValueConverterOcularAcuitiesTest {
           .value(VALUE)
           .build();
 
-      final var certificateDataValue = (CertificateDataValueOcularAcuities)
-          converterOcularAcuities.convert(null, RIGHT_EYE_ELEMENT_VALUE_OCULAR_ACUITIES);
+      final var certificateDataValue = (CertificateDataValueVisualAcuities)
+          convertervisualAcuities.convert(null, RIGHT_EYE_ELEMENT_VALUE_OCULAR_ACUITIES);
 
       assertEquals(expectedResult, certificateDataValue.getLeftEye().getWithoutCorrection());
     }
@@ -140,16 +140,16 @@ class CertificateDataValueConverterOcularAcuitiesTest {
   @Nested
   class BinocularTests {
 
-    private static final ElementValueOcularAcuities RIGHT_EYE_ELEMENT_VALUE_OCULAR_ACUITIES =
-        ElementValueOcularAcuities.builder()
+    private static final ElementValueVisualAcuities RIGHT_EYE_ELEMENT_VALUE_OCULAR_ACUITIES =
+        ElementValueVisualAcuities.builder()
             .binocular(OCULAR_ACUITY)
             .build();
 
     @Test
     void shallNotIncludeBinocularIfNull() {
-      final var elementValueOcularAcuities = ElementValueOcularAcuities.builder().build();
-      final var certificateDataValue = (CertificateDataValueOcularAcuities)
-          converterOcularAcuities.convert(null, elementValueOcularAcuities);
+      final var elementValuevisualAcuities = ElementValueVisualAcuities.builder().build();
+      final var certificateDataValue = (CertificateDataValueVisualAcuities)
+          convertervisualAcuities.convert(null, elementValuevisualAcuities);
       assertNull(certificateDataValue.getBinocular());
     }
 
@@ -160,8 +160,8 @@ class CertificateDataValueConverterOcularAcuitiesTest {
           .value(VALUE)
           .build();
 
-      final var certificateDataValue = (CertificateDataValueOcularAcuities)
-          converterOcularAcuities.convert(null, RIGHT_EYE_ELEMENT_VALUE_OCULAR_ACUITIES);
+      final var certificateDataValue = (CertificateDataValueVisualAcuities)
+          convertervisualAcuities.convert(null, RIGHT_EYE_ELEMENT_VALUE_OCULAR_ACUITIES);
 
       assertEquals(expectedResult, certificateDataValue.getBinocular().getWithCorrection());
     }
@@ -173,8 +173,8 @@ class CertificateDataValueConverterOcularAcuitiesTest {
           .value(VALUE)
           .build();
 
-      final var certificateDataValue = (CertificateDataValueOcularAcuities)
-          converterOcularAcuities.convert(null, RIGHT_EYE_ELEMENT_VALUE_OCULAR_ACUITIES);
+      final var certificateDataValue = (CertificateDataValueVisualAcuities)
+          convertervisualAcuities.convert(null, RIGHT_EYE_ELEMENT_VALUE_OCULAR_ACUITIES);
 
       assertEquals(expectedResult, certificateDataValue.getBinocular().getWithoutCorrection());
     }

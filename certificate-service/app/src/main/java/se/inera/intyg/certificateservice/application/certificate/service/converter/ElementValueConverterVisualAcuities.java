@@ -1,83 +1,83 @@
 package se.inera.intyg.certificateservice.application.certificate.service.converter;
 
-import static se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueType.OCULAR_ACUITIES;
+import static se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueType.VISUAL_ACUITIES;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValue;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDouble;
-import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueOcularAcuities;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueType;
+import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueVisualAcuities;
 import se.inera.intyg.certificateservice.domain.certificate.model.Correction;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueOcularAcuities;
-import se.inera.intyg.certificateservice.domain.certificate.model.OcularAcuity;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueVisualAcuities;
+import se.inera.intyg.certificateservice.domain.certificate.model.VisualAcuity;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
 @Component
 @RequiredArgsConstructor
-public class ElementValueConverterOcularAcuities implements ElementValueConverter {
+public class ElementValueConverterVisualAcuities implements ElementValueConverter {
 
   @Override
   public CertificateDataValueType getType() {
-    return OCULAR_ACUITIES;
+    return VISUAL_ACUITIES;
   }
 
   @Override
   public ElementValue convert(CertificateDataValue value) {
-    if (!(value instanceof CertificateDataValueOcularAcuities ocularAcuities)) {
+    if (!(value instanceof CertificateDataValueVisualAcuities visualAcuities)) {
       throw new IllegalStateException(
           "Invalid value type. Type was '%s'".formatted(value.getType())
       );
     }
 
-    return ElementValueOcularAcuities.builder()
+    return ElementValueVisualAcuities.builder()
         .rightEye(
-            OcularAcuity.builder()
+            VisualAcuity.builder()
                 .withCorrection(
                     Correction.builder()
-                        .id(new FieldId(ocularAcuities.getRightEye().getWithCorrection().getId()))
-                        .value(getIfPresent(ocularAcuities.getRightEye().getWithCorrection()))
+                        .id(new FieldId(visualAcuities.getRightEye().getWithCorrection().getId()))
+                        .value(getIfPresent(visualAcuities.getRightEye().getWithCorrection()))
                         .build()
                 )
                 .withoutCorrection(
                     Correction.builder()
                         .id(new FieldId(
-                            ocularAcuities.getRightEye().getWithoutCorrection().getId()))
-                        .value(getIfPresent(ocularAcuities.getRightEye().getWithoutCorrection()))
+                            visualAcuities.getRightEye().getWithoutCorrection().getId()))
+                        .value(getIfPresent(visualAcuities.getRightEye().getWithoutCorrection()))
                         .build()
                 )
                 .build()
         )
         .leftEye(
-            OcularAcuity.builder()
+            VisualAcuity.builder()
                 .withCorrection(
                     Correction.builder()
-                        .id(new FieldId(ocularAcuities.getLeftEye().getWithCorrection().getId()))
-                        .value(getIfPresent(ocularAcuities.getLeftEye().getWithCorrection()))
+                        .id(new FieldId(visualAcuities.getLeftEye().getWithCorrection().getId()))
+                        .value(getIfPresent(visualAcuities.getLeftEye().getWithCorrection()))
                         .build()
                 )
                 .withoutCorrection(
                     Correction.builder()
-                        .id(new FieldId(ocularAcuities.getLeftEye().getWithoutCorrection().getId()))
-                        .value(getIfPresent(ocularAcuities.getLeftEye().getWithoutCorrection()))
+                        .id(new FieldId(visualAcuities.getLeftEye().getWithoutCorrection().getId()))
+                        .value(getIfPresent(visualAcuities.getLeftEye().getWithoutCorrection()))
                         .build()
                 )
                 .build()
         )
         .binocular(
-            OcularAcuity.builder()
+            VisualAcuity.builder()
                 .withCorrection(
                     Correction.builder()
-                        .id(new FieldId(ocularAcuities.getBinocular().getWithCorrection().getId()))
-                        .value(getIfPresent(ocularAcuities.getBinocular().getWithCorrection()))
+                        .id(new FieldId(visualAcuities.getBinocular().getWithCorrection().getId()))
+                        .value(getIfPresent(visualAcuities.getBinocular().getWithCorrection()))
                         .build()
                 )
                 .withoutCorrection(
                     Correction.builder()
                         .id(new FieldId(
-                            ocularAcuities.getBinocular().getWithoutCorrection().getId()))
-                        .value(getIfPresent(ocularAcuities.getBinocular().getWithoutCorrection()))
+                            visualAcuities.getBinocular().getWithoutCorrection().getId()))
+                        .value(getIfPresent(visualAcuities.getBinocular().getWithoutCorrection()))
                         .build()
                 )
                 .build()
