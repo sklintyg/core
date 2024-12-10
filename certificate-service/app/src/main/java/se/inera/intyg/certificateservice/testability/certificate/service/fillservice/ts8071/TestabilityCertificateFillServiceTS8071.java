@@ -30,6 +30,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionHjartsjukdom.QUESTION_HJARTSJUKDOM_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionHjartsjukdomBehandlad.QUESTION_HJARTSJUKDOM_BEHANDLAD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionHjartsjukdomBehandladBeskrivning.QUESTION_HJARTSJUKDOM_BEHANDLAD_BESKRIVNING_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionHjartsjukdomBeskrivning.QUESTION_HJARTSJUKDOM_BESKRIVNING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionHorsel.QUESTION_HORSEL_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionHorselhjalpmedel.QUESTION_HORSELHJALPMEDEL_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionHorselhjalpmedelPosition.QUESTION_HORSELHJALPMEDEL_POSITION_ID;
@@ -65,6 +66,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionPsykiskUtvecklingsstorning.QUESTION_PSYKISK_UTVECKLINGSSTORNING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionPsykiskUtvecklingsstorningAllvarlig.QUESTION_PSYKISK_UTVECKLINGSSTORNING_ALLVARLIG_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionRorlighet.QUESTION_RORLIGHET_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionRorlighetBeskrivning.QUESTION_RORLIGHET_BESKRIVNING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionRorlighetHjalpaPassagerare.QUESTION_RORLIGHET_HJALPA_PASSAGERARE_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSjukdomEllerSynnedsattning.QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSjukdomEllerSynnedsattningBeskrivning.QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_BESKRIVNING_ID;
@@ -115,7 +117,9 @@ public class TestabilityCertificateFillServiceTS8071 implements
       QUESTION_SJUKDOMSHISTORIK_BESKRIVNING_ID, QUESTION_BALANSSINNE_ID,
       QUESTION_BALANSSINNE_BESKRIVNING_ID, QUESTION_HORSEL_ID, QUESTION_HORSELHJALPMEDEL_ID,
       QUESTION_HORSELHJALPMEDEL_POSITION_ID, QUESTION_RORLIGHET_ID,
+      QUESTION_RORLIGHET_BESKRIVNING_ID,
       QUESTION_RORLIGHET_HJALPA_PASSAGERARE_ID, QUESTION_HJARTSJUKDOM_ID,
+      QUESTION_HJARTSJUKDOM_BESKRIVNING_ID,
       QUESTION_HJARTSJUKDOM_BEHANDLAD_ID, QUESTION_HJARTSJUKDOM_BEHANDLAD_BESKRIVNING_ID,
       QUESTION_ARYTMI_ID, QUESTION_ARYTMI_BESKRIVNING_ID, QUESTION_SYNKOPE_ID,
       QUESTION_SYNKOPE_BESKRIVNING_ID, QUESTION_STROKE_ID, QUESTION_STROKE_PAVARKAN_ID,
@@ -201,7 +205,7 @@ public class TestabilityCertificateFillServiceTS8071 implements
               String.format(
                   "Ett exempel på text för frågan %s",
                   elementSpecification.configuration().name()
-              )))
+              ).substring(0, 49)))
           .build();
     }
 
