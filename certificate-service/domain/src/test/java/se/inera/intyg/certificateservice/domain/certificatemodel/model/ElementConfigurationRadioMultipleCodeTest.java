@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 
@@ -63,6 +64,40 @@ class ElementConfigurationRadioMultipleCodeTest {
         .build();
 
     assertEquals(expectedCode, configuration.code(codeValue));
+  }
+
+
+  @Test
+  void shallReturnSimplifiedValue() {
+    final var configuration = ElementConfigurationRadioMultipleCode.builder()
+        .id(new FieldId(FIELD_ID))
+        .list(
+            List.of(
+                new ElementConfigurationCode(
+                    new FieldId(CODE_FIELD_ID),
+                    LABEL,
+                    new Code(CODE, CODE_SYSTEM, DISPLAY_NAME)
+                ),
+                new ElementConfigurationCode(
+                    new FieldId(CODE_FIELD_ID_TWO),
+                    LABEL_TWO,
+                    new Code(CODE_TWO, CODE_SYSTEM, DISPLAY_NAME_TWO)
+                )
+            )
+        )
+        .build();
+
+    final var codeValue = ElementValueCode.builder()
+        .codeId(new FieldId(CODE_FIELD_ID_TWO))
+        .code(CODE_TWO)
+        .build();
+
+    assertEquals(
+        ElementSimplifiedValueText.builder()
+            .text(DISPLAY_NAME_TWO)
+            .build(),
+        configuration.simplified(codeValue)
+    );
   }
 
   @Test

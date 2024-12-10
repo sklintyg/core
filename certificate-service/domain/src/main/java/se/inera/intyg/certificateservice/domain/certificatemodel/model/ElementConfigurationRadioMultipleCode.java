@@ -4,6 +4,8 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValue;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
@@ -26,6 +28,17 @@ public class ElementConfigurationRadioMultipleCode implements ElementConfigurati
   public ElementValue emptyValue() {
     return ElementValueCode.builder()
         .codeId(id)
+        .build();
+  }
+
+  @Override
+  public ElementSimplifiedValue simplified(ElementValue value) {
+    if (!(value instanceof ElementValueCode elementValue)) {
+      throw new IllegalStateException("Wrong value type");
+    }
+
+    return ElementSimplifiedValueText.builder()
+        .text(code(elementValue).displayName())
         .build();
   }
 

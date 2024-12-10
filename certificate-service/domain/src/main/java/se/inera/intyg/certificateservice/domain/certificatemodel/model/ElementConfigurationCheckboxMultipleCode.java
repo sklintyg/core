@@ -5,6 +5,8 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValue;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCodeList;
@@ -29,6 +31,21 @@ public class ElementConfigurationCheckboxMultipleCode implements ElementConfigur
     return ElementValueCodeList.builder()
         .id(id)
         .list(Collections.emptyList())
+        .build();
+  }
+
+
+  @Override
+  public ElementSimplifiedValue simplified(ElementValue value) {
+    if (!(value instanceof ElementValueCodeList elementValue)) {
+      throw new IllegalStateException("Wrong value type");
+    }
+
+    return ElementSimplifiedValueList.builder()
+        .list(elementValue.list().stream()
+            .map(this::code)
+            .map(Code::displayName)
+            .toList())
         .build();
   }
 
