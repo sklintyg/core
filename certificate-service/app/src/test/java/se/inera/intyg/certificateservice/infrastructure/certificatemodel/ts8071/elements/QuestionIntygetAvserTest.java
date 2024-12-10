@@ -9,6 +9,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementLayout;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMessage;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
@@ -224,5 +225,13 @@ class QuestionIntygetAvserTest {
     final var element = QuestionIntygetAvser.questionIntygetAvser();
 
     assertEquals(expectedValidations, element.validations());
+  }
+
+  @Test
+  void shouldIncludeMapping() {
+    assertEquals(
+        new ElementMapping(ELEMENT_ID, null),
+        QuestionIntygetAvser.questionIntygetAvser().mapping()
+    );
   }
 }
