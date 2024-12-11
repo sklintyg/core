@@ -119,7 +119,7 @@ public class CertificateModelFactoryTSTRK8071 implements CertificateModelFactory
 
   private final CertificateActionFactory certificateActionFactory;
 
-  @Value("${certificate.model.ts8071.v1_0.active.from}")
+  @Value("${certificate.model.tstrk8071.v1_0.active.from}")
   private LocalDateTime activeFrom;
 
   @Value("${sendmessagetots.logicaladdress}")
