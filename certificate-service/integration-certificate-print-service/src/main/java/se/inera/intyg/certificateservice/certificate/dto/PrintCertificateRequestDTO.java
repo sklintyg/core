@@ -8,6 +8,6 @@ import lombok.Value;
 @Builder
 public class PrintCertificateRequestDTO {
 
-  List<PrintCertificateQuestionDTO> questions;
+  List<PrintCertificateCategoryDTO> categories;
   PrintCertificateMetadataDTO metadata;
 }
