@@ -8,7 +8,9 @@ import se.inera.intyg.certificateprintservice.application.print.dto.PrintCertifi
 public class GetPrintService {
 
   public PrintCertificateResponse get(PrintCertificateRequest request) {
+    //validate request
 
-    return PrintCertificateResponse.builder().build();
+    return PrintCertificateResponse.builder()
+        .build();
   }
 }

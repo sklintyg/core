@@ -12,7 +12,7 @@ import se.inera.intyg.certificateprintservice.application.print.dto.PrintCertifi
 @JsonDeserialize(builder = PrintCertificateRequestBuilder.class)
 public class PrintCertificateRequest {
 
-  List<PrintCertificateQuestion> questions;
+  List<PrintCertificateCategory> categories;
   PrintCertificateMetadata metadata;
 
   @JsonPOJOBuilder(withPrefix = "")
