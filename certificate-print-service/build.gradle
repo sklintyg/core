@@ -11,7 +11,6 @@ ext {
     ineraMavenRepository = 'https://nexus.drift.inera.se/repository/it-public/'
     nvdMirror = 'https://vulnz-nvd-mirror-devtest.intyg.nordicmedtest.se'
     springbootMavenBomVersion = '3.4.0'
-    logbackEcsEncoderVersion = '1.6.0'
 }
 
 group = 'se.inera.intyg.certificateprintservice'

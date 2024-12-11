@@ -33,7 +33,7 @@ tasks.register("appRunDebug") {
     doFirst {
         bootRun.configure {
             jvmArgs = [
-                    "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=18091",
+                    "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=18041",
             ]
         }
     }
