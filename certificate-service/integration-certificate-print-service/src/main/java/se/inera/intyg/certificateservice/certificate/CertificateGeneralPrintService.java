@@ -15,6 +15,10 @@ public class CertificateGeneralPrintService implements PdfGenerator {
 
   @Override
   public Pdf generate(Certificate certificate, String additionalInfoText, boolean isCitizenFormat) {
+    // Convert request
+    // Make call to PrintCertificateFromCerfiticatePrintService
+    // Convert response
+
     return null;
   }
 }

@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
@@ -36,17 +37,21 @@ public class ElementConfigurationCheckboxMultipleCode implements ElementConfigur
 
 
   @Override
-  public ElementSimplifiedValue simplified(ElementValue value) {
+  public Optional<ElementSimplifiedValue> simplified(ElementValue value) {
     if (!(value instanceof ElementValueCodeList elementValue)) {
       throw new IllegalStateException("Wrong value type");
     }
 
-    return ElementSimplifiedValueList.builder()
+    if (elementValue.isEmpty()) {
+      return Optional.empty();
+    }
+
+    return Optional.of(ElementSimplifiedValueList.builder()
         .list(elementValue.list().stream()
             .map(this::code)
             .map(Code::displayName)
             .toList())
-        .build();
+        .build());
   }
 
   public Code code(ElementValueCode elementValueCode) {

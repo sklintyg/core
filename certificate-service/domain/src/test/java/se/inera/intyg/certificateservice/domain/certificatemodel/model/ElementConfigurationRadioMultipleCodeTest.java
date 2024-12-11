@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collections;
 import java.util.List;
@@ -96,7 +97,7 @@ class ElementConfigurationRadioMultipleCodeTest {
         ElementSimplifiedValueText.builder()
             .text(DISPLAY_NAME_TWO)
             .build(),
-        configuration.simplified(codeValue)
+        configuration.simplified(codeValue).get()
     );
   }
 
@@ -115,5 +116,13 @@ class ElementConfigurationRadioMultipleCodeTest {
     assertThrows(IllegalArgumentException.class,
         () -> configuration.code(codeValue)
     );
+  }
+
+  @Test
+  void shouldReturnEmptyOptionalForNull() {
+    final var config = ElementConfigurationRadioMultipleCode.builder()
+        .build();
+
+    assertTrue(config.simplified(config.emptyValue()).isEmpty());
   }
 }

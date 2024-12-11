@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
@@ -20,8 +21,15 @@ class ElementConfigurationTextFieldTest {
 
     assertEquals(
         text,
-        ((ElementSimplifiedValueText) config.simplified(value)).text()
+        ((ElementSimplifiedValueText) config.simplified(value).get()).text()
     );
   }
 
+  @Test
+  void shouldReturnEmptyOptionalForNull() {
+    final var config = ElementConfigurationTextField.builder()
+        .build();
+
+    assertTrue(config.simplified(config.emptyValue()).isEmpty());
+  }
 }

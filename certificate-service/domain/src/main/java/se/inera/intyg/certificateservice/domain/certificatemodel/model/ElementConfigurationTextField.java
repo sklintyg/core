@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
+import java.util.Optional;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
@@ -34,13 +35,17 @@ public class ElementConfigurationTextField implements ElementConfiguration {
   }
 
   @Override
-  public ElementSimplifiedValue simplified(ElementValue value) {
+  public Optional<ElementSimplifiedValue> simplified(ElementValue value) {
     if (!(value instanceof ElementValueText elementValue)) {
       throw new IllegalStateException("Wrong value type");
     }
 
-    return ElementSimplifiedValueText.builder()
+    if (elementValue.isEmpty()) {
+      return Optional.empty();
+    }
+
+    return Optional.of(ElementSimplifiedValueText.builder()
         .text(elementValue.text())
-        .build();
+        .build());
   }
 }

@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -22,8 +23,17 @@ class ElementConfigurationDateTest {
 
     assertEquals(
         date.format(DateTimeFormatter.ISO_DATE),
-        ((ElementSimplifiedValueText) config.simplified(value)).text()
+        ((ElementSimplifiedValueText) config.simplified(value).get()).text()
     );
+  }
+
+
+  @Test
+  void shouldReturnEmptyOptionalForNull() {
+    final var config = ElementConfigurationDate.builder()
+        .build();
+
+    assertTrue(config.simplified(config.emptyValue()).isEmpty());
   }
 
 }

@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
 import java.util.List;
+import java.util.Optional;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
@@ -32,14 +33,18 @@ public class ElementConfigurationRadioMultipleCode implements ElementConfigurati
   }
 
   @Override
-  public ElementSimplifiedValue simplified(ElementValue value) {
+  public Optional<ElementSimplifiedValue> simplified(ElementValue value) {
     if (!(value instanceof ElementValueCode elementValue)) {
       throw new IllegalStateException("Wrong value type");
     }
 
-    return ElementSimplifiedValueText.builder()
+    if (elementValue.isEmpty()) {
+      return Optional.empty();
+    }
+
+    return Optional.of(ElementSimplifiedValueText.builder()
         .text(code(elementValue).displayName())
-        .build();
+        .build());
   }
 
   public Code code(ElementValueCode elementValueCode) {

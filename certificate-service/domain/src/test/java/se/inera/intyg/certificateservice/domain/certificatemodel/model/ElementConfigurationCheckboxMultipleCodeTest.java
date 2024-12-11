@@ -1,7 +1,9 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueList;
@@ -61,7 +63,24 @@ class ElementConfigurationCheckboxMultipleCodeTest {
         ElementSimplifiedValueList.builder()
             .list(List.of(DISPLAY_NAME, DISPLAY_NAME_TWO))
             .build(),
-        configuration.simplified(codeValue)
+        configuration.simplified(codeValue).get()
     );
+  }
+
+  @Test
+  void shouldReturnEmptyOptionalForNull() {
+    final var config = ElementConfigurationCheckboxMultipleCode.builder()
+        .build();
+
+    assertTrue(config.simplified(config.emptyValue()).isEmpty());
+  }
+
+  @Test
+  void shouldReturnEmptyOptionalForEmptyList() {
+    final var config = ElementConfigurationCheckboxMultipleCode.builder()
+        .list(Collections.emptyList())
+        .build();
+
+    assertTrue(config.simplified(config.emptyValue()).isEmpty());
   }
 }

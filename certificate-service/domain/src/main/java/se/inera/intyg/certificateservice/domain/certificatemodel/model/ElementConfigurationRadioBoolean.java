@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
+import java.util.Optional;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
@@ -30,13 +31,19 @@ public class ElementConfigurationRadioBoolean implements ElementConfiguration {
   }
 
   @Override
-  public ElementSimplifiedValue simplified(ElementValue value) {
+  public Optional<ElementSimplifiedValue> simplified(ElementValue value) {
     if (!(value instanceof ElementValueBoolean elementValue)) {
       throw new IllegalStateException("Wrong value type");
     }
 
-    return ElementSimplifiedValueText.builder()
-        .text(Boolean.TRUE.equals(elementValue.value()) ? selectedText : unselectedText)
-        .build();
+    if (elementValue.value() == null) {
+      return Optional.empty();
+    }
+
+    return Optional.of(
+        ElementSimplifiedValueText.builder()
+            .text(Boolean.TRUE.equals(elementValue.value()) ? selectedText : unselectedText)
+            .build()
+    );
   }
 }

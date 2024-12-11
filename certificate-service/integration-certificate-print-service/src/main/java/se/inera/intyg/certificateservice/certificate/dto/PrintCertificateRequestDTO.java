@@ -6,7 +6,7 @@ import lombok.Value;
 
 @Value
 @Builder
-public class PrintCertificateDTO {
+public class PrintCertificateRequestDTO {
 
   List<PrintCertificateQuestionDTO> questions;
   PrintCertificateMetadataDTO metadata;
