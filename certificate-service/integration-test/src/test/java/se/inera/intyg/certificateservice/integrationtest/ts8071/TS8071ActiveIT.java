@@ -4,7 +4,7 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ALVA_VARDADMINISTRATOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ANNA_SJUKSKOTERSKA_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.BERTIL_BARNMORSKA_DTO;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionOvrigBeskrivning.QUESTION_OVRIG_BESKRIVNING_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionOvrigBeskrivning.QUESTION_OVRIG_BESKRIVNING_ID;
 import static se.inera.intyg.certificateservice.integrationtest.ts8071.TS8071Constants.CODE;
 import static se.inera.intyg.certificateservice.integrationtest.ts8071.TS8071Constants.CODE_SYSTEM;
 
