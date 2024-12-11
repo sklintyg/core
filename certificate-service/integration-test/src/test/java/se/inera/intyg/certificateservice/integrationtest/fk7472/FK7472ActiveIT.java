@@ -71,10 +71,8 @@ import se.inera.intyg.certificateservice.integrationtest.SendCitizenCertificateI
 import se.inera.intyg.certificateservice.integrationtest.SignCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.SignCertificateNurseIT;
 import se.inera.intyg.certificateservice.integrationtest.UnitStatisticsIT;
-import se.inera.intyg.certificateservice.integrationtest.UpdateCertificateFK7472IT;
 import se.inera.intyg.certificateservice.integrationtest.UpdateCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ValidateCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.ValidateFK7472IT;
 
 public class FK7472ActiveIT {
 

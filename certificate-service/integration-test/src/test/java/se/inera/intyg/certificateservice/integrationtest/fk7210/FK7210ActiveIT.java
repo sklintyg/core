@@ -48,7 +48,6 @@ import se.inera.intyg.certificateservice.integrationtest.SignCertificateNurseIT;
 import se.inera.intyg.certificateservice.integrationtest.UnitStatisticsIT;
 import se.inera.intyg.certificateservice.integrationtest.UpdateCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ValidateCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.ValidateFK7210IT;
 
 public class FK7210ActiveIT {
 

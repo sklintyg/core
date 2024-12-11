@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.integrationtest;
+package se.inera.intyg.certificateservice.integrationtest.fk7472;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,6 +23,7 @@ import java.util.Objects;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDateRange;
+import se.inera.intyg.certificateservice.integrationtest.BaseIntegrationIT;
 
 public abstract class ValidateFK7472IT extends BaseIntegrationIT {
 
