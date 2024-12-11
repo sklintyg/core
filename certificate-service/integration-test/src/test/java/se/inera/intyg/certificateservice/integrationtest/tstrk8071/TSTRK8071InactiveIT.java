@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.integrationtest.ts8071;
+package se.inera.intyg.certificateservice.integrationtest.tstrk8071;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -6,11 +6,11 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import se.inera.intyg.certificateservice.integrationtest.InactiveTypeIT;
 
-class TS8071InactiveIT {
+class TSTRK8071InactiveIT {
 
-  private static final String CERTIFICATE_TYPE = TS8071Constants.TS8071;
-  private static final String ACTIVE_VERSION = TS8071Constants.VERSION;
-  private static final String TYPE = TS8071Constants.TYPE;
+  private static final String CERTIFICATE_TYPE = TSTRK8071Constants.TS8071;
+  private static final String ACTIVE_VERSION = TSTRK8071Constants.VERSION;
+  private static final String TYPE = TSTRK8071Constants.TYPE;
 
   @DynamicPropertySource
   static void testProperties(DynamicPropertyRegistry registry) {

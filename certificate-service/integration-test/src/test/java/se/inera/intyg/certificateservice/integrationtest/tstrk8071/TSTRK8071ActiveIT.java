@@ -1,12 +1,12 @@
-package se.inera.intyg.certificateservice.integrationtest.ts8071;
+package se.inera.intyg.certificateservice.integrationtest.tstrk8071;
 
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ALVA_VARDADMINISTRATOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ANNA_SJUKSKOTERSKA_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.BERTIL_BARNMORSKA_DTO;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionOvrigBeskrivning.QUESTION_OVRIG_BESKRIVNING_ID;
-import static se.inera.intyg.certificateservice.integrationtest.ts8071.TS8071Constants.CODE;
-import static se.inera.intyg.certificateservice.integrationtest.ts8071.TS8071Constants.CODE_SYSTEM;
+import static se.inera.intyg.certificateservice.integrationtest.tstrk8071.TSTRK8071Constants.CODE;
+import static se.inera.intyg.certificateservice.integrationtest.tstrk8071.TSTRK8071Constants.CODE_SYSTEM;
 
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
@@ -45,13 +45,13 @@ import se.inera.intyg.certificateservice.integrationtest.UnitStatisticsIT;
 import se.inera.intyg.certificateservice.integrationtest.UpdateCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ValidateCertificateIT;
 
-public class TS8071ActiveIT {
+public class TSTRK8071ActiveIT {
 
-  private static final String CERTIFICATE_TYPE = TS8071Constants.TS8071;
+  private static final String CERTIFICATE_TYPE = TSTRK8071Constants.TS8071;
   private static final String RECIPIENT = "TRANSP";
-  private static final String ACTIVE_VERSION = TS8071Constants.VERSION;
-  private static final String WRONG_VERSION = TS8071Constants.WRONG_VERSION;
-  private static final String TYPE = TS8071Constants.TYPE;
+  private static final String ACTIVE_VERSION = TSTRK8071Constants.VERSION;
+  private static final String WRONG_VERSION = TSTRK8071Constants.WRONG_VERSION;
+  private static final String TYPE = TSTRK8071Constants.TYPE;
   private static final ElementId ELEMENT_ID = QUESTION_OVRIG_BESKRIVNING_ID;
   private static final String VALUE = "Uppdaterad text";
 

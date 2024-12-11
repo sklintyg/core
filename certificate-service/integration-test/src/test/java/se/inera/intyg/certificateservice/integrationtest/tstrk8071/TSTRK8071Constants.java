@@ -1,6 +1,6 @@
-package se.inera.intyg.certificateservice.integrationtest.ts8071;
+package se.inera.intyg.certificateservice.integrationtest.tstrk8071;
 
-public class TS8071Constants {
+public class TSTRK8071Constants {
 
   public static final String TS8071 = "ts8071";
   public static final String TS8071_DISPLAY_TYPE = "TS8071";
