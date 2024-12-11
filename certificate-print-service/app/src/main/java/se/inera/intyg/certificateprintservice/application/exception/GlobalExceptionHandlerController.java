@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class GlobalExceptionHandlerController {
-
-
+  
   @ExceptionHandler({Exception.class})
   public ResponseEntity<String> handleRuntimeExceptions(Exception exception) {
     log.error("Internal server error. Reason: %s.".formatted(
