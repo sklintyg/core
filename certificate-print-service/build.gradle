@@ -96,6 +96,5 @@ reporting {
 
     dependencies {
         testReportAggregation project(':app')
-//        testReportAggregation project(':domain')
     }
 }
