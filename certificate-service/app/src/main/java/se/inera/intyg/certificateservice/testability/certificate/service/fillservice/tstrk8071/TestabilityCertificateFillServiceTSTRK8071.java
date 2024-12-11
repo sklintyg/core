@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.testability.certificate.service.fillservice.ts8071;
+package se.inera.intyg.certificateservice.testability.certificate.service.fillservice.tstrk8071;
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemDecision.NO;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKnowledge.YES;
@@ -107,7 +107,7 @@ import se.inera.intyg.certificateservice.testability.certificate.dto.Testability
 import se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityCertificateFillService;
 
 @Component
-public class TestabilityCertificateFillServiceTS8071 implements
+public class TestabilityCertificateFillServiceTSTRK8071 implements
     TestabilityCertificateFillService {
 
   private static final List<ElementId> MAXIMAL_IDS = List.of(
@@ -295,7 +295,8 @@ public class TestabilityCertificateFillServiceTS8071 implements
     }
 
     throw new IllegalStateException(
-        String.format("Code not defined in TS8071 fill service for question %s", elementId.id()));
+        String.format("Code not defined in TSTRK8071 fill service for question %s",
+            elementId.id()));
 
   }
 }

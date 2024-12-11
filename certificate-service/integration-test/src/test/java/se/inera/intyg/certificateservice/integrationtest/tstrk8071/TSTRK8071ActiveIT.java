@@ -47,7 +47,7 @@ import se.inera.intyg.certificateservice.integrationtest.ValidateCertificateIT;
 
 public class TSTRK8071ActiveIT {
 
-  private static final String CERTIFICATE_TYPE = TSTRK8071Constants.TS8071;
+  private static final String CERTIFICATE_TYPE = TSTRK8071Constants.TSTRK8071;
   private static final String RECIPIENT = "TRANSP";
   private static final String ACTIVE_VERSION = TSTRK8071Constants.VERSION;
   private static final String WRONG_VERSION = TSTRK8071Constants.WRONG_VERSION;
@@ -57,7 +57,7 @@ public class TSTRK8071ActiveIT {
 
   @DynamicPropertySource
   static void testProperties(DynamicPropertyRegistry registry) {
-    registry.add("certificate.model.ts8071.v1_0.active.from", () -> "2024-01-01T00:00:00");
+    registry.add("certificate.model.tstrk8071.v1_0.active.from", () -> "2024-01-01T00:00:00");
   }
 
   @Nested
@@ -598,7 +598,6 @@ public class TSTRK8071ActiveIT {
   @DisplayName(TYPE + "Aktiva versioner utifrån intygstyp och kodsystem")
   class IncludeExistsCertificateExternalTypeInfo extends ExistsCertificateExternalTypeInfoIT {
 
-
     @Override
     protected String type() {
       return CERTIFICATE_TYPE;
@@ -623,7 +622,6 @@ public class TSTRK8071ActiveIT {
   @Nested
   @DisplayName(TYPE + "Skicka intyg som invånare från 1177 Intyg")
   class IncludeSendCitizenCertificateIT extends SendCitizenCertificateIT {
-
 
     @Override
     protected String type() {

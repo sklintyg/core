@@ -10,13 +10,13 @@ import se.inera.intyg.certificateservice.integrationtest.GetCitizenCertificateLi
 
 class TSTRK8071CitizenIT {
 
-  private static final String CERTIFICATE_TYPE = TSTRK8071Constants.TS8071;
+  private static final String CERTIFICATE_TYPE = TSTRK8071Constants.TSTRK8071;
   private static final String ACTIVE_VERSION = TSTRK8071Constants.VERSION;
   private static final String TYPE = TSTRK8071Constants.TYPE;
 
   @DynamicPropertySource
   static void testProperties(DynamicPropertyRegistry registry) {
-    registry.add("certificate.model.ts8071.v1_0.active.from", () -> "2024-01-01T00:00:00");
+    registry.add("certificate.model.tstrk8071.v1_0.active.from", () -> "2024-01-01T00:00:00");
   }
 
   @Nested
