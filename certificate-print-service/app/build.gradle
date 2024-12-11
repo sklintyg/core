@@ -5,6 +5,7 @@ plugins {
 def applicationDir = "${rootProject.projectDir}/devops/dev"
 
 dependencies {
+    implementation project(':playwright-pdf-generator')
     implementation 'com.fasterxml.jackson.core:jackson-annotations'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-web'
