@@ -3,14 +3,13 @@ package se.inera.intyg.certificateservice.certificate.dto;
 import java.util.List;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValue;
 
 @Value
 @Builder
-public class PrintCertificateQuestionDTO {
+public class PrintCertificateCategoryDTO {
 
   String id;
   String name;
   List<PrintCertificateQuestionDTO> children;
-  ElementSimplifiedValue value;
+
 }

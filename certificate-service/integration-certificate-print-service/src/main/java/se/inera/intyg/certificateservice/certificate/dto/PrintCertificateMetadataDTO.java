@@ -8,5 +8,13 @@ import lombok.Value;
 public class PrintCertificateMetadataDTO {
 
   String name;
+  String version;
+  String typeId;
+  String certificateId;
   String signingDate;
+  byte[] recipientLogo;
+  String recipientName;
+  String applicationOrigin;
+  String personId;
+  String description;
 }
