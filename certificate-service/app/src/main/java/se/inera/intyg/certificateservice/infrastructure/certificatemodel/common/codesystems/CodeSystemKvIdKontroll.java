@@ -4,7 +4,7 @@ import se.inera.intyg.certificateservice.domain.common.model.Code;
 
 public class CodeSystemKvIdKontroll {
 
-  public static final String CODE_SYSTEM = "KV_ID_KONTROLL";
+  public static final String CODE_SYSTEM = "e7cc8f30-a353-4c42-b17a-a189b6876647";
 
   public static final Code IDK1 = new Code(
       "IDK1",
