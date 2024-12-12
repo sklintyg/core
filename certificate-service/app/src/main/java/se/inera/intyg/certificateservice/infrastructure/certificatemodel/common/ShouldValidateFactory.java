@@ -34,7 +34,12 @@ public class ShouldValidateFactory {
         .filter(data -> elementIds.contains(data.id()))
         .map(element -> (ElementValueBoolean) element.value())
         .anyMatch(
-            value -> value != null && value.value() != null && value.value() == expectedValue);
+            value -> value != null && (
+                expectedValue
+                    ? value.value() != null && value.value() == expectedValue
+                    : value.value() == null || value.value() == expectedValue
+            )
+        );
   }
 
   public static Predicate<List<ElementData>> codes(ElementId elementId, List<FieldId> fieldIds) {
