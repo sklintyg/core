@@ -11,7 +11,7 @@ public class PrintCertificateMetadataConverter {
   private static final String APPLICATION_ORIGIN_WEBCERT = "Webcert";
 
   public PrintCertificateMetadataDTO convert(Certificate certificate,
-      boolean isCitizenFormat) {
+      boolean isCitizenFormat, String fileName) {
     return PrintCertificateMetadataDTO.builder()
         .name(certificate.certificateModel().name())
         .typeId(certificate.certificateModel().type().code())
@@ -25,6 +25,7 @@ public class PrintCertificateMetadataConverter {
             : APPLICATION_ORIGIN_WEBCERT)
         .personId(certificate.certificateMetaData().patient().id().idWithDash())
         .description(certificate.certificateModel().detailedDescription())
+        .fileName(fileName)
         .build();
   }
 

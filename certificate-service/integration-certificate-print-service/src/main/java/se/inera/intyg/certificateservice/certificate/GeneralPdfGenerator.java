@@ -20,8 +20,10 @@ public class GeneralPdfGenerator implements PdfGenerator {
 
   @Override
   public Pdf generate(Certificate certificate, String additionalInfoText, boolean isCitizenFormat) {
+    final var fileName = getFileName(certificate);
+
     final var request = PrintCertificateRequestDTO.builder()
-        .metadata(printCertificateMetadataConverter.convert(certificate, isCitizenFormat))
+        .metadata(printCertificateMetadataConverter.convert(certificate, isCitizenFormat, fileName))
         .categories(
             certificate.certificateModel().elementSpecifications()
                 .stream()
@@ -33,7 +35,7 @@ public class GeneralPdfGenerator implements PdfGenerator {
     final var response = printCertificateFromCertificatePrintService.print(request,
         certificate.id().id());
 
-    return new Pdf(response.getPdfData(), getFileName(certificate));
+    return new Pdf(response.getPdfData(), fileName);
   }
 
   private String getFileName(Certificate certificate) {

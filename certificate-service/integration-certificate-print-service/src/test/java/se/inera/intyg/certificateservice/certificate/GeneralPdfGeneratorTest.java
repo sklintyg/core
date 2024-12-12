@@ -56,6 +56,7 @@ class GeneralPdfGeneratorTest {
   private static final PrintCertificateResponseDTO RESPONSE = PrintCertificateResponseDTO.builder()
       .pdfData(PDF_DATA)
       .build();
+  private static final String FILE_NAME = "aao_123_test";
 
   @Mock
   private PrintCertificateCategoryConverter printCertificateCategoryConverter;
@@ -71,7 +72,7 @@ class GeneralPdfGeneratorTest {
   void setUp() {
     when(printCertificateCategoryConverter.convert(CERTIFICATE, ELEMENT_SPECIFICATION))
         .thenReturn(PRINT_CERTIFICATE_CATEGORY_DTO);
-    when(printCertificateMetadataConverter.convert(CERTIFICATE, IS_CITIZEN))
+    when(printCertificateMetadataConverter.convert(CERTIFICATE, IS_CITIZEN, FILE_NAME))
         .thenReturn(PRINT_CERTIFICATE_METADATA_DTO);
     when(printCertificateFromCertificatePrintService.print(any(), anyString()))
         .thenReturn(RESPONSE);

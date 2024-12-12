@@ -9,6 +9,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 
 class PrintCertificateMetadataConverterTest {
 
+  private static final String FILE_NAME = "fileName";
   private final PrintCertificateMetadataConverter printCertificateMetadataConverter = new PrintCertificateMetadataConverter();
 
   public static final Certificate CERTIFICATE = fk7210CertificateBuilder()
@@ -20,32 +21,32 @@ class PrintCertificateMetadataConverterTest {
 
   @Test
   void shouldSetName() {
-    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false);
+    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false, FILE_NAME);
     assertEquals(CERTIFICATE.certificateModel().name(), result.getName());
   }
 
   @Test
   void shouldSetVersion() {
-    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false);
+    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false, FILE_NAME);
     assertEquals(CERTIFICATE.certificateModel().id().version().version(),
         result.getVersion());
   }
 
   @Test
   void shouldSetTypeId() {
-    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false);
+    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false, FILE_NAME);
     assertEquals(CERTIFICATE.certificateModel().type().code(), result.getTypeId());
   }
 
   @Test
   void shouldSetCertificateId() {
-    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false);
+    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false, FILE_NAME);
     assertEquals(CERTIFICATE.id().id(), result.getCertificateId());
   }
 
   @Test
   void shouldSetSigningDate() {
-    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false);
+    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false, FILE_NAME);
     assertEquals(CERTIFICATE.signed().toString(), result.getSigningDate());
   }
 
@@ -57,35 +58,40 @@ class PrintCertificateMetadataConverterTest {
 
   @Test
   void shouldSetRecipientName() {
-    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false);
+    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false, FILE_NAME);
     assertEquals(CERTIFICATE.certificateModel().recipient().name(),
         result.getRecipientName());
   }
 
   @Test
   void shouldSetApplicationOriginFor1177intyg() {
-    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, true);
+    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, true, FILE_NAME);
     assertEquals(APPLICATION_ORIGIN_1177_INTYG, result.getApplicationOrigin());
   }
 
   @Test
   void shouldSetApplicationOriginForWebcert() {
-    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false);
+    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false, FILE_NAME);
     assertEquals(APPLICATION_ORIGIN_WEBCERT, result.getApplicationOrigin());
   }
 
   @Test
   void shouldSetSPersonId() {
-    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false);
+    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false, FILE_NAME);
     assertEquals(CERTIFICATE.certificateMetaData().patient().id().idWithDash(),
         result.getPersonId());
   }
 
   @Test
   void shouldSetDescription() {
-    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false);
+    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false, FILE_NAME);
     assertEquals(CERTIFICATE.certificateModel().detailedDescription(),
         result.getDescription());
   }
 
+  @Test
+  void shouldSetFileName() {
+    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false, FILE_NAME);
+    assertEquals(FILE_NAME, result.getFileName());
+  }
 }

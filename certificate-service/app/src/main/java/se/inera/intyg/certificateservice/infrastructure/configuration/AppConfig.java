@@ -199,9 +199,9 @@ public class AppConfig {
 
   @Bean
   public GetCertificatePdfDomainService getCertificatePdfDomainService(
-      CertificateRepository certificateRepository, PdfGenerator pdfGenerator,
+      CertificateRepository certificateRepository, PdfGeneratorProvider pdfGeneratorProvider,
       CertificateEventDomainService certificateEventDomainService) {
-    return new GetCertificatePdfDomainService(certificateRepository, pdfGenerator,
+    return new GetCertificatePdfDomainService(certificateRepository, pdfGeneratorProvider,
         certificateEventDomainService);
   }
 
@@ -242,8 +242,8 @@ public class AppConfig {
 
   @Bean
   public PrintCitizenCertificateDomainService printCitizenCertificateDomainService(
-      CertificateRepository certificateRepository, PdfGenerator pdfGenerator) {
-    return new PrintCitizenCertificateDomainService(certificateRepository, pdfGenerator);
+      CertificateRepository certificateRepository, PdfGeneratorProvider pdfGeneratorProvider) {
+    return new PrintCitizenCertificateDomainService(certificateRepository, pdfGeneratorProvider);
   }
 
   @Bean

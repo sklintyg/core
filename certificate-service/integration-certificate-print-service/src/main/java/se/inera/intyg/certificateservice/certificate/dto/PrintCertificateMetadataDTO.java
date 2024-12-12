@@ -17,4 +17,5 @@ public class PrintCertificateMetadataDTO {
   String applicationOrigin;
   String personId;
   String description;
+  String fileName;
 }
