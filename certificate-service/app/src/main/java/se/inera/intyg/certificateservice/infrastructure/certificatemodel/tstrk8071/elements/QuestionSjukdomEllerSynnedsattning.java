@@ -45,7 +45,7 @@ public class QuestionSjukdomEllerSynnedsattning {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryExist(
+                CertificateElementRuleFactory.mandatoryOrExist(
                     QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_ID,
                     QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_FIELD_ID
                 ),

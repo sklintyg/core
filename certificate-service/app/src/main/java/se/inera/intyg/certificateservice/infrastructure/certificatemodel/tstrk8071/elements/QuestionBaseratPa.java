@@ -43,7 +43,7 @@ public class QuestionBaseratPa {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryExist(
+                CertificateElementRuleFactory.mandatoryOrExist(
                     QUESTION_BASERAT_PA_ID,
                     radioMultipleCodes.stream().map(ElementConfigurationCode::id).toList()
                 )

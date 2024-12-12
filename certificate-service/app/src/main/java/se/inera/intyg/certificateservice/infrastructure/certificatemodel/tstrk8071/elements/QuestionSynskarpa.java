@@ -72,9 +72,13 @@ public class QuestionSynskarpa {
                     QUESTION_SYNFUNKTIONER_ID,
                     QUESTION_SYNFUNKTIONER_FIELD_ID
                 ),
-                CertificateElementRuleFactory.mandatory(
+                CertificateElementRuleFactory.mandatoryAndExist(
                     QUESTION_SYNSKARPA_ID,
-                    QUESTION_SYNSKARPA_FIELD_ID
+                    List.of(
+                        new FieldId(RIGHT_EYE_WITHOUT_CORRECTION_ID),
+                        new FieldId(LEFT_EYE_WITHOUT_CORRECTION_ID),
+                        new FieldId(BINOCULAR_WITHOUT_CORRECTION_ID)
+                    )
                 )
             )
         )

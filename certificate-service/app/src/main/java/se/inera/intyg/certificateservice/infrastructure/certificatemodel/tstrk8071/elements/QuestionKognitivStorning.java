@@ -37,7 +37,7 @@ public class QuestionKognitivStorning {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryExist(
+                CertificateElementRuleFactory.mandatoryOrExist(
                     QUESTION_KOGNITIV_STORNING_ID,
                     QUESTION_KOGNITIV_STORNING_FIELD_ID
                 )

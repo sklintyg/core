@@ -29,6 +29,7 @@ public class CertificateDataVisualAcuitiesConfigConverter implements
 
     return CertificateDataConfigVisualAcuity.builder()
         .id(configurationVisualAcuities.id().value())
+        .text(configurationVisualAcuities.name())
         .withCorrectionLabel(configurationVisualAcuities.withCorrectionLabel())
         .withoutCorrectionLabel(configurationVisualAcuities.withoutCorrectionLabel())
         .rightEye(

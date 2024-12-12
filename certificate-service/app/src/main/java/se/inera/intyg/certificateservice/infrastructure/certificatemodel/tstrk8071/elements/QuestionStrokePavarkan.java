@@ -50,7 +50,7 @@ public class QuestionStrokePavarkan {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryExist(
+                CertificateElementRuleFactory.mandatoryOrExist(
                     QUESTION_STROKE_PAVARKAN_ID,
                     radioMultipleCodes.stream().map(ElementConfigurationCode::id).toList()
                 ),

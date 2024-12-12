@@ -41,7 +41,7 @@ public class QuestionNjurtransplatation {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryExist(
+                CertificateElementRuleFactory.mandatoryOrExist(
                     QUESTION_NJURTRANSPLATATION_ID,
                     QUESTION_NJURTRANSPLATATION_FIELD_ID
                 )

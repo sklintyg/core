@@ -44,7 +44,7 @@ public class QuestionBedomning {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryExist(
+                CertificateElementRuleFactory.mandatoryOrExist(
                     QUESTION_BEDOMNING_ID,
                     radioMultipleCodes.stream().map(ElementConfigurationCode::id).toList()
                 )

@@ -41,7 +41,7 @@ public class QuestionPsykiskUtvecklingsstorning {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryExist(
+                CertificateElementRuleFactory.mandatoryOrExist(
                     QUESTION_PSYKISK_UTVECKLINGSSTORNING_ID,
                     QUESTION_PSYKISK_UTVECKLINGSSTORNING_FIELD_ID
                 )

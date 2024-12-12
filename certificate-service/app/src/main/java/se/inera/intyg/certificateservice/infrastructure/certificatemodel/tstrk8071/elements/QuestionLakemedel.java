@@ -43,7 +43,7 @@ public class QuestionLakemedel {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryExist(
+                CertificateElementRuleFactory.mandatoryOrExist(
                     QUESTION_LAKEMEDEL_ID,
                     QUESTION_LAKEMEDEL_FIELD_ID
                 )

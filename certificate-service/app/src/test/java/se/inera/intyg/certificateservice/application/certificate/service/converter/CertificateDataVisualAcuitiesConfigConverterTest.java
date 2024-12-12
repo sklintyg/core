@@ -24,6 +24,7 @@ class CertificateDataVisualAcuitiesConfigConverterTest {
           .id(new FieldId("id"))
           .withCorrectionLabel("withCorrectionLabel")
           .withoutCorrectionLabel("withoutCorrectionLabel")
+          .name("name")
           .rightEye(ElementVisualAcuity.builder()
               .label("label1")
               .withCorrectionId("withCorrectionId1")
@@ -91,6 +92,14 @@ class CertificateDataVisualAcuitiesConfigConverterTest {
         converter.convert(ELEMENT_SPECIFICATION, FK3226_CERTIFICATE);
 
     assertEquals("withoutCorrectionLabel", result.getWithoutCorrectionLabel());
+  }
+
+  @Test
+  void shouldSetName() {
+    final CertificateDataConfigVisualAcuity result = (CertificateDataConfigVisualAcuity)
+        converter.convert(ELEMENT_SPECIFICATION, FK3226_CERTIFICATE);
+
+    assertEquals("name", result.getText());
   }
 
   @Nested

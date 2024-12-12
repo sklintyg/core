@@ -43,7 +43,7 @@ public class QuestionHjartsjukdomBehandlad {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryExist(
+                CertificateElementRuleFactory.mandatoryOrExist(
                     QUESTION_HJARTSJUKDOM_BEHANDLAD_ID,
                     QUESTION_HJARTSJUKDOM_BEHANDLAD_FIELD_ID
                 ),

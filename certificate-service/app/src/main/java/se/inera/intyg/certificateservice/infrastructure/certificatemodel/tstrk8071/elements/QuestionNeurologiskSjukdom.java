@@ -41,7 +41,7 @@ public class QuestionNeurologiskSjukdom {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryExist(
+                CertificateElementRuleFactory.mandatoryOrExist(
                     QUESTION_NEUROLOGISK_SJUKDOM_ID,
                     QUESTION_NEUROLOGISK_SJUKDOM_FIELD_ID
                 )

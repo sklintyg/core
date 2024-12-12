@@ -70,11 +70,11 @@ public class CertificateElementRuleFactory {
         .build();
   }
 
-  public static ElementRule mandatoryExist(ElementId id, FieldId fieldId) {
-    return mandatoryExist(id, List.of(fieldId));
+  public static ElementRule mandatoryOrExist(ElementId id, FieldId fieldId) {
+    return mandatoryOrExist(id, List.of(fieldId));
   }
 
-  public static ElementRule mandatoryExist(ElementId id, List<FieldId> fieldIds) {
+  public static ElementRule mandatoryOrExist(ElementId id, List<FieldId> fieldIds) {
     return ElementRuleExpression.builder()
         .id(id)
         .type(ElementRuleType.MANDATORY)
@@ -88,6 +88,26 @@ public class CertificateElementRuleFactory {
             )
         )
         .build();
+  }
+
+  public static ElementRule mandatoryAndExist(ElementId id, List<FieldId> fieldIds) {
+    return ElementRuleExpression.builder()
+        .id(id)
+        .type(ElementRuleType.MANDATORY)
+        .expression(
+            new RuleExpression(
+                multipleAndExpressionWithExists(
+                    fieldIds.stream()
+                        .map(field -> singleExpression(field.value()))
+                        .toArray(String[]::new)
+                )
+            )
+        )
+        .build();
+  }
+
+  private static String multipleAndExpressionWithExists(String... expression) {
+    return multipleAndExpression("exists", expression);
   }
 
   public static ElementRule mandatoryNotEmpty(ElementId id, List<FieldId> fieldIds) {
@@ -144,6 +164,20 @@ public class CertificateElementRuleFactory {
     return Arrays.stream(expression).reduce("", (s, s2) -> {
       if (!s.isEmpty()) {
         s += " || ";
+      }
+      if (wrapWith != null) {
+        s += wrapWith + "(" + s2 + ")";
+      } else {
+        s += s2;
+      }
+      return s;
+    });
+  }
+
+  public static String multipleAndExpression(String wrapWith, String... expression) {
+    return Arrays.stream(expression).reduce("", (s, s2) -> {
+      if (!s.isEmpty()) {
+        s += " && ";
       }
       if (wrapWith != null) {
         s += wrapWith + "(" + s2 + ")";
