@@ -26,12 +26,29 @@ public class CertificateElementRuleFactory {
   }
 
   public static ElementRule show(ElementId id, FieldId fieldId) {
+    return show(
+        id,
+        new RuleExpression(
+            singleExpression(fieldId.value())
+        )
+    );
+  }
+
+  public static ElementRule show(ElementId id, RuleExpression ruleExpression) {
+    return ElementRuleExpression.builder()
+        .type(ElementRuleType.SHOW)
+        .id(id)
+        .expression(ruleExpression)
+        .build();
+  }
+
+  public static ElementRule showIfNot(ElementId id, FieldId fieldId) {
     return ElementRuleExpression.builder()
         .type(ElementRuleType.SHOW)
         .id(id)
         .expression(
             new RuleExpression(
-                singleExpression(fieldId.value())
+                not(singleExpression(fieldId.value()))
             )
         )
         .build();
@@ -97,6 +114,24 @@ public class CertificateElementRuleFactory {
         .build();
   }
 
+  public static ElementRule disableSubElements(ElementId id, List<FieldId> elementsForExpression,
+      List<FieldId> elementsToDisable) {
+    return ElementRuleExpression.builder()
+        .id(id)
+        .type(ElementRuleType.DISABLE_SUB_ELEMENT)
+        .affectedSubElements(elementsToDisable)
+        .expression(
+            new RuleExpression(
+                multipleOrExpressionWithExists(
+                    elementsForExpression.stream()
+                        .map(FieldId::value)
+                        .toArray(String[]::new)
+                )
+            )
+        )
+        .build();
+  }
+
   private static String singleExpression(String id) {
     return "$" + id;
   }
@@ -125,5 +160,9 @@ public class CertificateElementRuleFactory {
 
   public static String multipleOrExpressionWithNotEmpty(String... expression) {
     return multipleOrExpression("!empty", expression);
+  }
+
+  public static String not(String s) {
+    return String.format("!%s", s);
   }
 }

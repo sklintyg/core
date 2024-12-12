@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.integrationtest;
+package se.inera.intyg.certificateservice.integrationtest.fk3226;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
@@ -35,6 +35,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.value.Certi
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDiagnosis;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDiagnosisList;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0010;
+import se.inera.intyg.certificateservice.integrationtest.BaseIntegrationIT;
 
 public abstract class UpdateCertificateFK3226IT extends BaseIntegrationIT {
 

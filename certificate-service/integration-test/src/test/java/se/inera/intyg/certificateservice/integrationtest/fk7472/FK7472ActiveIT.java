@@ -71,14 +71,13 @@ import se.inera.intyg.certificateservice.integrationtest.SendCitizenCertificateI
 import se.inera.intyg.certificateservice.integrationtest.SignCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.SignCertificateNurseIT;
 import se.inera.intyg.certificateservice.integrationtest.UnitStatisticsIT;
-import se.inera.intyg.certificateservice.integrationtest.UpdateCertificateFK7472IT;
 import se.inera.intyg.certificateservice.integrationtest.UpdateCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ValidateCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.ValidateFK7472IT;
 
 public class FK7472ActiveIT {
 
   private static final String CERTIFICATE_TYPE = FK7472Constants.FK7472;
+  private static final String RECIPIENT = "FKASSA";
   private static final String ACTIVE_VERSION = FK7472Constants.VERSION;
   private static final String WRONG_VERSION = FK7472Constants.WRONG_VERSION;
   private static final String TYPE = FK7472Constants.TYPE;
@@ -636,6 +635,11 @@ public class FK7472ActiveIT {
   @Nested
   @DisplayName(TYPE + "Skicka")
   class SendCertificate extends SendCertificateIT {
+
+    @Override
+    protected String recipient() {
+      return RECIPIENT;
+    }
 
     @Override
     protected String type() {

@@ -61,6 +61,7 @@ public class XmlGeneratorValue {
     return elementData.stream()
         .filter(data -> !(data.value() instanceof ElementValueUnitContactInformation))
         .filter(data -> certificateModel.elementSpecification(data.id()).includeInXml())
+        .sorted((o1, o2) -> certificateModel.compare(o1.id(), o2.id()))
         .map(data -> {
               final var converter = converters.get(data.value().getClass());
               if (converter == null) {

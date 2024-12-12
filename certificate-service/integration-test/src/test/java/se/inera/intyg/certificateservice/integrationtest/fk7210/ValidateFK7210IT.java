@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.integrationtest;
+package se.inera.intyg.certificateservice.integrationtest.fk7210;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.Objects;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.integrationtest.BaseIntegrationIT;
 
 public abstract class ValidateFK7210IT extends BaseIntegrationIT {
 

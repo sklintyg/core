@@ -288,6 +288,77 @@ class XmlGeneratorValueTest {
     }
 
     @Test
+    void shouldMergeDelsvarWhenCustomMappingOnElementIdAndElementDataIsNotSorted() {
+      final var dataOne = ElementData.builder()
+          .id(new ElementId(QUESTION_ID_ONE))
+          .value(
+              ElementValueText.builder()
+                  .textId(new FieldId(ANSWER_ID_ONE))
+                  .text(TEXT_VALUE_ONE)
+                  .build()
+          )
+          .build();
+      final var dataTwo = ElementData.builder()
+          .id(new ElementId(QUESTION_ID_TWO))
+          .value(
+              ElementValueDateList.builder()
+                  .build()
+          )
+          .build();
+
+      doReturn(List.of(dataTwo, dataOne)).when(certificate).elementData();
+      doReturn(certificateModel).when(certificate).certificateModel();
+      final var elementSpecificationOne = mock(ElementSpecification.class);
+      when(elementSpecificationOne.includeInXml()).thenReturn(true);
+      final var elementSpecificationTwo = mock(ElementSpecification.class);
+      when(elementSpecificationTwo.includeInXml()).thenReturn(true);
+      doReturn(elementSpecificationOne).when(certificateModel)
+          .elementSpecification(new ElementId(QUESTION_ID_ONE));
+      doReturn(elementSpecificationTwo).when(certificateModel)
+          .elementSpecification(new ElementId(QUESTION_ID_TWO));
+      doReturn(-1).when(certificateModel)
+          .compare(new ElementId(QUESTION_ID_ONE), new ElementId(QUESTION_ID_TWO));
+      final var elementMapping = new ElementMapping(new ElementId(QUESTION_ID_ONE), null);
+      doReturn(null).when(elementSpecificationOne).mapping();
+      doReturn(elementMapping).when(elementSpecificationTwo).mapping();
+
+      final var expectedData = new Svar();
+      final var subAnswerOne = new Delsvar();
+      final var subAnswerTwo = new Delsvar();
+      expectedData.setId(QUESTION_ID_ONE);
+      subAnswerOne.setId(ANSWER_ID_ONE);
+      subAnswerOne.getContent().add(TEXT_VALUE_ONE);
+      expectedData.getDelsvar().add(subAnswerOne);
+      subAnswerTwo.setId(ANSWER_ID_TWO);
+      subAnswerTwo.getContent().add(TEXT_VALUE_TWO);
+      expectedData.getDelsvar().add(subAnswerTwo);
+
+      final var answerOne = new Svar();
+      answerOne.setId(QUESTION_ID_ONE);
+      answerOne.getDelsvar().add(subAnswerOne);
+      final var answerTwo = new Svar();
+      answerTwo.setId(QUESTION_ID_TWO);
+      answerTwo.getDelsvar().add(subAnswerTwo);
+
+      doReturn(List.of(answerOne)).when(xmlGeneratorElementDataOne).generate(eq(dataOne), any());
+      doReturn(List.of(answerTwo)).when(xmlGeneratorElementDataTwo).generate(eq(dataTwo), any());
+
+      final var response = xmlGeneratorValue.generate(certificate);
+
+      assertAll(
+          () -> assertEquals(expectedData.getId(), response.get(0).getId()),
+          () -> assertEquals(expectedData.getDelsvar().get(0).getId(),
+              response.get(0).getDelsvar().get(0).getId()),
+          () -> assertEquals(expectedData.getDelsvar().get(0).getContent().get(0),
+              response.get(0).getDelsvar().get(0).getContent().get(0)),
+          () -> assertEquals(expectedData.getDelsvar().get(1).getId(),
+              response.get(0).getDelsvar().get(1).getId()),
+          () -> assertEquals(expectedData.getDelsvar().get(1).getContent().get(0),
+              response.get(0).getDelsvar().get(1).getContent().get(0))
+      );
+    }
+
+    @Test
     void shouldMergeDelsvarWhenCustomMappingOnElementIdAndFieldId() {
       final var dataOne = ElementData.builder()
           .id(new ElementId(QUESTION_ID_ONE))

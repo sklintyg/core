@@ -62,6 +62,7 @@ public class FK7809ActiveIT {
   private static final String TYPE = FK7809Constants.TYPE;
   private static final ElementId ELEMENT_ID = QUESTION_PROGNOS_ID;
   private static final String VALUE = "Svarstext för prognos.";
+  private static final String RECIPIENT = "FKASSA";
 
   @DynamicPropertySource
   static void testProperties(DynamicPropertyRegistry registry) {
@@ -574,6 +575,11 @@ public class FK7809ActiveIT {
   @Nested
   @DisplayName(TYPE + "Skicka")
   class SendCertificate extends SendCertificateIT {
+
+    @Override
+    protected String recipient() {
+      return RECIPIENT;
+    }
 
     @Override
     protected String type() {

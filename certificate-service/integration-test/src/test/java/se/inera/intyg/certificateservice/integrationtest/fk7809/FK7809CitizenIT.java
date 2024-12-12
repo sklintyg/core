@@ -17,7 +17,7 @@ class FK7809CitizenIT {
 
   @DynamicPropertySource
   static void testProperties(DynamicPropertyRegistry registry) {
-    registry.add("certificate.model.fk3226.v1_0.active.from", () -> "2024-01-01T00:00:00");
+    registry.add("certificate.model.fk7809.v1_0.active.from", () -> "2024-01-01T00:00:00");
   }
 
   @Nested
