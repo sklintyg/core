@@ -17,7 +17,7 @@ public class QuestionNeurologiskSjukdom {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionNeurologiskSjukdom() {
+  public static ElementSpecification questionNeurologiskSjukdom(ElementSpecification... children) {
     return ElementSpecification.builder()
         .id(QUESTION_NEUROLOGISK_SJUKDOM_ID)
         .configuration(
@@ -47,6 +47,7 @@ public class QuestionNeurologiskSjukdom {
                 )
             )
         )
+        .children(List.of(children))
         .build();
   }
 }

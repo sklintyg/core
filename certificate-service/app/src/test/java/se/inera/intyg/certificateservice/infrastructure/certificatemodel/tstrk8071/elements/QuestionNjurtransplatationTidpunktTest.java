@@ -34,7 +34,7 @@ class QuestionNjurtransplatationTidpunktTest {
   @Test
   void shallIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationTextField.builder()
-        .name("Ange tidpunkt")
+        .name("Ange tidpunkt för transplantationen")
         .id(new FieldId("15.3"))
         .build();
 

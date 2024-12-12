@@ -31,7 +31,7 @@ public class QuestionNjurtransplatationTidpunkt {
         .configuration(
             ElementConfigurationTextField.builder()
                 .id(QUESTION_NJURTRANSPLATATION_TIDPUNKT_FIELD_ID)
-                .name("Ange tidpunkt")
+                .name("Ange tidpunkt för transplantationen")
                 .build()
         )
         .rules(

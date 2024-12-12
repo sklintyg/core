@@ -32,7 +32,7 @@ public class QuestionDemensBeskrivning {
             ElementConfigurationTextArea.builder()
                 .id(QUESTION_DEMENS_BESKRIVNING_FIELD_ID)
                 .name(
-                    "Ange vilka tecken, eventuell diagnos och grad? (Med grader avses lindrig, måttlig/medelsvår eller grav/allvarlig.")
+                    "Ange vilka tecken, eventuell diagnos och grad? (Med grader avses lindrig, måttlig/medelsvår eller grav/allvarlig.)")
                 .build()
         )
         .rules(

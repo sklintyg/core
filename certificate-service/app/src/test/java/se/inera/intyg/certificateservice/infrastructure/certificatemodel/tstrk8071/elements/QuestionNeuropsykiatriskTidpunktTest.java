@@ -34,9 +34,9 @@ class QuestionNeuropsykiatriskTidpunktTest {
   @Test
   void shallIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationTextField.builder()
-        .name("När hade personen senast läkarkontakt med anledning av sin diagnos?")
-        .description("Ange tidpunkt")
         .id(new FieldId("20.3"))
+        .name("När hade personen senast läkarkontakt med anledning av sin diagnos?")
+        .label("Ange tidpunkt")
         .build();
 
     final var element = QuestionNeuropsykiatriskTidpunkt.questionNeuropsykiatriskTidpunkt();

@@ -21,6 +21,8 @@ public class CategoryOvrigKommentar {
         .configuration(
             ElementConfigurationCategory.builder()
                 .name("Övrig kommentar")
+                .description(
+                    "Övriga upplysningar som är relevanta ur trafiksäkerhetssynpunkt. Även exempelvis synpunkter/förslag om att personen bör genomgå ytterligare medicinsk utredning och orsak till detta.")
                 .build()
         )
         .children(

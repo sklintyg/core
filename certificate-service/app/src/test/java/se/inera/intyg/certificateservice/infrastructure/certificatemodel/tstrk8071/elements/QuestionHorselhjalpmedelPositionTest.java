@@ -108,7 +108,7 @@ class QuestionHorselhjalpmedelPositionTest {
   void shallIncludeMapping() {
     final var element = QuestionHorselhjalpmedelPosition.questionHorselhjalpmedelPosition();
 
-    assertEquals(new ElementMapping(new ElementId("9.2"), null), element.mapping());
+    assertEquals(new ElementMapping(new ElementId("9"), null), element.mapping());
   }
 
   @Nested

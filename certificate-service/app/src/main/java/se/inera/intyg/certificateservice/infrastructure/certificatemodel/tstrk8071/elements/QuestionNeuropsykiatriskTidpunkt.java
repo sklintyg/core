@@ -31,7 +31,7 @@ public class QuestionNeuropsykiatriskTidpunkt {
             ElementConfigurationTextField.builder()
                 .id(QUESTION_NEUROPSYKIATRISK_TIDPUNKT_FIELD_ID)
                 .name("När hade personen senast läkarkontakt med anledning av sin diagnos?")
-                .description("Ange tidpunkt")
+                .label("Ange tidpunkt")
                 .build()
         )
         .rules(

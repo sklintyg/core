@@ -21,8 +21,6 @@ class CategorySynfunktionTest {
   void shallIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationCategory.builder()
         .name("Synfunktioner")
-        .description(
-            "Uppgifter om synskärpa med korrektion, om det vid undersökningen behövs korrektion för att uppfylla kraven i 2 kap. 1 eller 2 § medicinföreskrifterna.")
         .build();
 
     final var element = CategorySynfunktion.categorySynfunktion();

@@ -66,6 +66,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionMissbrukVard.questionMissbrukVard;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionMissbrukVardBeskrivning.questionMissbrukVardBeskrivning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionNeurologiskSjukdom.questionNeurologiskSjukdom;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionNeurologiskSjukdomBeskrivning.questionNeurologiskSjukdomBeskrivning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionNeuropsykiatrisk.questionNeuropsykiatrisk;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionNeuropsykiatriskLakemedel.questionNeuropsykiatriskLakemedel;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionNeuropsykiatriskLakemedelBeskrivning.questionNeuropsykiatriskLakemedelBeskrivning;
@@ -236,7 +237,9 @@ public class CertificateModelFactoryTSTRK8071 implements CertificateModelFactory
                     questionDiabetes()
                 ),
                 categoryNeurologiskaSjukdomar(
-                    questionNeurologiskSjukdom()
+                    questionNeurologiskSjukdom(
+                        questionNeurologiskSjukdomBeskrivning()
+                    )
                 ),
                 categoryEpilepsi(
                     questionEpilepsi(

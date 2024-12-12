@@ -35,7 +35,7 @@ class QuestionDemensBeskrivningTest {
   void shallIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationTextArea.builder()
         .name(
-            "Ange vilka tecken, eventuell diagnos och grad? (Med grader avses lindrig, måttlig/medelsvår eller grav/allvarlig.")
+            "Ange vilka tecken, eventuell diagnos och grad? (Med grader avses lindrig, måttlig/medelsvår eller grav/allvarlig.)")
         .id(new FieldId("16.3"))
         .build();
 

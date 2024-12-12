@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionHorsel.QUESTION_HORSEL_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionHorselhjalpmedel.QUESTION_HORSELHJALPMEDEL_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionHorselhjalpmedel.QUESTION_HORSELHJALPMEDEL_ID;
 
@@ -67,7 +68,7 @@ public class QuestionHorselhjalpmedelPosition {
             )
         )
         .shouldValidate(ShouldValidateFactory.radioBoolean(QUESTION_HORSELHJALPMEDEL_ID))
-        .mapping(new ElementMapping(QUESTION_HORSELHJALPMEDEL_ID, null))
+        .mapping(new ElementMapping(QUESTION_HORSEL_ID, null))
         .children(List.of(children))
         .build();
   }
