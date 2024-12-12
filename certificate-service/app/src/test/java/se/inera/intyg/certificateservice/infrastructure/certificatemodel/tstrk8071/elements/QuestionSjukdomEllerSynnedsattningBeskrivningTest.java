@@ -11,6 +11,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
@@ -143,5 +144,12 @@ class QuestionSjukdomEllerSynnedsattningBeskrivningTest {
 
       assertFalse(shouldValidate.test(elementData));
     }
+  }
+
+  @Test
+  void shallIncludeMapping() {
+    final var element = QuestionSjukdomshistorik.questionSjukdomshistorik();
+
+    assertEquals(new ElementMapping(new ElementId("7"), null), element.mapping());
   }
 }
