@@ -1,9 +1,17 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs0002.GR_II_III;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs0002.TAXI;
 
 import java.util.List;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
@@ -80,5 +88,89 @@ class QuestionHorselhjalpmedelTest {
     final var element = QuestionHorselhjalpmedel.questionHorselhjalpmedel();
 
     assertEquals(new ElementMapping(new ElementId("9"), null), element.mapping());
+  }
+
+  @Nested
+  class ShouldValidate {
+
+    @Test
+    void shallReturnTrueIfCodeIsGR23() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId("1"))
+              .value(
+                  ElementValueCode.builder()
+                      .codeId(new FieldId(GR_II_III.code()))
+                      .build()
+              )
+              .build()
+      );
+
+      final var element = QuestionHorselhjalpmedel.questionHorselhjalpmedel();
+
+      final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
+
+      assertTrue(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shallReturnTrueIfCodeIsTaxi() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId("1"))
+              .value(
+                  ElementValueCode.builder()
+                      .codeId(new FieldId(TAXI.code()))
+                      .build()
+              )
+              .build()
+      );
+
+      final var element = QuestionHorselhjalpmedel.questionHorselhjalpmedel();
+
+      final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
+
+      assertTrue(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shallReturnFalseIfElementMissing() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId("7.1"))
+              .value(
+                  ElementValueBoolean.builder()
+                      .value(true)
+                      .build()
+              )
+              .build()
+      );
+
+      final var element = QuestionHorselhjalpmedel.questionHorselhjalpmedel();
+
+      final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
+
+      assertFalse(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shallReturnFalseIfElementCodeIsNotGR23OrTaxi() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId("1"))
+              .value(
+                  ElementValueCode.builder()
+                      .codeId(new FieldId("TEST"))
+                      .build()
+              )
+              .build()
+      );
+
+      final var element = QuestionHorselhjalpmedel.questionHorselhjalpmedel();
+
+      final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
+
+      assertFalse(shouldValidate.test(elementData));
+    }
   }
 }

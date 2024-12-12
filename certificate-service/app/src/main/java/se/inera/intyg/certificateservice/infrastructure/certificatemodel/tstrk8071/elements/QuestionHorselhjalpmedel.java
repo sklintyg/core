@@ -14,6 +14,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
 
 public class QuestionHorselhjalpmedel {
 
@@ -60,6 +61,11 @@ public class QuestionHorselhjalpmedel {
         )
         .mapping(new ElementMapping(QUESTION_HORSEL_ID, null))
         .children(List.of(children))
+        .shouldValidate(ShouldValidateFactory.codes(
+                QUESTION_INTYGET_AVSER_ID,
+                List.of(new FieldId(GR_II_III.code()), new FieldId(TAXI.code()))
+            )
+        )
         .build();
   }
 }
