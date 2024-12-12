@@ -39,7 +39,7 @@ public class PrintCertificateMetadataConverter {
     try {
       final var image = ImageIO.read(inputStream);
 
-      ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+      final var byteArrayOutputStream = new ByteArrayOutputStream();
       ImageIO.write(image, "PNG", byteArrayOutputStream);
       return byteArrayOutputStream.toByteArray();
     } catch (IOException e) {

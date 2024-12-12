@@ -31,7 +31,7 @@ import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 
 class CertificateModelFactoryTSTRK8071Test {
 
-  private static final String TYPE = "ts";
+  private static final String TYPE = "tstrk8071";
   private static final String VERSION = "1.0";
   private static final String LOGICAL_ADDRESS = "L-A";
 
