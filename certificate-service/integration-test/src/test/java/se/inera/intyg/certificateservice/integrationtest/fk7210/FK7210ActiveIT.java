@@ -48,11 +48,11 @@ import se.inera.intyg.certificateservice.integrationtest.SignCertificateNurseIT;
 import se.inera.intyg.certificateservice.integrationtest.UnitStatisticsIT;
 import se.inera.intyg.certificateservice.integrationtest.UpdateCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ValidateCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.ValidateFK7210IT;
 
 public class FK7210ActiveIT {
 
   private static final String CERTIFICATE_TYPE = FK7210Constants.FK7210;
+  private static final String RECIPIENT = "FKASSA";
   private static final String ACTIVE_VERSION = FK7210Constants.VERSION;
   private static final String WRONG_VERSION = FK7210Constants.WRONG_VERSION;
   private static final String TYPE = FK7210Constants.TYPE;
@@ -421,6 +421,11 @@ public class FK7210ActiveIT {
   @Nested
   @DisplayName(TYPE + "Skicka")
   class SendCertificate extends SendCertificateIT {
+
+    @Override
+    protected String recipient() {
+      return RECIPIENT;
+    }
 
     @Override
     protected String type() {
