@@ -13,11 +13,6 @@ public class ElementValueVisualAcuities implements ElementValue {
 
   @Override
   public boolean isEmpty() {
-    return rightEye.withoutCorrection().value() == null
-        && rightEye.withCorrection().value() == null
-        && leftEye.withoutCorrection().value() == null
-        && leftEye.withCorrection().value() == null
-        && binocular.withoutCorrection().value() == null
-        && binocular.withCorrection().value() == null;
+    return rightEye.isEmpty() && leftEye.isEmpty() && binocular.isEmpty();
   }
 }
