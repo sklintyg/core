@@ -109,7 +109,7 @@ class QuestionStrokePavarkanTest {
   void shallIncludeMapping() {
     final var element = QuestionStrokePavarkan.questionStrokePavarkan();
 
-    assertEquals(new ElementMapping(new ElementId("11.9"), null), element.mapping());
+    assertEquals(new ElementMapping(new ElementId("11"), null), element.mapping());
   }
 
   @Nested

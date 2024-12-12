@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionEpilepsi.QUESTION_EPILEPSI_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionMedvetandestorning.QUESTION_MEDVETANDESTORNING_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionMedvetandestorning.QUESTION_MEDVETANDESTORNING_ID;
 
@@ -52,7 +53,7 @@ public class QuestionMedvetandestorningTidpunkt {
             ShouldValidateFactory.radioBoolean(QUESTION_MEDVETANDESTORNING_ID)
         )
         .mapping(
-            new ElementMapping(QUESTION_MEDVETANDESTORNING_ID, null)
+            new ElementMapping(QUESTION_EPILEPSI_ID, null)
         )
         .validations(
             List.of(

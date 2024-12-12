@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionArytmi.QUESTION_ARYTMI_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionArytmi.QUESTION_ARYTMI_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionHjartsjukdom.QUESTION_HJARTSJUKDOM_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextField;
@@ -51,7 +52,7 @@ public class QuestionArytmiBeskrivning {
         .shouldValidate(
             ShouldValidateFactory.radioBoolean(QUESTION_ARYTMI_ID)
         )
-        .mapping(new ElementMapping(QUESTION_ARYTMI_ID, null))
+        .mapping(new ElementMapping(QUESTION_HJARTSJUKDOM_ID, null))
         .validations(
             List.of(
                 ElementValidationText.builder()

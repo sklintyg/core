@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionEpilepsi.QUESTION_EPILEPSI_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionEpilepsiAnfall.QUESTION_EPILEPSI_ANFALL_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionEpilepsiAnfall.QUESTION_EPILEPSI_ANFALL_ID;
 
@@ -52,7 +53,7 @@ public class QuestionEpilepsiAnfallBeskrivning {
             ShouldValidateFactory.radioBoolean(QUESTION_EPILEPSI_ANFALL_ID)
         )
         .mapping(
-            new ElementMapping(QUESTION_EPILEPSI_ANFALL_ID, null)
+            new ElementMapping(QUESTION_EPILEPSI_ID, null)
         )
         .validations(
             List.of(

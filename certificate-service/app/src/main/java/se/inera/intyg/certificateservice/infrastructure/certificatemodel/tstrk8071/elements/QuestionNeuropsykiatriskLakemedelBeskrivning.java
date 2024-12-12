@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionNeuropsykiatrisk.QUESTION_NEUROPSYKIATRISK_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionNeuropsykiatriskLakemedel.QUESTION_NEUROPSYKIATRISK_LAKEMEDEL_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionNeuropsykiatriskLakemedel.QUESTION_NEUROPSYKIATRISK_LAKEMEDEL_ID;
 
@@ -52,7 +53,7 @@ public class QuestionNeuropsykiatriskLakemedelBeskrivning {
             ShouldValidateFactory.radioBoolean(QUESTION_NEUROPSYKIATRISK_LAKEMEDEL_ID)
         )
         .mapping(
-            new ElementMapping(QUESTION_NEUROPSYKIATRISK_LAKEMEDEL_ID, null)
+            new ElementMapping(QUESTION_NEUROPSYKIATRISK_ID, null)
         )
         .validations(
             List.of(

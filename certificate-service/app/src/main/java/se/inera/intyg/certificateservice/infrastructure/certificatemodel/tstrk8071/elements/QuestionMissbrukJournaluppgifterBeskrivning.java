@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionMissbruk.QUESTION_MISSBRUK_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionMissbrukJournaluppgifter.QUESTION_MISSBRUK_JOURNALUPPGIFTER_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionMissbrukJournaluppgifter.QUESTION_MISSBRUK_JOURNALUPPGIFTER_ID;
 
@@ -52,7 +53,7 @@ public class QuestionMissbrukJournaluppgifterBeskrivning {
             ShouldValidateFactory.radioBoolean(QUESTION_MISSBRUK_JOURNALUPPGIFTER_ID)
         )
         .mapping(
-            new ElementMapping(QUESTION_MISSBRUK_JOURNALUPPGIFTER_ID, null)
+            new ElementMapping(QUESTION_MISSBRUK_ID, null)
         )
         .validations(
             List.of(

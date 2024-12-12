@@ -87,7 +87,7 @@ class QuestionMissbrukProvtagningTest {
   void shallIncludeMapping() {
     final var element = QuestionMissbrukProvtagning.questionMissbrukProvtagning();
 
-    assertEquals(new ElementMapping(new ElementId("18.3"), null), element.mapping());
+    assertEquals(new ElementMapping(new ElementId("18"), null), element.mapping());
   }
 
   @Nested

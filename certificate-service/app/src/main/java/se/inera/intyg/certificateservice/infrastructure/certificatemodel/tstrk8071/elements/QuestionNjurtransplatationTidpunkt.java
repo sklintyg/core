@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionNjurfunktion.QUESTION_NJURFUNKTION_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionNjurtransplatation.QUESTION_NJURTRANSPLATATION_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionNjurtransplatation.QUESTION_NJURTRANSPLATATION_ID;
 
@@ -52,7 +53,7 @@ public class QuestionNjurtransplatationTidpunkt {
             ShouldValidateFactory.radioBoolean(QUESTION_NJURTRANSPLATATION_ID)
         )
         .mapping(
-            new ElementMapping(QUESTION_NJURTRANSPLATATION_ID, null)
+            new ElementMapping(QUESTION_NJURFUNKTION_ID, null)
         )
         .validations(
             List.of(

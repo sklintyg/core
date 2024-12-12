@@ -86,7 +86,7 @@ class QuestionNeuropsykiatriskLakemedelBeskrivningTest {
   void shallIncludeMapping() {
     final var element = QuestionNeuropsykiatriskLakemedelBeskrivning.questionNeuropsykiatriskLakemedelBeskrivning();
 
-    assertEquals(new ElementMapping(new ElementId("20.4"), null), element.mapping());
+    assertEquals(new ElementMapping(new ElementId("20"), null), element.mapping());
   }
 
   @Nested

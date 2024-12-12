@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionNeuropsykiatrisk.QUESTION_NEUROPSYKIATRISK_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionPsykiskUtvecklingsstorning.QUESTION_PSYKISK_UTVECKLINGSSTORNING_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionPsykiskUtvecklingsstorning.QUESTION_PSYKISK_UTVECKLINGSSTORNING_ID;
 
@@ -53,7 +54,7 @@ public class QuestionPsykiskUtvecklingsstorningAllvarlig {
             ShouldValidateFactory.radioBoolean(QUESTION_PSYKISK_UTVECKLINGSSTORNING_ID)
         )
         .mapping(
-            new ElementMapping(QUESTION_PSYKISK_UTVECKLINGSSTORNING_ID, null)
+            new ElementMapping(QUESTION_NEUROPSYKIATRISK_ID, null)
         )
         .validations(
             List.of(

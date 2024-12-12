@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements;
 
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionMissbruk.QUESTION_MISSBRUK_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionMissbrukVard.QUESTION_MISSBRUK_VARD_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionMissbrukVard.QUESTION_MISSBRUK_VARD_ID;
 
@@ -54,7 +55,7 @@ public class QuestionMissbrukVardBeskrivning {
             ShouldValidateFactory.radioBoolean(QUESTION_MISSBRUK_VARD_ID)
         )
         .mapping(
-            new ElementMapping(QUESTION_MISSBRUK_VARD_ID, null)
+            new ElementMapping(QUESTION_MISSBRUK_ID, null)
         )
         .validations(
             List.of(

@@ -86,7 +86,7 @@ class QuestionLakemedelBeskrivningTest {
   void shallIncludeMapping() {
     final var element = QuestionLakemedelBeskrivning.questionLakemedelBeskrivning();
 
-    assertEquals(new ElementMapping(new ElementId("18.8"), null), element.mapping());
+    assertEquals(new ElementMapping(new ElementId("18"), null), element.mapping());
   }
 
   @Nested

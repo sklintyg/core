@@ -87,7 +87,7 @@ class QuestionDemensBeskrivningTest {
   void shallIncludeMapping() {
     final var element = QuestionDemensBeskrivning.questionDemensBeskrivning();
 
-    assertEquals(new ElementMapping(new ElementId("16.2"), null), element.mapping());
+    assertEquals(new ElementMapping(new ElementId("16"), null), element.mapping());
   }
 
   @Nested

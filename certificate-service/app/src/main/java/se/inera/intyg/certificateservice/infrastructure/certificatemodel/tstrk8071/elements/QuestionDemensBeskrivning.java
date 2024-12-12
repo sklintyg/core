@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionDemens.QUESTION_DEMENS_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionDemens.QUESTION_DEMENS_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionKognitivStorning.QUESTION_KOGNITIV_STORNING_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
@@ -53,7 +54,7 @@ public class QuestionDemensBeskrivning {
             ShouldValidateFactory.radioBoolean(QUESTION_DEMENS_ID)
         )
         .mapping(
-            new ElementMapping(QUESTION_DEMENS_ID, null)
+            new ElementMapping(QUESTION_KOGNITIV_STORNING_ID, null)
         )
         .validations(
             List.of(

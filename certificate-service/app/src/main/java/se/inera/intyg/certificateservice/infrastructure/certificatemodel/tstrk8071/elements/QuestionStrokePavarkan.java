@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionHjartsjukdom.QUESTION_HJARTSJUKDOM_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionStroke.QUESTION_STROKE_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionStroke.QUESTION_STROKE_ID;
 
@@ -60,7 +61,7 @@ public class QuestionStrokePavarkan {
             )
         )
         .shouldValidate(ShouldValidateFactory.radioBoolean(QUESTION_STROKE_ID))
-        .mapping(new ElementMapping(QUESTION_STROKE_ID, null))
+        .mapping(new ElementMapping(QUESTION_HJARTSJUKDOM_ID, null))
         .validations(
             List.of(
                 ElementValidationCode.builder()

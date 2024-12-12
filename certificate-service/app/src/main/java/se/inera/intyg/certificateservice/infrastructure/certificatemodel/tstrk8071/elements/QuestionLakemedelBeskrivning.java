@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionLakemedel.QUESTION_LAKEMEDEL_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionLakemedel.QUESTION_LAKEMEDEL_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.tstrk8071.elements.QuestionMissbruk.QUESTION_MISSBRUK_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
@@ -52,7 +53,7 @@ public class QuestionLakemedelBeskrivning {
             ShouldValidateFactory.radioBoolean(QUESTION_LAKEMEDEL_ID)
         )
         .mapping(
-            new ElementMapping(QUESTION_LAKEMEDEL_ID, null)
+            new ElementMapping(QUESTION_MISSBRUK_ID, null)
         )
         .validations(
             List.of(

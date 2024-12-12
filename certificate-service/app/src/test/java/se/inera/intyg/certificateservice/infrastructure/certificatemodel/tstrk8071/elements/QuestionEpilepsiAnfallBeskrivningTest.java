@@ -86,7 +86,7 @@ class QuestionEpilepsiAnfallBeskrivningTest {
   void shallIncludeMapping() {
     final var element = QuestionEpilepsiAnfallBeskrivning.questionEpilepsiAnfallBeskrivning();
 
-    assertEquals(new ElementMapping(new ElementId("14.3"), null), element.mapping());
+    assertEquals(new ElementMapping(new ElementId("14"), null), element.mapping());
   }
 
   @Nested

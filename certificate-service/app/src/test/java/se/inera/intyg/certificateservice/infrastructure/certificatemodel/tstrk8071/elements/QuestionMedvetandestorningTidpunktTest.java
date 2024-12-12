@@ -86,7 +86,7 @@ class QuestionMedvetandestorningTidpunktTest {
   void shallIncludeMapping() {
     final var element = QuestionMedvetandestorningTidpunkt.questionMedvetandestorningTidpunkt();
 
-    assertEquals(new ElementMapping(new ElementId("14.8"), null), element.mapping());
+    assertEquals(new ElementMapping(new ElementId("14"), null), element.mapping());
   }
 
   @Nested

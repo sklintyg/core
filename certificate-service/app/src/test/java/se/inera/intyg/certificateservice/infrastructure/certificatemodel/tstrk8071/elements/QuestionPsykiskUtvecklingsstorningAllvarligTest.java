@@ -82,7 +82,7 @@ class QuestionPsykiskUtvecklingsstorningAllvarligTest {
   void shallIncludeMapping() {
     final var element = QuestionPsykiskUtvecklingsstorningAllvarlig.questionPsykiskUtvecklingsstorningAllvarlig();
 
-    assertEquals(new ElementMapping(new ElementId("20.6"), null), element.mapping());
+    assertEquals(new ElementMapping(new ElementId("20"), null), element.mapping());
   }
 
   @Nested

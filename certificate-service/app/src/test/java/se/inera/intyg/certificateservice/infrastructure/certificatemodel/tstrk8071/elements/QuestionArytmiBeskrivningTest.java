@@ -86,7 +86,7 @@ class QuestionArytmiBeskrivningTest {
   void shallIncludeMapping() {
     final var element = QuestionArytmiBeskrivning.questionArytmiBeskrivning();
 
-    assertEquals(new ElementMapping(new ElementId("11.5"), null), element.mapping());
+    assertEquals(new ElementMapping(new ElementId("11"), null), element.mapping());
   }
 
   @Nested
