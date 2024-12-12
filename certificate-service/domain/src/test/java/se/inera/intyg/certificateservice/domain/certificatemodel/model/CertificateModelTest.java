@@ -715,4 +715,98 @@ class CertificateModelTest {
       assertFalse(certificateModel.certificateActionExists(CertificateActionType.CREATE));
     }
   }
+
+  @Nested
+  class TestComparator {
+
+    @Test
+    void shouldReturnMinusOneIfFirstElementIsBeforeSecondElement() {
+      final var firstElement = new ElementId("FIRST_ELEMENT");
+      final var secondElement = new ElementId("SECOND_ELEMENT");
+      final var certificateModel = CertificateModel.builder()
+          .elementSpecifications(
+              List.of(
+                  dateElementSpecificationBuilder()
+                      .id(firstElement)
+                      .build(),
+                  dateElementSpecificationBuilder()
+                      .id(secondElement)
+                      .build()
+              )
+          )
+          .build();
+
+      assertEquals(-1, certificateModel.compare(firstElement, secondElement));
+    }
+
+    @Test
+    void shouldReturnPlusOneIfFirstElementIsAfterSecondElement() {
+      final var firstElement = new ElementId("FIRST_ELEMENT");
+      final var secondElement = new ElementId("SECOND_ELEMENT");
+      final var certificateModel = CertificateModel.builder()
+          .elementSpecifications(
+              List.of(
+                  dateElementSpecificationBuilder()
+                      .id(secondElement)
+                      .build(),
+                  dateElementSpecificationBuilder()
+                      .id(firstElement)
+                      .build()
+              )
+          )
+          .build();
+
+      assertEquals(1, certificateModel.compare(firstElement, secondElement));
+    }
+
+    @Test
+    void shouldReturnMinusOneIfFirstElementIsBeforeSecondElementThatIsAChildElement() {
+      final var firstElement = new ElementId("FIRST_ELEMENT");
+      final var secondElement = new ElementId("SECOND_ELEMENT");
+      final var certificateModel = CertificateModel.builder()
+          .elementSpecifications(
+              List.of(
+                  dateElementSpecificationBuilder()
+                      .id(firstElement)
+                      .children(
+                          List.of(
+                              dateElementSpecificationBuilder()
+                                  .id(secondElement)
+                                  .build()
+                          )
+                      )
+                      .build()
+
+              )
+          )
+          .build();
+
+      assertEquals(-1, certificateModel.compare(firstElement, secondElement));
+    }
+  }
+
+  @Test
+  void shouldReturnPlusOneIfFirstElementIsAfterSecondElementThatIsAParentElement() {
+    final var firstElement = new ElementId("FIRST_ELEMENT");
+    final var secondElement = new ElementId("SECOND_ELEMENT");
+    final var certificateModel = CertificateModel.builder()
+        .elementSpecifications(
+            List.of(
+                dateElementSpecificationBuilder()
+                    .id(secondElement)
+                    .children(
+                        List.of(
+                            dateElementSpecificationBuilder()
+                                .id(firstElement)
+                                .build()
+                        )
+                    )
+                    .build()
+
+            )
+        )
+        .build();
+
+    assertEquals(1, certificateModel.compare(firstElement, secondElement));
+  }
 }

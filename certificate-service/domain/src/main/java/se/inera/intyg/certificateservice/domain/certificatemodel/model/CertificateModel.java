@@ -2,9 +2,11 @@ package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -22,7 +24,7 @@ import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 @Value
 @Builder
 @RequiredArgsConstructor
-public class CertificateModel {
+public class CertificateModel implements Comparator<ElementId> {
 
   CertificateModelId id;
   Code type;
@@ -123,5 +125,26 @@ public class CertificateModel {
             specification -> specification.certificateActionType().equals(certificateActionType)
         )
         .findFirst();
+  }
+
+  @Override
+  public int compare(ElementId elementId1, ElementId elementId2) {
+    final var flattened = flatten(elementSpecifications);
+    return Integer.compare(flattened.indexOf(elementId1), flattened.indexOf(elementId2));
+  }
+
+  private static List<ElementId> flatten(List<ElementSpecification> elementSpecifications) {
+    if (elementSpecifications.isEmpty()) {
+      return Collections.emptyList();
+    }
+
+    return elementSpecifications.stream()
+        .flatMap(element ->
+            Stream.concat(
+                Stream.of(element.id()),
+                flatten(element.children()).stream()
+            )
+        )
+        .toList();
   }
 }
