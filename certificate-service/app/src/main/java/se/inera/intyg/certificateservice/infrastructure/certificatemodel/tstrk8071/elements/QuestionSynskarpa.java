@@ -15,6 +15,10 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionSynskarpa {
 
+  private QuestionSynskarpa() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static final ElementId QUESTION_SYNSKARPA_ID = new ElementId("5");
   public static final FieldId QUESTION_SYNSKARPA_FIELD_ID = new FieldId("5.1");
   private static final String RIGHT_EYE_WITHOUT_CORRECTION_ID = "5.2";
