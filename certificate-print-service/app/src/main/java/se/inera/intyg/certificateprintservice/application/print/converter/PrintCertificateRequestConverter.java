@@ -14,6 +14,12 @@ public class PrintCertificateRequestConverter {
 
   public PrintCertificateRequest convert(PrintCertificateRequestDTO request) {
     return PrintCertificateRequest.builder()
+        .categories(
+            request.getCategories().stream()
+                .map(categoryConverter::convert)
+                .toList()
+        )
+        .metadata(metadataConverter.convert(request.getMetadata()))
         .build();
   }
 }

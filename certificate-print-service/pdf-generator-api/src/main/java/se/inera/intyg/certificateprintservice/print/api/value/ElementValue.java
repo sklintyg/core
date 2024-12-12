@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateprintservice.application.print.dto.value;
+package se.inera.intyg.certificateprintservice.print.api.value;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
@@ -8,9 +8,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     use = JsonTypeInfo.Id.NAME,
     property = "type")
 @JsonSubTypes({
-    @Type(value = ElementSimplifiedValueList.class, name = "LIST"),
-    @Type(value = ElementSimplifiedValueText.class, name = "TEXT"),
+    @Type(value = ElementValueList.class, name = "LIST"),
+    @Type(value = ElementValueText.class, name = "TEXT"),
 })
-public interface ElementSimplifiedValue {
+public interface ElementValue {
 
 }
