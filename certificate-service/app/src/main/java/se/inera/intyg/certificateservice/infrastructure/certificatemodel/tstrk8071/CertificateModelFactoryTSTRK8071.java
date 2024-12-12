@@ -126,7 +126,7 @@ public class CertificateModelFactoryTSTRK8071 implements CertificateModelFactory
   @Value("${sendmessagetots.logicaladdress}")
   private String tsLogicalAddress;
 
-  private static final String TSTRK_8071 = "ts";
+  private static final String TSTRK_8071 = "tstrk8071";
   private static final String VERSION = "1.0";
   private static final String NAME = "Läkarintyg avseende högre körkortsbehörigheter, taxiförarlegitimation och på begäran av Transportstyrelsen";
   private static final String DESCRIPTION = """
