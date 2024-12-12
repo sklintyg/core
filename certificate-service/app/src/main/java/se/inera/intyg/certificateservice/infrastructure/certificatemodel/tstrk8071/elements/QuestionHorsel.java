@@ -58,7 +58,7 @@ public class QuestionHorsel {
                 )
             )
         )
-        .shouldValidate(ShouldValidateFactory.codes(
+        .shouldValidate(ShouldValidateFactory.codeList(
                 QUESTION_INTYGET_AVSER_ID,
                 List.of(new FieldId(GR_II_III.code()), new FieldId(TAXI.code()))
             )

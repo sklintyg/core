@@ -62,7 +62,7 @@ public class QuestionRorlighetHjalpaPassagerare {
                 )
             )
         )
-        .shouldValidate(ShouldValidateFactory.codes(QUESTION_INTYGET_AVSER_ID,
+        .shouldValidate(ShouldValidateFactory.codeList(QUESTION_INTYGET_AVSER_ID,
             List.of(new FieldId(GR_II_III.code()), new FieldId(TAXI.code()))))
         .mapping(new ElementMapping(QUESTION_RORLIGHET_ID, null))
         .children(List.of(children))

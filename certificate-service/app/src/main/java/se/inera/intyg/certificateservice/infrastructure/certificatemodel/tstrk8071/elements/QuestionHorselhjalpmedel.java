@@ -61,7 +61,7 @@ public class QuestionHorselhjalpmedel {
         )
         .mapping(new ElementMapping(QUESTION_HORSEL_ID, null))
         .children(List.of(children))
-        .shouldValidate(ShouldValidateFactory.codes(
+        .shouldValidate(ShouldValidateFactory.codeList(
                 QUESTION_INTYGET_AVSER_ID,
                 List.of(new FieldId(GR_II_III.code()), new FieldId(TAXI.code()))
             )
