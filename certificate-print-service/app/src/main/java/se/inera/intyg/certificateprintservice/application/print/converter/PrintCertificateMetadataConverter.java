@@ -9,6 +9,16 @@ public class PrintCertificateMetadataConverter {
 
   public PrintCertificateMetadata convert(PrintCertificateMetadataDTO metadata) {
     return PrintCertificateMetadata.builder()
+        .name(metadata.getName())
+        .description(metadata.getDescription())
+        .version(metadata.getVersion())
+        .typeId(metadata.getTypeId())
+        .certificateId(metadata.getCertificateId())
+        .applicationOrigin(metadata.getApplicationOrigin())
+        .personId(metadata.getPersonId())
+        .recipientLogo(metadata.getRecipientLogo())
+        .recipientName(metadata.getRecipientName())
+        .signingDate(metadata.getSigningDate())
         .build();
   }
 }
