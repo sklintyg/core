@@ -54,7 +54,6 @@ class PrintCertificateFromCertificatePrintServiceTest {
         .build();
 
     final var expectedResponse = PrintCertificateResponseDTO.builder()
-        .filename("NAME")
         .build();
 
     mockWebServer.enqueue(

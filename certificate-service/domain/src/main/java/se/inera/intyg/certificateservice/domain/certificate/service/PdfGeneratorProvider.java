@@ -4,17 +4,20 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 
 public class PdfGeneratorProvider {
 
-  @Qualifier("certificatePdfService")
-  private PdfGenerator certificatePdfService;
-  @Qualifier("generalPdfService")
-  private PdfGenerator generalPdfService;
+  private final PdfGenerator certificatePdfService;
+  private final PdfGenerator generalPdfService;
 
-  public static PdfGenerator provider(Certificate certificate) {
+  public PdfGeneratorProvider(PdfGenerator certificatePdfService, PdfGenerator generalPdfService) {
+    this.certificatePdfService = certificatePdfService;
+    this.generalPdfService = generalPdfService;
+  }
+
+  public PdfGenerator provider(Certificate certificate) {
     if (certificate.certificateModel().pdfSpecification() != null) {
-      //return new CertificatePdfGenerator();
+      return certificatePdfService;
     }
 
-    return null;
+    return generalPdfService;
   }
 
 }

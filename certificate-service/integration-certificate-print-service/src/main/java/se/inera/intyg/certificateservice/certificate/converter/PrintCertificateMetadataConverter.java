@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateservice.certificate.converter;
 
-import java.util.Optional;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.certificate.dto.PrintCertificateMetadataDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
@@ -11,9 +10,9 @@ public class PrintCertificateMetadataConverter {
   private static final String APPLICATION_ORIGIN_1177_INTYG = "1177 intyg";
   private static final String APPLICATION_ORIGIN_WEBCERT = "Webcert";
 
-  public Optional<PrintCertificateMetadataDTO> convert(Certificate certificate,
+  public PrintCertificateMetadataDTO convert(Certificate certificate,
       boolean isCitizenFormat) {
-    return Optional.of(PrintCertificateMetadataDTO.builder()
+    return PrintCertificateMetadataDTO.builder()
         .name(certificate.certificateModel().name())
         .typeId(certificate.certificateModel().type().code())
         .version(certificate.certificateModel().id().version().version())
@@ -26,7 +25,7 @@ public class PrintCertificateMetadataConverter {
             : APPLICATION_ORIGIN_WEBCERT)
         .personId(certificate.certificateMetaData().patient().id().idWithDash())
         .description(certificate.certificateModel().detailedDescription())
-        .build());
+        .build();
   }
 
   private byte[] convertLogo(String logoPath) {

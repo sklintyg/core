@@ -20,6 +20,8 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
@@ -36,6 +38,20 @@ class PrintCertificateCategoryConverterTest {
       PrintCertificateQuestionDTO.builder().build();
 
 
+  public static final String CATEGORY_NAME = "Beräknat födelsedatum kategori";
+  public static final ElementSpecification KAT_1 = ElementSpecification.builder()
+      .id(new ElementId("KAT_1"))
+      .configuration(
+          ElementConfigurationCategory.builder()
+              .name(CATEGORY_NAME)
+              .build()
+      )
+      .children(List.of(
+          ElementSpecification.builder()
+              .id(QUESTION_BERAKNAT_FODELSEDATUM_ID)
+              .build())
+      )
+      .build();
   private static final Certificate CERTIFICATE = fk7210CertificateBuilder()
       .elementData(List.of(ElementData.builder()
           .id(QUESTION_BERAKNAT_FODELSEDATUM_ID)
@@ -47,25 +63,26 @@ class PrintCertificateCategoryConverterTest {
           .build())
       )
       .certificateModel(CertificateModel.builder()
-          .elementSpecifications(List.of(ElementSpecification.builder()
-              .id(QUESTION_BERAKNAT_FODELSEDATUM_ID)
-              .build()))
+          .elementSpecifications(List.of(KAT_1)
+          )
           .build())
       .build();
 
-
   @Test
   void shouldSetName() {
-    final var response = printCertificateCategoryConverter.convert(CERTIFICATE);
+    final var response = printCertificateCategoryConverter.convert(CERTIFICATE, KAT_1);
 
-    assertEquals(CERTIFICATE.certificateModel().name(), response.getName());
+    assertEquals(
+        CERTIFICATE.certificateModel().elementSpecifications().getFirst().configuration().name(),
+        response.getName());
   }
 
   @Test
   void shouldSetId() {
-    final var response = printCertificateCategoryConverter.convert(CERTIFICATE);
+    final var response = printCertificateCategoryConverter.convert(CERTIFICATE, KAT_1);
 
-    assertEquals(CERTIFICATE.id().id(), response.getId());
+    assertEquals(CERTIFICATE.certificateModel().elementSpecifications().getFirst().id().id(),
+        response.getId());
   }
 
   @Nested
@@ -74,14 +91,14 @@ class PrintCertificateCategoryConverterTest {
     @BeforeEach
     void setUp() {
       when(printCertificateQuestionConverter.convert(
-          CERTIFICATE.certificateModel().elementSpecifications().getFirst(),
+          CERTIFICATE.certificateModel().elementSpecifications().getFirst().children().getFirst(),
           CERTIFICATE
       )).thenReturn(Optional.of(PRINT_CERTIFICATE_QUESTION_DTO));
     }
 
     @Test
     void shouldSetChildren() {
-      final var response = printCertificateCategoryConverter.convert(CERTIFICATE);
+      final var response = printCertificateCategoryConverter.convert(CERTIFICATE, KAT_1);
       assertEquals(List.of(PRINT_CERTIFICATE_QUESTION_DTO), response.getChildren());
     }
   }

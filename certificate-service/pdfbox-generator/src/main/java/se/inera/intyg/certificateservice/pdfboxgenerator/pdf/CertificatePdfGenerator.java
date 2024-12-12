@@ -9,7 +9,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Pdf;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGenerator;
 
-@Component("certificatePdfService")
+@Component("CertificatePdfGenerator")
 @RequiredArgsConstructor
 public class CertificatePdfGenerator implements PdfGenerator {
 

@@ -21,71 +21,71 @@ class PrintCertificateMetadataConverterTest {
   @Test
   void shouldSetName() {
     final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false);
-    assertEquals(CERTIFICATE.certificateModel().name(), result.get().getName());
+    assertEquals(CERTIFICATE.certificateModel().name(), result.getName());
   }
 
   @Test
   void shouldSetVersion() {
     final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false);
     assertEquals(CERTIFICATE.certificateModel().id().version().version(),
-        result.get().getVersion());
+        result.getVersion());
   }
 
   @Test
   void shouldSetTypeId() {
     final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false);
-    assertEquals(CERTIFICATE.certificateModel().type().code(), result.get().getTypeId());
+    assertEquals(CERTIFICATE.certificateModel().type().code(), result.getTypeId());
   }
 
   @Test
   void shouldSetCertificateId() {
     final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false);
-    assertEquals(CERTIFICATE.id().id(), result.get().getCertificateId());
+    assertEquals(CERTIFICATE.id().id(), result.getCertificateId());
   }
 
   @Test
   void shouldSetSigningDate() {
     final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false);
-    assertEquals(CERTIFICATE.signed().toString(), result.get().getSigningDate());
+    assertEquals(CERTIFICATE.signed().toString(), result.getSigningDate());
   }
 
   //  @Test
 //  void shouldSetRecipientLogo() {
 //    final var result = printCertificateMetadataConverter.convert(CERTIFICATE);
-//    assertEquals(CERTIFICATE.certificateModel().recipient().logo, result.get().getRecipientLogo());
+//    assertEquals(CERTIFICATE.certificateModel().recipient().logo, result.getRecipientLogo());
 //  }
 
   @Test
   void shouldSetRecipientName() {
     final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false);
     assertEquals(CERTIFICATE.certificateModel().recipient().name(),
-        result.get().getRecipientName());
+        result.getRecipientName());
   }
 
   @Test
   void shouldSetApplicationOriginFor1177intyg() {
     final var result = printCertificateMetadataConverter.convert(CERTIFICATE, true);
-    assertEquals(APPLICATION_ORIGIN_1177_INTYG, result.get().getApplicationOrigin());
+    assertEquals(APPLICATION_ORIGIN_1177_INTYG, result.getApplicationOrigin());
   }
 
   @Test
   void shouldSetApplicationOriginForWebcert() {
     final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false);
-    assertEquals(APPLICATION_ORIGIN_WEBCERT, result.get().getApplicationOrigin());
+    assertEquals(APPLICATION_ORIGIN_WEBCERT, result.getApplicationOrigin());
   }
 
   @Test
   void shouldSetSPersonId() {
     final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false);
     assertEquals(CERTIFICATE.certificateMetaData().patient().id().idWithDash(),
-        result.get().getPersonId());
+        result.getPersonId());
   }
 
   @Test
   void shouldSetDescription() {
     final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false);
     assertEquals(CERTIFICATE.certificateModel().detailedDescription(),
-        result.get().getDescription());
+        result.getDescription());
   }
 
 }

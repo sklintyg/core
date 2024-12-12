@@ -11,6 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PrintCertificateResponseDTO {
 
-  private String filename;
   private byte[] pdfData;
 }
