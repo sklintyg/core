@@ -8,11 +8,12 @@ import se.inera.intyg.certificateprintservice.print.PrintCertificateGenerator;
 
 @Service
 @RequiredArgsConstructor
-public class GetPrintService {
+public class GeneratePrintService {
 
   private final PrintCertificateGenerator printCertificateGenerator;
 
   public PrintCertificateResponse get(PrintCertificateRequest request) {
+    
     //validate request
     return PrintCertificateResponse.builder()
         .pdfData(printCertificateGenerator.generate())

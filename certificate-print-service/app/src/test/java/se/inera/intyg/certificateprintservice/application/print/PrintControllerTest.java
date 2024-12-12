@@ -15,7 +15,7 @@ import se.inera.intyg.certificateprintservice.application.print.dto.PrintCertifi
 class PrintControllerTest {
 
   @Mock
-  GetPrintService getPrintService;
+  GeneratePrintService generatePrintService;
   @InjectMocks
   PrintController printController;
 
@@ -25,7 +25,7 @@ class PrintControllerTest {
     final var expectedResponse = PrintCertificateResponse.builder()
         .build();
 
-    doReturn(expectedResponse).when(getPrintService).get(request);
+    doReturn(expectedResponse).when(generatePrintService).get(request);
 
     final var actualResponse = printController.get(request);
     assertEquals(expectedResponse, actualResponse);

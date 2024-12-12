@@ -13,7 +13,7 @@ import se.inera.intyg.certificateprintservice.application.print.dto.PrintCertifi
 @RequiredArgsConstructor
 public class PrintController {
 
-  private final GetPrintService printService;
+  private final GeneratePrintService printService;
 
   @PostMapping
   PrintCertificateResponse get(@RequestBody PrintCertificateRequest request) {
