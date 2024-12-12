@@ -126,7 +126,7 @@ public class CertificateModelFactoryTSTRK8071 implements CertificateModelFactory
   @Value("${sendmessagetots.logicaladdress}")
   private String tsLogicalAddress;
 
-  private static final String TSTRK_8071 = "tstrk8071";
+  private static final String TSTRK_8071 = "ts";
   private static final String VERSION = "1.0";
   private static final String NAME = "Läkarintyg avseende högre körkortsbehörigheter, taxiförarlegitimation och på begäran av Transportstyrelsen";
   private static final String DESCRIPTION = """
@@ -135,7 +135,7 @@ public class CertificateModelFactoryTSTRK8071 implements CertificateModelFactory
   private static final String DETAILED_DESCRIPTION = """
        Intyg för körkort och taxiförarlegitimation ska avges med beaktande av vad som anges i Transportstyrelsens föreskrifter och allmänna råd (TSFS 2010:125) om medicinska krav för innehav av körkort m.m. (medicinföreskrifterna). Föreskrifterna finns på Transportstyrelsen external-link och där finns också kompletterande upplysningar till vissa av kapitlen. För närvarande finns kompletterande upplysningar till kapitel 1 om bland annat läkares anmälan, kapitel 2 om synfunktionerna, kapitel 6 om diabetes och kapitel 17 om medicinska intyg.
        På  Transportstyrelsen external-link finns också blanketter för olika specialistläkarintyg, exempelvis för intyg om ADHD m.m., om hjärt- och kärlsjukdomar, om diabetes och om alkohol, narkotika och läkemedel. Om en person ska lämna något specialistläkarintyg har denne fått ett brev om saken från Transporstyrelsen. Det är därför ofta klokt att  be att få se brevet, så att intyget kommer att svara mot de frågeställningar som kan finnas hos myndigheten.
-      
+            
        <b className="iu-fw-heading">Har du frågor?</b>
        Kontakta avdelning Körkort på Transportstyrelsen, telefon 0771-81 81 81.
       """;

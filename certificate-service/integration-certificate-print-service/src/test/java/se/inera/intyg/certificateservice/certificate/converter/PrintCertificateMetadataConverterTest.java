@@ -1,11 +1,15 @@
 package se.inera.intyg.certificateservice.certificate.converter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.fk7210certificateModelBuilder;
 
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.common.model.Recipient;
+import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 
 class PrintCertificateMetadataConverterTest {
 
@@ -13,6 +17,10 @@ class PrintCertificateMetadataConverterTest {
   private final PrintCertificateMetadataConverter printCertificateMetadataConverter = new PrintCertificateMetadataConverter();
 
   public static final Certificate CERTIFICATE = fk7210CertificateBuilder()
+      .certificateModel(fk7210certificateModelBuilder()
+          .recipient(new Recipient(new RecipientId("ts"), "ts", "ts", "transportstyrelsen-logo.png")
+          ).build()
+      )
       .signed(LocalDateTime.now())
       .build();
 
@@ -50,11 +58,11 @@ class PrintCertificateMetadataConverterTest {
     assertEquals(CERTIFICATE.signed().toString(), result.getSigningDate());
   }
 
-  //  @Test
-//  void shouldSetRecipientLogo() {
-//    final var result = printCertificateMetadataConverter.convert(CERTIFICATE);
-//    assertEquals(CERTIFICATE.certificateModel().recipient().logo, result.getRecipientLogo());
-//  }
+  @Test
+  void shouldSetRecipientLogo() {
+    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false, FILE_NAME);
+    assertNotNull(result.getRecipientLogo());
+  }
 
   @Test
   void shouldSetRecipientName() {

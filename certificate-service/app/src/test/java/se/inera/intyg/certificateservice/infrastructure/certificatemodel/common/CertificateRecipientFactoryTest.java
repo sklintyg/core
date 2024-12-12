@@ -26,7 +26,8 @@ class CertificateRecipientFactoryTest {
     final var expected = new Recipient(
         new RecipientId("TRANSP"),
         "Transportstyrelsen",
-        "Logisk adress"
+        "Logisk adress",
+        "ts/transportstyrelsen-logo.png"
     );
 
     final var response = CertificateRecipientFactory.transp("Logisk adress");
