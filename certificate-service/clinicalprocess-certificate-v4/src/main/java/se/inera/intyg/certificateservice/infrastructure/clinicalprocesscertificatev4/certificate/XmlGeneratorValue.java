@@ -4,7 +4,6 @@ import jakarta.xml.bind.JAXBElement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
@@ -38,13 +37,7 @@ public class XmlGeneratorValue {
               }
 
               final var answerToMapTo = answerToMapTo(mapping, answerList);
-              if (answerToMapTo.isEmpty()) {
-                throw new IllegalStateException(
-                    "Cannot resolve custom mapping '%s'".formatted(mapping)
-                );
-              }
-
-              answerToMapTo.get().getDelsvar().addAll(
+              answerToMapTo.getDelsvar().addAll(
                   mapping.getAnswers().stream()
                       .map(answer -> answer.getDelsvar().stream().toList())
                       .flatMap(List::stream)
@@ -87,7 +80,7 @@ public class XmlGeneratorValue {
     return mapping.getMapping() == null;
   }
 
-  private static Optional<Svar> answerToMapTo(XmlMapping mapping, ArrayList<Svar> answerList) {
+  private static Svar answerToMapTo(XmlMapping mapping, ArrayList<Svar> answerList) {
     return answerList.stream()
         .filter(svar ->
             svar.getId().equalsIgnoreCase(mapping.getMapping().elementId().id())
@@ -106,6 +99,13 @@ public class XmlGeneratorValue {
                         )
                 )
         )
-        .findAny();
+        .findAny()
+        .orElseGet(() -> {
+              final var emptySvar = new Svar();
+              emptySvar.setId(mapping.getMapping().elementId().id());
+              answerList.add(emptySvar);
+              return emptySvar;
+            }
+        );
   }
 }
