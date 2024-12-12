@@ -105,7 +105,7 @@ class GeneralPdfGeneratorTest {
 
   @Test
   void shouldConvertResponse() {
-    final var expectedResponse = new Pdf(PDF_DATA, "aao_123_test");
+    final var expectedResponse = new Pdf(PDF_DATA, FILE_NAME);
     final var response = generalPdfGenerator.generate(CERTIFICATE, TEXT, IS_CITIZEN);
 
     assertEquals(expectedResponse, response);
