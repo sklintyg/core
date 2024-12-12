@@ -1,5 +1,11 @@
 package se.inera.intyg.certificateprintservice.print;
 
+import com.microsoft.playwright.Browser;
+import com.microsoft.playwright.BrowserContext;
+import com.microsoft.playwright.BrowserType;
+import com.microsoft.playwright.Page;
+import com.microsoft.playwright.Page.PdfOptions;
+import com.microsoft.playwright.Playwright;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,7 +23,26 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
 
     final var t = generatorService.generate();
     log.info(t);
-    return null;
+
+    var builder = new StringBuilder();
+    request.getCategories().forEach(category -> builder.append(category.asHtml()));
+
+    try (
+        Playwright playwright = Playwright.create();
+        Browser browser = playwright.chromium()
+            .launch(new BrowserType.LaunchOptions().setHeadless(true));
+        BrowserContext context = browser.newContext();
+        Page page = context.newPage()
+    ) {
+      final var pdfOptions = new PdfOptions();
+      pdfOptions.setFormat("A4");
+      pdfOptions.setPrintBackground(true);
+      pdfOptions.setDisplayHeaderFooter(true);
+      pdfOptions.setTagged(true);
+      page.setContent(builder.toString());
+
+      return page.pdf(pdfOptions);
+    }
 
 //    try (
 //        Playwright playwright = Playwright.create();

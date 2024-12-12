@@ -18,6 +18,10 @@ public class PrintCertificateQuestion {
   ElementValue value;
   List<PrintCertificateQuestion> subQuestions;
 
+  public String asHtml() {
+    return "<div>hej</div>\n";
+  }
+
   @JsonPOJOBuilder(withPrefix = "")
   public static class PrintCertificateQuestionBuilder {
 
