@@ -27,12 +27,12 @@ public class GeneratePrintService {
       throw new IllegalArgumentException("Invalid request");
     }
 
-    if (request.getCategories().isEmpty()) {
+    if (request.getCategories() == null || request.getCategories().isEmpty()) {
       throw new IllegalArgumentException("Invalid request - Missing required parameter categories");
     }
 
     if (request.getMetadata() == null) {
-      throw new IllegalArgumentException("Invalid request - Missing required parameter categories");
+      throw new IllegalArgumentException("Invalid request - Missing required parameter metadata");
     }
   }
 }
