@@ -46,6 +46,7 @@ class GeneralPdfGeneratorTest {
       .id(new CertificateId(CERTIFICATE_ID))
       .certificateModel(
           CertificateModel.builder()
+              .name("åäö 123 test")
               .elementSpecifications(
                   List.of(ELEMENT_SPECIFICATION)
               )
@@ -103,9 +104,10 @@ class GeneralPdfGeneratorTest {
 
   @Test
   void shouldConvertResponse() {
-    final var expectedResponse = new Pdf(PDF_DATA, "");
+    final var expectedResponse = new Pdf(PDF_DATA, "aao_123_test");
     final var response = generalPdfGenerator.generate(CERTIFICATE, TEXT, IS_CITIZEN);
 
     assertEquals(expectedResponse, response);
   }
+
 }

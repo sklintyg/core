@@ -33,6 +33,18 @@ public class GeneralPdfGenerator implements PdfGenerator {
     final var response = printCertificateFromCertificatePrintService.print(request,
         certificate.id().id());
 
-    return new Pdf(response.getPdfData(), "");
+    return new Pdf(response.getPdfData(), getFileName(certificate));
   }
+
+  private String getFileName(Certificate certificate) {
+    return certificate.certificateModel().name()
+        .replace("å", "a")
+        .replace("ä", "a")
+        .replace("ö", "o")
+        .replace(" ", "_")
+        .replace("–", "")
+        .replace("__", "_")
+        .toLowerCase();
+  }
+
 }
