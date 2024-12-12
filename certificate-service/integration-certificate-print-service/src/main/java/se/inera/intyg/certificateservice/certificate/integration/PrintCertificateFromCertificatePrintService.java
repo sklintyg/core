@@ -1,69 +1,49 @@
 package se.inera.intyg.certificateservice.certificate.integration;
 
-import static se.inera.intyg.certificateservice.certificate.integration.constants.ApplicationConstants.APPLICATION_CERTIFICATE_PRINT_SERVICE;
+import static se.inera.intyg.certificateservice.logging.MdcHelper.LOG_SESSION_ID_HEADER;
+import static se.inera.intyg.certificateservice.logging.MdcHelper.LOG_TRACE_ID_HEADER;
 import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_TYPE_ACCESSED;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.SESSION_ID_KEY;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.TRACE_ID_KEY;
 
-import org.springframework.beans.factory.annotation.Qualifier;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientRequestException;
-import org.springframework.web.reactive.function.client.WebClientResponseException.GatewayTimeout;
-import reactor.core.publisher.Mono;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClient;
 import se.inera.intyg.certificateservice.certificate.dto.PrintCertificateRequestDTO;
 import se.inera.intyg.certificateservice.certificate.dto.PrintCertificateResponseDTO;
 import se.inera.intyg.certificateservice.logging.PerformanceLogging;
 
 @Service
+@RequiredArgsConstructor
 public class PrintCertificateFromCertificatePrintService {
 
-  private final WebClient webClient;
-  private final String scheme;
-  private final String baseUrl;
-  private final int port;
-  private final String endpoint;
+  private final RestClient restClient;
 
-  public PrintCertificateFromCertificatePrintService(
-      @Qualifier(value = "certificatePrintServiceWebClient") WebClient webClient,
-      @Value("${integration.webcert.scheme}") String scheme,
-      @Value("${integration.webcert.baseurl}") String baseUrl,
-      @Value("${integration.webcert.port}") int port,
-      @Value("${integration.webcert.printcertificate.endpoint}") String endpoint) {
-    this.webClient = webClient;
-    this.scheme = scheme;
-    this.baseUrl = baseUrl;
-    this.port = port;
-    this.endpoint = endpoint;
+  @Value("${print.certificate.service.address}")
+  private String printCertificateServiceUrl;
 
-  }
 
   @PerformanceLogging(eventAction = "print-certificate-from-certificate-print-service", eventType = EVENT_TYPE_ACCESSED)
   public PrintCertificateResponseDTO print(PrintCertificateRequestDTO request,
       String certificateId) {
-    return webClient.post().uri(uriBuilder -> uriBuilder
-            .scheme(scheme)
-            .host(baseUrl)
-            .port(port)
-            .path(endpoint)
-            .build(certificateId)
-        )
-        .body(Mono.just(
-            request
-        ), PrintCertificateRequestDTO.class)
-        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-        .retrieve()
-        .bodyToMono(PrintCertificateResponseDTO.class)
-        .share()
-        .onErrorMap(
-            WebClientRequestException.class,
-            ExceptionThrowableFunction.webClientRequest(APPLICATION_CERTIFICATE_PRINT_SERVICE)
-        )
-        .onErrorMap(
-            GatewayTimeout.class,
-            ExceptionThrowableFunction.gatewayTimeout(APPLICATION_CERTIFICATE_PRINT_SERVICE)
-        )
-        .block();
+    try {
+      return restClient
+          .post()
+          .uri(printCertificateServiceUrl + "/api/print/" + certificateId)
+          .header(LOG_TRACE_ID_HEADER, MDC.get(TRACE_ID_KEY))
+          .header(LOG_SESSION_ID_HEADER, MDC.get(SESSION_ID_KEY))
+          .body(request)
+          .retrieve()
+          .body(PrintCertificateResponseDTO.class);
+    } catch (HttpClientErrorException ex) {
+      if (ex.getStatusCode() != HttpStatus.NOT_FOUND) {
+        throw ex;
+      }
+      return null;
+    }
   }
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestClient;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificate.repository.StatisticsRepository;
@@ -438,6 +439,11 @@ public class AppConfig {
       @Qualifier("CertificatePdfGenerator") PdfGenerator certificatePdfGenerator,
       @Qualifier("GeneralPdfGenerator") PdfGenerator generalPdfGenerator) {
     return new PdfGeneratorProvider(certificatePdfGenerator, generalPdfGenerator);
+  }
+
+  @Bean
+  public RestClient restClient() {
+    return RestClient.create();
   }
 
 }
