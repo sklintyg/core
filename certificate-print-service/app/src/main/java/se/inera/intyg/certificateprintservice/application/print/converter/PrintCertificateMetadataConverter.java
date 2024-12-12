@@ -10,6 +10,7 @@ public class PrintCertificateMetadataConverter {
   public PrintCertificateMetadata convert(PrintCertificateMetadataDTO metadata) {
     return PrintCertificateMetadata.builder()
         .name(metadata.getName())
+        .fileName(metadata.getFileName())
         .description(metadata.getDescription())
         .version(metadata.getVersion())
         .typeId(metadata.getTypeId())

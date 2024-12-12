@@ -10,6 +10,7 @@ import se.inera.intyg.certificateprintservice.application.print.dto.PrintCertifi
 class PrintCertificateMetadataConverterTest {
 
   private static final String NAME = "name";
+  private static final String FILE_NAME = "fileName";
   private static final String VERSION = "version";
   private static final String TYPE_ID = "typeId";
   private static final String CERTIFICATE_ID = "certificateId";
@@ -21,6 +22,7 @@ class PrintCertificateMetadataConverterTest {
   private static final String DESCRIPTION = "description";
   private static PrintCertificateMetadataDTO METADATA_DTO = PrintCertificateMetadataDTO.builder()
       .name(NAME)
+      .fileName(FILE_NAME)
       .version(VERSION)
       .typeId(TYPE_ID)
       .certificateId(CERTIFICATE_ID)
@@ -42,6 +44,11 @@ class PrintCertificateMetadataConverterTest {
   @Test
   void shallConvertName() {
     assertEquals(NAME, printCertificateMetadataConverter.convert(METADATA_DTO).getName());
+  }
+
+  @Test
+  void shallConvertFileName() {
+    assertEquals(FILE_NAME, printCertificateMetadataConverter.convert(METADATA_DTO).getFileName());
   }
 
   @Test

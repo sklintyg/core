@@ -3,4 +3,34 @@ POST http://localhost:18040/api/print
 Content-Type: application/json
 
 {
+  "categories": [
+    {
+      "id": "1",
+      "name": "namn",
+      "questions": [
+        {
+          "id": "1.1",
+          "name": "q1",
+          "value": {
+            "type": "TEXT",
+            "text": "question text"
+          },
+          "subQuestions": [
+            {
+              "id": "1.1.1",
+              "name": "q1.1",
+              "value": {
+                "type": "TEXT",
+                "text": "subquestion text"
+              },
+              "subQuestions": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "name": "certName"
+  }
 }

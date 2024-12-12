@@ -13,6 +13,7 @@ import se.inera.intyg.certificateprintservice.print.api.PrintCertificateMetadata
 public class PrintCertificateMetadata {
 
   String name;
+  String fileName;
   String version;
   String typeId;
   String certificateId;

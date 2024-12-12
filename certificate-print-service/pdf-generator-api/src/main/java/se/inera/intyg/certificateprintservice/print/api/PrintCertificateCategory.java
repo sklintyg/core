@@ -14,7 +14,7 @@ public class PrintCertificateCategory {
 
   String id;
   String name;
-  List<PrintCertificateQuestion> children;
+  List<PrintCertificateQuestion> questions;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class PrintCertificateCategoryBuilder {

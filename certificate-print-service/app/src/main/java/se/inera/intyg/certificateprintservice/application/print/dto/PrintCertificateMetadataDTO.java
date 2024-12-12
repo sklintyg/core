@@ -12,6 +12,7 @@ import se.inera.intyg.certificateprintservice.application.print.dto.PrintCertifi
 public class PrintCertificateMetadataDTO {
 
   String name;
+  String fileName;
   String version;
   String typeId;
   String certificateId;

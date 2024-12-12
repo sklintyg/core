@@ -11,7 +11,6 @@ import se.inera.intyg.certificateprintservice.application.print.dto.PrintCertifi
 @JsonDeserialize(builder = PrintCertificateResponseDTOBuilder.class)
 public class PrintCertificateResponseDTO {
 
-  String filename;
   byte[] pdfData;
 
   @JsonPOJOBuilder(withPrefix = "")
