@@ -2,12 +2,12 @@ package se.inera.intyg.certificateservice.certificate.dto;
 
 import java.util.List;
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
-@Value
+@Data
 @Builder
 public class PrintCertificateRequestDTO {
 
-  List<PrintCertificateCategoryDTO> categories;
-  PrintCertificateMetadataDTO metadata;
+  private List<PrintCertificateCategoryDTO> categories;
+  private PrintCertificateMetadataDTO metadata;
 }
