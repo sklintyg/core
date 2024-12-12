@@ -140,7 +140,8 @@ class CertificateModelFactoryTSTRK8071Test {
     final var expectedRecipient = new Recipient(
         new RecipientId("TRANSP"),
         "Transportstyrelsen",
-        LOGICAL_ADDRESS
+        LOGICAL_ADDRESS,
+        "ts/transportstyrelsen-logo.png"
     );
 
     final var certificateModel = certificateModelFactoryTSTRK8071.create();
