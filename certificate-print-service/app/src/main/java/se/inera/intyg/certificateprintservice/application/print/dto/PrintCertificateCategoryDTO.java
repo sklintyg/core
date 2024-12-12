@@ -5,19 +5,19 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import java.util.List;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.certificateprintservice.application.print.dto.PrintCertificateCategory.PrintCertificateCategoryBuilder;
+import se.inera.intyg.certificateprintservice.application.print.dto.PrintCertificateCategoryDTO.PrintCertificateCategoryDTOBuilder;
 
 @Value
 @Builder
-@JsonDeserialize(builder = PrintCertificateCategoryBuilder.class)
-public class PrintCertificateCategory {
+@JsonDeserialize(builder = PrintCertificateCategoryDTOBuilder.class)
+public class PrintCertificateCategoryDTO {
 
   String id;
   String name;
-  List<PrintCertificateQuestion> children;
+  List<PrintCertificateQuestionDTO> children;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class PrintCertificateCategoryBuilder {
+  public static class PrintCertificateCategoryDTOBuilder {
 
   }
 }

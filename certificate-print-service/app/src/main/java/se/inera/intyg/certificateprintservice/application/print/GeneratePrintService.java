@@ -2,8 +2,8 @@ package se.inera.intyg.certificateprintservice.application.print;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import se.inera.intyg.certificateprintservice.application.print.dto.PrintCertificateRequest;
-import se.inera.intyg.certificateprintservice.application.print.dto.PrintCertificateResponse;
+import se.inera.intyg.certificateprintservice.application.print.dto.PrintCertificateRequestDTO;
+import se.inera.intyg.certificateprintservice.application.print.dto.PrintCertificateResponseDTO;
 import se.inera.intyg.certificateprintservice.print.PrintCertificateGenerator;
 
 @Service
@@ -12,8 +12,9 @@ public class GeneratePrintService {
 
   private final PrintCertificateGenerator printCertificateGenerator;
 
-  public PrintCertificateResponse get(PrintCertificateRequest request) {
-    return PrintCertificateResponse.builder()
+  public PrintCertificateResponseDTO get(PrintCertificateRequestDTO request) {
+
+    return PrintCertificateResponseDTO.builder()
         .pdfData(printCertificateGenerator.generate())
         .build();
   }

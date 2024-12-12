@@ -4,12 +4,12 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.certificateprintservice.application.print.dto.PrintCertificateMetadata.PrintCertificateMetadataBuilder;
+import se.inera.intyg.certificateprintservice.application.print.dto.PrintCertificateMetadataDTO.PrintCertificateMetadataDTOBuilder;
 
 @Value
 @Builder
-@JsonDeserialize(builder = PrintCertificateMetadataBuilder.class)
-public class PrintCertificateMetadata {
+@JsonDeserialize(builder = PrintCertificateMetadataDTOBuilder.class)
+public class PrintCertificateMetadataDTO {
 
   String name;
   String version;
@@ -23,7 +23,7 @@ public class PrintCertificateMetadata {
   String description;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class PrintCertificateMetadataBuilder {
+  public static class PrintCertificateMetadataDTOBuilder {
 
   }
 }

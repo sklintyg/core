@@ -5,8 +5,6 @@ import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -61,9 +59,6 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
                       </html>
               """
       );
-
-      Path outputPath = Paths.get("C:/output.pdf");
-      page.pdf(new Page.PdfOptions().setPath(outputPath).setScale(1));
 
       return page.pdf();
     }
