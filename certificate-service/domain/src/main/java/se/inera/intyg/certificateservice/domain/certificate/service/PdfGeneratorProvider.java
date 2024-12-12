@@ -4,9 +4,10 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 
 public class PdfGeneratorProvider {
 
-  private PdfGeneratorProvider() {
-    throw new IllegalStateException("Utility class");
-  }
+  @Qualifier("certificatePdfService")
+  private PdfGenerator certificatePdfService;
+  @Qualifier("generalPdfService")
+  private PdfGenerator generalPdfService;
 
   public static PdfGenerator provider(Certificate certificate) {
     if (certificate.certificateModel().pdfSpecification() != null) {
