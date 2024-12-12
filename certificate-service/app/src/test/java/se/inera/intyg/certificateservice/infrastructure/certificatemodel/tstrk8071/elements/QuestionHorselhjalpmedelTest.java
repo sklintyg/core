@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCodeList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
@@ -99,8 +100,15 @@ class QuestionHorselhjalpmedelTest {
           ElementData.builder()
               .id(new ElementId("1"))
               .value(
-                  ElementValueCode.builder()
-                      .codeId(new FieldId(GR_II_III.code()))
+                  ElementValueCodeList.builder()
+                      .list(
+                          List.of(
+                              ElementValueCode.builder()
+                                  .codeId(new FieldId(GR_II_III.code()))
+                                  .code(GR_II_III.code())
+                                  .build()
+                          )
+                      )
                       .build()
               )
               .build()
@@ -119,8 +127,15 @@ class QuestionHorselhjalpmedelTest {
           ElementData.builder()
               .id(new ElementId("1"))
               .value(
-                  ElementValueCode.builder()
-                      .codeId(new FieldId(TAXI.code()))
+                  ElementValueCodeList.builder()
+                      .list(
+                          List.of(
+                              ElementValueCode.builder()
+                                  .codeId(new FieldId(TAXI.code()))
+                                  .code(TAXI.code())
+                                  .build()
+                          )
+                      )
                       .build()
               )
               .build()
@@ -159,8 +174,15 @@ class QuestionHorselhjalpmedelTest {
           ElementData.builder()
               .id(new ElementId("1"))
               .value(
-                  ElementValueCode.builder()
-                      .codeId(new FieldId("TEST"))
+                  ElementValueCodeList.builder()
+                      .list(
+                          List.of(
+                              ElementValueCode.builder()
+                                  .codeId(new FieldId("TEST"))
+                                  .code("TEST")
+                                  .build()
+                          )
+                      )
                       .build()
               )
               .build()
