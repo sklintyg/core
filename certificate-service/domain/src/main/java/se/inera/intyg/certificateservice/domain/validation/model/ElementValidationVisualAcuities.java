@@ -118,7 +118,8 @@ public class ElementValidationVisualAcuities implements ElementValidation {
   }
 
   private boolean outsideOfAllowedInterval(Correction correction) {
-    return correction != null && (correction.value() < min || correction.value() > max);
+    return correction != null && correction.value() != null && (correction.value() < min
+        || correction.value() > max);
   }
 
   private Collection<ValidationError> validateMissingValue(
