@@ -13,8 +13,6 @@ public class GeneratePrintService {
   private final PrintCertificateGenerator printCertificateGenerator;
 
   public PrintCertificateResponse get(PrintCertificateRequest request) {
-    
-    //validate request
     return PrintCertificateResponse.builder()
         .pdfData(printCertificateGenerator.generate())
         .build();
