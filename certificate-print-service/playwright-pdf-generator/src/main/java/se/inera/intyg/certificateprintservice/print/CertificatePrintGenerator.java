@@ -6,12 +6,13 @@ import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
 import org.springframework.stereotype.Service;
+import se.inera.intyg.certificateprintservice.print.api.PrintCertificateRequest;
 
 @Service
 public class CertificatePrintGenerator implements PrintCertificateGenerator {
 
   @Override
-  public byte[] generate() {
+  public byte[] generate(PrintCertificateRequest request) {
     try (
         Playwright playwright = Playwright.create();
         Browser browser = playwright.chromium()
