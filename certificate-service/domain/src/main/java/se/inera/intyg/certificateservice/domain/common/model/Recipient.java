@@ -1,8 +1,9 @@
 package se.inera.intyg.certificateservice.domain.common.model;
 
-public record Recipient(RecipientId id, String name, String logicalAddress, String logo) {
+public record Recipient(RecipientId id, String name, String logicalAddress, String logo,
+                        String generalName) {
 
   public Recipient(RecipientId id, String name, String logicalAddress) {
-    this(id, name, logicalAddress, null);
+    this(id, name, logicalAddress, null, null);
   }
 }

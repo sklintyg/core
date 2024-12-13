@@ -4,12 +4,16 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import javax.imageio.ImageIO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.certificate.dto.PrintCertificateMetadataDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 
 @Component
+@RequiredArgsConstructor
 public class PrintCertificateMetadataConverter {
+
+  private final PrintCertificateUnitInformationConverter printCertificateUnitInformationConverter;
 
   private static final String APPLICATION_ORIGIN_1177_INTYG = "1177 intyg";
   private static final String APPLICATION_ORIGIN_WEBCERT = "Webcert";
@@ -33,6 +37,8 @@ public class PrintCertificateMetadataConverter {
             : APPLICATION_ORIGIN_WEBCERT)
         .personId(certificate.certificateMetaData().patient().id().idWithDash())
         .description(certificate.certificateModel().detailedDescription())
+        .unitInformation(
+            printCertificateUnitInformationConverter.convert(certificate))
         .fileName(fileName)
         .build();
   }
@@ -40,6 +46,10 @@ public class PrintCertificateMetadataConverter {
   private byte[] convertLogo(String logoPath) {
     final var classloader = getClass().getClassLoader();
     final var inputStream = classloader.getResourceAsStream(logoPath);
+
+    if (inputStream == null) {
+      throw new IllegalStateException("Input stream for converting logo is null");
+    }
 
     try {
       final var image = ImageIO.read(inputStream);
@@ -51,5 +61,4 @@ public class PrintCertificateMetadataConverter {
       throw new IllegalStateException("Could not convert logo:", e);
     }
   }
-
 }

@@ -27,7 +27,8 @@ class CertificateRecipientFactoryTest {
         new RecipientId("TRANSP"),
         "Transportstyrelsen",
         "Logisk adress",
-        "ts/transportstyrelsen-logo.png"
+        "ts/transportstyrelsen-logo.png",
+        "Läkarintyg Transportstyrelsen"
     );
 
     final var response = CertificateRecipientFactory.transp("Logisk adress");

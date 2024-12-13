@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.certificate.dto;
 
+import java.util.List;
 import lombok.Builder;
 import lombok.Value;
 
@@ -18,4 +19,5 @@ public class PrintCertificateMetadataDTO {
   String personId;
   String description;
   String fileName;
+  List<String> unitInformation;
 }

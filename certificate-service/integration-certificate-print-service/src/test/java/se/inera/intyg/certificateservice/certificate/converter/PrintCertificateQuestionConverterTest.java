@@ -9,10 +9,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.certificate.dto.ElementSimplifiedValueTextDTO;
 import se.inera.intyg.certificateservice.certificate.dto.PrintCertificateQuestionDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
@@ -106,7 +106,7 @@ class PrintCertificateQuestionConverterTest {
 
   @Test
   void shouldSetValue() {
-    final var expected = ElementSimplifiedValueText.builder()
+    final var expected = ElementSimplifiedValueTextDTO.builder()
         .text(DATE.format(DateTimeFormatter.ISO_DATE))
         .build();
 
@@ -133,7 +133,7 @@ class PrintCertificateQuestionConverterTest {
     final var expected = PrintCertificateQuestionDTO.builder()
         .name(DESCRIPTION)
         .id("2")
-        .value(ElementSimplifiedValueText.builder()
+        .value(ElementSimplifiedValueTextDTO.builder()
             .text(TEXT)
             .build())
         .children(Collections.emptyList())

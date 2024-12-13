@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -26,6 +27,8 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Pdf;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.domain.common.model.Recipient;
+import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 
 @ExtendWith(MockitoExtension.class)
 class GeneralPdfGeneratorTest {
@@ -50,6 +53,25 @@ class GeneralPdfGeneratorTest {
               .elementSpecifications(
                   List.of(ELEMENT_SPECIFICATION)
               )
+              .recipient(
+                  new Recipient(new RecipientId("TS"), "TS", "LA", "logo",
+                      "Läkarintyg Transportstyrelsen")
+              )
+              .build()
+      )
+      .build();
+
+  private static final Certificate CERTIFICATE_NO_GENERAL_RECIPIENT_NAME = Certificate.builder()
+      .id(new CertificateId(CERTIFICATE_ID))
+      .certificateModel(
+          CertificateModel.builder()
+              .name("åäö 123 test")
+              .elementSpecifications(
+                  List.of(ELEMENT_SPECIFICATION)
+              )
+              .recipient(
+                  new Recipient(new RecipientId("TS"), "TS", "LA")
+              )
               .build()
       )
       .build();
@@ -70,45 +92,82 @@ class GeneralPdfGeneratorTest {
 
   @BeforeEach
   void setUp() {
-    when(printCertificateCategoryConverter.convert(CERTIFICATE, ELEMENT_SPECIFICATION))
-        .thenReturn(PRINT_CERTIFICATE_CATEGORY_DTO);
-    when(printCertificateMetadataConverter.convert(CERTIFICATE, IS_CITIZEN, FILE_NAME))
-        .thenReturn(PRINT_CERTIFICATE_METADATA_DTO);
     when(printCertificateFromCertificatePrintService.print(any(), anyString()))
         .thenReturn(RESPONSE);
   }
 
-  @Test
-  void shouldConvertRequest() {
-    final var captor = ArgumentCaptor.forClass(PrintCertificateRequestDTO.class);
-    final var expected = PrintCertificateRequestDTO.builder()
-        .categories(List.of(PRINT_CERTIFICATE_CATEGORY_DTO))
-        .metadata(PRINT_CERTIFICATE_METADATA_DTO)
-        .build();
+  @Nested
+  class NoGeneralRecipientName {
 
-    generalPdfGenerator.generate(CERTIFICATE, TEXT, IS_CITIZEN);
-    verify(printCertificateFromCertificatePrintService).print(captor.capture(), anyString());
+    @BeforeEach
+    void setup() {
+      when(printCertificateCategoryConverter.convert(CERTIFICATE_NO_GENERAL_RECIPIENT_NAME,
+          ELEMENT_SPECIFICATION))
+          .thenReturn(PRINT_CERTIFICATE_CATEGORY_DTO);
+      when(
+          printCertificateMetadataConverter.convert(CERTIFICATE_NO_GENERAL_RECIPIENT_NAME,
+              IS_CITIZEN,
+              FILE_NAME))
+          .thenReturn(PRINT_CERTIFICATE_METADATA_DTO);
+    }
 
-    assertEquals(expected, captor.getValue());
+    @Test
+    void shouldConvertRequest() {
+      final var captor = ArgumentCaptor.forClass(PrintCertificateRequestDTO.class);
+      final var expected = PrintCertificateRequestDTO.builder()
+          .categories(List.of(PRINT_CERTIFICATE_CATEGORY_DTO))
+          .metadata(PRINT_CERTIFICATE_METADATA_DTO)
+          .build();
+
+      generalPdfGenerator.generate(CERTIFICATE_NO_GENERAL_RECIPIENT_NAME, TEXT, IS_CITIZEN);
+      verify(printCertificateFromCertificatePrintService).print(captor.capture(), anyString());
+
+      assertEquals(expected, captor.getValue());
+    }
+
+    @Test
+    void shouldConvertCertificateId() {
+      final var captor = ArgumentCaptor.forClass(String.class);
+
+      generalPdfGenerator.generate(CERTIFICATE_NO_GENERAL_RECIPIENT_NAME, TEXT, IS_CITIZEN);
+      verify(printCertificateFromCertificatePrintService).print(
+          any(PrintCertificateRequestDTO.class),
+          captor.capture());
+
+      assertEquals(CERTIFICATE_ID, captor.getValue());
+    }
+
+    @Test
+    void shouldConvertResponseWhenNoGeneralFileName() {
+      final var expectedResponse = new Pdf(PDF_DATA, FILE_NAME);
+      final var response = generalPdfGenerator.generate(CERTIFICATE_NO_GENERAL_RECIPIENT_NAME, TEXT,
+          IS_CITIZEN);
+
+      assertEquals(expectedResponse, response);
+    }
   }
 
-  @Test
-  void shouldConvertCertificateId() {
-    final var captor = ArgumentCaptor.forClass(String.class);
+  @Nested
+  class GeneralRecipientName {
 
-    generalPdfGenerator.generate(CERTIFICATE, TEXT, IS_CITIZEN);
-    verify(printCertificateFromCertificatePrintService).print(any(PrintCertificateRequestDTO.class),
-        captor.capture());
+    @BeforeEach
+    void setup() {
+      when(printCertificateCategoryConverter.convert(CERTIFICATE, ELEMENT_SPECIFICATION))
+          .thenReturn(PRINT_CERTIFICATE_CATEGORY_DTO);
+      when(printCertificateMetadataConverter.convert(CERTIFICATE, IS_CITIZEN,
+          "lakarintyg_transportstyrelsen"))
+          .thenReturn(PRINT_CERTIFICATE_METADATA_DTO);
+    }
 
-    assertEquals(CERTIFICATE_ID, captor.getValue());
-  }
 
-  @Test
-  void shouldConvertResponse() {
-    final var expectedResponse = new Pdf(PDF_DATA, FILE_NAME);
-    final var response = generalPdfGenerator.generate(CERTIFICATE, TEXT, IS_CITIZEN);
+    @Test
+    void shouldConvertResponseWhenGeneralFileName() {
+      final var expectedResponse = new Pdf(PDF_DATA, "lakarintyg_transportstyrelsen");
 
-    assertEquals(expectedResponse, response);
+      final var response = generalPdfGenerator.generate(CERTIFICATE, TEXT, IS_CITIZEN);
+
+      assertEquals(expectedResponse, response);
+    }
   }
 
 }

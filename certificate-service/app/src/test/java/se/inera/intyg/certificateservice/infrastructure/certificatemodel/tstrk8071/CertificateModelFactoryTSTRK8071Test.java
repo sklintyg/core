@@ -141,7 +141,8 @@ class CertificateModelFactoryTSTRK8071Test {
         new RecipientId("TRANSP"),
         "Transportstyrelsen",
         LOGICAL_ADDRESS,
-        "ts/transportstyrelsen-logo.png"
+        "ts/transportstyrelsen-logo.png",
+        "Läkarintyg Transportstyrelsen"
     );
 
     final var certificateModel = certificateModelFactoryTSTRK8071.create();

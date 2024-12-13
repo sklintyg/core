@@ -42,8 +42,7 @@ public class ElementConfigurationUnitContactInformation implements ElementConfig
             .list(
                 List.of(
                     elementValue.address(),
-                    elementValue.city(),
-                    elementValue.zipCode(),
+                    String.format("%s %s", elementValue.zipCode(), elementValue.city()),
                     elementValue.phoneNumber()
                 )
             )

@@ -43,7 +43,11 @@ public class GeneralPdfGenerator implements PdfGenerator {
   }
 
   private String getFileName(Certificate certificate) {
-    return certificate.certificateModel().name()
+    final var name = certificate.certificateModel().recipient().generalName() == null
+        ? certificate.certificateModel().name()
+        : certificate.certificateModel().recipient().generalName();
+
+    return name
         .replace("å", "a")
         .replace("ä", "a")
         .replace("ö", "o")

@@ -3,25 +3,41 @@ package se.inera.intyg.certificateservice.certificate.converter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.fk7210certificateModelBuilder;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 
+@ExtendWith(MockitoExtension.class)
 class PrintCertificateMetadataConverterTest {
 
   private static final String FILE_NAME = "fileName";
-  private final PrintCertificateMetadataConverter printCertificateMetadataConverter = new PrintCertificateMetadataConverter();
+  public static final List<String> CONTACT_INFO = List.of("TEST 123", "070 070");
+
+  @Mock
+  private PrintCertificateUnitInformationConverter printCertificateUnitInformationConverter;
+
+  @InjectMocks
+  private PrintCertificateMetadataConverter printCertificateMetadataConverter;
 
   public static final Certificate CERTIFICATE = fk7210CertificateBuilder()
       .certificateModel(fk7210certificateModelBuilder()
-          .recipient(new Recipient(new RecipientId("ts"), "ts", "ts", "transportstyrelsen-logo.png")
+          .recipient(new Recipient(new RecipientId("ts"), "ts", "ts", "transportstyrelsen-logo.png",
+              "Läkarintyg Transportstyrelsen")
           ).build()
       )
       .status(Status.SIGNED)
@@ -30,7 +46,8 @@ class PrintCertificateMetadataConverterTest {
 
   public static final Certificate DRAFT = fk7210CertificateBuilder()
       .certificateModel(fk7210certificateModelBuilder()
-          .recipient(new Recipient(new RecipientId("ts"), "ts", "ts", "transportstyrelsen-logo.png")
+          .recipient(new Recipient(new RecipientId("ts"), "ts", "ts", "transportstyrelsen-logo.png",
+              "Läkarintyg Transportstyrelsen")
           ).build()
       )
       .status(Status.DRAFT)
@@ -39,10 +56,23 @@ class PrintCertificateMetadataConverterTest {
   public static final String APPLICATION_ORIGIN_WEBCERT = "Webcert";
   public static final String APPLICATION_ORIGIN_1177_INTYG = "1177 intyg";
 
+  @BeforeEach
+  void setUp() {
+    when(printCertificateUnitInformationConverter.convert(any()))
+        .thenReturn(CONTACT_INFO);
+  }
+
   @Test
   void shouldSetName() {
     final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false, FILE_NAME);
     assertEquals(CERTIFICATE.certificateModel().name(), result.getName());
+  }
+
+
+  @Test
+  void shouldSetContactInfo() {
+    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false, FILE_NAME);
+    assertEquals(CONTACT_INFO, result.getUnitInformation());
   }
 
   @Test
