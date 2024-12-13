@@ -23,6 +23,7 @@ public class CertificateActionSend implements CertificateAction {
   private static final String TRANSPORTSTYRELSEN = "Transportstyrelsen";
   private static final String FORSAKRINGSKASSAN = "Försäkringskassan";
   private static final String UNSUPPORTED_RECIPIENT = "Unsupported recipient: %s";
+  private static final String UNABLE_TO_RETRIEVE_RECIPIENT_FOR_CERTIFICATE = "Unable to retrieve recipient for certificate";
   private final CertificateActionSpecification certificateActionSpecification;
   private final List<ActionRule> actionRules;
 
@@ -50,33 +51,27 @@ public class CertificateActionSend implements CertificateAction {
 
   @Override
   public String getName(Optional<Certificate> certificate) {
-    return certificate
-        .map(Certificate::certificateModel)
-        .map(CertificateModel::recipient)
+    return getRecipient(certificate)
         .map(CertificateActionSend::recipientName)
         .orElseThrow(
-            () -> new IllegalStateException("Unable to retrieve recipient for certificate"));
+            () -> new IllegalStateException(UNABLE_TO_RETRIEVE_RECIPIENT_FOR_CERTIFICATE));
   }
 
   @Override
   public String getDescription(Optional<Certificate> certificate) {
-    return certificate
-        .map(Certificate::certificateModel)
-        .map(CertificateModel::recipient)
+    return getRecipient(certificate)
         .map(CertificateActionSend::recipientDescription)
         .orElseThrow(
-            () -> new IllegalStateException("Unable to retrieve recipient for certificate"));
+            () -> new IllegalStateException(UNABLE_TO_RETRIEVE_RECIPIENT_FOR_CERTIFICATE));
   }
 
   @Override
   public String getBody(Optional<Certificate> certificate,
       Optional<ActionEvaluation> actionEvaluation) {
-    return certificate
-        .map(Certificate::certificateModel)
-        .map(CertificateModel::recipient)
+    return getRecipient(certificate)
         .map(CertificateActionSend::recipientBody)
         .orElseThrow(
-            () -> new IllegalStateException("Unable to retrieve recipient for certificate"));
+            () -> new IllegalStateException(UNABLE_TO_RETRIEVE_RECIPIENT_FOR_CERTIFICATE));
   }
 
   private static String recipientName(Recipient recipient) {
@@ -101,5 +96,11 @@ public class CertificateActionSend implements CertificateAction {
       case FORSAKRINGSKASSAN -> DESCRIPTION_FK;
       default -> throw new IllegalStateException(UNSUPPORTED_RECIPIENT.formatted(recipient.name()));
     };
+  }
+
+  private static Optional<Recipient> getRecipient(Optional<Certificate> certificate) {
+    return certificate
+        .map(Certificate::certificateModel)
+        .map(CertificateModel::recipient);
   }
 }
