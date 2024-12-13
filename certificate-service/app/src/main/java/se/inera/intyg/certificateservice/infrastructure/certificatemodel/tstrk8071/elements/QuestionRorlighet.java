@@ -40,7 +40,7 @@ public class QuestionRorlighet {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryExist(
+                CertificateElementRuleFactory.mandatoryOrExist(
                     QUESTION_RORLIGHET_ID,
                     QUESTION_RORLIGHET_FIELD_ID
                 )

@@ -57,7 +57,7 @@ class QuestionSjukdomEllerSynnedsattningTest {
         ElementRuleExpression.builder()
             .id(new ElementId("4"))
             .type(ElementRuleType.SHOW)
-            .expression(new RuleExpression("!$4.1"))
+            .expression(new RuleExpression("!$4.1 && !empty($4.1)"))
             .build()
     );
 

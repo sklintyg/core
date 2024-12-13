@@ -67,7 +67,7 @@ public class QuestionPatientensBehandlingOchVardsituation {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryExist(
+                CertificateElementRuleFactory.mandatoryOrExist(
                     QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_ID,
                     radioMultipleCodes.stream().map(ElementConfigurationCode::id).toList()
                 )

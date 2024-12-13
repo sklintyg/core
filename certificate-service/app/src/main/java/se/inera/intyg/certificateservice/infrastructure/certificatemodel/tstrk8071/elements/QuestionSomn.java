@@ -40,7 +40,7 @@ public class QuestionSomn {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryExist(
+                CertificateElementRuleFactory.mandatoryOrExist(
                     QUESTION_SOMN_ID,
                     QUESTION_SOMN_FIELD_ID
                 )

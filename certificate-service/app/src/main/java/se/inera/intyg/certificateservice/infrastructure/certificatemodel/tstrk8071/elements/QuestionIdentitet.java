@@ -46,7 +46,7 @@ public class QuestionIdentitet {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryExist(
+                CertificateElementRuleFactory.mandatoryOrExist(
                     QUESTION_IDENTITET_ID,
                     radioMultipleCodes.stream().map(ElementConfigurationCode::id).toList()
                 )

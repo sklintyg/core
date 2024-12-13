@@ -44,7 +44,7 @@ public class QuestionHorsel {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryExist(
+                CertificateElementRuleFactory.mandatoryOrExist(
                     QUESTION_HORSEL_ID,
                     QUESTION_HORSEL_FIELD_ID
                 ),

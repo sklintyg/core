@@ -45,7 +45,7 @@ public class QuestionSynkope {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryExist(
+                CertificateElementRuleFactory.mandatoryOrExist(
                     QUESTION_SYNKOPE_ID,
                     QUESTION_SYNKOPE_FIELD_ID
                 ),

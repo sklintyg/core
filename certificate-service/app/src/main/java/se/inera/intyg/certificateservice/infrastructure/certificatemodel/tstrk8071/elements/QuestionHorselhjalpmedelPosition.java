@@ -50,7 +50,7 @@ public class QuestionHorselhjalpmedelPosition {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryExist(
+                CertificateElementRuleFactory.mandatoryOrExist(
                     QUESTION_HORSELHJALPMEDEL_POSITION_ID,
                     radioMultipleCodes.stream().map(ElementConfigurationCode::id).toList()
                 ),

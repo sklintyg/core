@@ -38,7 +38,7 @@ public class QuestionMissbruk {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryExist(
+                CertificateElementRuleFactory.mandatoryOrExist(
                     QUESTION_MISSBRUK_ID,
                     QUESTION_MISSBRUK_FIELD_ID
                 )

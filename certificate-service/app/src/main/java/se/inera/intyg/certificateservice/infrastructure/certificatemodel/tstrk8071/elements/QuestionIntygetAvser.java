@@ -54,7 +54,7 @@ public class QuestionIntygetAvser {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryExist(
+                CertificateElementRuleFactory.mandatoryOrExist(
                     QUESTION_INTYGET_AVSER_ID,
                     List.of(
                         new FieldId(CodeSystemKvTs0002.GR_II.code()),
@@ -144,4 +144,3 @@ public class QuestionIntygetAvser {
         .build();
   }
 }
-

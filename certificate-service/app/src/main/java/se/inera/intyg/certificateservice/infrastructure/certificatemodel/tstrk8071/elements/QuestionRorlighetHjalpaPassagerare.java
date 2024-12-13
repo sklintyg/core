@@ -48,7 +48,7 @@ public class QuestionRorlighetHjalpaPassagerare {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryExist(
+                CertificateElementRuleFactory.mandatoryOrExist(
                     QUESTION_RORLIGHET_HJALPA_PASSAGERARE_ID,
                     QUESTION_RORLIGHET_HJALPA_PASSAGERARE_FIELD_ID
                 ),
