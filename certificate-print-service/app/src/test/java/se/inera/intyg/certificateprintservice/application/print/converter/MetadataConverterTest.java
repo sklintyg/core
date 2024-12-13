@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateprintservice.application.print.dto.PrintCertificateMetadataDTO;
 
-class PrintCertificateMetadataConverterTest {
+class MetadataConverterTest {
 
   private static final String NAME = "name";
   private static final String FILE_NAME = "fileName";

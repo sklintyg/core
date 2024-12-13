@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateprintservice.application.print.dto.PrintCertificateQuestionDTO;
 import se.inera.intyg.certificateprintservice.application.print.dto.value.ElementSimplifiedValueList;
 import se.inera.intyg.certificateprintservice.application.print.dto.value.ElementSimplifiedValueText;
-import se.inera.intyg.certificateprintservice.print.api.PrintCertificateQuestion;
+import se.inera.intyg.certificateprintservice.print.api.Question;
 import se.inera.intyg.certificateprintservice.print.api.value.ElementValue;
 import se.inera.intyg.certificateprintservice.print.api.value.ElementValueList;
 import se.inera.intyg.certificateprintservice.print.api.value.ElementValueText;
@@ -12,8 +12,8 @@ import se.inera.intyg.certificateprintservice.print.api.value.ElementValueText;
 @Component
 public class PrintCertificateQuestionConverter {
 
-  public PrintCertificateQuestion convert(PrintCertificateQuestionDTO question) {
-    return PrintCertificateQuestion.builder()
+  public Question convert(PrintCertificateQuestionDTO question) {
+    return Question.builder()
         .id(question.getId())
         .name(question.getName())
         .value(getElementValue(question))

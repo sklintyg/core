@@ -11,10 +11,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateprintservice.application.print.dto.PrintCertificateCategoryDTO;
 import se.inera.intyg.certificateprintservice.application.print.dto.PrintCertificateQuestionDTO;
-import se.inera.intyg.certificateprintservice.print.api.PrintCertificateQuestion;
+import se.inera.intyg.certificateprintservice.print.api.Question;
 
 @ExtendWith(MockitoExtension.class)
-class PrintCertificateCategoryConverterTest {
+class CategoryConverterTest {
 
   private static final String ID_1 = "ID_1";
   private static final String QUESTION_1 = "question_1";
@@ -49,10 +49,10 @@ class PrintCertificateCategoryConverterTest {
   @Test
   void shallConvertQuestions() {
 
-    final var q1 = PrintCertificateQuestion.builder()
+    final var q1 = Question.builder()
         .id(QUESTION_1)
         .build();
-    final var q2 = PrintCertificateQuestion.builder()
+    final var q2 = Question.builder()
         .id(QUESTION_2)
         .build();
 

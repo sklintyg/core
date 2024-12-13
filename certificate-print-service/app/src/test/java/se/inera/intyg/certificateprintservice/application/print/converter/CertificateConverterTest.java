@@ -12,11 +12,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateprintservice.application.print.dto.PrintCertificateCategoryDTO;
 import se.inera.intyg.certificateprintservice.application.print.dto.PrintCertificateMetadataDTO;
 import se.inera.intyg.certificateprintservice.application.print.dto.PrintCertificateRequestDTO;
-import se.inera.intyg.certificateprintservice.print.api.PrintCertificateCategory;
-import se.inera.intyg.certificateprintservice.print.api.PrintCertificateMetadata;
+import se.inera.intyg.certificateprintservice.print.api.Category;
+import se.inera.intyg.certificateprintservice.print.api.Metadata;
 
 @ExtendWith(MockitoExtension.class)
-class PrintCertificateRequestConverterTest {
+class CertificateConverterTest {
 
 
   private static final String ID_1 = "ID_1";
@@ -30,8 +30,8 @@ class PrintCertificateRequestConverterTest {
 
   @Test
   void shallConvertCategories() {
-    final var certificateCategory1 = PrintCertificateCategory.builder().id(ID_1).build();
-    final var certificateCategory2 = PrintCertificateCategory.builder().id(ID_2).build();
+    final var certificateCategory1 = Category.builder().id(ID_1).build();
+    final var certificateCategory2 = Category.builder().id(ID_2).build();
     final var expectedCategories = List.of(
         certificateCategory1,
         certificateCategory2
@@ -58,11 +58,11 @@ class PrintCertificateRequestConverterTest {
 
   @Test
   void shallConvertMetadata() {
-    final var expectedMetadata = PrintCertificateMetadata.builder().build();
+    final var expectedMetadata = Metadata.builder().build();
     final var metadataDTO = PrintCertificateMetadataDTO.builder().build();
     final var certificateDTOCategory1 = PrintCertificateCategoryDTO.builder().id(ID_1).build();
     final var certificateDTOCategory2 = PrintCertificateCategoryDTO.builder().id(ID_2).build();
-    
+
     final var request = PrintCertificateRequestDTO.builder()
         .categories(
             List.of(

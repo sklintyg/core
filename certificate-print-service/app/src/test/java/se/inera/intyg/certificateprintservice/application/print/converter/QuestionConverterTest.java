@@ -10,12 +10,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateprintservice.application.print.dto.PrintCertificateQuestionDTO;
 import se.inera.intyg.certificateprintservice.application.print.dto.value.ElementSimplifiedValueList;
 import se.inera.intyg.certificateprintservice.application.print.dto.value.ElementSimplifiedValueText;
-import se.inera.intyg.certificateprintservice.print.api.PrintCertificateQuestion;
+import se.inera.intyg.certificateprintservice.print.api.Question;
 import se.inera.intyg.certificateprintservice.print.api.value.ElementValueList;
 import se.inera.intyg.certificateprintservice.print.api.value.ElementValueText;
 
 @ExtendWith(MockitoExtension.class)
-class PrintCertificateQuestionConverterTest {
+class QuestionConverterTest {
 
   private static final String ID = "ID_1";
   private static final String NAME = "NAME_1";
@@ -83,7 +83,7 @@ class PrintCertificateQuestionConverterTest {
 
     final var result = printCertificateQuestionConverter.convert(questionDTO);
 
-    assertEquals(List.of(PrintCertificateQuestion.builder()
+    assertEquals(List.of(Question.builder()
         .value(ElementValueText.builder().build())
         .subQuestions(List.of()).build()), result.getSubQuestions());
   }
