@@ -3,8 +3,12 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs0002.ANNAT;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs0002.FORLANG_GR_II;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs0002.GR_II;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs0002.GR_II_III;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs0002.TAXI;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs0002.UTLANDSKT;
 
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -62,7 +66,7 @@ class QuestionHorselhjalpmedelTest {
         ElementRuleExpression.builder()
             .id(new ElementId("1"))
             .type(ElementRuleType.SHOW)
-            .expression(new RuleExpression("exists(gr_II_III) || exists(tax_leg)"))
+            .expression(new RuleExpression("!exists(gr_II) && !exists(forlang_gr_II)"))
             .build()
     );
 
@@ -169,7 +173,7 @@ class QuestionHorselhjalpmedelTest {
     }
 
     @Test
-    void shallReturnFalseIfElementCodeIsNotGR23OrTaxi() {
+    void shallReturnFalseIfElementCodeIsG2() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("1"))
@@ -178,8 +182,8 @@ class QuestionHorselhjalpmedelTest {
                       .list(
                           List.of(
                               ElementValueCode.builder()
-                                  .codeId(new FieldId("TEST"))
-                                  .code("TEST")
+                                  .codeId(new FieldId(GR_II.code()))
+                                  .code(GR_II.code())
                                   .build()
                           )
                       )
@@ -193,6 +197,87 @@ class QuestionHorselhjalpmedelTest {
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
       assertFalse(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shallReturnFalseIfElementCodeIsFORLANGG2() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId("1"))
+              .value(
+                  ElementValueCodeList.builder()
+                      .list(
+                          List.of(
+                              ElementValueCode.builder()
+                                  .codeId(new FieldId(FORLANG_GR_II.code()))
+                                  .code(FORLANG_GR_II.code())
+                                  .build()
+                          )
+                      )
+                      .build()
+              )
+              .build()
+      );
+
+      final var element = QuestionHorselhjalpmedel.questionHorselhjalpmedel();
+
+      final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
+
+      assertFalse(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shallReturnTrueIfElementCodeIsFromTS() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId("1"))
+              .value(
+                  ElementValueCodeList.builder()
+                      .list(
+                          List.of(
+                              ElementValueCode.builder()
+                                  .codeId(new FieldId(ANNAT.code()))
+                                  .code(ANNAT.code())
+                                  .build()
+                          )
+                      )
+                      .build()
+              )
+              .build()
+      );
+
+      final var element = QuestionHorselhjalpmedel.questionHorselhjalpmedel();
+
+      final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
+
+      assertTrue(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shallReturnTrueIfElementCodeIsUtlandskt() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId("1"))
+              .value(
+                  ElementValueCodeList.builder()
+                      .list(
+                          List.of(
+                              ElementValueCode.builder()
+                                  .codeId(new FieldId(UTLANDSKT.code()))
+                                  .code(UTLANDSKT.code())
+                                  .build()
+                          )
+                      )
+                      .build()
+              )
+              .build()
+      );
+
+      final var element = QuestionHorselhjalpmedel.questionHorselhjalpmedel();
+
+      final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
+
+      assertTrue(shouldValidate.test(elementData));
     }
   }
 }
