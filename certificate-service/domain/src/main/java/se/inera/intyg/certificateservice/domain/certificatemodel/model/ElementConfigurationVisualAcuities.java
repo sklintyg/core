@@ -1,9 +1,13 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
+import java.util.List;
+import java.util.Optional;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
 import se.inera.intyg.certificateservice.domain.certificate.model.Correction;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValue;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueTable;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueVisualAcuities;
 import se.inera.intyg.certificateservice.domain.certificate.model.VisualAcuity;
@@ -71,5 +75,29 @@ public class ElementConfigurationVisualAcuities implements ElementConfiguration 
                 .build()
         )
         .build();
+  }
+
+  @Override
+  public Optional<ElementSimplifiedValue> simplified(ElementValue value) {
+    if (!(value instanceof ElementValueVisualAcuities elementValue)) {
+      throw new IllegalStateException("Wrong value type");
+    }
+
+    if (elementValue.isEmpty()) {
+      return Optional.empty();
+    }
+
+    return Optional.of(
+        ElementSimplifiedValueTable.builder()
+            .headings(List.of(withoutCorrectionLabel, withCorrectionLabel))
+            .values(
+                List.of(
+                    elementValue.rightEye().simplified(),
+                    elementValue.leftEye().simplified(),
+                    elementValue.binocular().simplified()
+                )
+            )
+            .build()
+    );
   }
 }
