@@ -29,8 +29,6 @@ import se.inera.intyg.certificateprintservice.print.api.value.ElementValueText;
 @RequiredArgsConstructor
 public class CertificatePrintGenerator implements PrintCertificateGenerator {
 
-  private final GeneratorService generatorService;
-
   @Value("classpath:templates/certificateTemplate.html")
   private Resource template;
 
@@ -46,7 +44,6 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
         Page page = context.newPage()
     ) {
       final var pdfOptions = createtPdfOptions();
-
       page.setContent(jsoupContent);
       return page.pdf(pdfOptions);
     }
@@ -73,6 +70,7 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
       Element title = doc.getElementById("title");
       title.appendText(request.getMetadata().getName());
       Element content = doc.getElementById("content");
+
       request.getCategories().forEach(category -> content.appendChild(
           convertCategory(category, request.getCategories().indexOf(category))));
 
@@ -85,7 +83,10 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
 
   private Node convertCategory(Category category, int index) {
     final var div = new Element(Tag.DIV.toString());
+    div.attr("style", "border: 2px solid black;");
     final var title = new Element(Tag.H2.toString());
+    title.attr("class", "text-lg font-bold");
+    title.attr("style", "border-bottom: 2px solid black;");
     title.text("%d %s".formatted(index + 1, category.getName()));
     div.appendChild(title);
     category.getQuestions().forEach(question -> div.appendChildren(convertQuestion(question)));
@@ -95,10 +96,11 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
   private List<Node> convertQuestion(Question question) {
     var list = new ArrayList<Node>();
     final var name = new Element(Tag.H3.toString());
+    name.attr("class", "p-1");
     name.text("%s".formatted(question.getName()));
     list.add(name);
     final var value = new Element(Tag.P.toString());
-
+    value.attr("class", "text-sm p-1");
     if (question.getValue() instanceof ElementValueText textValue) {
       value.appendText(textValue.getText());
     } else if (question.getValue() instanceof ElementValueList listValue) {
