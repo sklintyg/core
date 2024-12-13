@@ -17,6 +17,7 @@ ext {
     springbootMavenBomVersion = '3.3.4'
     testContainersMysqlVersion = '1.20.2'
     testContainersActivemqVersion = '1.20.2'
+    mockServerClientVersion = '5.15.0'
     schematronVersion = '8.0.3'
     ineraMavenRepository = 'https://nexus.drift.inera.se/repository/it-public/'
     nvdMirror = 'https://vulnz-nvd-mirror-devtest.intyg.nordicmedtest.se'

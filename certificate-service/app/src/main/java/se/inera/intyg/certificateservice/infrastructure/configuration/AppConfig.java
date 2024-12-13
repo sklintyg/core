@@ -1,8 +1,10 @@
 package se.inera.intyg.certificateservice.infrastructure.configuration;
 
 import java.util.List;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestClient;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificate.repository.StatisticsRepository;
@@ -19,6 +21,7 @@ import se.inera.intyg.certificateservice.domain.certificate.service.GetCertifica
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateXmlDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.LockCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGenerator;
+import se.inera.intyg.certificateservice.domain.certificate.service.PdfGeneratorProvider;
 import se.inera.intyg.certificateservice.domain.certificate.service.RenewCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.ReplaceCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.RevokeCertificateDomainService;
@@ -196,9 +199,9 @@ public class AppConfig {
 
   @Bean
   public GetCertificatePdfDomainService getCertificatePdfDomainService(
-      CertificateRepository certificateRepository, PdfGenerator pdfGenerator,
+      CertificateRepository certificateRepository, PdfGeneratorProvider pdfGeneratorProvider,
       CertificateEventDomainService certificateEventDomainService) {
-    return new GetCertificatePdfDomainService(certificateRepository, pdfGenerator,
+    return new GetCertificatePdfDomainService(certificateRepository, pdfGeneratorProvider,
         certificateEventDomainService);
   }
 
@@ -239,8 +242,8 @@ public class AppConfig {
 
   @Bean
   public PrintCitizenCertificateDomainService printCitizenCertificateDomainService(
-      CertificateRepository certificateRepository, PdfGenerator pdfGenerator) {
-    return new PrintCitizenCertificateDomainService(certificateRepository, pdfGenerator);
+      CertificateRepository certificateRepository, PdfGeneratorProvider pdfGeneratorProvider) {
+    return new PrintCitizenCertificateDomainService(certificateRepository, pdfGeneratorProvider);
   }
 
   @Bean
@@ -430,4 +433,17 @@ public class AppConfig {
       CertificateActionConfigurationRepository certificateActionConfigurationRepository) {
     return new CertificateActionFactory(certificateActionConfigurationRepository);
   }
+
+  @Bean
+  public PdfGeneratorProvider pdfGeneratorProvider(
+      @Qualifier("CertificatePdfGenerator") PdfGenerator certificatePdfGenerator,
+      @Qualifier("GeneralPdfGenerator") PdfGenerator generalPdfGenerator) {
+    return new PdfGeneratorProvider(certificatePdfGenerator, generalPdfGenerator);
+  }
+
+  @Bean
+  public RestClient restClient() {
+    return RestClient.create();
+  }
+
 }

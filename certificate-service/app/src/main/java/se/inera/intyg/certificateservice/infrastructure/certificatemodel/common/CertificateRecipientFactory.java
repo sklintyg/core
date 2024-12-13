@@ -21,7 +21,9 @@ public class CertificateRecipientFactory {
     return new Recipient(
         new RecipientId("TRANSP"),
         "Transportstyrelsen",
-        logicalAddress
+        logicalAddress,
+        "ts/transportstyrelsen-logo.png",
+        "Läkarintyg Transportstyrelsen"
     );
   }
 }

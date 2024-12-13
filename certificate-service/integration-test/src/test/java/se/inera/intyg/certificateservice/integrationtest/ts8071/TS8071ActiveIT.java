@@ -26,6 +26,7 @@ import se.inera.intyg.certificateservice.integrationtest.ExistsCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ExistsCertificateTypeInfoIT;
 import se.inera.intyg.certificateservice.integrationtest.ForwardCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateEventsIT;
+import se.inera.intyg.certificateservice.integrationtest.GetCertificateGeneralPdfIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateTypeInfoIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateXmlIT;
@@ -87,6 +88,27 @@ public class TS8071ActiveIT {
     @Override
     protected String typeVersion() {
       return ACTIVE_VERSION;
+    }
+  }
+
+  @Nested
+  @DisplayName(TYPE + "Hämta generell intygspdf")
+  class GetCertificateGeneralPdf extends GetCertificateGeneralPdfIT {
+
+    @Override
+    protected String type() {
+      return CERTIFICATE_TYPE;
+    }
+
+    @Override
+    protected String typeVersion() {
+      return ACTIVE_VERSION;
+    }
+
+    protected static Stream<Arguments> rolesNoAccessToProtectedPerson() {
+      return Stream.of(
+          Arguments.of(ALVA_VARDADMINISTRATOR_DTO, BERTIL_BARNMORSKA_DTO, ANNA_SJUKSKOTERSKA_DTO)
+      );
     }
   }
 

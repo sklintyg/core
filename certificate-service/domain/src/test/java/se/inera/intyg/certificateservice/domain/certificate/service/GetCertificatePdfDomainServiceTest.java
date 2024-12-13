@@ -49,6 +49,8 @@ class GetCertificatePdfDomainServiceTest {
   private CertificateEventDomainService certificateEventDomainService;
   @Mock
   private PdfGenerator pdfGenerator;
+  @Mock
+  private PdfGeneratorProvider pdfGeneratorProvider;
 
   @InjectMocks
   GetCertificatePdfDomainService getCertificatePdfDomainService;
@@ -65,6 +67,8 @@ class GetCertificatePdfDomainServiceTest {
     void setUp() {
       doReturn(true).when(certificate)
           .allowTo(CertificateActionType.PRINT, Optional.of(ACTION_EVALUATION));
+      doReturn(pdfGenerator)
+          .when(pdfGeneratorProvider).provider(certificate);
     }
 
     @Test
@@ -124,6 +128,8 @@ class GetCertificatePdfDomainServiceTest {
 
   @Test
   void shallPublishGetCertificateEvent() {
+    doReturn(pdfGenerator)
+        .when(pdfGeneratorProvider).provider(certificate);
     doReturn(true).when(certificate)
         .allowTo(CertificateActionType.PRINT, Optional.of(ACTION_EVALUATION));
     getCertificatePdfDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION, ADDITIONAL_INFO_TEXT);

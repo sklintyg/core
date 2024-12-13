@@ -20,7 +20,7 @@ import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDo
 public class GetCertificatePdfDomainService {
 
   private final CertificateRepository certificateRepository;
-  private final PdfGenerator pdfGenerator;
+  private final PdfGeneratorProvider pdfGeneratorProvider;
   private final CertificateEventDomainService certificateEventDomainService;
 
 
@@ -41,7 +41,8 @@ public class GetCertificatePdfDomainService {
       certificate.updateMetadata(actionEvaluation);
     }
 
-    final var generatedPdf = pdfGenerator.generate(certificate, additionalInfoText, false);
+    final var generatedPdf = pdfGeneratorProvider.provider(certificate)
+        .generate(certificate, additionalInfoText, false);
 
     certificateEventDomainService.publish(
         CertificateEvent.builder()

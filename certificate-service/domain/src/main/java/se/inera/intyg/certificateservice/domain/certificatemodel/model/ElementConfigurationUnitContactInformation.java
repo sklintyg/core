@@ -1,8 +1,12 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
+import java.util.List;
+import java.util.Optional;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValue;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
 
@@ -21,5 +25,28 @@ public class ElementConfigurationUnitContactInformation implements ElementConfig
   @Override
   public ElementValue emptyValue() {
     return ElementValueUnitContactInformation.builder().build();
+  }
+
+  @Override
+  public Optional<ElementSimplifiedValue> simplified(ElementValue value) {
+    if (!(value instanceof ElementValueUnitContactInformation elementValue)) {
+      throw new IllegalStateException("Wrong value type");
+    }
+
+    if (elementValue.isEmpty()) {
+      return Optional.empty();
+    }
+
+    return Optional.of(
+        ElementSimplifiedValueList.builder()
+            .list(
+                List.of(
+                    elementValue.address(),
+                    String.format("%s %s", elementValue.zipCode(), elementValue.city()),
+                    elementValue.phoneNumber()
+                )
+            )
+            .build()
+    );
   }
 }

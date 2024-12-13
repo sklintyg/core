@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
+import java.util.Optional;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 
 public interface ElementConfiguration {
@@ -23,6 +25,10 @@ public interface ElementConfiguration {
   ElementType type();
 
   ElementValue emptyValue();
+
+  default Optional<ElementSimplifiedValue> simplified(ElementValue value) {
+    return Optional.empty();
+  }
 
   ElementMessage message();
 }
