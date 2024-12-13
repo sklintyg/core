@@ -126,26 +126,6 @@ class QuestionSynskarpaTest {
     }
 
     @Test
-    void shallReturnTrueIfBooleanIsNull() {
-      final var elementData = List.of(
-          ElementData.builder()
-              .id(new ElementId("4"))
-              .value(
-                  ElementValueBoolean.builder()
-                      .value(null)
-                      .build()
-              )
-              .build()
-      );
-
-      final var element = QuestionSynskarpa.questionSynskarpa();
-
-      final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
-
-      assertTrue(shouldValidate.test(elementData));
-    }
-
-    @Test
     void shallReturnFalseIfElementMissing() {
       final var elementData = List.of(
           ElementData.builder()

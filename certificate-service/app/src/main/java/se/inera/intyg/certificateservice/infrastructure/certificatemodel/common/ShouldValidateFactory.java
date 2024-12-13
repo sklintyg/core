@@ -34,11 +34,7 @@ public class ShouldValidateFactory {
         .filter(data -> elementIds.contains(data.id()))
         .map(element -> (ElementValueBoolean) element.value())
         .anyMatch(
-            value -> value != null && (
-                expectedValue
-                    ? value.value() != null && value.value() == expectedValue
-                    : value.value() == null || value.value() == expectedValue
-            )
+            value -> value != null && value.value() != null && value.value() == expectedValue
         );
   }
 
