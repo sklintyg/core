@@ -48,10 +48,19 @@ public class CertificateElementRuleFactory {
         .id(id)
         .expression(
             new RuleExpression(
-                not(singleExpression(fieldId.value()))
+                multipleAndExpression(
+                    null,
+                    not(singleExpression(fieldId.value())),
+                    notEmpty(singleExpression(fieldId.value())
+                    )
+                )
             )
         )
         .build();
+  }
+
+  public static String notEmpty(String expression) {
+    return "!empty(" + expression + ")";
   }
 
   public static ElementRule mandatory(ElementId id, List<FieldId> fieldIds) {
