@@ -59,17 +59,21 @@ public class XmlGeneratorVisualAcuities implements XmlGeneratorElementData {
     if (visualAcuity.withoutCorrection().value() != null) {
       final var subAnswer = new Delsvar();
       subAnswer.setId(visualAcuity.withoutCorrection().id().value());
-      subAnswer.getContent().add(visualAcuity.withoutCorrection().value().toString());
+      subAnswer.getContent().add(formatVisualAcuity(visualAcuity.withoutCorrection().value()));
       subAnswers.add(subAnswer);
     }
 
     if (visualAcuity.withCorrection().value() != null) {
       final var subAnswer = new Delsvar();
       subAnswer.setId(visualAcuity.withCorrection().id().value());
-      subAnswer.getContent().add(visualAcuity.withCorrection().value().toString());
+      subAnswer.getContent().add(formatVisualAcuity(visualAcuity.withCorrection().value()));
       subAnswers.add(subAnswer);
     }
 
     return Optional.of(subAnswers);
+  }
+
+  private String formatVisualAcuity(Double value) {
+    return String.valueOf(value).replace(".", ",");
   }
 }
