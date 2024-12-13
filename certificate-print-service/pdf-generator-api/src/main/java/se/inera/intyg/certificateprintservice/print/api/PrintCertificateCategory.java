@@ -16,13 +16,6 @@ public class PrintCertificateCategory {
   String name;
   List<PrintCertificateQuestion> questions;
 
-  public String asHtml() {
-    var sb = new StringBuilder();
-    sb.append("<h1>").append(name).append("</h1>\n");
-    questions.forEach(question -> sb.append(question.asHtml()));
-    return sb.toString();
-  }
-
   @JsonPOJOBuilder(withPrefix = "")
   public static class PrintCertificateCategoryBuilder {
 
