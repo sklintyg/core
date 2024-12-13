@@ -26,6 +26,7 @@ import se.inera.intyg.certificateservice.integrationtest.ExistsCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ExistsCertificateTypeInfoIT;
 import se.inera.intyg.certificateservice.integrationtest.ForwardCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateEventsIT;
+import se.inera.intyg.certificateservice.integrationtest.GetCertificateGeneralPdfIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateTypeInfoIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateXmlIT;
@@ -78,6 +79,21 @@ public class TSTRK8071ActiveIT {
   @Nested
   @DisplayName(TYPE + "Utökad behörighet vid djupintegration och SVOD (sjf=true)")
   class AccessLevelsSVOD extends AccessLevelsSVODIT {
+
+    @Override
+    protected String type() {
+      return CERTIFICATE_TYPE;
+    }
+
+    @Override
+    protected String typeVersion() {
+      return ACTIVE_VERSION;
+    }
+  }
+
+  @Nested
+  @DisplayName(TYPE + "Hämta pdf")
+  class GetCertificateGeneralPdf extends GetCertificateGeneralPdfIT {
 
     @Override
     protected String type() {

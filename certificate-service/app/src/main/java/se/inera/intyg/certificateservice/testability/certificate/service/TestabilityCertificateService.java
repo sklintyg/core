@@ -65,7 +65,7 @@ public class TestabilityCertificateService {
         .filter(model -> model.id().equals(certificateModelId))
         .findFirst()
         .orElseThrow(() -> new IllegalArgumentException(
-                "No certificateModelId matching ä%s'".formatted(certificateModelId)
+                "No certificateModelId matching %s'".formatted(certificateModelId)
             )
         );
 

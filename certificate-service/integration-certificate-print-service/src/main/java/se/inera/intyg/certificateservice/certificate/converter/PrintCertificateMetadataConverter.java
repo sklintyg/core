@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.certificate.converter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import javax.imageio.ImageIO;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.certificate.dto.PrintCertificateMetadataDTO;
@@ -19,7 +20,11 @@ public class PrintCertificateMetadataConverter {
         .name(certificate.certificateModel().name())
         .typeId(certificate.certificateModel().type().code())
         .version(certificate.certificateModel().id().version().version())
-        .signingDate(certificate.signed().toString())
+        .signingDate(
+            certificate.isDraft()
+                ? null
+                : certificate.signed().format(DateTimeFormatter.ISO_DATE)
+        )
         .certificateId(certificate.id().id())
         .recipientLogo(convertLogo(certificate.certificateModel().recipient().logo()))
         .recipientName(certificate.certificateModel().recipient().name())

@@ -2,7 +2,7 @@ package se.inera.intyg.certificateservice.integrationtest.tstrk8071;
 
 public class TSTRK8071Constants {
 
-  public static final String TSTRK8071 = "ts";
+  public static final String TSTRK8071 = "tstrk8071";
   public static final String TSTRK8071_DISPLAY_TYPE = "TSTRK8071";
   public static final String VERSION = "1.0";
   public static final String WRONG_VERSION = "wrongVersion";

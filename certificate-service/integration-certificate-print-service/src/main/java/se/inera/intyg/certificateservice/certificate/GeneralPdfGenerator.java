@@ -9,6 +9,7 @@ import se.inera.intyg.certificateservice.certificate.integration.PrintCertificat
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Pdf;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGenerator;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 
 @Component("GeneralPdfGenerator")
 @AllArgsConstructor
@@ -27,6 +28,9 @@ public class GeneralPdfGenerator implements PdfGenerator {
         .categories(
             certificate.certificateModel().elementSpecifications()
                 .stream()
+                .filter(
+                    elementSpecification -> !(elementSpecification.configuration() instanceof ElementConfigurationUnitContactInformation)
+                )
                 .map(element -> printCertificateCategoryConverter.convert(certificate, element))
                 .toList()
         )

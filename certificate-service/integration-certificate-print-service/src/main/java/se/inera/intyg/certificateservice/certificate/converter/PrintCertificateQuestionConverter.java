@@ -2,8 +2,14 @@ package se.inera.intyg.certificateservice.certificate.converter;
 
 import java.util.Optional;
 import org.springframework.stereotype.Component;
+import se.inera.intyg.certificateservice.certificate.dto.ElementSimplifiedValueDTO;
+import se.inera.intyg.certificateservice.certificate.dto.ElementSimplifiedValueListDTO;
+import se.inera.intyg.certificateservice.certificate.dto.ElementSimplifiedValueTextDTO;
 import se.inera.intyg.certificateservice.certificate.dto.PrintCertificateQuestionDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValue;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueList;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 
 @Component
@@ -23,7 +29,7 @@ public class PrintCertificateQuestionConverter {
     return simplifiedValue.map(elementSimplifiedValue -> PrintCertificateQuestionDTO.builder()
         .id(elementSpecification.id().id())
         .name(elementSpecification.configuration().name())
-        .value(elementSimplifiedValue)
+        .value(convertValue(elementSimplifiedValue))
         .children(
             elementSpecification.children().stream()
                 .map(child -> convert(child, certificate))
@@ -34,6 +40,24 @@ public class PrintCertificateQuestionConverter {
         .build()
     );
 
+  }
+
+  private ElementSimplifiedValueDTO convertValue(ElementSimplifiedValue elementSimplifiedValue) {
+    if (elementSimplifiedValue instanceof ElementSimplifiedValueText valueText) {
+      return ElementSimplifiedValueTextDTO.builder()
+          .text(valueText.text())
+          .build();
+    }
+
+    if (elementSimplifiedValue instanceof ElementSimplifiedValueList valueList) {
+      return ElementSimplifiedValueListDTO.builder()
+          .list(
+              valueList.list()
+          )
+          .build();
+    }
+
+    throw new IllegalStateException("No converter for this simplified value type");
   }
 
 }

@@ -23,7 +23,7 @@ dependencies {
 
     runtimeOnly 'com.mysql:mysql-connector-j'
     runtimeOnly project(':pdfbox-generator')
-    runtimeOnly project(':integration-certification-print-service')
+    runtimeOnly project(':integration-certificate-print-service')
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.boot:spring-boot-testcontainers'

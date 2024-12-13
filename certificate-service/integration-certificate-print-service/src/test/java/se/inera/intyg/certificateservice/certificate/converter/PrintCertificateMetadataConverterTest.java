@@ -2,12 +2,15 @@ package se.inera.intyg.certificateservice.certificate.converter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.fk7210certificateModelBuilder;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 
@@ -21,7 +24,16 @@ class PrintCertificateMetadataConverterTest {
           .recipient(new Recipient(new RecipientId("ts"), "ts", "ts", "transportstyrelsen-logo.png")
           ).build()
       )
+      .status(Status.SIGNED)
       .signed(LocalDateTime.now())
+      .build();
+
+  public static final Certificate DRAFT = fk7210CertificateBuilder()
+      .certificateModel(fk7210certificateModelBuilder()
+          .recipient(new Recipient(new RecipientId("ts"), "ts", "ts", "transportstyrelsen-logo.png")
+          ).build()
+      )
+      .status(Status.DRAFT)
       .build();
 
   public static final String APPLICATION_ORIGIN_WEBCERT = "Webcert";
@@ -55,7 +67,13 @@ class PrintCertificateMetadataConverterTest {
   @Test
   void shouldSetSigningDate() {
     final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false, FILE_NAME);
-    assertEquals(CERTIFICATE.signed().toString(), result.getSigningDate());
+    assertEquals(CERTIFICATE.signed().format(DateTimeFormatter.ISO_DATE), result.getSigningDate());
+  }
+
+  @Test
+  void shouldSetSigningDateToNullIfNotSigned() {
+    final var result = printCertificateMetadataConverter.convert(DRAFT, false, FILE_NAME);
+    assertNull(result.getSigningDate());
   }
 
   @Test

@@ -38,7 +38,7 @@ public class ElementConfigurationRadioBoolean implements ElementConfiguration {
       throw new IllegalStateException("Wrong value type");
     }
 
-    if (elementValue.value() == null) {
+    if (elementValue.isEmpty()) {
       return Optional.empty();
     }
 

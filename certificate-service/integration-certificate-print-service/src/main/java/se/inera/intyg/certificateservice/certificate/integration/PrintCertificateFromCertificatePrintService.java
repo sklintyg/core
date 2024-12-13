@@ -23,7 +23,7 @@ public class PrintCertificateFromCertificatePrintService {
 
   private final RestClient restClient;
 
-  @Value("${print.certificate.service.address}")
+  @Value("${integration.certificateprintservice.address}")
   private String printCertificateServiceUrl;
 
 

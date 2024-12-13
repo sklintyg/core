@@ -1,0 +1,163 @@
+openapi: 3.0.0
+info:
+  title: Certificate Print Service API
+  description: API for generating and printing certificates, including metadata, categories, and questions.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8081
+    description: Local server
+
+paths:
+  /api/print/{id}:
+    post:
+      summary: Generate and print certificate based on the provided ID, metadata, categories, and questions
+      operationId: printCertificate
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The unique identifier for the certificate to be printed
+          schema:
+            type: string
+            example: "12345"
+      requestBody:
+        description: Request to generate certificate with metadata, categories, and questions
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrintCertificateRequestDTO'
+      responses:
+        '200':
+          description: Successfully generated certificate
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrintCertificateResponseDTO'
+        '400':
+          description: Bad request, invalid or missing parameters
+        '404':
+          description: Certificate not found for the provided ID
+        '500':
+          description: Internal server error
+
+components:
+  schemas:
+    ElementSimplifiedValue:
+      type: object
+      properties:
+        value:
+          type: string
+          description: The value of the simplified element
+          example: "Approved"
+        type:
+          type: string
+          description: Type of the value (e.g., string, integer, etc.)
+          example: "string"
+
+    PrintCertificateQuestionDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the question
+          example: "q1"
+        name:
+          type: string
+          description: The name of the question
+          example: "What is your programming level?"
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrintCertificateQuestionDTO'
+          description: A list of child questions (if any)
+        value:
+          $ref: '#/components/schemas/ElementSimplifiedValue'
+          description: The value of the question's answer
+
+    PrintCertificateCategoryDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The category ID
+          example: "cat1"
+        name:
+          type: string
+          description: The name of the category
+          example: "Programming"
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrintCertificateQuestionDTO'
+          description: A list of questions (children) in this category
+
+    PrintCertificateMetadataDTO:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name associated with the certificate
+          example: "John Doe"
+        version:
+          type: string
+          description: The version of the certificate
+          example: "v1"
+        typeId:
+          type: string
+          description: The type ID of the certificate
+          example: "type-001"
+        certificateId:
+          type: string
+          description: The unique identifier for the certificate
+          example: "cert-12345"
+        signingDate:
+          type: string
+          format: date
+          description: The signing date of the certificate
+          example: "2024-12-12"
+        recipientLogo:
+          type: string
+          format: byte
+          description: The logo of the recipient (base64-encoded byte array)
+        recipientName:
+          type: string
+          description: The name of the certificate recipient
+          example: "John Doe"
+        applicationOrigin:
+          type: string
+          description: The origin of the application that generated the certificate
+          example: "Java Certification"
+        personId:
+          type: string
+          description: The unique person identifier for the recipient
+          example: "person-12345"
+        description:
+          type: string
+          description: A description of the certificate
+          example: "Completion of the Java Certification Program"
+        fileName:
+          type: string
+          description: The file name for the certificate PDF
+          example: "java_certification.pdf"
+
+    PrintCertificateRequestDTO:
+      type: object
+      properties:
+        metadata:
+          $ref: '#/components/schemas/PrintCertificateMetadataDTO'
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrintCertificateCategoryDTO'
+          description: A list of categories with questions related to the certificate
+
+    PrintCertificateResponseDTO:
+      type: object
+      properties:
+        pdfData:
+          type: string
+          format: byte
+          description: The certificate PDF as a base64-encoded byte array
+          example: "JVBERi0xLjQKJ... (base64-encoded PDF content)"
