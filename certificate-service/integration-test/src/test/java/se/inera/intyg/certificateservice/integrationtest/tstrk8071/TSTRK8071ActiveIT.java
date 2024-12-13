@@ -92,7 +92,7 @@ public class TSTRK8071ActiveIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Hämta pdf")
+  @DisplayName(TYPE + "Hämta generell intygspdf")
   class GetCertificateGeneralPdf extends GetCertificateGeneralPdfIT {
 
     @Override
@@ -103,6 +103,12 @@ public class TSTRK8071ActiveIT {
     @Override
     protected String typeVersion() {
       return ACTIVE_VERSION;
+    }
+
+    protected static Stream<Arguments> rolesNoAccessToProtectedPerson() {
+      return Stream.of(
+          Arguments.of(ALVA_VARDADMINISTRATOR_DTO, BERTIL_BARNMORSKA_DTO, ANNA_SJUKSKOTERSKA_DTO)
+      );
     }
   }
 

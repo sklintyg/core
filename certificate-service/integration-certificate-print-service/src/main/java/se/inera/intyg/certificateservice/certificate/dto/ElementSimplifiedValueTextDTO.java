@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.certificate.dto;
 
 import lombok.Builder;
+import lombok.Getter;
 import lombok.Value;
 import lombok.With;
 
@@ -10,9 +11,6 @@ public class ElementSimplifiedValueTextDTO implements ElementSimplifiedValueDTO 
 
   @With
   String text;
-
-  @Override
-  public ElementSimplifiedValueTypeDTO type() {
-    return ElementSimplifiedValueTypeDTO.TEXT;
-  }
+  @Getter(onMethod = @__(@Override))
+  ElementSimplifiedValueTypeDTO type = ElementSimplifiedValueTypeDTO.TEXT;
 }

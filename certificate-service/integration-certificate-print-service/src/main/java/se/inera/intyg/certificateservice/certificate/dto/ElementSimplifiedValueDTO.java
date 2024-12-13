@@ -14,6 +14,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 public interface ElementSimplifiedValueDTO {
 
-  ElementSimplifiedValueTypeDTO type();
+  ElementSimplifiedValueTypeDTO getType();
 
 }

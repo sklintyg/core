@@ -49,10 +49,11 @@ public abstract class GetCertificateGeneralPdfIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på samma mottagning skall pdf returneras")
   void shallReturnCertificatePdfIfUnitIsSubUnitAndOnSameUnit() {
-    certificatePrintServiceMock.mockPdf();
     final var testCertificates = testabilityApi.addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
+
+    certificatePrintServiceMock.mockPdf(certificateId(testCertificates));
 
     final var response = api.getCertificatePdf(
         defaultGetCertificatePdfRequest(),
@@ -71,6 +72,8 @@ public abstract class GetCertificateGeneralPdfIT extends BaseIntegrationIT {
     final var testCertificates = testabilityApi.addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
+
+    certificatePrintServiceMock.mockPdf(certificateId(testCertificates));
 
     final var response = api.getCertificatePdf(
         customGetCertificatePdfRequest()
@@ -94,6 +97,8 @@ public abstract class GetCertificateGeneralPdfIT extends BaseIntegrationIT {
             .build()
     );
 
+    certificatePrintServiceMock.mockPdf(certificateId(testCertificates));
+
     final var response = api.getCertificatePdf(
         customGetCertificatePdfRequest()
             .unit(ALFA_MEDICINCENTRUM_DTO)
@@ -113,6 +118,8 @@ public abstract class GetCertificateGeneralPdfIT extends BaseIntegrationIT {
     final var testCertificates = testabilityApi.addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
+
+    certificatePrintServiceMock.mockPdf(certificateId(testCertificates));
 
     final var response = api.getCertificatePdf(
         customGetCertificatePdfRequest()
@@ -138,6 +145,8 @@ public abstract class GetCertificateGeneralPdfIT extends BaseIntegrationIT {
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
+    certificatePrintServiceMock.mockPdf(certificateId(testCertificates));
+
     final var response = api.getCertificatePdf(
         customGetCertificatePdfRequest().unit(ALFA_HUDMOTTAGNINGEN_DTO).build(),
         certificateId(testCertificates)
@@ -152,6 +161,8 @@ public abstract class GetCertificateGeneralPdfIT extends BaseIntegrationIT {
     final var testCertificates = testabilityApi.addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
+
+    certificatePrintServiceMock.mockPdf(certificateId(testCertificates));
 
     final var response = api.getCertificatePdf(
         customGetCertificatePdfRequest()
@@ -174,6 +185,8 @@ public abstract class GetCertificateGeneralPdfIT extends BaseIntegrationIT {
             .build()
     );
 
+    certificatePrintServiceMock.mockPdf(certificateId(testCertificates));
+
     final var response = api.getCertificatePdf(
         customGetCertificatePdfRequest()
             .user(userDTO)
@@ -192,6 +205,8 @@ public abstract class GetCertificateGeneralPdfIT extends BaseIntegrationIT {
             .patient(ANONYMA_REACT_ATTILA_DTO)
             .build()
     );
+
+    certificatePrintServiceMock.mockPdf(certificateId(testCertificates));
 
     final var response = api.getCertificatePdf(
         customGetCertificatePdfRequest()
@@ -213,6 +228,8 @@ public abstract class GetCertificateGeneralPdfIT extends BaseIntegrationIT {
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
+    certificatePrintServiceMock.mockPdf(certificateId(testCertificates));
+
     final var response = api.getCertificatePdf(
         defaultGetCertificatePdfRequest(),
         certificateId(testCertificates)
@@ -230,6 +247,8 @@ public abstract class GetCertificateGeneralPdfIT extends BaseIntegrationIT {
     final var testCertificates = testabilityApi.addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
+
+    certificatePrintServiceMock.mockPdf(certificateId(testCertificates));
 
     api.sendCertificate(
         defaultSendCertificateRequest(),
