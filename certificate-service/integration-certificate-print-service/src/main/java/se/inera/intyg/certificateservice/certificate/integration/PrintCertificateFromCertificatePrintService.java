@@ -9,9 +9,7 @@ import static se.inera.intyg.certificateservice.logging.MdcLogConstants.TRACE_ID
 import lombok.RequiredArgsConstructor;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 import se.inera.intyg.certificateservice.certificate.dto.PrintCertificateRequestDTO;
 import se.inera.intyg.certificateservice.certificate.dto.PrintCertificateResponseDTO;
@@ -30,20 +28,13 @@ public class PrintCertificateFromCertificatePrintService {
   @PerformanceLogging(eventAction = "print-certificate-from-certificate-print-service", eventType = EVENT_TYPE_ACCESSED)
   public PrintCertificateResponseDTO print(PrintCertificateRequestDTO request,
       String certificateId) {
-    try {
-      return restClient
-          .post()
-          .uri(printCertificateServiceUrl + "/api/print/" + certificateId)
-          .header(LOG_TRACE_ID_HEADER, MDC.get(TRACE_ID_KEY))
-          .header(LOG_SESSION_ID_HEADER, MDC.get(SESSION_ID_KEY))
-          .body(request)
-          .retrieve()
-          .body(PrintCertificateResponseDTO.class);
-    } catch (HttpClientErrorException ex) {
-      if (ex.getStatusCode() != HttpStatus.NOT_FOUND) {
-        throw ex;
-      }
-      return null;
-    }
+    return restClient
+        .post()
+        .uri(printCertificateServiceUrl + "/api/print/" + certificateId)
+        .header(LOG_TRACE_ID_HEADER, MDC.get(TRACE_ID_KEY))
+        .header(LOG_SESSION_ID_HEADER, MDC.get(SESSION_ID_KEY))
+        .body(request)
+        .retrieve()
+        .body(PrintCertificateResponseDTO.class);
   }
 }
