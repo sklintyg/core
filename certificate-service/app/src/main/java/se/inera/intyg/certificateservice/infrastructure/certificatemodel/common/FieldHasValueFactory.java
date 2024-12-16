@@ -13,7 +13,7 @@ public class FieldHasValueFactory {
     throw new IllegalStateException("Utility class");
   }
 
-  public static Predicate<List<ElementData>> code(ElementId questionId, Code code) {
+  public static Predicate<List<ElementData>> codeList(ElementId questionId, Code code) {
     return elementData -> elementData.stream()
         .filter(data -> questionId.equals(data.id()))
         .map(element -> (ElementValueCodeList) element.value())

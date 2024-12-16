@@ -66,7 +66,7 @@ public class QuestionSynskarpa {
         .validations(
             List.of(
                 ElementValidationVisualAcuities.builder()
-                    .fieldHasValue(FieldHasValueFactory.code(QUESTION_INTYGET_AVSER_ID, TAXI))
+                    .fieldHasValue(FieldHasValueFactory.codeList(QUESTION_INTYGET_AVSER_ID, TAXI))
                     .mandatory(true)
                     .min(0.0)
                     .max(2.0)
