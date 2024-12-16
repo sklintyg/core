@@ -206,7 +206,7 @@ public class TestabilityCertificateFillServiceTS8071 implements
               String.format(
                   "Ett exempel på text för frågan %s",
                   elementSpecification.configuration().name()
-              ).substring(0, questionName.length() > 50 ? 49 : questionName.length() - 1)))
+              ).substring(0, questionName.length() < 50 ? questionName.length() - 1 : 49)))
           .build();
     }
 
