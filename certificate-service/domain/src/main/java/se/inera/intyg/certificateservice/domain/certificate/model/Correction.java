@@ -10,4 +10,12 @@ public class Correction {
 
   FieldId id;
   Double value;
+
+  public String simplified() {
+    if (value == null) {
+      return "-";
+    }
+
+    return String.format("%.1f", value);
+  }
 }
