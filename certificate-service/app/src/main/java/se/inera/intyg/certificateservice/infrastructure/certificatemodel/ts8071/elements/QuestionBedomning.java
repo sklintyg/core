@@ -10,7 +10,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCode;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemDecision;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemTs002;
 
 public class QuestionBedomning {
 
@@ -26,9 +26,9 @@ public class QuestionBedomning {
   public static ElementSpecification questionBedomning(
       ElementSpecification... children) {
     final var radioMultipleCodes = List.of(
-        CodeFactory.elementConfigurationCode(CodeSystemDecision.YES),
-        CodeFactory.elementConfigurationCode(CodeSystemDecision.NO),
-        CodeFactory.elementConfigurationCode(CodeSystemDecision.NO_DECISION)
+        CodeFactory.elementConfigurationCode(CodeSystemTs002.YES),
+        CodeFactory.elementConfigurationCode(CodeSystemTs002.NO),
+        CodeFactory.elementConfigurationCode(CodeSystemTs002.NO_DECISION)
     );
 
     return ElementSpecification.builder()

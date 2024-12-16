@@ -2,9 +2,9 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.common
 
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 
-public class CodeSystemKvTs0001 {
+public class CodeSystemKvInformationskallaForIntyg {
 
-  public static final String CODE_SYSTEM = "KV_TS_0001";
+  public static final String CODE_SYSTEM = "kv_informationskalla_for_intyg";
 
   public static final Code JOURNALUPPGIFTER = new Code(
       "journal",
@@ -24,7 +24,7 @@ public class CodeSystemKvTs0001 {
       "Undersökning av personen"
   );
 
-  private CodeSystemKvTs0001() {
+  private CodeSystemKvInformationskallaForIntyg() {
     throw new IllegalStateException("Utility class");
   }
 }

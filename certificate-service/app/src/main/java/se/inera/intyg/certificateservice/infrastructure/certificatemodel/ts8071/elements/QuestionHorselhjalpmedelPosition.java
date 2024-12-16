@@ -16,7 +16,7 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemPositionHearingAid;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvAnatomiskLokalisationHorapparat;
 
 public class QuestionHorselhjalpmedelPosition {
 
@@ -32,9 +32,10 @@ public class QuestionHorselhjalpmedelPosition {
   public static ElementSpecification questionHorselhjalpmedelPosition(
       ElementSpecification... children) {
     final var radioMultipleCodes = List.of(
-        CodeFactory.elementConfigurationCode(CodeSystemPositionHearingAid.VANSTER),
-        CodeFactory.elementConfigurationCode(CodeSystemPositionHearingAid.HOGER),
-        CodeFactory.elementConfigurationCode(CodeSystemPositionHearingAid.BADA_ORONEN)
+        CodeFactory.elementConfigurationCode(CodeSystemKvAnatomiskLokalisationHorapparat.VANSTER),
+        CodeFactory.elementConfigurationCode(CodeSystemKvAnatomiskLokalisationHorapparat.HOGER),
+        CodeFactory.elementConfigurationCode(
+            CodeSystemKvAnatomiskLokalisationHorapparat.BADA_ORONEN)
     );
 
     return ElementSpecification.builder()

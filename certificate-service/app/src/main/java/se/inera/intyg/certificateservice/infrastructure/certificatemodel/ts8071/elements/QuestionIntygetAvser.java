@@ -12,7 +12,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.MessageLe
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCodeList;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs0002;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor;
 
 public class QuestionIntygetAvser {
 
@@ -25,13 +25,13 @@ public class QuestionIntygetAvser {
 
   public static ElementSpecification questionIntygetAvser() {
     final var checkboxes = List.of(
-        CodeFactory.elementConfigurationCode(CodeSystemKvTs0002.GR_II),
-        CodeFactory.elementConfigurationCode(CodeSystemKvTs0002.GR_II_III),
-        CodeFactory.elementConfigurationCode(CodeSystemKvTs0002.FORLANG_GR_II),
-        CodeFactory.elementConfigurationCode(CodeSystemKvTs0002.FORLANG_GR_II_III),
-        CodeFactory.elementConfigurationCode(CodeSystemKvTs0002.UTLANDSKT),
-        CodeFactory.elementConfigurationCode(CodeSystemKvTs0002.TAXI),
-        CodeFactory.elementConfigurationCode(CodeSystemKvTs0002.ANNAT)
+        CodeFactory.elementConfigurationCode(CodeSystemKvIntygetGallerFor.GR_II),
+        CodeFactory.elementConfigurationCode(CodeSystemKvIntygetGallerFor.GR_II_III),
+        CodeFactory.elementConfigurationCode(CodeSystemKvIntygetGallerFor.FORLANG_GR_II),
+        CodeFactory.elementConfigurationCode(CodeSystemKvIntygetGallerFor.FORLANG_GR_II_III),
+        CodeFactory.elementConfigurationCode(CodeSystemKvIntygetGallerFor.UTLANDSKT),
+        CodeFactory.elementConfigurationCode(CodeSystemKvIntygetGallerFor.TAXI),
+        CodeFactory.elementConfigurationCode(CodeSystemKvIntygetGallerFor.ANNAT)
     );
 
     return ElementSpecification.builder()
@@ -57,79 +57,79 @@ public class QuestionIntygetAvser {
                 CertificateElementRuleFactory.mandatoryOrExist(
                     QUESTION_INTYGET_AVSER_ID,
                     List.of(
-                        new FieldId(CodeSystemKvTs0002.GR_II.code()),
-                        new FieldId(CodeSystemKvTs0002.GR_II_III.code()),
-                        new FieldId(CodeSystemKvTs0002.FORLANG_GR_II.code()),
-                        new FieldId(CodeSystemKvTs0002.FORLANG_GR_II_III.code()),
-                        new FieldId(CodeSystemKvTs0002.UTLANDSKT.code()),
-                        new FieldId(CodeSystemKvTs0002.TAXI.code()),
-                        new FieldId(CodeSystemKvTs0002.ANNAT.code())
+                        new FieldId(CodeSystemKvIntygetGallerFor.GR_II.code()),
+                        new FieldId(CodeSystemKvIntygetGallerFor.GR_II_III.code()),
+                        new FieldId(CodeSystemKvIntygetGallerFor.FORLANG_GR_II.code()),
+                        new FieldId(CodeSystemKvIntygetGallerFor.FORLANG_GR_II_III.code()),
+                        new FieldId(CodeSystemKvIntygetGallerFor.UTLANDSKT.code()),
+                        new FieldId(CodeSystemKvIntygetGallerFor.TAXI.code()),
+                        new FieldId(CodeSystemKvIntygetGallerFor.ANNAT.code())
                     )
                 ),
                 CertificateElementRuleFactory.disableSubElements(
                     QUESTION_INTYGET_AVSER_ID,
-                    List.of(new FieldId(CodeSystemKvTs0002.GR_II.code())),
+                    List.of(new FieldId(CodeSystemKvIntygetGallerFor.GR_II.code())),
                     List.of(
-                        new FieldId(CodeSystemKvTs0002.GR_II_III.code()),
-                        new FieldId(CodeSystemKvTs0002.FORLANG_GR_II.code()),
-                        new FieldId(CodeSystemKvTs0002.FORLANG_GR_II_III.code()),
-                        new FieldId(CodeSystemKvTs0002.UTLANDSKT.code()),
-                        new FieldId(CodeSystemKvTs0002.ANNAT.code())
+                        new FieldId(CodeSystemKvIntygetGallerFor.GR_II_III.code()),
+                        new FieldId(CodeSystemKvIntygetGallerFor.FORLANG_GR_II.code()),
+                        new FieldId(CodeSystemKvIntygetGallerFor.FORLANG_GR_II_III.code()),
+                        new FieldId(CodeSystemKvIntygetGallerFor.UTLANDSKT.code()),
+                        new FieldId(CodeSystemKvIntygetGallerFor.ANNAT.code())
                     )
                 ),
                 CertificateElementRuleFactory.disableSubElements(
                     QUESTION_INTYGET_AVSER_ID,
-                    List.of(new FieldId(CodeSystemKvTs0002.GR_II_III.code())),
+                    List.of(new FieldId(CodeSystemKvIntygetGallerFor.GR_II_III.code())),
                     List.of(
-                        new FieldId(CodeSystemKvTs0002.GR_II.code()),
-                        new FieldId(CodeSystemKvTs0002.FORLANG_GR_II.code()),
-                        new FieldId(CodeSystemKvTs0002.FORLANG_GR_II_III.code()),
-                        new FieldId(CodeSystemKvTs0002.UTLANDSKT.code()),
-                        new FieldId(CodeSystemKvTs0002.ANNAT.code())
+                        new FieldId(CodeSystemKvIntygetGallerFor.GR_II.code()),
+                        new FieldId(CodeSystemKvIntygetGallerFor.FORLANG_GR_II.code()),
+                        new FieldId(CodeSystemKvIntygetGallerFor.FORLANG_GR_II_III.code()),
+                        new FieldId(CodeSystemKvIntygetGallerFor.UTLANDSKT.code()),
+                        new FieldId(CodeSystemKvIntygetGallerFor.ANNAT.code())
                     )
                 ),
                 CertificateElementRuleFactory.disableSubElements(
                     QUESTION_INTYGET_AVSER_ID,
-                    List.of(new FieldId(CodeSystemKvTs0002.FORLANG_GR_II.code())),
+                    List.of(new FieldId(CodeSystemKvIntygetGallerFor.FORLANG_GR_II.code())),
                     List.of(
-                        new FieldId(CodeSystemKvTs0002.GR_II.code()),
-                        new FieldId(CodeSystemKvTs0002.GR_II_III.code()),
-                        new FieldId(CodeSystemKvTs0002.FORLANG_GR_II_III.code()),
-                        new FieldId(CodeSystemKvTs0002.UTLANDSKT.code()),
-                        new FieldId(CodeSystemKvTs0002.ANNAT.code())
+                        new FieldId(CodeSystemKvIntygetGallerFor.GR_II.code()),
+                        new FieldId(CodeSystemKvIntygetGallerFor.GR_II_III.code()),
+                        new FieldId(CodeSystemKvIntygetGallerFor.FORLANG_GR_II_III.code()),
+                        new FieldId(CodeSystemKvIntygetGallerFor.UTLANDSKT.code()),
+                        new FieldId(CodeSystemKvIntygetGallerFor.ANNAT.code())
                     )
                 ),
                 CertificateElementRuleFactory.disableSubElements(
                     QUESTION_INTYGET_AVSER_ID,
-                    List.of(new FieldId(CodeSystemKvTs0002.FORLANG_GR_II_III.code())),
+                    List.of(new FieldId(CodeSystemKvIntygetGallerFor.FORLANG_GR_II_III.code())),
                     List.of(
-                        new FieldId(CodeSystemKvTs0002.GR_II.code()),
-                        new FieldId(CodeSystemKvTs0002.GR_II_III.code()),
-                        new FieldId(CodeSystemKvTs0002.FORLANG_GR_II.code()),
-                        new FieldId(CodeSystemKvTs0002.UTLANDSKT.code()),
-                        new FieldId(CodeSystemKvTs0002.ANNAT.code())
+                        new FieldId(CodeSystemKvIntygetGallerFor.GR_II.code()),
+                        new FieldId(CodeSystemKvIntygetGallerFor.GR_II_III.code()),
+                        new FieldId(CodeSystemKvIntygetGallerFor.FORLANG_GR_II.code()),
+                        new FieldId(CodeSystemKvIntygetGallerFor.UTLANDSKT.code()),
+                        new FieldId(CodeSystemKvIntygetGallerFor.ANNAT.code())
                     )
                 ),
                 CertificateElementRuleFactory.disableSubElements(
                     QUESTION_INTYGET_AVSER_ID,
-                    List.of(new FieldId(CodeSystemKvTs0002.UTLANDSKT.code())),
+                    List.of(new FieldId(CodeSystemKvIntygetGallerFor.UTLANDSKT.code())),
                     List.of(
-                        new FieldId(CodeSystemKvTs0002.GR_II.code()),
-                        new FieldId(CodeSystemKvTs0002.GR_II_III.code()),
-                        new FieldId(CodeSystemKvTs0002.FORLANG_GR_II.code()),
-                        new FieldId(CodeSystemKvTs0002.FORLANG_GR_II_III.code()),
-                        new FieldId(CodeSystemKvTs0002.ANNAT.code())
+                        new FieldId(CodeSystemKvIntygetGallerFor.GR_II.code()),
+                        new FieldId(CodeSystemKvIntygetGallerFor.GR_II_III.code()),
+                        new FieldId(CodeSystemKvIntygetGallerFor.FORLANG_GR_II.code()),
+                        new FieldId(CodeSystemKvIntygetGallerFor.FORLANG_GR_II_III.code()),
+                        new FieldId(CodeSystemKvIntygetGallerFor.ANNAT.code())
                     )
                 ),
                 CertificateElementRuleFactory.disableSubElements(
                     QUESTION_INTYGET_AVSER_ID,
-                    List.of(new FieldId(CodeSystemKvTs0002.ANNAT.code())),
+                    List.of(new FieldId(CodeSystemKvIntygetGallerFor.ANNAT.code())),
                     List.of(
-                        new FieldId(CodeSystemKvTs0002.GR_II.code()),
-                        new FieldId(CodeSystemKvTs0002.GR_II_III.code()),
-                        new FieldId(CodeSystemKvTs0002.FORLANG_GR_II.code()),
-                        new FieldId(CodeSystemKvTs0002.FORLANG_GR_II_III.code()),
-                        new FieldId(CodeSystemKvTs0002.UTLANDSKT.code())
+                        new FieldId(CodeSystemKvIntygetGallerFor.GR_II.code()),
+                        new FieldId(CodeSystemKvIntygetGallerFor.GR_II_III.code()),
+                        new FieldId(CodeSystemKvIntygetGallerFor.FORLANG_GR_II.code()),
+                        new FieldId(CodeSystemKvIntygetGallerFor.FORLANG_GR_II_III.code()),
+                        new FieldId(CodeSystemKvIntygetGallerFor.UTLANDSKT.code())
                     )
                 )
             )
