@@ -20,7 +20,8 @@ public class ElementValidationCodeList implements ElementValidation {
   boolean mandatory;
 
   @Override
-  public List<ValidationError> validate(ElementData data, Optional<ElementId> categoryId) {
+  public List<ValidationError> validate(ElementData data, Optional<ElementId> categoryId,
+      List<ElementData> elementData) {
     validateElementData(data);
     final var codeList = getValue(data.value());
 

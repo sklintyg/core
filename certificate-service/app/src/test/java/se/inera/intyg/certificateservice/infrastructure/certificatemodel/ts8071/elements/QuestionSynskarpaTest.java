@@ -1,7 +1,9 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynfunktioner.QUESTION_SYNFUNKTIONER_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynfunktioner.QUESTION_SYNFUNKTIONER_ID;
@@ -89,17 +91,15 @@ class QuestionSynskarpaTest {
 
   @Test
   void shallIncludeValidation() {
-    final var expectedValidations = List.of(
-        ElementValidationVisualAcuities.builder()
-            .mandatory(true)
-            .min(0.0)
-            .max(2.0)
-            .build()
+    final var validation = (ElementValidationVisualAcuities) QuestionSynskarpa.questionSynskarpa()
+        .validations().getFirst();
+
+    assertAll(
+        () -> assertEquals(0.0, validation.min()),
+        () -> assertEquals(2.0, validation.max()),
+        () -> assertTrue(validation.mandatory()),
+        () -> assertNotNull(validation.fieldHasValue())
     );
-
-    final var element = QuestionSynskarpa.questionSynskarpa();
-
-    assertEquals(expectedValidations, element.validations());
   }
 
   @Nested

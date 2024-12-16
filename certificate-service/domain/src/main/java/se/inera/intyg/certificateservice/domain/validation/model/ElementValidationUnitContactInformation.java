@@ -31,7 +31,8 @@ public class ElementValidationUnitContactInformation implements ElementValidatio
   private static final String PHONE_NUMBER_MESSAGE = "Ange telefonnummer.";
 
   @Override
-  public List<ValidationError> validate(ElementData data, Optional<ElementId> categoryId) {
+  public List<ValidationError> validate(ElementData data, Optional<ElementId> categoryId,
+      List<ElementData> elementData) {
     if (data == null) {
       throw new IllegalArgumentException("Element data is null");
     }

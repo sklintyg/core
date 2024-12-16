@@ -37,7 +37,7 @@ class ElementValidationTextTest {
     void shallThrowIllegalArgumentExceptionIfDataIsNull() {
       final Optional<ElementId> categoryId = Optional.empty();
       assertThrows(IllegalArgumentException.class,
-          () -> elementValidationText.validate(null, categoryId)
+          () -> elementValidationText.validate(null, categoryId, Collections.emptyList())
       );
     }
 
@@ -49,7 +49,7 @@ class ElementValidationTextTest {
           .build();
 
       assertThrows(IllegalArgumentException.class,
-          () -> elementValidationText.validate(elementData, categoryId)
+          () -> elementValidationText.validate(elementData, categoryId, Collections.emptyList())
       );
     }
 
@@ -62,7 +62,7 @@ class ElementValidationTextTest {
           .build();
 
       assertThrows(IllegalArgumentException.class,
-          () -> elementValidationText.validate(elementData, categoryId)
+          () -> elementValidationText.validate(elementData, categoryId, Collections.emptyList())
       );
     }
   }
@@ -99,8 +99,8 @@ class ElementValidationTextTest {
 
       final var actualResult = elementValidationText.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(expectedValidationError, actualResult);
     }
@@ -127,8 +127,8 @@ class ElementValidationTextTest {
 
       final var actualResult = elementValidationText.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(expectedValidationError, actualResult);
     }
@@ -147,8 +147,8 @@ class ElementValidationTextTest {
 
       final var actualResult = elementValidationText.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(Collections.emptyList(), actualResult);
     }
@@ -178,8 +178,8 @@ class ElementValidationTextTest {
 
       final var actualResult = elementValidationText.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(Collections.emptyList(), actualResult);
     }
@@ -198,8 +198,8 @@ class ElementValidationTextTest {
 
       final var actualResult = elementValidationText.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(Collections.emptyList(), actualResult);
     }
@@ -226,8 +226,8 @@ class ElementValidationTextTest {
 
       final var actualResult = elementValidationText.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(expectedValidationError, actualResult);
     }
@@ -256,8 +256,8 @@ class ElementValidationTextTest {
 
       final var actualResult = elementValidationText.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(Collections.emptyList(), actualResult);
     }
@@ -275,8 +275,8 @@ class ElementValidationTextTest {
 
       final var actualResult = elementValidationText.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(Collections.emptyList(), actualResult);
     }

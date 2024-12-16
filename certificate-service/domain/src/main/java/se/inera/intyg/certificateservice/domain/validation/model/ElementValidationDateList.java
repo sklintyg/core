@@ -23,7 +23,8 @@ public class ElementValidationDateList implements ElementValidation {
   TemporalAmount max;
 
   @Override
-  public List<ValidationError> validate(ElementData data, Optional<ElementId> categoryId) {
+  public List<ValidationError> validate(ElementData data, Optional<ElementId> categoryId,
+      List<ElementData> elementData) {
     validateElementData(data);
     final var dateList = getValue(data.value());
     final var dateAfterMaxErrors = getDateAfterMaxErrors(data, categoryId, dateList);

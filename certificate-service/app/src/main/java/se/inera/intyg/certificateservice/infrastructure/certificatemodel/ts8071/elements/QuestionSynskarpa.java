@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs0002.TAXI;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionIntygetAvser.QUESTION_INTYGET_AVSER_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynfunktioner.QUESTION_SYNFUNKTIONER_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynfunktioner.QUESTION_SYNFUNKTIONER_ID;
 
@@ -11,6 +13,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementVi
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationVisualAcuities;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.FieldHasValueFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
 
 public class QuestionSynskarpa {
@@ -63,6 +66,7 @@ public class QuestionSynskarpa {
         .validations(
             List.of(
                 ElementValidationVisualAcuities.builder()
+                    .fieldHasValue(FieldHasValueFactory.code(QUESTION_INTYGET_AVSER_ID, TAXI))
                     .mandatory(true)
                     .min(0.0)
                     .max(2.0)

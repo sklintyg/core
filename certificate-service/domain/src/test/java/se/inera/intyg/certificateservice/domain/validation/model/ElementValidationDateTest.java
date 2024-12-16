@@ -36,7 +36,7 @@ class ElementValidationDateTest {
     void shallThrowIllegalArgumentExceptionIfDataIsNull() {
       final Optional<ElementId> categoryId = Optional.empty();
       assertThrows(IllegalArgumentException.class,
-          () -> elementValidationDate.validate(null, categoryId)
+          () -> elementValidationDate.validate(null, categoryId, Collections.emptyList())
       );
     }
 
@@ -48,7 +48,7 @@ class ElementValidationDateTest {
           .build();
 
       assertThrows(IllegalArgumentException.class,
-          () -> elementValidationDate.validate(elementData, categoryId));
+          () -> elementValidationDate.validate(elementData, categoryId, Collections.emptyList()));
     }
 
     @Test
@@ -60,7 +60,7 @@ class ElementValidationDateTest {
           .build();
 
       assertThrows(IllegalArgumentException.class,
-          () -> elementValidationDate.validate(elementData, categoryId));
+          () -> elementValidationDate.validate(elementData, categoryId, Collections.emptyList()));
     }
   }
 
@@ -97,7 +97,7 @@ class ElementValidationDateTest {
           .build();
 
       final var actualResult = elementValidationDate.validate(elementData,
-          Optional.of(CATEGORY_ID));
+          Optional.of(CATEGORY_ID), Collections.emptyList());
       assertEquals(expectedValidationError, actualResult);
     }
 
@@ -124,7 +124,7 @@ class ElementValidationDateTest {
           .build();
 
       final var actualResult = elementValidationDate.validate(elementData,
-          Optional.of(CATEGORY_ID));
+          Optional.of(CATEGORY_ID), Collections.emptyList());
       assertEquals(expectedValidationError, actualResult);
     }
 
@@ -152,7 +152,7 @@ class ElementValidationDateTest {
           .build();
 
       final var actualResult = elementValidationDate.validate(elementData,
-          Optional.of(CATEGORY_ID));
+          Optional.of(CATEGORY_ID), Collections.emptyList());
       assertEquals(expectedValidationError, actualResult);
     }
   }
@@ -181,7 +181,7 @@ class ElementValidationDateTest {
           .build();
 
       final var actualResult = elementValidationDate.validate(elementData,
-          Optional.of(CATEGORY_ID));
+          Optional.of(CATEGORY_ID), Collections.emptyList());
 
       assertEquals(expectedValidationError, actualResult);
     }
@@ -209,7 +209,7 @@ class ElementValidationDateTest {
           .build();
 
       final var actualResult = elementValidationDate.validate(elementData,
-          Optional.of(CATEGORY_ID));
+          Optional.of(CATEGORY_ID), Collections.emptyList());
       assertEquals(expectedValidationError, actualResult);
     }
 
@@ -237,7 +237,7 @@ class ElementValidationDateTest {
           .build();
 
       final var actualResult = elementValidationDate.validate(elementData,
-          Optional.of(CATEGORY_ID));
+          Optional.of(CATEGORY_ID), Collections.emptyList());
       assertEquals(expectedValidationError, actualResult);
     }
   }
@@ -263,7 +263,7 @@ class ElementValidationDateTest {
           .build();
 
       final var actualResult = elementValidationDate.validate(elementData,
-          Optional.of(CATEGORY_ID));
+          Optional.of(CATEGORY_ID), Collections.emptyList());
 
       assertEquals(expectedValidationError, actualResult);
     }
@@ -282,7 +282,7 @@ class ElementValidationDateTest {
           .build();
 
       final var actualResult = elementValidationDate.validate(elementData,
-          Optional.of(CATEGORY_ID));
+          Optional.of(CATEGORY_ID), Collections.emptyList());
 
       assertEquals(expectedValidationError, actualResult);
     }
