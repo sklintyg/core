@@ -199,13 +199,14 @@ public class TestabilityCertificateFillServiceTS8071 implements
     }
 
     if (value instanceof ElementValueText elementValueText) {
+      final var questionName = elementSpecification.configuration().name();
       return ElementData.builder()
           .id(elementSpecification.id())
           .value(elementValueText.withText(
               String.format(
                   "Ett exempel på text för frågan %s",
                   elementSpecification.configuration().name()
-              ).substring(0, 49)))
+              ).substring(0, questionName.length() > 50 ? 49 : questionName.length() - 1)))
           .build();
     }
 
