@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.GR_II_III;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.TAXI;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.FORLANG_GR_II;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.GR_II;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionIntygetAvser.QUESTION_INTYGET_AVSER_ID;
 
 import java.util.List;
@@ -35,7 +35,7 @@ public class CategoryHorsel {
                     QUESTION_INTYGET_AVSER_ID,
                     new RuleExpression(
                         String.format(
-                            "exists(%s) || exists(%s)", GR_II_III.code(), TAXI.code()
+                            "!exists(%s) && !exists(%s)", GR_II.code(), FORLANG_GR_II.code()
                         )
                     )
                 )

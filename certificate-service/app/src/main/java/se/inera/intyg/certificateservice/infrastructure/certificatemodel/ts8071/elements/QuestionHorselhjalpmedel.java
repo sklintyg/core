@@ -1,7 +1,12 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.ANNAT;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.FORLANG_GR_II;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.FORLANG_GR_II_III;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.GR_II;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.GR_II_III;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.TAXI;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.UTLANDSKT;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionHorsel.QUESTION_HORSEL_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionIntygetAvser.QUESTION_INTYGET_AVSER_ID;
 
@@ -53,7 +58,7 @@ public class QuestionHorselhjalpmedel {
                     QUESTION_INTYGET_AVSER_ID,
                     new RuleExpression(
                         String.format(
-                            "exists(%s) || exists(%s)", GR_II_III.code(), TAXI.code()
+                            "!exists(%s) && !exists(%s)", GR_II.code(), FORLANG_GR_II.code()
                         )
                     )
                 )
@@ -63,7 +68,9 @@ public class QuestionHorselhjalpmedel {
         .children(List.of(children))
         .shouldValidate(ShouldValidateFactory.codeList(
                 QUESTION_INTYGET_AVSER_ID,
-                List.of(new FieldId(GR_II_III.code()), new FieldId(TAXI.code()))
+                List.of(new FieldId(GR_II_III.code()), new FieldId(TAXI.code()),
+                    new FieldId(UTLANDSKT.code()), new FieldId(FORLANG_GR_II_III.code()),
+                    new FieldId(ANNAT.code()))
             )
         )
         .build();
