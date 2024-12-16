@@ -2,9 +2,9 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.common
 
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 
-public class CodeSystemTs002 {
+public class CodeSystemKvTs001 {
 
-  public static final String CODE_SYSTEM = "TS-002";
+  public static final String CODE_SYSTEM = "TS-001";
 
   public static final Code YES = new Code(
       "ja",
@@ -18,14 +18,14 @@ public class CodeSystemTs002 {
       "Nej"
   );
 
-  public static final Code NO_DECISION = new Code(
-      "ejstalln",
+  public static final Code NO_KNOWLEDGE = new Code(
+      "vetej",
       CODE_SYSTEM,
-      "Kan inte ta ställning"
+      "Vet ej"
   );
 
 
-  private CodeSystemTs002() {
+  private CodeSystemKvTs001() {
     throw new IllegalStateException("Utility class");
   }
 }
