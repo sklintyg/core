@@ -24,12 +24,12 @@ public class QuestionSynskarpa {
 
   public static final ElementId QUESTION_SYNSKARPA_ID = new ElementId("5");
   public static final FieldId QUESTION_SYNSKARPA_FIELD_ID = new FieldId("5.1");
-  private static final String RIGHT_EYE_WITHOUT_CORRECTION_ID = "5.2";
-  private static final String RIGHT_EYE_WITH_CORRECTION_ID = "5.5";
-  private static final String LEFT_EYE_WITHOUT_CORRECTION_ID = "5.3";
-  private static final String LEFT_EYE_WITH_CORRECTION_ID = "5.6";
-  private static final String BINOCULAR_WITHOUT_CORRECTION_ID = "5.4";
-  private static final String BINOCULAR_WITH_CORRECTION_ID = "5.7";
+  public static final String RIGHT_EYE_WITHOUT_CORRECTION_ID = "5.2";
+  public static final String RIGHT_EYE_WITH_CORRECTION_ID = "5.5";
+  public static final String LEFT_EYE_WITHOUT_CORRECTION_ID = "5.3";
+  public static final String LEFT_EYE_WITH_CORRECTION_ID = "5.6";
+  public static final String BINOCULAR_WITHOUT_CORRECTION_ID = "5.4";
+  public static final String BINOCULAR_WITH_CORRECTION_ID = "5.7";
 
   public static ElementSpecification questionSynskarpa() {
     return ElementSpecification.builder()

@@ -1,11 +1,22 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.lessThanOrEqual;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.multipleAndExpressions;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.multipleOrExpression;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.withCitation;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.wrapWithParenthesis;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynskarpa.LEFT_EYE_WITHOUT_CORRECTION_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynskarpa.QUESTION_SYNSKARPA_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynskarpa.RIGHT_EYE_WITHOUT_CORRECTION_ID;
+
 import java.util.List;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueVisualAcuities;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementLayout;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCodeList;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeFactory;
@@ -20,10 +31,11 @@ public class QuestionKorrigeringAvSynskarpa {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionKorrigeringAvSynskarpa() {
+  public static ElementSpecification questionKorrigeringAvSynskarpa(
+      ElementSpecification... children) {
     final var checkboxes = List.of(
         CodeFactory.elementConfigurationCode(
-            CodeSystemKorringerAvSynskarpa.GLASOGON_UTAN_STYRKA_OVER_8_DIOPTRIER),
+            CodeSystemKorringerAvSynskarpa.GLASOGON_INGEN_STYRKA_OVER_8_DIOPTRIER),
         CodeFactory.elementConfigurationCode(
             CodeSystemKorringerAvSynskarpa.GLASOGON_MED_STYRKA_OVER_8_DIOPTRIER),
         CodeFactory.elementConfigurationCode(CodeSystemKorringerAvSynskarpa.KONTAKTLINSER)
@@ -41,13 +53,44 @@ public class QuestionKorrigeringAvSynskarpa {
         )
         .rules(
             List.of(
+                CertificateElementRuleFactory.show(
+                    QUESTION_SYNSKARPA_ID,
+                    new RuleExpression(
+                        multipleOrExpression(
+                            wrapWithParenthesis(
+                                multipleAndExpressions(
+                                    lessThanOrEqual(
+                                        withCitation(LEFT_EYE_WITHOUT_CORRECTION_ID),
+                                        "0.8"
+                                    ),
+                                    lessThanOrEqual(
+                                        withCitation(RIGHT_EYE_WITHOUT_CORRECTION_ID),
+                                        "0.1"
+                                    )
+                                )
+                            ),
+                            wrapWithParenthesis(
+                                multipleAndExpressions(
+                                    lessThanOrEqual(
+                                        withCitation(LEFT_EYE_WITHOUT_CORRECTION_ID),
+                                        "0.1"
+                                    ),
+                                    lessThanOrEqual(
+                                        withCitation(RIGHT_EYE_WITHOUT_CORRECTION_ID),
+                                        "0.8"
+                                    )
+                                )
+                            )
+                        )
+                    )
+                ),
                 CertificateElementRuleFactory.mandatoryOrExist(
                     QUESTION_KORRIGERING_AV_SYNSKARPA_ID,
                     List.of(
                         new FieldId(
                             CodeSystemKorringerAvSynskarpa.GLASOGON_MED_STYRKA_OVER_8_DIOPTRIER.code()),
                         new FieldId(
-                            CodeSystemKorringerAvSynskarpa.GLASOGON_UTAN_STYRKA_OVER_8_DIOPTRIER.code()),
+                            CodeSystemKorringerAvSynskarpa.GLASOGON_INGEN_STYRKA_OVER_8_DIOPTRIER.code()),
                         new FieldId(CodeSystemKorringerAvSynskarpa.KONTAKTLINSER.code())
                     )
                 ),
@@ -57,13 +100,13 @@ public class QuestionKorrigeringAvSynskarpa {
                         CodeSystemKorringerAvSynskarpa.GLASOGON_MED_STYRKA_OVER_8_DIOPTRIER.code())),
                     List.of(
                         new FieldId(
-                            CodeSystemKorringerAvSynskarpa.GLASOGON_UTAN_STYRKA_OVER_8_DIOPTRIER.code())
+                            CodeSystemKorringerAvSynskarpa.GLASOGON_INGEN_STYRKA_OVER_8_DIOPTRIER.code())
                     )
                 ),
                 CertificateElementRuleFactory.disableSubElements(
                     QUESTION_KORRIGERING_AV_SYNSKARPA_ID,
                     List.of(new FieldId(
-                        CodeSystemKorringerAvSynskarpa.GLASOGON_UTAN_STYRKA_OVER_8_DIOPTRIER.code())),
+                        CodeSystemKorringerAvSynskarpa.GLASOGON_INGEN_STYRKA_OVER_8_DIOPTRIER.code())),
                     List.of(
                         new FieldId(
                             CodeSystemKorringerAvSynskarpa.GLASOGON_MED_STYRKA_OVER_8_DIOPTRIER.code())
@@ -77,6 +120,23 @@ public class QuestionKorrigeringAvSynskarpa {
                     .mandatory(true)
                     .build()
             )
+        )
+        .children(List.of(children))
+        .shouldValidate(
+            elementData -> elementData.stream()
+                .filter(data -> data.id().equals(QUESTION_SYNSKARPA_ID))
+                .map(data -> (ElementValueVisualAcuities) data.value())
+                .anyMatch(
+                    visualAcuities ->
+                        (visualAcuities.rightEye().withoutCorrection().value() != null
+                            && visualAcuities.rightEye().withoutCorrection().value() <= 0.1
+                            && visualAcuities.leftEye().withoutCorrection().value() != null
+                            && visualAcuities.leftEye().withoutCorrection().value() <= 0.8) ||
+                            (visualAcuities.rightEye().withoutCorrection().value() != null
+                                && visualAcuities.rightEye().withoutCorrection().value() <= 0.8
+                                && visualAcuities.leftEye().withoutCorrection().value() != null
+                                && visualAcuities.leftEye().withoutCorrection().value() <= 0.1)
+                )
         )
         .build();
   }
