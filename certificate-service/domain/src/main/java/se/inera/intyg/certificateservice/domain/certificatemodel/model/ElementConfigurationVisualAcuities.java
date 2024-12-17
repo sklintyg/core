@@ -25,6 +25,8 @@ public class ElementConfigurationVisualAcuities implements ElementConfiguration 
   FieldId id;
   String withoutCorrectionLabel;
   String withCorrectionLabel;
+  Double min;
+  Double max;
   ElementVisualAcuity rightEye;
   ElementVisualAcuity leftEye;
   ElementVisualAcuity binocular;

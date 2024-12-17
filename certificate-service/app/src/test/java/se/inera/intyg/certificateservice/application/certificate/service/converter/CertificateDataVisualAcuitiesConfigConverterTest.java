@@ -24,6 +24,8 @@ class CertificateDataVisualAcuitiesConfigConverterTest {
           .id(new FieldId("id"))
           .withCorrectionLabel("withCorrectionLabel")
           .withoutCorrectionLabel("withoutCorrectionLabel")
+          .min(0.0)
+          .max(2.0)
           .name("name")
           .rightEye(ElementVisualAcuity.builder()
               .label("label1")
@@ -100,6 +102,22 @@ class CertificateDataVisualAcuitiesConfigConverterTest {
         converter.convert(ELEMENT_SPECIFICATION, FK3226_CERTIFICATE);
 
     assertEquals("name", result.getText());
+  }
+
+  @Test
+  void shallIncludeMin() {
+    final CertificateDataConfigVisualAcuity result = (CertificateDataConfigVisualAcuity)
+        converter.convert(ELEMENT_SPECIFICATION, FK3226_CERTIFICATE);
+
+    assertEquals(0.0, result.getMin());
+  }
+
+  @Test
+  void shallIncludeMax() {
+    final CertificateDataConfigVisualAcuity result = (CertificateDataConfigVisualAcuity)
+        converter.convert(ELEMENT_SPECIFICATION, FK3226_CERTIFICATE);
+
+    assertEquals(2.0, result.getMax());
   }
 
   @Nested

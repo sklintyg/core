@@ -42,7 +42,7 @@ class ElementValidationDateListTest {
     void shallThrowIllegalArgumentExceptionIfDataIsNull() {
       final Optional<ElementId> categoryId = Optional.empty();
       assertThrows(IllegalArgumentException.class,
-          () -> elementValidationDateList.validate(null, categoryId)
+          () -> elementValidationDateList.validate(null, categoryId, Collections.emptyList())
       );
     }
 
@@ -54,7 +54,8 @@ class ElementValidationDateListTest {
           .build();
 
       assertThrows(IllegalArgumentException.class,
-          () -> elementValidationDateList.validate(elementData, categoryId));
+          () -> elementValidationDateList.validate(elementData, categoryId,
+              Collections.emptyList()));
     }
 
     @Test
@@ -66,7 +67,8 @@ class ElementValidationDateListTest {
           .build();
 
       assertThrows(IllegalArgumentException.class,
-          () -> elementValidationDateList.validate(elementData, categoryId));
+          () -> elementValidationDateList.validate(elementData, categoryId,
+              Collections.emptyList()));
     }
   }
 
@@ -93,7 +95,8 @@ class ElementValidationDateListTest {
           )
           .build();
 
-      final var validationErrors = elementValidationDateList.validate(elementData, categoryId);
+      final var validationErrors = elementValidationDateList.validate(elementData, categoryId,
+          Collections.emptyList());
       assertEquals(Collections.emptyList(), validationErrors);
     }
 
@@ -123,7 +126,8 @@ class ElementValidationDateListTest {
           )
           .build();
 
-      final var validationErrors = elementValidationDateList.validate(elementData, categoryId);
+      final var validationErrors = elementValidationDateList.validate(elementData, categoryId,
+          Collections.emptyList());
       assertEquals(expectedValidationError, validationErrors);
     }
 
@@ -140,7 +144,7 @@ class ElementValidationDateListTest {
                   FIELD_ID_DATE_TWO).stream()
           )
           .toList();
-      
+
       final var categoryId = Optional.of(CATEGORY_ID);
       final var elementData = ElementData.builder()
           .id(ELEMENT_ID)
@@ -163,7 +167,8 @@ class ElementValidationDateListTest {
           )
           .build();
 
-      final var validationErrors = elementValidationDateList.validate(elementData, categoryId);
+      final var validationErrors = elementValidationDateList.validate(elementData, categoryId,
+          Collections.emptyList());
       assertEquals(expectedValidationError, validationErrors);
     }
   }
@@ -184,7 +189,8 @@ class ElementValidationDateListTest {
           )
           .build();
 
-      final var validationErrors = elementValidationDateList.validate(elementData, categoryId);
+      final var validationErrors = elementValidationDateList.validate(elementData, categoryId,
+          Collections.emptyList());
       assertEquals(Collections.emptyList(), validationErrors);
     }
 
@@ -207,7 +213,8 @@ class ElementValidationDateListTest {
           )
           .build();
 
-      final var validationErrors = elementValidationDateList.validate(elementData, categoryId);
+      final var validationErrors = elementValidationDateList.validate(elementData, categoryId,
+          Collections.emptyList());
       assertEquals(expectedValidationError, validationErrors);
     }
 
@@ -233,7 +240,8 @@ class ElementValidationDateListTest {
           )
           .build();
 
-      final var validationErrors = elementValidationDateList.validate(elementData, categoryId);
+      final var validationErrors = elementValidationDateList.validate(elementData, categoryId,
+          Collections.emptyList());
       assertEquals(Collections.emptyList(), validationErrors);
     }
   }

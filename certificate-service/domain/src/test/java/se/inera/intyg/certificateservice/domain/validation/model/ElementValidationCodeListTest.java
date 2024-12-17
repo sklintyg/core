@@ -35,7 +35,7 @@ class ElementValidationCodeListListTest {
     void shallThrowIllegalArgumentExceptionIfDataIsNull() {
       final Optional<ElementId> categoryId = Optional.empty();
       assertThrows(IllegalArgumentException.class,
-          () -> elementValidationCodeList.validate(null, categoryId)
+          () -> elementValidationCodeList.validate(null, categoryId, Collections.emptyList())
       );
     }
 
@@ -47,7 +47,8 @@ class ElementValidationCodeListListTest {
           .build();
 
       assertThrows(IllegalArgumentException.class,
-          () -> elementValidationCodeList.validate(elementData, categoryId));
+          () -> elementValidationCodeList.validate(elementData, categoryId,
+              Collections.emptyList()));
     }
 
     @Test
@@ -59,7 +60,8 @@ class ElementValidationCodeListListTest {
           .build();
 
       assertThrows(IllegalArgumentException.class,
-          () -> elementValidationCodeList.validate(elementData, categoryId));
+          () -> elementValidationCodeList.validate(elementData, categoryId,
+              Collections.emptyList()));
     }
   }
 
@@ -94,7 +96,7 @@ class ElementValidationCodeListListTest {
           .build();
 
       final var actualValidationErrors = elementValidationCodeList.validate(elementData,
-          Optional.of(CATEGORY_ID));
+          Optional.of(CATEGORY_ID), Collections.emptyList());
       assertEquals(expectedValidationErrors, actualValidationErrors);
     }
 
@@ -122,7 +124,7 @@ class ElementValidationCodeListListTest {
           .build();
 
       final var actualValidationErrors = elementValidationCodeList.validate(elementData,
-          Optional.of(CATEGORY_ID));
+          Optional.of(CATEGORY_ID), Collections.emptyList());
       assertEquals(expectedValidationErrors, actualValidationErrors);
     }
 
@@ -146,7 +148,7 @@ class ElementValidationCodeListListTest {
           .build();
 
       final var actualValidationErrors = elementValidationCodeList.validate(elementData,
-          Optional.of(CATEGORY_ID));
+          Optional.of(CATEGORY_ID), Collections.emptyList());
       assertEquals(Collections.emptyList(), actualValidationErrors);
     }
 
@@ -179,7 +181,7 @@ class ElementValidationCodeListListTest {
           .build();
 
       final var actualValidationErrors = elementValidationCodeList.validate(elementData,
-          Optional.of(CATEGORY_ID));
+          Optional.of(CATEGORY_ID), Collections.emptyList());
       assertEquals(expectedValidationErrors, actualValidationErrors);
     }
 
@@ -202,7 +204,7 @@ class ElementValidationCodeListListTest {
           .build();
 
       final var actualValidationErrors = elementValidationCodeList.validate(elementData,
-          Optional.of(CATEGORY_ID));
+          Optional.of(CATEGORY_ID), Collections.emptyList());
       assertEquals(Collections.emptyList(), actualValidationErrors);
     }
 
@@ -226,7 +228,7 @@ class ElementValidationCodeListListTest {
           .build();
 
       final var actualValidationErrors = elementValidationCodeList.validate(elementData,
-          Optional.of(CATEGORY_ID));
+          Optional.of(CATEGORY_ID), Collections.emptyList());
       assertEquals(Collections.emptyList(), actualValidationErrors);
     }
   }

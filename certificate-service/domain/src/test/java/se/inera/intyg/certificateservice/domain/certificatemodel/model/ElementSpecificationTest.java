@@ -153,7 +153,8 @@ class ElementSpecificationTest {
           .value(mock(ElementValue.class))
           .build();
 
-      doReturn(expectedResult).when(validation).validate(elementData, Optional.empty());
+      doReturn(expectedResult).when(validation).validate(elementData, Optional.empty(),
+          Collections.emptyList());
 
       final var actualResult = element.validate(List.of(elementData), Optional.empty());
       assertEquals(expectedResult, actualResult);
@@ -173,7 +174,8 @@ class ElementSpecificationTest {
           .value(mock(ElementValue.class))
           .build();
 
-      doReturn(expectedResult).when(validation).validate(elementData, Optional.empty());
+      doReturn(expectedResult).when(validation).validate(elementData, Optional.empty(),
+          List.of(elementData));
 
       final var actualResult = element.validate(List.of(elementData), Optional.empty());
       assertEquals(expectedResult, actualResult);
@@ -204,8 +206,10 @@ class ElementSpecificationTest {
       final var validationErrorsTwo = List.of(
           ValidationError.builder().fieldId(FIELD_ID_TWO).build());
 
-      doReturn(validationErrorsOne).when(validationOne).validate(elementData, Optional.empty());
-      doReturn(validationErrorsTwo).when(validationTwo).validate(elementData, Optional.empty());
+      doReturn(validationErrorsOne).when(validationOne).validate(elementData, Optional.empty(),
+          List.of(elementData));
+      doReturn(validationErrorsTwo).when(validationTwo).validate(elementData, Optional.empty(),
+          List.of(elementData));
 
       final var actualResult = element.validate(List.of(elementData), Optional.empty());
       assertEquals(expectedResult, actualResult);
@@ -245,16 +249,20 @@ class ElementSpecificationTest {
           .value(mock(ElementValue.class))
           .build();
 
+      final var elementData = List.of(elementDataOne, elementDataTwo);
+
       final var validationErrorsOne = List.of(
           ValidationError.builder().fieldId(FIELD_ID_ONE).build());
       final var validationErrorsTwo = List.of(
           ValidationError.builder().fieldId(FIELD_ID_TWO).build());
 
-      doReturn(validationErrorsOne).when(validationOne).validate(elementDataOne, Optional.empty());
-      doReturn(validationErrorsTwo).when(validationTwo).validate(elementDataTwo, Optional.empty());
+      doReturn(validationErrorsOne).when(validationOne).validate(elementDataOne, Optional.empty(),
+          elementData);
+      doReturn(validationErrorsTwo).when(validationTwo).validate(elementDataTwo, Optional.empty(),
+          elementData);
 
       final var actualResult = element.validate(
-          List.of(elementDataOne, elementDataTwo),
+          elementData,
           Optional.empty()
       );
       assertEquals(expectedResult, actualResult);
@@ -277,13 +285,14 @@ class ElementSpecificationTest {
           .build();
 
       doReturn(Collections.emptyList()).when(validation)
-          .validate(any(ElementData.class), eq(Optional.empty()));
+          .validate(any(ElementData.class), eq(Optional.empty()), eq(List.of(elementData)));
 
       element.validate(List.of(elementData), Optional.empty());
 
       final var elementDataArgumentCaptor = ArgumentCaptor.forClass(ElementData.class);
 
-      verify(validation).validate(elementDataArgumentCaptor.capture(), eq(Optional.empty()));
+      verify(validation).validate(elementDataArgumentCaptor.capture(), eq(Optional.empty()),
+          eq(List.of(elementData)));
 
       assertEquals(expectedValue, elementDataArgumentCaptor.getValue().value());
     }
@@ -306,13 +315,14 @@ class ElementSpecificationTest {
           .build();
 
       doReturn(Collections.emptyList()).when(validation)
-          .validate(any(ElementData.class), eq(Optional.empty()));
+          .validate(any(ElementData.class), eq(Optional.empty()), eq(Collections.emptyList()));
 
       element.validate(Collections.emptyList(), Optional.empty());
 
       final var elementDataArgumentCaptor = ArgumentCaptor.forClass(ElementData.class);
 
-      verify(validation).validate(elementDataArgumentCaptor.capture(), eq(Optional.empty()));
+      verify(validation).validate(elementDataArgumentCaptor.capture(), eq(Optional.empty()),
+          eq(Collections.emptyList()));
 
       assertEquals(expectedValue, elementDataArgumentCaptor.getValue());
     }
@@ -338,13 +348,14 @@ class ElementSpecificationTest {
           .build();
 
       doReturn(Collections.emptyList()).when(validation)
-          .validate(eq(elementData), any(Optional.class));
+          .validate(eq(elementData), any(Optional.class), eq(List.of(elementData)));
 
       element.validate(List.of(elementData), Optional.empty());
 
       final ArgumentCaptor<Optional<ElementId>> elementDataArgumentCaptor = ArgumentCaptor.forClass(
           Optional.class);
-      verify(validation).validate(eq(elementData), elementDataArgumentCaptor.capture());
+      verify(validation).validate(eq(elementData), elementDataArgumentCaptor.capture(),
+          eq(List.of(elementData)));
 
       assertEquals(expectedCategory, elementDataArgumentCaptor.getValue().orElseThrow());
     }

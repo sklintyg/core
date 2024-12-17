@@ -44,7 +44,7 @@ class ElementValidationDateRangeListTest {
     void shallThrowIllegalArgumentExceptionIfDataIsNull() {
       final Optional<ElementId> categoryId = Optional.empty();
       assertThrows(IllegalArgumentException.class,
-          () -> elementValidationDateRangeList.validate(null, categoryId)
+          () -> elementValidationDateRangeList.validate(null, categoryId, Collections.emptyList())
       );
     }
 
@@ -56,7 +56,8 @@ class ElementValidationDateRangeListTest {
           .build();
 
       assertThrows(IllegalArgumentException.class,
-          () -> elementValidationDateRangeList.validate(elementData, categoryId));
+          () -> elementValidationDateRangeList.validate(elementData, categoryId,
+              Collections.emptyList()));
     }
 
     @Test
@@ -68,7 +69,8 @@ class ElementValidationDateRangeListTest {
           .build();
 
       assertThrows(IllegalArgumentException.class,
-          () -> elementValidationDateRangeList.validate(elementData, categoryId));
+          () -> elementValidationDateRangeList.validate(elementData, categoryId,
+              Collections.emptyList()));
     }
   }
 
@@ -97,8 +99,8 @@ class ElementValidationDateRangeListTest {
 
       final var actualResult = elementValidationDateRangeList.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(expectedValidationError, actualResult);
     }
@@ -117,8 +119,8 @@ class ElementValidationDateRangeListTest {
 
       final var actualResult = elementValidationDateRangeList.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(expectedValidationError, actualResult);
     }
@@ -146,8 +148,8 @@ class ElementValidationDateRangeListTest {
 
       final var actualResult = elementValidationDateRangeList.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(expectedValidationError, actualResult);
     }
@@ -175,8 +177,8 @@ class ElementValidationDateRangeListTest {
 
       final var actualResult = elementValidationDateRangeList.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(expectedValidationError, actualResult);
     }
@@ -205,8 +207,8 @@ class ElementValidationDateRangeListTest {
 
       final var actualResult = elementValidationDateRangeList.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(expectedValidationError, actualResult);
     }
@@ -244,8 +246,8 @@ class ElementValidationDateRangeListTest {
 
       final var actualResult = elementValidationDateRangeList.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertAll(
           () -> assertEquals(expectedValidationErrorIncomplete.get(0), actualResult.get(0)),
@@ -285,8 +287,8 @@ class ElementValidationDateRangeListTest {
 
         final var actualResult = elementValidationDateRangeList.validate(
             elementData,
-            Optional.of(CATEGORY_ID)
-        );
+            Optional.of(CATEGORY_ID),
+            Collections.emptyList());
 
         assertEquals(expectedValidationError, actualResult);
       }
@@ -320,8 +322,8 @@ class ElementValidationDateRangeListTest {
 
         final var actualResult = elementValidationDateRangeList.validate(
             elementData,
-            Optional.of(CATEGORY_ID)
-        );
+            Optional.of(CATEGORY_ID),
+            Collections.emptyList());
 
         assertEquals(expectedValidationError, actualResult);
       }
@@ -356,8 +358,8 @@ class ElementValidationDateRangeListTest {
 
       final var actualResult = elementValidationDateRangeList.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(expectedValidationError, actualResult);
     }
@@ -391,8 +393,8 @@ class ElementValidationDateRangeListTest {
 
       final var actualResult = elementValidationDateRangeList.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(expectedValidationError, actualResult);
     }
@@ -426,8 +428,8 @@ class ElementValidationDateRangeListTest {
 
       final var actualResult = elementValidationDateRangeList.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(expectedValidationError, actualResult);
     }
@@ -466,8 +468,8 @@ class ElementValidationDateRangeListTest {
 
       final var actualResult = elementValidationDateRangeList.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(expectedValidationError, actualResult);
     }
@@ -497,8 +499,8 @@ class ElementValidationDateRangeListTest {
 
       final var actualResult = elementValidationDateRangeList.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(Collections.emptyList(), actualResult);
     }
@@ -537,8 +539,8 @@ class ElementValidationDateRangeListTest {
 
         final var actualResult = elementValidationDateRangeList.validate(
             elementData,
-            Optional.of(CATEGORY_ID)
-        );
+            Optional.of(CATEGORY_ID),
+            Collections.emptyList());
 
         assertEquals(expectedValidationError, actualResult);
       }
@@ -568,8 +570,8 @@ class ElementValidationDateRangeListTest {
 
         final var actualResult = elementValidationDateRangeList.validate(
             elementData,
-            Optional.of(CATEGORY_ID)
-        );
+            Optional.of(CATEGORY_ID),
+            Collections.emptyList());
 
         assertEquals(expectedValidationError, actualResult);
       }
@@ -609,8 +611,8 @@ class ElementValidationDateRangeListTest {
 
         final var actualResult = elementValidationDateRangeList.validate(
             elementData,
-            Optional.of(CATEGORY_ID)
-        );
+            Optional.of(CATEGORY_ID),
+            Collections.emptyList());
 
         assertEquals(expectedValidationError, actualResult);
       }
@@ -640,8 +642,8 @@ class ElementValidationDateRangeListTest {
 
         final var actualResult = elementValidationDateRangeList.validate(
             elementData,
-            Optional.of(CATEGORY_ID)
-        );
+            Optional.of(CATEGORY_ID),
+            Collections.emptyList());
 
         assertEquals(expectedValidationError, actualResult);
       }
@@ -667,8 +669,8 @@ class ElementValidationDateRangeListTest {
 
         final var actualResult = elementValidationDateRangeList.validate(
             elementData,
-            Optional.of(CATEGORY_ID)
-        );
+            Optional.of(CATEGORY_ID),
+            Collections.emptyList());
 
         assertEquals(Collections.emptyList(), actualResult);
       }
@@ -694,8 +696,8 @@ class ElementValidationDateRangeListTest {
 
       final var actualResult = elementValidationDateRangeList.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(Collections.emptyList(), actualResult);
     }
@@ -735,8 +737,8 @@ class ElementValidationDateRangeListTest {
 
       final var actualResult = elementValidationDateRangeList.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(expectedValidationError, actualResult);
     }
@@ -769,8 +771,8 @@ class ElementValidationDateRangeListTest {
 
       final var actualResult = elementValidationDateRangeList.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertAll(
           () -> assertEquals(expectedValidationErrorIncomplete.get(0), actualResult.get(0)),
@@ -798,8 +800,8 @@ class ElementValidationDateRangeListTest {
 
       final var actualResult = elementValidationDateRangeList.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(Collections.emptyList(), actualResult);
     }
@@ -824,8 +826,8 @@ class ElementValidationDateRangeListTest {
 
       final var actualResult = elementValidationDateRangeList.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(Collections.emptyList(), actualResult);
     }
@@ -856,8 +858,8 @@ class ElementValidationDateRangeListTest {
 
       final var actualResult = elementValidationDateRangeList.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(Collections.emptyList(), actualResult);
     }
@@ -875,8 +877,8 @@ class ElementValidationDateRangeListTest {
 
       final var actualResult = elementValidationDateRangeList.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(Collections.emptyList(), actualResult);
     }
@@ -904,8 +906,8 @@ class ElementValidationDateRangeListTest {
 
       final var actualResult = elementValidationDateRangeList.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(expectedValidationError, actualResult);
     }
@@ -933,8 +935,8 @@ class ElementValidationDateRangeListTest {
 
       final var actualResult = elementValidationDateRangeList.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(expectedValidationError, actualResult);
     }
@@ -963,8 +965,8 @@ class ElementValidationDateRangeListTest {
 
       final var actualResult = elementValidationDateRangeList.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(expectedValidationError, actualResult);
     }
@@ -1002,8 +1004,8 @@ class ElementValidationDateRangeListTest {
 
       final var actualResult = elementValidationDateRangeList.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertAll(
           () -> assertEquals(expectedValidationErrorIncomplete.get(0), actualResult.get(0)),
@@ -1043,8 +1045,8 @@ class ElementValidationDateRangeListTest {
 
         final var actualResult = elementValidationDateRangeList.validate(
             elementData,
-            Optional.of(CATEGORY_ID)
-        );
+            Optional.of(CATEGORY_ID),
+            Collections.emptyList());
 
         assertEquals(expectedValidationError, actualResult);
       }
@@ -1078,8 +1080,8 @@ class ElementValidationDateRangeListTest {
 
         final var actualResult = elementValidationDateRangeList.validate(
             elementData,
-            Optional.of(CATEGORY_ID)
-        );
+            Optional.of(CATEGORY_ID),
+            Collections.emptyList());
 
         assertEquals(expectedValidationError, actualResult);
       }
@@ -1114,8 +1116,8 @@ class ElementValidationDateRangeListTest {
 
       final var actualResult = elementValidationDateRangeList.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(expectedValidationError, actualResult);
     }
@@ -1149,8 +1151,8 @@ class ElementValidationDateRangeListTest {
 
       final var actualResult = elementValidationDateRangeList.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(expectedValidationError, actualResult);
     }
@@ -1184,8 +1186,8 @@ class ElementValidationDateRangeListTest {
 
       final var actualResult = elementValidationDateRangeList.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(expectedValidationError, actualResult);
     }
@@ -1224,8 +1226,8 @@ class ElementValidationDateRangeListTest {
 
       final var actualResult = elementValidationDateRangeList.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(expectedValidationError, actualResult);
     }
@@ -1255,8 +1257,8 @@ class ElementValidationDateRangeListTest {
 
       final var actualResult = elementValidationDateRangeList.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(Collections.emptyList(), actualResult);
     }
@@ -1295,8 +1297,8 @@ class ElementValidationDateRangeListTest {
 
         final var actualResult = elementValidationDateRangeList.validate(
             elementData,
-            Optional.of(CATEGORY_ID)
-        );
+            Optional.of(CATEGORY_ID),
+            Collections.emptyList());
 
         assertEquals(expectedValidationError, actualResult);
       }
@@ -1326,8 +1328,8 @@ class ElementValidationDateRangeListTest {
 
         final var actualResult = elementValidationDateRangeList.validate(
             elementData,
-            Optional.of(CATEGORY_ID)
-        );
+            Optional.of(CATEGORY_ID),
+            Collections.emptyList());
 
         assertEquals(expectedValidationError, actualResult);
       }
@@ -1352,8 +1354,8 @@ class ElementValidationDateRangeListTest {
 
         final var actualResult = elementValidationDateRangeList.validate(
             elementData,
-            Optional.of(CATEGORY_ID)
-        );
+            Optional.of(CATEGORY_ID),
+            Collections.emptyList());
 
         assertEquals(Collections.emptyList(), actualResult);
       }
@@ -1378,8 +1380,8 @@ class ElementValidationDateRangeListTest {
 
         final var actualResult = elementValidationDateRangeList.validate(
             elementData,
-            Optional.of(CATEGORY_ID)
-        );
+            Optional.of(CATEGORY_ID),
+            Collections.emptyList());
 
         assertEquals(Collections.emptyList(), actualResult);
       }
@@ -1412,8 +1414,8 @@ class ElementValidationDateRangeListTest {
 
       final var actualResult = elementValidationDateRangeList.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(Collections.emptyList(), actualResult);
     }
@@ -1439,8 +1441,8 @@ class ElementValidationDateRangeListTest {
 
       final var actualResult = elementValidationDateRangeList.validate(
           elementData,
-          Optional.of(CATEGORY_ID)
-      );
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
 
       assertEquals(Collections.emptyList(), actualResult);
     }

@@ -1,8 +1,13 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs0002.ANNAT;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs0002.TAXI;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionIntygetAvser.QUESTION_INTYGET_AVSER_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynfunktioner.QUESTION_SYNFUNKTIONER_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynfunktioner.QUESTION_SYNFUNKTIONER_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynskarpa.QUESTION_SYNSKARPA_ID;
@@ -12,6 +17,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCodeList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationVisualAcuities;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementVisualAcuity;
@@ -37,6 +44,8 @@ class QuestionSynskarpaTest {
         .name("Synskärpa")
         .withCorrectionLabel("Med korrektion")
         .withoutCorrectionLabel("Utan korrektion")
+        .min(0.0)
+        .max(2.0)
         .rightEye(
             ElementVisualAcuity.builder()
                 .label("Höger öga")
@@ -87,19 +96,71 @@ class QuestionSynskarpaTest {
     assertEquals(expectedRule, element.rules());
   }
 
-  @Test
-  void shallIncludeValidation() {
-    final var expectedValidations = List.of(
-        ElementValidationVisualAcuities.builder()
-            .mandatory(true)
-            .min(0.0)
-            .max(2.0)
-            .build()
-    );
+  @Nested
+  class ValidationTests {
 
-    final var element = QuestionSynskarpa.questionSynskarpa();
+    @Test
+    void shallIncludeValidation() {
+      final var validation = (ElementValidationVisualAcuities) QuestionSynskarpa.questionSynskarpa()
+          .validations().getFirst();
 
-    assertEquals(expectedValidations, element.validations());
+      assertAll(
+          () -> assertEquals(0.0, validation.min()),
+          () -> assertEquals(2.0, validation.max()),
+          () -> assertTrue(validation.mandatory()),
+          () -> assertNotNull(validation.shouldValidateSightOnBothEyes())
+      );
+    }
+
+    @Test
+    void shallReturnTrueIfFieldHasValue() {
+      final var validation = (ElementValidationVisualAcuities) QuestionSynskarpa.questionSynskarpa()
+          .validations().getFirst();
+
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(QUESTION_INTYGET_AVSER_ID)
+              .value(
+                  ElementValueCodeList.builder()
+                      .list(
+                          List.of(
+                              ElementValueCode.builder()
+                                  .code(TAXI.code())
+                                  .build()
+                          )
+                      )
+                      .build()
+              )
+              .build()
+      );
+
+      assertTrue(validation.shouldValidateSightOnBothEyes().test(elementData));
+    }
+
+    @Test
+    void shallReturnFalseIfFieldDontHaveValue() {
+      final var validation = (ElementValidationVisualAcuities) QuestionSynskarpa.questionSynskarpa()
+          .validations().getFirst();
+
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(QUESTION_INTYGET_AVSER_ID)
+              .value(
+                  ElementValueCodeList.builder()
+                      .list(
+                          List.of(
+                              ElementValueCode.builder()
+                                  .code(ANNAT.code())
+                                  .build()
+                          )
+                      )
+                      .build()
+              )
+              .build()
+      );
+
+      assertFalse(validation.shouldValidateSightOnBothEyes().test(elementData));
+    }
   }
 
   @Nested
