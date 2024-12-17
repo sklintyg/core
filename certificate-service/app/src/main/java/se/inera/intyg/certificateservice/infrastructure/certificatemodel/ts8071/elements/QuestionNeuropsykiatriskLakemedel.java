@@ -42,7 +42,7 @@ public class QuestionNeuropsykiatriskLakemedel {
                     QUESTION_NEUROPSYKIATRISK_ID,
                     QUESTION_NEUROPSYKIATRISK_FIELD_ID
                 ),
-                CertificateElementRuleFactory.mandatoryOrExist(
+                CertificateElementRuleFactory.mandatoryExist(
                     QUESTION_NEUROPSYKIATRISK_LAKEMEDEL_ID,
                     QUESTION_NEUROPSYKIATRISK_LAKEMEDEL_FIELD_ID
                 )

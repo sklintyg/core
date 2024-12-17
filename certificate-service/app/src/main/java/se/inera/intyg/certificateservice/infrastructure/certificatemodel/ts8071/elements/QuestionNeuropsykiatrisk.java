@@ -38,7 +38,7 @@ public class QuestionNeuropsykiatrisk {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryOrExist(
+                CertificateElementRuleFactory.mandatoryExist(
                     QUESTION_NEUROPSYKIATRISK_ID,
                     QUESTION_NEUROPSYKIATRISK_FIELD_ID
                 )

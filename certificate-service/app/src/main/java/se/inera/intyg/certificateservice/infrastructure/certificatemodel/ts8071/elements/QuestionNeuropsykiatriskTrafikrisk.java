@@ -43,7 +43,7 @@ public class QuestionNeuropsykiatriskTrafikrisk {
                     QUESTION_NEUROPSYKIATRISK_ID,
                     QUESTION_NEUROPSYKIATRISK_FIELD_ID
                 ),
-                CertificateElementRuleFactory.mandatoryOrExist(
+                CertificateElementRuleFactory.mandatoryExist(
                     QUESTION_NEUROPSYKIATRISK_TRAFIKRISK_ID,
                     QUESTION_NEUROPSYKIATRISK_TRAFIKRISK_FIELD_ID
                 )

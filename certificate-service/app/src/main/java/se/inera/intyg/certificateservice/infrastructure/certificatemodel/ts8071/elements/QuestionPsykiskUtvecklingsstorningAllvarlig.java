@@ -44,7 +44,7 @@ public class QuestionPsykiskUtvecklingsstorningAllvarlig {
                     QUESTION_PSYKISK_UTVECKLINGSSTORNING_ID,
                     QUESTION_PSYKISK_UTVECKLINGSSTORNING_FIELD_ID
                 ),
-                CertificateElementRuleFactory.mandatory(
+                CertificateElementRuleFactory.mandatoryExist(
                     QUESTION_PSYKISK_UTVECKLINGSSTORNING_ALLVARLIG_ID,
                     QUESTION_PSYKISK_UTVECKLINGSSTORNING_ALLVARLIG_FIELD_ID
                 )

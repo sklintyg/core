@@ -37,7 +37,7 @@ public class QuestionSynfunktioner {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryOrExist(
+                CertificateElementRuleFactory.mandatoryExist(
                     QUESTION_SYNFUNKTIONER_ID,
                     QUESTION_SYNFUNKTIONER_FIELD_ID
                 )

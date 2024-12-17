@@ -39,7 +39,7 @@ public class QuestionDiabetes {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryOrExist(
+                CertificateElementRuleFactory.mandatoryExist(
                     QUESTION_DIABETES_ID,
                     QUESTION_DIABETES_FIELD_ID
                 )

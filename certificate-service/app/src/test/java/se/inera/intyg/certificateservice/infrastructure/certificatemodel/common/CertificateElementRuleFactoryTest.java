@@ -87,7 +87,7 @@ class CertificateElementRuleFactoryTest {
         .expression(new RuleExpression("exists($FIELD1)"))
         .build();
 
-    final var response = CertificateElementRuleFactory.mandatoryOrExist(
+    final var response = CertificateElementRuleFactory.mandatoryExist(
         new ElementId("ID"), new FieldId("FIELD1")
     );
 

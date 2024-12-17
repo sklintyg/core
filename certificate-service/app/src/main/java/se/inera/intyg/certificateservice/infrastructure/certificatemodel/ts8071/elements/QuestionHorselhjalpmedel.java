@@ -47,7 +47,7 @@ public class QuestionHorselhjalpmedel {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryOrExist(
+                CertificateElementRuleFactory.mandatoryExist(
                     QUESTION_HORSELHJALPMEDEL_ID,
                     QUESTION_HORSELHJALPMEDEL_FIELD_ID
                 ),

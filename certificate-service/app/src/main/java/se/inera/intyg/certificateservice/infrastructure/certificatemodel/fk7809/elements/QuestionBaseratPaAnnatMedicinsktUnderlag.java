@@ -43,7 +43,7 @@ public class QuestionBaseratPaAnnatMedicinsktUnderlag {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryOrExist(
+                CertificateElementRuleFactory.mandatoryExist(
                     QUESTION_BASERAT_PA_ANNAT_UNDERLAG_ID,
                     QUESTION_BASERAT_PA_ANNAT_UNDERLAG_FIELD_ID
                 )

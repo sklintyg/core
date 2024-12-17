@@ -43,7 +43,7 @@ public class QuestionSomnBehandling {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryOrExist(
+                CertificateElementRuleFactory.mandatoryExist(
                     QUESTION_SOMN_BEHANDLING_ID,
                     QUESTION_SOMN_BEHANDLING_FIELD_ID
                 )

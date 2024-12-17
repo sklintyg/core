@@ -79,7 +79,7 @@ public class CertificateElementRuleFactory {
         .build();
   }
 
-  public static ElementRule mandatoryOrExist(ElementId id, FieldId fieldId) {
+  public static ElementRule mandatoryExist(ElementId id, FieldId fieldId) {
     return mandatoryOrExist(id, List.of(fieldId));
   }
 
