@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.FORLANG_GR_II_III;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.GR_II;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.GR_II_III;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.TAXI;
@@ -65,7 +66,8 @@ class QuestionRorlighetHjalpaPassagerareTest {
         ElementRuleExpression.builder()
             .id(new ElementId("1"))
             .type(ElementRuleType.SHOW)
-            .expression(new RuleExpression("exists(gr_II_III) || exists(tax_leg)"))
+            .expression(new RuleExpression(
+                "exists(gr_II_III) || exists(forlang_gr_II_III) || exists(tax_leg)"))
             .build()
     );
 
@@ -123,6 +125,34 @@ class QuestionRorlighetHjalpaPassagerareTest {
 
       assertTrue(shouldValidate.test(elementData));
     }
+
+    @Test
+    void shallReturnTrueIfCodeIsForlangGR23F() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId("1"))
+              .value(
+                  ElementValueCodeList.builder()
+                      .list(
+                          List.of(
+                              ElementValueCode.builder()
+                                  .codeId(new FieldId(FORLANG_GR_II_III.code()))
+                                  .code(FORLANG_GR_II_III.code())
+                                  .build()
+                          )
+                      )
+                      .build()
+              )
+              .build()
+      );
+
+      final var element = QuestionRorlighetHjalpaPassagerare.questionRorlighetHjalpaPassagerare();
+
+      final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
+
+      assertTrue(shouldValidate.test(elementData));
+    }
+
 
     @Test
     void shallReturnTrueIfCodeIsTaxi() {
