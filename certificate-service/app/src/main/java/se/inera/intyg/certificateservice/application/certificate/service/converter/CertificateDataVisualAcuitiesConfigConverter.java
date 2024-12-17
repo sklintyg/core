@@ -32,6 +32,8 @@ public class CertificateDataVisualAcuitiesConfigConverter implements
         .text(configurationVisualAcuities.name())
         .withCorrectionLabel(configurationVisualAcuities.withCorrectionLabel())
         .withoutCorrectionLabel(configurationVisualAcuities.withoutCorrectionLabel())
+        .min(configurationVisualAcuities.min())
+        .max(configurationVisualAcuities.max())
         .rightEye(
             VisualAcuity.builder()
                 .withoutCorrectionId(configurationVisualAcuities.rightEye().withoutCorrectionId())

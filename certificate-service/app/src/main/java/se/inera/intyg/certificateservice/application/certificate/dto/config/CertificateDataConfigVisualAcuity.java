@@ -31,6 +31,8 @@ public class CertificateDataConfigVisualAcuity implements CertificateDataConfig 
   String id;
   String withoutCorrectionLabel;
   String withCorrectionLabel;
+  Double min;
+  Double max;
   VisualAcuity rightEye;
   VisualAcuity leftEye;
   VisualAcuity binocular;
