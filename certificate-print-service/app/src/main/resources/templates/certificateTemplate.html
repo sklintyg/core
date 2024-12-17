@@ -6,8 +6,60 @@
   <title id="title"></title>
   <script src="https://cdn.jsdelivr.net/npm/@unocss/runtime"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@unocss/reset/tailwind.min.css"/>
+  <style>
+    @page {
+      size: A4;
+      margin: 1cm 2cm 1cm 2cm;
+
+      @bottom-right {
+        position: fixed;
+        padding-bottom: 2cm;
+        display: inline;
+        width: 3cm;
+        border: red solid 1px;
+        content: 'Sida ' counter(page) '(' counter(pages) ')';
+      }
+
+      @bottom-left {
+        content: element(footer);
+      }
+    }
+
+
+    body, html {
+      font-size: 10pt;
+      font-family: "Liberation Sans", "LiberationSans", system-ui, sans-serif;
+    }
+
+    @media print {
+
+      header {
+        border: blue solid 1px;
+        padding-bottom: 45px;
+        position: fixed;
+        top: 0;
+      }
+
+      footer {
+        border: blue solid 1px;
+        position: fixed;
+        bottom: 0;
+      }
+    }
+  </style>
 </head>
 <body>
+<header id="header" style="display: flex; height: 45px;">
+  <div id="logo"></div>
+  <div id="pnr"></div>
+  <div id="page"></div>
+</header>
+
 <div id="content"></div>
+
+<footer id="footer">
+  <p>Utskriften skapades med Webcert - en tjänst som drivs av Inera AB</p>
+  <p>www.inera.se</p>
+</footer>
 </body>
 </html>
