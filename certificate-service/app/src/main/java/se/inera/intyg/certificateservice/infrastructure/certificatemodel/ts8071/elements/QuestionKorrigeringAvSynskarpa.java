@@ -14,7 +14,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 public class QuestionKorrigeringAvSynskarpa {
 
   public static final ElementId QUESTION_KORRIGERING_AV_SYNSKARPA_ID = new ElementId("6");
-  public static final FieldId QUESTION_KORRIGERING_AV_SYNSKARPA_FIELD_ID = new FieldId("6.1");
+  public static final FieldId QUESTION_KORRIGERING_AV_SYNSKARPA_FIELD_ID = new FieldId("6");
 
   private QuestionKorrigeringAvSynskarpa() {
     throw new IllegalStateException("Utility class");
@@ -35,7 +35,7 @@ public class QuestionKorrigeringAvSynskarpa {
             ElementConfigurationCheckboxMultipleCode.builder()
                 .id(QUESTION_KORRIGERING_AV_SYNSKARPA_FIELD_ID)
                 .name("Korrigering av synskärpa genom")
-                .elementLayout(ElementLayout.COLUMNS)
+                .elementLayout(ElementLayout.ROWS)
                 .list(checkboxes)
                 .build()
         )
