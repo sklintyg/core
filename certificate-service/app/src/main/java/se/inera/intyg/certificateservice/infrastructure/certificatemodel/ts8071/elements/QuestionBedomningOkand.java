@@ -43,7 +43,10 @@ public class QuestionBedomningOkand {
                 CertificateElementRuleFactory.show(
                     QUESTION_BEDOMNING_ID,
                     new RuleExpression(String.format("$%s", NO_DECISION.code()))
-                )
+                ),
+                CertificateElementRuleFactory.limit(
+                    QUESTION_BEDOMNING_OKAND_ID,
+                    (short) 250)
             )
         )
         .validations(
