@@ -119,4 +119,8 @@ public class ElementSpecification {
     }
     return data;
   }
+
+  public Optional<ElementMapping> getMapping() {
+    return Optional.ofNullable(mapping);
+  }
 }
