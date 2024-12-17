@@ -12,8 +12,10 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynskarpa.QUESTION_SYNSKARPA_ID;
 
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.domain.certificate.model.CodeListToBoolean;
 import se.inera.intyg.certificateservice.domain.certificate.model.Correction;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueVisualAcuities;
@@ -21,6 +23,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.VisualAcuity;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementLayout;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
@@ -84,7 +87,7 @@ class QuestionKorrigeringAvSynskarpaTest {
             .type(ElementRuleType.MANDATORY)
             .expression(
                 new RuleExpression(
-                    "exists($GLASOGON_MED_STYRKA_OVER_8_DIOPTRIER) || exists($GLASOGON_INGEN_STYRKA_OVER_8_DIOPTRIER) || exists($KONTAKTLINSER)"
+                    "exists($6.3) || exists($6.1) || exists($6.5)"
                 )
             )
             .build(),
@@ -93,7 +96,7 @@ class QuestionKorrigeringAvSynskarpaTest {
             .type(ElementRuleType.DISABLE_SUB_ELEMENT)
             .expression(
                 new RuleExpression(
-                    "exists(GLASOGON_MED_STYRKA_OVER_8_DIOPTRIER)"
+                    "exists($6.3)"
                 )
             )
             .affectedSubElements(
@@ -105,7 +108,7 @@ class QuestionKorrigeringAvSynskarpaTest {
             .type(ElementRuleType.DISABLE_SUB_ELEMENT)
             .expression(
                 new RuleExpression(
-                    "exists(GLASOGON_INGEN_STYRKA_OVER_8_DIOPTRIER)"
+                    "exists($6.1)"
                 )
             )
             .affectedSubElements(
@@ -134,7 +137,7 @@ class QuestionKorrigeringAvSynskarpaTest {
     final var element = questionKorrigeringAvSynskarpa(
         expectedChild
     );
-    
+
     assertEquals(expectedChild, element.children().getFirst());
   }
 
@@ -208,5 +211,17 @@ class QuestionKorrigeringAvSynskarpaTest {
       final var element = QuestionKorrigeringAvSynskarpa.questionKorrigeringAvSynskarpa();
       assertFalse(element.shouldValidate().test(elementData));
     }
+  }
+
+  @Test
+  void shallIncludeMapping() {
+    final var expectedMapping = new ElementMapping(
+        null,
+        null,
+        Optional.of(CodeListToBoolean.class)
+    );
+
+    final var element = QuestionKorrigeringAvSynskarpa.questionKorrigeringAvSynskarpa();
+    assertEquals(expectedMapping, element.mapping());
   }
 }

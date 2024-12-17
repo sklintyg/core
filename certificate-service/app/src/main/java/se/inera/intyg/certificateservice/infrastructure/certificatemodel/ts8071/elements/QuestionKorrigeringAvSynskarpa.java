@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.lessThanOrEqual;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.multipleAndExpressions;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.multipleOrExpression;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.singleExpression;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.withCitation;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.wrapWithParenthesis;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynskarpa.LEFT_EYE_WITHOUT_CORRECTION_ID;
@@ -10,10 +11,13 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynskarpa.RIGHT_EYE_WITHOUT_CORRECTION_ID;
 
 import java.util.List;
+import java.util.Optional;
+import se.inera.intyg.certificateservice.domain.certificate.model.CodeListToBoolean;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueVisualAcuities;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementLayout;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
@@ -97,7 +101,8 @@ public class QuestionKorrigeringAvSynskarpa {
                 CertificateElementRuleFactory.disableSubElements(
                     QUESTION_KORRIGERING_AV_SYNSKARPA_ID,
                     List.of(new FieldId(
-                        CodeSystemKorringerAvSynskarpa.GLASOGON_MED_STYRKA_OVER_8_DIOPTRIER.code())),
+                        singleExpression(
+                            CodeSystemKorringerAvSynskarpa.GLASOGON_MED_STYRKA_OVER_8_DIOPTRIER.code()))),
                     List.of(
                         new FieldId(
                             CodeSystemKorringerAvSynskarpa.GLASOGON_INGEN_STYRKA_OVER_8_DIOPTRIER.code())
@@ -106,7 +111,8 @@ public class QuestionKorrigeringAvSynskarpa {
                 CertificateElementRuleFactory.disableSubElements(
                     QUESTION_KORRIGERING_AV_SYNSKARPA_ID,
                     List.of(new FieldId(
-                        CodeSystemKorringerAvSynskarpa.GLASOGON_INGEN_STYRKA_OVER_8_DIOPTRIER.code())),
+                        singleExpression(
+                            CodeSystemKorringerAvSynskarpa.GLASOGON_INGEN_STYRKA_OVER_8_DIOPTRIER.code()))),
                     List.of(
                         new FieldId(
                             CodeSystemKorringerAvSynskarpa.GLASOGON_MED_STYRKA_OVER_8_DIOPTRIER.code())
@@ -137,6 +143,13 @@ public class QuestionKorrigeringAvSynskarpa {
                                 && visualAcuities.leftEye().withoutCorrection().value() != null
                                 && visualAcuities.leftEye().withoutCorrection().value() <= 0.1)
                 )
+        )
+        .mapping(
+            new ElementMapping(
+                null,
+                null,
+                Optional.of(CodeListToBoolean.class)
+            )
         )
         .build();
   }
