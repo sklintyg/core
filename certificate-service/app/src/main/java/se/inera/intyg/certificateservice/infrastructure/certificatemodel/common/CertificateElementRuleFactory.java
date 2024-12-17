@@ -88,13 +88,17 @@ public class CertificateElementRuleFactory {
         .id(id)
         .type(ElementRuleType.MANDATORY)
         .expression(
-            new RuleExpression(
-                multipleOrExpressionWithExists(
-                    fieldIds.stream()
-                        .map(field -> singleExpression(field.value()))
-                        .toArray(String[]::new)
-                )
-            )
+            orExists(fieldIds)
+        )
+        .build();
+  }
+
+  public static ElementRule showOrExist(ElementId id, List<FieldId> fieldIds) {
+    return ElementRuleExpression.builder()
+        .id(id)
+        .type(ElementRuleType.SHOW)
+        .expression(
+            orExists(fieldIds)
         )
         .build();
   }
@@ -195,6 +199,16 @@ public class CertificateElementRuleFactory {
       }
       return s;
     });
+  }
+
+  private static RuleExpression orExists(List<FieldId> fieldIds) {
+    return new RuleExpression(
+        multipleOrExpressionWithExists(
+            fieldIds.stream()
+                .map(field -> singleExpression(field.value()))
+                .toArray(String[]::new)
+        )
+    );
   }
 
   public static String multipleOrExpressionWithExists(String... expression) {
