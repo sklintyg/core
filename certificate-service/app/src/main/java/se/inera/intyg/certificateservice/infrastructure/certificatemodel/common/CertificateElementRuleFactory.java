@@ -161,7 +161,7 @@ public class CertificateElementRuleFactory {
         .build();
   }
 
-  private static String singleExpression(String id) {
+  public static String singleExpression(String id) {
     return "$" + id;
   }
 

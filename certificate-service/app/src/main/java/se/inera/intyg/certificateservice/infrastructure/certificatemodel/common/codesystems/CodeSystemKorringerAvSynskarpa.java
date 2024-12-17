@@ -11,19 +11,19 @@ public class CodeSystemKorringerAvSynskarpa {
   }
 
   public static final Code GLASOGON_INGEN_STYRKA_OVER_8_DIOPTRIER = new Code(
-      "GLASOGON_INGEN_STYRKA_OVER_8_DIOPTRIER",
+      "6.1",
       CODE_SYSTEM,
       "Glasögon och inget av glasen har en styrka över plus 8 dioptrier i den mest brytande meridianen"
   );
 
   public static final Code GLASOGON_MED_STYRKA_OVER_8_DIOPTRIER = new Code(
-      "GLASOGON_MED_STYRKA_OVER_8_DIOPTRIER",
+      "6.3",
       CODE_SYSTEM,
       "Glasögon och något av glasen har en styrka över plus 8 dioptrier i den mest brytande meridianen"
   );
 
   public static final Code KONTAKTLINSER = new Code(
-      "KONTAKTLINSER",
+      "6.5",
       CODE_SYSTEM,
       "Kontaktlinser"
   );
