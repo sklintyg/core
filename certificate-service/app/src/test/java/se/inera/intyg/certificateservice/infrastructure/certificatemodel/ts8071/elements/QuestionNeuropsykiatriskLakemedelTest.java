@@ -54,7 +54,7 @@ class QuestionNeuropsykiatriskLakemedelTest {
         ElementRuleExpression.builder()
             .id(ELEMENT_ID)
             .type(ElementRuleType.MANDATORY)
-            .expression(new RuleExpression("$20.4"))
+            .expression(new RuleExpression("exists($20.4)"))
             .build()
     );
 

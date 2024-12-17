@@ -64,7 +64,7 @@ class CertificateModelFactoryTS8071Test {
 
   @Test
   void shallIncludeName() {
-    final var expectedName = "Läkarintyg avseende högre körkortsbehörigheter, taxiförarlegitimation och på begäran av Transportstyrelsen";
+    final var expectedName = "Läkarintyg för högre körkortsbehörigheter, taxiförarlegitimation och på begäran av Transportstyrelsen";
 
     final var certificateModel = certificateModelFactoryTS8071.create();
 
