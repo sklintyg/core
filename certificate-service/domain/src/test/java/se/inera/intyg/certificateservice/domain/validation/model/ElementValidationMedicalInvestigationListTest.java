@@ -155,7 +155,8 @@ class ElementValidationMedicalInvestigationListTest {
                   .build()
           )
           .build();
-      assertEquals(Collections.emptyList(), validation.validate(elementData, categoryId));
+      assertEquals(Collections.emptyList(), validation.validate(elementData, categoryId,
+          Collections.emptyList()));
     }
 
     @Test
@@ -170,7 +171,8 @@ class ElementValidationMedicalInvestigationListTest {
                   .build()
           )
           .build();
-      assertEquals(Collections.emptyList(), validation.validate(elementData, categoryId));
+      assertEquals(Collections.emptyList(), validation.validate(elementData, categoryId,
+          Collections.emptyList()));
     }
   }
 
@@ -186,7 +188,7 @@ class ElementValidationMedicalInvestigationListTest {
     void shallThrowIllegalArgumentExceptionIfDataIsNull() {
       final Optional<ElementId> categoryId = Optional.empty();
       assertThrows(IllegalArgumentException.class,
-          () -> validation.validate(null, categoryId)
+          () -> validation.validate(null, categoryId, Collections.emptyList())
       );
     }
 
@@ -198,7 +200,7 @@ class ElementValidationMedicalInvestigationListTest {
           .build();
 
       assertThrows(IllegalArgumentException.class,
-          () -> validation.validate(elementData, categoryId));
+          () -> validation.validate(elementData, categoryId, Collections.emptyList()));
     }
 
     @Test
@@ -210,7 +212,7 @@ class ElementValidationMedicalInvestigationListTest {
           .build();
 
       assertThrows(IllegalArgumentException.class,
-          () -> validation.validate(elementData, categoryId));
+          () -> validation.validate(elementData, categoryId, Collections.emptyList()));
     }
   }
 
@@ -235,7 +237,8 @@ class ElementValidationMedicalInvestigationListTest {
           )
           .build();
 
-      final var validationErrors = validation.validate(elementData, categoryId);
+      final var validationErrors = validation.validate(elementData, categoryId,
+          Collections.emptyList());
       assertEquals(Collections.emptyList(), validationErrors);
     }
 
@@ -262,7 +265,8 @@ class ElementValidationMedicalInvestigationListTest {
           )
           .build();
 
-      final var validationErrors = validation.validate(elementData, categoryId);
+      final var validationErrors = validation.validate(elementData, categoryId,
+          Collections.emptyList());
       assertTrue(validationErrors.contains(expectedValidationError.get(0)));
     }
 
@@ -295,7 +299,8 @@ class ElementValidationMedicalInvestigationListTest {
           )
           .build();
 
-      final var validationErrors = validation.validate(elementData, categoryId);
+      final var validationErrors = validation.validate(elementData, categoryId,
+          Collections.emptyList());
       assertTrue(validationErrors.contains(expectedValidationError.get(0)));
       assertTrue(validationErrors.contains(expectedValidationError.get(1)));
     }
@@ -322,7 +327,8 @@ class ElementValidationMedicalInvestigationListTest {
           )
           .build();
 
-      final var validationErrors = validation.validate(elementData, categoryId);
+      final var validationErrors = validation.validate(elementData, categoryId,
+          Collections.emptyList());
       assertEquals(Collections.emptyList(), validationErrors);
     }
 
@@ -349,7 +355,8 @@ class ElementValidationMedicalInvestigationListTest {
           )
           .build();
 
-      final var validationErrors = validation.validate(elementData, categoryId);
+      final var validationErrors = validation.validate(elementData, categoryId,
+          Collections.emptyList());
       assertTrue(validationErrors.contains(expectedValidationError.get(0)));
     }
 
@@ -382,7 +389,8 @@ class ElementValidationMedicalInvestigationListTest {
           )
           .build();
 
-      final var validationErrors = validation.validate(elementData, categoryId);
+      final var validationErrors = validation.validate(elementData, categoryId,
+          Collections.emptyList());
       assertTrue(validationErrors.contains(expectedValidationError.get(0)));
       assertTrue(validationErrors.contains(expectedValidationError.get(1)));
     }
@@ -409,7 +417,8 @@ class ElementValidationMedicalInvestigationListTest {
           )
           .build();
 
-      final var validationErrors = validation.validate(elementData, categoryId);
+      final var validationErrors = validation.validate(elementData, categoryId,
+          Collections.emptyList());
       assertEquals(Collections.emptyList(), validationErrors);
     }
 
@@ -441,7 +450,8 @@ class ElementValidationMedicalInvestigationListTest {
           )
           .build();
 
-      final var validationErrors = validation.validate(elementData, categoryId);
+      final var validationErrors = validation.validate(elementData, categoryId,
+          Collections.emptyList());
       assertEquals(expectedValidationErrors, validationErrors);
     }
 
@@ -473,7 +483,8 @@ class ElementValidationMedicalInvestigationListTest {
           getExpectedValidationError("Ange ett svar.", EMPTY_MEDICAL_INV.informationSource()
               .textId())
       );
-      final var validationErrors = validation.validate(elementData, categoryId);
+      final var validationErrors = validation.validate(elementData, categoryId,
+          Collections.emptyList());
       assertEquals(expectedValidationErrors.size(), validationErrors.size());
       assertEquals(expectedValidationErrors, validationErrors);
     }
@@ -511,7 +522,8 @@ class ElementValidationMedicalInvestigationListTest {
               INCOMPLETE_MEDICAL_INV_DATE.date().dateId())
       );
 
-      final var validationErrors = validation.validate(elementData, categoryId);
+      final var validationErrors = validation.validate(elementData, categoryId,
+          Collections.emptyList());
       assertEquals(expectedValidationErrors.size(), validationErrors.size());
       assertEquals(expectedValidationErrors, validationErrors);
     }
@@ -548,7 +560,8 @@ class ElementValidationMedicalInvestigationListTest {
               EMPTY_MEDICAL_INV.informationSource().textId())
       );
 
-      final var validationErrors = validation.validate(elementData, categoryId);
+      final var validationErrors = validation.validate(elementData, categoryId,
+          Collections.emptyList());
       assertEquals(expectedValidationErrors.size(), validationErrors.size());
       assertEquals(expectedValidationErrors, validationErrors);
     }
@@ -593,7 +606,8 @@ class ElementValidationMedicalInvestigationListTest {
                   .codeId())
       );
 
-      final var validationErrors = validation.validate(elementData, categoryId);
+      final var validationErrors = validation.validate(elementData, categoryId,
+          Collections.emptyList());
       assertEquals(expectedValidationErrors.size(), validationErrors.size());
       assertEquals(expectedValidationErrors, validationErrors);
     }
@@ -627,7 +641,8 @@ class ElementValidationMedicalInvestigationListTest {
               FIELD_ID)
       );
 
-      final var validationErrors = validation.validate(elementData, categoryId);
+      final var validationErrors = validation.validate(elementData, categoryId,
+          Collections.emptyList());
       assertEquals(expectedValidationErrors.size(), validationErrors.size());
       assertEquals(expectedValidationErrors, validationErrors);
     }
@@ -654,7 +669,8 @@ class ElementValidationMedicalInvestigationListTest {
           )
           .build();
 
-      final var validationErrors = validation.validate(elementData, categoryId);
+      final var validationErrors = validation.validate(elementData, categoryId,
+          Collections.emptyList());
       assertEquals(Collections.emptyList(), validationErrors);
     }
 
@@ -676,7 +692,8 @@ class ElementValidationMedicalInvestigationListTest {
           )
           .build();
 
-      final var validationErrors = validation.validate(elementData, categoryId);
+      final var validationErrors = validation.validate(elementData, categoryId,
+          Collections.emptyList());
       assertEquals(getExpectedValidationErrorAsList("Ange en text som inte är längre än 1.",
           COMPLETE_MEDICAL_INV.informationSource().textId()), validationErrors);
     }
@@ -705,7 +722,8 @@ class ElementValidationMedicalInvestigationListTest {
           )
           .build();
 
-      final var validationErrors = validation.validate(elementData, categoryId);
+      final var validationErrors = validation.validate(elementData, categoryId,
+          Collections.emptyList());
       assertEquals(Collections.emptyList(), validationErrors);
     }
   }

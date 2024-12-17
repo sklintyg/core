@@ -39,7 +39,7 @@ class ElementValidationUnitContactInformationTest {
   @Test
   void shallThrowIfDataIsNull() {
     assertThrows(IllegalArgumentException.class,
-        () -> elementValidation.validate(null, EMPTY_CATEGORY)
+        () -> elementValidation.validate(null, EMPTY_CATEGORY, Collections.emptyList())
     );
   }
 
@@ -51,7 +51,7 @@ class ElementValidationUnitContactInformationTest {
         .build();
 
     assertThrows(IllegalArgumentException.class,
-        () -> elementValidation.validate(elementData, categoryId)
+        () -> elementValidation.validate(elementData, categoryId, Collections.emptyList())
     );
   }
 
@@ -64,7 +64,7 @@ class ElementValidationUnitContactInformationTest {
         .build();
 
     assertThrows(IllegalArgumentException.class,
-        () -> elementValidation.validate(elementData, categoryId)
+        () -> elementValidation.validate(elementData, categoryId, Collections.emptyList())
     );
   }
 
@@ -88,7 +88,8 @@ class ElementValidationUnitContactInformationTest {
         )
         .build();
 
-    final var actualResult = elementValidation.validate(elementData, Optional.empty());
+    final var actualResult = elementValidation.validate(elementData, Optional.empty(),
+        Collections.emptyList());
     assertEquals(expectedValidationError, actualResult);
   }
 
@@ -112,7 +113,8 @@ class ElementValidationUnitContactInformationTest {
         )
         .build();
 
-    final var actualResult = elementValidation.validate(elementData, Optional.empty());
+    final var actualResult = elementValidation.validate(elementData, Optional.empty(),
+        Collections.emptyList());
     assertEquals(expectedValidationError, actualResult);
   }
 
@@ -136,7 +138,8 @@ class ElementValidationUnitContactInformationTest {
         )
         .build();
 
-    final var actualResult = elementValidation.validate(elementData, Optional.empty());
+    final var actualResult = elementValidation.validate(elementData, Optional.empty(),
+        Collections.emptyList());
     assertEquals(expectedValidationError, actualResult);
   }
 
@@ -160,7 +163,8 @@ class ElementValidationUnitContactInformationTest {
         )
         .build();
 
-    final var actualResult = elementValidation.validate(elementData, Optional.empty());
+    final var actualResult = elementValidation.validate(elementData, Optional.empty(),
+        Collections.emptyList());
     assertEquals(expectedValidationError, actualResult);
   }
 
@@ -184,7 +188,8 @@ class ElementValidationUnitContactInformationTest {
         )
         .build();
 
-    final var actualResult = elementValidation.validate(elementData, Optional.empty());
+    final var actualResult = elementValidation.validate(elementData, Optional.empty(),
+        Collections.emptyList());
     assertEquals(expectedValidationError, actualResult);
   }
 
@@ -208,7 +213,8 @@ class ElementValidationUnitContactInformationTest {
         )
         .build();
 
-    final var actualResult = elementValidation.validate(elementData, Optional.empty());
+    final var actualResult = elementValidation.validate(elementData, Optional.empty(),
+        Collections.emptyList());
     assertEquals(expectedValidationError, actualResult);
   }
 
@@ -232,7 +238,8 @@ class ElementValidationUnitContactInformationTest {
         )
         .build();
 
-    final var actualResult = elementValidation.validate(elementData, Optional.empty());
+    final var actualResult = elementValidation.validate(elementData, Optional.empty(),
+        Collections.emptyList());
     assertEquals(expectedValidationError, actualResult);
   }
 
@@ -256,7 +263,8 @@ class ElementValidationUnitContactInformationTest {
         )
         .build();
 
-    final var actualResult = elementValidation.validate(elementData, Optional.empty());
+    final var actualResult = elementValidation.validate(elementData, Optional.empty(),
+        Collections.emptyList());
     assertEquals(expectedValidationError, actualResult);
   }
 
@@ -296,7 +304,8 @@ class ElementValidationUnitContactInformationTest {
         )
         .build();
 
-    final var actualResult = elementValidation.validate(elementData, Optional.empty());
+    final var actualResult = elementValidation.validate(elementData, Optional.empty(),
+        Collections.emptyList());
     assertEquals(expectedValidationError, actualResult);
   }
 
@@ -311,7 +320,8 @@ class ElementValidationUnitContactInformationTest {
         )
         .build();
 
-    final var actualResult = elementValidation.validate(elementData, Optional.empty());
+    final var actualResult = elementValidation.validate(elementData, Optional.empty(),
+        Collections.emptyList());
     assertEquals(expectedValidationError, actualResult);
   }
 }

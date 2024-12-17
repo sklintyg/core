@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import lombok.AccessLevel;
+import java.util.function.Predicate;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
 import se.inera.intyg.certificateservice.domain.certificate.model.Correction;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
@@ -16,17 +17,19 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
 @Value
-@Getter(AccessLevel.NONE)
+@Getter
 @Builder
+@Slf4j
 public class ElementValidationVisualAcuities implements ElementValidation {
 
   boolean mandatory;
   Double min;
   Double max;
+  Predicate<List<ElementData>> shouldValidateSightOnBothEyes;
 
   @Override
   public List<ValidationError> validate(ElementData data,
-      Optional<ElementId> categoryId) {
+      Optional<ElementId> categoryId, List<ElementData> dataList) {
     if (data == null) {
       throw new IllegalArgumentException("Element data is null");
     }
@@ -41,7 +44,63 @@ public class ElementValidationVisualAcuities implements ElementValidation {
       validationErrors.addAll(validateMinAndMaxValues(value, data, categoryId));
     }
 
+    if (shouldValidateSightOnBothEyes != null && shouldValidateSightOnBothEyes.test(dataList)) {
+      validationErrors.addAll(validateHasSightOnBothEyes(value, data, categoryId));
+    }
+
     return validationErrors;
+  }
+
+  private Collection<ValidationError> validateHasSightOnBothEyes(
+      ElementValueVisualAcuities visualAcuities, ElementData data, Optional<ElementId> categoryId) {
+    final var validationErrors = new ArrayList<ValidationError>();
+    if (!valueIsZero(visualAcuities.rightEye().withoutCorrection()) && !valueIsZero(
+        visualAcuities.leftEye().withoutCorrection())) {
+      return validationErrors;
+    }
+
+    if (missingValue(visualAcuities.rightEye().withCorrection())) {
+      validationErrors.add(
+          buildValidationError(
+              visualAcuities.rightEye().withCorrection().id(),
+              data,
+              categoryId,
+              ErrorMessageFactory.missingAnswer().value()
+          )
+      );
+    }
+
+    if (missingValue(visualAcuities.leftEye().withCorrection())) {
+      validationErrors.add(
+          buildValidationError(
+              visualAcuities.leftEye().withCorrection().id(),
+              data,
+              categoryId,
+              ErrorMessageFactory.missingAnswer().value()
+          )
+      );
+    }
+
+    if (missingValue(visualAcuities.binocular().withCorrection())) {
+      validationErrors.add(
+          buildValidationError(
+              visualAcuities.binocular().withCorrection().id(),
+              data,
+              categoryId,
+              ErrorMessageFactory.missingAnswer().value()
+          )
+      );
+    }
+
+    return validationErrors;
+  }
+
+  private boolean valueIsZero(Correction correction) {
+    return correction != null && correction.value() != null && correction.value() == 0.0;
+  }
+
+  private boolean missingValue(Correction correction) {
+    return correction != null && correction.value() == null;
   }
 
   private Collection<ValidationError> validateMinAndMaxValues(

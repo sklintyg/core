@@ -48,7 +48,8 @@ class ElementValidationDiagnosisTest {
   void shallThrowIfElementDataIsNull() {
     elementValidationDiagnosis = ElementValidationDiagnosis.builder().build();
     assertThrows(IllegalArgumentException.class,
-        () -> elementValidationDiagnosis.validate(null, CATEGORY_ELEMENT_ID));
+        () -> elementValidationDiagnosis.validate(null, CATEGORY_ELEMENT_ID,
+            Collections.emptyList()));
   }
 
   @Nested
@@ -79,7 +80,7 @@ class ElementValidationDiagnosisTest {
           .build();
 
       final var validationErrors = elementValidationDiagnosis.validate(elementData,
-          CATEGORY_ELEMENT_ID);
+          CATEGORY_ELEMENT_ID, Collections.emptyList());
 
       assertEquals(expectedValidationError, validationErrors.get(0));
     }
@@ -110,7 +111,7 @@ class ElementValidationDiagnosisTest {
           .build();
 
       final var validationErrors = elementValidationDiagnosis.validate(elementData,
-          CATEGORY_ELEMENT_ID);
+          CATEGORY_ELEMENT_ID, Collections.emptyList());
 
       assertEquals(expectedValidationError, validationErrors.get(0));
     }
@@ -134,7 +135,7 @@ class ElementValidationDiagnosisTest {
           .build();
 
       final var validationErrors = elementValidationDiagnosis.validate(elementData,
-          CATEGORY_ELEMENT_ID);
+          CATEGORY_ELEMENT_ID, Collections.emptyList());
       assertEquals(Collections.emptyList(), validationErrors);
     }
   }
@@ -159,7 +160,7 @@ class ElementValidationDiagnosisTest {
           .build();
 
       final var validationErrors = elementValidationDiagnosis.validate(elementData,
-          CATEGORY_ELEMENT_ID);
+          CATEGORY_ELEMENT_ID, Collections.emptyList());
       assertEquals(Collections.emptyList(), validationErrors);
     }
 
@@ -182,7 +183,7 @@ class ElementValidationDiagnosisTest {
           .build();
 
       final var validationErrors = elementValidationDiagnosis.validate(elementData,
-          CATEGORY_ELEMENT_ID);
+          CATEGORY_ELEMENT_ID, Collections.emptyList());
       assertEquals(Collections.emptyList(), validationErrors);
     }
   }
@@ -254,7 +255,7 @@ class ElementValidationDiagnosisTest {
           .build();
 
       final var validationErrors = elementValidationDiagnosis.validate(elementData,
-          CATEGORY_ELEMENT_ID);
+          CATEGORY_ELEMENT_ID, Collections.emptyList());
       assertEquals(expectedValidationError, validationErrors);
     }
 
@@ -303,7 +304,7 @@ class ElementValidationDiagnosisTest {
           .build();
 
       final var validationErrors = elementValidationDiagnosis.validate(elementData,
-          CATEGORY_ELEMENT_ID);
+          CATEGORY_ELEMENT_ID, Collections.emptyList());
       assertEquals(expectedValidationError, validationErrors);
     }
 
@@ -350,7 +351,7 @@ class ElementValidationDiagnosisTest {
           .build();
 
       final var validationErrors = elementValidationDiagnosis.validate(elementData,
-          CATEGORY_ELEMENT_ID);
+          CATEGORY_ELEMENT_ID, Collections.emptyList());
       assertEquals(expectedValidationError, validationErrors);
     }
 
@@ -397,7 +398,7 @@ class ElementValidationDiagnosisTest {
           .build();
 
       final var validationErrors = elementValidationDiagnosis.validate(elementData,
-          CATEGORY_ELEMENT_ID);
+          CATEGORY_ELEMENT_ID, Collections.emptyList());
       assertEquals(expectedValidationError, validationErrors);
     }
   }
@@ -435,7 +436,7 @@ class ElementValidationDiagnosisTest {
           .build();
 
       final var validationErrors = elementValidationDiagnosis.validate(elementData,
-          CATEGORY_ELEMENT_ID);
+          CATEGORY_ELEMENT_ID, Collections.emptyList());
       assertEquals(Collections.emptyList(), validationErrors);
     }
 
@@ -466,7 +467,7 @@ class ElementValidationDiagnosisTest {
           .build();
 
       final var validationErrors = elementValidationDiagnosis.validate(elementData,
-          CATEGORY_ELEMENT_ID);
+          CATEGORY_ELEMENT_ID, Collections.emptyList());
       assertEquals(Collections.emptyList(), validationErrors);
     }
   }
@@ -510,7 +511,7 @@ class ElementValidationDiagnosisTest {
 
       doReturn(Optional.empty()).when(diagnosisCodeRepository).findByCode(new DiagnosisCode(CODE));
       final var validationErrors = elementValidationDiagnosis.validate(elementData,
-          CATEGORY_ELEMENT_ID);
+          CATEGORY_ELEMENT_ID, Collections.emptyList());
       assertEquals(expectedValidationError, validationErrors);
     }
 
@@ -537,7 +538,7 @@ class ElementValidationDiagnosisTest {
           .findByCode(new DiagnosisCode(CODE));
 
       final var validationErrors = elementValidationDiagnosis.validate(elementData,
-          CATEGORY_ELEMENT_ID);
+          CATEGORY_ELEMENT_ID, Collections.emptyList());
       assertTrue(validationErrors.isEmpty());
     }
   }

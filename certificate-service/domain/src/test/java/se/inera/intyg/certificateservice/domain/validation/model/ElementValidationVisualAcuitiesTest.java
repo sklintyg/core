@@ -36,14 +36,15 @@ class ElementValidationVisualAcuitiesTest {
     @BeforeEach
     void setUp() {
       elementValidationVisualAcuities = new ElementValidationVisualAcuities(
-          true, 0.0, 2.0
+          true, 0.0, 2.0, null
       );
     }
 
     @Test
     void shallThrowIfElementDataIsNull() {
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> elementValidationVisualAcuities.validate(null, CATEGORY_ID));
+          () -> elementValidationVisualAcuities.validate(null, CATEGORY_ID,
+              Collections.emptyList()));
 
       assertEquals("Element data is null", illegalArgumentException.getMessage());
     }
@@ -52,7 +53,8 @@ class ElementValidationVisualAcuitiesTest {
     void shallThrowIfElementDataValueIsNull() {
       final var elementData = ElementData.builder().build();
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> elementValidationVisualAcuities.validate(elementData, CATEGORY_ID));
+          () -> elementValidationVisualAcuities.validate(elementData, CATEGORY_ID,
+              Collections.emptyList()));
 
       assertEquals("Element data value is null", illegalArgumentException.getMessage());
     }
@@ -65,7 +67,8 @@ class ElementValidationVisualAcuitiesTest {
           .build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> elementValidationVisualAcuities.validate(elementData, CATEGORY_ID));
+          () -> elementValidationVisualAcuities.validate(elementData, CATEGORY_ID,
+              Collections.emptyList()));
 
       assertEquals("Element data value %s is of wrong type".formatted(elementValueText.getClass()),
           illegalArgumentException.getMessage());
@@ -78,7 +81,7 @@ class ElementValidationVisualAcuitiesTest {
     @BeforeEach
     void setUp() {
       elementValidationVisualAcuities = new ElementValidationVisualAcuities(
-          true, null, null
+          true, null, null, null
       );
     }
 
@@ -134,8 +137,8 @@ class ElementValidationVisualAcuitiesTest {
 
       final var actualValidationErrors = elementValidationVisualAcuities.validate(
           elementData,
-          CATEGORY_ID
-      );
+          CATEGORY_ID,
+          Collections.emptyList());
 
       assertEquals(expectedValidationErrors, actualValidationErrors);
     }
@@ -192,8 +195,8 @@ class ElementValidationVisualAcuitiesTest {
 
       final var actualValidationErrors = elementValidationVisualAcuities.validate(
           elementData,
-          CATEGORY_ID
-      );
+          CATEGORY_ID,
+          Collections.emptyList());
 
       assertEquals(expectedValidationErrors, actualValidationErrors);
     }
@@ -250,8 +253,8 @@ class ElementValidationVisualAcuitiesTest {
 
       final var actualValidationErrors = elementValidationVisualAcuities.validate(
           elementData,
-          CATEGORY_ID
-      );
+          CATEGORY_ID,
+          Collections.emptyList());
 
       assertEquals(expectedValidationErrors, actualValidationErrors);
     }
@@ -263,7 +266,7 @@ class ElementValidationVisualAcuitiesTest {
     @BeforeEach
     void setUp() {
       elementValidationVisualAcuities = new ElementValidationVisualAcuities(
-          false, null, null
+          false, null, null, null
       );
     }
 
@@ -308,8 +311,8 @@ class ElementValidationVisualAcuitiesTest {
 
       final var actualValidationErrors = elementValidationVisualAcuities.validate(
           elementData,
-          CATEGORY_ID
-      );
+          CATEGORY_ID,
+          Collections.emptyList());
 
       assertEquals(Collections.emptyList(), actualValidationErrors);
     }
@@ -355,8 +358,8 @@ class ElementValidationVisualAcuitiesTest {
 
       final var actualValidationErrors = elementValidationVisualAcuities.validate(
           elementData,
-          CATEGORY_ID
-      );
+          CATEGORY_ID,
+          Collections.emptyList());
 
       assertEquals(Collections.emptyList(), actualValidationErrors);
     }
@@ -402,8 +405,8 @@ class ElementValidationVisualAcuitiesTest {
 
       final var actualValidationErrors = elementValidationVisualAcuities.validate(
           elementData,
-          CATEGORY_ID
-      );
+          CATEGORY_ID,
+          Collections.emptyList());
 
       assertEquals(Collections.emptyList(), actualValidationErrors);
     }
@@ -415,7 +418,7 @@ class ElementValidationVisualAcuitiesTest {
     @BeforeEach
     void setUp() {
       elementValidationVisualAcuities = new ElementValidationVisualAcuities(
-          false, 0.0, 2.0
+          false, 0.0, 2.0, null
       );
     }
 
@@ -454,8 +457,8 @@ class ElementValidationVisualAcuitiesTest {
 
       final var actualValidationErrors = elementValidationVisualAcuities.validate(
           elementData,
-          CATEGORY_ID
-      );
+          CATEGORY_ID,
+          Collections.emptyList());
 
       assertEquals(expectedValidationErrors, actualValidationErrors);
     }
@@ -495,8 +498,8 @@ class ElementValidationVisualAcuitiesTest {
 
       final var actualValidationErrors = elementValidationVisualAcuities.validate(
           elementData,
-          CATEGORY_ID
-      );
+          CATEGORY_ID,
+          Collections.emptyList());
 
       assertEquals(expectedValidationErrors, actualValidationErrors);
     }
@@ -537,8 +540,8 @@ class ElementValidationVisualAcuitiesTest {
 
       final var actualValidationErrors = elementValidationVisualAcuities.validate(
           elementData,
-          CATEGORY_ID
-      );
+          CATEGORY_ID,
+          Collections.emptyList());
 
       assertEquals(expectedValidationErrors, actualValidationErrors);
     }
@@ -578,8 +581,8 @@ class ElementValidationVisualAcuitiesTest {
 
       final var actualValidationErrors = elementValidationVisualAcuities.validate(
           elementData,
-          CATEGORY_ID
-      );
+          CATEGORY_ID,
+          Collections.emptyList());
 
       assertEquals(expectedValidationErrors, actualValidationErrors);
     }
@@ -619,8 +622,8 @@ class ElementValidationVisualAcuitiesTest {
 
       final var actualValidationErrors = elementValidationVisualAcuities.validate(
           elementData,
-          CATEGORY_ID
-      );
+          CATEGORY_ID,
+          Collections.emptyList());
 
       assertEquals(expectedValidationErrors, actualValidationErrors);
     }
@@ -660,7 +663,274 @@ class ElementValidationVisualAcuitiesTest {
 
       final var actualValidationErrors = elementValidationVisualAcuities.validate(
           elementData,
-          CATEGORY_ID
+          CATEGORY_ID,
+          Collections.emptyList());
+
+      assertEquals(expectedValidationErrors, actualValidationErrors);
+    }
+  }
+
+  @Nested
+  class FieldHasValueTests {
+
+    private static final ElementId ELEMENT_WITH_VALUE = new ElementId("ID_WITH_VALUE");
+
+    @BeforeEach
+    void setUp() {
+      elementValidationVisualAcuities = new ElementValidationVisualAcuities(
+          false, 0.0, 2.0, elementData -> elementData.stream()
+          .anyMatch(data -> data.id().equals(ELEMENT_WITH_VALUE))
+      );
+    }
+
+    @Test
+    void shallReturnValidationErrorIfFieldHasValueIsTrueAndRightEyeWithoutCorrectionValueIsZero() {
+      final var expectedValidationErrors = List.of(
+          ValidationError.builder()
+              .elementId(ELEMENT_ID)
+              .fieldId(new FieldId(RIGHT_EYE_WITH_CORRECTION_ID))
+              .categoryId(CATEGORY_ID.orElse(null))
+              .message(
+                  new ErrorMessage("Ange ett svar.")
+              )
+              .build(),
+          ValidationError.builder()
+              .elementId(ELEMENT_ID)
+              .fieldId(new FieldId(LEFT_EYE_WITH_CORRECTION_ID))
+              .categoryId(CATEGORY_ID.orElse(null))
+              .message(
+                  new ErrorMessage("Ange ett svar.")
+              )
+              .build(),
+          ValidationError.builder()
+              .elementId(ELEMENT_ID)
+              .fieldId(new FieldId(BINOCULAR_WITH_CORRECTION_ID))
+              .categoryId(CATEGORY_ID.orElse(null))
+              .message(
+                  new ErrorMessage("Ange ett svar.")
+              )
+              .build()
+      );
+
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueVisualAcuities.builder()
+                  .binocular(getDefaultVisualActuityWithId(BINOCULAR_WITHOUT_CORRECTION_ID,
+                      BINOCULAR_WITH_CORRECTION_ID))
+                  .leftEye(getDefaultVisualActuityWithId(LEFT_EYE_WITHOUT_CORRECTION_ID,
+                      LEFT_EYE_WITH_CORRECTION_ID))
+                  .rightEye(
+                      VisualAcuity.builder()
+                          .withoutCorrection(
+                              Correction.builder()
+                                  .id(new FieldId(RIGHT_EYE_WITH_CORRECTION_ID))
+                                  .value(0.0)
+                                  .build()
+                          )
+                          .withCorrection(Correction.builder()
+                              .id(new FieldId(RIGHT_EYE_WITH_CORRECTION_ID))
+                              .build()
+                          )
+                          .build()
+                  )
+                  .build()
+          )
+          .build();
+
+      final var elementDataList = List.of(
+          ElementData.builder()
+              .id(ELEMENT_WITH_VALUE)
+              .build(),
+          elementData
+      );
+
+      final var actualValidationErrors = elementValidationVisualAcuities.validate(
+          elementData,
+          CATEGORY_ID,
+          elementDataList
+      );
+
+      assertEquals(expectedValidationErrors, actualValidationErrors);
+
+    }
+
+    @Test
+    void shallReturnValidationErrorIfFieldHasValueIsTrueAndLeftEyeWithoutCorrectionValueIsZero() {
+      final var expectedValidationErrors = List.of(
+          ValidationError.builder()
+              .elementId(ELEMENT_ID)
+              .fieldId(new FieldId(RIGHT_EYE_WITH_CORRECTION_ID))
+              .categoryId(CATEGORY_ID.orElse(null))
+              .message(
+                  new ErrorMessage("Ange ett svar.")
+              )
+              .build(),
+          ValidationError.builder()
+              .elementId(ELEMENT_ID)
+              .fieldId(new FieldId(LEFT_EYE_WITH_CORRECTION_ID))
+              .categoryId(CATEGORY_ID.orElse(null))
+              .message(
+                  new ErrorMessage("Ange ett svar.")
+              )
+              .build(),
+          ValidationError.builder()
+              .elementId(ELEMENT_ID)
+              .fieldId(new FieldId(BINOCULAR_WITH_CORRECTION_ID))
+              .categoryId(CATEGORY_ID.orElse(null))
+              .message(
+                  new ErrorMessage("Ange ett svar.")
+              )
+              .build()
+      );
+
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueVisualAcuities.builder()
+                  .binocular(getDefaultVisualActuityWithId(BINOCULAR_WITHOUT_CORRECTION_ID,
+                      BINOCULAR_WITH_CORRECTION_ID))
+                  .rightEye(getDefaultVisualActuityWithId(RIGHT_EYE_WITH_CORRECTION_ID,
+                      RIGHT_EYE_WITH_CORRECTION_ID))
+                  .leftEye(
+                      VisualAcuity.builder()
+                          .withoutCorrection(
+                              Correction.builder()
+                                  .id(new FieldId(LEFT_EYE_WITH_CORRECTION_ID))
+                                  .value(0.0)
+                                  .build()
+                          )
+                          .withCorrection(Correction.builder()
+                              .id(new FieldId(LEFT_EYE_WITH_CORRECTION_ID))
+                              .build()
+                          )
+                          .build()
+                  )
+                  .build()
+          )
+          .build();
+
+      final var elementDataList = List.of(
+          ElementData.builder()
+              .id(ELEMENT_WITH_VALUE)
+              .build(),
+          elementData
+      );
+
+      final var actualValidationErrors = elementValidationVisualAcuities.validate(
+          elementData,
+          CATEGORY_ID,
+          elementDataList
+      );
+
+      assertEquals(expectedValidationErrors, actualValidationErrors);
+    }
+
+    @Test
+    void shallNotReturnValidationErrorsIfFieldHasValueIsFalse() {
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueVisualAcuities.builder()
+                  .binocular(getDefaultVisualActuityWithId(BINOCULAR_WITHOUT_CORRECTION_ID,
+                      BINOCULAR_WITH_CORRECTION_ID))
+                  .rightEye(getDefaultVisualActuityWithId(RIGHT_EYE_WITHOUT_CORRECTION_ID,
+                      RIGHT_EYE_WITH_CORRECTION_ID))
+                  .leftEye(
+                      getDefaultVisualActuityWithId(LEFT_EYE_WITHOUT_CORRECTION_ID,
+                          LEFT_EYE_WITH_CORRECTION_ID))
+                  .build()
+          )
+          .build();
+
+      final var elementDataList = List.of(
+          ElementData.builder()
+              .id(ELEMENT_WITH_VALUE)
+              .build(),
+          elementData
+      );
+
+      final var actualValidationErrors = elementValidationVisualAcuities.validate(
+          elementData,
+          CATEGORY_ID,
+          elementDataList
+      );
+
+      assertEquals(Collections.emptyList(), actualValidationErrors);
+
+    }
+
+    @Test
+    void shallReturnValidationErrorForFieldsWithoutValueOnly() {
+      final var expectedValidationErrors = List.of(
+          ValidationError.builder()
+              .elementId(ELEMENT_ID)
+              .fieldId(new FieldId(RIGHT_EYE_WITH_CORRECTION_ID))
+              .categoryId(CATEGORY_ID.orElse(null))
+              .message(
+                  new ErrorMessage("Ange ett svar.")
+              )
+              .build(),
+          ValidationError.builder()
+              .elementId(ELEMENT_ID)
+              .fieldId(new FieldId(BINOCULAR_WITH_CORRECTION_ID))
+              .categoryId(CATEGORY_ID.orElse(null))
+              .message(
+                  new ErrorMessage("Ange ett svar.")
+              )
+              .build()
+      );
+
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueVisualAcuities.builder()
+                  .binocular(getDefaultVisualActuityWithId(BINOCULAR_WITHOUT_CORRECTION_ID,
+                      BINOCULAR_WITH_CORRECTION_ID))
+                  .rightEye(
+                      VisualAcuity.builder()
+                          .withoutCorrection(
+                              Correction.builder()
+                                  .id(new FieldId(RIGHT_EYE_WITHOUT_CORRECTION_ID))
+                                  .value(0.0)
+                                  .build()
+                          )
+                          .withCorrection(Correction.builder()
+                              .id(new FieldId(RIGHT_EYE_WITH_CORRECTION_ID))
+                              .build()
+                          )
+                          .build()
+                  )
+                  .leftEye(
+                      VisualAcuity.builder()
+                          .withoutCorrection(
+                              Correction.builder()
+                                  .id(new FieldId(LEFT_EYE_WITHOUT_CORRECTION_ID))
+                                  .value(0.0)
+                                  .build()
+                          )
+                          .withCorrection(Correction.builder()
+                              .id(new FieldId(LEFT_EYE_WITH_CORRECTION_ID))
+                              .value(1.0)
+                              .build()
+                          )
+                          .build()
+                  )
+                  .build()
+          )
+          .build();
+
+      final var elementDataList = List.of(
+          ElementData.builder()
+              .id(ELEMENT_WITH_VALUE)
+              .build(),
+          elementData
+      );
+
+      final var actualValidationErrors = elementValidationVisualAcuities.validate(
+          elementData,
+          CATEGORY_ID,
+          elementDataList
       );
 
       assertEquals(expectedValidationErrors, actualValidationErrors);
@@ -677,6 +947,20 @@ class ElementValidationVisualAcuitiesTest {
         .withCorrection(Correction.builder()
             .id(new FieldId("ID2"))
             .value(2.0)
+            .build()
+        )
+        .build();
+  }
+
+  private static VisualAcuity getDefaultVisualActuityWithId(String withoutId, String withId) {
+    return VisualAcuity.builder()
+        .withoutCorrection(Correction.builder()
+            .id(new FieldId(withoutId))
+            .value(1.0)
+            .build()
+        )
+        .withCorrection(Correction.builder()
+            .id(new FieldId(withId))
             .build()
         )
         .build();

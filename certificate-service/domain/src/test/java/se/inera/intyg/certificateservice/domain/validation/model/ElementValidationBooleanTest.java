@@ -34,7 +34,7 @@ class ElementValidationBooleanTest {
     void shallThrowIllegalArgumentExceptionIfDataIsNull() {
       final Optional<ElementId> categoryId = Optional.empty();
       assertThrows(IllegalArgumentException.class,
-          () -> elementValidationBoolean.validate(null, categoryId)
+          () -> elementValidationBoolean.validate(null, categoryId, Collections.emptyList())
       );
     }
 
@@ -46,7 +46,8 @@ class ElementValidationBooleanTest {
           .build();
 
       assertThrows(IllegalArgumentException.class,
-          () -> elementValidationBoolean.validate(elementData, categoryId));
+          () -> elementValidationBoolean.validate(elementData, categoryId,
+              Collections.emptyList()));
     }
 
     @Test
@@ -58,7 +59,8 @@ class ElementValidationBooleanTest {
           .build();
 
       assertThrows(IllegalArgumentException.class,
-          () -> elementValidationBoolean.validate(elementData, categoryId));
+          () -> elementValidationBoolean.validate(elementData, categoryId,
+              Collections.emptyList()));
     }
   }
 
@@ -88,7 +90,7 @@ class ElementValidationBooleanTest {
           .build();
 
       final var actualValidationErrors = elementValidationBoolean.validate(elementData,
-          Optional.of(CATEGORY_ID));
+          Optional.of(CATEGORY_ID), Collections.emptyList());
       assertEquals(expectedValidationErrors, actualValidationErrors);
     }
 
@@ -107,7 +109,7 @@ class ElementValidationBooleanTest {
           .build();
 
       final var actualValidationErrors = elementValidationBoolean.validate(elementData,
-          Optional.of(CATEGORY_ID));
+          Optional.of(CATEGORY_ID), Collections.emptyList());
 
       assertEquals(Collections.emptyList(), actualValidationErrors);
     }
@@ -126,7 +128,7 @@ class ElementValidationBooleanTest {
           .build();
 
       final var actualValidationErrors = elementValidationBoolean.validate(elementData,
-          Optional.of(CATEGORY_ID));
+          Optional.of(CATEGORY_ID), Collections.emptyList());
 
       assertEquals(Collections.emptyList(), actualValidationErrors);
     }
