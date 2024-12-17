@@ -14,6 +14,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCodeList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
@@ -123,5 +124,12 @@ class QuestionKorrigeringAvSynskarpaStyrkaOverTest {
       final var element = QuestionKorrigeringAvSynskarpaStyrkaOver.questionKorrigeringAvSynskarpaStyrkaOver();
       assertFalse(element.shouldValidate().test(elementData));
     }
+  }
+
+  @Test
+  void shallIncludeMapping() {
+    final var expectedMapping = new ElementMapping(QUESTION_KORRIGERING_AV_SYNSKARPA_ID, null);
+    final var element = QuestionKorrigeringAvSynskarpaStyrkaOver.questionKorrigeringAvSynskarpaStyrkaOver();
+    assertEquals(expectedMapping, element.mapping());
   }
 }

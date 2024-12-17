@@ -5,6 +5,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
@@ -58,7 +59,11 @@ public class QuestionKorrigeringAvSynskarpaKontaktlinser {
         .shouldValidate(
             ShouldValidateFactory.codeList(QUESTION_KORRIGERING_AV_SYNSKARPA_ID, List.of(
                 new FieldId(
-                    CodeSystemKorringerAvSynskarpa.KONTAKTLINSER.code()))))
+                    CodeSystemKorringerAvSynskarpa.KONTAKTLINSER.code())))
+        )
+        .mapping(
+            new ElementMapping(QUESTION_KORRIGERING_AV_SYNSKARPA_ID, null)
+        )
         .build();
   }
 }
