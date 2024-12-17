@@ -53,6 +53,9 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionIntygetAvser.questionIntygetAvser;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionKognitivStorning.questionKognitivStorning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionKorrigeringAvSynskarpa.questionKorrigeringAvSynskarpa;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionKorrigeringAvSynskarpaIngenStyrkaOver.questionKorrigeringAvSynskarpaIngenStyrkaOver;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionKorrigeringAvSynskarpaKontaktlinser.questionKorrigeringAvSynskarpaKontaktlinser;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionKorrigeringAvSynskarpaStyrkaOver.questionKorrigeringAvSynskarpaStyrkaOver;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionLakemedel.questionLakemedel;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionLakemedelBeskrivning.questionLakemedelBeskrivning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMedicinering.questionMedicinering;
@@ -194,7 +197,11 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
                 ),
                 categorySynskarpa(
                     questionSynskarpa(),
-                    questionKorrigeringAvSynskarpa()
+                    questionKorrigeringAvSynskarpa(
+                        questionKorrigeringAvSynskarpaIngenStyrkaOver(),
+                        questionKorrigeringAvSynskarpaStyrkaOver(),
+                        questionKorrigeringAvSynskarpaKontaktlinser()
+                    )
                 ),
                 categoryAnamnes(
                     questionSjukdomEllerSynnedsattning(
