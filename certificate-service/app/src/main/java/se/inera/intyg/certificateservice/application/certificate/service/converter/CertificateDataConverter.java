@@ -181,8 +181,14 @@ public class CertificateDataConverter {
     return elementSpecifications.stream()
         .filter(removeMessagesIfNotUnsigned(certificate.status()))
         .filter(
-            removeQuestionIfNotDraftWithoutValue(elementIdElementValueMap, certificate).negate())
+            removeQuestionIfNotDraftWithoutElementValue(elementIdElementValueMap,
+                certificate).negate()
+        )
         .filter(removeElementsForCitizenCertificate(forCitizen))
+        .filter(
+            removeCategoryIfNotDraftWithChildrenWithoutElementValue(elementIdElementValueMap,
+                certificate).negate()
+        )
         .flatMap(
             specification -> {
               final var dataElementMap = convertData(
@@ -198,7 +204,16 @@ public class CertificateDataConverter {
         );
   }
 
-  private static Predicate<ElementSpecification> removeQuestionIfNotDraftWithoutValue(
+  private static Predicate<ElementSpecification> removeCategoryIfNotDraftWithChildrenWithoutElementValue(
+      Map<ElementId, ElementValue> elementIdElementValueMap,
+      Certificate certificate) {
+    return specification -> !certificate.isDraft()
+        && specification.configuration().type().equals(CATEGORY)
+        && specification.children().stream()
+        .noneMatch(child -> elementIdElementValueMap.containsKey(child.id()));
+  }
+
+  private static Predicate<ElementSpecification> removeQuestionIfNotDraftWithoutElementValue(
       Map<ElementId, ElementValue> elementIdElementValueMap,
       Certificate certificate) {
     return specification -> !certificate.isDraft()
