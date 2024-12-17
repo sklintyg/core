@@ -106,7 +106,7 @@ class QuestionSynskarpaTest {
           () -> assertEquals(0.0, validation.min()),
           () -> assertEquals(2.0, validation.max()),
           () -> assertTrue(validation.mandatory()),
-          () -> assertNotNull(validation.fieldHasValue())
+          () -> assertNotNull(validation.shouldValidateSightOnBothEyes())
       );
     }
 
@@ -132,7 +132,7 @@ class QuestionSynskarpaTest {
               .build()
       );
 
-      assertTrue(validation.fieldHasValue().test(elementData));
+      assertTrue(validation.shouldValidateSightOnBothEyes().test(elementData));
     }
 
     @Test
@@ -157,7 +157,7 @@ class QuestionSynskarpaTest {
               .build()
       );
 
-      assertFalse(validation.fieldHasValue().test(elementData));
+      assertFalse(validation.shouldValidateSightOnBothEyes().test(elementData));
     }
   }
 

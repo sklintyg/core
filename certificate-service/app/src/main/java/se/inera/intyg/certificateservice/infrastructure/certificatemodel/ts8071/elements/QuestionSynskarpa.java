@@ -6,6 +6,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynfunktioner.QUESTION_SYNFUNKTIONER_ID;
 
 import java.util.List;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCodeList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationVisualAcuities;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
@@ -13,7 +14,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementVi
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationVisualAcuities;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.FieldHasValueFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
 
 public class QuestionSynskarpa {
@@ -66,7 +66,14 @@ public class QuestionSynskarpa {
         .validations(
             List.of(
                 ElementValidationVisualAcuities.builder()
-                    .fieldHasValue(FieldHasValueFactory.codeList(QUESTION_INTYGET_AVSER_ID, TAXI))
+                    .shouldValidateSightOnBothEyes(
+                        elementData -> elementData.stream()
+                            .filter(data -> QUESTION_INTYGET_AVSER_ID.equals(data.id()))
+                            .map(element -> (ElementValueCodeList) element.value())
+                            .map(ElementValueCodeList::list)
+                            .flatMap(List::stream)
+                            .anyMatch(valueCode -> valueCode.code().equals(TAXI.code()))
+                    )
                     .mandatory(true)
                     .min(0.0)
                     .max(2.0)

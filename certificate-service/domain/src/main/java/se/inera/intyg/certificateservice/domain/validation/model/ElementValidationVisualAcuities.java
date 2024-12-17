@@ -25,7 +25,7 @@ public class ElementValidationVisualAcuities implements ElementValidation {
   boolean mandatory;
   Double min;
   Double max;
-  Predicate<List<ElementData>> fieldHasValue;
+  Predicate<List<ElementData>> shouldValidateSightOnBothEyes;
 
   @Override
   public List<ValidationError> validate(ElementData data,
@@ -44,7 +44,7 @@ public class ElementValidationVisualAcuities implements ElementValidation {
       validationErrors.addAll(validateMinAndMaxValues(value, data, categoryId));
     }
 
-    if (fieldHasValue != null && fieldHasValue.test(elementData)) {
+    if (shouldValidateSightOnBothEyes != null && shouldValidateSightOnBothEyes.test(elementData)) {
       validationErrors.addAll(validateHasSightOnBothEyes(value, data, categoryId));
     }
 
