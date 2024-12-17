@@ -172,4 +172,32 @@ class CertificateElementRuleFactoryTest {
 
     assertEquals(expected, response);
   }
+
+  @Test
+  void shouldReturnLessThanOrEqual() {
+    final var expectedResult = "1 <= 2";
+    final var response = CertificateElementRuleFactory.lessThanOrEqual("1", "2");
+    assertEquals(expectedResult, response);
+  }
+
+  @Test
+  void shouldReturnWithCitations() {
+    final var expectedResult = "'expected'";
+    final var response = CertificateElementRuleFactory.withCitation("expected");
+    assertEquals(expectedResult, response);
+  }
+
+  @Test
+  void shouldReturnMultipleAndExpressions() {
+    final var expectedResult = "1 && 2 && 3";
+    final var response = CertificateElementRuleFactory.multipleAndExpressions("1", "2", "3");
+    assertEquals(expectedResult, response);
+  }
+
+  @Test
+  void shouldReturnWrapWithParenthesis() {
+    final var expectedResult = "(expected)";
+    final var response = CertificateElementRuleFactory.wrapWithParenthesis("expected");
+    assertEquals(expectedResult, response);
+  }
 }
