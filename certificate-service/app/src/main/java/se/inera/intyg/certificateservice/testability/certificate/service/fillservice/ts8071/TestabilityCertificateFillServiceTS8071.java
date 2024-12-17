@@ -1,12 +1,12 @@
 package se.inera.intyg.certificateservice.testability.certificate.service.fillservice.ts8071;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemDecision.NO;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKnowledge.YES;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIdKontroll.IDK1;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs0001.DISTANSKONTAKT;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs0001.JOURNALUPPGIFTER;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs0002.GR_II;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs0002.TAXI;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvInformationskallaForIntyg.DISTANSKONTAKT;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvInformationskallaForIntyg.JOURNALUPPGIFTER;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.GR_II;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.TAXI;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs001.YES;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs002.NO;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.CertificateModelFactoryTS8071.TS8071_V1_0;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionArytmi.QUESTION_ARYTMI_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionArytmiBeskrivning.QUESTION_ARYTMI_BESKRIVNING_ID;
@@ -80,6 +80,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynfunktioner.QUESTION_SYNFUNKTIONER_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynkope.QUESTION_SYNKOPE_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynkopeBeskrivning.QUESTION_SYNKOPE_BESKRIVNING_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynskarpa.QUESTION_SYNSKARPA_ID;
 import static se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityFillTypeDTO.EMPTY;
 import static se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityFillTypeDTO.MAXIMAL;
 import static se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityFillTypeDTO.MINIMAL;
@@ -89,20 +90,24 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.stereotype.Component;
+import se.inera.intyg.certificateservice.domain.certificate.model.Correction;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCodeList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueVisualAcuities;
+import se.inera.intyg.certificateservice.domain.certificate.model.VisualAcuity;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationVisualAcuities;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKnowledge;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemPositionHearingAid;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvAnatomiskLokalisationHorapparat;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs001;
 import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityFillTypeDTO;
 import se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityCertificateFillService;
 
@@ -112,7 +117,8 @@ public class TestabilityCertificateFillServiceTS8071 implements
 
   private static final List<ElementId> MAXIMAL_IDS = List.of(
       QUESTION_INTYGET_AVSER_ID, QUESTION_BASERAT_PA_ID, QUESTION_BASERAT_PA_DATUM_ID,
-      QUESTION_IDENTITET_ID, QUESTION_SYNFUNKTIONER_ID, QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_ID,
+      QUESTION_SYNSKARPA_ID, QUESTION_IDENTITET_ID, QUESTION_SYNFUNKTIONER_ID,
+      QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_ID,
       QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_BESKRIVNING_ID, QUESTION_SJUKDOMSHISTORIK_ID,
       QUESTION_SJUKDOMSHISTORIK_BESKRIVNING_ID, QUESTION_BALANSSINNE_ID,
       QUESTION_BALANSSINNE_BESKRIVNING_ID, QUESTION_HORSEL_ID, QUESTION_HORSELHJALPMEDEL_ID,
@@ -245,7 +251,41 @@ public class TestabilityCertificateFillServiceTS8071 implements
           .build();
     }
 
+    if (value instanceof ElementValueVisualAcuities) {
+      final var config = (ElementConfigurationVisualAcuities) elementSpecification.configuration();
+      return ElementData.builder()
+          .id(elementSpecification.id())
+          .value(
+              ElementValueVisualAcuities.builder()
+                  .binocular(
+                      VisualAcuity.builder()
+                          .withoutCorrection(
+                              getCorrection(config.binocular().withoutCorrectionId()))
+                          .build()
+                  )
+                  .rightEye(
+                      VisualAcuity.builder()
+                          .withoutCorrection(getCorrection(config.rightEye().withoutCorrectionId()))
+                          .build()
+                  )
+                  .leftEye(
+                      VisualAcuity.builder()
+                          .withoutCorrection(getCorrection(config.leftEye().withoutCorrectionId()))
+                          .build()
+                  )
+                  .build()
+          )
+          .build();
+    }
+
     return null;
+  }
+
+  private static Correction getCorrection(String id) {
+    return Correction.builder()
+        .id(new FieldId(id))
+        .value(1D)
+        .build();
   }
 
 
@@ -288,11 +328,11 @@ public class TestabilityCertificateFillServiceTS8071 implements
     }
 
     if (elementId == QUESTION_STROKE_PAVARKAN_ID) {
-      return CodeSystemKnowledge.NO;
+      return CodeSystemKvTs001.NO;
     }
 
     if (elementId == QUESTION_HORSELHJALPMEDEL_POSITION_ID) {
-      return CodeSystemPositionHearingAid.BADA_ORONEN;
+      return CodeSystemKvAnatomiskLokalisationHorapparat.BADA_ORONEN;
     }
 
     throw new IllegalStateException(

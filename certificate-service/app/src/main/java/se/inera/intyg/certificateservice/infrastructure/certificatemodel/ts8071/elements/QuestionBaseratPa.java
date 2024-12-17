@@ -10,7 +10,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCode;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs0001;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvInformationskallaForIntyg;
 
 public class QuestionBaseratPa {
 
@@ -26,9 +26,10 @@ public class QuestionBaseratPa {
   public static ElementSpecification questionBaseratPa(
       ElementSpecification... children) {
     final var radioMultipleCodes = List.of(
-        CodeFactory.elementConfigurationCode(CodeSystemKvTs0001.JOURNALUPPGIFTER),
-        CodeFactory.elementConfigurationCode(CodeSystemKvTs0001.DISTANSKONTAKT),
-        CodeFactory.elementConfigurationCode(CodeSystemKvTs0001.UNDERSOKNING)
+        CodeFactory.elementConfigurationCode(
+            CodeSystemKvInformationskallaForIntyg.JOURNALUPPGIFTER),
+        CodeFactory.elementConfigurationCode(CodeSystemKvInformationskallaForIntyg.DISTANSKONTAKT),
+        CodeFactory.elementConfigurationCode(CodeSystemKvInformationskallaForIntyg.UNDERSOKNING)
     );
 
     return ElementSpecification.builder()
