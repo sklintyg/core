@@ -2,9 +2,9 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.common
 
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 
-public class CodeSystemPositionHearingAid {
+public class CodeSystemKvAnatomiskLokalisationHorapparat {
 
-  public static final String CODE_SYSTEM = "CODE_SYSTEM_POSITION_HEARING_AID";
+  public static final String CODE_SYSTEM = "1.2.752.129.5.1.68";
 
   public static final Code HOGER = new Code(
       "89644007",
@@ -25,7 +25,7 @@ public class CodeSystemPositionHearingAid {
   );
 
 
-  private CodeSystemPositionHearingAid() {
+  private CodeSystemKvAnatomiskLokalisationHorapparat() {
     throw new IllegalStateException("Utility class");
   }
 }

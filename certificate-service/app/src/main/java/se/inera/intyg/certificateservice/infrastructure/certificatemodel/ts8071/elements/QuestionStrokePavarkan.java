@@ -16,7 +16,7 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKnowledge;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs001;
 
 public class QuestionStrokePavarkan {
 
@@ -32,9 +32,9 @@ public class QuestionStrokePavarkan {
   public static ElementSpecification questionStrokePavarkan(
       ElementSpecification... children) {
     final var radioMultipleCodes = List.of(
-        CodeFactory.elementConfigurationCode(CodeSystemKnowledge.YES),
-        CodeFactory.elementConfigurationCode(CodeSystemKnowledge.NO),
-        CodeFactory.elementConfigurationCode(CodeSystemKnowledge.NO_KNOWLEDGE)
+        CodeFactory.elementConfigurationCode(CodeSystemKvTs001.YES),
+        CodeFactory.elementConfigurationCode(CodeSystemKvTs001.NO),
+        CodeFactory.elementConfigurationCode(CodeSystemKvTs001.NO_KNOWLEDGE)
     );
 
     return ElementSpecification.builder()

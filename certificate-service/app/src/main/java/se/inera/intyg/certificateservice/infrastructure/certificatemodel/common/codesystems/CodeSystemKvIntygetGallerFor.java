@@ -2,9 +2,9 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.common
 
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 
-public class CodeSystemKvTs0002 {
+public class CodeSystemKvIntygetGallerFor {
 
-  public static final String CODE_SYSTEM = "KV_TS_0002";
+  public static final String CODE_SYSTEM = "1.2.752.129.5.1.66";
 
   public static final Code GR_II = new Code(
       "gr_II",
@@ -48,7 +48,7 @@ public class CodeSystemKvTs0002 {
       "Intyg i annat fall på begäran av Transportstyrelsen"
   );
 
-  private CodeSystemKvTs0002() {
+  private CodeSystemKvIntygetGallerFor() {
     throw new IllegalStateException("Utility class");
   }
 }
