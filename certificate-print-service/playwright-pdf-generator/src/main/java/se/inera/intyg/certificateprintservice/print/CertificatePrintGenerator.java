@@ -81,18 +81,18 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
       certificate.getCategories().forEach(category -> content.appendChild(
           convertCategory(category, certificate.getCategories().indexOf(category))));
 
-      final var watermarkPath = ClassLoader.getSystemResource("transportstyrelsen-logo.png")
-          .toURI();
-      byte[] imageBytes = Files.readAllBytes(Paths.get(watermarkPath));
-      final var base64 = Base64.getEncoder().encode(imageBytes);
-      final var img = new Element(Tag.IMG.toString())
-          .attr("src", "data:image/png;base64, " + new String(base64))
-          .attr("alt", "test-image-alt")
-          .attr("style", "height: 40px");
-
-      final var logo = doc.getElementById("logo").appendChild(img);
-      final var pnr = doc.getElementById("pnr").attr("style", "font-weight: bold;")
-          .appendText("Person- /samordningsnr");
+//      final var logoPath = ClassLoader.getSystemResource("transportstyrelsen-logo.png")
+//          .toURI();
+//      byte[] imageBytes = Files.readAllBytes(Paths.get(logoPath));
+//      final var base64 = Base64.getEncoder().encode(imageBytes);
+//      final var img = new Element(Tag.IMG.toString())
+//          .attr("src", "data:image/png;base64, " + new String(base64))
+//          .attr("alt", "test-image-alt")
+//          .attr("style", "height: 40px");
+//
+//      final var logo = doc.getElementById("logo").appendChild(img);
+//      final var pnr = doc.getElementById("pnr").attr("style", "font-weight: bold;")
+//          .appendText("Person- /samordningsnr");
 
       log.info(doc.html());
       return doc.html();
@@ -106,9 +106,9 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
     final var pdfOptions = new PdfOptions();
     pdfOptions.setFormat("A4");
     pdfOptions.setPrintBackground(true);
-    //pdfOptions.setDisplayHeaderFooter(true);
+    pdfOptions.setDisplayHeaderFooter(true);
     pdfOptions.setTagged(true);
-    //pdfOptions.setHeaderTemplate(createHeader(certificateMetadata));
+    pdfOptions.setHeaderTemplate(createHeader(certificateMetadata));
 //    pdfOptions.setFooterTemplate("""
 //        <footer>
 //          <p>Utskriften skapades med Webcert - en tjänst som drivs av Inera AB</p>
@@ -119,29 +119,49 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
   }
 
   private String createHeader(Metadata certificateMetadata) throws IOException, URISyntaxException {
+
     final var headerDiv = new Element(Tag.DIV.toString()).attr("style",
-        "display: block !important;");
-    headerDiv.appendChild(new Element(Tag.P.toString()).attr("class", "title").attr("style",
-        "font-size: 14px; width: 800px; height: 200px; margin: 20px;"));
-    headerDiv.appendChild(new Element(Tag.P.toString()).attr(CLASS, "pageNumber").attr(STYLE,
-        "font-size: 10px; width: 15px; height: 200px; margin-top: 20px;"));
-    headerDiv.appendChild(new Element(Tag.P.toString()).attr(CLASS, "totalPages").attr(STYLE,
-        "font-size: 10px; width: 15px; height: 200px; margin-top: 20px;"));
+        "display: flex; font-size: 10px; width: 100%; justifyContent: flex-end; padding: 0 20px; gap: 10px;");
+    headerDiv.appendChild(
+        new Element(Tag.P.toString()).addClass("title").attr("style", "font-size: 10px;"));
 
-//    final var pnrDiv = new Element(Tag.DIV.toString());
-//    pnrDiv.appendChild(img);
-//    pnrDiv.appendChild(new Element(Tag.STRONG.toString()).appendText("Person- /samordningsnr"));
-//    pnrDiv.appendChild(new Element(Tag.P.toString()).appendText(certificateMetadata.getPersonId()));
-//    headerDiv.appendChild(pnrDiv);
-//
-//    final var logo = ClassLoader.getSystemResource("transportstyrelsens_logotyp_rgb.eps.pdf")
-//        .getPath();
-//    headerDiv.appendChild(
-//        new Element(Tag.IMG.toString()).attr("src", logo));
+    final var pageNrDiv = new Element(Tag.DIV.toString());
 
-//    final var watermark = new Element(Tag.DIV.toString());
-//    watermark.text("UTKAST");
-//    watermark.attr("style", "")
+    final var pnrDiv = new Element(Tag.DIV.toString());
+    pnrDiv.appendChild(new Element(Tag.STRONG.toString()).appendText("Person- /samordningsnr"))
+        .attr("style", "font-size: 10px;");
+    pnrDiv.appendChild(new Element(Tag.P.toString()).appendText(certificateMetadata.getPersonId()))
+        .attr("style", "font-size: 10px;");
+    headerDiv.appendChild(pnrDiv);
+
+    pageNrDiv.appendChild(
+        new Element(Tag.P.toString()).addClass("pageNumber").attr("style", "font-size: 10px;"));
+    pageNrDiv.appendChild(
+        new Element(Tag.P.toString()).addClass("totalPages").attr("style", "font-size: 10px;"));
+    headerDiv.appendChild(pageNrDiv);
+
+    final var logoPath = ClassLoader.getSystemResource("transportstyrelsen-logo.png")
+        .toURI();
+    byte[] imageBytes = Files.readAllBytes(Paths.get(logoPath));
+    final var base64 = Base64.getEncoder().encode(imageBytes);
+    final var img = new Element(Tag.IMG.toString())
+        .attr("src", "data:image/png;base64, " + new String(base64))
+        .attr("alt", "test-image-alt")
+        .attr("style", "height: 40px");
+
+    headerDiv.appendChild(img);
+
+    final var leftPageInfo = new Element(Tag.DIV.toString()).addClass(
+        "fixed top-0 bottom 0 left-0 leading-4 text-sm");
+    leftPageInfo.appendChild(
+        new Element(Tag.DIV.toString()).addClass("rotate-180")
+            .attr("style",
+                "font-size: 10px; writingMode: vertical-rl; textOrientation: sideways; height: 100%;")
+            .appendChild(new Element(Tag.P.toString()).text("HEJSANHOPPSANHEJSAN"))
+
+    );
+
+    headerDiv.appendChild(leftPageInfo);
 
     return headerDiv.html();
   }
