@@ -4,7 +4,7 @@ import se.inera.intyg.certificateservice.domain.common.model.Code;
 
 public class CodeSystemKvInformationskallaForIntyg {
 
-  public static final String CODE_SYSTEM = "kv_informationskalla_for_intyg";
+  public static final String CODE_SYSTEM = "1.2.752.129.5.1.67";
 
   public static final Code JOURNALUPPGIFTER = new Code(
       "journal",

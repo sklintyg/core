@@ -4,7 +4,7 @@ import se.inera.intyg.certificateservice.domain.common.model.Code;
 
 public class CodeSystemKvAnatomiskLokalisationHorapparat {
 
-  public static final String CODE_SYSTEM = "kv_anatomisk_lokalisation_horapparat";
+  public static final String CODE_SYSTEM = "1.2.752.129.5.1.68";
 
   public static final Code HOGER = new Code(
       "89644007",

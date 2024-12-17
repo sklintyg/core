@@ -4,7 +4,7 @@ import se.inera.intyg.certificateservice.domain.common.model.Code;
 
 public class CodeSystemKvIntygetGallerFor {
 
-  public static final String CODE_SYSTEM = "kv_intyget_galler_for";
+  public static final String CODE_SYSTEM = "1.2.752.129.5.1.66";
 
   public static final Code GR_II = new Code(
       "gr_II",
