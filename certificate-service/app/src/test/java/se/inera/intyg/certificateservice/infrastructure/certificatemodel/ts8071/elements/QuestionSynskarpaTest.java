@@ -37,6 +37,8 @@ class QuestionSynskarpaTest {
         .name("Synskärpa")
         .withCorrectionLabel("Med korrektion")
         .withoutCorrectionLabel("Utan korrektion")
+        .min(0.0)
+        .max(2.0)
         .rightEye(
             ElementVisualAcuity.builder()
                 .label("Höger öga")
