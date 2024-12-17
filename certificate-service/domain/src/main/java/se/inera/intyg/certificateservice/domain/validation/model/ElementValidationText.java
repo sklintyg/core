@@ -23,7 +23,7 @@ public class ElementValidationText implements ElementValidation {
 
   @Override
   public List<ValidationError> validate(ElementData data,
-      Optional<ElementId> categoryId, List<ElementData> elementData) {
+      Optional<ElementId> categoryId, List<ElementData> dataList) {
     if (data == null) {
       throw new IllegalArgumentException("Element data is null");
     }

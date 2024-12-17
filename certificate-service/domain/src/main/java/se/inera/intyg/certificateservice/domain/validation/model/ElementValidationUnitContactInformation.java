@@ -32,7 +32,7 @@ public class ElementValidationUnitContactInformation implements ElementValidatio
 
   @Override
   public List<ValidationError> validate(ElementData data, Optional<ElementId> categoryId,
-      List<ElementData> elementData) {
+      List<ElementData> dataList) {
     if (data == null) {
       throw new IllegalArgumentException("Element data is null");
     }

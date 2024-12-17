@@ -29,7 +29,7 @@ public class ElementValidationVisualAcuities implements ElementValidation {
 
   @Override
   public List<ValidationError> validate(ElementData data,
-      Optional<ElementId> categoryId, List<ElementData> elementData) {
+      Optional<ElementId> categoryId, List<ElementData> dataList) {
     if (data == null) {
       throw new IllegalArgumentException("Element data is null");
     }
@@ -44,7 +44,7 @@ public class ElementValidationVisualAcuities implements ElementValidation {
       validationErrors.addAll(validateMinAndMaxValues(value, data, categoryId));
     }
 
-    if (shouldValidateSightOnBothEyes != null && shouldValidateSightOnBothEyes.test(elementData)) {
+    if (shouldValidateSightOnBothEyes != null && shouldValidateSightOnBothEyes.test(dataList)) {
       validationErrors.addAll(validateHasSightOnBothEyes(value, data, categoryId));
     }
 

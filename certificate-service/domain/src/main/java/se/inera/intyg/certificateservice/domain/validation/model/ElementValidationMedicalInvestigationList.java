@@ -29,7 +29,7 @@ public class ElementValidationMedicalInvestigationList implements ElementValidat
 
   @Override
   public List<ValidationError> validate(ElementData data, Optional<ElementId> categoryId,
-      List<ElementData> elementData) {
+      List<ElementData> dataList) {
     validateElementData(data);
     final var medicalInvestigationList = getValue(data.value());
 

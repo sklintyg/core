@@ -24,7 +24,7 @@ public class ElementValidationDateList implements ElementValidation {
 
   @Override
   public List<ValidationError> validate(ElementData data, Optional<ElementId> categoryId,
-      List<ElementData> elementData) {
+      List<ElementData> dataList) {
     validateElementData(data);
     final var dateList = getValue(data.value());
     final var dateAfterMaxErrors = getDateAfterMaxErrors(data, categoryId, dateList);

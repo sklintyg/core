@@ -21,7 +21,7 @@ public class ElementValidationCode implements ElementValidation {
 
   @Override
   public List<ValidationError> validate(ElementData data, Optional<ElementId> categoryId,
-      List<ElementData> elementData) {
+      List<ElementData> dataList) {
     validateElementData(data);
     final var code = getValue(data.value());
     if (mandatory && code.isEmpty()) {

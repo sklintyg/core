@@ -8,5 +8,5 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 public interface ElementValidation {
 
   List<ValidationError> validate(ElementData data, Optional<ElementId> categoryId,
-      List<ElementData> elementData);
+      List<ElementData> dataList);
 }
