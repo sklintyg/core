@@ -641,15 +641,6 @@ class CertificateDataConverterTest {
         .status(Status.SIGNED)
         .build();
 
-    when(certificateDataDateConfigConverter.getType())
-        .thenReturn(ElementType.CATEGORY);
-
-    when(certificateDataDateConfigConverter.convert(any(ElementSpecification.class),
-        eq(certificate)))
-        .thenReturn(
-            CertificateDataConfigDate.builder().build()
-        );
-
     final var result = certificateDataConverter.convert(certificate, false);
 
     assertNull(result.get(ID_2),
@@ -906,5 +897,119 @@ class CertificateDataConverterTest {
           "Map should contain keys 'id1' and 'id2' ");
     }
 
+  }
+
+  @Nested
+  class FilterCategoriesWithChildrenWithoutElementValueTests {
+
+    @Test
+    void shallNotReturnCertificateElementIfCertificateIsSignedAndElementIsCategoryWhenChildrenElementDataIsNull() {
+      final var elementId = new ElementId(ID_1);
+      final var elementIdWithoutValue = new ElementId(ID_2);
+
+      final var elementSpecification = ElementSpecification.builder()
+          .id(elementId)
+          .configuration(
+              ElementConfigurationCategory.builder().build()
+          )
+          .children(
+              List.of(
+                  ElementSpecification.builder()
+                      .id(elementIdWithoutValue)
+                      .configuration(
+                          ElementConfigurationDate.builder().build()
+                      )
+                      .build()
+              )
+          )
+          .build();
+
+      final var elementSpecifications = List.of(
+          elementSpecification
+      );
+
+      final var certificateModel = CertificateModel.builder()
+          .elementSpecifications(elementSpecifications)
+          .build();
+
+      final var certificate = certificateBuilder
+          .certificateModel(certificateModel)
+          .status(Status.SIGNED)
+          .build();
+
+      final var result = certificateDataConverter.convert(certificate, false);
+
+      assertNull(result.get(ID_2),
+          "Should not include CertificateDataElementDTO if certificate is signed and no element value found for children");
+      assertTrue(result.isEmpty(), "Map should not contain any entries");
+    }
+
+    @Test
+    void shallReturnCertificateElementIfCertificateIsDraftAndElementIsCategoryWhenChildrenElementDataIsNull() {
+      final var elementId = new ElementId(ID_1);
+      final var elementIdWithoutValue = new ElementId(ID_2);
+
+      final var elementSpecification = ElementSpecification.builder()
+          .id(elementId)
+          .configuration(
+              ElementConfigurationCategory.builder()
+                  .build()
+          )
+          .children(
+              List.of(
+                  ElementSpecification.builder()
+                      .id(elementIdWithoutValue)
+                      .configuration(
+                          ElementConfigurationDate.builder().build()
+                      )
+                      .build()
+              )
+          )
+          .build();
+
+      final var elementSpecifications = List.of(
+          elementSpecification
+      );
+
+      final var certificateModel = CertificateModel.builder()
+          .elementSpecifications(elementSpecifications)
+          .build();
+
+      final var certificate = certificateBuilder
+          .certificateModel(certificateModel)
+          .status(Status.DRAFT)
+          .build();
+
+      when(certificateDataDateConfigConverter.getType())
+          .thenReturn(ElementType.CATEGORY);
+      when(certificateDataDateConfigConverterDate.getType())
+          .thenReturn(ElementType.DATE);
+
+      when(certificateDataDateConfigConverter.convert(any(ElementSpecification.class),
+          eq(certificate)))
+          .thenReturn(
+              CertificateDataConfigDate.builder().build()
+          );
+
+      when(certificateDataDateConfigConverterDate.convert(any(ElementSpecification.class),
+          eq(certificate)))
+          .thenReturn(
+              CertificateDataConfigDate.builder().build()
+          );
+
+      when(certificateDataValueConverterDate.getType())
+          .thenReturn(ElementType.DATE);
+
+      when(certificateDataValueConverterDate.convert(any(), any()))
+          .thenReturn(
+              CertificateDataValueDate.builder().build()
+          );
+
+      final var result = certificateDataConverter.convert(certificate, false);
+
+      assertNotNull(result.get(ID_2),
+          "Should include CertificateDataElementDTO if certificate is draft and no element value found for children");
+      assertEquals(2, result.size(), "Map should contain two entries");
+    }
   }
 }
