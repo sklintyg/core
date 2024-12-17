@@ -51,6 +51,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMissbrukVard.QUESTION_MISSBRUK_VARD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMissbrukVardBeskrivning.QUESTION_MISSBRUK_VARD_BESKRIVNING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNeurologiskSjukdom.QUESTION_NEUROLOGISK_SJUKDOM_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNeurologiskSjukdomBeskrivning.QUESTION_NEUROLOGISK_SJUKDOM_BESKRIVNING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNeuropsykiatrisk.QUESTION_NEUROPSYKIATRISK_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNeuropsykiatriskLakemedel.QUESTION_NEUROPSYKIATRISK_LAKEMEDEL_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNeuropsykiatriskLakemedelBeskrivning.QUESTION_NEUROPSYKIATRISK_LAKEMEDEL_BESKRIVNING_ID;
@@ -129,7 +130,8 @@ public class TestabilityCertificateFillServiceTS8071 implements
       QUESTION_HJARTSJUKDOM_BEHANDLAD_ID, QUESTION_HJARTSJUKDOM_BEHANDLAD_BESKRIVNING_ID,
       QUESTION_ARYTMI_ID, QUESTION_ARYTMI_BESKRIVNING_ID, QUESTION_SYNKOPE_ID,
       QUESTION_SYNKOPE_BESKRIVNING_ID, QUESTION_STROKE_ID, QUESTION_STROKE_PAVARKAN_ID,
-      QUESTION_DIABETES_ID, QUESTION_NEUROLOGISK_SJUKDOM_ID, QUESTION_EPILEPSI_ID,
+      QUESTION_DIABETES_ID, QUESTION_NEUROLOGISK_SJUKDOM_ID,
+      QUESTION_NEUROLOGISK_SJUKDOM_BESKRIVNING_ID, QUESTION_EPILEPSI_ID,
       QUESTION_EPILEPSI_BESKRIVNING_ID, QUESTION_EPILEPSI_ANFALL_ID,
       QUESTION_EPILEPSI_ANFALL_BESKRIVNING_ID, QUESTION_EPILEPSI_MEDICIN_ID,
       QUESTION_EPILEPSI_MEDICIN_BESKRIVNING_ID, QUESTION_EPILEPSI_MEDICIN_TIDPUNKT_ID,
@@ -261,16 +263,25 @@ public class TestabilityCertificateFillServiceTS8071 implements
                       VisualAcuity.builder()
                           .withoutCorrection(
                               getCorrection(config.binocular().withoutCorrectionId()))
+                          .withCorrection(
+                              getCorrection(config.binocular().withCorrectionId())
+                          )
                           .build()
                   )
                   .rightEye(
                       VisualAcuity.builder()
                           .withoutCorrection(getCorrection(config.rightEye().withoutCorrectionId()))
+                          .withCorrection(
+                              getCorrection(config.rightEye().withCorrectionId())
+                          )
                           .build()
                   )
                   .leftEye(
                       VisualAcuity.builder()
                           .withoutCorrection(getCorrection(config.leftEye().withoutCorrectionId()))
+                          .withCorrection(
+                              getCorrection(config.leftEye().withCorrectionId())
+                          )
                           .build()
                   )
                   .build()
