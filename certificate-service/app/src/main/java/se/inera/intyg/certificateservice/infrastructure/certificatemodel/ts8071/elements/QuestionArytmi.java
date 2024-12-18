@@ -44,7 +44,7 @@ public class QuestionArytmi {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryOrExist(
+                CertificateElementRuleFactory.mandatoryExist(
                     QUESTION_ARYTMI_ID,
                     QUESTION_ARYTMI_FIELD_ID
                 ),

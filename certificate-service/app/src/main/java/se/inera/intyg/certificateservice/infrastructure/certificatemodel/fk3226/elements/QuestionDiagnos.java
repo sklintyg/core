@@ -135,7 +135,7 @@ public class QuestionDiagnos {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryOrExist(DIAGNOSIS_ID,
+                CertificateElementRuleFactory.mandatoryExist(DIAGNOSIS_ID,
                     DIAGNOS_1),
                 CertificateElementRuleFactory.limit(DIAGNOSIS_ID, DIAGNOSIS_CODE_LIMIT)
             )

@@ -4,7 +4,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionBedomning.QUESTION_BEDOMNING_ID;
 
 import java.util.List;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextField;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
@@ -29,7 +29,7 @@ public class QuestionBedomningRisk {
     return ElementSpecification.builder()
         .id(QUESTION_BEDOMNING_RISK_ID)
         .configuration(
-            ElementConfigurationTextArea.builder()
+            ElementConfigurationTextField.builder()
                 .id(QUESTION_BEDOMNING_RISK_FIELD_ID)
                 .name("Du bedömer att det finns en risk, ange orsaken till detta")
                 .build()
@@ -43,14 +43,17 @@ public class QuestionBedomningRisk {
                 CertificateElementRuleFactory.show(
                     QUESTION_BEDOMNING_ID,
                     new RuleExpression(String.format("$%s", YES.code()))
-                )
+                ),
+                CertificateElementRuleFactory.limit(
+                    QUESTION_BEDOMNING_RISK_ID,
+                    (short) 50)
             )
         )
         .validations(
             List.of(
                 ElementValidationText.builder()
                     .mandatory(true)
-                    .limit(250)
+                    .limit(50)
                     .build()
             )
         )

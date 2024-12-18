@@ -44,7 +44,7 @@ public class QuestionMissbrukJournaluppgifter {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryOrExist(
+                CertificateElementRuleFactory.mandatoryExist(
                     QUESTION_MISSBRUK_JOURNALUPPGIFTER_ID,
                     QUESTION_MISSBRUK_JOURNALUPPGIFTER_FIELD_ID
                 )

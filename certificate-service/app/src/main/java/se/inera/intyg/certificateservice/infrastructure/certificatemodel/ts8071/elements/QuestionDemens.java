@@ -43,7 +43,7 @@ public class QuestionDemens {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryOrExist(
+                CertificateElementRuleFactory.mandatoryExist(
                     QUESTION_DEMENS_ID,
                     QUESTION_DEMENS_FIELD_ID
                 )

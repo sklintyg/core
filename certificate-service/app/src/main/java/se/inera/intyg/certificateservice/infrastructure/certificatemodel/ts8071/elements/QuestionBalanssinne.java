@@ -41,7 +41,7 @@ public class QuestionBalanssinne {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryOrExist(
+                CertificateElementRuleFactory.mandatoryExist(
                     QUESTION_BALANSSINNE_ID,
                     QUESTION_BALANSSINNE_FIELD_ID
                 )

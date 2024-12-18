@@ -13,9 +13,11 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 
 class QuestionBedomningOkandTest {
@@ -53,6 +55,11 @@ class QuestionBedomningOkandTest {
             .id(new ElementId("23"))
             .type(ElementRuleType.SHOW)
             .expression(new RuleExpression("$ejstalln"))
+            .build(),
+        ElementRuleLimit.builder()
+            .id(ELEMENT_ID)
+            .type(ElementRuleType.TEXT_LIMIT)
+            .limit(new RuleLimit((short) 250))
             .build()
     );
 

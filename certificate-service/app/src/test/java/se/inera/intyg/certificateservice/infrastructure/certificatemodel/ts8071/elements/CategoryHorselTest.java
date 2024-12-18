@@ -38,7 +38,8 @@ class CategoryHorselTest {
         ElementRuleExpression.builder()
             .id(new ElementId("1"))
             .type(ElementRuleType.SHOW)
-            .expression(new RuleExpression("!exists(gr_II) && !exists(forlang_gr_II)"))
+            .expression(new RuleExpression(
+                "exists($gr_II_III) || exists($tax_leg) || exists($utbyt_utl_kk) || exists($forlang_gr_II_III) || exists($int_begar_ts)"))
             .build()
     );
 

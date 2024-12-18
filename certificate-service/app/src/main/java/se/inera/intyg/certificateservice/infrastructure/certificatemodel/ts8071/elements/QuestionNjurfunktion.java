@@ -39,7 +39,7 @@ public class QuestionNjurfunktion {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryOrExist(
+                CertificateElementRuleFactory.mandatoryExist(
                     QUESTION_NJURFUNKTION_ID,
                     QUESTION_NJURFUNKTION_FIELD_ID
                 )

@@ -4,7 +4,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNeurologiskSjukdom.QUESTION_NEUROLOGISK_SJUKDOM_ID;
 
 import java.util.List;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextField;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
@@ -28,7 +28,7 @@ public class QuestionNeurologiskSjukdomBeskrivning {
     return ElementSpecification.builder()
         .id(QUESTION_NEUROLOGISK_SJUKDOM_BESKRIVNING_ID)
         .configuration(
-            ElementConfigurationTextArea.builder()
+            ElementConfigurationTextField.builder()
                 .id(QUESTION_NEUROLOGISK_SJUKDOM_BESKRIVNING_FIELD_ID)
                 .name("Ange vilken sjukdom och vilka tecken")
                 .build()
@@ -45,7 +45,7 @@ public class QuestionNeurologiskSjukdomBeskrivning {
                 ),
                 CertificateElementRuleFactory.limit(
                     QUESTION_NEUROLOGISK_SJUKDOM_BESKRIVNING_ID,
-                    (short) 250)
+                    (short) 50)
             )
         )
         .shouldValidate(
@@ -58,7 +58,7 @@ public class QuestionNeurologiskSjukdomBeskrivning {
             List.of(
                 ElementValidationText.builder()
                     .mandatory(true)
-                    .limit(250)
+                    .limit(50)
                     .build()
             )
         )

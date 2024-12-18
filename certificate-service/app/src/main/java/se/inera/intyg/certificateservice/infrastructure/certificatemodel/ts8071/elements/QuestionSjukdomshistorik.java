@@ -47,7 +47,7 @@ public class QuestionSjukdomshistorik {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryOrExist(
+                CertificateElementRuleFactory.mandatoryExist(
                     QUESTION_SJUKDOMSHISTORIK_ID,
                     QUESTION_SJUKDOMSHISTORIK_FIELD_ID
                 ),
