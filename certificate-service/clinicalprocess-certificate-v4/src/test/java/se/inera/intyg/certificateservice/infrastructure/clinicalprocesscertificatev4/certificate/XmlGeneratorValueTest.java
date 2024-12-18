@@ -13,6 +13,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.CodeListToBoolean;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCodeList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
@@ -505,6 +508,63 @@ class XmlGeneratorValueTest {
               response.get(0).getDelsvar().get(0).getId()),
           () -> assertEquals(expectedData.getDelsvar().get(0).getContent().get(0),
               response.get(0).getDelsvar().get(0).getContent().get(0))
+      );
+    }
+  }
+
+  @Nested
+  class TestCustomElementValueMapper {
+
+    @BeforeEach
+    void setUp() {
+      doReturn(CodeListToBoolean.class).when(xmlGeneratorElementDataOne).supports();
+      xmlGeneratorValue = new XmlGeneratorValue(
+          List.of(xmlGeneratorElementDataOne)
+      );
+    }
+
+    @Test
+    void shallUseElementValueMapperToGenerateConverter() {
+      final var dataOne = ElementData.builder()
+          .id(new ElementId(QUESTION_ID_ONE))
+          .value(
+              ElementValueCodeList.builder()
+                  .list(Collections.emptyList())
+                  .build()
+          )
+          .build();
+
+      doReturn(List.of(dataOne)).when(certificate).elementData();
+      doReturn(certificateModel).when(certificate).certificateModel();
+      final var elementSpecificationOne = mock(ElementSpecification.class);
+      when(elementSpecificationOne.includeInXml()).thenReturn(true);
+      doReturn(elementSpecificationOne).when(certificateModel)
+          .elementSpecification(new ElementId(QUESTION_ID_ONE));
+      final var elementMapping = new ElementMapping(null, null,
+          Optional.of(CodeListToBoolean.class));
+      doReturn(Optional.of(elementMapping)).when(elementSpecificationOne).getMapping();
+
+      final var expectedData = new Svar();
+      final var subAnswerOne = new Delsvar();
+      expectedData.setId(QUESTION_ID_ONE);
+      subAnswerOne.setId(ANSWER_ID_ONE);
+      subAnswerOne.getContent().add(TEXT_VALUE_ONE);
+      expectedData.getDelsvar().add(subAnswerOne);
+
+      final var answerOne = new Svar();
+      answerOne.setId(QUESTION_ID_ONE);
+      answerOne.getDelsvar().add(subAnswerOne);
+
+      doReturn(List.of(answerOne)).when(xmlGeneratorElementDataOne).generate(eq(dataOne), any());
+
+      final var response = xmlGeneratorValue.generate(certificate);
+
+      assertAll(
+          () -> assertEquals(expectedData.getId(), response.getFirst().getId()),
+          () -> assertEquals(expectedData.getDelsvar().getFirst().getId(),
+              response.getFirst().getDelsvar().getFirst().getId()),
+          () -> assertEquals(expectedData.getDelsvar().getFirst().getContent().getFirst(),
+              response.getFirst().getDelsvar().getFirst().getContent().getFirst())
       );
     }
   }

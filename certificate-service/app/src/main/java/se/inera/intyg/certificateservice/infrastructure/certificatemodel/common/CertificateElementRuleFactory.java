@@ -165,11 +165,11 @@ public class CertificateElementRuleFactory {
         .build();
   }
 
-  private static String singleExpression(String id) {
+  public static String singleExpression(String id) {
     return "$" + id;
   }
 
-  private static String multipleOrExpression(String... expression) {
+  public static String multipleOrExpression(String... expression) {
     return multipleOrExpression(null, expression);
   }
 
@@ -221,5 +221,27 @@ public class CertificateElementRuleFactory {
 
   public static String not(String s) {
     return String.format("!%s", s);
+  }
+
+  public static String lessThanOrEqual(String s1, String s2) {
+    return s1 + " <= " + s2;
+  }
+
+  public static String withCitation(String field) {
+    return "'" + field + "'";
+  }
+
+  public static String multipleAndExpressions(String... expression) {
+    return Arrays.stream(expression).reduce("", (s, s2) -> {
+      if (!s.isEmpty()) {
+        s += " && ";
+      }
+      s += s2;
+      return s;
+    });
+  }
+
+  public static String wrapWithParenthesis(String expression) {
+    return "(" + expression + ")";
   }
 }
