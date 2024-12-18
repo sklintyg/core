@@ -66,8 +66,16 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
   }
 
 
+  private String getLogo() throws IOException, URISyntaxException {
+    final var logoPath = ClassLoader.getSystemResource("transportstyrelsen-logo.png")
+        .toURI();
+    final var logoBytes = Files.readAllBytes(Paths.get(logoPath));
+    return new String(Base64.getEncoder().encode(logoBytes));
+  }
+
   private String convertToHtml(Certificate certificate) {
     try {
+      //final var metadata = certificate.getMetadata();
 
       final var doc = Jsoup.parse(template.getFile(), "UTF-8", "", Parser.xmlParser());
 
@@ -78,21 +86,16 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
               certificate.getMetadata().getVersion()));
       Element content = doc.getElementById("content");
 
+//      doc.getElementById("recipient-logo")
+//          .attr("src", "data:image/png;base64, " + getLogo())
+//          .attr("alt", "recipient-logo");
+//      doc.getElementById("person-id-title").text("Person- /samordningsnr");
+//      doc.getElementById("person-id-value").text(metadata.getPersonId());
+//
+//      doc.getElementById("certificate-header-title").text(certificateTitle);
+
       certificate.getCategories().forEach(category -> content.appendChild(
           convertCategory(category, certificate.getCategories().indexOf(category))));
-
-//      final var logoPath = ClassLoader.getSystemResource("transportstyrelsen-logo.png")
-//          .toURI();
-//      byte[] imageBytes = Files.readAllBytes(Paths.get(logoPath));
-//      final var base64 = Base64.getEncoder().encode(imageBytes);
-//      final var img = new Element(Tag.IMG.toString())
-//          .attr("src", "data:image/png;base64, " + new String(base64))
-//          .attr("alt", "test-image-alt")
-//          .attr("style", "height: 40px");
-//
-//      final var logo = doc.getElementById("logo").appendChild(img);
-//      final var pnr = doc.getElementById("pnr").attr("style", "font-weight: bold;")
-//          .appendText("Person- /samordningsnr");
 
       log.info(doc.html());
       return doc.html();
@@ -104,75 +107,123 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
   private PdfOptions createtPdfOptions(Metadata certificateMetadata)
       throws IOException, URISyntaxException {
     final var pdfOptions = new PdfOptions();
-    pdfOptions.setFormat("A4");
+    //pdfOptions.setFormat("A4");
     pdfOptions.setPrintBackground(true);
     pdfOptions.setDisplayHeaderFooter(true);
     pdfOptions.setTagged(true);
+    pdfOptions.setPreferCSSPageSize(true);
     pdfOptions.setHeaderTemplate(createHeader(certificateMetadata));
-//    pdfOptions.setFooterTemplate("""
-//        <footer>
-//          <p>Utskriften skapades med Webcert - en tjänst som drivs av Inera AB</p>
-//        </footer>""");
+//    final var margin = new Margin();
+//    margin.setLeft("20mm");
+//    margin.setTop("15mm");
+//    pdfOptions.setMargin(margin);
+
     pdfOptions.setPath(Path.of("certificate.pdf"));
 
     return pdfOptions;
   }
 
+
+  private Element getTitle(String title) {
+    return new Element(Tag.P.toString()).addClass("title")
+        .attr("style", "font-size: 10px;");
+  }
+
+  private Element getLeftMarginInfo() {
+    final var leftMarginInfo = new Element(Tag.DIV.toString()).addClass(
+        "fixed top-0 bottom 0 left-0 leading-4 text-sm");
+    leftMarginInfo.appendChild(
+        new Element(Tag.DIV.toString()).addClass("rotate-180")
+            .attr("style",
+                "font-size: 10px; writingMode: vertical-rl; textOrientation: sideways; height: 100%;")
+            .appendChild(new Element(Tag.P.toString()).text("HEJSANHOPPSANHEJSAN"))
+    );
+    return leftMarginInfo;
+  }
+
+  private Element getLogo(byte[] logoBytes) {
+    final var logoWrapper = new Element(Tag.DIV.toString());//.attr("style", "width: 50%");
+    final var base64 = Base64.getEncoder().encode(logoBytes);
+    final var logo = new Element(Tag.IMG.toString())
+        .attr("src", "data:image/png;base64, " + new String(base64))
+        .attr("alt", "recipient-logo")
+        .attr("style",
+            "max-height: 15mm; max-width: 35mm; border: blue solid 1px;");
+    logoWrapper.appendChild(logo);
+    return logoWrapper;
+  }
+
+  private Element getQRCode(byte[] qrCodeBytes) {
+    final var qrCodeWrapper = new Element(Tag.DIV.toString());//.attr("style", "width: 50%");
+    final var base64 = Base64.getEncoder().encode(qrCodeBytes);
+    final var qrCode = new Element((Tag.IMG.toString()))
+        .attr("src", "data:image/png;base64, " + new String(base64))
+        .attr("alt", "qr-code")
+        .attr("style",
+            "size: 100%; max-height: 15mm; max-width: 15mm; margin-right: 5mm; border: purple solid 1px;");
+    qrCodeWrapper.appendChild(qrCode);
+    return qrCodeWrapper;
+  }
+
+  private Element getPersonId(String personId) {
+    final var personIdWrapper = new Element(Tag.DIV.toString()).attr("style", "width: 100%");
+
+    final var div = new Element(Tag.DIV.toString());
+    div.attr("style", "border: red solid 1px; float: right; text-align: right;");
+
+    div.appendChild(new Element(Tag.SPAN.toString()).attr("style", "font-weight: bold;")
+        .appendText("Person- /samordningsnr"));
+    div.appendChild(new Element(Tag.BR.toString()));
+    div.appendChild(new Element(Tag.SPAN.toString()).appendText(personId));
+
+    personIdWrapper.appendChild(div);
+    return personIdWrapper;
+  }
+
   private String createHeader(Metadata certificateMetadata) throws IOException, URISyntaxException {
+    final var logoPath = ClassLoader.getSystemResource("transportstyrelsen-logo.png")
+        .toURI();
+    final var qrPath = ClassLoader.getSystemResource("qrcode.png")
+        .toURI();
 
-    final var headerDiv = new Element(Tag.DIV.toString()).attr("style",
-        "display: flex; font-size: 10px; width: 100%; justifyContent: flex-end; padding: 0 20px; gap: 10px;");
-    headerDiv.appendChild(
-        new Element(Tag.P.toString()).addClass("title").attr("style", "font-size: 10px;"));
+    final var pageHeaderWrapper = new Element(Tag.DIV.toString());
 
+    final var pageHeader = new Element(Tag.DIV.toString()).attr("style", """
+        margin: 10mm 20mm 10mm 20mm;
+        width: 100%;
+        font-size: 10pt;
+        display: flex;
+        border: green solid 1px;
+        """);
+
+    pageHeader.appendChild(getLogo(Files.readAllBytes(Paths.get(logoPath))));
+    //pageHeader.appendChild(getQRCode(Files.readAllBytes(Paths.get(qrPath))));
+    pageHeader.appendChild(getPersonId(certificateMetadata.getPersonId()));
+    pageHeaderWrapper.appendChild(pageHeader);
+
+    return pageHeaderWrapper.html();
+  }
+
+  private String getFooter() {
     final var pageNrDiv = new Element(Tag.DIV.toString());
-
-    final var pnrDiv = new Element(Tag.DIV.toString());
-    pnrDiv.appendChild(new Element(Tag.STRONG.toString()).appendText("Person- /samordningsnr"))
-        .attr("style", "font-size: 10px;");
-    pnrDiv.appendChild(new Element(Tag.P.toString()).appendText(certificateMetadata.getPersonId()))
-        .attr("style", "font-size: 10px;");
-    headerDiv.appendChild(pnrDiv);
 
     pageNrDiv.appendChild(
         new Element(Tag.P.toString()).addClass("pageNumber").attr("style", "font-size: 10px;"));
     pageNrDiv.appendChild(
         new Element(Tag.P.toString()).addClass("totalPages").attr("style", "font-size: 10px;"));
-    headerDiv.appendChild(pageNrDiv);
-
-    final var logoPath = ClassLoader.getSystemResource("transportstyrelsen-logo.png")
-        .toURI();
-    byte[] imageBytes = Files.readAllBytes(Paths.get(logoPath));
-    final var base64 = Base64.getEncoder().encode(imageBytes);
-    final var img = new Element(Tag.IMG.toString())
-        .attr("src", "data:image/png;base64, " + new String(base64))
-        .attr("alt", "test-image-alt")
-        .attr("style", "height: 40px");
-
-    headerDiv.appendChild(img);
-
-    final var leftPageInfo = new Element(Tag.DIV.toString()).addClass(
-        "fixed top-0 bottom 0 left-0 leading-4 text-sm");
-    leftPageInfo.appendChild(
-        new Element(Tag.DIV.toString()).addClass("rotate-180")
-            .attr("style",
-                "font-size: 10px; writingMode: vertical-rl; textOrientation: sideways; height: 100%;")
-            .appendChild(new Element(Tag.P.toString()).text("HEJSANHOPPSANHEJSAN"))
-
-    );
-
-    headerDiv.appendChild(leftPageInfo);
-
-    return headerDiv.html();
+    //header.appendChild(pageNrDiv);
+    return pageNrDiv.html();
   }
 
   private Node convertCategory(Category category, int index) {
     final var div = new Element(Tag.DIV.toString());
-    div.attr(STYLE, "border: 1px solid black; margin-top 2cm;");
+    div.attr(STYLE, "border: 1px solid black;");
+
     final var title = new Element(Tag.H2.toString());
     title.attr(CLASS, "text-lg font-bold");
     title.attr(STYLE, "border-bottom: 1px solid black;");
-    title.text("%d %s".formatted(index + 1, category.getName()));
+    title.text("%s".formatted(category.getName()));
+
     div.appendChild(title);
     category.getQuestions().forEach(question -> div.appendChildren(convertQuestion(question)));
     return div;
