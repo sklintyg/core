@@ -78,7 +78,7 @@ class QuestionKorrigeringAvSynskarpaTest {
             .type(ElementRuleType.SHOW)
             .expression(
                 new RuleExpression(
-                    "('5.3' <= 0.8 && '5.2' <= 0.1) || ('5.3' <= 0.1 && '5.2' <= 0.8)"
+                    "('5.6' <= 0.8 && '5.5' <= 0.1) || ('5.6' <= 0.1 && '5.5' <= 0.8)"
                 )
             )
             .build(),
@@ -153,7 +153,7 @@ class QuestionKorrigeringAvSynskarpaTest {
                   ElementValueVisualAcuities.builder()
                       .rightEye(
                           VisualAcuity.builder()
-                              .withoutCorrection(
+                              .withCorrection(
                                   Correction.builder()
                                       .value(0.1)
                                       .build()
@@ -162,7 +162,7 @@ class QuestionKorrigeringAvSynskarpaTest {
                       )
                       .leftEye(
                           VisualAcuity.builder()
-                              .withoutCorrection(
+                              .withCorrection(
                                   Correction.builder()
                                       .value(0.8)
                                       .build()
@@ -187,7 +187,7 @@ class QuestionKorrigeringAvSynskarpaTest {
                   ElementValueVisualAcuities.builder()
                       .rightEye(
                           VisualAcuity.builder()
-                              .withoutCorrection(
+                              .withCorrection(
                                   Correction.builder()
                                       .value(0.2)
                                       .build()
@@ -196,7 +196,7 @@ class QuestionKorrigeringAvSynskarpaTest {
                       )
                       .leftEye(
                           VisualAcuity.builder()
-                              .withoutCorrection(
+                              .withCorrection(
                                   Correction.builder()
                                       .value(0.8)
                                       .build()
