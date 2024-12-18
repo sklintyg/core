@@ -70,7 +70,7 @@ public class XmlGeneratorValue {
                     "Converter for '%s' not found".formatted(data.value().getClass())
                 );
               }
-              
+
               return XmlMapping.builder()
                   .mapping(
                       certificateModel
@@ -86,7 +86,7 @@ public class XmlGeneratorValue {
   }
 
   private static boolean noCustomMapping(XmlMapping mapping) {
-    return mapping.getMapping() == null || mapping.getMapping().elementValueMapper().isPresent();
+    return mapping.getMapping() == null || mapping.getMapping().elementId() == null;
   }
 
   private static Svar answerToMapTo(XmlMapping mapping, ArrayList<Svar> answerList) {
