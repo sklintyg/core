@@ -9,7 +9,6 @@ import com.microsoft.playwright.options.Media;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -66,7 +65,6 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
     }
   }
 
-
   private String convertToHtml(Certificate certificate) {
     try {
 
@@ -79,8 +77,8 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
               certificate.getMetadata().getVersion()));
       Element content = doc.getElementById("content");
 
-      certificate.getCategories().forEach(category -> content.appendChild(
-          convertCategory(category, certificate.getCategories().indexOf(category))));
+      certificate.getCategories()
+          .forEach(category -> content.appendChild(convertCategory(category)));
 
       doc.getElementById("style").appendText("""
           @page {
@@ -107,7 +105,6 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
     pdfOptions.setTagged(true);
     pdfOptions.setHeaderTemplate(createHeader(certificateMetadata));
     pdfOptions.setFooterTemplate(createFooterTemplate(certificateMetadata));
-    pdfOptions.setPath(Path.of("certificate.pdf"));
 
     return pdfOptions;
   }
@@ -133,30 +130,13 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
         """;
   }
 
-  private String createHeader(Metadata certificateMetadata) throws IOException, URISyntaxException {
 
-    final var headerDiv = new Element(Tag.DIV.toString()).attr("style",
-        "display: flex; font-size: 10px; height: 100%; justify-content: center; align-items: center;");
-    headerDiv.appendChild(
-        new Element(Tag.P.toString()).addClass("title").attr("style", "font-size: 10px;"));
-
-    final var pnrDiv = new Element(Tag.DIV.toString());
-    pnrDiv.appendChild(new Element(Tag.STRONG.toString()).appendText("Person- /samordningsnr"))
+  private Element getTitle(String title) {
+    return new Element(Tag.P.toString()).addClass("title")
         .attr("style", "font-size: 10px;");
-    pnrDiv.appendChild(new Element(Tag.P.toString()).appendText(certificateMetadata.getPersonId()))
-        .attr("style", "font-size: 10px;");
-    headerDiv.appendChild(pnrDiv);
+  }
 
-    final var logoPath = ClassLoader.getSystemResource("transportstyrelsen-logo.png")
-        .toURI();
-    byte[] imageBytes = Files.readAllBytes(Paths.get(logoPath));
-    final var base64 = Base64.getEncoder().encode(imageBytes);
-    final var img = new Element(Tag.IMG.toString())
-        .attr("src", "data:image/png;base64, " + new String(base64))
-        .attr("alt", "test-image-alt")
-        .attr("style", "height: 40px");
-
-    headerDiv.appendChild(img);
+  private Element getLeftMarginInfo(Metadata certificateMetadata) {
 
     final var leftPageInfo = new Element(Tag.DIV.toString()).attr("style",
         """
@@ -180,7 +160,54 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
     child.text("%s utfärdat av %s".formatted(certificateMetadata.getTypeId(),
         certificateMetadata.getApplicationOrigin()));
     leftPageInfo.appendChild(child);
-    headerDiv.appendChild(leftPageInfo);
+    return leftPageInfo;
+  }
+
+  private Element getLogo(byte[] logoBytes) {
+    final var logoWrapper = new Element(Tag.DIV.toString());//.attr("style", "width: 50%");
+    final var base64 = Base64.getEncoder().encode(logoBytes);
+    final var logo = new Element(Tag.IMG.toString())
+        .attr("src", "data:image/png;base64, " + new String(base64))
+        .attr("alt", "recipient-logo")
+        .attr("style",
+            "max-height: 15mm; max-width: 35mm; border: blue solid 1px;");
+    logoWrapper.appendChild(logo);
+    return logoWrapper;
+  }
+
+  private Element getPersonId(String personId) {
+    final var personIdWrapper = new Element(Tag.DIV.toString()).attr("style", "width: 100%");
+
+    final var div = new Element(Tag.DIV.toString());
+    div.attr("style", "border: red solid 1px; float: right; text-align: right;");
+
+    div.appendChild(new Element(Tag.SPAN.toString()).attr("style", "font-weight: bold;")
+        .appendText("Person- /samordningsnr"));
+    div.appendChild(new Element(Tag.BR.toString()));
+    div.appendChild(new Element(Tag.SPAN.toString()).appendText(personId));
+
+    personIdWrapper.appendChild(div);
+    return personIdWrapper;
+  }
+
+  private String createHeader(Metadata certificateMetadata) throws IOException, URISyntaxException {
+    final var logoPath = ClassLoader.getSystemResource("transportstyrelsen-logo.png")
+        .toURI();
+
+    final var pageHeaderWrapper = new Element(Tag.DIV.toString());
+
+    final var pageHeader = new Element(Tag.DIV.toString()).attr("style", """
+        margin: 10mm 20mm 10mm 20mm;
+        width: 100%;
+        font-size: 10pt;
+        display: flex;
+        border: green solid 1px;
+        """);
+
+    pageHeader.appendChild(getLogo(Files.readAllBytes(Paths.get(logoPath))));
+    pageHeader.appendChild(getPersonId(certificateMetadata.getPersonId()));
+    pageHeaderWrapper.appendChild(pageHeader);
+    pageHeaderWrapper.appendChild(getLeftMarginInfo(certificateMetadata));
 
     final var watermark = new Element(Tag.DIV.toString()).attr("style", """
         position: absolute;
@@ -197,19 +224,20 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
         """
     );
     watermark.text("UTKAST");
-    headerDiv.appendChild(watermark);
+    pageHeaderWrapper.appendChild(watermark);
 
-    return headerDiv.html();
+    return pageHeaderWrapper.html();
   }
 
-  private Node convertCategory(Category category, int index) {
+  private Node convertCategory(Category category) {
     final var div = new Element(Tag.DIV.toString());
-    div.attr(STYLE, "border: 1px solid black; margin-top 2cm;");
+    div.attr(STYLE, "border: 1px solid black;");
     div.addClass("box-decoration-clone");
     final var title = new Element(Tag.H2.toString());
     title.addClass("text-lg font-bold");
     title.attr(STYLE, "border-bottom: 1px solid black;");
-    title.text("%d %s".formatted(index + 1, category.getName()));
+    title.text("%s".formatted(category.getName()));
+
     div.appendChild(title);
     category.getQuestions().forEach(question -> div.appendChildren(convertQuestion(question)));
     return div;
