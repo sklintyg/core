@@ -6,9 +6,9 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.singleExpression;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.withCitation;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.wrapWithParenthesis;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynskarpa.LEFT_EYE_WITHOUT_CORRECTION_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynskarpa.LEFT_EYE_WITH_CORRECTION_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynskarpa.QUESTION_SYNSKARPA_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynskarpa.RIGHT_EYE_WITHOUT_CORRECTION_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynskarpa.RIGHT_EYE_WITH_CORRECTION_ID;
 
 import java.util.List;
 import java.util.Optional;
@@ -64,11 +64,11 @@ public class QuestionKorrigeringAvSynskarpa {
                             wrapWithParenthesis(
                                 multipleAndExpressions(
                                     lessThanOrEqual(
-                                        withCitation(LEFT_EYE_WITHOUT_CORRECTION_ID),
+                                        withCitation(LEFT_EYE_WITH_CORRECTION_ID),
                                         "0.8"
                                     ),
                                     lessThanOrEqual(
-                                        withCitation(RIGHT_EYE_WITHOUT_CORRECTION_ID),
+                                        withCitation(RIGHT_EYE_WITH_CORRECTION_ID),
                                         "0.1"
                                     )
                                 )
@@ -76,11 +76,11 @@ public class QuestionKorrigeringAvSynskarpa {
                             wrapWithParenthesis(
                                 multipleAndExpressions(
                                     lessThanOrEqual(
-                                        withCitation(LEFT_EYE_WITHOUT_CORRECTION_ID),
+                                        withCitation(LEFT_EYE_WITH_CORRECTION_ID),
                                         "0.1"
                                     ),
                                     lessThanOrEqual(
-                                        withCitation(RIGHT_EYE_WITHOUT_CORRECTION_ID),
+                                        withCitation(RIGHT_EYE_WITH_CORRECTION_ID),
                                         "0.8"
                                     )
                                 )
@@ -134,14 +134,14 @@ public class QuestionKorrigeringAvSynskarpa {
                 .map(data -> (ElementValueVisualAcuities) data.value())
                 .anyMatch(
                     visualAcuities ->
-                        (visualAcuities.rightEye().withoutCorrection().value() != null
-                            && visualAcuities.rightEye().withoutCorrection().value() <= 0.1
-                            && visualAcuities.leftEye().withoutCorrection().value() != null
-                            && visualAcuities.leftEye().withoutCorrection().value() <= 0.8) ||
-                            (visualAcuities.rightEye().withoutCorrection().value() != null
-                                && visualAcuities.rightEye().withoutCorrection().value() <= 0.8
-                                && visualAcuities.leftEye().withoutCorrection().value() != null
-                                && visualAcuities.leftEye().withoutCorrection().value() <= 0.1)
+                        (visualAcuities.rightEye().withCorrection().value() != null
+                            && visualAcuities.rightEye().withCorrection().value() <= 0.1
+                            && visualAcuities.leftEye().withCorrection().value() != null
+                            && visualAcuities.leftEye().withCorrection().value() <= 0.8) ||
+                            (visualAcuities.rightEye().withCorrection().value() != null
+                                && visualAcuities.rightEye().withCorrection().value() <= 0.8
+                                && visualAcuities.leftEye().withCorrection().value() != null
+                                && visualAcuities.leftEye().withCorrection().value() <= 0.1)
                 )
         )
         .mapping(
