@@ -6,6 +6,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
 public class QuestionOvrigBeskrivning {
 
@@ -26,6 +27,11 @@ public class QuestionOvrigBeskrivning {
                 .id(QUESTION_OVRIG_BESKRIVNING_FIELD_ID)
                 .name("Ange övriga upplysningar")
                 .build()
+        )
+        .rules(
+            List.of(
+                CertificateElementRuleFactory.limit(QUESTION_OVRIG_BESKRIVNING_ID, (short) 400)
+            )
         )
         .validations(
             List.of(

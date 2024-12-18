@@ -45,7 +45,7 @@ public class QuestionStroke {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryOrExist(
+                CertificateElementRuleFactory.mandatoryExist(
                     QUESTION_STROKE_ID,
                     QUESTION_STROKE_FIELD_ID
                 ),

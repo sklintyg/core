@@ -10,12 +10,14 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextField;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 
 class QuestionBedomningRiskTest {
@@ -31,7 +33,7 @@ class QuestionBedomningRiskTest {
 
   @Test
   void shallIncludeConfiguration() {
-    final var expectedConfiguration = ElementConfigurationTextArea.builder()
+    final var expectedConfiguration = ElementConfigurationTextField.builder()
         .name("Du bedömer att det finns en risk, ange orsaken till detta")
         .id(new FieldId("23.2"))
         .build();
@@ -53,6 +55,11 @@ class QuestionBedomningRiskTest {
             .id(new ElementId("23"))
             .type(ElementRuleType.SHOW)
             .expression(new RuleExpression("$ja"))
+            .build(),
+        ElementRuleLimit.builder()
+            .id(ELEMENT_ID)
+            .type(ElementRuleType.TEXT_LIMIT)
+            .limit(new RuleLimit((short) 50))
             .build()
     );
 
@@ -66,7 +73,7 @@ class QuestionBedomningRiskTest {
     final var expectedValidations = List.of(
         ElementValidationText.builder()
             .mandatory(true)
-            .limit(250)
+            .limit(50)
             .build()
     );
 

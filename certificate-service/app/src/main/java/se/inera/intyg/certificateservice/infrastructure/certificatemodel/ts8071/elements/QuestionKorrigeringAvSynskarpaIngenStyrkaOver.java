@@ -46,7 +46,7 @@ public class QuestionKorrigeringAvSynskarpaIngenStyrkaOver {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryOrExist(
+                CertificateElementRuleFactory.mandatoryExist(
                     QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_OVER_ID,
                     QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_OVER_FIELD_ID
                 ),

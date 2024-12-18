@@ -40,7 +40,7 @@ public class QuestionPsykisk {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryOrExist(
+                CertificateElementRuleFactory.mandatoryExist(
                     QUESTION_PSYKISK_ID,
                     QUESTION_PSYKISK_FIELD_ID
                 )

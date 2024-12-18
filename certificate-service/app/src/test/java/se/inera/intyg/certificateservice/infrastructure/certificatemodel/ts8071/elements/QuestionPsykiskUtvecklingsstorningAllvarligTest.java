@@ -56,7 +56,7 @@ class QuestionPsykiskUtvecklingsstorningAllvarligTest {
         ElementRuleExpression.builder()
             .id(ELEMENT_ID)
             .type(ElementRuleType.MANDATORY)
-            .expression(new RuleExpression("$20.7"))
+            .expression(new RuleExpression("exists($20.7)"))
             .build()
     );
 

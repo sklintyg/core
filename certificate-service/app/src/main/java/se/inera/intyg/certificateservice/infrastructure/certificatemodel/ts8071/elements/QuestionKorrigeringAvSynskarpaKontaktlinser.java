@@ -44,7 +44,7 @@ public class QuestionKorrigeringAvSynskarpaKontaktlinser {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryOrExist(
+                CertificateElementRuleFactory.mandatoryExist(
                     QUESTION_KONTAKTLINSER_ID,
                     QUESTION_KONTAKTLINSER_FIELD_ID
                 ),

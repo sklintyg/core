@@ -37,7 +37,7 @@ public class QuestionEpilepsi {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryOrExist(
+                CertificateElementRuleFactory.mandatoryExist(
                     QUESTION_EPILEPSI_ID,
                     QUESTION_EPILEPSI_FIELD_ID
                 )

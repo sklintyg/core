@@ -40,7 +40,7 @@ public class QuestionMedicinering {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatoryOrExist(
+                CertificateElementRuleFactory.mandatoryExist(
                     QUESTION_MEDICINERING_ID,
                     QUESTION_MEDICINERING_FIELD_ID
                 )
