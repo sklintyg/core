@@ -37,6 +37,10 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionIdentitet.QUESTION_IDENTITET_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionIntygetAvser.QUESTION_INTYGET_AVSER_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionKognitivStorning.QUESTION_KOGNITIV_STORNING_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionKorrigeringAvSynskarpa.QUESTION_KORRIGERING_AV_SYNSKARPA_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionKorrigeringAvSynskarpaIngenStyrkaOver.QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_OVER_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionKorrigeringAvSynskarpaKontaktlinser.QUESTION_KONTAKTLINSER_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionKorrigeringAvSynskarpaStyrkaOver.QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_UNDER_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionLakemedel.QUESTION_LAKEMEDEL_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionLakemedelBeskrivning.QUESTION_LAKEMEDEL_BESKRIVNING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMedicinering.QUESTION_MEDICINERING_ID;
@@ -107,6 +111,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKorrigeringAvSynskarpa;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvAnatomiskLokalisationHorapparat;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs001;
 import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityFillTypeDTO;
@@ -119,6 +124,8 @@ public class TestabilityCertificateFillServiceTS8071 implements
   private static final List<ElementId> MAXIMAL_IDS = List.of(
       QUESTION_INTYGET_AVSER_ID, QUESTION_BASERAT_PA_ID, QUESTION_BASERAT_PA_DATUM_ID,
       QUESTION_SYNSKARPA_ID, QUESTION_IDENTITET_ID, QUESTION_SYNFUNKTIONER_ID,
+      QUESTION_KORRIGERING_AV_SYNSKARPA_ID, QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_OVER_ID,
+      QUESTION_KONTAKTLINSER_ID, QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_UNDER_ID,
       QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_ID,
       QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_BESKRIVNING_ID, QUESTION_SJUKDOMSHISTORIK_ID,
       QUESTION_SJUKDOMSHISTORIK_BESKRIVNING_ID, QUESTION_BALANSSINNE_ID,
@@ -262,25 +269,27 @@ public class TestabilityCertificateFillServiceTS8071 implements
                   .binocular(
                       VisualAcuity.builder()
                           .withoutCorrection(
-                              getCorrection(config.binocular().withoutCorrectionId()))
+                              getCorrection(config.binocular().withoutCorrectionId(), 1D))
                           .withCorrection(
-                              getCorrection(config.binocular().withCorrectionId())
+                              getCorrection(config.binocular().withCorrectionId(), 1D)
                           )
                           .build()
                   )
                   .rightEye(
                       VisualAcuity.builder()
-                          .withoutCorrection(getCorrection(config.rightEye().withoutCorrectionId()))
+                          .withoutCorrection(
+                              getCorrection(config.rightEye().withoutCorrectionId(), 0.5D))
                           .withCorrection(
-                              getCorrection(config.rightEye().withCorrectionId())
+                              getCorrection(config.rightEye().withCorrectionId(), 0.8)
                           )
                           .build()
                   )
                   .leftEye(
                       VisualAcuity.builder()
-                          .withoutCorrection(getCorrection(config.leftEye().withoutCorrectionId()))
+                          .withoutCorrection(
+                              getCorrection(config.leftEye().withoutCorrectionId(), 0.0D))
                           .withCorrection(
-                              getCorrection(config.leftEye().withCorrectionId())
+                              getCorrection(config.leftEye().withCorrectionId(), 0.1D)
                           )
                           .build()
                   )
@@ -292,13 +301,12 @@ public class TestabilityCertificateFillServiceTS8071 implements
     return null;
   }
 
-  private static Correction getCorrection(String id) {
+  private static Correction getCorrection(String id, Double value) {
     return Correction.builder()
         .id(new FieldId(id))
-        .value(1D)
+        .value(value)
         .build();
   }
-
 
   private static boolean getBoolean(ElementId elementId, TestabilityFillTypeDTO fillType) {
     if (fillType == MINIMAL) {
@@ -344,6 +352,10 @@ public class TestabilityCertificateFillServiceTS8071 implements
 
     if (elementId == QUESTION_HORSELHJALPMEDEL_POSITION_ID) {
       return CodeSystemKvAnatomiskLokalisationHorapparat.BADA_ORONEN;
+    }
+
+    if (elementId == QUESTION_KORRIGERING_AV_SYNSKARPA_ID) {
+      return CodeSystemKorrigeringAvSynskarpa.GLASOGON_INGEN_STYRKA_OVER_8_DIOPTRIER;
     }
 
     throw new IllegalStateException(
