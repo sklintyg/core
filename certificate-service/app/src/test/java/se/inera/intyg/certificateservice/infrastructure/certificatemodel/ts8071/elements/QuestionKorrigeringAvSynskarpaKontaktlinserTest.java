@@ -65,7 +65,7 @@ class QuestionKorrigeringAvSynskarpaKontaktlinserTest {
             .build(),
         ElementRuleExpression.builder()
             .id(QUESTION_KORRIGERING_AV_SYNSKARPA_ID)
-            .expression(new RuleExpression("$KONTAKTLINSER"))
+            .expression(new RuleExpression("$6.5"))
             .type(ElementRuleType.SHOW)
             .build()
     );
@@ -87,8 +87,8 @@ class QuestionKorrigeringAvSynskarpaKontaktlinserTest {
                       .list(
                           List.of(
                               ElementValueCode.builder()
-                                  .codeId(new FieldId("KONTAKTLINSER"))
-                                  .code("KONTAKTLINSER")
+                                  .codeId(new FieldId("6.5"))
+                                  .code("6.5")
                                   .build()
                           )
                       )

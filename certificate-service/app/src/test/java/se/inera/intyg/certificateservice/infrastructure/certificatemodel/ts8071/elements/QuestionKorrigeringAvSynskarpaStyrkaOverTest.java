@@ -65,7 +65,7 @@ class QuestionKorrigeringAvSynskarpaStyrkaOverTest {
             .build(),
         ElementRuleExpression.builder()
             .id(QUESTION_KORRIGERING_AV_SYNSKARPA_ID)
-            .expression(new RuleExpression("$GLASOGON_MED_STYRKA_OVER_8_DIOPTRIER"))
+            .expression(new RuleExpression("$6.3"))
             .type(ElementRuleType.SHOW)
             .build()
     );
@@ -87,8 +87,8 @@ class QuestionKorrigeringAvSynskarpaStyrkaOverTest {
                       .list(
                           List.of(
                               ElementValueCode.builder()
-                                  .codeId(new FieldId("GLASOGON_MED_STYRKA_OVER_8_DIOPTRIER"))
-                                  .code("GLASOGON_MED_STYRKA_OVER_8_DIOPTRIER")
+                                  .codeId(new FieldId("6.3"))
+                                  .code("6.3")
                                   .build()
                           )
                       )
