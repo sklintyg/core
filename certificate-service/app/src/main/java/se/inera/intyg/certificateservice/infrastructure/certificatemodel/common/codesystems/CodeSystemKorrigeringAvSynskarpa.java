@@ -2,11 +2,11 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.common
 
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 
-public class CodeSystemKorringerAvSynskarpa {
+public class CodeSystemKorrigeringAvSynskarpa {
 
   public static final String CODE_SYSTEM = "KORRIGERING_AV_SYNSKARPA";
 
-  private CodeSystemKorringerAvSynskarpa() {
+  private CodeSystemKorrigeringAvSynskarpa() {
     throw new IllegalStateException("Utility class");
   }
 

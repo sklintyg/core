@@ -11,7 +11,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKorringerAvSynskarpa;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKorrigeringAvSynskarpa;
 
 public class QuestionKorrigeringAvSynskarpaKontaktlinser {
 
@@ -51,7 +51,7 @@ public class QuestionKorrigeringAvSynskarpaKontaktlinser {
                 CertificateElementRuleFactory.show(
                     QUESTION_KORRIGERING_AV_SYNSKARPA_ID,
                     new FieldId(
-                        CodeSystemKorringerAvSynskarpa.KONTAKTLINSER.code()
+                        CodeSystemKorrigeringAvSynskarpa.KONTAKTLINSER.code()
                     )
                 )
             )
@@ -59,7 +59,7 @@ public class QuestionKorrigeringAvSynskarpaKontaktlinser {
         .shouldValidate(
             ShouldValidateFactory.codeList(QUESTION_KORRIGERING_AV_SYNSKARPA_ID, List.of(
                 new FieldId(
-                    CodeSystemKorringerAvSynskarpa.KONTAKTLINSER.code())))
+                    CodeSystemKorrigeringAvSynskarpa.KONTAKTLINSER.code())))
         )
         .mapping(
             new ElementMapping(QUESTION_KORRIGERING_AV_SYNSKARPA_ID, null)
