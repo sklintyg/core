@@ -136,7 +136,7 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
   }
 
   private int calculateTopMargin() {
-    return 30;
+    return 50;
   }
 
   private PdfOptions createtPdfOptions(Metadata certificateMetadata)
@@ -181,7 +181,7 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
             position: fixed;
             border: red solid 1px;
             transform: translateX(-50%);
-            font-size; 10px;
+            font-size; 10pt;
             writingMode: vertical-rl;
             textOrientation: sideways;
             height: 100%;
@@ -225,48 +225,77 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
     return personIdWrapper;
   }
 
+  private Element getCertificateTitle(Metadata metadata) {
+    final var certificateTitle = "%s (%s v%s)".formatted(metadata.getName(),
+        metadata.getTypeId(), metadata.getVersion());
 
-  private String createHeader(Metadata certificateMetadata, boolean isGeneralInfo)
-      throws IOException, URISyntaxException {
-    final var logoPath = ClassLoader.getSystemResource("transportstyrelsen-logo.png")
-        .toURI();
+    final var titleWrapper = new Element(Tag.DIV.toString())
+        .attr("style", "font-size: 14pt; border-bottom: black solid 0.5px; padding-bottom: 1mm;");
 
-    final var pageHeaderWrapper = new Element(Tag.DIV.toString()).attr("style",
-        "display: flex; flex-direction: column;");
+    final var title = new Element(Tag.SPAN.toString())
+        .appendText(certificateTitle);
 
-    final var pageHeader = new Element(Tag.DIV.toString()).attr("style", """
-        margin: 10mm 20mm 10mm 20mm;
-        width: 100%;
-        font-size: 10pt;
-        display: flex;
-        border: green solid 1px;
-        """);
+    titleWrapper.appendChild(title);
+    return titleWrapper;
+  }
 
-    pageHeader.appendChild(getLogo(Files.readAllBytes(Paths.get(logoPath))));
-    if (!isGeneralInfo) {
-      pageHeader.appendChild(getPersonId(certificateMetadata.getPersonId()));
+  private void appendWatermarkIfDraft(Element baseWrapper, String signingDate) {
+    if (signingDate != null) {
+      return;
     }
-    pageHeaderWrapper.appendChild(pageHeader);
-    pageHeaderWrapper.appendChild(getLeftMarginInfo(certificateMetadata));
-    pageHeaderWrapper.appendChild(createCertificateHeader(certificateMetadata));
+
     final var watermark = new Element(Tag.DIV.toString()).attr("style", """
         position: absolute;
         top: 50%;
         left: 50%;
-        width: 100%;
-        height: 100%;
-        transform: translate(-50%, -50%) rotate(45deg);
-        font-family: 'Helvetica', sans-serif;
+        transform: translateX(-50%) translateY(-50%) rotate(315deg);
         font-size: 100pt;
         color: rgb(128, 128, 128);
         opacity: 0.5;
         z-index: -1;
         """
     );
-    watermark.text("UTKAST");
-    pageHeaderWrapper.appendChild(watermark);
 
-    return pageHeaderWrapper.html();
+    watermark.text("UTKAST");
+    baseWrapper.appendChild(watermark);
+  }
+
+  private String createHeader(Metadata certificateMetadata, boolean isGeneralInfo)
+      throws IOException, URISyntaxException {
+    final var logoPath = ClassLoader.getSystemResource("transportstyrelsen-logo.png")
+        .toURI();
+
+    final var baseWrapper = new Element(Tag.DIV.toString()).attr("style",
+        "display: flex; flex-direction: column;");
+    final var headerWrapper = new Element(Tag.DIV.toString())
+        .attr("style", "display: grid; width: 100%; font-size: 10pt;");
+
+    final var pageHeader = new Element(Tag.DIV.toString()).attr("style", """
+        margin: 10mm 20mm 10mm 20mm;
+        display: flex;
+        border: green solid 1px;
+        """);
+    pageHeader.appendChild(getLogo(Files.readAllBytes(Paths.get(logoPath))));
+    pageHeader.appendChild(getPersonId(certificateMetadata.getPersonId()));
+
+    if (!isGeneralInfo) {
+      pageHeader.appendChild(getPersonId(certificateMetadata.getPersonId()));
+    }
+
+    final var certificateHeader = new Element(Tag.DIV.toString()).attr("style", """
+        margin: 0 20mm 10mm 20mm;
+        font-weight: bold;
+        """);
+    certificateHeader.appendChild(getCertificateTitle(certificateMetadata));
+
+    headerWrapper.appendChild(pageHeader);
+    headerWrapper.appendChild(certificateHeader);
+    baseWrapper.appendChild(headerWrapper);
+    baseWrapper.appendChild(getLeftMarginInfo(certificateMetadata));
+
+    appendWatermarkIfDraft(baseWrapper, certificateMetadata.getSigningDate());
+
+    return baseWrapper.html();
   }
 
   private Node createCertificateHeader(Metadata certificateMetadata) {
