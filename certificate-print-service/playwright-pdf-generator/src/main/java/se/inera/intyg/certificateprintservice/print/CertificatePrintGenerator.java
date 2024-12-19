@@ -111,10 +111,7 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
     content.appendChild(elementProvider.element(Tag.STRONG).text(metadata.getName()));
     content.appendChild(elementProvider.element(Tag.P).text(metadata.getDescription()));
     content.appendChild(elementProvider.element(Tag.STRONG).text("Skicka intyg till mottagare"));
-    content.appendChild(
-        elementProvider.element(Tag.P).text(
-            "Du kan hantera ditt intyg genom att logga in på 1177.se Där kan du till exempel skicka intyget till mottagaren"));
-
+    content.appendChild(elementProvider.element(Tag.P).text(TextFactory.citizenInformation()));
     return doc.html();
   }
 
@@ -161,34 +158,12 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
 
 
   private String createFooterTemplate(Metadata certificateMetadata) {
-
-    var origin = "Utskriften skapades med %s - en tjänst som drivs av Inera AB".formatted(
-        certificateMetadata.getApplicationOrigin());
     return """
             <div style="width: 100%%; text-align: left; font-size: 10px; margin-left: 30mm">
                 <span>%s</span>
             </div>
-        """.formatted(origin);
+        """.formatted(TextFactory.applicationOrigin(certificateMetadata));
   }
-
-
-  private static String getPrintInfoText(Metadata metadata) {
-    final var draftInfo = "Detta är en utskrift av ett elektroniskt intygsutkast och ska INTE skickas till %s.".formatted(
-        metadata.getRecipientName());
-    final var signedInfo = "Detta är en utskrift av ett elektroniskt intyg. Intyget har signerats elektroniskt av intygsutfärdaren.";
-    final var signedAndSentInfo =
-        "Detta är en utskrift av ett elektroniskt intyg. Intyget har signerats elektroniskt av intygsutfärdaren. "
-            + "Notera att intyget redan har skickats till %s.".formatted(
-            metadata.getRecipientName());
-
-    if (metadata.getSigningDate() == null) {
-      return draftInfo;
-    } else {
-      return metadata.isSent() ? signedAndSentInfo : signedInfo;
-    }
-
-  }
-
 
   private String createHeader(Metadata certificateMetadata, boolean includeConfidentialDetails)
       throws IOException, URISyntaxException {
@@ -205,7 +180,7 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
     if (includeConfidentialDetails) {
       pageHeader.appendChild(elementProvider.personId(certificateMetadata.getPersonId()));
       certificateHeader.appendChild(
-          elementProvider.printInfo(getPrintInfoText(certificateMetadata)));
+          elementProvider.printInfo(TextFactory.information(certificateMetadata)));
       if (certificateMetadata.isSent()) {
         baseWrapper.appendChild(elementProvider.sent(certificateMetadata.getCertificateId()));
       }
@@ -214,9 +189,9 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
     headerWrapper.appendChild(pageHeader);
     headerWrapper.appendChild(certificateHeader);
     baseWrapper.appendChild(headerWrapper);
-    baseWrapper.appendChild(elementProvider.leftMarginInfo(
-        "%s - Fastställd av %s".formatted(certificateMetadata.getTypeId(),
-            certificateMetadata.getRecipientName())));
+    baseWrapper.appendChild(
+        elementProvider.leftMarginInfo(TextFactory.margin(certificateMetadata))
+    );
 
     if (certificateMetadata.getSigningDate() != null) {
       baseWrapper.appendChild(elementProvider.draftWatermark());
