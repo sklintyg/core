@@ -28,7 +28,6 @@ import se.inera.intyg.certificateprintservice.print.converter.HeaderConverter;
 @RequiredArgsConstructor
 public class CertificatePrintGenerator implements PrintCertificateGenerator {
 
-
   private static final String CONTENT = "content";
   @Value("classpath:templates/certificateTemplate.html")
   private Resource template;
@@ -74,7 +73,7 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
   private byte[] createCertificateDetailsPage(Certificate certificate, Page certificatePage,
       Page headerPage)
       throws IOException {
-    final var certificateHeader = HeaderConverter.header(certificate.getMetadata(), true);
+    final var certificateHeader = HeaderConverter.header(certificate.getMetadata(), false);
     final var certificateContent = certificateToHtml(certificate, headerPage, certificateHeader);
     final var pdfOptions = getPdfOptions(certificate.getMetadata(), certificateHeader);
     certificatePage.setContent(certificateContent);
