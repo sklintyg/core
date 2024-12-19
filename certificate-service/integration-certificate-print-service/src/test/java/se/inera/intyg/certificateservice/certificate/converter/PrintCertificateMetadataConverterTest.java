@@ -1,8 +1,10 @@
 package se.inera.intyg.certificateservice.certificate.converter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
@@ -18,6 +20,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
@@ -41,7 +44,28 @@ class PrintCertificateMetadataConverterTest {
           ).build()
       )
       .status(Status.SIGNED)
+      .sent(
+          Sent.builder()
+              .sentAt(LocalDateTime.now())
+              .build()
+      )
       .signed(LocalDateTime.now())
+      .build();
+
+
+  public static final Certificate NOT_SENT_CERTIFICATE = fk7210CertificateBuilder()
+      .certificateModel(fk7210certificateModelBuilder()
+          .recipient(new Recipient(new RecipientId("ts"), "ts", "ts", "transportstyrelsen-logo.png",
+              "Läkarintyg Transportstyrelsen")
+          ).build()
+      )
+      .status(Status.SIGNED)
+      .signed(LocalDateTime.now())
+      .sent(
+          Sent.builder()
+              .sentAt(null)
+              .build()
+      )
       .build();
 
   public static final Certificate DRAFT = fk7210CertificateBuilder()
@@ -149,5 +173,19 @@ class PrintCertificateMetadataConverterTest {
   void shouldSetFileName() {
     final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false, FILE_NAME);
     assertEquals(FILE_NAME, result.getFileName());
+  }
+
+  @Test
+  void shouldSetSentToFalseIfNotSent() {
+    final var result = printCertificateMetadataConverter.convert(NOT_SENT_CERTIFICATE, false,
+        FILE_NAME);
+    assertFalse(result.isSent());
+  }
+
+  @Test
+  void shouldSetSentToTrueIfSent() {
+    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false,
+        FILE_NAME);
+    assertTrue(result.isSent());
   }
 }
