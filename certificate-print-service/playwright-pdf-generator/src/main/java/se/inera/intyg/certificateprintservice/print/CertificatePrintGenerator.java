@@ -1,9 +1,14 @@
 package se.inera.intyg.certificateprintservice.print;
 
+import static se.inera.intyg.certificateprintservice.print.Constants.RIGHT_MARGIN_INFO_STYLE;
+import static se.inera.intyg.certificateprintservice.print.Constants.STYLE;
+
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
+import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Page.PdfOptions;
+import com.microsoft.playwright.Playwright;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -11,7 +16,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.Objects;
 import javax.swing.text.html.HTML.Tag;
@@ -44,20 +48,23 @@ import se.inera.intyg.certificateprintservice.print.api.value.ElementValueText;
 @RequiredArgsConstructor
 public class CertificatePrintGenerator implements PrintCertificateGenerator {
 
-  private static final String STYLE = "style";
+
   @Value("classpath:templates/certificateTemplate.html")
   private Resource template;
   @Value("classpath:templates/infoPageTemplate.html")
   private Resource infoPageTemplate;
   @Value("classpath:templates/tailwind_3.4.16.js")
   private Resource cssScript;
-  private final Browser browser;
+  private final Playwright playwright;
 
+  private final ElementProvider elementProvider;
 
   @Override
   public byte[] generate(Certificate certificate) {
 
     try (
+        Browser browser = playwright.chromium()
+            .launch(new BrowserType.LaunchOptions().setHeadless(true));
         BrowserContext context = browser.newContext();
         Page certificatePage = context.newPage();
         Page certificateInfoPage = context.newPage();
@@ -89,13 +96,8 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
 
   private String certificateToHtml(Certificate certificate, Page headerPage, String certificateHtml)
       throws IOException {
-    final var headerHeight = getHeaderHeight(headerPage, certificateHtml);
-    final var doc = Jsoup.parse(template.getFile(), StandardCharsets.UTF_8.name(), "",
-        Parser.xmlParser());
-
-    setPageMargin(doc, headerHeight);
-    final var title = doc.getElementById("title");
-    Objects.requireNonNull(title).appendText(getCertificateTitle(certificate.getMetadata()));
+    var doc = createDocFromTemplate(template, certificateHtml, headerPage,
+        certificate.getMetadata());
 
     final var content = doc.getElementById("content");
     certificate.getCategories().forEach(category ->
@@ -107,25 +109,35 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
 
   private String certificateInfoToHtml(Metadata metadata, Page infoHeaderPage,
       String certificateInfoHtml) throws IOException {
-    final var headerHeight = getHeaderHeight(infoHeaderPage, certificateInfoHtml);
-    final var doc = Jsoup.parse(infoPageTemplate.getFile(), StandardCharsets.UTF_8.name(), "",
+
+    var doc = createDocFromTemplate(infoPageTemplate, certificateInfoHtml, infoHeaderPage,
+        metadata);
+
+    final var content = doc.getElementById("content");
+
+    assert content != null;
+    content.appendChild(elementProvider.element(Tag.STRONG).text(metadata.getName()));
+    content.appendChild(elementProvider.element(Tag.P).text(metadata.getDescription()));
+    content.appendChild(elementProvider.element(Tag.STRONG).text("Skicka intyg till mottagare"));
+    content.appendChild(
+        elementProvider.element(Tag.P)
+            .text("Du kan hantera ditt intyg genom att logga in på 1177.se "
+                + "Där kan du till exempel skicka intyget till mottagaren"));
+
+    return doc.html();
+  }
+
+  private Document createDocFromTemplate(Resource template, String html, Page page,
+      Metadata metadata)
+      throws IOException {
+    final var headerHeight = getHeaderHeight(page, html);
+    final var doc = Jsoup.parse(template.getFile(), StandardCharsets.UTF_8.name(), "",
         Parser.xmlParser());
 
     setPageMargin(doc, headerHeight);
     final var title = doc.getElementById("title");
     Objects.requireNonNull(title).appendText(getCertificateTitle(metadata));
-
-    final var content = doc.getElementById("content");
-
-    assert content != null;
-    content.appendChild(element(Tag.STRONG).text(metadata.getName()));
-    content.appendChild(element(Tag.P).text(metadata.getDescription()));
-    content.appendChild(element(Tag.STRONG).text("Skicka intyg till mottagare"));
-    content.appendChild(
-        element(Tag.P).text("Du kan hantera ditt intyg genom att logga in på 1177.se "
-            + "Där kan du till exempel skicka intyget till mottagaren"));
-
-    return doc.html();
+    return doc;
   }
 
   private String getCertificateTitle(Metadata metadata) {
@@ -133,9 +145,6 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
         metadata.getVersion());
   }
 
-  private Element element(Tag tag) {
-    return new Element(tag.toString());
-  }
 
   private PdfOptions getPdfOptions(Metadata metadata, String header) {
     return new PdfOptions()
@@ -173,64 +182,16 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
 
 
   private Element getLeftMarginInfo(Metadata metadata) {
-    final var leftMarginInfoWrapper = new Element(Tag.DIV.toString())
-        .attr("style", """
-            position: absolute;
-            left: 1cm;
-            bottom: 15mm;
-            border: red solid 1px;
-            font-size: 10pt;
-            transform: rotate(-90deg) translateY(-50%);
-            transform-origin: top left;
-            """);
+    final var leftMarginInfoWrapper = elementProvider.element(Tag.DIV)
+        .attr(STYLE, Constants.LEFT_MARGIN_INFO_STYLE);
 
     final var leftMarginInfo = new Element(Tag.SPAN.toString())
-        .text("%s - Fastställd av Transportstyrelsen".formatted(metadata.getTypeId()));
+        .text("%s - Fastställd av %s".formatted(metadata.getTypeId(), metadata.getRecipientName()));
 
     leftMarginInfoWrapper.appendChild(leftMarginInfo);
     return leftMarginInfoWrapper;
   }
 
-  private Element getLogo(byte[] logoBytes) {
-    final var logoWrapper = new Element(Tag.DIV.toString());
-    final var base64 = Base64.getEncoder().encode(logoBytes);
-    final var logo = new Element(Tag.IMG.toString())
-        .attr("src", "data:image/png;base64, " + new String(base64))
-        .attr("alt", "recipient-logo")
-        .attr("style",
-            "max-height: 15mm; max-width: 35mm; border: blue solid 1px;");
-    logoWrapper.appendChild(logo);
-    return logoWrapper;
-  }
-
-  private Element getPersonId(String personId) {
-    final var personIdWrapper = new Element(Tag.DIV.toString()).attr("style", "width: 100%");
-
-    final var div = new Element(Tag.DIV.toString());
-    div.attr("style", "border: red solid 1px; float: right; text-align: right;");
-
-    div.appendChild(new Element(Tag.SPAN.toString()).attr("style", "font-weight: bold;")
-        .appendText("Person- /samordningsnr"));
-    div.appendChild(new Element(Tag.BR.toString()));
-    div.appendChild(new Element(Tag.SPAN.toString()).appendText(personId));
-
-    personIdWrapper.appendChild(div);
-    return personIdWrapper;
-  }
-
-  private Element getTitle(Metadata metadata) {
-    final var titleWrapper = new Element(Tag.DIV.toString()).attr("style", """
-        font-size: 14pt;
-        font-weight: bold;
-        border-bottom: black solid 0.5px;
-        padding-bottom: 1mm;
-        """);
-
-    final var title = element(Tag.SPAN).appendText(getCertificateTitle(metadata));
-
-    titleWrapper.appendChild(title);
-    return titleWrapper;
-  }
 
   private void appendWatermarkIfDraft(Element baseWrapper, String signingDate) {
     if (signingDate != null) {
@@ -253,17 +214,6 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
     baseWrapper.appendChild(watermark);
   }
 
-  private Element getPrintInfo(Metadata metadata) {
-    final var printInfoWrapper = new Element(Tag.DIV.toString()).attr("style", """
-        margin-top: 5mm;
-        padding: 3mm 5mm;
-        border: red solid 1px;
-        """);
-
-    final var printInfo = new Element(Tag.SPAN.toString()).appendText(getPrintInfoText(metadata));
-    printInfoWrapper.appendChild(printInfo);
-    return printInfoWrapper;
-  }
 
   private static String getPrintInfoText(Metadata metadata) {
     final var draftInfo = "Detta är en utskrift av ett elektroniskt intygsutkast och ska INTE skickas till %s.".formatted(
@@ -277,11 +227,9 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
     if (metadata.getSigningDate() == null) {
       return draftInfo;
     } else {
-      // TODO Metadata from cs should be updted to include sent info
-      // return metadata.getSendDate() == null ? signedInfo : signedAndSentInfo;
-
-      return signedInfo;
+      return metadata.getSentDate() == null ? signedInfo : signedAndSentInfo;
     }
+
   }
 
   private void appendRightMarginInfoIfSigned(Element baseWrapper, Metadata metadata) {
@@ -290,16 +238,7 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
     }
 
     final var rightMarginInfoWrapper = new Element(Tag.DIV.toString())
-        .attr("style", """
-            position: absolute;
-            width: 100%;
-            left: 20cm;
-            bottom: 15mm;
-            border: red solid 1px;
-            font-size: 10pt;
-            transform: rotate(-90deg) translateY(-50%);
-            transform-origin: top left;
-            """);
+        .attr(STYLE, RIGHT_MARGIN_INFO_STYLE);
 
     final var rightMarginInfo = new Element(Tag.SPAN.toString())
         .text("Intygs-ID: %s".formatted(metadata.getCertificateId()));
@@ -323,15 +262,16 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
           display: flex;
           border: green solid 1px;
         """);
-    pageHeader.appendChild(getLogo(Files.readAllBytes(Paths.get(logoPath))));
+    pageHeader.appendChild(elementProvider.recipientLogo(Files.readAllBytes(Paths.get(logoPath))));
 
     final var certificateHeader = new Element(Tag.DIV.toString()).attr("style",
         "margin: 0 20mm 10mm 20mm;");
-    certificateHeader.appendChild(getTitle(certificateMetadata));
+    certificateHeader.appendChild(elementProvider.title(getCertificateTitle(certificateMetadata)));
 
     if (!isGeneralInfo) {
-      pageHeader.appendChild(getPersonId(certificateMetadata.getPersonId()));
-      certificateHeader.appendChild(getPrintInfo(certificateMetadata));
+      pageHeader.appendChild(elementProvider.getPersonId(certificateMetadata.getPersonId()));
+      certificateHeader.appendChild(
+          elementProvider.printInfo(getPrintInfoText(certificateMetadata)));
       appendRightMarginInfoIfSigned(baseWrapper, certificateMetadata);
     }
 
@@ -370,7 +310,7 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
     if (question.getValue() instanceof ElementValueText textValue) {
       value.appendText(textValue.getText());
     } else if (question.getValue() instanceof ElementValueList listValue) {
-      value.appendText(listValue.getList().toString());
+      value.appendText(String.join(", ", listValue.getList()));
     }
     list.add(value);
 

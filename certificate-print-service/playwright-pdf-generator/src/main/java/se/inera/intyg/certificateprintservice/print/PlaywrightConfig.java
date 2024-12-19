@@ -1,7 +1,5 @@
 package se.inera.intyg.certificateprintservice.print;
 
-import com.microsoft.playwright.Browser;
-import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Playwright;
 import jakarta.annotation.PreDestroy;
 import org.springframework.context.annotation.Bean;
@@ -11,18 +9,15 @@ import org.springframework.context.annotation.Configuration;
 public class PlaywrightConfig {
 
   private Playwright playwright;
-  private Browser browser;
 
   @Bean()
-  Browser browser() {
-    playwright = Playwright.create();
-    browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true));
-    return browser;
+  Playwright playwright() {
+    this.playwright = Playwright.create();
+    return this.playwright;
   }
 
   @PreDestroy
   void destroy() {
-    browser.close();
     playwright.close();
   }
 
