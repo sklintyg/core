@@ -62,7 +62,7 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
 
   private byte[] createCertificateInfoPage(Metadata metadata, Page certificateInfoPage,
       Page infoHeaderPage) throws IOException {
-    final var certificateInfoHeader = HeaderConverter.header(metadata, true);
+    final var certificateInfoHeader = HeaderConverter.header(metadata, false);
     final var certificateInfo = certificateInfoToHtml(metadata, infoHeaderPage,
         certificateInfoHeader);
     final var certificateInfoPdfOptions = getPdfOptions(metadata, certificateInfoHeader);
@@ -73,7 +73,7 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
   private byte[] createCertificateDetailsPage(Certificate certificate, Page certificatePage,
       Page headerPage)
       throws IOException {
-    final var certificateHeader = HeaderConverter.header(certificate.getMetadata(), false);
+    final var certificateHeader = HeaderConverter.header(certificate.getMetadata(), true);
     final var certificateContent = certificateToHtml(certificate, headerPage, certificateHeader);
     final var pdfOptions = getPdfOptions(certificate.getMetadata(), certificateHeader);
     certificatePage.setContent(certificateContent);
