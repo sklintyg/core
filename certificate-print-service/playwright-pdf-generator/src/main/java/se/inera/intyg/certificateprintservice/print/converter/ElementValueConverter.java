@@ -1,6 +1,7 @@
-package se.inera.intyg.certificateprintservice.print;
+package se.inera.intyg.certificateprintservice.print.converter;
 
 import org.jsoup.nodes.Element;
+import se.inera.intyg.certificateprintservice.print.HTMLFactory;
 import se.inera.intyg.certificateprintservice.print.api.value.ElementValue;
 import se.inera.intyg.certificateprintservice.print.api.value.ElementValueList;
 import se.inera.intyg.certificateprintservice.print.api.value.ElementValueTable;

@@ -1,9 +1,10 @@
-package se.inera.intyg.certificateprintservice.print;
+package se.inera.intyg.certificateprintservice.print.converter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateprintservice.print.HTMLFactory;
 import se.inera.intyg.certificateprintservice.print.api.value.ElementValueList;
 import se.inera.intyg.certificateprintservice.print.api.value.ElementValueTable;
 import se.inera.intyg.certificateprintservice.print.api.value.ElementValueText;

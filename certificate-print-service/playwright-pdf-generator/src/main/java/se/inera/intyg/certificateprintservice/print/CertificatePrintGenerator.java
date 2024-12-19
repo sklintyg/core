@@ -1,7 +1,5 @@
 package se.inera.intyg.certificateprintservice.print;
 
-import static se.inera.intyg.certificateprintservice.print.Constants.STYLE;
-
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.BrowserType;
@@ -13,24 +11,19 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import javax.swing.text.html.HTML.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
 import org.jsoup.parser.Parser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-import se.inera.intyg.certificateprintservice.print.api.Category;
 import se.inera.intyg.certificateprintservice.print.api.Certificate;
 import se.inera.intyg.certificateprintservice.print.api.Metadata;
-import se.inera.intyg.certificateprintservice.print.api.Question;
+import se.inera.intyg.certificateprintservice.print.converter.ElementCategoryConverter;
 
 @Service
 @Slf4j
@@ -100,7 +93,7 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
 
     final var content = doc.getElementById(CONTENT);
     certificate.getCategories().forEach(category ->
-        Objects.requireNonNull(content).appendChild(convertCategory(category)));
+        Objects.requireNonNull(content).appendChild(ElementCategoryConverter.category(category)));
 
     log.debug(doc.html());
     return doc.html();
@@ -231,33 +224,4 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
 
     return baseWrapper.html();
   }
-
-  private Node convertCategory(Category category) {
-    final var div = new Element(Tag.DIV.toString());
-    div.attr(STYLE, "border: 1px solid black;");
-    div.addClass("box-decoration-clone");
-    final var title = new Element(Tag.H2.toString());
-    title.addClass("text-lg font-bold");
-    title.attr(STYLE, "border-bottom: 1px solid black;");
-    title.text("%s".formatted(category.getName()));
-
-    div.appendChild(title);
-    category.getQuestions().forEach(question -> div.appendChildren(convertQuestion(question)));
-    return div;
-  }
-
-  private List<Node> convertQuestion(Question question) {
-    final var list = new ArrayList<Node>();
-    final var name = new Element(Tag.H3.toString());
-    name.addClass("p-1");
-    name.text("%s".formatted(question.getName()));
-    list.add(name);
-    list.add(ElementValueConverter.html(question.getValue()));
-
-    question.getSubQuestions()
-        .forEach(subQuestion -> list.addAll(convertQuestion(subQuestion)));
-    return list;
-  }
-
-
 }
