@@ -20,4 +20,8 @@ public class Metadata {
   String applicationOrigin;
   String personId;
   String description;
+
+  public boolean isDraft() {
+    return signingDate == null;
+  }
 }
