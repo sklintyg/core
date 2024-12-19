@@ -11,7 +11,7 @@ public class HTMLFactory {
     throw new IllegalStateException("Utility class");
   }
 
-  public static Element getTableValue(ElementValueTable tableValue) {
+  public static Element table(ElementValueTable tableValue) {
     final var tableElement = new Element(Tag.TABLE.toString());
 
     final var trHeader = new Element(Tag.TR.toString());
@@ -25,13 +25,20 @@ public class HTMLFactory {
     tableElement.appendChild(trHeader);
 
     tableValue.getValues().stream()
-        .map(HTMLFactory::getTableRow)
+        .map(HTMLFactory::tr)
         .forEach(tableElement::appendChild);
 
     return tableElement;
   }
 
-  private static Element getTableRow(List<String> rowValues) {
+  public static Element p(String text) {
+    final var value = new Element(Tag.P.toString());
+    value.addClass("text-sm p-1");
+    value.appendText(text);
+    return value;
+  }
+
+  private static Element tr(List<String> rowValues) {
     final var trRow = new Element(Tag.TR.toString());
     rowValues.stream()
         .map(rowValue -> {

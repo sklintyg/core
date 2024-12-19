@@ -31,9 +31,6 @@ import se.inera.intyg.certificateprintservice.print.api.Category;
 import se.inera.intyg.certificateprintservice.print.api.Certificate;
 import se.inera.intyg.certificateprintservice.print.api.Metadata;
 import se.inera.intyg.certificateprintservice.print.api.Question;
-import se.inera.intyg.certificateprintservice.print.api.value.ElementValueList;
-import se.inera.intyg.certificateprintservice.print.api.value.ElementValueTable;
-import se.inera.intyg.certificateprintservice.print.api.value.ElementValueText;
 
 @Service
 @Slf4j
@@ -255,28 +252,11 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
     name.addClass("p-1");
     name.text("%s".formatted(question.getName()));
     list.add(name);
-
-    Element value = null;
-    if (question.getValue() instanceof ElementValueText textValue) {
-      value = getTextValue(textValue.getText());
-    } else if (question.getValue() instanceof ElementValueList listValue) {
-      value = getTextValue(String.join(", ", listValue.getList()));
-    } else if (question.getValue() instanceof ElementValueTable tableValue) {
-      value = HTMLFactory.getTableValue(tableValue);
-    }
-
-    list.add(value);
+    list.add(ElementValueConverter.html(question.getValue()));
 
     question.getSubQuestions()
         .forEach(subQuestion -> list.addAll(convertQuestion(subQuestion)));
     return list;
-  }
-
-  private Element getTextValue(String text) {
-    final var value = new Element(Tag.P.toString());
-    value.addClass("text-sm p-1");
-    value.appendText(text);
-    return value;
   }
 
 
