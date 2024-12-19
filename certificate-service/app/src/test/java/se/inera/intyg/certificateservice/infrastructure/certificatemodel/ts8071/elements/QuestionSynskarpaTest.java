@@ -40,7 +40,7 @@ class QuestionSynskarpaTest {
   @Test
   void shallIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationVisualAcuities.builder()
-        .id(new FieldId("5.1"))
+        .id(new FieldId("5"))
         .name("Synskärpa")
         .withCorrectionLabel("Med korrektion")
         .withoutCorrectionLabel("Utan korrektion")
@@ -49,22 +49,22 @@ class QuestionSynskarpaTest {
         .rightEye(
             ElementVisualAcuity.builder()
                 .label("Höger öga")
-                .withoutCorrectionId("5.2")
-                .withCorrectionId("5.5")
+                .withoutCorrectionId("5.1")
+                .withCorrectionId("5.4")
                 .build()
         )
         .leftEye(
             ElementVisualAcuity.builder()
                 .label("Vänster öga")
-                .withoutCorrectionId("5.3")
-                .withCorrectionId("5.6")
+                .withoutCorrectionId("5.2")
+                .withCorrectionId("5.5")
                 .build()
         )
         .binocular(
             ElementVisualAcuity.builder()
                 .label("Binokulärt")
-                .withoutCorrectionId("5.4")
-                .withCorrectionId("5.7")
+                .withoutCorrectionId("5.3")
+                .withCorrectionId("5.6")
                 .build()
         )
         .build();
@@ -84,9 +84,9 @@ class QuestionSynskarpaTest {
         CertificateElementRuleFactory.mandatoryAndExist(
             QUESTION_SYNSKARPA_ID,
             List.of(
+                new FieldId("5.1"),
                 new FieldId("5.2"),
-                new FieldId("5.3"),
-                new FieldId("5.4")
+                new FieldId("5.3")
             )
         )
     );
