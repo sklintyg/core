@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateprintservice.print;
 
+import static se.inera.intyg.certificateprintservice.print.Constants.RIGHT_MARGIN_INFO_STYLE;
 import static se.inera.intyg.certificateprintservice.print.Constants.STYLE;
 
 import java.util.Base64;
@@ -78,5 +79,59 @@ public class ElementProvider {
 
     leftMarginInfoWrapper.appendChild(leftMarginInfo);
     return leftMarginInfoWrapper;
+  }
+
+  public Element pageHeader(byte[] logo) {
+
+    final var pageHeader = new Element(Tag.DIV.toString()).attr("style", """
+          margin: 10mm 20mm 10mm 20mm;
+          display: flex;
+          border: green solid 1px;
+        """);
+    pageHeader.appendChild(recipientLogo(logo));
+
+    return pageHeader;
+  }
+
+  public Element headerWrapper() {
+    return element(Tag.DIV)
+        .attr("style", "display: grid; width: 100%; font-size: 10pt;")
+        .attr("title", "headerElement");
+
+  }
+
+  public Element certificateHeader(String certificateTitle) {
+    final var certificateHeader = new Element(Tag.DIV.toString()).attr("style",
+        "margin: 0 20mm 10mm 20mm;");
+    certificateHeader.appendChild(title(certificateTitle));
+    return certificateHeader;
+  }
+
+  public Element draftWatermark() {
+    final var watermark = element(Tag.DIV).attr("style", """
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%) rotate(315deg);
+        font-size: 100pt;
+        color: rgb(128, 128, 128);
+        opacity: 0.5;
+        z-index: -1;
+        """
+    );
+
+    watermark.text("UTKAST");
+    return watermark;
+  }
+
+  public Element sent(String certificateId) {
+    final var rightMarginInfoWrapper = element(Tag.DIV)
+        .attr(STYLE, RIGHT_MARGIN_INFO_STYLE);
+
+    final var rightMarginInfo = element(Tag.SPAN)
+        .text("Intygs-ID: %s".formatted(certificateId));
+
+    rightMarginInfoWrapper.appendChild(rightMarginInfo);
+    return rightMarginInfoWrapper;
   }
 }
