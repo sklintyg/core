@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateprintservice.print;
 
+import static se.inera.intyg.certificateprintservice.print.Constants.STYLE;
+
 import java.util.Base64;
 import javax.swing.text.html.HTML.Tag;
 import org.jsoup.nodes.Element;
@@ -51,7 +53,7 @@ public class ElementProvider {
     return titleWrapper;
   }
 
-  public Element getPersonId(String personId) {
+  public Element personId(String personId) {
     final var personIdWrapper = element(Tag.DIV).attr("style", "width: 100%");
 
     final var div = element(Tag.DIV);
@@ -64,5 +66,17 @@ public class ElementProvider {
 
     personIdWrapper.appendChild(div);
     return personIdWrapper;
+  }
+
+
+  public Element leftMarginInfo(String info) {
+    final var leftMarginInfoWrapper = element(Tag.DIV)
+        .attr(STYLE, Constants.LEFT_MARGIN_INFO_STYLE);
+
+    final var leftMarginInfo = new Element(Tag.SPAN.toString())
+        .text(info);
+
+    leftMarginInfoWrapper.appendChild(leftMarginInfo);
+    return leftMarginInfoWrapper;
   }
 }

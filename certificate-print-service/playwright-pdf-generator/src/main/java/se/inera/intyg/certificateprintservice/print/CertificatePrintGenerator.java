@@ -181,18 +181,6 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
   }
 
 
-  private Element getLeftMarginInfo(Metadata metadata) {
-    final var leftMarginInfoWrapper = elementProvider.element(Tag.DIV)
-        .attr(STYLE, Constants.LEFT_MARGIN_INFO_STYLE);
-
-    final var leftMarginInfo = new Element(Tag.SPAN.toString())
-        .text("%s - Fastställd av %s".formatted(metadata.getTypeId(), metadata.getRecipientName()));
-
-    leftMarginInfoWrapper.appendChild(leftMarginInfo);
-    return leftMarginInfoWrapper;
-  }
-
-
   private void appendWatermarkIfDraft(Element baseWrapper, String signingDate) {
     if (signingDate != null) {
       return;
@@ -227,7 +215,7 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
     if (metadata.getSigningDate() == null) {
       return draftInfo;
     } else {
-      return metadata.getSentDate() == null ? signedInfo : signedAndSentInfo;
+      return metadata.isSent() ? signedAndSentInfo : signedInfo;
     }
 
   }
@@ -269,7 +257,7 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
     certificateHeader.appendChild(elementProvider.title(getCertificateTitle(certificateMetadata)));
 
     if (!isGeneralInfo) {
-      pageHeader.appendChild(elementProvider.getPersonId(certificateMetadata.getPersonId()));
+      pageHeader.appendChild(elementProvider.personId(certificateMetadata.getPersonId()));
       certificateHeader.appendChild(
           elementProvider.printInfo(getPrintInfoText(certificateMetadata)));
       appendRightMarginInfoIfSigned(baseWrapper, certificateMetadata);
@@ -278,7 +266,9 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
     headerWrapper.appendChild(pageHeader);
     headerWrapper.appendChild(certificateHeader);
     baseWrapper.appendChild(headerWrapper);
-    baseWrapper.appendChild(getLeftMarginInfo(certificateMetadata));
+    baseWrapper.appendChild(elementProvider.leftMarginInfo(
+        "%s - Fastställd av %s".formatted(certificateMetadata.getTypeId(),
+            certificateMetadata.getRecipientName())));
 
     appendWatermarkIfDraft(baseWrapper, certificateMetadata.getSigningDate());
 
