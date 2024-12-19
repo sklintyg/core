@@ -6,17 +6,14 @@ import static se.inera.intyg.certificateprintservice.print.Constants.STYLE;
 import java.util.Base64;
 import javax.swing.text.html.HTML.Tag;
 import org.jsoup.nodes.Element;
-import org.springframework.stereotype.Component;
 
-@Component
 public class ElementProvider {
 
-
-  public Element element(Tag tag) {
+  public static Element element(Tag tag) {
     return new Element(tag.toString());
   }
 
-  public Element recipientLogo(byte[] logoBytes) {
+  public static Element recipientLogo(byte[] logoBytes) {
     final var logoWrapper = element(Tag.DIV);
     final var base64 = Base64.getEncoder().encode(logoBytes);
     final var logo = element(Tag.IMG)
@@ -28,7 +25,7 @@ public class ElementProvider {
     return logoWrapper;
   }
 
-  public Element printInfo(String info) {
+  public static Element printInfo(String info) {
     final var printInfoWrapper = new Element(Tag.DIV.toString()).attr("style", """
         margin-top: 5mm;
         padding: 3mm 5mm;
@@ -40,7 +37,7 @@ public class ElementProvider {
     return printInfoWrapper;
   }
 
-  public Element title(String name) {
+  public static Element title(String name) {
     final var titleWrapper = new Element(Tag.DIV.toString()).attr("style", """
         font-size: 14pt;
         font-weight: bold;
@@ -54,7 +51,7 @@ public class ElementProvider {
     return titleWrapper;
   }
 
-  public Element personId(String personId) {
+  public static Element personId(String personId) {
     final var personIdWrapper = element(Tag.DIV).attr("style", "width: 100%");
 
     final var div = element(Tag.DIV);
@@ -69,8 +66,7 @@ public class ElementProvider {
     return personIdWrapper;
   }
 
-
-  public Element leftMarginInfo(String info) {
+  public static Element leftMarginInfo(String info) {
     final var leftMarginInfoWrapper = element(Tag.DIV)
         .attr(STYLE, Constants.LEFT_MARGIN_INFO_STYLE);
 
@@ -81,7 +77,7 @@ public class ElementProvider {
     return leftMarginInfoWrapper;
   }
 
-  public Element pageHeader(byte[] logo) {
+  public static Element pageHeader(byte[] logo) {
 
     final var pageHeader = new Element(Tag.DIV.toString()).attr("style", """
           margin: 10mm 20mm 10mm 20mm;
@@ -93,21 +89,21 @@ public class ElementProvider {
     return pageHeader;
   }
 
-  public Element headerWrapper() {
+  public static Element headerWrapper() {
     return element(Tag.DIV)
         .attr("style", "display: grid; width: 100%; font-size: 10pt;")
         .attr("title", "headerElement");
 
   }
 
-  public Element certificateHeader(String certificateTitle) {
+  public static Element certificateHeader(String certificateTitle) {
     final var certificateHeader = new Element(Tag.DIV.toString()).attr("style",
         "margin: 0 20mm 10mm 20mm;");
     certificateHeader.appendChild(title(certificateTitle));
     return certificateHeader;
   }
 
-  public Element draftWatermark() {
+  public static Element draftWatermark() {
     final var watermark = element(Tag.DIV).attr("style", """
         position: absolute;
         top: 50%;
@@ -124,7 +120,7 @@ public class ElementProvider {
     return watermark;
   }
 
-  public Element sent(String certificateId) {
+  public static Element sent(String certificateId) {
     final var rightMarginInfoWrapper = element(Tag.DIV)
         .attr(STYLE, RIGHT_MARGIN_INFO_STYLE);
 

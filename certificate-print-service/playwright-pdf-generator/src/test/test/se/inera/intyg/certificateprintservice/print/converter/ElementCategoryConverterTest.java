@@ -13,7 +13,7 @@ class ElementCategoryConverterTest {
 
   @Test
   void shouldReturnHtmlForCategory() {
-    final var result = ElementCategoryConverter.category(
+    final var result = CategoryConverter.category(
         Category.builder()
             .id("ID")
             .name("Name Category")

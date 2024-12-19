@@ -1,13 +1,13 @@
-package se.inera.intyg.certificateprintservice.print;
+package se.inera.intyg.certificateprintservice.print.element;
 
 import java.util.List;
 import javax.swing.text.html.HTML.Tag;
 import org.jsoup.nodes.Element;
 import se.inera.intyg.certificateprintservice.print.api.value.ElementValueTable;
 
-public class HTMLFactory {
+public class BasicElementFactory {
 
-  private HTMLFactory() {
+  private BasicElementFactory() {
     throw new IllegalStateException("Utility class");
   }
 
@@ -25,7 +25,7 @@ public class HTMLFactory {
     tableElement.appendChild(trHeader);
 
     tableValue.getValues().stream()
-        .map(HTMLFactory::tr)
+        .map(BasicElementFactory::tr)
         .forEach(tableElement::appendChild);
 
     return tableElement;

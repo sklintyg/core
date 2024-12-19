@@ -7,9 +7,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import se.inera.intyg.certificateprintservice.print.api.Category;
 
-public class ElementCategoryConverter {
+public class CategoryConverter {
 
-  private ElementCategoryConverter() {
+  private CategoryConverter() {
     throw new IllegalStateException("Utility class");
   }
 
@@ -25,7 +25,7 @@ public class ElementCategoryConverter {
     div.appendChild(title);
     category.getQuestions()
         .forEach(
-            question -> div.appendChildren(ElementQuestionConverter.question(question))
+            question -> div.appendChildren(QuestionConverter.question(question))
         );
     return div;
   }

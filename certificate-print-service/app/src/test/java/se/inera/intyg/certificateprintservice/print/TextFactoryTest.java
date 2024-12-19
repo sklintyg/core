@@ -85,4 +85,18 @@ class TextFactoryTest {
         TextFactory.citizenInformation()
     );
   }
+
+  @Test
+  void shouldReturnTitle() {
+    final var metadata = Metadata.builder()
+        .name("Name")
+        .typeId("TypeId")
+        .version("1.0")
+        .build();
+
+    assertEquals(
+        "Name (TypeId v1.0)",
+        TextFactory.title(metadata)
+    );
+  }
 }

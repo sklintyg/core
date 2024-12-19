@@ -36,4 +36,12 @@ public class TextFactory {
   public static String citizenInformation() {
     return "Du kan hantera ditt intyg genom att logga in på 1177.se Där kan du till exempel skicka intyget till mottagaren";
   }
+
+  public static String title(Metadata metadata) {
+    return "%s (%s v%s)".formatted(
+        metadata.getName(),
+        metadata.getTypeId(),
+        metadata.getVersion()
+    );
+  }
 }

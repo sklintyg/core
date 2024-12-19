@@ -7,9 +7,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import se.inera.intyg.certificateprintservice.print.api.Question;
 
-public class ElementQuestionConverter {
+public class QuestionConverter {
 
-  private ElementQuestionConverter() {
+  private QuestionConverter() {
     throw new IllegalStateException("Utility class");
   }
 

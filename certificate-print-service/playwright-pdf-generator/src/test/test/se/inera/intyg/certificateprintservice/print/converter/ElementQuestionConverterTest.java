@@ -12,7 +12,7 @@ class ElementQuestionConverterTest {
 
   @Test
   void shouldReturnHtmlForQuestionWithoutSubQuestions() {
-    final var result = ElementQuestionConverter.question(
+    final var result = QuestionConverter.question(
         Question.builder()
             .id("ID")
             .name("Name Question")
@@ -32,7 +32,7 @@ class ElementQuestionConverterTest {
 
   @Test
   void shouldReturnHtmlForQuestionWithSubQuestions() {
-    final var result = ElementQuestionConverter.question(
+    final var result = QuestionConverter.question(
         Question.builder()
             .id("ID")
             .name("Name Question")

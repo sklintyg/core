@@ -4,10 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateprintservice.print.HTMLFactory;
 import se.inera.intyg.certificateprintservice.print.api.value.ElementValueList;
 import se.inera.intyg.certificateprintservice.print.api.value.ElementValueTable;
 import se.inera.intyg.certificateprintservice.print.api.value.ElementValueText;
+import se.inera.intyg.certificateprintservice.print.element.BasicElementFactory;
 
 class ElementValueConverterTest {
 
@@ -41,7 +41,7 @@ class ElementValueConverterTest {
 
   @Test
   void shouldReturnValueTable() {
-    final var result = HTMLFactory.table(
+    final var result = BasicElementFactory.table(
         ElementValueTable.builder()
             .headings(List.of("H1", "H2"))
             .values(List.of(List.of("D1", "D2"), List.of("D11", "D21")))

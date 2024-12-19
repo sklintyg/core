@@ -13,21 +13,20 @@ import org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName;
 
 public class PdfMerger {
 
-
   public static byte[] mergePdfs(byte[] pdf, byte[] otherPdf) throws IOException {
-    PDFMergerUtility merger = new PDFMergerUtility();
+    final var merger = new PDFMergerUtility();
     final var doc = Loader.loadPDF(pdf);
     final var infoDoc = Loader.loadPDF(otherPdf);
 
     merger.appendDocument(doc, infoDoc);
-    addPagenNr(doc);
+    addPageNumber(doc);
     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
     doc.save(byteArrayOutputStream);
     doc.close();
     return byteArrayOutputStream.toByteArray();
   }
 
-  private static void addPagenNr(PDDocument doc) throws IOException {
+  private static void addPageNumber(PDDocument doc) throws IOException {
     int totalPages = doc.getNumberOfPages();
     for (int i = 0; i < totalPages; i++) {
       PDPage page = doc.getPage(i);

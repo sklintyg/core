@@ -5,12 +5,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateprintservice.print.api.value.ElementValueTable;
+import se.inera.intyg.certificateprintservice.print.element.BasicElementFactory;
 
-class HTMLFactoryTest {
+class BasicElementFactoryTest {
 
   @Test
   void shouldReturnTableHtmlIfOneHeading() {
-    final var result = HTMLFactory.table(
+    final var result = BasicElementFactory.table(
         ElementValueTable.builder()
             .headings(List.of("H1"))
             .values(List.of(List.of("D1")))
@@ -25,7 +26,8 @@ class HTMLFactoryTest {
             + " <tr>\n"
             + "  <td>D1</td>\n"
             + " </tr>\n"
-            + "</table>"
-        , result.toString());
+            + "</table>",
+        result.toString()
+    );
   }
 }
