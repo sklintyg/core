@@ -3,16 +3,17 @@ package se.inera.intyg.certificateprintservice.print;
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Page;
-import com.microsoft.playwright.Page.EmulateMediaOptions;
 import com.microsoft.playwright.Page.PdfOptions;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Objects;
 import javax.swing.text.html.HTML.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -58,106 +59,106 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
 
     try (
         BrowserContext context = browser.newContext();
-        Page page = context.newPage();
-        Page infoPage = context.newPage()
+        Page certificatePage = context.newPage();
+        Page certificateInfoPage = context.newPage();
+        Page headerPage = context.newPage();
+        Page infoHeaderPage = context.newPage();
     ) {
+      final var metadata = certificate.getMetadata();
+      final var certificateHeader = createHeader(metadata, false);
+      final var certificateContent = certificateToHtml(certificate, headerPage, certificateHeader);
+      final var pdfOptions = getPdfOptions(metadata, certificateHeader);
+      certificatePage.setContent(certificateContent);
 
-      infoPage.setContent(convertInfoToHtml(certificate));
-      var infoPdf = infoPage.pdf(createtGeneralPdfOptions(certificate.getMetadata()));
+      final var certificateInfoHeader = createHeader(metadata, true);
+      final var certificateInfo = certificateInfoToHtml(metadata, infoHeaderPage,
+          certificateInfoHeader);
+      final var certificateInfoPdfOptions = getPdfOptions(metadata, certificateInfoHeader);
+      certificateInfoPage.setContent(certificateInfo);
 
-      String jsoupContent = convertCertificateToHtml(certificate);
-      final var emulateOptions = new EmulateMediaOptions();
-      final var pdfOptions = createtPdfOptions(certificate.getMetadata());
-      page.setContent(jsoupContent);
-      page.emulateMedia(emulateOptions);
+      final var certificateContentPdf = certificatePage.pdf(pdfOptions);
+      final var certificateInfoPdf = certificateInfoPage.pdf(certificateInfoPdfOptions);
 
-      final var certPdf = page.pdf(pdfOptions);
+      return mergePdfs(certificateContentPdf, certificateInfoPdf);
 
-      return mergePdfs(certPdf, infoPdf);
-    } catch (IOException e) {
-      throw new RuntimeException("Could not get logo", e);
-    } catch (URISyntaxException e) {
-      throw new RuntimeException(e);
+    } catch (Exception e) {
+      throw new IllegalStateException("Failure creating pdf from certificate '%s'"
+          .formatted(certificate.getMetadata().getCertificateId()), e);
     }
   }
 
+  private String certificateToHtml(Certificate certificate, Page headerPage, String certificateHtml)
+      throws IOException {
+    final var headerHeight = getHeaderHeight(headerPage, certificateHtml);
+    final var doc = Jsoup.parse(template.getFile(), StandardCharsets.UTF_8.name(), "",
+        Parser.xmlParser());
 
-  private String convertInfoToHtml(Certificate certificate) throws IOException {
-    final var doc = Jsoup.parse(infoPageTemplate.getFile(), "UTF-8", "", Parser.xmlParser());
-    setTitle(doc, certificate);
-    setPageMargin(doc);
+    setPageMargin(doc, headerHeight);
+    final var title = doc.getElementById("title");
+    Objects.requireNonNull(title).appendText(getCertificateTitle(certificate.getMetadata()));
 
-    Element content = doc.getElementById("content");
-    content.appendChild(
-        new Element(Tag.STRONG.toString()).text(certificate.getMetadata().getName()));
-    content.appendChild(
-        new Element(Tag.P.toString()).text(certificate.getMetadata().getDescription()));
+    final var content = doc.getElementById("content");
+    certificate.getCategories().forEach(category ->
+        Objects.requireNonNull(content).appendChild(convertCategory(category)));
 
+    log.debug(doc.html());
+    return doc.html();
+  }
+
+  private String certificateInfoToHtml(Metadata metadata, Page infoHeaderPage,
+      String certificateInfoHtml) throws IOException {
+    final var headerHeight = getHeaderHeight(infoHeaderPage, certificateInfoHtml);
+    final var doc = Jsoup.parse(infoPageTemplate.getFile(), StandardCharsets.UTF_8.name(), "",
+        Parser.xmlParser());
+
+    setPageMargin(doc, headerHeight);
+    final var title = doc.getElementById("title");
+    Objects.requireNonNull(title).appendText(getCertificateTitle(metadata));
+
+    final var content = doc.getElementById("content");
+
+    assert content != null;
+    content.appendChild(element(Tag.STRONG).text(metadata.getName()));
+    content.appendChild(element(Tag.P).text(metadata.getDescription()));
+    content.appendChild(element(Tag.STRONG).text("Skicka intyg till mottagare"));
     content.appendChild(
-        new Element(Tag.STRONG.toString()).text("Skicka intyg till mottagare"));
-    content.appendChild(
-        new Element(Tag.P.toString()).text(
-            "Du kan hantera ditt intyg genom att logga in på 1177.se Där kan du till exempel skicka intyget till mottagaren"));
+        element(Tag.P).text("Du kan hantera ditt intyg genom att logga in på 1177.se "
+            + "Där kan du till exempel skicka intyget till mottagaren"));
 
     return doc.html();
   }
 
-  private String convertCertificateToHtml(Certificate certificate) {
-    try {
-
-      final var doc = Jsoup.parse(template.getFile(), "UTF-8", "", Parser.xmlParser());
-
-      setTitle(doc, certificate);
-      setPageMargin(doc);
-      Element content = doc.getElementById("content");
-      certificate.getCategories()
-          .forEach(category -> content.appendChild(convertCategory(category)));
-
-      log.info(doc.html());
-      return doc.html();
-    } catch (Exception e) {
-      throw new RuntimeException("Could not build html from certificate config", e);
-    }
+  private String getCertificateTitle(Metadata metadata) {
+    return "%s (%s v%s)".formatted(metadata.getName(), metadata.getTypeId(),
+        metadata.getVersion());
   }
 
-  private void setPageMargin(Document doc) {
+  private Element element(Tag tag) {
+    return new Element(tag.toString());
+  }
+
+  private PdfOptions getPdfOptions(Metadata metadata, String header) {
+    return new PdfOptions()
+        .setFormat("A4")
+        .setPrintBackground(true)
+        .setDisplayHeaderFooter(true)
+        .setTagged(true)
+        .setHeaderTemplate(header)
+        .setFooterTemplate(createFooterTemplate(metadata));
+  }
+
+  private double getHeaderHeight(Page page, String header) {
+    page.setContent(header);
+    return page.getByTitle("headerElement").boundingBox().height;
+  }
+
+  private void setPageMargin(Document doc, Double headerHeight) {
     doc.getElementById("style").appendText("""
         @page {
-              margin: %dmm 20mm 15mm 20mm;
-            }""".formatted(calculateTopMargin()));
+              margin: calc(%spx + 6mm) 20mm 15mm 20mm;
+            }""".formatted(Math.round(headerHeight)));
   }
 
-  private void setTitle(Document doc, Certificate certificate) {
-    Element title = doc.getElementById("title");
-    title.appendText(
-        "%s (%s %s)".formatted(certificate.getMetadata().getName(),
-            certificate.getMetadata().getTypeId(),
-            certificate.getMetadata().getVersion()));
-  }
-
-  private int calculateTopMargin() {
-    return 50;
-  }
-
-  private PdfOptions createtPdfOptions(Metadata certificateMetadata)
-      throws IOException, URISyntaxException {
-    final var pdfOptions = createtGeneralPdfOptions(certificateMetadata);
-    pdfOptions.setHeaderTemplate(createHeader(certificateMetadata, false));
-    return pdfOptions;
-  }
-
-  private PdfOptions createtGeneralPdfOptions(Metadata certificateMetadata)
-      throws IOException, URISyntaxException {
-    final var pdfOptions = new PdfOptions();
-    pdfOptions.setFormat("A4");
-    pdfOptions.setPrintBackground(true);
-    pdfOptions.setDisplayHeaderFooter(true);
-    pdfOptions.setTagged(true);
-    pdfOptions.setHeaderTemplate(createHeader(certificateMetadata, true));
-    pdfOptions.setFooterTemplate(createFooterTemplate(certificateMetadata));
-
-    return pdfOptions;
-  }
 
   private String createFooterTemplate(Metadata certificateMetadata) {
 
@@ -171,35 +172,27 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
   }
 
 
-  private Element getLeftMarginInfo(Metadata certificateMetadata) {
-
-    final var leftPageInfo = new Element(Tag.DIV.toString()).attr("style",
-        """
-            display: flex;
-            justify-content: start;
-            align-items: end;
-            position: fixed;
+  private Element getLeftMarginInfo(Metadata metadata) {
+    final var leftMarginInfoWrapper = new Element(Tag.DIV.toString())
+        .attr("style", """
+            position: absolute;
+            left: 1cm;
+            bottom: 15mm;
             border: red solid 1px;
-            transform: translateX(-50%);
-            font-size; 10pt;
-            writingMode: vertical-rl;
-            textOrientation: sideways;
-            height: 100%;
-            bottom: 40mm;
-            width: 20mm;
-            text-wrap: nowrap;
+            font-size: 10pt;
+            transform: rotate(-90deg) translateY(-50%);
+            transform-origin: top left;
             """);
-    final var child = new Element(Tag.SPAN.toString());
-    child.attr("style",
-        "font-size: 10px; transform: rotate(-90deg);");
-    child.text("%s utfärdat av %s".formatted(certificateMetadata.getTypeId(),
-        certificateMetadata.getApplicationOrigin()));
-    leftPageInfo.appendChild(child);
-    return leftPageInfo;
+
+    final var leftMarginInfo = new Element(Tag.SPAN.toString())
+        .text("%s - Fastställd av Transportstyrelsen".formatted(metadata.getTypeId()));
+
+    leftMarginInfoWrapper.appendChild(leftMarginInfo);
+    return leftMarginInfoWrapper;
   }
 
   private Element getLogo(byte[] logoBytes) {
-    final var logoWrapper = new Element(Tag.DIV.toString());//.attr("style", "width: 50%");
+    final var logoWrapper = new Element(Tag.DIV.toString());
     final var base64 = Base64.getEncoder().encode(logoBytes);
     final var logo = new Element(Tag.IMG.toString())
         .attr("src", "data:image/png;base64, " + new String(base64))
@@ -225,15 +218,15 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
     return personIdWrapper;
   }
 
-  private Element getCertificateTitle(Metadata metadata) {
-    final var certificateTitle = "%s (%s v%s)".formatted(metadata.getName(),
-        metadata.getTypeId(), metadata.getVersion());
+  private Element getTitle(Metadata metadata) {
+    final var titleWrapper = new Element(Tag.DIV.toString()).attr("style", """
+        font-size: 14pt;
+        font-weight: bold;
+        border-bottom: black solid 0.5px;
+        padding-bottom: 1mm;
+        """);
 
-    final var titleWrapper = new Element(Tag.DIV.toString())
-        .attr("style", "font-size: 14pt; border-bottom: black solid 0.5px; padding-bottom: 1mm;");
-
-    final var title = new Element(Tag.SPAN.toString())
-        .appendText(certificateTitle);
+    final var title = element(Tag.SPAN).appendText(getCertificateTitle(metadata));
 
     titleWrapper.appendChild(title);
     return titleWrapper;
@@ -260,33 +253,87 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
     baseWrapper.appendChild(watermark);
   }
 
+  private Element getPrintInfo(Metadata metadata) {
+    final var printInfoWrapper = new Element(Tag.DIV.toString()).attr("style", """
+        margin-top: 5mm;
+        padding: 3mm 5mm;
+        border: red solid 1px;
+        """);
+
+    final var printInfo = new Element(Tag.SPAN.toString()).appendText(getPrintInfoText(metadata));
+    printInfoWrapper.appendChild(printInfo);
+    return printInfoWrapper;
+  }
+
+  private static String getPrintInfoText(Metadata metadata) {
+    final var draftInfo = "Detta är en utskrift av ett elektroniskt intygsutkast och ska INTE skickas till %s.".formatted(
+        metadata.getRecipientName());
+    final var signedInfo = "Detta är en utskrift av ett elektroniskt intyg. Intyget har signerats elektroniskt av intygsutfärdaren.";
+    final var signedAndSentInfo =
+        "Detta är en utskrift av ett elektroniskt intyg. Intyget har signerats elektroniskt av intygsutfärdaren. "
+            + "Notera att intyget redan har skickats till %s.".formatted(
+            metadata.getRecipientName());
+
+    if (metadata.getSigningDate() == null) {
+      return draftInfo;
+    } else {
+      // TODO Metadata from cs should be updted to include sent info
+      // return metadata.getSendDate() == null ? signedInfo : signedAndSentInfo;
+
+      return signedInfo;
+    }
+  }
+
+  private void appendRightMarginInfoIfSigned(Element baseWrapper, Metadata metadata) {
+    if (metadata.getSigningDate() == null) {
+      return;
+    }
+
+    final var rightMarginInfoWrapper = new Element(Tag.DIV.toString())
+        .attr("style", """
+            position: absolute;
+            width: 100%;
+            left: 20cm;
+            bottom: 15mm;
+            border: red solid 1px;
+            font-size: 10pt;
+            transform: rotate(-90deg) translateY(-50%);
+            transform-origin: top left;
+            """);
+
+    final var rightMarginInfo = new Element(Tag.SPAN.toString())
+        .text("Intygs-ID: %s".formatted(metadata.getCertificateId()));
+
+    rightMarginInfoWrapper.appendChild(rightMarginInfo);
+    baseWrapper.appendChild(rightMarginInfoWrapper);
+  }
+
   private String createHeader(Metadata certificateMetadata, boolean isGeneralInfo)
       throws IOException, URISyntaxException {
     final var logoPath = ClassLoader.getSystemResource("transportstyrelsen-logo.png")
         .toURI();
 
-    final var baseWrapper = new Element(Tag.DIV.toString()).attr("style",
-        "display: flex; flex-direction: column;");
+    final var baseWrapper = new Element(Tag.DIV.toString());
     final var headerWrapper = new Element(Tag.DIV.toString())
-        .attr("style", "display: grid; width: 100%; font-size: 10pt;");
+        .attr("style", "display: grid; width: 100%; font-size: 10pt;")
+        .attr("title", "headerElement");
 
     final var pageHeader = new Element(Tag.DIV.toString()).attr("style", """
-        margin: 10mm 20mm 10mm 20mm;
-        display: flex;
-        border: green solid 1px;
+          margin: 10mm 20mm 10mm 20mm;
+          display: flex;
+          border: green solid 1px;
         """);
     pageHeader.appendChild(getLogo(Files.readAllBytes(Paths.get(logoPath))));
-    pageHeader.appendChild(getPersonId(certificateMetadata.getPersonId()));
+
+    final var certificateHeader = new Element(Tag.DIV.toString()).attr("style",
+        "margin: 0 20mm 10mm 20mm;");
+    certificateHeader.appendChild(getTitle(certificateMetadata));
 
     if (!isGeneralInfo) {
       pageHeader.appendChild(getPersonId(certificateMetadata.getPersonId()));
+      certificateHeader.appendChild(getPrintInfo(certificateMetadata));
+      appendRightMarginInfoIfSigned(baseWrapper, certificateMetadata);
     }
-
-    final var certificateHeader = new Element(Tag.DIV.toString()).attr("style", """
-        margin: 0 20mm 10mm 20mm;
-        font-weight: bold;
-        """);
-    certificateHeader.appendChild(getCertificateTitle(certificateMetadata));
 
     headerWrapper.appendChild(pageHeader);
     headerWrapper.appendChild(certificateHeader);
@@ -296,21 +343,6 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
     appendWatermarkIfDraft(baseWrapper, certificateMetadata.getSigningDate());
 
     return baseWrapper.html();
-  }
-
-  private Node createCertificateHeader(Metadata certificateMetadata) {
-    final var certHeader = new Element(Tag.DIV.toString()).attr("style", """
-        margin: 10mm 20mm 10mm 20mm;
-        width: 100%;
-        display: flex;
-        font-size: 10pt;
-        border: blue solid 1px;
-        """);
-
-    certHeader.appendChild(new Element(Tag.STRONG.toString()).text(certificateMetadata.getName()));
-    certHeader.appendText(
-        "(%s %s)".formatted(certificateMetadata.getTypeId(), certificateMetadata.getVersion()));
-    return certHeader;
   }
 
   private Node convertCategory(Category category) {
