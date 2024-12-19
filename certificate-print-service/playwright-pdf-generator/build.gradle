@@ -1,10 +1,5 @@
-plugins {
-    id 'java'
-}
-
 group = 'se.inera.intyg.certificateprintservice'
 version = '0.0.1-SNAPSHOT'
-
 
 dependencies {
     implementation project(':pdf-generator-api')

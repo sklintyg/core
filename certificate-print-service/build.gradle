@@ -43,6 +43,7 @@ dependencyCheck {
 subprojects {
     apply plugin: 'java'
     apply plugin: 'jacoco'
+    apply plugin: 'io.spring.dependency-management'
 
     sourceCompatibility = '21'
     targetCompatibility = '21'
@@ -52,8 +53,6 @@ subprojects {
             extendsFrom annotationProcessor
         }
     }
-
-    apply plugin: 'io.spring.dependency-management'
 
     dependencyManagement {
         imports {
@@ -95,5 +94,7 @@ reporting {
 
     dependencies {
         testReportAggregation project(':app')
+        testReportAggregation project(':playwright-pdf-generator')
+        testReportAggregation project(':pdf-generator-api')
     }
 }
