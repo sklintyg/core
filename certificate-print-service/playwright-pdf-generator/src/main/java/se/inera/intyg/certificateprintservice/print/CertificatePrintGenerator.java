@@ -41,6 +41,7 @@ import se.inera.intyg.certificateprintservice.print.api.Certificate;
 import se.inera.intyg.certificateprintservice.print.api.Metadata;
 import se.inera.intyg.certificateprintservice.print.api.Question;
 import se.inera.intyg.certificateprintservice.print.api.value.ElementValueList;
+import se.inera.intyg.certificateprintservice.print.api.value.ElementValueTable;
 import se.inera.intyg.certificateprintservice.print.api.value.ElementValueText;
 
 @Service
@@ -69,7 +70,7 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
         Page certificatePage = context.newPage();
         Page certificateInfoPage = context.newPage();
         Page headerPage = context.newPage();
-        Page infoHeaderPage = context.newPage();
+        Page infoHeaderPage = context.newPage()
     ) {
       final var metadata = certificate.getMetadata();
       final var certificateHeader = createHeader(metadata, false);
@@ -295,18 +296,28 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
     name.addClass("p-1");
     name.text("%s".formatted(question.getName()));
     list.add(name);
-    final var value = new Element(Tag.P.toString());
-    value.addClass("text-sm p-1");
+
+    Element value = null;
     if (question.getValue() instanceof ElementValueText textValue) {
-      value.appendText(textValue.getText());
+      value = getTextValue(textValue.getText());
     } else if (question.getValue() instanceof ElementValueList listValue) {
-      value.appendText(String.join(", ", listValue.getList()));
+      value = getTextValue(String.join(", ", listValue.getList()));
+    } else if (question.getValue() instanceof ElementValueTable tableValue) {
+      value = HTMLFactory.getTableValue(tableValue);
     }
+
     list.add(value);
 
     question.getSubQuestions()
         .forEach(subQuestion -> list.addAll(convertQuestion(subQuestion)));
     return list;
+  }
+
+  private Element getTextValue(String text) {
+    final var value = new Element(Tag.P.toString());
+    value.addClass("text-sm p-1");
+    value.appendText(text);
+    return value;
   }
 
 
