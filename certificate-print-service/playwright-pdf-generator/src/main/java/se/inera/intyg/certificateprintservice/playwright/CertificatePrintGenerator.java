@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateprintservice.pdfgenerator.PrintCertificateGenerator;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.Certificate;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.Metadata;
-import se.inera.intyg.certificateprintservice.playwright.certificate.CertificateInformationToHtmlConverter;
 import se.inera.intyg.certificateprintservice.playwright.certificate.CertificateToHtmlConverter;
 import se.inera.intyg.certificateprintservice.playwright.element.HeaderConverter;
 import se.inera.intyg.certificateprintservice.playwright.text.TextFactory;
@@ -57,7 +56,7 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
   private byte[] createCertificateInfoPage(Metadata metadata, Page certificateInfoPage,
       Page infoHeaderPage) throws IOException {
     final var certificateInfoHeader = HeaderConverter.header(metadata, false);
-    final var certificateInfo = CertificateInformationToHtmlConverter.convert(infoPageTemplate,
+    final var certificateInfo = CertificateToHtmlConverter.certificateInformation(infoPageTemplate,
         infoHeaderPage, certificateInfoHeader, metadata);
     final var certificateInfoPdfOptions = getPdfOptions(metadata, certificateInfoHeader);
     certificateInfoPage.setContent(certificateInfo);
@@ -68,7 +67,7 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
       Page headerPage)
       throws IOException {
     final var certificateHeader = HeaderConverter.header(certificate.getMetadata(), true);
-    final var certificateContent = CertificateToHtmlConverter.convert(template, certificate,
+    final var certificateContent = CertificateToHtmlConverter.certificate(template, certificate,
         headerPage, certificateHeader);
     final var pdfOptions = getPdfOptions(certificate.getMetadata(), certificateHeader);
     certificatePage.setContent(certificateContent);
