@@ -2,9 +2,9 @@ package se.inera.intyg.certificateprintservice.print.converter;
 
 import javax.swing.text.html.HTML.Tag;
 import org.jsoup.nodes.Element;
-import se.inera.intyg.certificateprintservice.print.ElementProvider;
 import se.inera.intyg.certificateprintservice.print.TextFactory;
 import se.inera.intyg.certificateprintservice.print.api.Metadata;
+import se.inera.intyg.certificateprintservice.print.element.ElementProvider;
 import se.inera.intyg.certificateprintservice.print.element.InformationElementFactory;
 
 public class HeaderConverter {
@@ -36,9 +36,9 @@ public class HeaderConverter {
   }
 
   private static Element buildHeaderElement(Metadata metadata, boolean includeInformation) {
-    final var headerElement = ElementProvider.headerWrapper();
-    final var certificateHeader = ElementProvider.certificateHeader(TextFactory.title(metadata));
-    final var pageHeader = ElementProvider.pageHeader(metadata.getRecipientLogo());
+    final var headerElement = headerWrapper();
+    final var certificateHeader = certificateHeader(TextFactory.title(metadata));
+    final var pageHeader = pageHeader(metadata.getRecipientLogo());
 
     if (includeInformation) {
       pageHeader.appendChild(InformationElementFactory.personId(metadata.getPersonId()));
@@ -50,5 +50,31 @@ public class HeaderConverter {
     headerElement.appendChild(certificateHeader);
 
     return headerElement;
+  }
+
+  private static Element headerWrapper() {
+    return ElementProvider.element(Tag.DIV)
+        .attr("style", "display: grid; width: 100%; font-size: 10pt;")
+        .attr("title", "headerElement");
+
+  }
+
+  private static Element certificateHeader(String certificateTitle) {
+    final var certificateHeader = new Element(Tag.DIV.toString()).attr("style",
+        "margin: 0 20mm 10mm 20mm;");
+    certificateHeader.appendChild(InformationElementFactory.title(certificateTitle));
+    return certificateHeader;
+  }
+
+  private static Element pageHeader(byte[] logo) {
+
+    final var pageHeader = new Element(Tag.DIV.toString()).attr("style", """
+          margin: 10mm 20mm 10mm 20mm;
+          display: flex;
+          border: green solid 1px;
+        """);
+    pageHeader.appendChild(ElementProvider.logo(logo));
+
+    return pageHeader;
   }
 }

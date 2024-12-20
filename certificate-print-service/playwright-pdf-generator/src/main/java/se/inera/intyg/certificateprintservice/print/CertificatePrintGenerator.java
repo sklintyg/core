@@ -20,6 +20,7 @@ import se.inera.intyg.certificateprintservice.print.api.Certificate;
 import se.inera.intyg.certificateprintservice.print.api.Metadata;
 import se.inera.intyg.certificateprintservice.print.converter.CategoryConverter;
 import se.inera.intyg.certificateprintservice.print.converter.HeaderConverter;
+import se.inera.intyg.certificateprintservice.print.element.ElementProvider;
 
 @Service
 @Slf4j
