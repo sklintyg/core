@@ -5,6 +5,7 @@ import org.jsoup.nodes.Element;
 import se.inera.intyg.certificateprintservice.print.ElementProvider;
 import se.inera.intyg.certificateprintservice.print.TextFactory;
 import se.inera.intyg.certificateprintservice.print.api.Metadata;
+import se.inera.intyg.certificateprintservice.print.element.InformationElementFactory;
 
 public class HeaderConverter {
 
@@ -16,16 +17,16 @@ public class HeaderConverter {
     final var baseWrapper = ElementProvider.element(Tag.DIV);
 
     if (includeInformation && metadata.isSent()) {
-      baseWrapper.appendChild(ElementProvider.sent(metadata.getCertificateId()));
+      baseWrapper.appendChild(InformationElementFactory.sent(metadata.getCertificateId()));
     }
 
     baseWrapper.appendChild(buildHeaderElement(metadata, includeInformation));
     baseWrapper.appendChild(
-        ElementProvider.leftMarginInfo(TextFactory.margin(metadata))
+        InformationElementFactory.leftMargin(TextFactory.margin(metadata))
     );
 
     if (metadata.isDraft()) {
-      baseWrapper.appendChild(ElementProvider.draftWatermark());
+      baseWrapper.appendChild(InformationElementFactory.draftWatermark());
     }
 
     return baseWrapper.html();
@@ -37,8 +38,9 @@ public class HeaderConverter {
     final var pageHeader = ElementProvider.pageHeader(metadata.getRecipientLogo());
 
     if (includeInformation) {
-      pageHeader.appendChild(ElementProvider.personId(metadata.getPersonId()));
-      certificateHeader.appendChild(ElementProvider.printInfo(TextFactory.information(metadata)));
+      pageHeader.appendChild(InformationElementFactory.personId(metadata.getPersonId()));
+      certificateHeader.appendChild(
+          InformationElementFactory.printInfo(TextFactory.information(metadata)));
     }
 
     headerElement.appendChild(pageHeader);

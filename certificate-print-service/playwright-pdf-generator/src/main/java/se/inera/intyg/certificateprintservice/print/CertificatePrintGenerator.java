@@ -1,7 +1,5 @@
 package se.inera.intyg.certificateprintservice.print;
 
-import com.microsoft.playwright.Browser;
-import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Page.PdfOptions;
@@ -41,13 +39,13 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
   public byte[] generate(Certificate certificate) {
 
     try (
-        Browser browser = playwright.chromium()
+        final var browser = playwright.chromium()
             .launch(new BrowserType.LaunchOptions().setHeadless(true));
-        BrowserContext context = browser.newContext();
-        Page detailsPage = context.newPage();
-        Page infoPage = context.newPage();
-        Page detailsHeaderPage = context.newPage();
-        Page infoHeaderPage = context.newPage()
+        final var context = browser.newContext();
+        final var detailsPage = context.newPage();
+        final var infoPage = context.newPage();
+        final var detailsHeaderPage = context.newPage();
+        final var infoHeaderPage = context.newPage()
     ) {
 
       return PdfMerger.mergePdfs(createCertificateDetailsPage(certificate, detailsPage,
