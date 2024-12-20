@@ -17,17 +17,17 @@ public class TemplateToDocumentConverter {
     throw new IllegalStateException("Utility class");
   }
 
-  public static Document convert(Resource template, String html, Page page,
+  public static Document convert(Resource template, String header, Page page,
       Metadata metadata)
       throws IOException {
-    final var headerHeight = getHeaderHeight(page, html);
-    final var doc = Jsoup.parse(template.getFile(), StandardCharsets.UTF_8.name(), "",
+    final var headerHeight = getHeaderHeight(page, header);
+    final var document = Jsoup.parse(template.getFile(), StandardCharsets.UTF_8.name(), "",
         Parser.xmlParser());
 
-    setPageMargin(doc, headerHeight);
-    final var title = doc.getElementById("title");
+    setPageMargin(document, headerHeight);
+    final var title = document.getElementById("title");
     Objects.requireNonNull(title).appendText(TextFactory.title(metadata));
-    return doc;
+    return document;
   }
 
   private static double getHeaderHeight(Page page, String header) {
@@ -36,10 +36,15 @@ public class TemplateToDocumentConverter {
   }
 
   private static void setPageMargin(Document doc, Double headerHeight) {
-    doc.getElementById("style").appendText("""
+    final var styleElement = doc.getElementById("style");
+
+    if (styleElement == null) {
+      throw new IllegalStateException("Style element is null");
+    }
+
+    styleElement.appendText("""
         @page {
               margin: calc(%spx + 6mm) 20mm 15mm 20mm;
             }""".formatted(Math.round(headerHeight)));
   }
-
 }
