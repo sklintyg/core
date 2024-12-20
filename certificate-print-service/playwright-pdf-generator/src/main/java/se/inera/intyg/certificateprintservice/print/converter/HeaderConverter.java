@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateprintservice.print.converter;
 
+import static se.inera.intyg.certificateprintservice.print.Constants.STYLE;
+
 import javax.swing.text.html.HTML.Tag;
 import org.jsoup.nodes.Element;
 import se.inera.intyg.certificateprintservice.print.TextFactory;
@@ -54,13 +56,13 @@ public class HeaderConverter {
 
   private static Element headerWrapper() {
     return ElementProvider.element(Tag.DIV)
-        .attr("style", "display: grid; width: 100%; font-size: 10pt;")
+        .attr(STYLE, "display: grid; width: 100%; font-size: 10pt;")
         .attr("title", "headerElement");
 
   }
 
   private static Element certificateHeader(String certificateTitle) {
-    final var certificateHeader = new Element(Tag.DIV.toString()).attr("style",
+    final var certificateHeader = new Element(Tag.DIV.toString()).attr(STYLE,
         "margin: 0 20mm 10mm 20mm;");
     certificateHeader.appendChild(InformationElementFactory.title(certificateTitle));
     return certificateHeader;
@@ -68,7 +70,7 @@ public class HeaderConverter {
 
   private static Element pageHeader(byte[] logo) {
 
-    final var pageHeader = new Element(Tag.DIV.toString()).attr("style", """
+    final var pageHeader = new Element(Tag.DIV.toString()).attr(STYLE, """
           margin: 10mm 20mm 10mm 20mm;
           display: flex;
           border: green solid 1px;
