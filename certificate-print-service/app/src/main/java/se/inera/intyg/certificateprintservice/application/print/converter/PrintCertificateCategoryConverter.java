@@ -3,7 +3,7 @@ package se.inera.intyg.certificateprintservice.application.print.converter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateprintservice.application.print.dto.PrintCertificateCategoryDTO;
-import se.inera.intyg.certificateprintservice.print.api.Category;
+import se.inera.intyg.certificateprintservice.pdfgenerator.api.Category;
 
 @Component
 @RequiredArgsConstructor

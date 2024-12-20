@@ -17,8 +17,8 @@ import se.inera.intyg.certificateprintservice.application.print.dto.PrintCertifi
 import se.inera.intyg.certificateprintservice.application.print.dto.PrintCertificateMetadataDTO;
 import se.inera.intyg.certificateprintservice.application.print.dto.PrintCertificateRequestDTO;
 import se.inera.intyg.certificateprintservice.application.print.dto.PrintCertificateResponseDTO;
-import se.inera.intyg.certificateprintservice.print.PrintCertificateGenerator;
-import se.inera.intyg.certificateprintservice.print.api.Certificate;
+import se.inera.intyg.certificateprintservice.pdfgenerator.PrintCertificateGenerator;
+import se.inera.intyg.certificateprintservice.pdfgenerator.api.Certificate;
 
 @ExtendWith(MockitoExtension.class)
 class GeneratePrintServiceTest {

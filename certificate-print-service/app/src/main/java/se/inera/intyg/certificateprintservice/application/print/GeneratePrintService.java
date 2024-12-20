@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateprintservice.application.print.converter.PrintCertificateRequestConverter;
 import se.inera.intyg.certificateprintservice.application.print.dto.PrintCertificateRequestDTO;
 import se.inera.intyg.certificateprintservice.application.print.dto.PrintCertificateResponseDTO;
-import se.inera.intyg.certificateprintservice.print.PrintCertificateGenerator;
+import se.inera.intyg.certificateprintservice.pdfgenerator.PrintCertificateGenerator;
 
 @Service
 @RequiredArgsConstructor
