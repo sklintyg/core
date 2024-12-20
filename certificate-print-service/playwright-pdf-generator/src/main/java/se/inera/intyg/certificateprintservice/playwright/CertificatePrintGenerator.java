@@ -31,6 +31,9 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
   private Resource cssScript;
   private final Playwright playwright;
 
+  private final CertificateToHtmlConverter certificateToHtmlConverter;
+  private final CertificateInformationToHtmlConverter certificateInformationToHtmlConverter;
+
   @Override
   public byte[] generate(Certificate certificate) {
 
@@ -57,7 +60,7 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
   private byte[] createCertificateInfoPage(Metadata metadata, Page certificateInfoPage,
       Page infoHeaderPage) throws IOException {
     final var certificateInfoHeader = HeaderConverter.header(metadata, false);
-    final var certificateInfo = CertificateInformationToHtmlConverter.convert(infoPageTemplate,
+    final var certificateInfo = certificateInformationToHtmlConverter.convert(infoPageTemplate,
         infoHeaderPage, certificateInfoHeader, metadata);
     final var certificateInfoPdfOptions = getPdfOptions(metadata, certificateInfoHeader);
     certificateInfoPage.setContent(certificateInfo);
@@ -68,7 +71,7 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
       Page headerPage)
       throws IOException {
     final var certificateHeader = HeaderConverter.header(certificate.getMetadata(), true);
-    final var certificateContent = CertificateToHtmlConverter.convert(template, certificate,
+    final var certificateContent = certificateToHtmlConverter.convert(template, certificate,
         headerPage, certificateHeader);
     final var pdfOptions = getPdfOptions(certificate.getMetadata(), certificateHeader);
     certificatePage.setContent(certificateContent);

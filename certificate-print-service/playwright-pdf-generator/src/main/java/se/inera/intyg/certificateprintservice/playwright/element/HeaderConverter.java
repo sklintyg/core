@@ -74,7 +74,7 @@ public class HeaderConverter {
           border: green solid 1px;
         """);
 
-    pageHeader.appendChild(ElementProvider.logo(logo));
+//    pageHeader.appendChild(ElementProvider.logo(logo));
 
     return pageHeader;
   }

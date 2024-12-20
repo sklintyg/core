@@ -5,24 +5,26 @@ import static se.inera.intyg.certificateprintservice.playwright.Constants.CONTEN
 import com.microsoft.playwright.Page;
 import java.io.IOException;
 import javax.swing.text.html.HTML.Tag;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.Metadata;
 import se.inera.intyg.certificateprintservice.playwright.element.ElementProvider;
 import se.inera.intyg.certificateprintservice.playwright.pdf.TemplateToDocumentConverter;
 import se.inera.intyg.certificateprintservice.playwright.text.TextFactory;
 
 @Slf4j
+@Component
+@RequiredArgsConstructor
 public class CertificateInformationToHtmlConverter {
 
-  private CertificateInformationToHtmlConverter() {
-    throw new IllegalStateException("Utility class");
-  }
+  private final TemplateToDocumentConverter templateToDocumentConverter;
 
-  public static String convert(Resource template, Page infoHeaderPage,
+  public String convert(Resource template, Page infoHeaderPage,
       String certificateInfoHtml, Metadata metadata) throws IOException {
 
-    var doc = TemplateToDocumentConverter.convert(template, certificateInfoHtml,
+    var doc = templateToDocumentConverter.convert(template, certificateInfoHtml,
         infoHeaderPage,
         metadata);
 

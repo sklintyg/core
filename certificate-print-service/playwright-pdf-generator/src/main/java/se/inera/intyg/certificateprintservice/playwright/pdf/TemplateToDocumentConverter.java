@@ -8,16 +8,14 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.parser.Parser;
 import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.Metadata;
 import se.inera.intyg.certificateprintservice.playwright.text.TextFactory;
 
+@Component
 public class TemplateToDocumentConverter {
-
-  private TemplateToDocumentConverter() {
-    throw new IllegalStateException("Utility class");
-  }
-
-  public static Document convert(Resource template, String html, Page page,
+  
+  public Document convert(Resource template, String html, Page page,
       Metadata metadata)
       throws IOException {
     final var headerHeight = getHeaderHeight(page, html);
