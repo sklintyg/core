@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateprintservice.print;
+package se.inera.intyg.certificateprintservice.print.text;
 
 import se.inera.intyg.certificateprintservice.print.api.Metadata;
 

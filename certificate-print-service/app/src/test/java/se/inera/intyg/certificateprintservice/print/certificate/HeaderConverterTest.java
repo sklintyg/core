@@ -1,9 +1,10 @@
-package se.inera.intyg.certificateprintservice.print.converter;
+package se.inera.intyg.certificateprintservice.print.certificate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateprintservice.print.api.Metadata;
+import se.inera.intyg.certificateprintservice.print.element.HeaderConverter;
 
 class HeaderConverterTest {
 

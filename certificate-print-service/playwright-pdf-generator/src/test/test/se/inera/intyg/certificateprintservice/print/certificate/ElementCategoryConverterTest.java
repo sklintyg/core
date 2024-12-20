@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateprintservice.print.converter;
+package se.inera.intyg.certificateprintservice.print.certificate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

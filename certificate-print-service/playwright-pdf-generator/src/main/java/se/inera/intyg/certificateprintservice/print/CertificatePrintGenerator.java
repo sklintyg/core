@@ -18,9 +18,10 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateprintservice.print.api.Certificate;
 import se.inera.intyg.certificateprintservice.print.api.Metadata;
-import se.inera.intyg.certificateprintservice.print.converter.CategoryConverter;
-import se.inera.intyg.certificateprintservice.print.converter.HeaderConverter;
+import se.inera.intyg.certificateprintservice.print.certificate.CategoryConverter;
 import se.inera.intyg.certificateprintservice.print.element.ElementProvider;
+import se.inera.intyg.certificateprintservice.print.element.HeaderConverter;
+import se.inera.intyg.certificateprintservice.print.text.TextFactory;
 
 @Service
 @Slf4j

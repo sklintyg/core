@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateprintservice.print.api.Metadata;
+import se.inera.intyg.certificateprintservice.print.text.TextFactory;
 
 class TextFactoryTest {
 

@@ -1,13 +1,11 @@
-package se.inera.intyg.certificateprintservice.print.converter;
+package se.inera.intyg.certificateprintservice.print.element;
 
 import static se.inera.intyg.certificateprintservice.print.Constants.STYLE;
 
 import javax.swing.text.html.HTML.Tag;
 import org.jsoup.nodes.Element;
-import se.inera.intyg.certificateprintservice.print.TextFactory;
 import se.inera.intyg.certificateprintservice.print.api.Metadata;
-import se.inera.intyg.certificateprintservice.print.element.ElementProvider;
-import se.inera.intyg.certificateprintservice.print.element.InformationElementFactory;
+import se.inera.intyg.certificateprintservice.print.text.TextFactory;
 
 public class HeaderConverter {
 

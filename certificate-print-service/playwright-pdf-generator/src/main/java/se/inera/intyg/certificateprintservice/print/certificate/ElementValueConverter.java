@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateprintservice.print.converter;
+package se.inera.intyg.certificateprintservice.print.certificate;
 
 import org.jsoup.nodes.Element;
 import se.inera.intyg.certificateprintservice.print.api.value.ElementValue;

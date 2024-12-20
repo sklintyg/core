@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateprintservice.print.converter;
+package se.inera.intyg.certificateprintservice.print.certificate;
 
 import java.util.ArrayList;
 import java.util.List;
