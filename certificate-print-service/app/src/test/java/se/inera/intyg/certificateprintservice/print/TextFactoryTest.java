@@ -16,7 +16,16 @@ class TextFactoryTest {
 
     assertEquals(
         "Detta är en utskrift av ett elektroniskt intyg. Intyget har signerats elektroniskt av intygsutfärdaren.",
-        TextFactory.information(metadata)
+        TextFactory.alert(metadata)
+    );
+  }
+
+  @Test
+  void shouldReturnDraft() {
+
+    assertEquals(
+        "UTKAST",
+        TextFactory.draft()
     );
   }
 
@@ -30,7 +39,22 @@ class TextFactoryTest {
 
     assertEquals(
         "Detta är en utskrift av ett elektroniskt intyg. Intyget har signerats elektroniskt av intygsutfärdaren.",
-        TextFactory.information(metadata)
+        TextFactory.alert(metadata)
+    );
+  }
+
+  @Test
+  void shouldReturnCertificateId() {
+    final var metadata =
+        Metadata.builder()
+            .certificateId("1234ABC")
+            .recipientName("Transportstyrelsen")
+            .signingDate("2025-01-01")
+            .build();
+
+    assertEquals(
+        "Intygs-ID: 1234ABC",
+        TextFactory.certificateId(metadata.getCertificateId())
     );
   }
 
@@ -45,7 +69,7 @@ class TextFactoryTest {
 
     assertEquals(
         "Detta är en utskrift av ett elektroniskt intyg. Intyget har signerats elektroniskt av intygsutfärdaren. Notera att intyget redan har skickats till Transportstyrelsen.",
-        TextFactory.information(metadata)
+        TextFactory.alert(metadata)
     );
   }
 

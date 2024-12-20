@@ -17,7 +17,10 @@ public class HeaderConverter {
     final var baseWrapper = ElementProvider.element(Tag.DIV);
 
     if (includeInformation && metadata.isSent()) {
-      baseWrapper.appendChild(InformationElementFactory.sent(metadata.getCertificateId()));
+      baseWrapper.appendChild(InformationElementFactory.rightMargin(
+              TextFactory.certificateId(metadata.getCertificateId())
+          )
+      );
     }
 
     baseWrapper.appendChild(buildHeaderElement(metadata, includeInformation));
@@ -26,7 +29,7 @@ public class HeaderConverter {
     );
 
     if (metadata.isDraft()) {
-      baseWrapper.appendChild(InformationElementFactory.draftWatermark());
+      baseWrapper.appendChild(InformationElementFactory.watermark(TextFactory.draft()));
     }
 
     return baseWrapper.html();
@@ -40,7 +43,7 @@ public class HeaderConverter {
     if (includeInformation) {
       pageHeader.appendChild(InformationElementFactory.personId(metadata.getPersonId()));
       certificateHeader.appendChild(
-          InformationElementFactory.printInfo(TextFactory.information(metadata)));
+          InformationElementFactory.alert(TextFactory.alert(metadata)));
     }
 
     headerElement.appendChild(pageHeader);

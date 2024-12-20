@@ -4,7 +4,7 @@ import se.inera.intyg.certificateprintservice.print.api.Metadata;
 
 public class TextFactory {
 
-  public static String information(Metadata metadata) {
+  public static String alert(Metadata metadata) {
     if (metadata.isDraft()) {
       "Detta är en utskrift av ett elektroniskt intygsutkast och ska INTE skickas till %s.".formatted(
           metadata.getRecipientName());
@@ -43,5 +43,13 @@ public class TextFactory {
         metadata.getTypeId(),
         metadata.getVersion()
     );
+  }
+
+  public static String draft() {
+    return "UTKAST";
+  }
+
+  public static String certificateId(String certificateId) {
+    return "Intygs-ID: %s".formatted(certificateId);
   }
 }

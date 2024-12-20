@@ -13,7 +13,7 @@ public class InformationElementFactory {
     return new Element(tag.toString());
   }
 
-  public static Element printInfo(String info) {
+  public static Element alert(String info) {
     final var printInfoWrapper = new Element(Tag.DIV.toString()).attr("style", """
         margin-top: 5mm;
         padding: 3mm 5mm;
@@ -65,7 +65,7 @@ public class InformationElementFactory {
     return leftMarginInfoWrapper;
   }
 
-  public static Element draftWatermark() {
+  public static Element watermark(String text) {
     final var watermark = element(Tag.DIV).attr("style", """
         position: absolute;
         top: 50%;
@@ -78,16 +78,16 @@ public class InformationElementFactory {
         """
     );
 
-    watermark.text("UTKAST");
+    watermark.text(text);
     return watermark;
   }
 
-  public static Element sent(String certificateId) {
+  public static Element rightMargin(String text) {
     final var rightMarginInfoWrapper = element(Tag.DIV)
         .attr(STYLE, RIGHT_MARGIN_INFO_STYLE);
 
     final var rightMarginInfo = element(Tag.SPAN)
-        .text("Intygs-ID: %s".formatted(certificateId));
+        .text(text);
 
     rightMarginInfoWrapper.appendChild(rightMarginInfo);
     return rightMarginInfoWrapper;
