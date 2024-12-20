@@ -3,6 +3,7 @@ package se.inera.intyg.certificateprintservice.print;
 public abstract class Constants {
 
   public static final String STYLE = "style";
+  public static final String CONTENT = "content";
 
   public static final String LEFT_MARGIN_INFO_STYLE = """
       position: absolute;
