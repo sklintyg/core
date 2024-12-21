@@ -8,9 +8,13 @@ plugins {
 }
 
 ext {
+    jsoupVersion = "1.18.3"
+    pdfBoxVersion = "3.0.3"
+    springbootMavenBomVersion = '3.4.0'
+    tailwindCssVersion= '3.4.16'
+
     ineraMavenRepository = 'https://nexus.drift.inera.se/repository/it-public/'
     nvdMirror = 'https://vulnz-nvd-mirror-devtest.intyg.nordicmedtest.se'
-    springbootMavenBomVersion = '3.4.0'
 }
 
 group = 'se.inera.intyg.certificateprintservice'

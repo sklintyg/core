@@ -1,20 +1,36 @@
-group = 'se.inera.intyg.certificateprintservice'
-version = '0.0.1-SNAPSHOT'
+tasks.register('downloadTailwindCSS') {
+    doLast {
+        String tailwindCSSFilePath = "${layout.buildDirectory.get()}/resources/main/templates/tailwindCSS.js"
+        File file = new File(tailwindCSSFilePath)
+        if (!file.exists()) {
+            URI.create("https://cdn.tailwindcss.com/${tailwindCssVersion}").toURL().withInputStream {
+                i -> file.withOutputStream { it << i }
+            }
+        }
+    }
+}
+
+processResources {
+    finalizedBy downloadTailwindCSS
+}
+
 
 dependencies {
-    implementation project(':pdf-generator-api')
-    implementation 'org.springframework.boot:spring-boot-starter'
-    implementation 'com.microsoft.playwright:playwright:1.49.0'
-    implementation 'org.springframework.boot:spring-boot-configuration-processor'
-    implementation 'org.jsoup:jsoup:1.18.3'
-    implementation 'org.springframework.boot:spring-boot-devtools:3.4.0'
-    implementation 'org.apache.pdfbox:pdfbox:3.0.3'
+    implementation project(":pdf-generator-api")
+    implementation "org.springframework.boot:spring-boot-starter"
+    implementation "com.microsoft.playwright:playwright:1.49.0"
+    implementation "org.springframework.boot:spring-boot-configuration-processor"
+    implementation "org.jsoup:jsoup:${jsoupVersion}"
+    implementation "org.springframework.boot:spring-boot-devtools"
+    implementation ("org.apache.pdfbox:pdfbox:${pdfBoxVersion}") {
+        exclude group: "commons-logging", module: "commons-logging"
+    }
 
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
+    compileOnly "org.projectlombok:lombok"
+    annotationProcessor "org.projectlombok:lombok"
 
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+    testImplementation "org.junit.jupiter:junit-jupiter"
 }
 
 test {
