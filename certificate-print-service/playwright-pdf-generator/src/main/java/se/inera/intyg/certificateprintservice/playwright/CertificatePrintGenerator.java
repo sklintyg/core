@@ -26,8 +26,7 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
   private Resource template;
   @Value("classpath:templates/infoPageTemplate.html")
   private Resource infoPageTemplate;
-  @Value("classpath:templates/tailwind_3.4.16.js")
-  private Resource cssScript;
+
   private final Playwright playwright;
 
   private final CertificateToHtmlConverter certificateToHtmlConverter;
@@ -66,8 +65,7 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
   }
 
   private byte[] createCertificateDetailsPage(Certificate certificate, Page certificatePage,
-      Page headerPage)
-      throws IOException {
+      Page headerPage) throws IOException {
     final var certificateHeader = HeaderConverter.header(certificate.getMetadata(), true);
     final var certificateContent = certificateToHtmlConverter.certificate(template, certificate,
         headerPage, certificateHeader);

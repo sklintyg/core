@@ -15,11 +15,10 @@ import se.inera.intyg.certificateprintservice.playwright.text.TextFactory;
 @Component
 public class TemplateToDocumentConverter {
 
-  public Document convert(Resource template, String header, Page page,
-      Metadata metadata)
+  public Document convert(Resource template, String header, Page page, Metadata metadata)
       throws IOException {
     final var headerHeight = getHeaderHeight(page, header);
-    final var document = Jsoup.parse(template.getFile(), StandardCharsets.UTF_8.name(), "",
+    final var document = Jsoup.parse(template.getInputStream(), StandardCharsets.UTF_8.name(), "",
         Parser.xmlParser());
 
     setPageMargin(document, headerHeight);
@@ -42,7 +41,8 @@ public class TemplateToDocumentConverter {
 
     styleElement.appendText("""
         @page {
-              margin: calc(%spx + 6mm) 20mm 15mm 20mm;
-            }""".formatted(Math.round(headerHeight)));
+          margin: calc(%spx + 15mm) 20mm 15mm 20mm;
+        }
+        """.formatted(Math.round(headerHeight)));
   }
 }

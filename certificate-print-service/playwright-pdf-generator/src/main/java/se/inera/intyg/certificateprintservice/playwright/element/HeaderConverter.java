@@ -2,6 +2,7 @@ package se.inera.intyg.certificateprintservice.playwright.element;
 
 import static se.inera.intyg.certificateprintservice.playwright.Constants.STYLE;
 
+import java.io.IOException;
 import javax.swing.text.html.HTML.Tag;
 import org.jsoup.nodes.Element;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.Metadata;
@@ -16,7 +17,7 @@ public class HeaderConverter {
   public static String header(Metadata metadata, boolean includeInformation) {
     final var baseWrapper = ElementProvider.element(Tag.DIV);
 
-    if (includeInformation && metadata.isSent()) {
+    if (includeInformation && metadata.getSigningDate() != null) {
       baseWrapper.appendChild(InformationElementFactory.rightMargin(
               TextFactory.certificateId(metadata.getCertificateId())
           )
@@ -25,8 +26,7 @@ public class HeaderConverter {
 
     baseWrapper.appendChild(buildHeaderElement(metadata, includeInformation));
     baseWrapper.appendChild(
-        InformationElementFactory.leftMargin(TextFactory.margin(metadata))
-    );
+        InformationElementFactory.leftMargin(TextFactory.margin(metadata)));
 
     if (metadata.isDraft()) {
       baseWrapper.appendChild(InformationElementFactory.watermark(TextFactory.draft()));
@@ -38,7 +38,16 @@ public class HeaderConverter {
   private static Element buildHeaderElement(Metadata metadata, boolean includeInformation) {
     final var headerElement = headerWrapper();
     final var certificateHeader = certificateHeader(TextFactory.title(metadata));
-    final var pageHeader = pageHeader(metadata.getRecipientLogo());
+
+    final byte[] logoBytes;
+    try {
+      logoBytes = ClassLoader.getSystemResourceAsStream("transportstyrelsen-logo.png")
+          .readAllBytes();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+    final var pageHeader = pageHeader(logoBytes);
+    //final var pageHeader = pageHeader(metadata.getRecipientLogo());
 
     if (includeInformation) {
       pageHeader.appendChild(InformationElementFactory.personId(metadata.getPersonId()));
@@ -54,14 +63,19 @@ public class HeaderConverter {
 
   private static Element headerWrapper() {
     return ElementProvider.element(Tag.DIV)
-        .attr(STYLE, "display: grid; width: 100%; font-size: 10pt;")
-        .attr("title", "headerElement");
-
+        .attr("title", "headerElement")
+        .attr(STYLE, """
+            display: grid;
+            width: 17cm;
+            font-size: 10pt;
+            margin: 10mm 20mm 0 20mm;
+            border: blue solid 2px;
+            """);
   }
 
   private static Element certificateHeader(String certificateTitle) {
-    final var certificateHeader = new Element(Tag.DIV.toString()).attr(STYLE,
-        "margin: 0 20mm 10mm 20mm;");
+    final var certificateHeader = new Element(Tag.DIV.toString())
+        .attr(STYLE, "margin-bottom: 5mm;");
     certificateHeader.appendChild(InformationElementFactory.title(certificateTitle));
     return certificateHeader;
   }
@@ -69,12 +83,12 @@ public class HeaderConverter {
   private static Element pageHeader(byte[] logo) {
 
     final var pageHeader = new Element(Tag.DIV.toString()).attr(STYLE, """
-          margin: 10mm 20mm 10mm 20mm;
+          margin: 0 0 10mm 0;
           display: flex;
           border: green solid 1px;
         """);
 
-//    pageHeader.appendChild(ElementProvider.logo(logo));
+    pageHeader.appendChild(ElementProvider.logo(logo));
 
     return pageHeader;
   }
