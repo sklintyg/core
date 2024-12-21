@@ -1,48 +1,79 @@
 package se.inera.intyg.certificateprintservice.playwright.pdf;
 
+import static se.inera.intyg.certificateprintservice.playwright.Constants.STYLE;
+
 import com.microsoft.playwright.Page;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Objects;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.parser.Parser;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.Metadata;
 import se.inera.intyg.certificateprintservice.playwright.text.TextFactory;
 
 @Component
-public class TemplateToDocumentConverter {
+public class TemplateToDocumentConverter implements InitializingBean {
+
+  @Value("classpath:templates/tailwindCSS.js")
+  private Resource tailwindScript;
+
+  private String tailwindCSS;
+
+  @Override
+  public void afterPropertiesSet() throws Exception {
+    tailwindCSS = new String(Base64.getEncoder().encode(tailwindScript.getContentAsByteArray()));
+  }
+
 
   public Document convert(Resource template, String header, Page page, Metadata metadata)
       throws IOException {
-    final var headerHeight = getHeaderHeight(page, header);
     final var document = Jsoup.parse(template.getInputStream(), StandardCharsets.UTF_8.name(), "",
         Parser.xmlParser());
 
-    setPageMargin(document, headerHeight);
-    final var title = document.getElementById("title");
-    Objects.requireNonNull(title).appendText(TextFactory.title(metadata));
+    setDocumentTitle(document, metadata);
+    setDocumentScript(document);
+    setPageMargin(document, page, header);
     return document;
   }
 
-  private static double getHeaderHeight(Page page, String header) {
-    page.setContent(header);
-    return page.getByTitle("headerElement").boundingBox().height;
+  private void setDocumentTitle(Document document, Metadata metadata) {
+    final var title = document.getElementById("title");
+    Objects.requireNonNull(title).appendText(TextFactory.title(metadata));
   }
 
-  private static void setPageMargin(Document doc, Double headerHeight) {
-    final var styleElement = doc.getElementById("style");
+  private void setDocumentScript(Document document) {
+    final var scriptElement = document.getElementById("script");
+
+    if (scriptElement == null) {
+      throw new IllegalStateException("Style element is null");
+    }
+
+    scriptElement.attr("src", "data:text/javascript;base64, " + tailwindCSS);
+  }
+
+  private void setPageMargin(Document doc, Page page, String header) {
+    final var styleElement = doc.getElementById(STYLE);
 
     if (styleElement == null) {
       throw new IllegalStateException("Style element is null");
     }
 
+    final var headerHeight = calculateHeaderHeight(page, header);
     styleElement.appendText("""
         @page {
           margin: calc(%spx + 15mm) 20mm 15mm 20mm;
         }
         """.formatted(Math.round(headerHeight)));
+  }
+
+  private double calculateHeaderHeight(Page page, String header) {
+    page.setContent(header);
+    return page.getByTitle("headerElement").boundingBox().height;
   }
 }
