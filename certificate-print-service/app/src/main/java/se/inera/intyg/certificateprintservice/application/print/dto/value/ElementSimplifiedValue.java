@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonSubTypes({
     @Type(value = ElementSimplifiedValueList.class, name = "LIST"),
     @Type(value = ElementSimplifiedValueText.class, name = "TEXT"),
+    @Type(value = ElementSimplifiedValueTable.class, name = "TABLE"),
 })
 public interface ElementSimplifiedValue {
 

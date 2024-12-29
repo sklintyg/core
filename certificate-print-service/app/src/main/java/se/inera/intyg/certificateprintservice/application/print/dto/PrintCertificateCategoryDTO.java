@@ -14,7 +14,7 @@ public class PrintCertificateCategoryDTO {
 
   String id;
   String name;
-  List<PrintCertificateQuestionDTO> questions;
+  List<PrintCertificateQuestionDTO> children;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class PrintCertificateCategoryDTOBuilder {

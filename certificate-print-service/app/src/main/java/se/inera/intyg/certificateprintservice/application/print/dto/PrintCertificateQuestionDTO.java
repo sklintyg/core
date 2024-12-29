@@ -16,7 +16,7 @@ public class PrintCertificateQuestionDTO {
   String id;
   String name;
   ElementSimplifiedValue value;
-  List<PrintCertificateQuestionDTO> subQuestions;
+  List<PrintCertificateQuestionDTO> children;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class PrintCertificateQuestionDTOBuilder {

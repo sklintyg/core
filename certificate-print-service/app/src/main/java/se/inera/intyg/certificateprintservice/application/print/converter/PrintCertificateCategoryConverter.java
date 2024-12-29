@@ -15,7 +15,7 @@ public class PrintCertificateCategoryConverter {
     return Category.builder()
         .id(category.getId())
         .name(category.getName())
-        .questions(category.getQuestions().stream().map(printCertificateQuestionConverter::convert)
+        .questions(category.getChildren().stream().map(printCertificateQuestionConverter::convert)
             .toList())
         .build();
   }

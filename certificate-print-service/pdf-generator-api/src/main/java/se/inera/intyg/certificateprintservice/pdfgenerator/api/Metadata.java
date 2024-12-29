@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateprintservice.pdfgenerator.api;
 
 
+import java.util.List;
 import lombok.Builder;
 import lombok.Value;
 
@@ -20,6 +21,9 @@ public class Metadata {
   String applicationOrigin;
   String personId;
   String description;
+  String issuerName;
+  String issuingUnit;
+  List<String> issuingUnitInfo;
 
   public boolean isDraft() {
     return signingDate == null;
