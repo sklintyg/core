@@ -4,7 +4,6 @@ import jakarta.xml.bind.JAXBElement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
@@ -13,6 +12,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.common.XmlMapping;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.CVType;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
@@ -38,13 +38,7 @@ public class XmlGeneratorValue {
               }
 
               final var answerToMapTo = answerToMapTo(mapping, answerList);
-              if (answerToMapTo.isEmpty()) {
-                throw new IllegalStateException(
-                    "Cannot resolve custom mapping '%s'".formatted(mapping)
-                );
-              }
-
-              answerToMapTo.get().getDelsvar().addAll(
+              answerToMapTo.getDelsvar().addAll(
                   mapping.getAnswers().stream()
                       .map(answer -> answer.getDelsvar().stream().toList())
                       .flatMap(List::stream)
@@ -61,13 +55,22 @@ public class XmlGeneratorValue {
     return elementData.stream()
         .filter(data -> !(data.value() instanceof ElementValueUnitContactInformation))
         .filter(data -> certificateModel.elementSpecification(data.id()).includeInXml())
+        .sorted((o1, o2) -> certificateModel.compare(o1.id(), o2.id()))
         .map(data -> {
-              final var converter = converters.get(data.value().getClass());
+              final var valueMapper = certificateModel.elementSpecification(data.id())
+                  .getMapping()
+                  .flatMap(ElementMapping::elementValueMapper);
+
+              final var converter = valueMapper
+                  .map(converters::get)
+                  .orElseGet(() -> converters.get(data.value().getClass()));
+
               if (converter == null) {
                 throw new IllegalStateException(
                     "Converter for '%s' not found".formatted(data.value().getClass())
                 );
               }
+
               return XmlMapping.builder()
                   .mapping(
                       certificateModel
@@ -83,10 +86,10 @@ public class XmlGeneratorValue {
   }
 
   private static boolean noCustomMapping(XmlMapping mapping) {
-    return mapping.getMapping() == null;
+    return mapping.getMapping() == null || mapping.getMapping().elementId() == null;
   }
 
-  private static Optional<Svar> answerToMapTo(XmlMapping mapping, ArrayList<Svar> answerList) {
+  private static Svar answerToMapTo(XmlMapping mapping, ArrayList<Svar> answerList) {
     return answerList.stream()
         .filter(svar ->
             svar.getId().equalsIgnoreCase(mapping.getMapping().elementId().id())
@@ -105,6 +108,13 @@ public class XmlGeneratorValue {
                         )
                 )
         )
-        .findAny();
+        .findAny()
+        .orElseGet(() -> {
+              final var emptySvar = new Svar();
+              emptySvar.setId(mapping.getMapping().elementId().id());
+              answerList.add(emptySvar);
+              return emptySvar;
+            }
+        );
   }
 }

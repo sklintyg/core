@@ -16,4 +16,14 @@ public class CertificateRecipientFactory {
         logicalAddress
     );
   }
+
+  public static Recipient transp(String logicalAddress) {
+    return new Recipient(
+        new RecipientId("TRANSP"),
+        "Transportstyrelsen",
+        logicalAddress,
+        "ts/transportstyrelsen-logo.png",
+        "Läkarintyg Transportstyrelsen"
+    );
+  }
 }

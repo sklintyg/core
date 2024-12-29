@@ -89,7 +89,7 @@ class XmlGeneratorCodeListTest {
     void shallMapSvar() {
       final var response = xmlGenerator.generate(data, elementSpecification);
 
-      final var first = response.get(0);
+      final var first = response.getFirst();
       assertAll(
           () -> assertEquals(1, response.size()),
           () -> assertEquals(QUESTION_ID, first.getId()),
@@ -101,14 +101,14 @@ class XmlGeneratorCodeListTest {
     void shallMapDelsvarForCode() {
       final var response = xmlGenerator.generate(data, elementSpecification);
 
-      final var delsvar = response.get(0).getDelsvar();
-      final var delsvarCode = response.get(0).getDelsvar().get(0);
-      final var jaxbElement = (JAXBElement<CVType>) delsvarCode.getContent().get(0);
+      final var delsvar = response.getFirst().getDelsvar();
+      final var delsvarCode = response.getFirst().getDelsvar().getFirst();
+      final var jaxbElement = (JAXBElement<CVType>) delsvarCode.getContent().getFirst();
       final var cvType = jaxbElement.getValue();
 
       assertAll(
           () -> assertEquals(1, delsvar.size()),
-          () -> assertEquals(CODE_ID_ONE, delsvarCode.getId()),
+          () -> assertEquals(VALUE_ID, delsvarCode.getId()),
           () -> assertEquals("CODE", cvType.getCode()),
           () -> assertEquals("CODE_SYSTEM", cvType.getCodeSystem()),
           () -> assertEquals("DISPLAY_NAME", cvType.getDisplayName())
@@ -177,7 +177,7 @@ class XmlGeneratorCodeListTest {
     void shallMapFirstSvar() {
       final var response = xmlGenerator.generate(data, elementSpecification);
 
-      final var first = response.get(0);
+      final var first = response.getFirst();
       assertAll(
           () -> assertEquals(2, response.size()),
           () -> assertEquals(QUESTION_ID, first.getId()),
@@ -201,14 +201,14 @@ class XmlGeneratorCodeListTest {
     void shallMapDelsvarForFirstCode() {
       final var response = xmlGenerator.generate(data, elementSpecification);
 
-      final var delsvar = response.get(0).getDelsvar();
-      final var delsvarCode = delsvar.get(0);
-      final var jaxbElement = (JAXBElement<CVType>) delsvarCode.getContent().get(0);
+      final var delsvar = response.getFirst().getDelsvar();
+      final var delsvarCode = delsvar.getFirst();
+      final var jaxbElement = (JAXBElement<CVType>) delsvarCode.getContent().getFirst();
       final var cvType = jaxbElement.getValue();
 
       assertAll(
           () -> assertEquals(1, delsvar.size()),
-          () -> assertEquals(CODE_ID_ONE, delsvarCode.getId()),
+          () -> assertEquals(VALUE_ID, delsvarCode.getId()),
           () -> assertEquals("CODE", cvType.getCode()),
           () -> assertEquals("CODE_SYSTEM", cvType.getCodeSystem()),
           () -> assertEquals("DISPLAY_NAME", cvType.getDisplayName())
@@ -220,13 +220,13 @@ class XmlGeneratorCodeListTest {
       final var response = xmlGenerator.generate(data, elementSpecification);
 
       final var delsvar = response.get(1).getDelsvar();
-      final var delsvarCode = delsvar.get(0);
-      final var jaxbElement = (JAXBElement<CVType>) delsvarCode.getContent().get(0);
+      final var delsvarCode = delsvar.getFirst();
+      final var jaxbElement = (JAXBElement<CVType>) delsvarCode.getContent().getFirst();
       final var cvType = jaxbElement.getValue();
 
       assertAll(
           () -> assertEquals(1, delsvar.size()),
-          () -> assertEquals(CODE_ID_TWO, delsvarCode.getId()),
+          () -> assertEquals(VALUE_ID, delsvarCode.getId()),
           () -> assertEquals("CODE_TWO", cvType.getCode()),
           () -> assertEquals("CODE_SYSTEM", cvType.getCodeSystem()),
           () -> assertEquals("DISPLAY_NAME_TWO", cvType.getDisplayName())

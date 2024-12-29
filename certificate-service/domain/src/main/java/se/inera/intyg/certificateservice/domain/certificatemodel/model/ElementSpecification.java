@@ -79,7 +79,8 @@ public class ElementSpecification {
     }
 
     final var validationErrors = validations.stream()
-        .map(validation -> validation.validate(dataForElement(elementData), categoryId))
+        .map(
+            validation -> validation.validate(dataForElement(elementData), categoryId, elementData))
         .flatMap(List::stream);
 
     final var childrenValidationErrors = children.stream()
@@ -117,5 +118,9 @@ public class ElementSpecification {
       );
     }
     return data;
+  }
+
+  public Optional<ElementMapping> getMapping() {
+    return Optional.ofNullable(mapping);
   }
 }

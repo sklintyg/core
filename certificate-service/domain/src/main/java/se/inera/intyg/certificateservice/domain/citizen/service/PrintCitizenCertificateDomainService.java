@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Pdf;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
-import se.inera.intyg.certificateservice.domain.certificate.service.PdfGenerator;
+import se.inera.intyg.certificateservice.domain.certificate.service.PdfGeneratorProvider;
 import se.inera.intyg.certificateservice.domain.common.exception.CitizenCertificateForbidden;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 
@@ -12,7 +12,7 @@ import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 public class PrintCitizenCertificateDomainService {
 
   private final CertificateRepository certificateRepository;
-  private final PdfGenerator pdfGenerator;
+  private final PdfGeneratorProvider pdfGeneratorProvider;
 
   public Pdf get(CertificateId certificateId, PersonId personId, String additionalInfoText) {
 
@@ -31,6 +31,7 @@ public class PrintCitizenCertificateDomainService {
       );
     }
 
-    return pdfGenerator.generate(certificate, additionalInfoText, true);
+    return pdfGeneratorProvider.provider(certificate)
+        .generate(certificate, additionalInfoText, true);
   }
 }

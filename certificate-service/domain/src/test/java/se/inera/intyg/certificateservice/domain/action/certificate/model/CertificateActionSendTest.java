@@ -31,7 +31,10 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.Ce
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
+import se.inera.intyg.certificateservice.domain.common.model.Recipient;
+import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 import se.inera.intyg.certificateservice.domain.patient.model.ProtectedPerson;
@@ -231,28 +234,6 @@ class CertificateActionSendTest {
     assertFalse(
         certificateActionSend.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
-    );
-  }
-
-  @Test
-  void shallReturnName() {
-    assertEquals("Skicka till Försäkringskassan", certificateActionSend.getName(Optional.empty()));
-  }
-
-  @Test
-  void shallReturnDescription() {
-    assertEquals("Öppnar ett fönster där du kan välja att skicka intyget till Försäkringskassan.",
-        certificateActionSend.getDescription(Optional.empty()));
-  }
-
-  @Test
-  void shallReturnBody() {
-    final var actionEvaluation = actionEvaluationBuilder.build();
-    final var certificate = certificateBuilder.build();
-
-    assertEquals(
-        "<p>Om du går vidare kommer intyget skickas direkt till Försäkringskassans system vilket ska göras i samråd med patienten.</p>",
-        certificateActionSend.getBody(Optional.of(certificate), Optional.of(actionEvaluation))
     );
   }
 
@@ -524,5 +505,142 @@ class CertificateActionSendTest {
         certificateActionSend.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
+  }
+
+  @Nested
+  class RecipientTests {
+
+    @Nested
+    class RecipientForsakringskassanTests {
+
+      @Test
+      void shallReturnName() {
+        final var certificate = certificateBuilder
+            .certificateModel(
+                CertificateModel.builder()
+                    .recipient(
+                        new Recipient(
+                            new RecipientId("id"),
+                            "Försäkringskassan",
+                            "logicalAddress"
+                        )
+                    )
+                    .build()
+            )
+            .build();
+        assertEquals("Skicka till Försäkringskassan",
+            certificateActionSend.getName(Optional.of(certificate)));
+      }
+
+      @Test
+      void shallReturnDescription() {
+        final var certificate = certificateBuilder
+            .certificateModel(
+                CertificateModel.builder()
+                    .recipient(
+                        new Recipient(
+                            new RecipientId("id"),
+                            "Försäkringskassan",
+                            "logicalAddress"
+                        )
+                    )
+                    .build()
+            )
+            .build();
+        assertEquals(
+            "Öppnar ett fönster där du kan välja att skicka intyget till Försäkringskassan.",
+            certificateActionSend.getDescription(Optional.of(certificate)));
+      }
+
+      @Test
+      void shallReturnBody() {
+        final var actionEvaluation = actionEvaluationBuilder.build();
+        final var certificate = certificateBuilder
+            .certificateModel(
+                CertificateModel.builder()
+                    .recipient(
+                        new Recipient(
+                            new RecipientId("id"),
+                            "Försäkringskassan",
+                            "logicalAddress"
+                        )
+                    )
+                    .build()
+            )
+            .build();
+        assertEquals(
+            "<p>Om du går vidare kommer intyget skickas direkt till Försäkringskassans system vilket ska göras i samråd med patienten.</p>",
+            certificateActionSend.getBody(Optional.of(certificate),
+                Optional.of(actionEvaluation))
+        );
+      }
+    }
+
+    @Nested
+    class RecipientTranssportstyrelsenTests {
+
+      @Test
+      void shallReturnName() {
+        final var certificate = certificateBuilder
+            .certificateModel(
+                CertificateModel.builder()
+                    .recipient(
+                        new Recipient(
+                            new RecipientId("id"),
+                            "Transportstyrelsen",
+                            "logicalAddress"
+                        )
+                    )
+                    .build()
+            )
+            .build();
+        assertEquals("Skicka till Transportstyrelsen",
+            certificateActionSend.getName(Optional.of(certificate)));
+      }
+
+      @Test
+      void shallReturnDescription() {
+        final var certificate = certificateBuilder
+            .certificateModel(
+                CertificateModel.builder()
+                    .recipient(
+                        new Recipient(
+                            new RecipientId("id"),
+                            "Transportstyrelsen",
+                            "logicalAddress"
+                        )
+                    )
+                    .build()
+            )
+            .build();
+        assertEquals(
+            "Öppnar ett fönster där du kan välja att skicka intyget till Transportstyrelsen.",
+            certificateActionSend.getDescription(Optional.of(certificate)));
+      }
+
+      @Test
+      void shallReturnBody() {
+        final var actionEvaluation = actionEvaluationBuilder.build();
+        final var certificate = certificateBuilder
+            .certificateModel(
+                CertificateModel.builder()
+                    .recipient(
+                        new Recipient(
+                            new RecipientId("id"),
+                            "Transportstyrelsen",
+                            "logicalAddress"
+                        )
+                    )
+                    .build()
+            )
+            .build();
+
+        assertEquals(
+            "<p>Om du går vidare kommer intyget skickas direkt till Transportstyrelsens system vilket ska göras i samråd med patienten.</p>",
+            certificateActionSend.getBody(Optional.of(certificate),
+                Optional.of(actionEvaluation))
+        );
+      }
+    }
   }
 }

@@ -17,6 +17,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMet
 import se.inera.intyg.certificateservice.domain.certificate.model.Pdf;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGenerator;
+import se.inera.intyg.certificateservice.domain.certificate.service.PdfGeneratorProvider;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.common.exception.CitizenCertificateForbidden;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
@@ -48,6 +49,9 @@ class PrintCitizenCertificateDomainServiceTest {
   @Mock
   PdfGenerator pdfGenerator;
 
+  @Mock
+  PdfGeneratorProvider pdfGeneratorProvider;
+
   @InjectMocks
   PrintCitizenCertificateDomainService printCitizenCertificateDomainService;
 
@@ -76,6 +80,8 @@ class PrintCitizenCertificateDomainServiceTest {
 
     @Test
     void shouldReturnPdfIfPatientIdMatchesCitizen() {
+      when(pdfGeneratorProvider.provider(CERTIFICATE))
+          .thenReturn(pdfGenerator);
       when(pdfGenerator.generate(CERTIFICATE, ADDITIONAL_INFO_TEXT, true)).thenReturn(PDF);
 
       final var response = printCitizenCertificateDomainService.get(CERTIFICATE_ID,

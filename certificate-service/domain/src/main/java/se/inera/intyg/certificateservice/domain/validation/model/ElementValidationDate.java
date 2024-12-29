@@ -24,7 +24,7 @@ public class ElementValidationDate implements ElementValidation {
 
   @Override
   public List<ValidationError> validate(ElementData data,
-      Optional<ElementId> categoryId) {
+      Optional<ElementId> categoryId, List<ElementData> dataList) {
     if (data == null) {
       throw new IllegalArgumentException("Element data is null");
     }

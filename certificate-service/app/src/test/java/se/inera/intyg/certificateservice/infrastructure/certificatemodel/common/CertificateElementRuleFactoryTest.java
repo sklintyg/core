@@ -47,6 +47,23 @@ class CertificateElementRuleFactoryTest {
   }
 
   @Test
+  void shouldReturnShowIfNotRule() {
+    final var expected = ElementRuleExpression.builder()
+        .id(new ElementId("ID"))
+        .type(ElementRuleType.SHOW)
+        .expression(new RuleExpression("!$FIELD && !empty($FIELD)"))
+        .build();
+
+    final var response = CertificateElementRuleFactory.showIfNot(
+        new ElementId("ID"),
+        new FieldId("FIELD")
+    );
+
+    assertEquals(expected, response);
+  }
+
+
+  @Test
   void shouldReturnMandatoryRuleForSeveralFields() {
     final var expected = ElementRuleExpression.builder()
         .id(new ElementId("ID"))
@@ -63,7 +80,7 @@ class CertificateElementRuleFactoryTest {
   }
 
   @Test
-  void shouldReturnMandatoryExistRule() {
+  void shouldReturnMandatoryOrExistRule() {
     final var expected = ElementRuleExpression.builder()
         .id(new ElementId("ID"))
         .type(ElementRuleType.MANDATORY)
@@ -78,14 +95,30 @@ class CertificateElementRuleFactoryTest {
   }
 
   @Test
-  void shouldReturnMandatoryExistRuleForSeveralFields() {
+  void shouldReturnMandatoryOrExistRuleForSeveralFields() {
     final var expected = ElementRuleExpression.builder()
         .id(new ElementId("ID"))
         .type(ElementRuleType.MANDATORY)
         .expression(new RuleExpression("exists($FIELD0) || exists($FIELD1) || exists($FIELD2)"))
         .build();
 
-    final var response = CertificateElementRuleFactory.mandatoryExist(
+    final var response = CertificateElementRuleFactory.mandatoryOrExist(
+        new ElementId("ID"),
+        List.of(new FieldId("FIELD0"), new FieldId("FIELD1"), new FieldId("FIELD2"))
+    );
+
+    assertEquals(expected, response);
+  }
+
+  @Test
+  void shouldReturnMandatoryAndExistRuleForSeveralFields() {
+    final var expected = ElementRuleExpression.builder()
+        .id(new ElementId("ID"))
+        .type(ElementRuleType.MANDATORY)
+        .expression(new RuleExpression("exists($FIELD0) && exists($FIELD1) && exists($FIELD2)"))
+        .build();
+
+    final var response = CertificateElementRuleFactory.mandatoryAndExist(
         new ElementId("ID"),
         List.of(new FieldId("FIELD0"), new FieldId("FIELD1"), new FieldId("FIELD2"))
     );
@@ -138,5 +171,33 @@ class CertificateElementRuleFactoryTest {
     );
 
     assertEquals(expected, response);
+  }
+
+  @Test
+  void shouldReturnLessThanOrEqual() {
+    final var expectedResult = "1 <= 2";
+    final var response = CertificateElementRuleFactory.lessThanOrEqual("1", "2");
+    assertEquals(expectedResult, response);
+  }
+
+  @Test
+  void shouldReturnWithCitations() {
+    final var expectedResult = "'expected'";
+    final var response = CertificateElementRuleFactory.withCitation("expected");
+    assertEquals(expectedResult, response);
+  }
+
+  @Test
+  void shouldReturnMultipleAndExpressions() {
+    final var expectedResult = "1 && 2 && 3";
+    final var response = CertificateElementRuleFactory.multipleAndExpressions("1", "2", "3");
+    assertEquals(expectedResult, response);
+  }
+
+  @Test
+  void shouldReturnWrapWithParenthesis() {
+    final var expectedResult = "(expected)";
+    final var response = CertificateElementRuleFactory.wrapWithParenthesis("expected");
+    assertEquals(expectedResult, response);
   }
 }

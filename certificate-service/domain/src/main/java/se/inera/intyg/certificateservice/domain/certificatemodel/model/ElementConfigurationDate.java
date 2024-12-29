@@ -1,9 +1,13 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
 import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValue;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 
@@ -26,5 +30,20 @@ public class ElementConfigurationDate implements ElementConfiguration {
     return ElementValueDate.builder()
         .dateId(id)
         .build();
+  }
+
+  @Override
+  public Optional<ElementSimplifiedValue> simplified(ElementValue value) {
+    if (!(value instanceof ElementValueDate elementValueDate)) {
+      throw new IllegalStateException("Wrong value type");
+    }
+
+    if (elementValueDate.isEmpty()) {
+      return Optional.empty();
+    }
+
+    return Optional.of(ElementSimplifiedValueText.builder()
+        .text(elementValueDate.date().format(DateTimeFormatter.ISO_DATE))
+        .build());
   }
 }

@@ -21,4 +21,19 @@ class CertificateRecipientFactoryTest {
     assertEquals(expected, response);
   }
 
+  @Test
+  void shouldReturnTransp() {
+    final var expected = new Recipient(
+        new RecipientId("TRANSP"),
+        "Transportstyrelsen",
+        "Logisk adress",
+        "ts/transportstyrelsen-logo.png",
+        "Läkarintyg Transportstyrelsen"
+    );
+
+    final var response = CertificateRecipientFactory.transp("Logisk adress");
+
+    assertEquals(expected, response);
+  }
+
 }

@@ -26,15 +26,41 @@ public class CertificateElementRuleFactory {
   }
 
   public static ElementRule show(ElementId id, FieldId fieldId) {
+    return show(
+        id,
+        new RuleExpression(
+            singleExpression(fieldId.value())
+        )
+    );
+  }
+
+  public static ElementRule show(ElementId id, RuleExpression ruleExpression) {
+    return ElementRuleExpression.builder()
+        .type(ElementRuleType.SHOW)
+        .id(id)
+        .expression(ruleExpression)
+        .build();
+  }
+
+  public static ElementRule showIfNot(ElementId id, FieldId fieldId) {
     return ElementRuleExpression.builder()
         .type(ElementRuleType.SHOW)
         .id(id)
         .expression(
             new RuleExpression(
-                singleExpression(fieldId.value())
+                multipleAndExpression(
+                    null,
+                    not(singleExpression(fieldId.value())),
+                    notEmpty(singleExpression(fieldId.value())
+                    )
+                )
             )
         )
         .build();
+  }
+
+  public static String notEmpty(String expression) {
+    return "!empty(" + expression + ")";
   }
 
   public static ElementRule mandatory(ElementId id, List<FieldId> fieldIds) {
@@ -54,16 +80,36 @@ public class CertificateElementRuleFactory {
   }
 
   public static ElementRule mandatoryExist(ElementId id, FieldId fieldId) {
-    return mandatoryExist(id, List.of(fieldId));
+    return mandatoryOrExist(id, List.of(fieldId));
   }
 
-  public static ElementRule mandatoryExist(ElementId id, List<FieldId> fieldIds) {
+  public static ElementRule mandatoryOrExist(ElementId id, List<FieldId> fieldIds) {
+    return ElementRuleExpression.builder()
+        .id(id)
+        .type(ElementRuleType.MANDATORY)
+        .expression(
+            orExists(fieldIds)
+        )
+        .build();
+  }
+
+  public static ElementRule showOrExist(ElementId id, List<FieldId> fieldIds) {
+    return ElementRuleExpression.builder()
+        .id(id)
+        .type(ElementRuleType.SHOW)
+        .expression(
+            orExists(fieldIds)
+        )
+        .build();
+  }
+
+  public static ElementRule mandatoryAndExist(ElementId id, List<FieldId> fieldIds) {
     return ElementRuleExpression.builder()
         .id(id)
         .type(ElementRuleType.MANDATORY)
         .expression(
             new RuleExpression(
-                multipleOrExpressionWithExists(
+                multipleAndExpressionWithExists(
                     fieldIds.stream()
                         .map(field -> singleExpression(field.value()))
                         .toArray(String[]::new)
@@ -71,6 +117,10 @@ public class CertificateElementRuleFactory {
             )
         )
         .build();
+  }
+
+  private static String multipleAndExpressionWithExists(String... expression) {
+    return multipleAndExpression("exists", expression);
   }
 
   public static ElementRule mandatoryNotEmpty(ElementId id, List<FieldId> fieldIds) {
@@ -97,11 +147,29 @@ public class CertificateElementRuleFactory {
         .build();
   }
 
-  private static String singleExpression(String id) {
+  public static ElementRule disableSubElements(ElementId id, List<FieldId> elementsForExpression,
+      List<FieldId> elementsToDisable) {
+    return ElementRuleExpression.builder()
+        .id(id)
+        .type(ElementRuleType.DISABLE_SUB_ELEMENT)
+        .affectedSubElements(elementsToDisable)
+        .expression(
+            new RuleExpression(
+                multipleOrExpressionWithExists(
+                    elementsForExpression.stream()
+                        .map(FieldId::value)
+                        .toArray(String[]::new)
+                )
+            )
+        )
+        .build();
+  }
+
+  public static String singleExpression(String id) {
     return "$" + id;
   }
 
-  private static String multipleOrExpression(String... expression) {
+  public static String multipleOrExpression(String... expression) {
     return multipleOrExpression(null, expression);
   }
 
@@ -119,11 +187,61 @@ public class CertificateElementRuleFactory {
     });
   }
 
+  public static String multipleAndExpression(String wrapWith, String... expression) {
+    return Arrays.stream(expression).reduce("", (s, s2) -> {
+      if (!s.isEmpty()) {
+        s += " && ";
+      }
+      if (wrapWith != null) {
+        s += wrapWith + "(" + s2 + ")";
+      } else {
+        s += s2;
+      }
+      return s;
+    });
+  }
+
+  private static RuleExpression orExists(List<FieldId> fieldIds) {
+    return new RuleExpression(
+        multipleOrExpressionWithExists(
+            fieldIds.stream()
+                .map(field -> singleExpression(field.value()))
+                .toArray(String[]::new)
+        )
+    );
+  }
+
   public static String multipleOrExpressionWithExists(String... expression) {
     return multipleOrExpression("exists", expression);
   }
 
   public static String multipleOrExpressionWithNotEmpty(String... expression) {
     return multipleOrExpression("!empty", expression);
+  }
+
+  public static String not(String s) {
+    return String.format("!%s", s);
+  }
+
+  public static String lessThanOrEqual(String s1, String s2) {
+    return s1 + " <= " + s2;
+  }
+
+  public static String withCitation(String field) {
+    return "'" + field + "'";
+  }
+
+  public static String multipleAndExpressions(String... expression) {
+    return Arrays.stream(expression).reduce("", (s, s2) -> {
+      if (!s.isEmpty()) {
+        s += " && ";
+      }
+      s += s2;
+      return s;
+    });
+  }
+
+  public static String wrapWithParenthesis(String expression) {
+    return "(" + expression + ")";
   }
 }
