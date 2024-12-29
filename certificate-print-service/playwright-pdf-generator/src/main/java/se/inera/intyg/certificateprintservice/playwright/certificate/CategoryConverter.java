@@ -4,7 +4,6 @@ import static se.inera.intyg.certificateprintservice.playwright.Constants.STYLE;
 
 import javax.swing.text.html.HTML.Tag;
 import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.Category;
 
 public class CategoryConverter {
@@ -13,14 +12,15 @@ public class CategoryConverter {
     throw new IllegalStateException("Utility class");
   }
 
-  public static Node category(Category category) {
-    final var div = new Element(Tag.DIV.toString());
-    div.attr(STYLE, "border: 1px solid black;");
-    div.addClass("box-decoration-clone");
-    final var title = new Element(Tag.H2.toString());
-    title.addClass("text-lg font-bold");
-    title.attr(STYLE, "border-bottom: 1px solid black;");
-    title.text("%s".formatted(category.getName()));
+  public static Element category(Category category) {
+    final var div = new Element(Tag.DIV.toString())
+        .addClass("box-decoration-clone")
+        .attr(STYLE, "border: 1px solid black; margin-bottom: 5mm;");
+
+    final var title = new Element(Tag.H2.toString())
+        .addClass("text-lg font-bold uppercase")
+        .attr(STYLE, "border-bottom: 1px solid black;")
+        .text("%s".formatted(category.getName()));
 
     div.appendChild(title);
     category.getQuestions()

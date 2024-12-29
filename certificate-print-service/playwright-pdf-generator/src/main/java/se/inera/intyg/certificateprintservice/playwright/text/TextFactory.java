@@ -4,6 +4,10 @@ import se.inera.intyg.certificateprintservice.pdfgenerator.api.Metadata;
 
 public class TextFactory {
 
+  private TextFactory() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static String alert(Metadata metadata) {
     if (metadata.isDraft()) {
       "Detta är en utskrift av ett elektroniskt intygsutkast och ska INTE skickas till %s.".formatted(
