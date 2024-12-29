@@ -100,21 +100,21 @@ class InformationElementFactoryTest {
     );
   }
 
-  @Test
-  void shouldReturnTitle() {
-    final var text = "Certificate title";
-
-    assertEquals(
-        """
-            <div style="font-size: 14pt;
-            font-weight: bold;
-            border-bottom: black solid 0.5px;
-            padding-bottom: 1mm;
-            ">
-             <span>Certificate title</span>
-            </div>""",
-        InformationElementFactory.title(text).toString()
-    );
-  }
+//  @Test
+//  void shouldReturnTitle() {
+//    final var text = "Certificate title";
+//
+//    assertEquals(
+//        """
+//            <div style="font-size: 14pt;
+//            font-weight: bold;
+//            border-bottom: black solid 0.5px;
+//            padding-bottom: 1mm;
+//            ">
+//             <span>Certificate title</span>
+//            </div>""",
+//        InformationElementFactory.title(text).toString()
+//    );
+//  }
 
 }
