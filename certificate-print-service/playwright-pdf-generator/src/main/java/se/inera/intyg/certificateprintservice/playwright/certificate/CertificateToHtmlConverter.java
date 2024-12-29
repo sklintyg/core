@@ -38,8 +38,10 @@ public class CertificateToHtmlConverter {
 
     children.forEach(content::appendChild);
 
-    log.debug(document.html());
-    return document.html();
+    final var documentHtml = document.html();
+    final var htmlWithScript = templateToDocumentConverter.setDocumentScript(documentHtml);
+    log.debug(htmlWithScript);
+    return htmlWithScript;
   }
 
   public  String certificate(Resource template, Certificate certificate, Page headerPage,

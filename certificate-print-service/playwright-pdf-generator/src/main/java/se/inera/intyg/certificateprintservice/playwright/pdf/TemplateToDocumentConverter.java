@@ -47,14 +47,9 @@ public class TemplateToDocumentConverter implements InitializingBean {
     Objects.requireNonNull(title).appendText(TextFactory.title(metadata));
   }
 
-  private void setDocumentScript(Document document) {
-    final var scriptElement = document.getElementById("script");
-
-    if (scriptElement == null) {
-      throw new IllegalStateException("Style element is null");
-    }
-
-    scriptElement.attr("src", "data:text/javascript;base64, " + tailwindCSS);
+  public String setDocumentScript(String html) {
+    return html.replace("<script></script>",
+        "<script src=\"data:text/javascript;base64, %s\"></script>".formatted(tailwindCSS));
   }
 
   private void setPageMargin(Document doc, Page page, String header) {
