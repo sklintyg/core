@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateprintservice.playwright.certificate;
 
 import static se.inera.intyg.certificateprintservice.playwright.Constants.CONTENT;
+import static se.inera.intyg.certificateprintservice.playwright.Constants.STYLE;
 
 import com.microsoft.playwright.Page;
 import java.io.IOException;
@@ -9,12 +10,13 @@ import java.util.List;
 import javax.swing.text.html.HTML.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jsoup.nodes.Node;
+import org.jsoup.nodes.Element;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.Certificate;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.Metadata;
 import se.inera.intyg.certificateprintservice.playwright.element.ElementProvider;
+import se.inera.intyg.certificateprintservice.playwright.element.InformationElementFactory;
 import se.inera.intyg.certificateprintservice.playwright.pdf.TemplateToDocumentConverter;
 import se.inera.intyg.certificateprintservice.playwright.text.TextFactory;
 
@@ -25,18 +27,16 @@ public class CertificateToHtmlConverter {
 
   private final TemplateToDocumentConverter templateToDocumentConverter;
 
-  private  String convert(Resource template, Metadata metadata, Page page, String html,
-      List<Node> children)
-      throws IOException {
-    var document = templateToDocumentConverter.convert(template, html, page, metadata);
-
+  private String convert(Resource template, Metadata metadata, Page page, String html,
+      List<Element> children) throws IOException {
+    final var document = templateToDocumentConverter.convert(template, html, page, metadata);
     final var content = document.getElementById(CONTENT);
 
     if (content == null) {
-      throw new IllegalStateException("Could not find content in document");
+      throw new IllegalStateException("Could not find element 'content' in document");
     }
 
-    children.forEach(content::appendChild);
+    content.appendChildren(children);
 
     final var documentHtml = document.html();
     final var htmlWithScript = templateToDocumentConverter.setDocumentScript(documentHtml);
@@ -44,12 +44,22 @@ public class CertificateToHtmlConverter {
     return htmlWithScript;
   }
 
-  public  String certificate(Resource template, Certificate certificate, Page headerPage,
-      String certificateHtml)
-      throws IOException {
-    final var children = certificate.getCategories().stream()
+  public String certificate(Resource template, Certificate certificate, Page headerPage,
+      String certificateHtml) throws IOException {
+    final var metadata = certificate.getMetadata();
+    final var children = new ArrayList<>(certificate.getCategories().stream()
         .map(CategoryConverter::category)
-        .toList();
+        .toList());
+
+    if (!metadata.isDraft()) {
+      children.add(InformationElementFactory.issuerName(metadata));
+    }
+
+    children.add(InformationElementFactory.contactInfo(metadata));
+
+    if (!metadata.isDraft()) {
+      children.add(InformationElementFactory.signingDate(metadata));
+    }
 
     return convert(
         template,

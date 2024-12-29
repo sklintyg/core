@@ -3,8 +3,11 @@ package se.inera.intyg.certificateprintservice.playwright.element;
 import static se.inera.intyg.certificateprintservice.playwright.Constants.RIGHT_MARGIN_INFO_STYLE;
 import static se.inera.intyg.certificateprintservice.playwright.Constants.STYLE;
 
+import java.time.LocalDate;
+import java.util.List;
 import javax.swing.text.html.HTML.Tag;
 import org.jsoup.nodes.Element;
+import se.inera.intyg.certificateprintservice.pdfgenerator.api.Metadata;
 import se.inera.intyg.certificateprintservice.playwright.Constants;
 
 public class InformationElementFactory {
@@ -30,17 +33,21 @@ public class InformationElementFactory {
     return printInfoWrapper;
   }
 
-  public static Element title(String name) {
+  public static Element title(Metadata metadata) {
     final var titleWrapper = new Element(Tag.DIV.toString())
         .attr(STYLE, """
             font-size: 14pt;
-            font-weight: bold;
             padding-bottom: 1mm;
             border-bottom: black solid 1px;
             """);
 
-    final var title = element(Tag.SPAN).appendText(name);
+    final var title = element(Tag.SPAN)
+        .attr(STYLE, "font-weight: bold; ")
+        .appendText(metadata.getName());
+    final var shortTitle = element(Tag.SPAN)
+        .appendText(" (%s v%s)".formatted(metadata.getTypeId(), metadata.getVersion()));
     titleWrapper.appendChild(title);
+    titleWrapper.appendChild(shortTitle);
     return titleWrapper;
   }
 
@@ -96,5 +103,42 @@ public class InformationElementFactory {
 
     rightMarginInfoWrapper.appendChild(rightMarginInfo);
     return rightMarginInfoWrapper;
+  }
+
+  public static Element issuerName(Metadata metadata) {
+    final var issuerNameWrapper = element(Tag.DIV)
+        .attr(STYLE, "display: grid; margin-top: 1cm;");
+    final var unitInformation = List.of(
+        element(Tag.SPAN).attr(STYLE, "font-weight: bold;").text("IntygsUtfärdare:"),
+        element(Tag.SPAN).text(metadata.getIssuerName())
+    );
+    issuerNameWrapper.appendChildren(unitInformation);
+    return issuerNameWrapper;
+  }
+
+  public static Element contactInfo(Metadata metadata) {
+    final var contactInfoWrapper = element(Tag.DIV)
+        .attr(STYLE, "display: grid; margin-top: 5mm;");
+    final var unitInformation = List.of(
+        element(Tag.SPAN).attr(STYLE, "font-weight: bold;").text("Kontaktuppgifter:"),
+        element(Tag.SPAN).text(metadata.getIssuingUnit()),
+        element(Tag.SPAN).text(metadata.getIssuingUnitInfo().getFirst()),
+        element(Tag.SPAN).text(metadata.getIssuingUnitInfo().get(1)),
+        element(Tag.SPAN).text(metadata.getIssuingUnitInfo().getLast())
+    );
+    contactInfoWrapper.appendChildren(unitInformation);
+    return contactInfoWrapper;
+  }
+
+  public static Element signingDate(Metadata metadata) {
+    final var signingDate = LocalDate.parse(metadata.getSigningDate().split("T")[0]);
+    final var signingDateWrapper = element(Tag.DIV)
+        .attr(STYLE, "display: grid; margin-top: 5mm;");
+    final var unitInformation = List.of(
+        element(Tag.SPAN).attr(STYLE, "font-weight: bold;").text("Intyget signerades:"),
+        element(Tag.SPAN).text(signingDate.toString())
+    );
+    signingDateWrapper.appendChildren(unitInformation);
+    return signingDateWrapper;
   }
 }

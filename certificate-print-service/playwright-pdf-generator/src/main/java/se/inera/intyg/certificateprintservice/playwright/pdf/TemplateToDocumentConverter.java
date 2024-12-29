@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Objects;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.parser.Parser;
@@ -18,6 +19,7 @@ import se.inera.intyg.certificateprintservice.pdfgenerator.api.Metadata;
 import se.inera.intyg.certificateprintservice.playwright.text.TextFactory;
 
 @Component
+@Slf4j
 public class TemplateToDocumentConverter implements InitializingBean {
 
   @Value("classpath:templates/tailwindCSS.js")
@@ -30,14 +32,12 @@ public class TemplateToDocumentConverter implements InitializingBean {
     tailwindCSS = new String(Base64.getEncoder().encode(tailwindScript.getContentAsByteArray()));
   }
 
-
   public Document convert(Resource template, String header, Page page, Metadata metadata)
       throws IOException {
     final var document = Jsoup.parse(template.getInputStream(), StandardCharsets.UTF_8.name(), "",
         Parser.xmlParser());
 
     setDocumentTitle(document, metadata);
-    setDocumentScript(document);
     setPageMargin(document, page, header);
     return document;
   }
@@ -62,13 +62,12 @@ public class TemplateToDocumentConverter implements InitializingBean {
     final var headerHeight = calculateHeaderHeight(page, header);
     styleElement.appendText("""
         @page {
-          margin: calc(%spx + 15mm) 20mm 15mm 20mm;
-        }
-        """.formatted(Math.round(headerHeight)));
+          margin: calc(%spx + 15mm) 20mm 40mm 20mm;
+        }""".formatted(headerHeight));
   }
 
-  private double calculateHeaderHeight(Page page, String header) {
+  private int calculateHeaderHeight(Page page, String header) {
     page.setContent(header);
-    return page.getByTitle("headerElement").boundingBox().height;
+    return (int) page.getByTitle("headerElement").evaluate("node => node.offsetHeight");
   }
 }
