@@ -114,7 +114,7 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator, Ini
     try (
         final var context = browserCertificateDetails.newContext();
         final var detailsPage = context.newPage();
-        final var detailsHeaderPage = context.newPage();
+        final var detailsHeaderPage = context.newPage()
     ) {
       log.info("Details resources time: {}", Duration.between(start1, Instant.now()).toMillis());
 

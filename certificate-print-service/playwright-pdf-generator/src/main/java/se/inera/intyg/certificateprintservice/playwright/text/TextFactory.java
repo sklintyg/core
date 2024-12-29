@@ -10,7 +10,7 @@ public class TextFactory {
 
   public static String alert(Metadata metadata) {
     if (metadata.isDraft()) {
-      "Detta är en utskrift av ett elektroniskt intygsutkast och ska INTE skickas till %s.".formatted(
+      return "Detta är en utskrift av ett elektroniskt intygsutkast och ska INTE skickas till %s.".formatted(
           metadata.getRecipientName());
     }
 
