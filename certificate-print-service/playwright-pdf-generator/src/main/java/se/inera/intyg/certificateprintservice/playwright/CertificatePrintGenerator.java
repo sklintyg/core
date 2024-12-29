@@ -143,11 +143,31 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator, Ini
         .setFooterTemplate(createFooterTemplate(metadata));
   }
 
-  private String createFooterTemplate(Metadata certificateMetadata) {
-    return """
-            <div style="width: 100%%; text-align: left; font-size: 10px; margin-left: 30mm">
-                <span>%s</span>
-            </div>
-        """.formatted(TextFactory.applicationOrigin(certificateMetadata));
+  private String createFooterTemplate(Metadata metadata) {
+    final var elementList = new ArrayList<Element>();
+    final var baseWrapper = ElementProvider.element(Tag.DIV);
+    final var footerWrapper = ElementProvider.element(Tag.DIV)
+        .attr(STYLE, """
+            height: 25mm;
+            width: 100%;
+            font-size: 10pt;
+            margin: 0 20mm;
+            border-top: black solid 1px;
+            """);
+    elementList.add(ElementProvider.element(Tag.SPAN)
+        .attr(STYLE, """
+            display: block;
+            margin-top: 5mm;
+            margin-bottom: 2mm;
+            """)
+        .text(TextFactory.applicationOrigin(metadata)));
+
+    elementList.add(ElementProvider.element(Tag.A)
+        .attr("href", "https://inera.se")
+        .text("www.inera.se"));
+
+    footerWrapper.appendChildren(elementList);
+    baseWrapper.appendChild(footerWrapper);
+    return baseWrapper.html();
   }
 }
