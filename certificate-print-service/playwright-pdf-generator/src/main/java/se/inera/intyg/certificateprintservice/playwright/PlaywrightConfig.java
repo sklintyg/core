@@ -2,23 +2,34 @@ package se.inera.intyg.certificateprintservice.playwright;
 
 import com.microsoft.playwright.Playwright;
 import jakarta.annotation.PreDestroy;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class PlaywrightConfig {
 
-  private Playwright playwright;
+  private Playwright playwrightCertificateDetails;
+  private Playwright playwrightCertificateInfo;
 
-  @Bean()
-  Playwright playwright() {
-    this.playwright = Playwright.create();
-    return this.playwright;
+  @Bean
+  @Qualifier("playwrightCertificateDetails")
+  Playwright playwrightCertificateDetails() {
+    this.playwrightCertificateDetails = Playwright.create();
+    return this.playwrightCertificateDetails;
+  }
+
+  @Bean
+  @Qualifier("playwrightCertificateInfo")
+  Playwright playwrightCertificateInfo() {
+    this.playwrightCertificateInfo = Playwright.create();
+    return this.playwrightCertificateInfo;
   }
 
   @PreDestroy
   void destroy() {
-    playwright.close();
+    playwrightCertificateDetails.close();
+    playwrightCertificateInfo.close();
   }
 
 }
