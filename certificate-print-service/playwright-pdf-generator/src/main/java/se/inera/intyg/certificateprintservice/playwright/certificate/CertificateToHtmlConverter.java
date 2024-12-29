@@ -60,11 +60,21 @@ public class CertificateToHtmlConverter {
 
   public String certificateInformation(Resource template, Page infoHeaderPage,
       String certificateInfoHtml, Metadata metadata) throws IOException {
-    final var children = new ArrayList<Node>();
+    final var children = new ArrayList<Element>();
     children.add(ElementProvider.element(Tag.STRONG).text(metadata.getName()));
-    children.add(ElementProvider.element(Tag.P).text(metadata.getDescription()));
+    children.add(ElementProvider.element(Tag.P)
+        .attr(STYLE, "white-space: pre-line;")
+        .append(metadata.getDescription()));
+    children.add(ElementProvider.element(Tag.BR));
     children.add(ElementProvider.element(Tag.STRONG).text("Skicka intyg till mottagare"));
-    children.add(ElementProvider.element(Tag.P).text(TextFactory.citizenInformation()));
+    children.add(ElementProvider.element(Tag.P)
+        .attr(STYLE, "white-space: pre-line;")
+        .append(TextFactory.citizenInformation()));
+
+    children.stream().flatMap(element -> element.children().stream())
+        .filter(element -> element.tagName().equals(Tag.A.toString()))
+        .forEach(element -> element.attr(STYLE, "color: #0000EE;"));
+
     return convert(
         template,
         metadata,
