@@ -15,7 +15,7 @@ public class PrintController {
 
   private final GeneratePrintService printService;
 
-  @PostMapping
+  @PostMapping(value = "/{id}")
   PrintCertificateResponseDTO get(@RequestBody PrintCertificateRequestDTO request) {
     return printService.get(request);
   }
