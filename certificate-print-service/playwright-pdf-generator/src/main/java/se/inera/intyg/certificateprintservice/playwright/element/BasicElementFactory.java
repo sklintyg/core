@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateprintservice.playwright.element;
 
+import static se.inera.intyg.certificateprintservice.playwright.Constants.STYLE;
+
 import java.util.List;
 import javax.swing.text.html.HTML.Tag;
 import org.jsoup.nodes.Element;
@@ -12,23 +14,34 @@ public class BasicElementFactory {
   }
 
   public static Element table(ElementValueTable tableValue) {
-    final var tableElement = new Element(Tag.TABLE.toString());
+    final var headerColumns = tableValue.getHeadings().size();
+    final var valueColumns = tableValue.getValues().getFirst().size();
+    final var tableElement = ElementProvider.element(Tag.TABLE);
 
-    final var trHeader = new Element(Tag.TR.toString());
-    tableValue.getHeadings().stream()
-        .map(heading -> {
-          final var th = new Element(Tag.TH.toString());
-          th.appendText(heading);
-          return th;
-        })
-        .forEach(trHeader::appendChild);
-    tableElement.appendChild(trHeader);
+    tableElement.appendChild(th(tableValue, headerColumns, valueColumns));
 
     tableValue.getValues().stream()
-        .map(BasicElementFactory::tr)
+        .map(values -> tr(values, headerColumns, valueColumns))
         .forEach(tableElement::appendChild);
 
     return tableElement;
+  }
+
+  private static Element th(ElementValueTable tableValue, int headerColumns,
+      int valueColumns) {
+    final var trHeader = ElementProvider.element(Tag.TR)
+        .attr(STYLE, "border-bottom: black solid 1px;");
+    for (int i = 0; i < valueColumns; i++) {
+      final var th = ElementProvider.element(Tag.TH)
+          .attr(STYLE, "padding-right: 5mm;");
+      if (valueColumns - i > headerColumns) {
+        th.appendText("");
+      } else {
+        th.appendText(tableValue.getHeadings().get(i - (valueColumns - headerColumns)));
+      }
+      trHeader.appendChild(th);
+    }
+    return trHeader;
   }
 
   public static Element p(String text) {
@@ -38,16 +51,18 @@ public class BasicElementFactory {
     return value;
   }
 
-  private static Element tr(List<String> rowValues) {
-    final var trRow = new Element(Tag.TR.toString());
-    rowValues.stream()
-        .map(rowValue -> {
-          final var td = new Element(Tag.TD.toString());
-          td.appendText(rowValue);
-          return td;
-        })
-        .forEach(trRow::appendChild);
-    return trRow;
+  private static Element tr(List<String> rowValues, int headerColumns,
+      int valueColumns) {
+    final var tableRow = ElementProvider.element(Tag.TR);
+    for (int i = 0; i < valueColumns; i++) {
+      final var td = ElementProvider.element(Tag.TD);
+      if (valueColumns - i > headerColumns) {
+        td.attr(STYLE, "font-weight: bold; padding-right: 5mm;");
+      }
+      td.appendText(rowValues.get(i));
+      tableRow.appendChild(td);
+    }
+    return tableRow;
   }
 
 }
