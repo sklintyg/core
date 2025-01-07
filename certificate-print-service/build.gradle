@@ -10,6 +10,7 @@ plugins {
 ext {
     jsoupVersion = "1.18.3"
     pdfBoxVersion = "3.0.3"
+    playwrightVersion = "1.49.0"
     springbootMavenBomVersion = '3.4.0'
     tailwindCssVersion= '3.4.16'
 
