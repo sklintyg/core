@@ -16,8 +16,9 @@ public class VisualAcuity implements ElementValue {
     return withoutCorrection.value() == null && withCorrection.value() == null;
   }
 
-  public List<String> simplified() {
+  public List<String> simplified(String label) {
     return List.of(
+        label,
         withoutCorrection == null
             ? "-"
             : withoutCorrection.simplified(),

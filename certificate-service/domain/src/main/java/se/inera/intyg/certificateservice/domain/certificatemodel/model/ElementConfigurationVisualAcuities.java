@@ -94,9 +94,9 @@ public class ElementConfigurationVisualAcuities implements ElementConfiguration 
             .headings(List.of(withoutCorrectionLabel, withCorrectionLabel))
             .values(
                 List.of(
-                    elementValue.rightEye().simplified(),
-                    elementValue.leftEye().simplified(),
-                    elementValue.binocular().simplified()
+                    elementValue.rightEye().simplified(rightEye.label()),
+                    elementValue.leftEye().simplified(leftEye.label()),
+                    elementValue.binocular().simplified(binocular.label())
                 )
             )
             .build()

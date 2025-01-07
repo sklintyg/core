@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 import java.util.Optional;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.Correction;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueTable;
@@ -14,6 +13,15 @@ import se.inera.intyg.certificateservice.domain.certificate.model.VisualAcuity;
 class ElementConfigurationVisualAcuitiesTest {
 
   private static final ElementConfigurationVisualAcuities CONFIG = ElementConfigurationVisualAcuities.builder()
+      .rightEye(ElementVisualAcuity.builder()
+          .label("Höger öga")
+          .build())
+      .leftEye(ElementVisualAcuity.builder()
+          .label("Vänster öga")
+          .build())
+      .binocular(ElementVisualAcuity.builder()
+          .label("Binokulärt")
+          .build())
       .withoutCorrectionLabel("H1")
       .withCorrectionLabel("H2")
       .build();
@@ -57,15 +65,14 @@ class ElementConfigurationVisualAcuitiesTest {
       .build();
 
   @Test
-  @Disabled
   void shouldReturnSimplifiedValue() {
     final var expected = Optional.of(
         ElementSimplifiedValueTable.builder()
             .headings(List.of("H1", "H2"))
             .values(List.of(
-                    List.of("1,0", "-"),
-                    List.of("2,5", "3,0"),
-                    List.of("-", "10,1")
+                    List.of("Höger öga", "1,0", "-"),
+                    List.of("Vänster öga", "2,5", "3,0"),
+                    List.of("Binokulärt", "-", "10,1")
                 )
             )
             .build()
