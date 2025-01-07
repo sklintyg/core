@@ -37,6 +37,8 @@ public class PrintCertificateMetadataConverter {
             : APPLICATION_ORIGIN_WEBCERT)
         .personId(certificate.certificateMetaData().patient().id().idWithDash())
         .description(certificate.certificateModel().detailedDescription())
+        .issuerName(certificate.certificateMetaData().issuer().name().fullName())
+        .issuingUnit(certificate.certificateMetaData().issuingUnit().name().name())
         .unitInformation(
             printCertificateUnitInformationConverter.convert(certificate))
         .fileName(fileName)

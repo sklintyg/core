@@ -150,4 +150,18 @@ class PrintCertificateMetadataConverterTest {
     final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false, FILE_NAME);
     assertEquals(FILE_NAME, result.getFileName());
   }
+
+  @Test
+  void shouldSetIssuerName() {
+    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false, FILE_NAME);
+    assertEquals(CERTIFICATE.certificateMetaData().issuer().name().fullName(),
+        result.getIssuerName());
+  }
+
+  @Test
+  void shouldSetIssuingUnit() {
+    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false, FILE_NAME);
+    assertEquals(CERTIFICATE.certificateMetaData().issuingUnit().name().name(),
+        result.getIssuingUnit());
+  }
 }
