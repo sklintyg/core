@@ -42,7 +42,7 @@ public class InformationElementFactory {
             """);
 
     final var title = element(Tag.SPAN)
-        .attr(STYLE, "font-weight: bold; ")
+        .attr(STYLE, "font-weight: bold;")
         .appendText(metadata.getName());
     final var shortTitle = element(Tag.SPAN)
         .appendText(" (%s v%s)".formatted(metadata.getTypeId(), metadata.getVersion()));
@@ -56,7 +56,7 @@ public class InformationElementFactory {
         .attr(STYLE, "width: 100%");
 
     final var div = element(Tag.DIV);
-    div.attr(STYLE, "border: red solid 1px; float: right; text-align: right;");
+    div.attr(STYLE, "float: right; text-align: right;");
 
     div.appendChild(element(Tag.SPAN)
         .attr(STYLE, "font-weight: bold;")

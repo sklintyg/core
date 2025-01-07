@@ -9,7 +9,6 @@ public abstract class Constants {
       position: absolute;
       left: 1cm;
       bottom: 35mm;
-      border: red solid 1px;
       font-size: 10pt;
       transform: rotate(-90deg) translateY(-50%);
       transform-origin: top left;
@@ -20,7 +19,6 @@ public abstract class Constants {
       width: 100%;
       left: 20cm;
       bottom: 35mm;
-      border: red solid 1px;
       font-size: 10pt;
       transform: rotate(-90deg) translateY(-50%);
       transform-origin: top left;

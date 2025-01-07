@@ -21,7 +21,7 @@ public class ElementProvider {
         .attr("src", "data:image/png;base64, " + new String(base64))
         .attr("alt", "recipient-logo")
         .attr("style",
-            "max-height: 15mm; max-width: 35mm; border: blue solid 1px;");
+            "max-height: 15mm; max-width: 35mm;");
     logoWrapper.appendChild(logo);
     return logoWrapper;
   }

@@ -66,7 +66,6 @@ public class HeaderConverter {
             width: 17cm;
             font-size: 10pt;
             margin: 10mm 20mm 0 20mm;
-            border: blue solid 2px;
             """);
   }
 
@@ -82,7 +81,6 @@ public class HeaderConverter {
     final var pageHeader = new Element(Tag.DIV.toString()).attr(STYLE, """
           margin: 0 0 10mm 0;
           display: flex;
-          border: green solid 1px;
         """);
 
     pageHeader.appendChild(ElementProvider.logo(logo));
