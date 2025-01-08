@@ -20,7 +20,7 @@ class PrintCertificateMetadataConverterTest {
   private static final String APPLICATION_ORIGIN = "applicationOrigin";
   private static final String PERSON_ID = "personId";
   private static final String DESCRIPTION = "description";
-  private static PrintCertificateMetadataDTO METADATA_DTO = PrintCertificateMetadataDTO.builder()
+  private static final PrintCertificateMetadataDTO METADATA_DTO = PrintCertificateMetadataDTO.builder()
       .name(NAME)
       .fileName(FILE_NAME)
       .version(VERSION)

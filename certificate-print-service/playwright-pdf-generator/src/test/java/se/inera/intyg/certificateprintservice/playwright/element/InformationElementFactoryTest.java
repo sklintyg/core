@@ -51,8 +51,7 @@ class InformationElementFactoryTest {
         """
             <div style="position: absolute;
             left: 1cm;
-            bottom: 15mm;
-            border: red solid 1px;
+            bottom: 35mm;
             font-size: 10pt;
             transform: rotate(-90deg) translateY(-50%);
             transform-origin: top left;
@@ -72,8 +71,7 @@ class InformationElementFactoryTest {
             <div style="position: absolute;
             width: 100%;
             left: 20cm;
-            bottom: 15mm;
-            border: red solid 1px;
+            bottom: 35mm;
             font-size: 10pt;
             transform: rotate(-90deg) translateY(-50%);
             transform-origin: top left;
@@ -91,7 +89,7 @@ class InformationElementFactoryTest {
     assertEquals(
         """
             <div style="width: 100%">
-             <div style="border: red solid 1px; float: right; text-align: right;">
+             <div style="float: right; text-align: right;">
               <span style="font-weight: bold;">Person- /samordningsnr</span>
               <br><span>191212121212</span>
              </div>

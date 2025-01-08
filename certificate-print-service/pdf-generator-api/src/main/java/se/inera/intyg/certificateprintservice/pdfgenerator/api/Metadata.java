@@ -28,4 +28,8 @@ public class Metadata {
   public boolean isDraft() {
     return signingDate == null;
   }
+
+  public boolean isSigned() {
+    return signingDate != null;
+  }
 }

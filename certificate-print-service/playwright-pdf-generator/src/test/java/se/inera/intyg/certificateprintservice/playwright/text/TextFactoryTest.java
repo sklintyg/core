@@ -15,7 +15,7 @@ class TextFactoryTest {
             .build();
 
     assertEquals(
-        "Detta är en utskrift av ett elektroniskt intyg. Intyget har signerats elektroniskt av intygsutfärdaren.",
+        "Detta är en utskrift av ett elektroniskt intygsutkast och ska INTE skickas till Transportstyrelsen.",
         TextFactory.alert(metadata)
     );
   }

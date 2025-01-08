@@ -17,15 +17,15 @@ class BasicElementFactoryTest {
             .build()
     );
 
-    assertEquals(
-        "<table>\n"
-            + " <tr>\n"
-            + "  <th>H1</th>\n"
-            + " </tr>\n"
-            + " <tr>\n"
-            + "  <td>D1</td>\n"
-            + " </tr>\n"
-            + "</table>",
+    assertEquals("""
+            <table>
+             <tr style="border-bottom: black solid 1px;">
+              <th style="padding-right: 5mm;">H1</th>
+             </tr>
+             <tr>
+              <td>D1</td>
+             </tr>
+            </table>""",
         result.toString()
     );
   }

@@ -13,7 +13,7 @@ class ElementProviderTest {
     assertEquals(
         """
             <div>
-             <img src="data:image/png;base64, VGVzdCBsb29n" alt="recipient-logo" style="max-height: 15mm; max-width: 35mm; border: blue solid 1px;">
+             <img src="data:image/png;base64, VGVzdCBsb29n" alt="recipient-logo" style="max-height: 15mm; max-width: 35mm;">
             </div>""",
         logo.toString()
     );

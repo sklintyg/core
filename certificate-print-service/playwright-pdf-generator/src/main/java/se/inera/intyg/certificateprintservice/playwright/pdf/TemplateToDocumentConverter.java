@@ -32,13 +32,13 @@ public class TemplateToDocumentConverter implements InitializingBean {
     tailwindCSS = new String(Base64.getEncoder().encode(tailwindScript.getContentAsByteArray()));
   }
 
-  public Document convert(Resource template, String header, Page page, Metadata metadata)
+  public Document convert(Resource template, String htmlHeader, Page page, Metadata metadata)
       throws IOException {
     final var document = Jsoup.parse(template.getInputStream(), StandardCharsets.UTF_8.name(), "",
         Parser.xmlParser());
 
     setDocumentTitle(document, metadata);
-    setPageMargin(document, page, header);
+    setPageMargin(document, page, htmlHeader);
     return document;
   }
 
@@ -47,9 +47,8 @@ public class TemplateToDocumentConverter implements InitializingBean {
     Objects.requireNonNull(title).appendText(TextFactory.title(metadata));
   }
 
-  public String setDocumentScript(String html) {
-    return html.replace("<script></script>",
-        "<script src=\"data:text/javascript;base64, %s\"></script>".formatted(tailwindCSS));
+  public String getScriptSource() {
+    return "data:text/javascript;base64, %s".formatted(tailwindCSS);
   }
 
   private void setPageMargin(Document doc, Page page, String header) {

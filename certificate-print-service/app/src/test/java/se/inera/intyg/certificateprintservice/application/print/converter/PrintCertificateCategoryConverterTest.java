@@ -28,7 +28,7 @@ class PrintCertificateCategoryConverterTest {
   void shallConvertId() {
     var category = PrintCertificateCategoryDTO.builder()
         .id(ID_1)
-        .questions(List.of())
+        .children(List.of())
         .build();
 
     final var result = printCertificateCategoryConverter.convert(category);
@@ -39,7 +39,7 @@ class PrintCertificateCategoryConverterTest {
   void shallConvertName() {
     var category = PrintCertificateCategoryDTO.builder()
         .name("name")
-        .questions(List.of())
+        .children(List.of())
         .build();
 
     final var result = printCertificateCategoryConverter.convert(category);
@@ -68,7 +68,7 @@ class PrintCertificateCategoryConverterTest {
         .build();
 
     var category = PrintCertificateCategoryDTO.builder()
-        .questions(List.of(q1DTO,
+        .children(List.of(q1DTO,
             q2DTO))
         .build();
     doReturn(q1).when(printCertificateQuestionConverter).convert(q1DTO);

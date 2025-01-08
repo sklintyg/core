@@ -4,6 +4,7 @@ import static se.inera.intyg.certificateprintservice.playwright.Constants.RIGHT_
 import static se.inera.intyg.certificateprintservice.playwright.Constants.STYLE;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.text.html.HTML.Tag;
 import org.jsoup.nodes.Element;
@@ -119,13 +120,15 @@ public class InformationElementFactory {
   public static Element contactInfo(Metadata metadata) {
     final var contactInfoWrapper = element(Tag.DIV)
         .attr(STYLE, "display: grid; margin-top: 5mm;");
-    final var unitInformation = List.of(
+
+    final var unitInformation = new ArrayList<>(List.of(
         element(Tag.SPAN).attr(STYLE, "font-weight: bold;").text("Kontaktuppgifter:"),
-        element(Tag.SPAN).text(metadata.getIssuingUnit()),
-        element(Tag.SPAN).text(metadata.getIssuingUnitInfo().getFirst()),
-        element(Tag.SPAN).text(metadata.getIssuingUnitInfo().get(1)),
-        element(Tag.SPAN).text(metadata.getIssuingUnitInfo().getLast())
-    );
+        element(Tag.SPAN).text(metadata.getIssuingUnit())
+    ));
+    unitInformation.addAll(
+        metadata.getIssuingUnitInfo().stream().map(i -> element(Tag.SPAN).text(i))
+            .toList());
+    
     contactInfoWrapper.appendChildren(unitInformation);
     return contactInfoWrapper;
   }

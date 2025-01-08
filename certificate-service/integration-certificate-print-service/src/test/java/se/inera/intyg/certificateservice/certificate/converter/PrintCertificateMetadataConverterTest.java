@@ -141,7 +141,7 @@ class PrintCertificateMetadataConverterTest {
   @Test
   void shouldSetDescription() {
     final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false, FILE_NAME);
-    assertEquals(CERTIFICATE.certificateModel().detailedDescription(),
+    assertEquals(CERTIFICATE.certificateModel().description(),
         result.getDescription());
   }
 

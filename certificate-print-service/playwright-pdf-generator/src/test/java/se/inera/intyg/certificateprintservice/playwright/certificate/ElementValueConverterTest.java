@@ -48,21 +48,21 @@ class ElementValueConverterTest {
             .build()
     );
 
-    assertEquals(
-        "<table>\n"
-            + " <tr>\n"
-            + "  <th>H1</th>\n"
-            + "  <th>H2</th>\n"
-            + " </tr>\n"
-            + " <tr>\n"
-            + "  <td>D1</td>\n"
-            + "  <td>D2</td>\n"
-            + " </tr>\n"
-            + " <tr>\n"
-            + "  <td>D11</td>\n"
-            + "  <td>D21</td>\n"
-            + " </tr>\n"
-            + "</table>"
+    assertEquals("""
+            <table>
+             <tr style="border-bottom: black solid 1px;">
+              <th style="padding-right: 5mm;">H1</th>
+              <th style="padding-right: 5mm;">H2</th>
+             </tr>
+             <tr>
+              <td>D1</td>
+              <td>D2</td>
+             </tr>
+             <tr>
+              <td>D11</td>
+              <td>D21</td>
+             </tr>
+            </table>"""
         , result.toString());
   }
 

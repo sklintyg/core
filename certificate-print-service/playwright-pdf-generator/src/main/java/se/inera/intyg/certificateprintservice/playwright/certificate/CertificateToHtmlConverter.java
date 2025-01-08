@@ -27,9 +27,9 @@ public class CertificateToHtmlConverter {
 
   private final TemplateToDocumentConverter templateToDocumentConverter;
 
-  private String convert(Resource template, Metadata metadata, Page page, String html,
+  private String convert(Resource template, Metadata metadata, Page page, String htmlHeader,
       List<Element> children) throws IOException {
-    final var document = templateToDocumentConverter.convert(template, html, page, metadata);
+    final var document = templateToDocumentConverter.convert(template, htmlHeader, page, metadata);
     final var content = document.getElementById(CONTENT);
 
     if (content == null) {
@@ -38,10 +38,9 @@ public class CertificateToHtmlConverter {
 
     content.appendChildren(children);
 
-    final var documentHtml = document.html();
-    final var htmlWithScript = templateToDocumentConverter.setDocumentScript(documentHtml);
-    log.debug(htmlWithScript);
-    return htmlWithScript;
+    final var script = document.getElementsByTag(Tag.SCRIPT.toString());
+    script.attr("src", templateToDocumentConverter.getScriptSource());
+    return document.html();
   }
 
   public String certificate(Resource template, Certificate certificate, Page headerPage,
@@ -51,13 +50,13 @@ public class CertificateToHtmlConverter {
         .map(CategoryConverter::category)
         .toList());
 
-    if (!metadata.isDraft()) {
+    if (metadata.isSigned()) {
       children.add(InformationElementFactory.issuerName(metadata));
     }
 
     children.add(InformationElementFactory.contactInfo(metadata));
 
-    if (!metadata.isDraft()) {
+    if (metadata.isSigned()) {
       children.add(InformationElementFactory.signingDate(metadata));
     }
 
@@ -71,7 +70,7 @@ public class CertificateToHtmlConverter {
   }
 
   public String certificateInformation(Resource template, Page infoHeaderPage,
-      String certificateInfoHtml, Metadata metadata) throws IOException {
+      String htmlHeader, Metadata metadata) throws IOException {
     final var children = new ArrayList<Element>();
     children.add(ElementProvider.element(Tag.STRONG).text(metadata.getName()));
     children.add(ElementProvider.element(Tag.P)
@@ -83,15 +82,11 @@ public class CertificateToHtmlConverter {
         .attr(STYLE, "white-space: pre-line;")
         .append(TextFactory.citizenInformation()));
 
-    children.stream().flatMap(element -> element.children().stream())
-        .filter(element -> element.tagName().equals(Tag.A.toString()))
-        .forEach(element -> element.attr(STYLE, "color: #0000EE;"));
-
     return convert(
         template,
         metadata,
         infoHeaderPage,
-        certificateInfoHtml,
+        htmlHeader,
         children
     );
   }
