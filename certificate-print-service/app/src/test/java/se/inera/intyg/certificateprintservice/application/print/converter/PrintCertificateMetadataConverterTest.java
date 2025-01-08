@@ -14,6 +14,7 @@ class PrintCertificateMetadataConverterTest {
   private static final String VERSION = "version";
   private static final String TYPE_ID = "typeId";
   private static final String CERTIFICATE_ID = "certificateId";
+  private static final String SENT_DATE = "sentDate";
   private static final String SIGNING_DATE = "signingDate";
   private static final byte[] RECIPIENT_LOGO = "logo".getBytes(StandardCharsets.UTF_8);
   private static final String RECIPIENT_NAME = "recipientName";
@@ -26,6 +27,7 @@ class PrintCertificateMetadataConverterTest {
       .version(VERSION)
       .typeId(TYPE_ID)
       .certificateId(CERTIFICATE_ID)
+      .sentDate(SENT_DATE)
       .signingDate(SIGNING_DATE)
       .recipientLogo(RECIPIENT_LOGO)
       .recipientName(RECIPIENT_NAME)
@@ -65,6 +67,12 @@ class PrintCertificateMetadataConverterTest {
   void shallConvertCertificateId() {
     assertEquals(CERTIFICATE_ID,
         printCertificateMetadataConverter.convert(METADATA_DTO).getCertificateId());
+  }
+
+  @Test
+  void shallConvertSentDate() {
+    assertEquals(SENT_DATE,
+        printCertificateMetadataConverter.convert(METADATA_DTO).getSentDate());
   }
 
   @Test

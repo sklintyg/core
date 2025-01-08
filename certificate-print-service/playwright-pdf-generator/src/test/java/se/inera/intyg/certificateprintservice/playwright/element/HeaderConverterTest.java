@@ -15,7 +15,6 @@ class HeaderConverterTest {
         .version("1.0")
         .recipientName("Recipient name")
         .recipientLogo("Logo".getBytes())
-        .isSent(true)
         .applicationOrigin("Webcert")
         .description("Description")
         .personId("191212121212")

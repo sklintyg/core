@@ -15,7 +15,7 @@ public class Metadata {
   String typeId;
   String certificateId;
   String signingDate;
-  boolean isSent;
+  String sentDate;
   byte[] recipientLogo;
   String recipientName;
   String applicationOrigin;
@@ -27,6 +27,10 @@ public class Metadata {
 
   public boolean isDraft() {
     return signingDate == null;
+  }
+
+  public boolean isSent() {
+    return sentDate != null;
   }
 
   public boolean isSigned() {

@@ -18,7 +18,7 @@ public class PrintCertificateMetadataDTO {
   String typeId;
   String certificateId;
   String signingDate;
-  boolean isSent;
+  String sentDate;
   byte[] recipientLogo;
   String recipientName;
   String applicationOrigin;

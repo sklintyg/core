@@ -64,7 +64,7 @@ class TextFactoryTest {
         Metadata.builder()
             .recipientName("Transportstyrelsen")
             .signingDate("2025-01-01")
-            .isSent(true)
+            .sentDate("2025-01-01")
             .build();
 
     assertEquals(
