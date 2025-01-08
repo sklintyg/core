@@ -39,6 +39,7 @@ public class PrintCertificateMetadataConverter {
         .description(certificate.certificateModel().description())
         .issuerName(certificate.certificateMetaData().issuer().name().fullName())
         .issuingUnit(certificate.certificateMetaData().issuingUnit().name().name())
+        .sentDate(certificate.sent() != null ? certificate.sent().sentAt().toString() : null)
         .unitInformation(
             printCertificateUnitInformationConverter.convert(certificate))
         .fileName(fileName)

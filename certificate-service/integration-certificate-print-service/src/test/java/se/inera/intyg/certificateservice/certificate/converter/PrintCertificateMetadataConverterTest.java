@@ -18,6 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
@@ -41,6 +42,7 @@ class PrintCertificateMetadataConverterTest {
           ).build()
       )
       .status(Status.SIGNED)
+      .sent(Sent.builder().sentAt(LocalDateTime.now()).build())
       .signed(LocalDateTime.now())
       .build();
 
@@ -163,5 +165,12 @@ class PrintCertificateMetadataConverterTest {
     final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false, FILE_NAME);
     assertEquals(CERTIFICATE.certificateMetaData().issuingUnit().name().name(),
         result.getIssuingUnit());
+  }
+
+  @Test
+  void shouldSetIsSent() {
+    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false, FILE_NAME);
+    assertEquals(CERTIFICATE.sent().sentAt().toString(),
+        result.getSentDate());
   }
 }
