@@ -22,10 +22,11 @@ class ElementQuestionConverterTest {
             )
             .subQuestions(Collections.emptyList())
             .build()
+        , false
     );
 
     assertEquals(
-        "[<h3 class=\"p-1\">Name Question</h3>, <p class=\"text-sm p-1\">Example text for value</p>]",
+        "[<h3 class=\"text-sm font-medium\" style=\"padding-top: 1mm; padding-left: 5mm; padding-right: 5mm;\">Name Question</h3>, <p class=\"text-sm italic\" style=\"padding-left: 5mm; padding-right: 5mm; margin-bottom: 0; margin-top: 0;\">Example text for value</p>]",
         result.toString()
     );
   }
@@ -54,10 +55,11 @@ class ElementQuestionConverterTest {
                 )
             )
             .build()
+        , true
     );
 
     assertEquals(
-        "[<h3 class=\"p-1\">Name Question</h3>, <p class=\"text-sm p-1\">Example text for value</p>, <h3 class=\"p-1\">Name Question 2</h3>, <p class=\"text-sm p-1\">Example text for value 2</p>]",
+        "[<h3 class=\"text-sm font-medium\" style=\"padding-top: 1mm; padding-left: 5mm; padding-right: 5mm; color: #6A6A6A\">Name Question</h3>, <p class=\"text-sm italic\" style=\"padding-left: 5mm; padding-right: 5mm; margin-bottom: 0; margin-top: 0;\">Example text for value</p>, <h3 class=\"text-sm font-medium\" style=\"padding-top: 1mm; padding-left: 5mm; padding-right: 5mm; color: #6A6A6A\">Name Question 2</h3>, <p class=\"text-sm italic\" style=\"padding-left: 5mm; padding-right: 5mm; margin-bottom: 0; margin-top: 0;\">Example text for value 2</p>]",
         result.toString()
     );
   }

@@ -50,15 +50,7 @@ public class CertificateToHtmlConverter {
         .map(CategoryConverter::category)
         .toList());
 
-    if (metadata.isSigned()) {
-      children.add(InformationElementFactory.issuerName(metadata));
-    }
-
-    children.add(InformationElementFactory.contactInfo(metadata));
-
-    if (metadata.isSigned()) {
-      children.add(InformationElementFactory.signingDate(metadata));
-    }
+    children.add(getSignInfo(metadata));
 
     return convert(
         template,
@@ -89,5 +81,22 @@ public class CertificateToHtmlConverter {
         htmlHeader,
         children
     );
+  }
+
+  private Element getSignInfo(Metadata metadata) {
+    final var signInfo = ElementProvider.element(Tag.DIV)
+        .attr(STYLE, "break-inside: avoid;");
+
+    if (!metadata.isDraft()) {
+      signInfo.appendChild(InformationElementFactory.issuerName(metadata));
+    }
+
+    signInfo.appendChild(InformationElementFactory.contactInfo(metadata));
+
+    if (!metadata.isDraft()) {
+      signInfo.appendChild(InformationElementFactory.signingDate(metadata));
+    }
+
+    return signInfo;
   }
 }

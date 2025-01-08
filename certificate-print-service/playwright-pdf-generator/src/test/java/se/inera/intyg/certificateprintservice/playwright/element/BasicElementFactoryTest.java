@@ -18,9 +18,9 @@ class BasicElementFactoryTest {
     );
 
     assertEquals("""
-            <table>
+            <table class="text-sm" style="margin-left: 5mm; margin-right: 5mm;">
              <tr style="border-bottom: black solid 1px;">
-              <th style="padding-right: 5mm;">H1</th>
+              <th class="font-medium" style="padding-right: 10mm;">H1</th>
              </tr>
              <tr>
               <td>D1</td>

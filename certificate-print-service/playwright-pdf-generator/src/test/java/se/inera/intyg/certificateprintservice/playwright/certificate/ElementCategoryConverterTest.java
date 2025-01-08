@@ -33,10 +33,10 @@ class ElementCategoryConverterTest {
 
     assertEquals(
         """
-            <div class="box-decoration-clone" style="border: 1px solid black; margin-bottom: 5mm;">
-             <h2 class="text-lg font-bold uppercase" style="border-bottom: 1px solid black;">Name Category</h2>
-             <h3 class="p-1">Name Question</h3>
-             <p class="text-sm p-1">Example text for value</p>
+            <div class="box-decoration-clone" style="border: 1px solid black; margin-bottom: 5mm; padding-bottom: 3mm;">
+             <h2 class="text-base font-medium uppercase" style="border-bottom: 1px solid black; padding-left: 5mm; padding-right: 5mm;">Name Category</h2>
+             <h3 class="text-sm font-medium" style="padding-top: 1mm; padding-left: 5mm; padding-right: 5mm;">Name Question</h3>
+             <p class="text-sm italic" style="padding-left: 5mm; padding-right: 5mm; margin-bottom: 0; margin-top: 0;">Example text for value</p>
             </div>""",
         result.toString()
     );

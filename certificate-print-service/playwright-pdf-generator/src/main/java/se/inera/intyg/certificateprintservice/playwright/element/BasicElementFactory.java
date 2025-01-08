@@ -16,7 +16,9 @@ public class BasicElementFactory {
   public static Element table(ElementValueTable tableValue) {
     final var headerColumns = tableValue.getHeadings().size();
     final var valueColumns = tableValue.getValues().getFirst().size();
-    final var tableElement = ElementProvider.element(Tag.TABLE);
+    final var tableElement = ElementProvider.element(Tag.TABLE)
+        .addClass("text-sm")
+        .attr(STYLE, "margin-left: 5mm; margin-right: 5mm;");
 
     tableElement.appendChild(th(tableValue, headerColumns, valueColumns));
 
@@ -33,7 +35,8 @@ public class BasicElementFactory {
         .attr(STYLE, "border-bottom: black solid 1px;");
     for (int i = 0; i < valueColumns; i++) {
       final var th = ElementProvider.element(Tag.TH)
-          .attr(STYLE, "padding-right: 5mm;");
+          .addClass("font-medium")
+          .attr(STYLE, "padding-right: 10mm;");
       if (valueColumns - i > headerColumns) {
         th.appendText("");
       } else {
@@ -45,10 +48,10 @@ public class BasicElementFactory {
   }
 
   public static Element p(String text) {
-    final var value = new Element(Tag.P.toString());
-    value.addClass("text-sm p-1");
-    value.appendText(text);
-    return value;
+    return new Element(Tag.P.toString())
+        .addClass("text-sm italic")
+        .attr(STYLE, "padding-left: 5mm; padding-right: 5mm; margin-bottom: 0; margin-top: 0;")
+        .appendText(text);
   }
 
   private static Element tr(List<String> rowValues, int headerColumns,
@@ -57,7 +60,8 @@ public class BasicElementFactory {
     for (int i = 0; i < valueColumns; i++) {
       final var td = ElementProvider.element(Tag.TD);
       if (valueColumns - i > headerColumns) {
-        td.attr(STYLE, "font-weight: bold; padding-right: 5mm;");
+        td.addClass("font-medium");
+        td.attr(STYLE, "padding-right: 10mm;");
       }
       td.appendText(rowValues.get(i));
       tableRow.appendChild(td);
