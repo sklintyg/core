@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateprintservice.playwright;
 
-import com.microsoft.playwright.Browser;
 import java.time.Duration;
 import java.time.Instant;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +21,8 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
 
   @Value("classpath:templates/certificateTemplate.html")
   private Resource template;
+  private final BrowserPool browserPool;
   private final CertificateToHtmlConverter certificateToHtmlConverter;
-  private final Browser browser;
-
 
   @Override
   public byte[] generate(final Certificate certificate) {
@@ -42,9 +40,10 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
     }
   }
 
-  private byte[] createCertificatePdf(PrintInformation printInformation) {
+  private byte[] createCertificatePdf(PrintInformation printInformation) throws Exception {
     final var start1 = Instant.now();
-
+    final var playwrightBrowser = browserPool.borrowObject();
+    final var browser = playwrightBrowser.getBrowser();
     try (
         final var context = browser.newContext();
         final var page = context.newPage();
@@ -59,6 +58,9 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
       return page.pdf(printInformation.getPdfOptions());
     } catch (Exception e) {
       throw new IllegalStateException("Failure creating certificate details pdf", e);
+    } finally {
+      browserPool.returnObject(playwrightBrowser);
     }
   }
+
 }

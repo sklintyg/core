@@ -16,11 +16,13 @@ processResources {
 
 dependencies {
     implementation project(":pdf-generator-api")
-    implementation "org.springframework.boot:spring-boot-starter"
     implementation "com.microsoft.playwright:playwright:${playwrightVersion}"
-    implementation "org.springframework.boot:spring-boot-configuration-processor"
+    implementation "org.apache.commons:commons-pool2:${apacheCommonsPoolVersion}"
     implementation "org.jsoup:jsoup:${jsoupVersion}"
+    implementation "org.springframework.boot:spring-boot-configuration-processor"
     implementation "org.springframework.boot:spring-boot-devtools"
+    implementation "org.springframework.boot:spring-boot-starter"
+
     implementation ("org.apache.pdfbox:pdfbox:${pdfBoxVersion}") {
         exclude group: "commons-logging", module: "commons-logging"
     }

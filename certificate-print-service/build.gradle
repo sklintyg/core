@@ -8,6 +8,7 @@ plugins {
 }
 
 ext {
+    apacheCommonsPoolVersion = "2.12.0"
     jsoupVersion = "1.18.3"
     pdfBoxVersion = "3.0.3"
     playwrightVersion = "1.49.0"

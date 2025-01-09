@@ -1,34 +1,20 @@
 package se.inera.intyg.certificateprintservice.playwright;
 
-import com.microsoft.playwright.Browser;
-import com.microsoft.playwright.BrowserType;
-import com.microsoft.playwright.Playwright;
-import jakarta.annotation.PreDestroy;
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class PlaywrightConfig {
 
-  private Playwright playwright;
-  private Browser browser;
-
-  @Bean()
-  Browser browser(Playwright playwright) {
-    browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true));
-    return browser;
-  }
-
-  @Bean()
-  Playwright playwright() {
-    this.playwright = Playwright.create();
-    return this.playwright;
-  }
-
-  @PreDestroy
-  void destroy() {
-    browser.close();
-    playwright.close();
+  @Bean
+  public BrowserPool browserPool() throws Exception {
+    final var config = new GenericObjectPoolConfig<PlaywrightBrowser>();
+    config.setMaxIdle(5);
+    config.setMaxTotal(5);
+    final var browserPool = new BrowserPool(new BrowserFactory(), config);
+    browserPool.addObjects(5);
+    return browserPool;
   }
 
 }
