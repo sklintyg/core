@@ -19,6 +19,7 @@ import se.inera.intyg.certificateservice.certificate.converter.PrintCertificateC
 import se.inera.intyg.certificateservice.certificate.converter.PrintCertificateMetadataConverter;
 import se.inera.intyg.certificateservice.certificate.dto.PrintCertificateCategoryDTO;
 import se.inera.intyg.certificateservice.certificate.dto.PrintCertificateMetadataDTO;
+import se.inera.intyg.certificateservice.certificate.dto.PrintCertificateQuestionDTO;
 import se.inera.intyg.certificateservice.certificate.dto.PrintCertificateRequestDTO;
 import se.inera.intyg.certificateservice.certificate.dto.PrintCertificateResponseDTO;
 import se.inera.intyg.certificateservice.certificate.integration.PrintCertificateFromCertificatePrintService;
@@ -26,6 +27,8 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Pdf;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
@@ -35,6 +38,7 @@ class GeneralPdfGeneratorTest {
 
   private static final PrintCertificateCategoryDTO PRINT_CERTIFICATE_CATEGORY_DTO = PrintCertificateCategoryDTO
       .builder()
+      .questions(List.of())
       .build();
   private static final PrintCertificateMetadataDTO PRINT_CERTIFICATE_METADATA_DTO = PrintCertificateMetadataDTO
       .builder()
@@ -115,7 +119,7 @@ class GeneralPdfGeneratorTest {
     void shouldConvertRequest() {
       final var captor = ArgumentCaptor.forClass(PrintCertificateRequestDTO.class);
       final var expected = PrintCertificateRequestDTO.builder()
-          .categories(List.of(PRINT_CERTIFICATE_CATEGORY_DTO))
+          .categories(List.of())
           .metadata(PRINT_CERTIFICATE_METADATA_DTO)
           .build();
 
@@ -170,4 +174,89 @@ class GeneralPdfGeneratorTest {
     }
   }
 
+  @Test
+  void shouldNotConvertContactInfoToCategory() {
+
+    var certificateModel = CertificateModel.builder()
+        .name("åäö 123 test")
+        .recipient(
+            new Recipient(new RecipientId("TS"), "TS", "LA")
+        )
+        .elementSpecifications(
+            List.of(ElementSpecification.builder()
+                .id(new ElementId("UNIT_CONTACT_INFORMATION"))
+                .configuration(ElementConfigurationUnitContactInformation.builder()
+                    .build()
+                ).build()
+            )
+        )
+        .build();
+
+    final var cert = Certificate.builder()
+        .id(new CertificateId(CERTIFICATE_ID))
+        .certificateModel(certificateModel)
+        .build();
+
+    when(
+        printCertificateMetadataConverter.convert(cert,
+            IS_CITIZEN,
+            FILE_NAME))
+        .thenReturn(PRINT_CERTIFICATE_METADATA_DTO);
+
+    final var captor = ArgumentCaptor.forClass(PrintCertificateRequestDTO.class);
+    final var expected = PrintCertificateRequestDTO.builder()
+        .categories(List.of())
+        .metadata(PRINT_CERTIFICATE_METADATA_DTO)
+        .build();
+
+    generalPdfGenerator.generate(cert, TEXT, IS_CITIZEN);
+    verify(printCertificateFromCertificatePrintService).print(captor.capture(), anyString());
+
+    assertEquals(expected, captor.getValue());
+
+  }
+
+  @Test
+  void shouldFilterCategoriesWithoutQuestions() {
+
+    var categoryWithQuestion = PrintCertificateCategoryDTO
+        .builder()
+        .questions(List.of(PrintCertificateQuestionDTO.builder()
+            .name("name")
+            .build()))
+        .build();
+
+    var certWithMultipleElements = Certificate.builder()
+        .id(new CertificateId(CERTIFICATE_ID))
+        .certificateModel(
+            CertificateModel.builder()
+                .name("åäö 123 test")
+                .elementSpecifications(
+                    List.of(ELEMENT_SPECIFICATION, ELEMENT_SPECIFICATION)
+                )
+                .recipient(
+                    new Recipient(new RecipientId("TS"), "TS", "LA")
+                )
+                .build()
+        )
+        .build();
+
+    when(printCertificateCategoryConverter.convert(certWithMultipleElements,
+        ELEMENT_SPECIFICATION))
+        .thenReturn(PRINT_CERTIFICATE_CATEGORY_DTO).thenReturn(categoryWithQuestion);
+
+    when(
+        printCertificateMetadataConverter.convert(certWithMultipleElements,
+            IS_CITIZEN,
+            FILE_NAME))
+        .thenReturn(PRINT_CERTIFICATE_METADATA_DTO);
+
+    final var captor = ArgumentCaptor.forClass(PrintCertificateRequestDTO.class);
+
+    generalPdfGenerator.generate(certWithMultipleElements, TEXT, IS_CITIZEN);
+    verify(printCertificateFromCertificatePrintService).print(captor.capture(), anyString());
+
+    assertEquals(1, captor.getValue().getCategories().size());
+
+  }
 }

@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,30 +38,6 @@ class GeneratePrintServiceTest {
     final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
         () -> generatePrintService.get(null));
     assertEquals("Invalid request", illegalArgumentException.getMessage());
-  }
-
-  @Test
-  void shallThrowIfCategoriesIsNull() {
-    final var request = PrintCertificateRequestDTO.builder()
-        .categories(null)
-        .build();
-
-    final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-        () -> generatePrintService.get(request));
-    assertEquals("Invalid request - Missing required parameter categories",
-        illegalArgumentException.getMessage());
-  }
-
-  @Test
-  void shallThrowIfCategoriesIsEmpty() {
-    final var request = PrintCertificateRequestDTO.builder()
-        .categories(Collections.emptyList())
-        .build();
-
-    final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-        () -> generatePrintService.get(request));
-    assertEquals("Invalid request - Missing required parameter categories",
-        illegalArgumentException.getMessage());
   }
 
   @Test
