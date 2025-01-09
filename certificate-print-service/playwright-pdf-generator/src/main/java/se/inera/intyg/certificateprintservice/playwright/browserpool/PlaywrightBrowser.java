@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateprintservice.playwright;
+package se.inera.intyg.certificateprintservice.playwright.browserpool;
 
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.Playwright;

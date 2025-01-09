@@ -9,6 +9,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateprintservice.pdfgenerator.PrintCertificateGenerator;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.Certificate;
+import se.inera.intyg.certificateprintservice.playwright.browserpool.BrowserPool;
 import se.inera.intyg.certificateprintservice.playwright.certificate.CertificateToHtmlConverter;
 import se.inera.intyg.certificateprintservice.playwright.certificate.PrintInformation;
 import se.inera.intyg.certificateprintservice.playwright.element.FooterConverter;
@@ -27,11 +28,13 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
   @Override
   public byte[] generate(final Certificate certificate) {
     try {
+      final var start1 = Instant.now();
       final var printInformation = new PrintInformation();
       printInformation.setHeaderHtml(HeaderConverter.createHeader(certificate.getMetadata()));
       printInformation.setFooterHtml(FooterConverter.createFooter(certificate.getMetadata()));
       printInformation.setCertificate(certificate);
       printInformation.setTemplate(template.getInputStream());
+      log.info("Build html time: {}", Duration.between(start1, Instant.now()).toMillis());
 
       return createCertificatePdf(printInformation);
     } catch (Exception e) {
@@ -54,10 +57,13 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator {
       final var certificateContent = certificateToHtmlConverter.certificate(printInformation);
       final var start2 = Instant.now();
       page.setContent(certificateContent);
+      final var pdf = page.pdf(printInformation.getPdfOptions());
       log.info("Details pdf time: {}", Duration.between(start2, Instant.now()).toMillis());
-      return page.pdf(printInformation.getPdfOptions());
+      return pdf;
+
     } catch (Exception e) {
       throw new IllegalStateException("Failure creating certificate details pdf", e);
+
     } finally {
       browserPool.returnObject(playwrightBrowser);
     }
