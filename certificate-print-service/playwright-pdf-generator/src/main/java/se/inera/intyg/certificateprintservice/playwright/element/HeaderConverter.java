@@ -17,18 +17,16 @@ public class HeaderConverter {
     throw new IllegalStateException("Utility class");
   }
 
-  public static String header(Metadata metadata, boolean includeInformation) {
+  public static String createHeader(Metadata metadata) {
     final var start1 = Instant.now();
     final var baseWrapper = ElementProvider.element(Tag.DIV);
 
-    if (includeInformation && metadata.getSigningDate() != null) {
+    if (metadata.getSigningDate() != null) {
       baseWrapper.appendChild(InformationElementFactory.rightMargin(
-              TextFactory.certificateId(metadata.getCertificateId())
-          )
-      );
+          TextFactory.certificateId(metadata.getCertificateId())));
     }
 
-    baseWrapper.appendChild(buildHeaderElement(metadata, includeInformation));
+    baseWrapper.appendChild(buildHeaderElement(metadata));
     baseWrapper.appendChild(
         InformationElementFactory.leftMargin(TextFactory.margin(metadata)));
 
@@ -41,16 +39,14 @@ public class HeaderConverter {
     return html;
   }
 
-  private static Element buildHeaderElement(Metadata metadata, boolean includeInformation) {
+  private static Element buildHeaderElement(Metadata metadata) {
     final var headerElement = headerWrapper();
     final var certificateHeader = certificateHeader(metadata);
     final var pageHeader = pageHeader(metadata.getRecipientLogo());
 
-    if (includeInformation) {
-      pageHeader.appendChild(InformationElementFactory.personId(metadata.getPersonId()));
-      certificateHeader.appendChild(
-          InformationElementFactory.alert(TextFactory.alert(metadata)));
-    }
+    pageHeader.appendChild(InformationElementFactory.personId(metadata.getPersonId()));
+    certificateHeader.appendChild(
+        InformationElementFactory.alert(TextFactory.alert(metadata)));
 
     headerElement.appendChild(pageHeader);
     headerElement.appendChild(certificateHeader);

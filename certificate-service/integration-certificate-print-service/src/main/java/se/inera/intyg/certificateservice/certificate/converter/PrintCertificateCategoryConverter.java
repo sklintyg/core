@@ -26,7 +26,7 @@ public class PrintCertificateCategoryConverter {
     return PrintCertificateCategoryDTO.builder()
         .name(category.configuration().name())
         .id(category.id().id())
-        .children(convertChildren(certificate, category))
+        .questions(convertChildren(certificate, category))
         .build();
   }
 

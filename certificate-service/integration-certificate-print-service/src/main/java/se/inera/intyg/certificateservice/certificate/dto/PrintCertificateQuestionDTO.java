@@ -10,6 +10,6 @@ public class PrintCertificateQuestionDTO {
 
   String id;
   String name;
-  List<PrintCertificateQuestionDTO> children;
+  List<PrintCertificateQuestionDTO> subquestions;
   ElementSimplifiedValueDTO value;
 }

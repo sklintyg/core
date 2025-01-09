@@ -19,7 +19,7 @@ public class PrintCertificateQuestionConverter {
         .id(question.getId())
         .name(question.getName())
         .value(getElementValue(question))
-        .subQuestions(question.getChildren().stream()
+        .subQuestions(question.getSubquestions().stream()
             .map(this::convert)
             .toList())
         .build();

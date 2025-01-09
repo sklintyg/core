@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.Metadata;
+import se.inera.intyg.certificateprintservice.playwright.certificate.PrintInformation;
 import se.inera.intyg.certificateprintservice.playwright.text.TextFactory;
 
 @Component
@@ -32,13 +33,14 @@ public class TemplateToDocumentConverter implements InitializingBean {
     tailwindCSS = new String(Base64.getEncoder().encode(tailwindScript.getContentAsByteArray()));
   }
 
-  public Document convert(Resource template, String htmlHeader, Page page, Metadata metadata)
+  public Document convert(PrintInformation printInformation)
       throws IOException {
-    final var document = Jsoup.parse(template.getInputStream(), StandardCharsets.UTF_8.name(), "",
+    final var document = Jsoup.parse(printInformation.getTemplate(), StandardCharsets.UTF_8.name(),
+        "",
         Parser.xmlParser());
 
-    setDocumentTitle(document, metadata);
-    setPageMargin(document, page, htmlHeader);
+    setDocumentTitle(document, printInformation.getcertificateMetadata());
+    setPageMargin(document, printInformation.getHeaderPage(), printInformation.getHeaderHtml());
     return document;
   }
 

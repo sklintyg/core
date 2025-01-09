@@ -8,7 +8,7 @@ import se.inera.intyg.certificateprintservice.pdfgenerator.api.Metadata;
 class HeaderConverterTest {
 
   @Test
-  void shouldReturnHeader() {
+  void shouldReturnCreateHeader() {
     final var metadata = Metadata.builder()
         .name("Name")
         .typeId("TypeId")
@@ -76,10 +76,7 @@ class HeaderConverterTest {
             ">
              UTKAST
             </div>""",
-        HeaderConverter.header(
-            metadata,
-            true
-        )
+        HeaderConverter.createHeader(metadata)
     );
   }
 }

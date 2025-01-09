@@ -70,9 +70,9 @@ class ElementConfigurationVisualAcuitiesTest {
         ElementSimplifiedValueTable.builder()
             .headings(List.of("H1", "H2"))
             .values(List.of(
-                    List.of("Höger öga", "1,0", "-"),
-                    List.of("Vänster öga", "2,5", "3,0"),
-                    List.of("Binokulärt", "-", "10,1")
+                    List.of("Höger öga", "1.0", "-"),
+                    List.of("Vänster öga", "2.5", "3.0"),
+                    List.of("Binokulärt", "-", "10.1")
                 )
             )
             .build()

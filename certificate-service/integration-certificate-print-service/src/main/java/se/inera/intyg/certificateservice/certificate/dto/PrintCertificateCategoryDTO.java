@@ -10,6 +10,6 @@ public class PrintCertificateCategoryDTO {
 
   String id;
   String name;
-  List<PrintCertificateQuestionDTO> children;
+  List<PrintCertificateQuestionDTO> questions;
 
 }

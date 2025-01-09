@@ -32,7 +32,7 @@ public class PrintCertificateQuestionConverter {
         .id(elementSpecification.id().id())
         .name(elementSpecification.configuration().name())
         .value(convertValue(elementSimplifiedValue))
-        .children(
+        .subquestions(
             elementSpecification.children().stream()
                 .map(child -> convert(child, certificate))
                 .filter(Optional::isPresent)

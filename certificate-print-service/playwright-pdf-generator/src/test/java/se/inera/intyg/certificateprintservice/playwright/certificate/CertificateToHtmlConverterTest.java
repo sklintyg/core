@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import com.microsoft.playwright.Page;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.text.html.HTML.Tag;
@@ -19,7 +20,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.core.io.Resource;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.Category;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.Certificate;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.Metadata;
@@ -30,7 +30,6 @@ import se.inera.intyg.certificateprintservice.playwright.pdf.TemplateToDocumentC
 @ExtendWith(MockitoExtension.class)
 class CertificateToHtmlConverterTest {
 
-  private static final String HEADER = "header";
   private static final Metadata.MetadataBuilder METADATA_BUILDER = Metadata.builder()
       .issuingUnit("unit")
       .issuerName("issuerName")
@@ -38,7 +37,7 @@ class CertificateToHtmlConverterTest {
       .name("Certificate name")
       .description("Certificate description");
   private static final Metadata METADATA = METADATA_BUILDER.build();
-  private static final List<Category> categories = List.of(Category.builder()
+  private static final List<Category> CATEGORIES = List.of(Category.builder()
       .id("ID")
       .name("Name Category")
       .questions(List.of(
@@ -57,9 +56,9 @@ class CertificateToHtmlConverterTest {
   @Mock
   TemplateToDocumentConverter templateToDocumentConverter;
   @Mock
-  Resource template;
+  InputStream template;
   @Mock
-  Page page;
+  Page headerPage;
   @InjectMocks
   CertificateToHtmlConverter certificateToHtmlConverter;
 
@@ -72,43 +71,27 @@ class CertificateToHtmlConverterTest {
         new Element(Tag.DIV.toString()).attr("id", "content"), new Element(Tag.SCRIPT.toString())));
   }
 
-
   @Nested
   class CertificateDetails {
 
 
     @Test
     void shallSetIssuerIfSigned() throws IOException {
-      var metadata = METADATA_BUILDER.signingDate("2021-12-12").build();
-      when(templateToDocumentConverter.convert(template, HEADER, page, metadata)).thenReturn(doc);
-      var result = certificateToHtmlConverter.certificate(template, Certificate.builder()
-              .metadata(metadata)
-              .categories(categories)
-              .build(),
-          page,
-          HEADER);
-
+      var result = getSignedHtml();
       assertTrue(result.contains("IntygsUtfärdare"));
     }
 
+
     @Test
     void shallSetSignDateIfSigned() throws IOException {
-      var metadata = METADATA_BUILDER.signingDate("2021-12-12").build();
-      when(templateToDocumentConverter.convert(template, HEADER, page, metadata)).thenReturn(doc);
-      var result = certificateToHtmlConverter.certificate(template, Certificate.builder()
-              .metadata(metadata)
-              .categories(categories)
-              .build(),
-          page,
-          HEADER);
-
+      var result = getSignedHtml();
       assertTrue(result.contains("Intyget signerades:"));
     }
 
+
     @Test
     void shallNotSetIssuerIfDraft() throws IOException {
-      when(templateToDocumentConverter.convert(template, HEADER, page, METADATA)).thenReturn(doc);
-      var result = defaultCertDetails();
+      var result = getUnsignedHtml();
 
       assertFalse(result.contains("IntygsUtfärdare"));
     }
@@ -116,16 +99,14 @@ class CertificateToHtmlConverterTest {
 
     @Test
     void shallNotSetSignDateIfDraft() throws IOException {
-      when(templateToDocumentConverter.convert(template, HEADER, page, METADATA)).thenReturn(doc);
-      var result = defaultCertDetails();
+      var result = getUnsignedHtml();
 
       assertFalse(result.contains("Intyget signerades:"));
     }
 
     @Test
     void shallSetContactInfo() throws IOException {
-      when(templateToDocumentConverter.convert(template, HEADER, page, METADATA)).thenReturn(doc);
-      var result = defaultCertDetails();
+      var result = getUnsignedHtml();
 
       assertTrue(result.contains("Kontaktuppgifter:"));
     }
@@ -133,28 +114,17 @@ class CertificateToHtmlConverterTest {
 
     @Test
     void shallSetCategories() throws IOException {
-      when(templateToDocumentConverter.convert(template, HEADER, page, METADATA)).thenReturn(doc);
-      var result = defaultCertDetails();
+      var result = getUnsignedHtml();
 
       assertTrue(result.contains("Name Category"));
     }
 
     @Test
     void shallSetScript() throws IOException {
-      when(templateToDocumentConverter.convert(template, HEADER, page, METADATA)).thenReturn(doc);
       when(templateToDocumentConverter.getScriptSource()).thenReturn("this is the script");
-      var result = defaultCertDetails();
+      var result = getUnsignedHtml();
 
       assertTrue(result.contains("this is the script"));
-    }
-
-    private String defaultCertDetails() throws IOException {
-      return certificateToHtmlConverter.certificate(template, Certificate.builder()
-              .metadata(METADATA)
-              .categories(categories)
-              .build(),
-          page,
-          HEADER);
     }
   }
 
@@ -164,37 +134,53 @@ class CertificateToHtmlConverterTest {
 
     @Test
     void shallSetCertName() throws IOException {
-      when(templateToDocumentConverter.convert(template, HEADER, page, METADATA)).thenReturn(doc);
 
-      var result = defaultCertInfo();
+      var result = getUnsignedHtml();
       assertTrue(result.contains("Certificate name"));
     }
 
     @Test
     void shallSetCertDescription() throws IOException {
-      when(templateToDocumentConverter.convert(template, HEADER, page, METADATA)).thenReturn(doc);
-      var result = defaultCertInfo();
+      var result = getUnsignedHtml();
       assertTrue(result.contains("Certificate description"));
     }
 
     @Test
     void shallSetCitizenInfo() throws IOException {
-      when(templateToDocumentConverter.convert(template, HEADER, page, METADATA)).thenReturn(doc);
-      var result = defaultCertInfo();
+      var result = getUnsignedHtml();
 
       assertAll(() -> assertTrue(result.contains("Skicka intyg till mottagare")),
           () -> assertTrue(result.contains(
               "Du kan hantera ditt intyg genom att logga in på 1177.se Där kan du till exempel skicka intyget till mottagaren")));
     }
-
-
-    String defaultCertInfo() throws IOException {
-      return certificateToHtmlConverter.certificateInformation(template,
-          page,
-          HEADER, METADATA);
-    }
-
   }
 
+  private String getSignedHtml() throws IOException {
+    var metadata = METADATA_BUILDER.signingDate("2021-12-12").build();
 
+    var pi = new PrintInformation();
+    pi.setCertificate(Certificate.builder()
+        .metadata(metadata)
+        .categories(CATEGORIES)
+        .build());
+    pi.setTemplate(template);
+    pi.setHeaderPage(headerPage);
+
+    when(templateToDocumentConverter.convert(pi)).thenReturn(doc);
+    return certificateToHtmlConverter.certificate(pi);
+  }
+
+  private String getUnsignedHtml() throws IOException {
+    var pi = new PrintInformation();
+    pi.setCertificate(Certificate.builder()
+        .metadata(METADATA)
+        .categories(CATEGORIES)
+        .build());
+    pi.setTemplate(template);
+    pi.setHeaderPage(headerPage);
+
+    when(templateToDocumentConverter.convert(pi)).thenReturn(doc);
+    return certificateToHtmlConverter.certificate(pi);
+  }
 }
+

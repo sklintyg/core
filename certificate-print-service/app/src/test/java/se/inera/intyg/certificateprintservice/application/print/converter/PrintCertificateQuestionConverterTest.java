@@ -26,7 +26,7 @@ class PrintCertificateQuestionConverterTest {
   PrintCertificateQuestionDTO.PrintCertificateQuestionDTOBuilder printCertificateQuestionDTOBuilder =
       PrintCertificateQuestionDTO.builder()
           .value(ElementSimplifiedValueText.builder().build())
-          .children(List.of());
+          .subquestions(List.of());
 
   @Test
   void shallConvertId() {
@@ -79,7 +79,7 @@ class PrintCertificateQuestionConverterTest {
   @Test
   void shallConvertSubquestions() {
     final var questionDTO = printCertificateQuestionDTOBuilder
-        .children(List.of(printCertificateQuestionDTOBuilder.build())).build();
+        .subquestions(List.of(printCertificateQuestionDTOBuilder.build())).build();
 
     final var result = printCertificateQuestionConverter.convert(questionDTO);
 

@@ -99,7 +99,7 @@ class PrintCertificateCategoryConverterTest {
     @Test
     void shouldSetChildren() {
       final var response = printCertificateCategoryConverter.convert(CERTIFICATE, KAT_1);
-      assertEquals(List.of(PRINT_CERTIFICATE_QUESTION_DTO), response.getChildren());
+      assertEquals(List.of(PRINT_CERTIFICATE_QUESTION_DTO), response.getQuestions());
     }
   }
 }
