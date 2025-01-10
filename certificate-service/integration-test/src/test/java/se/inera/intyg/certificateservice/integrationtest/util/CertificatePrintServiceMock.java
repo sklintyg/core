@@ -13,9 +13,9 @@ public class CertificatePrintServiceMock {
 
   private final MockServerClient mockServerClient;
 
-  public void mockPdf(String certificateId) {
+  public void mockPdf() {
     try {
-      mockServerClient.when(HttpRequest.request(String.format("/api/print/%s", certificateId)))
+      mockServerClient.when(HttpRequest.request("/api/print"))
           .respond(
               HttpResponse
                   .response(
