@@ -214,4 +214,11 @@ class CertificateElementRuleFactoryTest {
     final var response = CertificateElementRuleFactory.exists("1");
     assertEquals(expectedResult, response);
   }
+
+  @Test
+  void shouldReturnWrapWithNotEmpty() {
+    final var expectedResult = "!empty(1)";
+    final var response = CertificateElementRuleFactory.wrapWithNotEmpty("1");
+    assertEquals(expectedResult, response);
+  }
 }

@@ -253,4 +253,8 @@ public class CertificateElementRuleFactory {
   public static String exists(String expression) {
     return String.format("exists(%s)", expression);
   }
+
+  public static String wrapWithNotEmpty(String expression) {
+    return "!empty(" + expression + ")";
+  }
 }

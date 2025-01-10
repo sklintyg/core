@@ -1,11 +1,11 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.exists;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.lessThan;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.multipleAndExpressions;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.multipleOrExpression;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.singleExpression;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.withCitation;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.wrapWithNotEmpty;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.wrapWithParenthesis;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynskarpa.LEFT_EYE_WITHOUT_CORRECTION_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynskarpa.QUESTION_SYNSKARPA_ID;
@@ -61,37 +61,56 @@ public class QuestionKorrigeringAvSynskarpa {
                 CertificateElementRuleFactory.show(
                     QUESTION_SYNSKARPA_ID,
                     new RuleExpression(
-                        multipleAndExpressions(
-                            multipleOrExpression(
-                                wrapWithParenthesis(
-                                    multipleAndExpressions(
-                                        lessThan(
-                                            withCitation(LEFT_EYE_WITHOUT_CORRECTION_ID),
-                                            "0.8"
-                                        ),
-                                        lessThan(
-                                            withCitation(RIGHT_EYE_WITHOUT_CORRECTION_ID),
-                                            "0.8"
+                        multipleOrExpression(
+                            wrapWithParenthesis(
+                                multipleAndExpressions(
+                                    wrapWithParenthesis(
+                                        multipleAndExpressions(
+                                            lessThan(
+                                                withCitation(LEFT_EYE_WITHOUT_CORRECTION_ID),
+                                                "0.8"
+                                            ),
+                                            lessThan(
+                                                withCitation(RIGHT_EYE_WITHOUT_CORRECTION_ID),
+                                                "0.8"
+                                            )
                                         )
-                                    )
-                                ),
-                                wrapWithParenthesis(
-                                    multipleOrExpression(
-                                        lessThan(
-                                            withCitation(LEFT_EYE_WITHOUT_CORRECTION_ID),
-                                            "0.1"
-                                        ),
-                                        lessThan(
-                                            withCitation(RIGHT_EYE_WITHOUT_CORRECTION_ID),
-                                            "0.1"
+                                    ),
+                                    wrapWithParenthesis(
+                                        multipleAndExpressions(
+                                            wrapWithNotEmpty(
+                                                withCitation(LEFT_EYE_WITHOUT_CORRECTION_ID)),
+                                            wrapWithNotEmpty(
+                                                withCitation(RIGHT_EYE_WITHOUT_CORRECTION_ID))
                                         )
                                     )
                                 )
                             ),
                             wrapWithParenthesis(
                                 multipleAndExpressions(
-                                    exists(withCitation(LEFT_EYE_WITHOUT_CORRECTION_ID)),
-                                    exists(withCitation(RIGHT_EYE_WITHOUT_CORRECTION_ID))
+                                    multipleAndExpressions(
+                                        wrapWithParenthesis(
+                                            multipleOrExpression(
+                                                lessThan(
+                                                    withCitation(LEFT_EYE_WITHOUT_CORRECTION_ID),
+                                                    "0.1"
+                                                ),
+                                                lessThan(
+                                                    withCitation(RIGHT_EYE_WITHOUT_CORRECTION_ID),
+                                                    "0.1"
+                                                )
+                                            )
+                                        )
+                                    )
+                                    ,
+                                    wrapWithParenthesis(
+                                        multipleAndExpressions(
+                                            wrapWithNotEmpty(
+                                                withCitation(LEFT_EYE_WITHOUT_CORRECTION_ID)),
+                                            wrapWithNotEmpty(
+                                                withCitation(RIGHT_EYE_WITHOUT_CORRECTION_ID))
+                                        )
+                                    )
                                 )
                             )
                         )
@@ -144,13 +163,15 @@ public class QuestionKorrigeringAvSynskarpa {
                 .anyMatch(
                     visualAcuities ->
                         (visualAcuities.rightEye().withoutCorrection().value() != null
-                            && visualAcuities.rightEye().withoutCorrection().value() < 0.1
+                            && visualAcuities.rightEye().withoutCorrection().value() < 0.8
                             && visualAcuities.leftEye().withoutCorrection().value() != null
                             && visualAcuities.leftEye().withoutCorrection().value() < 0.8) ||
-                            (visualAcuities.rightEye().withoutCorrection().value() != null
-                                && visualAcuities.rightEye().withoutCorrection().value() < 0.8
-                                && visualAcuities.leftEye().withoutCorrection().value() != null
-                                && visualAcuities.leftEye().withoutCorrection().value() < 0.1)
+                            (
+                                (visualAcuities.rightEye().withoutCorrection().value() != null
+                                    && visualAcuities.rightEye().withoutCorrection().value() < 0.1)
+                                    || (visualAcuities.leftEye().withoutCorrection().value() != null
+                                    && visualAcuities.leftEye().withoutCorrection().value() < 0.1)
+                            )
                 )
         )
         .mapping(
