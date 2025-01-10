@@ -40,4 +40,15 @@ public abstract class Constants {
       font-size: 10pt;
       margin: 10mm 20mm 0 20mm;
       """;
+
+  public static final String DRAFT_WATERMARK_STYLE = """
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%) rotate(315deg);
+      font-size: 100pt;
+      color: rgb(128, 128, 128);
+      opacity: 0.5;
+      z-index: -1;
+      """;
 }

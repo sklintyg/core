@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateprintservice.playwright.element;
 
+import static se.inera.intyg.certificateprintservice.playwright.Constants.DRAFT_WATERMARK_STYLE;
 import static se.inera.intyg.certificateprintservice.playwright.Constants.RIGHT_MARGIN_INFO_STYLE;
 import static se.inera.intyg.certificateprintservice.playwright.Constants.STYLE;
 
@@ -78,18 +79,7 @@ public class InformationElementFactory {
   }
 
   public static Element watermark(String text) {
-    final var watermark = element(Tag.DIV)
-        .attr(STYLE, """
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translateX(-50%) translateY(-50%) rotate(315deg);
-            font-size: 100pt;
-            color: rgb(128, 128, 128);
-            opacity: 0.5;
-            z-index: -1;
-            """);
-
+    final var watermark = element(Tag.DIV).attr(STYLE, DRAFT_WATERMARK_STYLE);
     watermark.text(text);
     return watermark;
   }
