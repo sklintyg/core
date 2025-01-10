@@ -3,6 +3,7 @@ package se.inera.intyg.certificateprintservice.playwright.element;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateprintservice.pdfgenerator.api.Metadata;
 
 class InformationElementFactoryTest {
 
@@ -98,21 +99,22 @@ class InformationElementFactoryTest {
     );
   }
 
-//  @Test
-//  void shouldReturnTitle() {
-//    final var text = "Certificate title";
-//
-//    assertEquals(
-//        """
-//            <div style="font-size: 14pt;
-//            font-weight: bold;
-//            border-bottom: black solid 0.5px;
-//            padding-bottom: 1mm;
-//            ">
-//             <span>Certificate title</span>
-//            </div>""",
-//        InformationElementFactory.title(text).toString()
-//    );
-//  }
+  @Test
+  void shouldReturnTitle() {
+    assertEquals(
+        """
+            <div style="font-size: 14pt;
+            padding-bottom: 1mm;
+            border-bottom: black solid 1px;
+            ">
+             <span style="font-weight: bold;">Certificate name</span><span> (TS v1.0)</span>
+            </div>""",
+        InformationElementFactory.title(Metadata.builder()
+            .name("Certificate name")
+            .typeId("TS")
+            .version("1.0")
+            .build()).toString()
+    );
+  }
 
 }

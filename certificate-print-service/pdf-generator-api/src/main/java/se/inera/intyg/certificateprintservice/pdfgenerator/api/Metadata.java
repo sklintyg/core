@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateprintservice.pdfgenerator.api;
 
 
+import java.time.LocalDate;
 import java.util.List;
 import lombok.Builder;
 import lombok.Value;
@@ -35,5 +36,9 @@ public class Metadata {
 
   public boolean isSigned() {
     return signingDate != null;
+  }
+
+  public String getSigningDateAsString() {
+    return LocalDate.parse(this.signingDate.split("T")[0]).toString();
   }
 }

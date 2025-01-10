@@ -29,4 +29,12 @@ class BasicElementFactoryTest {
         result.toString()
     );
   }
+
+  @Test
+  void shouldReturnParagraphWithContent() {
+    assertEquals("""
+            <p class="text-sm italic" style="padding-left: 5mm; padding-right: 5mm; margin-bottom: 0; margin-top: 0;">answer</p>""",
+        BasicElementFactory.p("answer").toString());
+
+  }
 }

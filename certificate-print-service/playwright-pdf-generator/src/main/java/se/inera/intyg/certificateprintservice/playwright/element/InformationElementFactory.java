@@ -3,7 +3,6 @@ package se.inera.intyg.certificateprintservice.playwright.element;
 import static se.inera.intyg.certificateprintservice.playwright.Constants.RIGHT_MARGIN_INFO_STYLE;
 import static se.inera.intyg.certificateprintservice.playwright.Constants.STYLE;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.text.html.HTML.Tag;
@@ -128,18 +127,17 @@ public class InformationElementFactory {
     unitInformation.addAll(
         metadata.getIssuingUnitInfo().stream().map(i -> element(Tag.SPAN).text(i))
             .toList());
-    
+
     contactInfoWrapper.appendChildren(unitInformation);
     return contactInfoWrapper;
   }
 
   public static Element signingDate(Metadata metadata) {
-    final var signingDate = LocalDate.parse(metadata.getSigningDate().split("T")[0]);
     final var signingDateWrapper = element(Tag.DIV)
         .attr(STYLE, "display: grid; margin-top: 5mm;");
     final var unitInformation = List.of(
         element(Tag.SPAN).attr(STYLE, "font-weight: bold;").text("Intyget signerades:"),
-        element(Tag.SPAN).text(signingDate.toString())
+        element(Tag.SPAN).text(metadata.getSigningDateAsString())
     );
     signingDateWrapper.appendChildren(unitInformation);
     return signingDateWrapper;

@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateprintservice.playwright.element;
 
 import static se.inera.intyg.certificateprintservice.playwright.Constants.STYLE;
+import static se.inera.intyg.certificateprintservice.playwright.element.ElementProvider.element;
 
 import java.util.ArrayList;
 import javax.swing.text.html.HTML.Tag;
@@ -20,14 +21,14 @@ public class FooterConverter {
 
   public static String createFooter(Metadata metadata) {
     final var elementList = new ArrayList<Element>();
-    final var baseWrapper = ElementProvider.element(Tag.DIV);
+    final var baseWrapper = element(Tag.DIV);
 
-    final var elementWrapper = ElementProvider.element(Tag.DIV);
+    final var elementWrapper = element(Tag.DIV);
     elementList.add(createFooterText(metadata));
-    elementList.add(createIneraLink());
+    elementList.add(createLink());
     elementWrapper.appendChildren(elementList);
 
-    final var footerWrapper = ElementProvider.element(Tag.DIV)
+    final var footerWrapper = element(Tag.DIV)
         .attr(STYLE, """
             height: 25mm;
             width: 100%;
@@ -44,14 +45,15 @@ public class FooterConverter {
     return baseWrapper.html();
   }
 
-  private static Element createIneraLink() {
-    return ElementProvider.element(Tag.A)
+  private static Element createLink() {
+    return element(Tag.A)
         .attr("href", "https://inera.se")
+        .attr("alt", "This is alt text")
         .text("www.inera.se");
   }
 
   private static Element createFooterText(Metadata metadata) {
-    return ElementProvider.element(Tag.SPAN)
+    return element(Tag.SPAN)
         .attr(STYLE, """
             display: block;
             margin-top: 5mm;

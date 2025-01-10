@@ -3,7 +3,9 @@ package se.inera.intyg.certificateprintservice.playwright.certificate;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Page.PdfOptions;
 import java.io.InputStream;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Setter;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.Certificate;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.Metadata;
 
@@ -12,6 +14,7 @@ public class PrintInformation {
 
   private String headerHtml;
   private String footerHtml;
+  @Setter(AccessLevel.NONE)
   private PdfOptions pdfOptions;
   private Certificate certificate;
   private InputStream template;

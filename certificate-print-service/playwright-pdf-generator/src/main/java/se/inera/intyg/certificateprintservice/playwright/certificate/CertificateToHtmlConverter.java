@@ -2,6 +2,7 @@ package se.inera.intyg.certificateprintservice.playwright.certificate;
 
 import static se.inera.intyg.certificateprintservice.playwright.Constants.CONTENT;
 import static se.inera.intyg.certificateprintservice.playwright.Constants.STYLE;
+import static se.inera.intyg.certificateprintservice.playwright.element.ElementProvider.element;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.Metadata;
-import se.inera.intyg.certificateprintservice.playwright.element.ElementProvider;
 import se.inera.intyg.certificateprintservice.playwright.element.InformationElementFactory;
 import se.inera.intyg.certificateprintservice.playwright.pdf.TemplateToDocumentConverter;
 import se.inera.intyg.certificateprintservice.playwright.text.TextFactory;
@@ -56,14 +56,14 @@ public class CertificateToHtmlConverter {
   private Element certificateInformation(Metadata metadata) {
     var infoWrapper = new Element(Tag.DIV.toString()).attr("style", "page-break-before:always");
 
-    infoWrapper.appendChild(ElementProvider.element(Tag.STRONG).text(metadata.getName()));
-    infoWrapper.appendChild(ElementProvider.element(Tag.P)
+    infoWrapper.appendChild(element(Tag.STRONG).text(metadata.getName()));
+    infoWrapper.appendChild(element(Tag.P)
         .attr(STYLE, "white-space: pre-line;")
         .append(metadata.getDescription()));
-    infoWrapper.appendChild(ElementProvider.element(Tag.BR));
+    infoWrapper.appendChild(element(Tag.BR));
     infoWrapper.appendChild(
-        ElementProvider.element(Tag.STRONG).text("Skicka intyg till mottagare"));
-    infoWrapper.appendChild(ElementProvider.element(Tag.P)
+        element(Tag.STRONG).text("Skicka intyg till mottagare"));
+    infoWrapper.appendChild(element(Tag.P)
         .attr(STYLE, "white-space: pre-line;")
         .append(TextFactory.citizenInformation()));
 
@@ -75,7 +75,7 @@ public class CertificateToHtmlConverter {
   }
 
   private Element getSignInfo(Metadata metadata) {
-    final var signInfo = ElementProvider.element(Tag.DIV)
+    final var signInfo = element(Tag.DIV)
         .attr(STYLE, "break-inside: avoid;");
 
     if (!metadata.isDraft()) {

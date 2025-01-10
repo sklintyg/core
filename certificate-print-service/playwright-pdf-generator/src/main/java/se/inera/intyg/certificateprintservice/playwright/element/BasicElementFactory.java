@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateprintservice.playwright.element;
 
 import static se.inera.intyg.certificateprintservice.playwright.Constants.STYLE;
+import static se.inera.intyg.certificateprintservice.playwright.element.ElementProvider.element;
 
 import java.util.List;
 import javax.swing.text.html.HTML.Tag;
@@ -16,7 +17,7 @@ public class BasicElementFactory {
   public static Element table(ElementValueTable tableValue) {
     final var headerColumns = tableValue.getHeadings().size();
     final var valueColumns = tableValue.getValues().getFirst().size();
-    final var tableElement = ElementProvider.element(Tag.TABLE)
+    final var tableElement = element(Tag.TABLE)
         .addClass("text-sm")
         .attr(STYLE, "margin-left: 5mm; margin-right: 5mm;");
 
@@ -31,10 +32,10 @@ public class BasicElementFactory {
 
   private static Element th(ElementValueTable tableValue, int headerColumns,
       int valueColumns) {
-    final var trHeader = ElementProvider.element(Tag.TR)
+    final var trHeader = element(Tag.TR)
         .attr(STYLE, "border-bottom: black solid 1px;");
     for (int i = 0; i < valueColumns; i++) {
-      final var th = ElementProvider.element(Tag.TH)
+      final var th = element(Tag.TH)
           .addClass("font-medium")
           .attr(STYLE, "padding-right: 10mm;");
       if (valueColumns - i > headerColumns) {
@@ -56,9 +57,9 @@ public class BasicElementFactory {
 
   private static Element tr(List<String> rowValues, int headerColumns,
       int valueColumns) {
-    final var tableRow = ElementProvider.element(Tag.TR);
+    final var tableRow = element(Tag.TR);
     for (int i = 0; i < valueColumns; i++) {
-      final var td = ElementProvider.element(Tag.TD);
+      final var td = element(Tag.TD);
       if (valueColumns - i > headerColumns) {
         td.addClass("font-medium");
         td.attr(STYLE, "padding-right: 10mm;");

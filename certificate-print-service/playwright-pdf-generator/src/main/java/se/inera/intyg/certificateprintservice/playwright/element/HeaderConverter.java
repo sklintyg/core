@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateprintservice.playwright.element;
 
 import static se.inera.intyg.certificateprintservice.playwright.Constants.STYLE;
+import static se.inera.intyg.certificateprintservice.playwright.element.ElementProvider.element;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -19,9 +20,9 @@ public class HeaderConverter {
 
   public static String createHeader(Metadata metadata) {
     final var start1 = Instant.now();
-    final var baseWrapper = ElementProvider.element(Tag.DIV);
+    final var baseWrapper = element(Tag.DIV);
 
-    if (metadata.getSigningDate() != null) {
+    if (metadata.isSigned()) {
       baseWrapper.appendChild(InformationElementFactory.rightMargin(
           TextFactory.certificateId(metadata.getCertificateId())));
     }
@@ -55,7 +56,7 @@ public class HeaderConverter {
   }
 
   private static Element headerWrapper() {
-    return ElementProvider.element(Tag.DIV)
+    return element(Tag.DIV)
         .attr("title", "headerElement")
         .attr(STYLE, """
             display: grid;
