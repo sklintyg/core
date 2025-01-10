@@ -8,9 +8,14 @@ plugins {
 }
 
 ext {
+    jsoupVersion = "1.18.3"
+    pdfBoxVersion = "3.0.3"
+    playwrightVersion = "1.49.0"
+    springbootMavenBomVersion = '3.4.0'
+    tailwindCssVersion= '3.4.16'
+
     ineraMavenRepository = 'https://nexus.drift.inera.se/repository/it-public/'
     nvdMirror = 'https://vulnz-nvd-mirror-devtest.intyg.nordicmedtest.se'
-    springbootMavenBomVersion = '3.4.0'
 }
 
 group = 'se.inera.intyg.certificateprintservice'
@@ -43,6 +48,7 @@ dependencyCheck {
 subprojects {
     apply plugin: 'java'
     apply plugin: 'jacoco'
+    apply plugin: 'io.spring.dependency-management'
 
     sourceCompatibility = '21'
     targetCompatibility = '21'
@@ -52,8 +58,6 @@ subprojects {
             extendsFrom annotationProcessor
         }
     }
-
-    apply plugin: 'io.spring.dependency-management'
 
     dependencyManagement {
         imports {
@@ -95,5 +99,7 @@ reporting {
 
     dependencies {
         testReportAggregation project(':app')
+        testReportAggregation project(':playwright-pdf-generator')
+        testReportAggregation project(':pdf-generator-api')
     }
 }

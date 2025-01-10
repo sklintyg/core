@@ -165,7 +165,7 @@ class PrintCertificateMetadataConverterTest {
   @Test
   void shouldSetDescription() {
     final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false, FILE_NAME);
-    assertEquals(CERTIFICATE.certificateModel().detailedDescription(),
+    assertEquals(CERTIFICATE.certificateModel().description(),
         result.getDescription());
   }
 
@@ -176,16 +176,23 @@ class PrintCertificateMetadataConverterTest {
   }
 
   @Test
-  void shouldSetSentToFalseIfNotSent() {
-    final var result = printCertificateMetadataConverter.convert(NOT_SENT_CERTIFICATE, false,
-        FILE_NAME);
-    assertFalse(result.isSent());
+  void shouldSetIssuerName() {
+    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false, FILE_NAME);
+    assertEquals(CERTIFICATE.certificateMetaData().issuer().name().fullName(),
+        result.getIssuerName());
   }
 
   @Test
-  void shouldSetSentToTrueIfSent() {
-    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false,
-        FILE_NAME);
-    assertTrue(result.isSent());
+  void shouldSetIssuingUnit() {
+    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false, FILE_NAME);
+    assertEquals(CERTIFICATE.certificateMetaData().issuingUnit().name().name(),
+        result.getIssuingUnit());
+  }
+
+  @Test
+  void shouldSetIsSent() {
+    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false, FILE_NAME);
+    assertEquals(CERTIFICATE.sent().sentAt().toString(),
+        result.getSentDate());
   }
 }

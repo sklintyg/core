@@ -9,11 +9,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     property = "type")
 @JsonSubTypes({
     @Type(value = ElementSimplifiedValueTextDTO.class, name = "TEXT"),
-    @Type(value = ElementSimplifiedValueListDTO.class, name = "LIST")
+    @Type(value = ElementSimplifiedValueListDTO.class, name = "LIST"),
+    @Type(value = ElementSimplifiedValueTableDTO.class, name = "TABLE")
 })
 
 public interface ElementSimplifiedValueDTO {
-
-  ElementSimplifiedValueTypeDTO getType();
 
 }

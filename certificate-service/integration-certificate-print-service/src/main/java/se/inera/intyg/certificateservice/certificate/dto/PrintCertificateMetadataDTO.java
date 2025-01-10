@@ -12,6 +12,7 @@ public class PrintCertificateMetadataDTO {
   String version;
   String typeId;
   String certificateId;
+  String sentDate;
   String signingDate;
   byte[] recipientLogo;
   String recipientName;
@@ -19,6 +20,7 @@ public class PrintCertificateMetadataDTO {
   String personId;
   String description;
   String fileName;
-  boolean isSent;
+  String issuerName;
+  String issuingUnit;
   List<String> unitInformation;
 }

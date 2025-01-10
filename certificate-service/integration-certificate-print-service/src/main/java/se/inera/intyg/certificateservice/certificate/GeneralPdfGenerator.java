@@ -1,15 +1,18 @@
 package se.inera.intyg.certificateservice.certificate;
 
+import java.util.function.Predicate;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.certificate.converter.PrintCertificateCategoryConverter;
 import se.inera.intyg.certificateservice.certificate.converter.PrintCertificateMetadataConverter;
+import se.inera.intyg.certificateservice.certificate.dto.PrintCertificateCategoryDTO;
 import se.inera.intyg.certificateservice.certificate.dto.PrintCertificateRequestDTO;
 import se.inera.intyg.certificateservice.certificate.integration.PrintCertificateFromCertificatePrintService;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Pdf;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGenerator;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 
 @Component("GeneralPdfGenerator")
 @AllArgsConstructor
@@ -28,16 +31,14 @@ public class GeneralPdfGenerator implements PdfGenerator {
         .categories(
             certificate.certificateModel().elementSpecifications()
                 .stream()
-                .filter(
-                    elementSpecification -> !(elementSpecification.configuration() instanceof ElementConfigurationUnitContactInformation)
-                )
+                .filter(isNotContactInformation())
                 .map(element -> printCertificateCategoryConverter.convert(certificate, element))
+                .filter(hasQuestions())
                 .toList()
         )
         .build();
 
-    final var response = printCertificateFromCertificatePrintService.print(request,
-        certificate.id().id());
+    final var response = printCertificateFromCertificatePrintService.print(request);
 
     return new Pdf(response.getPdfData(), fileName);
   }
@@ -55,6 +56,15 @@ public class GeneralPdfGenerator implements PdfGenerator {
         .replace("–", "")
         .replace("__", "_")
         .toLowerCase();
+  }
+
+
+  private Predicate<ElementSpecification> isNotContactInformation() {
+    return elementSpecification -> !(elementSpecification.configuration() instanceof ElementConfigurationUnitContactInformation);
+  }
+
+  private Predicate<PrintCertificateCategoryDTO> hasQuestions() {
+    return elementSpecification -> !elementSpecification.getQuestions().isEmpty();
   }
 
 }

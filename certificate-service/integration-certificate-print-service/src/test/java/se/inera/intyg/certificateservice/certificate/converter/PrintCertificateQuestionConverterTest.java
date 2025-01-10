@@ -136,13 +136,13 @@ class PrintCertificateQuestionConverterTest {
         .value(ElementSimplifiedValueTextDTO.builder()
             .text(TEXT)
             .build())
-        .children(Collections.emptyList())
+        .subquestions(Collections.emptyList())
         .build();
 
     final var response = printCertificateQuestionConverter.convert(
         ELEMENT_SPECIFICATION, CERTIFICATE
     );
 
-    assertEquals(expected, response.get().getChildren().getFirst());
+    assertEquals(expected, response.get().getSubquestions().getFirst());
   }
 }
