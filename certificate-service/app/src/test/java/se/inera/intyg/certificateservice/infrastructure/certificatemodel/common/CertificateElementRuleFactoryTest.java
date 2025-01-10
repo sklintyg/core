@@ -200,4 +200,18 @@ class CertificateElementRuleFactoryTest {
     final var response = CertificateElementRuleFactory.wrapWithParenthesis("expected");
     assertEquals(expectedResult, response);
   }
+
+  @Test
+  void shouldReturnLessThan() {
+    final var expectedResult = "1 < 2";
+    final var response = CertificateElementRuleFactory.lessThan("1", "2");
+    assertEquals(expectedResult, response);
+  }
+
+  @Test
+  void shouldReturnExist() {
+    final var expectedResult = "exists(1)";
+    final var response = CertificateElementRuleFactory.exists("1");
+    assertEquals(expectedResult, response);
+  }
 }
