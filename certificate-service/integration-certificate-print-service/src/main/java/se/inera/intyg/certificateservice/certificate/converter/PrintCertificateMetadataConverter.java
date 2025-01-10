@@ -43,6 +43,7 @@ public class PrintCertificateMetadataConverter {
         .unitInformation(
             printCertificateUnitInformationConverter.convert(certificate))
         .fileName(fileName)
+        .isSent(certificate.sent() != null && certificate.sent().sentAt() != null)
         .build();
   }
 

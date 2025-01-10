@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
@@ -25,7 +24,8 @@ public class ElementValidationVisualAcuities implements ElementValidation {
   boolean mandatory;
   Double min;
   Double max;
-  Predicate<List<ElementData>> shouldValidateSightOnBothEyes;
+  Double minAllowedSightOneEye;
+  Double minAllowedSightOtherEye;
 
   @Override
   public List<ValidationError> validate(ElementData data,
@@ -44,18 +44,17 @@ public class ElementValidationVisualAcuities implements ElementValidation {
       validationErrors.addAll(validateMinAndMaxValues(value, data, categoryId));
     }
 
-    if (shouldValidateSightOnBothEyes != null && shouldValidateSightOnBothEyes.test(dataList)) {
-      validationErrors.addAll(validateHasSightOnBothEyes(value, data, categoryId));
+    if (minAllowedSightOneEye != null && minAllowedSightOtherEye != null) {
+      validationErrors.addAll(validateHasGoodEnoughSightOnBothEyes(value, data, categoryId));
     }
 
     return validationErrors;
   }
 
-  private Collection<ValidationError> validateHasSightOnBothEyes(
+  private Collection<ValidationError> validateHasGoodEnoughSightOnBothEyes(
       ElementValueVisualAcuities visualAcuities, ElementData data, Optional<ElementId> categoryId) {
     final var validationErrors = new ArrayList<ValidationError>();
-    if (!valueIsZero(visualAcuities.rightEye().withoutCorrection()) && !valueIsZero(
-        visualAcuities.leftEye().withoutCorrection())) {
+    if (shouldNotBeEvaluated(visualAcuities)) {
       return validationErrors;
     }
 
@@ -95,8 +94,29 @@ public class ElementValidationVisualAcuities implements ElementValidation {
     return validationErrors;
   }
 
-  private boolean valueIsZero(Correction correction) {
-    return correction != null && correction.value() != null && correction.value() == 0.0;
+  private boolean shouldNotBeEvaluated(ElementValueVisualAcuities visualAcuities) {
+    final var rightEye = visualAcuities.rightEye();
+    final var leftEye = visualAcuities.leftEye();
+    return isMissingValue(rightEye.withoutCorrection(), leftEye.withoutCorrection())
+        || hasGoodEnoughSightOnBothEyes(rightEye.withoutCorrection(), leftEye.withoutCorrection());
+  }
+
+  private boolean isMissingValue(Correction rightEye, Correction leftEye) {
+    return rightEye == null
+        || leftEye == null
+        || rightEye.value() == null
+        || leftEye.value() == null;
+  }
+
+  private boolean hasGoodEnoughSightOnBothEyes(Correction rightEye, Correction leftEye) {
+    final var rightEyeSight = rightEye.value();
+    final var leftEyeSight = leftEye.value();
+
+    final var minSightOneEye = minAllowedSightOneEye;
+    final var minSightOtherEye = minAllowedSightOtherEye;
+
+    return (rightEyeSight >= minSightOneEye && leftEyeSight >= minSightOtherEye)
+        || (rightEyeSight >= minSightOtherEye && leftEyeSight >= minSightOneEye);
   }
 
   private boolean missingValue(Correction correction) {

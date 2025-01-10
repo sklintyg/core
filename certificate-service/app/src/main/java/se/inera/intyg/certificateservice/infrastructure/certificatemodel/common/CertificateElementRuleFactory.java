@@ -103,6 +103,7 @@ public class CertificateElementRuleFactory {
         .build();
   }
 
+
   public static ElementRule mandatoryAndExist(ElementId id, List<FieldId> fieldIds) {
     return ElementRuleExpression.builder()
         .id(id)
@@ -227,6 +228,10 @@ public class CertificateElementRuleFactory {
     return s1 + " <= " + s2;
   }
 
+  public static String lessThan(String s1, String s2) {
+    return s1 + " < " + s2;
+  }
+
   public static String withCitation(String field) {
     return "'" + field + "'";
   }
@@ -243,5 +248,13 @@ public class CertificateElementRuleFactory {
 
   public static String wrapWithParenthesis(String expression) {
     return "(" + expression + ")";
+  }
+
+  public static String exists(String expression) {
+    return String.format("exists(%s)", expression);
+  }
+
+  public static String wrapWithNotEmpty(String expression) {
+    return "!empty(" + expression + ")";
   }
 }

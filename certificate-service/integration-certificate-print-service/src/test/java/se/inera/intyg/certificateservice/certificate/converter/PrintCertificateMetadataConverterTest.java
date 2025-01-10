@@ -1,8 +1,10 @@
 package se.inera.intyg.certificateservice.certificate.converter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
@@ -42,8 +44,28 @@ class PrintCertificateMetadataConverterTest {
           ).build()
       )
       .status(Status.SIGNED)
-      .sent(Sent.builder().sentAt(LocalDateTime.now()).build())
+      .sent(
+          Sent.builder()
+              .sentAt(LocalDateTime.now())
+              .build()
+      )
       .signed(LocalDateTime.now())
+      .build();
+
+
+  public static final Certificate NOT_SENT_CERTIFICATE = fk7210CertificateBuilder()
+      .certificateModel(fk7210certificateModelBuilder()
+          .recipient(new Recipient(new RecipientId("ts"), "ts", "ts", "transportstyrelsen-logo.png",
+              "Läkarintyg Transportstyrelsen")
+          ).build()
+      )
+      .status(Status.SIGNED)
+      .signed(LocalDateTime.now())
+      .sent(
+          Sent.builder()
+              .sentAt(null)
+              .build()
+      )
       .build();
 
   public static final Certificate DRAFT = fk7210CertificateBuilder()

@@ -2,12 +2,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0010.ANNAT;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.TAXI;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionIntygetAvser.QUESTION_INTYGET_AVSER_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynfunktioner.QUESTION_SYNFUNKTIONER_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynfunktioner.QUESTION_SYNFUNKTIONER_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynskarpa.QUESTION_SYNSKARPA_ID;
@@ -15,10 +10,6 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCodeList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationVisualAcuities;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementVisualAcuity;
@@ -107,123 +98,10 @@ class QuestionSynskarpaTest {
       assertAll(
           () -> assertEquals(0.0, validation.min()),
           () -> assertEquals(2.0, validation.max()),
-          () -> assertTrue(validation.mandatory()),
-          () -> assertNotNull(validation.shouldValidateSightOnBothEyes())
+          () -> assertEquals(0.1, validation.minAllowedSightOneEye()),
+          () -> assertEquals(0.8, validation.minAllowedSightOtherEye()),
+          () -> assertTrue(validation.mandatory())
       );
-    }
-
-    @Test
-    void shallReturnTrueIfFieldHasValue() {
-      final var validation = (ElementValidationVisualAcuities) QuestionSynskarpa.questionSynskarpa()
-          .validations().getFirst();
-
-      final var elementData = List.of(
-          ElementData.builder()
-              .id(QUESTION_INTYGET_AVSER_ID)
-              .value(
-                  ElementValueCodeList.builder()
-                      .list(
-                          List.of(
-                              ElementValueCode.builder()
-                                  .code(TAXI.code())
-                                  .build()
-                          )
-                      )
-                      .build()
-              )
-              .build()
-      );
-
-      assertTrue(validation.shouldValidateSightOnBothEyes().test(elementData));
-    }
-
-    @Test
-    void shallReturnFalseIfFieldDontHaveValue() {
-      final var validation = (ElementValidationVisualAcuities) QuestionSynskarpa.questionSynskarpa()
-          .validations().getFirst();
-
-      final var elementData = List.of(
-          ElementData.builder()
-              .id(QUESTION_INTYGET_AVSER_ID)
-              .value(
-                  ElementValueCodeList.builder()
-                      .list(
-                          List.of(
-                              ElementValueCode.builder()
-                                  .code(ANNAT.code())
-                                  .build()
-                          )
-                      )
-                      .build()
-              )
-              .build()
-      );
-
-      assertFalse(validation.shouldValidateSightOnBothEyes().test(elementData));
-    }
-  }
-
-  @Nested
-  class ShouldValidate {
-
-    @Test
-    void shallReturnTrueIfBooleanIsFalse() {
-      final var elementData = List.of(
-          ElementData.builder()
-              .id(new ElementId("4"))
-              .value(
-                  ElementValueBoolean.builder()
-                      .value(false)
-                      .build()
-              )
-              .build()
-      );
-
-      final var element = QuestionSynskarpa.questionSynskarpa();
-
-      final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
-
-      assertTrue(shouldValidate.test(elementData));
-    }
-
-    @Test
-    void shallReturnFalseIfElementMissing() {
-      final var elementData = List.of(
-          ElementData.builder()
-              .id(new ElementId("8.1"))
-              .value(
-                  ElementValueBoolean.builder()
-                      .value(true)
-                      .build()
-              )
-              .build()
-      );
-
-      final var element = QuestionSynskarpa.questionSynskarpa();
-
-      final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
-
-      assertFalse(shouldValidate.test(elementData));
-    }
-
-    @Test
-    void shallReturnFalseIfElementTrue() {
-      final var elementData = List.of(
-          ElementData.builder()
-              .id(new ElementId("4"))
-              .value(
-                  ElementValueBoolean.builder()
-                      .value(true)
-                      .build()
-              )
-              .build()
-      );
-
-      final var element = QuestionSynskarpa.questionSynskarpa();
-
-      final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
-
-      assertFalse(shouldValidate.test(elementData));
     }
   }
 }

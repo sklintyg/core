@@ -1,12 +1,9 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.TAXI;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionIntygetAvser.QUESTION_INTYGET_AVSER_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynfunktioner.QUESTION_SYNFUNKTIONER_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynfunktioner.QUESTION_SYNFUNKTIONER_ID;
 
 import java.util.List;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCodeList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationVisualAcuities;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
@@ -68,17 +65,11 @@ public class QuestionSynskarpa {
         .validations(
             List.of(
                 ElementValidationVisualAcuities.builder()
-                    .shouldValidateSightOnBothEyes(
-                        elementData -> elementData.stream()
-                            .filter(data -> QUESTION_INTYGET_AVSER_ID.equals(data.id()))
-                            .map(element -> (ElementValueCodeList) element.value())
-                            .map(ElementValueCodeList::list)
-                            .flatMap(List::stream)
-                            .anyMatch(valueCode -> valueCode.code().equals(TAXI.code()))
-                    )
                     .mandatory(true)
                     .min(0.0)
                     .max(2.0)
+                    .minAllowedSightOneEye(0.1)
+                    .minAllowedSightOtherEye(0.8)
                     .build()
             )
 
