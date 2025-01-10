@@ -19,5 +19,6 @@ public class PrintCertificateMetadataDTO {
   String personId;
   String description;
   String fileName;
+  boolean isSent;
   List<String> unitInformation;
 }
