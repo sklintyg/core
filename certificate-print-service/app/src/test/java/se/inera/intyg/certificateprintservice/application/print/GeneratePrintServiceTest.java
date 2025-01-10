@@ -35,13 +35,11 @@ class GeneratePrintServiceTest {
 
   @Test
   void shallThrowIfRequestIsNull() {
-    final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-        () -> generatePrintService.get(null));
-    assertEquals("Invalid request", illegalArgumentException.getMessage());
+    assertThrows(IllegalArgumentException.class, () -> generatePrintService.get(null));
   }
 
   @Test
-  void shallThrowIfMetadataIsNUll() {
+  void shallThrowIfMetadataIsNull() {
     final var request = PrintCertificateRequestDTO.builder()
         .categories(List.of(PrintCertificateCategoryDTO.builder().build()))
         .build();

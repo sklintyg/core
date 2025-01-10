@@ -38,8 +38,7 @@ public class GeneralPdfGenerator implements PdfGenerator {
         )
         .build();
 
-    final var response = printCertificateFromCertificatePrintService.print(request,
-        certificate.id().id());
+    final var response = printCertificateFromCertificatePrintService.print(request);
 
     return new Pdf(response.getPdfData(), fileName);
   }

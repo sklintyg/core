@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateprintservice.playwright.element;
 
+import static se.inera.intyg.certificateprintservice.playwright.Constants.HEADER_STYLE;
 import static se.inera.intyg.certificateprintservice.playwright.Constants.STYLE;
 import static se.inera.intyg.certificateprintservice.playwright.element.ElementProvider.element;
 
@@ -58,12 +59,7 @@ public class HeaderConverter {
   private static Element headerWrapper() {
     return element(Tag.DIV)
         .attr("title", "headerElement")
-        .attr(STYLE, """
-            display: grid;
-            width: 17cm;
-            font-size: 10pt;
-            margin: 10mm 20mm 0 20mm;
-            """);
+        .attr(STYLE, HEADER_STYLE);
   }
 
   private static Element certificateHeader(Metadata metadata) {

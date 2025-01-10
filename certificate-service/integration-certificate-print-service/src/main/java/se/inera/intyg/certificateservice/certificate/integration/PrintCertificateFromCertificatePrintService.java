@@ -26,11 +26,10 @@ public class PrintCertificateFromCertificatePrintService {
 
 
   @PerformanceLogging(eventAction = "print-certificate-from-certificate-print-service", eventType = EVENT_TYPE_ACCESSED)
-  public PrintCertificateResponseDTO print(PrintCertificateRequestDTO request,
-      String certificateId) {
+  public PrintCertificateResponseDTO print(PrintCertificateRequestDTO request) {
     return restClient
         .post()
-        .uri(printCertificateServiceUrl + "/api/print/" + certificateId)
+        .uri(printCertificateServiceUrl + "/api/print")
         .header(LOG_TRACE_ID_HEADER, MDC.get(TRACE_ID_KEY))
         .header(LOG_SESSION_ID_HEADER, MDC.get(SESSION_ID_KEY))
         .body(request)

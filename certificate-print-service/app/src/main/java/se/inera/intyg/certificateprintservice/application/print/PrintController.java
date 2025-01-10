@@ -15,13 +15,8 @@ public class PrintController {
 
   private final GeneratePrintService printService;
 
-  @PostMapping(value = "/{id}")
+  @PostMapping()
   PrintCertificateResponseDTO get(@RequestBody PrintCertificateRequestDTO request) {
     return printService.get(request);
-  }
-
-  @PostMapping(value = "/testprint", produces = "application/pdf")
-  byte[] print(@RequestBody PrintCertificateRequestDTO request) {
-    return printService.get(request).getPdfData();
   }
 }

@@ -60,7 +60,7 @@ class CertificateToHtmlConverterTest {
   @Mock
   Page headerPage;
   @InjectMocks
-  CertificateToHtmlConverter certificateToHtmlConverter;
+  HtmlConverter htmlConverter;
 
   Document doc;
 
@@ -167,7 +167,7 @@ class CertificateToHtmlConverterTest {
     pi.setHeaderPage(headerPage);
 
     when(templateToDocumentConverter.convert(pi)).thenReturn(doc);
-    return certificateToHtmlConverter.certificate(pi);
+    return htmlConverter.convert(pi);
   }
 
   private String getUnsignedHtml() throws IOException {
@@ -180,7 +180,7 @@ class CertificateToHtmlConverterTest {
     pi.setHeaderPage(headerPage);
 
     when(templateToDocumentConverter.convert(pi)).thenReturn(doc);
-    return certificateToHtmlConverter.certificate(pi);
+    return htmlConverter.convert(pi);
   }
 }
 

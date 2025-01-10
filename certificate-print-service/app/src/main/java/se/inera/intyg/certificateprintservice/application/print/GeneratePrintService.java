@@ -16,15 +16,15 @@ public class GeneratePrintService {
 
   public PrintCertificateResponseDTO get(PrintCertificateRequestDTO request) {
     validateRequest(request);
-    final var printCertificateRequest = printCertificateRequestConverter.convert(request);
+    final var certificate = printCertificateRequestConverter.convert(request);
     return PrintCertificateResponseDTO.builder()
-        .pdfData(printCertificateGenerator.generate(printCertificateRequest))
+        .pdfData(printCertificateGenerator.generate(certificate))
         .build();
   }
 
   private void validateRequest(PrintCertificateRequestDTO request) {
     if (request == null) {
-      throw new IllegalArgumentException("Invalid request");
+      throw new IllegalArgumentException("Invalid request - request is null");
     }
 
     if (request.getMetadata() == null) {

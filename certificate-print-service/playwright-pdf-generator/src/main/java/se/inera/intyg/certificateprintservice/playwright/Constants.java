@@ -24,4 +24,20 @@ public abstract class Constants {
       transform-origin: top left;
       """;
 
+  public static final String FOOTER_STYLE = """
+      height: 25mm;
+      width: 100%;
+      font-size: 10pt;
+      margin: 0 20mm;
+      border-top: black solid 1px;
+      justify-content: space-between;
+      display: flex;
+      """;
+
+  public static final String HEADER_STYLE = """
+      display: grid;
+      width: 17cm;
+      font-size: 10pt;
+      margin: 10mm 20mm 0 20mm;
+      """;
 }

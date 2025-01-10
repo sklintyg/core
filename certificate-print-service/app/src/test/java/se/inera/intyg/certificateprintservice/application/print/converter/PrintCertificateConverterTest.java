@@ -16,17 +16,17 @@ import se.inera.intyg.certificateprintservice.pdfgenerator.api.Category;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.Metadata;
 
 @ExtendWith(MockitoExtension.class)
-class PrintCertificateCertificateConverterTest {
+class PrintCertificateConverterTest {
 
 
   private static final String ID_1 = "ID_1";
   private static final String ID_2 = "ID_2";
   @Mock
-  PrintCertificateCategoryConverter categoryConverter;
+  private PrintCertificateCategoryConverter categoryConverter;
   @Mock
-  PrintCertificateMetadataConverter metadataConverter;
+  private PrintCertificateMetadataConverter metadataConverter;
   @InjectMocks
-  PrintCertificateRequestConverter printCertificateRequestConverter;
+  private PrintCertificateRequestConverter printCertificateRequestConverter;
 
   @Test
   void shallConvertCategories() {

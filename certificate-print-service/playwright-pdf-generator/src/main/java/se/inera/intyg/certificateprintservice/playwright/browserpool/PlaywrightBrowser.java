@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateprintservice.playwright.browserpool;
 
 import com.microsoft.playwright.Browser;
+import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Playwright;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,4 +14,7 @@ public class PlaywrightBrowser {
   @Getter
   private final Browser browser;
 
+  public BrowserContext getBrowserContext() {
+    return this.browser.newContext();
+  }
 }

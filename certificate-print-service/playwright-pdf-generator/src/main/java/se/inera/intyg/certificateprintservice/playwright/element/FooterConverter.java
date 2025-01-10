@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateprintservice.playwright.element;
 
+import static se.inera.intyg.certificateprintservice.playwright.Constants.FOOTER_STYLE;
 import static se.inera.intyg.certificateprintservice.playwright.Constants.STYLE;
 import static se.inera.intyg.certificateprintservice.playwright.element.ElementProvider.element;
 
@@ -29,15 +30,7 @@ public class FooterConverter {
     elementWrapper.appendChildren(elementList);
 
     final var footerWrapper = element(Tag.DIV)
-        .attr(STYLE, """
-            height: 25mm;
-            width: 100%;
-            font-size: 10pt;
-            margin: 0 20mm;
-            border-top: black solid 1px;
-            justify-content: space-between;
-            display: flex;
-            """);
+        .attr(STYLE, FOOTER_STYLE);
     footerWrapper.appendChild(elementWrapper);
     footerWrapper.appendChild(createPageNr());
 
@@ -48,7 +41,6 @@ public class FooterConverter {
   private static Element createLink() {
     return element(Tag.A)
         .attr("href", "https://inera.se")
-        .attr("alt", "This is alt text")
         .text("www.inera.se");
   }
 

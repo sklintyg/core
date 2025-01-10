@@ -6,11 +6,13 @@ import static se.inera.intyg.certificateprintservice.playwright.element.ElementP
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.swing.text.html.HTML.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.Metadata;
 import se.inera.intyg.certificateprintservice.playwright.element.InformationElementFactory;
@@ -20,11 +22,11 @@ import se.inera.intyg.certificateprintservice.playwright.text.TextFactory;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class CertificateToHtmlConverter {
+public class HtmlConverter {
 
   private final TemplateToDocumentConverter templateToDocumentConverter;
 
-  private String convert(PrintInformation printInformation,
+  private String toHtmlString(PrintInformation printInformation,
       List<Element> children) throws IOException {
     final var document = templateToDocumentConverter.convert(printInformation);
     final var content = document.getElementById(CONTENT);
@@ -40,54 +42,64 @@ public class CertificateToHtmlConverter {
     return document.html();
   }
 
-  public String certificate(PrintInformation printInformation) throws IOException {
+  public String convert(PrintInformation printInformation) throws IOException {
     final var metadata = printInformation.getcertificateMetadata();
     final var children = new ArrayList<>(printInformation.getCertificate().getCategories().stream()
         .map(CategoryConverter::category)
         .toList());
-
-    children.add(getSignInfo(metadata));
-
+    children.add(getIssuerInformation(metadata));
     children.add(certificateInformation(printInformation.getcertificateMetadata()));
-
-    return convert(printInformation, children);
+    return toHtmlString(printInformation, children);
   }
 
   private Element certificateInformation(Metadata metadata) {
     var infoWrapper = new Element(Tag.DIV.toString()).attr("style", "page-break-before:always");
-
-    infoWrapper.appendChild(element(Tag.STRONG).text(metadata.getName()));
-    infoWrapper.appendChild(element(Tag.P)
-        .attr(STYLE, "white-space: pre-line;")
-        .append(metadata.getDescription()));
+    infoWrapper.appendChild(certificateName(metadata.getName()));
+    infoWrapper.appendChild(certificateDescription(metadata.getDescription()));
     infoWrapper.appendChild(element(Tag.BR));
-    infoWrapper.appendChild(
-        element(Tag.STRONG).text("Skicka intyg till mottagare"));
-    infoWrapper.appendChild(element(Tag.P)
-        .attr(STYLE, "white-space: pre-line;")
-        .append(TextFactory.citizenInformation()));
+    infoWrapper.appendChildren(citizenInfo());
+    setLinkColor(infoWrapper);
+    return infoWrapper;
+  }
 
+  private void setLinkColor(Element infoWrapper) {
     infoWrapper.getAllElements().stream().flatMap(element -> element.children().stream())
         .filter(element -> element.tagName().equals(Tag.A.toString()))
         .forEach(element -> element.attr(STYLE, "color: #0000EE;"));
-    return infoWrapper;
-
   }
 
-  private Element getSignInfo(Metadata metadata) {
-    final var signInfo = element(Tag.DIV)
+  private Collection<Node> citizenInfo() {
+    return List.of(
+        element(Tag.STRONG).text("Skicka intyg till mottagare"),
+        element(Tag.P)
+            .attr(STYLE, "white-space: pre-line;")
+            .append(TextFactory.citizenInformation()));
+  }
+
+  private Node certificateDescription(String description) {
+    return element(Tag.P)
+        .attr(STYLE, "white-space: pre-line;")
+        .append(description);
+  }
+
+  private Node certificateName(String name) {
+    return element(Tag.STRONG).text(name);
+  }
+
+  private Element getIssuerInformation(Metadata metadata) {
+    final var issuerInfo = element(Tag.DIV)
         .attr(STYLE, "break-inside: avoid;");
 
     if (!metadata.isDraft()) {
-      signInfo.appendChild(InformationElementFactory.issuerName(metadata));
+      issuerInfo.appendChild(InformationElementFactory.issuerName(metadata));
     }
 
-    signInfo.appendChild(InformationElementFactory.contactInfo(metadata));
+    issuerInfo.appendChild(InformationElementFactory.contactInfo(metadata));
 
     if (!metadata.isDraft()) {
-      signInfo.appendChild(InformationElementFactory.signingDate(metadata));
+      issuerInfo.appendChild(InformationElementFactory.signingDate(metadata));
     }
 
-    return signInfo;
+    return issuerInfo;
   }
 }

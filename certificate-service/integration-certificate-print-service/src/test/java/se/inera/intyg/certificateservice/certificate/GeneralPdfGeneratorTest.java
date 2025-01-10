@@ -2,7 +2,6 @@ package se.inera.intyg.certificateservice.certificate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -96,7 +95,7 @@ class GeneralPdfGeneratorTest {
 
   @BeforeEach
   void setUp() {
-    when(printCertificateFromCertificatePrintService.print(any(), anyString()))
+    when(printCertificateFromCertificatePrintService.print(any()))
         .thenReturn(RESPONSE);
   }
 
@@ -124,22 +123,11 @@ class GeneralPdfGeneratorTest {
           .build();
 
       generalPdfGenerator.generate(CERTIFICATE_NO_GENERAL_RECIPIENT_NAME, TEXT, IS_CITIZEN);
-      verify(printCertificateFromCertificatePrintService).print(captor.capture(), anyString());
+      verify(printCertificateFromCertificatePrintService).print(captor.capture());
 
       assertEquals(expected, captor.getValue());
     }
 
-    @Test
-    void shouldConvertCertificateId() {
-      final var captor = ArgumentCaptor.forClass(String.class);
-
-      generalPdfGenerator.generate(CERTIFICATE_NO_GENERAL_RECIPIENT_NAME, TEXT, IS_CITIZEN);
-      verify(printCertificateFromCertificatePrintService).print(
-          any(PrintCertificateRequestDTO.class),
-          captor.capture());
-
-      assertEquals(CERTIFICATE_ID, captor.getValue());
-    }
 
     @Test
     void shouldConvertResponseWhenNoGeneralFileName() {
@@ -210,7 +198,7 @@ class GeneralPdfGeneratorTest {
         .build();
 
     generalPdfGenerator.generate(cert, TEXT, IS_CITIZEN);
-    verify(printCertificateFromCertificatePrintService).print(captor.capture(), anyString());
+    verify(printCertificateFromCertificatePrintService).print(captor.capture());
 
     assertEquals(expected, captor.getValue());
 
@@ -254,7 +242,7 @@ class GeneralPdfGeneratorTest {
     final var captor = ArgumentCaptor.forClass(PrintCertificateRequestDTO.class);
 
     generalPdfGenerator.generate(certWithMultipleElements, TEXT, IS_CITIZEN);
-    verify(printCertificateFromCertificatePrintService).print(captor.capture(), anyString());
+    verify(printCertificateFromCertificatePrintService).print(captor.capture());
 
     assertEquals(1, captor.getValue().getCategories().size());
 
