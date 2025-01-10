@@ -53,7 +53,7 @@ public abstract class GetCertificateGeneralPdfIT extends BaseIntegrationIT {
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    certificatePrintServiceMock.mockPdf(certificateId(testCertificates));
+    certificatePrintServiceMock.mockPdf();
 
     final var response = api.getCertificatePdf(
         defaultGetCertificatePdfRequest(),
@@ -73,7 +73,7 @@ public abstract class GetCertificateGeneralPdfIT extends BaseIntegrationIT {
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    certificatePrintServiceMock.mockPdf(certificateId(testCertificates));
+    certificatePrintServiceMock.mockPdf();
 
     final var response = api.getCertificatePdf(
         customGetCertificatePdfRequest()
@@ -97,7 +97,7 @@ public abstract class GetCertificateGeneralPdfIT extends BaseIntegrationIT {
             .build()
     );
 
-    certificatePrintServiceMock.mockPdf(certificateId(testCertificates));
+    certificatePrintServiceMock.mockPdf();
 
     final var response = api.getCertificatePdf(
         customGetCertificatePdfRequest()
@@ -119,7 +119,7 @@ public abstract class GetCertificateGeneralPdfIT extends BaseIntegrationIT {
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    certificatePrintServiceMock.mockPdf(certificateId(testCertificates));
+    certificatePrintServiceMock.mockPdf();
 
     final var response = api.getCertificatePdf(
         customGetCertificatePdfRequest()
@@ -145,7 +145,7 @@ public abstract class GetCertificateGeneralPdfIT extends BaseIntegrationIT {
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    certificatePrintServiceMock.mockPdf(certificateId(testCertificates));
+    certificatePrintServiceMock.mockPdf();
 
     final var response = api.getCertificatePdf(
         customGetCertificatePdfRequest().unit(ALFA_HUDMOTTAGNINGEN_DTO).build(),
@@ -162,7 +162,7 @@ public abstract class GetCertificateGeneralPdfIT extends BaseIntegrationIT {
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    certificatePrintServiceMock.mockPdf(certificateId(testCertificates));
+    certificatePrintServiceMock.mockPdf();
 
     final var response = api.getCertificatePdf(
         customGetCertificatePdfRequest()
@@ -185,7 +185,7 @@ public abstract class GetCertificateGeneralPdfIT extends BaseIntegrationIT {
             .build()
     );
 
-    certificatePrintServiceMock.mockPdf(certificateId(testCertificates));
+    certificatePrintServiceMock.mockPdf();
 
     final var response = api.getCertificatePdf(
         customGetCertificatePdfRequest()
@@ -206,7 +206,7 @@ public abstract class GetCertificateGeneralPdfIT extends BaseIntegrationIT {
             .build()
     );
 
-    certificatePrintServiceMock.mockPdf(certificateId(testCertificates));
+    certificatePrintServiceMock.mockPdf();
 
     final var response = api.getCertificatePdf(
         customGetCertificatePdfRequest()
@@ -228,7 +228,7 @@ public abstract class GetCertificateGeneralPdfIT extends BaseIntegrationIT {
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    certificatePrintServiceMock.mockPdf(certificateId(testCertificates));
+    certificatePrintServiceMock.mockPdf();
 
     final var response = api.getCertificatePdf(
         defaultGetCertificatePdfRequest(),
@@ -248,7 +248,7 @@ public abstract class GetCertificateGeneralPdfIT extends BaseIntegrationIT {
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    certificatePrintServiceMock.mockPdf(certificateId(testCertificates));
+    certificatePrintServiceMock.mockPdf();
 
     api.sendCertificate(
         defaultSendCertificateRequest(),
