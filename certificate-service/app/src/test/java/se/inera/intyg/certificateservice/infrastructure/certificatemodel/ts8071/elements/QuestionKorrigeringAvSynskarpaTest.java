@@ -78,7 +78,7 @@ class QuestionKorrigeringAvSynskarpaTest {
             .type(ElementRuleType.SHOW)
             .expression(
                 new RuleExpression(
-                    "('5.5' <= 0.8 && '5.4' <= 0.1) || ('5.5' <= 0.1 && '5.4' <= 0.8)"
+                    "(('5.2' < 0.8 && '5.1' < 0.8) && (!empty('5.2') && !empty('5.1'))) || (('5.2' < 0.1 || '5.1' < 0.1) && (!empty('5.2') && !empty('5.1')))"
                 )
             )
             .build(),
@@ -145,7 +145,7 @@ class QuestionKorrigeringAvSynskarpaTest {
   class ShouldValidateTests {
 
     @Test
-    void shallReturnTrueIfSightForBestEyeIs08And01ForWorst() {
+    void shallReturnTrueIfSightWithoutCorrectionForBestEyeIs08AndWorstIs00() {
       final var elementData = List.of(
           ElementData.builder()
               .id(QUESTION_SYNSKARPA_ID)
@@ -153,18 +153,18 @@ class QuestionKorrigeringAvSynskarpaTest {
                   ElementValueVisualAcuities.builder()
                       .rightEye(
                           VisualAcuity.builder()
-                              .withCorrection(
+                              .withoutCorrection(
                                   Correction.builder()
-                                      .value(0.1)
+                                      .value(0.8)
                                       .build()
                               )
                               .build()
                       )
                       .leftEye(
                           VisualAcuity.builder()
-                              .withCorrection(
+                              .withoutCorrection(
                                   Correction.builder()
-                                      .value(0.8)
+                                      .value(0.0)
                                       .build()
                               )
                               .build()
@@ -179,7 +179,7 @@ class QuestionKorrigeringAvSynskarpaTest {
     }
 
     @Test
-    void shallReturnFalseIfSightForBestEyeIs08And02ForWorst() {
+    void shallReturnTrueIfSightWithoutCorrectionForBestEyeIs07AndWorstIs01() {
       final var elementData = List.of(
           ElementData.builder()
               .id(QUESTION_SYNSKARPA_ID)
@@ -187,16 +187,118 @@ class QuestionKorrigeringAvSynskarpaTest {
                   ElementValueVisualAcuities.builder()
                       .rightEye(
                           VisualAcuity.builder()
-                              .withCorrection(
+                              .withoutCorrection(
                                   Correction.builder()
-                                      .value(0.2)
+                                      .value(0.1)
                                       .build()
                               )
                               .build()
                       )
                       .leftEye(
                           VisualAcuity.builder()
-                              .withCorrection(
+                              .withoutCorrection(
+                                  Correction.builder()
+                                      .value(0.7)
+                                      .build()
+                              )
+                              .build()
+                      )
+                      .build()
+              )
+              .build()
+      );
+
+      final var element = QuestionKorrigeringAvSynskarpa.questionKorrigeringAvSynskarpa();
+      assertTrue(element.shouldValidate().test(elementData));
+    }
+
+    @Test
+    void shallReturnFalseIfSightWithoutCorrectionForBestEyeIs08AndWorstIs01() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(QUESTION_SYNSKARPA_ID)
+              .value(
+                  ElementValueVisualAcuities.builder()
+                      .rightEye(
+                          VisualAcuity.builder()
+                              .withoutCorrection(
+                                  Correction.builder()
+                                      .value(0.1)
+                                      .build()
+                              )
+                              .build()
+                      )
+                      .leftEye(
+                          VisualAcuity.builder()
+                              .withoutCorrection(
+                                  Correction.builder()
+                                      .value(0.8)
+                                      .build()
+                              )
+                              .build()
+                      )
+                      .build()
+              )
+              .build()
+      );
+
+      final var element = QuestionKorrigeringAvSynskarpa.questionKorrigeringAvSynskarpa();
+      assertFalse(element.shouldValidate().test(elementData));
+    }
+
+    @Test
+    void shallReturnFalseIfSightWithoutCorrectionForLeftEyeIsNullAndRightEyeIs08() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(QUESTION_SYNSKARPA_ID)
+              .value(
+                  ElementValueVisualAcuities.builder()
+                      .rightEye(
+                          VisualAcuity.builder()
+                              .withoutCorrection(
+                                  Correction.builder()
+                                      .value(0.8)
+                                      .build()
+                              )
+                              .build()
+                      )
+                      .leftEye(
+                          VisualAcuity.builder()
+                              .withoutCorrection(
+                                  Correction.builder()
+                                      .value(null)
+                                      .build()
+                              )
+                              .build()
+                      )
+                      .build()
+              )
+              .build()
+      );
+
+      final var element = QuestionKorrigeringAvSynskarpa.questionKorrigeringAvSynskarpa();
+      assertFalse(element.shouldValidate().test(elementData));
+    }
+
+    @Test
+    void shallReturnFalseIfSightForRightEyeIsNullAndLeftEyeIs08() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(QUESTION_SYNSKARPA_ID)
+              .value(
+                  ElementValueVisualAcuities.builder()
+                      .rightEye(
+                          VisualAcuity.builder()
+                              .withoutCorrection(
+                                  Correction.builder()
+                                      .value(null)
+                                      .build()
+                              )
+                              .build()
+                      )
+                      .leftEye(
+                          VisualAcuity.builder()
+                              .withoutCorrection(
                                   Correction.builder()
                                       .value(0.8)
                                       .build()
