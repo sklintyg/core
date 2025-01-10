@@ -79,6 +79,9 @@ public class InformationElementFactory {
   }
 
   public static Element watermark(String text) {
+    final var watermark = element(Tag.DIV)
+        .attr(STYLE, DRAFT_WATERMARK_STYLE);
+
     final var watermark = element(Tag.DIV).attr(STYLE, DRAFT_WATERMARK_STYLE);
     watermark.text(text);
     return watermark;
