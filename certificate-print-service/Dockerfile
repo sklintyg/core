@@ -47,7 +47,7 @@ libxcursor1 \
 libgtk-3-0 \
 libpangocairo-1.0-0 \
 libcairo-gobject2 \
-libgdk-pixbuf-2.0-0 \
+libgdk-pixbuf-2.0-0
 
 ADD /app/build/libs/app.jar /deployments
 
