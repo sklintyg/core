@@ -22,7 +22,7 @@ ENV SCRIPT_DEBUG=true
 
 USER root
 
-RUN apt-get install libglib2.0-0 \
+RUN apt-get update && apt-get install -y libglib2.0-0 \
 libnss3 \
 libnspr4 \
 libdbus-1-3 \
