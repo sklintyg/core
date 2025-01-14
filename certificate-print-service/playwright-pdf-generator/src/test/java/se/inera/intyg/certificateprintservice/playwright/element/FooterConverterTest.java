@@ -11,7 +11,8 @@ class FooterConverterTest {
   @Test
   void shouldReturnCreatedHeader() {
     assertEquals("""
-        <div style="height: 25mm;
+        <div style="font-family: 'Liberation Sans', sans-serif;
+        height: 25mm;
         width: 100%;
         font-size: 10pt;
         margin: 0 20mm;
