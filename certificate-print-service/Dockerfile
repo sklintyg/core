@@ -42,7 +42,12 @@ libxkbcommon0 \
 libpango-1.0-0 \
 libcairo2 \
 libasound2 \
-libatspi2.0-0
+libatspi2.0-0 \
+libxcursor1 \
+libgtk-3-0 \
+libpangocairo-1.0-0 \
+libcairo-gobject2 \
+libgdk-pixbuf-2.0-0 \
 
 ADD /app/build/libs/app.jar /deployments
 
