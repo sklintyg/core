@@ -16,6 +16,7 @@ public class BrowserFactory extends BasePooledObjectFactory<PlaywrightBrowser> {
     Map<String, String> env = new HashMap<>();
     //env.put("PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD", "1");
     env.put("PLAYWRIGHT_BROWSERS_PATH",
+        //Paths.get("C:\\Utveckling\\playwright-browsers").toString());
         Paths.get("/browsers").toString());
     final var playwright = Playwright.create(new Playwright.CreateOptions().setEnv(env));
     final var launchOptions = new LaunchOptions()
