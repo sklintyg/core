@@ -36,7 +36,7 @@ public class BasicElementFactory {
         .attr(STYLE, "border-bottom: black solid 1px;");
     for (int i = 0; i < valueColumns; i++) {
       final var th = element(Tag.TH)
-          .addClass("font-medium")
+          .addClass("font-bold")
           .attr(STYLE, "padding-right: 10mm;");
       if (valueColumns - i > headerColumns) {
         th.appendText("");
@@ -61,7 +61,7 @@ public class BasicElementFactory {
     for (int i = 0; i < valueColumns; i++) {
       final var td = element(Tag.TD);
       if (valueColumns - i > headerColumns) {
-        td.addClass("font-medium");
+        td.addClass("font-bold");
         td.attr(STYLE, "padding-right: 10mm;");
       }
       td.appendText(rowValues.get(i));
