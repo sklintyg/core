@@ -137,13 +137,14 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
   private static final String NAME = "Läkarintyg för högre körkortsbehörigheter, taxiförarlegitimation och på begäran av Transportstyrelsen";
   private static final String DESCRIPTION = """
       Transportstyrelsens läkarintyg ska användas vid förlängd giltighet av högre behörighet från 45 år, ansökan om körkortstillstånd för grupp II och III och vid ansökan om taxiförarlegitimation. Transportstyrelsens läkarintyg kan även användas när Transportstyrelsen i annat fall begärt ett allmänt läkarintyg avseende lämplighet att inneha körkort.
-      
+            
       Specialistintyg finns bl.a. för alkohol, läkemedel, synfunktion, Alkolås m.m. Se <a href="https://www.transportstyrelsen.se/" target="_blank" rel="noopener noreferrer">Transportstyrelsen</a>.
       """;
   private static final String DETAILED_DESCRIPTION = """
-       Intyg för körkort och taxiförarlegitimation ska avges med beaktande av vad som anges i Transportstyrelsens föreskrifter och allmänna råd (TSFS 2010:125) om medicinska krav för innehav av körkort m.m. (medicinföreskrifterna). Föreskrifterna finns på <a href="https://www.transportstyrelsen.se/" target="_blank" rel="noopener noreferrer">Transportstyrelsen</a> och där finns också kompletterande upplysningar till vissa av kapitlen. För närvarande finns kompletterande upplysningar till kapitel 1 om bland annat läkares anmälan, kapitel 2 om synfunktionerna, kapitel 6 om diabetes och kapitel 17 om medicinska intyg.
-       På <a href="https://www.transportstyrelsen.se/" target="_blank" rel="noopener noreferrer">Transportstyrelsen</a> finns också blanketter för olika specialistläkarintyg, exempelvis för intyg om ADHD m.m., om hjärt- och kärlsjukdomar, om diabetes och om alkohol, narkotika och läkemedel. Om en person ska lämna något specialistläkarintyg har denne fått ett brev om saken från Transporstyrelsen. Det är därför ofta klokt att  be att få se brevet, så att intyget kommer att svara mot de frågeställningar som kan finnas hos myndigheten.
-      
+       Intyg för körkort och taxiförarlegitimation ska avges med beaktande av vad som anges i Transportstyrelsens föreskrifter och allmänna råd (TSFS 2010:125) om medicinska krav för innehav av körkort m.m. (medicinföreskrifterna). Föreskrifterna finns på <LINK:transportstyrelsenLink> och där finns också kompletterande upplysningar till vissa av kapitlen. För närvarande finns kompletterande upplysningar till kapitel 1 om bland annat läkares anmälan, kapitel 2 om synfunktionerna, kapitel 6 om diabetes och kapitel 17 om medicinska intyg.
+       
+       På <LINK:transportstyrelsenLink> finns också blanketter för olika specialistläkarintyg, exempelvis för intyg om ADHD m.m., om hjärt- och kärlsjukdomar, om diabetes och om alkohol, narkotika och läkemedel. Om en person ska lämna något specialistläkarintyg har denne fått ett brev om saken från Transporstyrelsen. Det är därför ofta klokt att  be att få se brevet, så att intyget kommer att svara mot de frågeställningar som kan finnas hos myndigheten.
+            
        <b className="iu-fw-heading">Har du frågor?</b>
        Kontakta avdelning Körkort på Transportstyrelsen, telefon 0771-81 81 81.
       """;
