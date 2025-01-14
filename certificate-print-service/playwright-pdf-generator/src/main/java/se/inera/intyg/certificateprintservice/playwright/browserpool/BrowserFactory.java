@@ -2,6 +2,7 @@ package se.inera.intyg.certificateprintservice.playwright.browserpool;
 
 import com.microsoft.playwright.BrowserType.LaunchOptions;
 import com.microsoft.playwright.Playwright;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.pool2.BasePooledObjectFactory;
@@ -13,16 +14,15 @@ public class BrowserFactory extends BasePooledObjectFactory<PlaywrightBrowser> {
   @Override
   public PlaywrightBrowser create() {
     Map<String, String> env = new HashMap<>();
-    env.put("PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD", "1");
-    //env.put("PLAYWRIGHT_BROWSERS_PATH",
-    //Paths.get("C:\\Utveckling\\playwright-browsers").toString());
-    //Paths.get("/browsers").toString());
+    //env.put("PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD", "1");
+    env.put("PLAYWRIGHT_BROWSERS_PATH",
+        Paths.get("C:\\Utveckling\\playwright-browsers").toString());
     final var playwright = Playwright.create(new Playwright.CreateOptions().setEnv(env));
-    //final var launchOptions = new LaunchOptions()
-    //.setHeadless(true);
-    //final var browser = playwright.chromium().launch(launchOptions);
-    final var browser = playwright.chromium()
-        .launch(new LaunchOptions().setChannel("chrome").setHeadless(true));
+    final var launchOptions = new LaunchOptions()
+        .setHeadless(true);
+    final var browser = playwright.chromium().launch(launchOptions);
+    //final var browser = playwright.chromium()
+    //    .launch(new LaunchOptions().setChannel("chrome").setHeadless(true));
     return new PlaywrightBrowser(playwright, browser);
   }
 
