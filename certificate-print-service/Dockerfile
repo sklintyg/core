@@ -20,6 +20,8 @@ LABEL se.inera.from_image=${from_image}       \
 ENV APP_NAME=$artifact
 ENV SCRIPT_DEBUG=true
 
+USER root
+
 RUN apt-get install libglib2.0-0 \
 libnss3 \
 libnspr4 \
@@ -43,3 +45,5 @@ libasound2 \
 libatspi2.0-0
 
 ADD /app/build/libs/app.jar /deployments
+
+USER nobody
