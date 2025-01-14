@@ -18,11 +18,11 @@ public class BrowserFactory extends BasePooledObjectFactory<PlaywrightBrowser> {
     //    Paths.get("/browsers").toString());
     //Paths.get("C:\\Utveckling\\playwright-browsers").toString());
     final var playwright = Playwright.create(new Playwright.CreateOptions().setEnv(env));
-    final var launchOptions = new LaunchOptions()
-        .setHeadless(true);
-    final var browser = playwright.chromium().launch(launchOptions);
-    //final var browser = playwright.chromium()
-    //    .launch(new LaunchOptions().setChannel("chrome").setHeadless(true));
+    //final var launchOptions = new LaunchOptions()
+    //    .setHeadless(true);
+    //final var browser = playwright.chromium().launch(launchOptions);
+    final var browser = playwright.chromium()
+        .launch(new LaunchOptions().setChannel("chrome").setHeadless(true));
     return new PlaywrightBrowser(playwright, browser);
   }
 

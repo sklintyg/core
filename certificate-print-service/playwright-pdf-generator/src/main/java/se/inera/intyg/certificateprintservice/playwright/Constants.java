@@ -35,6 +35,7 @@ public abstract class Constants {
       """;
 
   public static final String HEADER_STYLE = """
+      font-family: 'Liberation Sans', sans-serif;
       display: grid;
       width: 17cm;
       font-size: 10pt;
