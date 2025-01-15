@@ -31,16 +31,17 @@ RUN apt-get update && apt-get install -y \
     --no-install-recommends
     #npm \
 
-#RUN sh -c npx playwright install --with-deps --only-shell
 # Add Google's official GPG key
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
 
 # Set up the stable repository
 RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
 
+ENV CHROME_VERSION 130.0.6723.44-1
+
 # Install Chromium and other necessary packages
 RUN apt-get update && apt-get install -y \
-    google-chrome-stable \
+    google-chrome-stable=$CHROME_VERSION \
     --no-install-recommends
 
 # Clean up apt-get
