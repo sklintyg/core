@@ -9,23 +9,27 @@ ARG artifact_version
 ARG vcs_url
 ARG vcs_ref
 
-LABEL se.inera.from_image=${from_image}       \
-      se.inera.project=${project_name}        \
-      se.inera.artifact=${artifact}   \
+LABEL se.inera.from_image=${from_image} \
+      se.inera.project=${project_name} \
+      se.inera.artifact=${artifact} \
       se.inera.artifact_name=${artifact_name} \
-      se.inera.version=${artifact_version}    \
-      se.inera.vcs_url=${vcs_url}             \
+      se.inera.version=${artifact_version} \
+      se.inera.vcs_url=${vcs_url} \
       se.inera.vcs_ref=${vcs_ref}
 
 ENV APP_NAME=$artifact
 ENV SCRIPT_DEBUG=true
-ENV CHROME_VERSION 130.0.6723.116-1
 ENV CHROME_BIN=/usr/bin/google-chrome
 ENV CHROME_PATH=/usr/bin/google-chrome
 
+# On update of playwright version, find supported stable chrome version here
+# https://playwright.dev/docs/release-notes
+# Then find latest minor of supported chrome version here:
+# https://www.ubuntuupdates.org/package/google_chrome/stable/main/base/google-chrome-stable
+ENV CHROME_VERSION 130.0.6723.116-1
+
 USER root
 
-# Install necessary dependencies
 RUN apt-get update \
     && apt-get install -y wget gnupg fonts-liberation ca-certificates --no-install-recommends \
     && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
@@ -33,32 +37,6 @@ RUN apt-get update \
     && apt-get install -y ./google-chrome-stable_${CHROME_VERSION}_amd64.deb \
     && rm -f /google-chrome-stable_${CHROME_VERSION}_amd64.deb \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-
-
-
-# Add Google's official GPG key
-#RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
-
-#RUN wget "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_VERSION}_amd64.deb"
-#RUN apt-get install -y ./google-chrome-stable_${CHROME_VERSION}_amd64.deb
-#RUN rm -f "google-chrome-stable_${CHROME_VERSION}_amd64.deb"
-# Set up the stable repository
-#RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
-
-
-# Install Chromium and other necessary packages
-#RUN apt-get update && apt-get install -y \
-#    google-chrome-stable=$CHROME_VERSION \
-#    --no-install-recommends
-
-# Clean up apt-get
-#RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Set environment variable to use headless mode
-#ENV CHROME_BIN=/usr/bin/google-chrome
-#ENV CHROME_PATH=/usr/bin/google-chrome
-
 
 ADD /app/build/libs/app.jar /deployments
 
