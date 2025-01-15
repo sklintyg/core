@@ -18,7 +18,7 @@ public class CategoryConverter {
         .attr(STYLE, "border: 1px solid black; margin-bottom: 5mm; padding-bottom: 3mm;");
 
     final var title = new Element(Tag.H2.toString())
-        .addClass("text-base font-medium uppercase")
+        .addClass("text-base font-bold uppercase")
         .attr(STYLE,
             "border-bottom: 1px solid black; padding-left: 5mm; padding-right: 5mm;")
         .text(category.getName());

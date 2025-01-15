@@ -23,7 +23,8 @@ class HeaderConverterTest {
         .build();
 
     assertEquals("""
-            <div title="headerElement" style="display: grid;
+            <div title="headerElement" style="font-family: 'Liberation Sans', sans-serif;
+            display: grid;
             width: 17cm;
             font-size: 10pt;
             margin: 10mm 20mm 0 20mm;
@@ -56,7 +57,8 @@ class HeaderConverterTest {
               </div>
              </div>
             </div>
-            <div style="position: absolute;
+            <div style="font-family: 'Liberation Sans', sans-serif;
+            position: absolute;
             left: 1cm;
             bottom: 35mm;
             font-size: 10pt;

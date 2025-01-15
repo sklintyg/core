@@ -50,7 +50,8 @@ class InformationElementFactoryTest {
 
     assertEquals(
         """
-            <div style="position: absolute;
+            <div style="font-family: 'Liberation Sans', sans-serif;
+            position: absolute;
             left: 1cm;
             bottom: 35mm;
             font-size: 10pt;
@@ -69,7 +70,8 @@ class InformationElementFactoryTest {
 
     assertEquals(
         """
-            <div style="position: absolute;
+            <div style="font-family: 'Liberation Sans', sans-serif;
+            position: absolute;
             width: 100%;
             left: 20cm;
             bottom: 35mm;

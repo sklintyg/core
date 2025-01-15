@@ -6,6 +6,7 @@ public abstract class Constants {
   public static final String CONTENT = "content";
 
   public static final String LEFT_MARGIN_INFO_STYLE = """
+      font-family: 'Liberation Sans', sans-serif;
       position: absolute;
       left: 1cm;
       bottom: 35mm;
@@ -15,6 +16,7 @@ public abstract class Constants {
       """;
 
   public static final String RIGHT_MARGIN_INFO_STYLE = """
+      font-family: 'Liberation Sans', sans-serif;
       position: absolute;
       width: 100%;
       left: 20cm;
@@ -25,6 +27,7 @@ public abstract class Constants {
       """;
 
   public static final String FOOTER_STYLE = """
+      font-family: 'Liberation Sans', sans-serif;
       height: 25mm;
       width: 100%;
       font-size: 10pt;
@@ -35,6 +38,7 @@ public abstract class Constants {
       """;
 
   public static final String HEADER_STYLE = """
+      font-family: 'Liberation Sans', sans-serif;
       display: grid;
       width: 17cm;
       font-size: 10pt;

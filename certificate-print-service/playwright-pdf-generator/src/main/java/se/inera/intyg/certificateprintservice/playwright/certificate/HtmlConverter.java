@@ -35,6 +35,7 @@ public class HtmlConverter {
       throw new IllegalStateException("Could not find element 'content' in document");
     }
 
+    content.attr(STYLE, "font-family: 'Liberation Sans', sans-serif;");
     content.appendChildren(children);
 
     final var script = document.getElementsByTag(Tag.SCRIPT.toString());
