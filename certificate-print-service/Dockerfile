@@ -31,7 +31,7 @@ RUN apt-get update && apt-get install -y \
     --no-install-recommends
     #npm \
 
-ENV CHROME_VERSION 130.0.6723.116-1
+ENV CHROME_VERSION 130.0.6723.116
 
 # Add Google's official GPG key
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
