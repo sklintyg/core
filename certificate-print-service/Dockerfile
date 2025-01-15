@@ -31,13 +31,16 @@ RUN apt-get update && apt-get install -y \
     --no-install-recommends
     #npm \
 
+ENV CHROME_VERSION 130.0.6723.116-1
+
 # Add Google's official GPG key
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+
+#RUN wget "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_VERSION}_amd64.deb"
 
 # Set up the stable repository
 RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
 
-ENV CHROME_VERSION 130.0.6723.44-1
 
 # Install Chromium and other necessary packages
 RUN apt-get update && apt-get install -y \
