@@ -75,7 +75,7 @@ class QuestionHorselhjalpmedelPositionTest {
             .type(ElementRuleType.MANDATORY)
             .expression(
                 new RuleExpression(
-                    "exists($25577004) || exists($89644007) || exists($34338003)"
+                    "exists($89644007) || exists($25577004) || exists($34338003)"
                 )
             )
             .build(),
