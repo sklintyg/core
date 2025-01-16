@@ -40,10 +40,6 @@ public class QuestionEpilepsiMedicinTidpunkt {
                     QUESTION_EPILEPSI_MEDICIN_ID,
                     QUESTION_EPILEPSI_MEDICIN_FIELD_ID
                 ),
-                CertificateElementRuleFactory.mandatory(
-                    QUESTION_EPILEPSI_MEDICIN_TIDPUNKT_ID,
-                    QUESTION_EPILEPSI_MEDICIN_TIDPUNKT_FIELD_ID
-                ),
                 CertificateElementRuleFactory.limit(
                     QUESTION_EPILEPSI_MEDICIN_TIDPUNKT_ID,
                     (short) 50)

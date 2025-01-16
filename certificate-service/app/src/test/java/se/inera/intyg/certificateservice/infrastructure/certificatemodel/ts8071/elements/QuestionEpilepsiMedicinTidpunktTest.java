@@ -51,11 +51,6 @@ class QuestionEpilepsiMedicinTidpunktTest {
             .type(ElementRuleType.SHOW)
             .expression(new RuleExpression("$14.5"))
             .build(),
-        ElementRuleExpression.builder()
-            .id(ELEMENT_ID)
-            .type(ElementRuleType.MANDATORY)
-            .expression(new RuleExpression("$14.7"))
-            .build(),
         ElementRuleLimit.builder()
             .id(ELEMENT_ID)
             .type(ElementRuleType.TEXT_LIMIT)
