@@ -39,7 +39,7 @@ public class QuestionIdentitet {
         .configuration(
             ElementConfigurationRadioMultipleCode.builder()
                 .id(QUESTION_IDENTITET_FIELD_ID)
-                .name("Identitet är styrkt genom")
+                .name("Identitet styrkt genom")
                 .elementLayout(ElementLayout.COLUMNS)
                 .list(radioMultipleCodes)
                 .build()

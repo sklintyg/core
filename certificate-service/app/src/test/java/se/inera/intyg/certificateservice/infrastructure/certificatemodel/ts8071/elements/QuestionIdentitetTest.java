@@ -35,7 +35,7 @@ class QuestionIdentitetTest {
   void shallIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationRadioMultipleCode.builder()
         .id(new FieldId("3.1"))
-        .name("Identitet är styrkt genom")
+        .name("Identitet styrkt genom")
         .elementLayout(ElementLayout.COLUMNS)
         .list(
             List.of(
