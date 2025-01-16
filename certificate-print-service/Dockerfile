@@ -19,6 +19,8 @@ LABEL se.inera.from_image=${from_image} \
 
 ENV APP_NAME=$artifact
 ENV SCRIPT_DEBUG=true
+ENV XDG_CONFIG_HOME=/tmp/.chromium
+ENV XDG_CACHE_HOME=/tmp/.chromium
 ENV CHROME_BIN=/usr/bin/google-chrome
 ENV CHROME_PATH=/usr/bin/google-chrome
 
