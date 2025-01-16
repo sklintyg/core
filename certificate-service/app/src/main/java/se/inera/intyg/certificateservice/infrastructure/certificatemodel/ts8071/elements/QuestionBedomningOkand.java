@@ -17,9 +17,9 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 public class QuestionBedomningOkand {
 
   public static final ElementId QUESTION_BEDOMNING_OKAND_ID = new ElementId(
-      "23.3");
+      "23.2");
   private static final FieldId QUESTION_BEDOMNING_OKAND_FIELD_ID = new FieldId(
-      "23.3");
+      "23.2");
 
   private QuestionBedomningOkand() {
     throw new IllegalStateException("Utility class");

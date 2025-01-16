@@ -22,7 +22,7 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 
 class QuestionBedomningOkandTest {
 
-  private static final ElementId ELEMENT_ID = new ElementId("23.3");
+  private static final ElementId ELEMENT_ID = new ElementId("23.2");
 
   @Test
   void shallIncludeId() {
@@ -35,7 +35,7 @@ class QuestionBedomningOkandTest {
   void shallIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationTextArea.builder()
         .name("Du kan inte ta ställning till om det finns en risk, ange orsaken till detta")
-        .id(new FieldId("23.3"))
+        .id(new FieldId("23.2"))
         .build();
 
     final var element = QuestionBedomningOkand.questionBedomningOkand();
@@ -49,7 +49,7 @@ class QuestionBedomningOkandTest {
         ElementRuleExpression.builder()
             .id(ELEMENT_ID)
             .type(ElementRuleType.MANDATORY)
-            .expression(new RuleExpression("$23.3"))
+            .expression(new RuleExpression("$23.2"))
             .build(),
         ElementRuleExpression.builder()
             .id(new ElementId("23"))

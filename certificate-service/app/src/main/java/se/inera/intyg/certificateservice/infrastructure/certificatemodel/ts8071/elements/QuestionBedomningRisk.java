@@ -17,9 +17,9 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 public class QuestionBedomningRisk {
 
   public static final ElementId QUESTION_BEDOMNING_RISK_ID = new ElementId(
-      "23.2");
+      "23.3");
   private static final FieldId QUESTION_BEDOMNING_RISK_FIELD_ID = new FieldId(
-      "23.2");
+      "23.3");
 
   private QuestionBedomningRisk() {
     throw new IllegalStateException("Utility class");
