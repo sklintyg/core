@@ -54,7 +54,6 @@ public class QuestionEpilepsiMedicinTidpunkt {
         .validations(
             List.of(
                 ElementValidationText.builder()
-                    .mandatory(true)
                     .limit(50)
                     .build()
             )
