@@ -67,7 +67,6 @@ class QuestionEpilepsiMedicinTidpunktTest {
   void shallIncludeValidations() {
     final var expectedValidations = List.of(
         ElementValidationText.builder()
-            .mandatory(true)
             .limit(50)
             .build()
     );
