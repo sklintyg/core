@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.text.html.HTML.Tag;
 import org.jsoup.nodes.Element;
-import se.inera.intyg.certificateprintservice.pdfgenerator.api.Metadata;
 import se.inera.intyg.certificateprintservice.playwright.Constants;
 
 public class InformationElementFactory {
@@ -33,8 +32,8 @@ public class InformationElementFactory {
     return printInfoWrapper;
   }
 
-  public static Element title(Metadata metadata) {
-    final var titleWrapper = new Element(Tag.DIV.toString())
+  public static Element title(String name, String type, String version) {
+    final var titleWrapper = element(Tag.DIV)
         .attr(STYLE, """
             font-size: 14pt;
             padding-bottom: 1mm;
@@ -43,9 +42,9 @@ public class InformationElementFactory {
 
     final var title = element(Tag.SPAN)
         .attr(STYLE, "font-weight: bold;")
-        .appendText(metadata.getName());
+        .appendText(name);
     final var shortTitle = element(Tag.SPAN)
-        .appendText(" (%s v%s)".formatted(metadata.getTypeId(), metadata.getVersion()));
+        .appendText(" (%s v%s)".formatted(type, version));
     titleWrapper.appendChild(title);
     titleWrapper.appendChild(shortTitle);
     return titleWrapper;
@@ -58,11 +57,10 @@ public class InformationElementFactory {
     final var div = element(Tag.DIV);
     div.attr(STYLE, "float: right; text-align: right;");
 
-    div.appendChild(element(Tag.SPAN)
+    div.appendChild(element(Tag.P)
         .attr(STYLE, "font-weight: bold;")
         .appendText("Person- /samordningsnr"));
-    div.appendChild(element(Tag.BR));
-    div.appendChild(element(Tag.SPAN).appendText(personId));
+    div.appendChild(element(Tag.P).appendText(personId));
 
     personIdWrapper.appendChild(div);
     return personIdWrapper;
@@ -105,39 +103,39 @@ public class InformationElementFactory {
     return rightMarginInfoWrapper;
   }
 
-  public static Element issuerName(Metadata metadata) {
+  public static Element issuerName(String issuerName) {
     final var issuerNameWrapper = element(Tag.DIV)
         .attr(STYLE, "display: grid; margin-top: 1cm;");
     final var unitInformation = List.of(
         element(Tag.SPAN).attr(STYLE, "font-weight: bold;").text("IntygsUtfärdare:"),
-        element(Tag.SPAN).text(metadata.getIssuerName())
+        element(Tag.SPAN).text(issuerName)
     );
     issuerNameWrapper.appendChildren(unitInformation);
     return issuerNameWrapper;
   }
 
-  public static Element contactInfo(Metadata metadata) {
+  public static Element contactInfo(String issuingUnit, List<String> issuingUnitInfo) {
     final var contactInfoWrapper = element(Tag.DIV)
         .attr(STYLE, "display: grid; margin-top: 5mm;");
 
     final var unitInformation = new ArrayList<>(List.of(
         element(Tag.SPAN).attr(STYLE, "font-weight: bold;").text("Kontaktuppgifter:"),
-        element(Tag.SPAN).text(metadata.getIssuingUnit())
+        element(Tag.SPAN).text(issuingUnit)
     ));
     unitInformation.addAll(
-        metadata.getIssuingUnitInfo().stream().map(i -> element(Tag.SPAN).text(i))
+        issuingUnitInfo.stream().map(i -> element(Tag.SPAN).text(i))
             .toList());
 
     contactInfoWrapper.appendChildren(unitInformation);
     return contactInfoWrapper;
   }
 
-  public static Element signingDate(Metadata metadata) {
+  public static Element signingDate(String signDate) {
     final var signingDateWrapper = element(Tag.DIV)
         .attr(STYLE, "display: grid; margin-top: 5mm;");
     final var unitInformation = List.of(
         element(Tag.SPAN).attr(STYLE, "font-weight: bold;").text("Intyget signerades:"),
-        element(Tag.SPAN).text(metadata.getSigningDateAsString())
+        element(Tag.SPAN).text(signDate)
     );
     signingDateWrapper.appendChildren(unitInformation);
     return signingDateWrapper;

@@ -1,22 +1,15 @@
 package se.inera.intyg.certificateprintservice.playwright.pdf;
 
-import static se.inera.intyg.certificateprintservice.playwright.Constants.STYLE;
-
 import com.microsoft.playwright.Page;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.parser.Parser;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.Metadata;
-import se.inera.intyg.certificateprintservice.playwright.certificate.PrintInformation;
 import se.inera.intyg.certificateprintservice.playwright.text.TextFactory;
 
 @Component
@@ -33,18 +26,18 @@ public class TemplateToDocumentConverter implements InitializingBean {
     tailwindCSS = new String(Base64.getEncoder().encode(tailwindScript.getContentAsByteArray()));
   }
 
-  public Document convert(PrintInformation printInformation)
-      throws IOException {
-    final var document = Jsoup.parse(printInformation.getTemplate(), StandardCharsets.UTF_8.name(),
-        "",
-        Parser.xmlParser());
+//  public Document convert(PrintInformation printInformation)
+//      throws IOException {
+//    final var document = Jsoup.parse(printInformation.getTemplate(), StandardCharsets.UTF_8.name(),
+//        "",
+//        Parser.xmlParser());
+//
+//    setDocumentTitle(document, printInformation.getcertificateMetadata());
+//    setPageMargin(document, printInformation.getHeaderPage(), printInformation.getHeaderHtml());
+//    return document;
+//  }
 
-    setDocumentTitle(document, printInformation.getcertificateMetadata());
-    setPageMargin(document, printInformation.getHeaderPage(), printInformation.getHeaderHtml());
-    return document;
-  }
-
-  private void setDocumentTitle(Document document, Metadata metadata) {
+  public void setDocumentTitle(Document document, Metadata metadata) {
     final var title = document.getElementById("title");
     Objects.requireNonNull(title).appendText(TextFactory.title(metadata));
   }
@@ -53,22 +46,23 @@ public class TemplateToDocumentConverter implements InitializingBean {
     return "data:text/javascript;base64, %s".formatted(tailwindCSS);
   }
 
-  private void setPageMargin(Document doc, Page page, String header) {
-    final var styleElement = doc.getElementById(STYLE);
+//  public void setPageMargin(Document doc, Page page, String header) {
+//    final var styleElement = doc.getElementById(STYLE);
+//
+//    if (styleElement == null) {
+//      throw new IllegalStateException("Style element is null");
+//    }
+//
+//    final var headerHeight = calculateHeaderHeight(page, header);
+//    styleElement.appendText("""
+//        @page {
+//          margin: calc(%spx + 15mm) 20mm 40mm 20mm;
+//        }""".formatted(headerHeight));
+//  }
 
-    if (styleElement == null) {
-      throw new IllegalStateException("Style element is null");
-    }
-
-    final var headerHeight = calculateHeaderHeight(page, header);
-    styleElement.appendText("""
-        @page {
-          margin: calc(%spx + 15mm) 20mm 40mm 20mm;
-        }""".formatted(headerHeight));
-  }
-
-  private int calculateHeaderHeight(Page page, String header) {
+  public int calculateHeaderHeight(Page page, String header, String name) {
     page.setContent(header);
-    return (int) page.getByTitle("headerElement").evaluate("node => node.offsetHeight");
+    return (int) Math.round(page.getByTitle(name).boundingBox().height);
+    //return (int) page.getByTitle("headerElement").evaluate("node => node.offsetHeight");
   }
 }

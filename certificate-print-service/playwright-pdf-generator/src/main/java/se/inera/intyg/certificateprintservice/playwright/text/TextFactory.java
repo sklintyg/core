@@ -8,17 +8,17 @@ public class TextFactory {
     throw new IllegalStateException("Utility class");
   }
 
-  public static String alert(Metadata metadata) {
-    if (metadata.isDraft()) {
+  public static String alert(String recipientName, boolean isDraft, boolean isSent) {
+    if (isDraft) {
       return "Detta är en utskrift av ett elektroniskt intygsutkast och ska INTE skickas till %s.".formatted(
-          metadata.getRecipientName());
+          recipientName);
     }
 
-    if (metadata.isSent()) {
+    if (isSent) {
       return
           "Detta är en utskrift av ett elektroniskt intyg. Intyget har signerats elektroniskt av intygsutfärdaren. "
               + "Notera att intyget redan har skickats till %s.".formatted(
-              metadata.getRecipientName());
+              recipientName);
     }
 
     return "Detta är en utskrift av ett elektroniskt intyg. Intyget har signerats elektroniskt av intygsutfärdaren.";
@@ -31,10 +31,8 @@ public class TextFactory {
     );
   }
 
-  public static String applicationOrigin(Metadata metadata) {
-    return "Utskriften skapades med %s - en tjänst som drivs av Inera AB".formatted(
-        metadata.getApplicationOrigin()
-    );
+  public static String applicationOrigin(String origin) {
+    return "Utskriften skapades med %s - en tjänst som drivs av Inera AB".formatted(origin);
   }
 
   public static String citizenInformation() {
