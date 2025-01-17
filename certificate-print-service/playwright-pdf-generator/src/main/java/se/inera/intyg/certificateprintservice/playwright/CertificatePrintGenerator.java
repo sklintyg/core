@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateprintservice.playwright;
 
 import com.microsoft.playwright.Page.PdfOptions;
+import java.io.IOException;
 import java.util.Base64;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,13 +26,16 @@ import se.inera.intyg.certificateprintservice.playwright.document.Watermark;
 @RequiredArgsConstructor
 public class CertificatePrintGenerator implements PrintCertificateGenerator, InitializingBean {
 
-  @Value("classpath:templates/certificateTemplates.html")
+  @Value("classpath:templates/certificateTemplate.html")
   private Resource template;
   @Value("classpath:templates/tailwindCSS.js")
   private Resource tailwindScript;
 
   private final BrowserPool browserPool;
   private String tailwindCSS;
+
+  private static final PdfOptions PDF_OPTIONS =
+      new PdfOptions().setFormat("A4").setPrintBackground(true).setDisplayHeaderFooter(false);
 
   @Override
   public void afterPropertiesSet() throws Exception {
@@ -51,7 +55,8 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator, Ini
     }
   }
 
-  private byte[] createPdf(PlaywrightBrowser playwrightBrowser, Certificate certificate) {
+  private byte[] createPdf(PlaywrightBrowser playwrightBrowser, Certificate certificate)
+      throws IOException {
     try (
         final var context = playwrightBrowser.getBrowserContext();
         final var page = context.newPage();
@@ -69,22 +74,11 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator, Ini
           .certificateVersion(metadata.getVersion())
           .tailWindScript(tailwindCSS)
           .isDraft(metadata.isDraft())
-          .isSent(metadata.isSent())
           .build();
 
-      page.setContent(document.create(template, page).html());
-      return page.pdf(getPdfOptions());
-
-    } catch (Exception e) {
-      throw new IllegalStateException("Failure creating certificate details pdf", e);
+      page.setContent(document.build(template, page).html());
+      return page.pdf(PDF_OPTIONS);
     }
-  }
-
-  public PdfOptions getPdfOptions() {
-    return new PdfOptions()
-        .setFormat("A4")
-        .setPrintBackground(true)
-        .setDisplayHeaderFooter(false);
   }
 
 }
