@@ -6,7 +6,6 @@ public abstract class Constants {
   public static final String CONTENT = "content";
 
   public static final String LEFT_MARGIN_INFO_STYLE = """
-      font-family: 'Liberation Sans', sans-serif;
       border: red solid 1px;
       font-size: 10pt;
       transform: rotate(-90deg) translateY(-50%);
@@ -18,15 +17,15 @@ public abstract class Constants {
   // bottom: 35mm;
 
   public static final String RIGHT_MARGIN_INFO_STYLE = """
-      font-family: 'Liberation Sans', sans-serif;
-      position: absolute;
-      width: 100%;
-      left: 20cm;
-      bottom: 35mm;
+      border: red solid 1px;
       font-size: 10pt;
       transform: rotate(-90deg) translateY(-50%);
       transform-origin: top left;
       """;
+//  position: absolute;
+//  width: 100%;
+//  left: 20cm;
+//  bottom: 35mm;
 
   public static final String FOOTER_STYLE = """
       margin: 0 20mm 0 20mm;
@@ -49,4 +48,12 @@ public abstract class Constants {
       font-size: 10pt;
       """;
   //
+
+  public static final String WATERMARK_STYLE = """      
+      transform: translateX(-50%) translateY(-50%) rotate(315deg);
+      font-size: 100pt;
+      color: rgb(128, 128, 128);
+      opacity: 0.5;
+      z-index: -1;
+      """;
 }

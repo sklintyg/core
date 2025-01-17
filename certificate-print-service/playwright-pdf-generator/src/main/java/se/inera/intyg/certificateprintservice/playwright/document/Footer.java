@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateprintservice.playwright.element;
+package se.inera.intyg.certificateprintservice.playwright.document;
 
 import static se.inera.intyg.certificateprintservice.playwright.Constants.FOOTER_STYLE;
 import static se.inera.intyg.certificateprintservice.playwright.Constants.STYLE;

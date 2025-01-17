@@ -1,30 +1,21 @@
 package se.inera.intyg.certificateprintservice.playwright.pdf;
 
-import com.microsoft.playwright.Page;
-import java.util.Base64;
-import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
-import org.jsoup.nodes.Document;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
-import se.inera.intyg.certificateprintservice.pdfgenerator.api.Metadata;
-import se.inera.intyg.certificateprintservice.playwright.text.TextFactory;
 
 @Component
 @Slf4j
-public class TemplateToDocumentConverter implements InitializingBean {
+public class TemplateToDocumentConverter {
 
-  @Value("classpath:templates/tailwindCSS.js")
-  private Resource tailwindScript;
-
-  private String tailwindCSS;
-
-  @Override
-  public void afterPropertiesSet() throws Exception {
-    tailwindCSS = new String(Base64.getEncoder().encode(tailwindScript.getContentAsByteArray()));
-  }
+//  @Value("classpath:templates/tailwindCSS.js")
+//  private Resource tailwindScript;
+//
+//  private String tailwindCSS;
+//
+//  @Override
+//  public void afterPropertiesSet() throws Exception {
+//    tailwindCSS = new String(Base64.getEncoder().encode(tailwindScript.getContentAsByteArray()));
+//  }
 
 //  public Document convert(PrintInformation printInformation)
 //      throws IOException {
@@ -37,14 +28,14 @@ public class TemplateToDocumentConverter implements InitializingBean {
 //    return document;
 //  }
 
-  public void setDocumentTitle(Document document, Metadata metadata) {
-    final var title = document.getElementById("title");
-    Objects.requireNonNull(title).appendText(TextFactory.title(metadata));
-  }
+//  public void setDocumentTitle(Document document, Metadata metadata) {
+//    final var title = document.getElementById("title");
+//    Objects.requireNonNull(title).appendText(TextFactory.title(metadata));
+//  }
 
-  public String getScriptSource() {
-    return "data:text/javascript;base64, %s".formatted(tailwindCSS);
-  }
+//  public String getScriptSource() {
+//    return "data:text/javascript;base64, %s".formatted(tailwindCSS);
+//  }
 
 //  public void setPageMargin(Document doc, Page page, String header) {
 //    final var styleElement = doc.getElementById(STYLE);
@@ -59,10 +50,10 @@ public class TemplateToDocumentConverter implements InitializingBean {
 //          margin: calc(%spx + 15mm) 20mm 40mm 20mm;
 //        }""".formatted(headerHeight));
 //  }
-
-  public int calculateHeaderHeight(Page page, String header, String name) {
-    page.setContent(header);
-    return (int) Math.round(page.getByTitle(name).boundingBox().height);
-    //return (int) page.getByTitle("headerElement").evaluate("node => node.offsetHeight");
-  }
+//
+//  public int calculateHeaderHeight(Page page, String header, String name) {
+//    page.setContent(header);
+//    return (int) Math.round(page.getByTitle(name).boundingBox().height);
+//    //return (int) page.getByTitle("headerElement").evaluate("node => node.offsetHeight");
+//  }
 }

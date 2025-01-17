@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateprintservice.playwright.element;
+package se.inera.intyg.certificateprintservice.playwright.document;
 
 import static se.inera.intyg.certificateprintservice.playwright.Constants.STYLE;
 import static se.inera.intyg.certificateprintservice.playwright.element.ElementProvider.element;
@@ -13,20 +13,19 @@ import se.inera.intyg.certificateprintservice.playwright.Constants;
 @Builder
 @Getter
 @EqualsAndHashCode
-public class LeftMarginInfo {
+public class Watermark {
 
-  String certificateType;
-  String recipientName;
+  @Builder.Default
+  String watermarkText = "UTKAST";
 
   public Element create() {
     return element(Tag.DIV)
-        .appendChild(leftMarginInfo())
-        .attr(STYLE, Constants.LEFT_MARGIN_INFO_STYLE);
+        .appendChild(watermark())
+        .attr(STYLE, Constants.WATERMARK_STYLE);
   }
 
-  private Element leftMarginInfo() {
-    final var info = "%s - Fastställd av %s".formatted(certificateType, recipientName);
-    return element(Tag.P).text(info);
+  private Element watermark() {
+    return element(Tag.P).text(watermarkText);
   }
 
 }

@@ -1,6 +1,7 @@
-package se.inera.intyg.certificateprintservice.playwright.element;
+package se.inera.intyg.certificateprintservice.playwright.converters;
 
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.Certificate;
+import se.inera.intyg.certificateprintservice.playwright.document.Content;
 
 public class ContentConverter {
 

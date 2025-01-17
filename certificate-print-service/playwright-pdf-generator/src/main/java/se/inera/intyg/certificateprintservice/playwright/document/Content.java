@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateprintservice.playwright.element;
+package se.inera.intyg.certificateprintservice.playwright.document;
 
 import static se.inera.intyg.certificateprintservice.playwright.Constants.STYLE;
 import static se.inera.intyg.certificateprintservice.playwright.element.ElementProvider.element;
@@ -14,6 +14,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.Category;
 import se.inera.intyg.certificateprintservice.playwright.certificate.CategoryConverter;
+import se.inera.intyg.certificateprintservice.playwright.element.InformationElementFactory;
 import se.inera.intyg.certificateprintservice.playwright.text.TextFactory;
 
 @Builder

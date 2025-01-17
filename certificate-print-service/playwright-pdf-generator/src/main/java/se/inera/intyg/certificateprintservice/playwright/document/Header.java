@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateprintservice.playwright.element;
+package se.inera.intyg.certificateprintservice.playwright.document;
 
 import static se.inera.intyg.certificateprintservice.playwright.Constants.HEADER_STYLE;
 import static se.inera.intyg.certificateprintservice.playwright.Constants.STYLE;
@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.jsoup.nodes.Element;
+import se.inera.intyg.certificateprintservice.playwright.element.ElementProvider;
+import se.inera.intyg.certificateprintservice.playwright.element.InformationElementFactory;
 import se.inera.intyg.certificateprintservice.playwright.text.TextFactory;
 
 @Builder

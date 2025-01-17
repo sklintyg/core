@@ -39,12 +39,8 @@ public class TextFactory {
     return "Du kan hantera ditt intyg genom att logga in på 1177.se Där kan du till exempel skicka intyget till mottagaren";
   }
 
-  public static String title(Metadata metadata) {
-    return "%s (%s v%s)".formatted(
-        metadata.getName(),
-        metadata.getTypeId(),
-        metadata.getVersion()
-    );
+  public static String title(String name, String type, String version) {
+    return "%s (%s v%s)".formatted(name, type, version);
   }
 
   public static String draft() {
