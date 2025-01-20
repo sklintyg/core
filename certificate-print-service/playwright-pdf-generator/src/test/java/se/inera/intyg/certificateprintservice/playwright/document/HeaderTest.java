@@ -2,9 +2,19 @@ package se.inera.intyg.certificateprintservice.playwright.document;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.ALT;
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.ATTRIBUTES;
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.CLASS;
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.DIV;
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.IMG;
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.NUM_ATTRIBUTES;
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.NUM_CHILDREN;
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.P;
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.SRC;
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.TAG_TYPE;
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.TEXT;
 
 import java.util.Objects;
-import org.jsoup.parser.Tag;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -37,9 +47,9 @@ class HeaderTest {
       final var header = headerBuilder.isDraft(true).isSent(false).build();
       final var element = header.create();
       assertAll(
-          () -> assertEquals(Tag.valueOf("div"), element.tag(), "Tag type"),
-          () -> assertEquals(0, element.attributes().asList().size(), "Attributes"),
-          () -> assertEquals(2, element.children().size(), "Number of children")
+          () -> assertEquals(DIV, element.tag(), TAG_TYPE),
+          () -> assertEquals(0, element.attributes().asList().size(), NUM_ATTRIBUTES),
+          () -> assertEquals(2, element.children().size(), NUM_CHILDREN)
       );
     }
 
@@ -51,11 +61,11 @@ class HeaderTest {
         final var header = headerBuilder.isDraft(true).isSent(false).build();
         final var element = header.create().child(0);
         assertAll(
-            () -> assertEquals(Tag.valueOf("div"), element.tag(), "Tag type"),
-            () -> assertEquals(2, element.children().size(), "Number of children"),
-            () -> assertEquals(1, element.attributes().asList().size(), "Attributes"),
+            () -> assertEquals(DIV, element.tag(), TAG_TYPE),
+            () -> assertEquals(2, element.children().size(), NUM_CHILDREN),
+            () -> assertEquals(1, element.attributes().asList().size(), NUM_ATTRIBUTES),
             () -> assertEquals("flex top-0 left-0 mb-[10mm]",
-                Objects.requireNonNull(element.attribute("class")).getValue(), "Attributes")
+                Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
         );
       }
 
@@ -67,9 +77,9 @@ class HeaderTest {
           final var header = headerBuilder.isDraft(true).isSent(false).build();
           final var element = header.create().child(0).child(0);
           assertAll(
-              () -> assertEquals(Tag.valueOf("div"), element.tag(), "Tag type"),
-              () -> assertEquals(1, element.children().size(), "Number of children"),
-              () -> assertEquals(0, element.attributes().asList().size(), "Attributes")
+              () -> assertEquals(DIV, element.tag(), TAG_TYPE),
+              () -> assertEquals(1, element.children().size(), NUM_CHILDREN),
+              () -> assertEquals(0, element.attributes().asList().size(), NUM_ATTRIBUTES)
           );
         }
 
@@ -78,11 +88,11 @@ class HeaderTest {
           final var header = headerBuilder.isDraft(true).isSent(false).build();
           final var element = header.create().child(0).child(1);
           assertAll(
-              () -> assertEquals(Tag.valueOf("div"), element.tag(), "Tag type"),
-              () -> assertEquals(2, element.children().size(), "Number of children"),
-              () -> assertEquals(1, element.attributes().asList().size(), "Attributes"),
+              () -> assertEquals(DIV, element.tag(), TAG_TYPE),
+              () -> assertEquals(2, element.children().size(), NUM_CHILDREN),
+              () -> assertEquals(1, element.attributes().asList().size(), NUM_ATTRIBUTES),
               () -> assertEquals("float-right text-right w-full",
-                  Objects.requireNonNull(element.attribute("class")).getValue(), "Attributes")
+                  Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
           );
         }
 
@@ -94,15 +104,15 @@ class HeaderTest {
             final var header = headerBuilder.isDraft(true).isSent(false).build();
             final var element = header.create().child(0).child(0).child(0);
             assertAll(
-                () -> assertEquals(Tag.valueOf("img"), element.tag(), "Tag type"),
-                () -> assertEquals(0, element.children().size(), "Number of children"),
-                () -> assertEquals(3, element.attributes().asList().size(), "Number of attributes"),
+                () -> assertEquals(IMG, element.tag(), TAG_TYPE),
+                () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
+                () -> assertEquals(3, element.attributes().asList().size(), NUM_ATTRIBUTES),
                 () -> assertEquals("data:image/png;base64, cmVjaXBpZW50TG9nbw==",
-                    Objects.requireNonNull(element.attribute("src")).getValue(), "Attributes"),
+                    Objects.requireNonNull(element.attribute(SRC)).getValue(), ATTRIBUTES),
                 () -> assertEquals("logotyp intygsmottagare",
-                    Objects.requireNonNull(element.attribute("alt")).getValue(), "Attributes"),
+                    Objects.requireNonNull(element.attribute(ALT)).getValue(), ATTRIBUTES),
                 () -> assertEquals("max-h-[15mm] max-w-[35mm]",
-                    Objects.requireNonNull(element.attribute("class")).getValue(), "Attributes")
+                    Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
             );
           }
         }
@@ -115,13 +125,12 @@ class HeaderTest {
             final var header = headerBuilder.isDraft(true).isSent(false).build();
             final var element = header.create().child(0).child(1).child(0);
             assertAll(
-                () -> assertEquals(Tag.valueOf("p"), element.tag(), "Tag type"),
-                () -> assertEquals(0, element.children().size(), "Number of children"),
-                () -> assertEquals(1, element.attributes().asList().size(),
-                    "Number of attributes"),
-                () -> assertEquals("Person- /samordningsnr", element.text(), "Text"),
+                () -> assertEquals(P, element.tag(), TAG_TYPE),
+                () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
+                () -> assertEquals(1, element.attributes().asList().size(), NUM_ATTRIBUTES),
+                () -> assertEquals("Person- /samordningsnr", element.text(), TEXT),
                 () -> assertEquals("font-bold",
-                    Objects.requireNonNull(element.attribute("class")).getValue(), "Attributes")
+                    Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
             );
           }
 
@@ -130,11 +139,10 @@ class HeaderTest {
             final var header = headerBuilder.isDraft(true).isSent(false).build();
             final var element = header.create().child(0).child(1).child(1);
             assertAll(
-                () -> assertEquals(Tag.valueOf("p"), element.tag(), "Tag type"),
-                () -> assertEquals(0, element.children().size(), "Number of children"),
-                () -> assertEquals(0, element.attributes().asList().size(),
-                    "Number of attributes"),
-                () -> assertEquals(PERSON_ID, element.text(), "Text")
+                () -> assertEquals(P, element.tag(), TAG_TYPE),
+                () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
+                () -> assertEquals(0, element.attributes().asList().size(), NUM_ATTRIBUTES),
+                () -> assertEquals(PERSON_ID, element.text(), TEXT)
             );
           }
         }
@@ -149,11 +157,11 @@ class HeaderTest {
         final var header = headerBuilder.isDraft(true).isSent(false).build();
         final var element = header.create().child(1);
         assertAll(
-            () -> assertEquals(Tag.valueOf("div"), element.tag(), "Tag type"),
-            () -> assertEquals(2, element.children().size(), "Number of children"),
-            () -> assertEquals(1, element.attributes().asList().size(), "Attributes"),
+            () -> assertEquals(DIV, element.tag(), TAG_TYPE),
+            () -> assertEquals(2, element.children().size(), NUM_CHILDREN),
+            () -> assertEquals(1, element.attributes().asList().size(), NUM_ATTRIBUTES),
             () -> assertEquals("mb-[5mm]",
-                Objects.requireNonNull(element.attribute("class")).getValue(), "Attributes")
+                Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
         );
       }
 
@@ -165,11 +173,11 @@ class HeaderTest {
           final var header = headerBuilder.isDraft(true).isSent(false).build();
           final var element = header.create().child(1).child(0);
           assertAll(
-              () -> assertEquals(Tag.valueOf("div"), element.tag(), "Tag type"),
-              () -> assertEquals(2, element.children().size(), "Number of children"),
-              () -> assertEquals(1, element.attributes().asList().size(), "Attributes"),
+              () -> assertEquals(DIV, element.tag(), TAG_TYPE),
+              () -> assertEquals(2, element.children().size(), NUM_CHILDREN),
+              () -> assertEquals(1, element.attributes().asList().size(), NUM_ATTRIBUTES),
               () -> assertEquals("text-[14pt] pb-[1mm] border-b border-solid border-black",
-                  Objects.requireNonNull(element.attribute("class")).getValue(), "Attributes")
+                  Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
           );
         }
 
@@ -178,11 +186,11 @@ class HeaderTest {
           final var header = headerBuilder.isDraft(true).isSent(false).build();
           final var element = header.create().child(1).child(1);
           assertAll(
-              () -> assertEquals(Tag.valueOf("div"), element.tag(), "Tag type"),
-              () -> assertEquals(1, element.children().size(), "Number of children"),
-              () -> assertEquals(1, element.attributes().asList().size(), "Attributes"),
+              () -> assertEquals(DIV, element.tag(), TAG_TYPE),
+              () -> assertEquals(1, element.children().size(), NUM_CHILDREN),
+              () -> assertEquals(1, element.attributes().asList().size(), NUM_ATTRIBUTES),
               () -> assertEquals("mt-[5mm] py-[3mm] px-[5mm] border border-solid border-red-600",
-                  Objects.requireNonNull(element.attribute("class")).getValue(), "Attributes")
+                  Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
           );
         }
 
@@ -194,12 +202,12 @@ class HeaderTest {
             final var header = headerBuilder.isDraft(true).isSent(false).build();
             final var element = header.create().child(1).child(0).child(0);
             assertAll(
-                () -> assertEquals(Tag.valueOf("p"), element.tag(), "Tag type"),
-                () -> assertEquals(0, element.children().size(), "Number of children"),
-                () -> assertEquals(1, element.attributes().asList().size(), "Number of attributes"),
-                () -> assertEquals(CERTIFICATE_NAME, element.text(), "Text"),
+                () -> assertEquals(P, element.tag(), TAG_TYPE),
+                () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
+                () -> assertEquals(1, element.attributes().asList().size(), NUM_ATTRIBUTES),
+                () -> assertEquals(CERTIFICATE_NAME, element.text(), TEXT),
                 () -> assertEquals("font-bold inline",
-                    Objects.requireNonNull(element.attribute("class")).getValue(), "Attributes")
+                    Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
             );
           }
 
@@ -210,13 +218,12 @@ class HeaderTest {
             final var header = headerBuilder.isDraft(true).isSent(false).build();
             final var element = header.create().child(1).child(0).child(1);
             assertAll(
-                () -> assertEquals(Tag.valueOf("p"), element.tag(), "Tag type"),
-                () -> assertEquals(0, element.children().size(), "Number of children"),
-                () -> assertEquals(1, element.attributes().asList().size(),
-                    "Number of attributes"),
-                () -> assertEquals(expectedText, element.text(), "Text"),
+                () -> assertEquals(P, element.tag(), TAG_TYPE),
+                () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
+                () -> assertEquals(1, element.attributes().asList().size(), NUM_ATTRIBUTES),
+                () -> assertEquals(expectedText, element.text(), TEXT),
                 () -> assertEquals("inline",
-                    Objects.requireNonNull(element.attribute("class")).getValue(), "Attributes")
+                    Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
             );
           }
         }
@@ -229,12 +236,11 @@ class HeaderTest {
             final var header = headerBuilder.isDraft(true).isSent(false).build();
             final var element = header.create().child(1).child(1).child(0);
             assertAll(
-                () -> assertEquals(Tag.valueOf("p"), element.tag(), "Tag type"),
-                () -> assertEquals(0, element.children().size(), "Number of children"),
-                () -> assertEquals(0, element.attributes().asList().size(),
-                    "Number of attributes"),
+                () -> assertEquals(P, element.tag(), TAG_TYPE),
+                () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
+                () -> assertEquals(0, element.attributes().asList().size(), NUM_ATTRIBUTES),
                 () -> assertEquals(DRAFT_ALERT_MESSAGE.formatted(RECIPIENT_NAME), element.text(),
-                    "Text")
+                    TEXT)
             );
           }
 
@@ -243,11 +249,10 @@ class HeaderTest {
             final var header = headerBuilder.isDraft(false).isSent(false).build();
             final var element = header.create().child(1).child(1).child(0);
             assertAll(
-                () -> assertEquals(Tag.valueOf("p"), element.tag(), "Tag type"),
-                () -> assertEquals(0, element.children().size(), "Number of children"),
-                () -> assertEquals(0, element.attributes().asList().size(),
-                    "Number of attributes"),
-                () -> assertEquals(SIGNED_ALERT_MESSAGE, element.text(), "Text")
+                () -> assertEquals(P, element.tag(), TAG_TYPE),
+                () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
+                () -> assertEquals(0, element.attributes().asList().size(), NUM_ATTRIBUTES),
+                () -> assertEquals(SIGNED_ALERT_MESSAGE, element.text(), TEXT)
             );
           }
 
@@ -256,12 +261,11 @@ class HeaderTest {
             final var header = headerBuilder.isDraft(false).isSent(true).build();
             final var element = header.create().child(1).child(1).child(0);
             assertAll(
-                () -> assertEquals(Tag.valueOf("p"), element.tag(), "Tag type"),
-                () -> assertEquals(0, element.children().size(), "Number of children"),
-                () -> assertEquals(0, element.attributes().asList().size(),
-                    "Number of attributes"),
+                () -> assertEquals(P, element.tag(), TAG_TYPE),
+                () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
+                () -> assertEquals(0, element.attributes().asList().size(), NUM_ATTRIBUTES),
                 () -> assertEquals(SENT_ALERT_MESSAGE.formatted(RECIPIENT_NAME), element.text(),
-                    "Text")
+                    TEXT)
             );
           }
         }

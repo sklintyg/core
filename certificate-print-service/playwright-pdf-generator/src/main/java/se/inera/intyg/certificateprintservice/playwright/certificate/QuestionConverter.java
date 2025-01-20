@@ -1,7 +1,5 @@
 package se.inera.intyg.certificateprintservice.playwright.certificate;
 
-import static se.inera.intyg.certificateprintservice.playwright.Constants.STYLE;
-
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.text.html.HTML.Tag;
@@ -19,9 +17,9 @@ public class QuestionConverter {
         .text(question.getName());
 
     if (isSubQuestion) {
-      name.attr(STYLE, "padding-top: 1mm; padding-left: 5mm; padding-right: 5mm; color: #6A6A6A");
+      name.addClass("pt-[1mm] px-[5mm] text-neutral-600");
     } else {
-      name.attr(STYLE, "padding-top: 1mm; padding-left: 5mm; padding-right: 5mm;");
+      name.addClass("pt-[1mm] px-[5mm]");
     }
 
     final var list = new ArrayList<Element>();

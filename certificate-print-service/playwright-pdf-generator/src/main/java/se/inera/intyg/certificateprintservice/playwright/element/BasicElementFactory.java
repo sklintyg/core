@@ -49,8 +49,7 @@ public class BasicElementFactory {
 
   public static Element p(String text) {
     return new Element(Tag.P.toString())
-        .addClass("text-sm italic")
-        .attr(STYLE, "padding-left: 5mm; padding-right: 5mm; margin-bottom: 0; margin-top: 0;")
+        .addClass("text-sm italic px-[5mm]")
         .appendText(text);
   }
 
@@ -60,8 +59,7 @@ public class BasicElementFactory {
     for (int i = 0; i < valueColumns; i++) {
       final var td = element(Tag.TD);
       if (valueColumns - i > headerColumns) {
-        td.addClass("font-bold");
-        td.attr(STYLE, "padding-right: 10mm;");
+        td.addClass("font-bold pr-[10mm]");
       }
       td.appendText(rowValues.get(i));
       tableRow.appendChild(td);

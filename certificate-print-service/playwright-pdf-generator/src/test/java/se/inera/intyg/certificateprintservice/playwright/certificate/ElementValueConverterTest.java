@@ -20,7 +20,7 @@ class ElementValueConverterTest {
     );
 
     assertEquals(
-        "<p class=\"text-sm italic\" style=\"padding-left: 5mm; padding-right: 5mm; margin-bottom: 0; margin-top: 0;\">Example text for value</p>",
+        "<p class=\"text-sm italic px-[5mm]\">Example text for value</p>",
         result.toString()
     );
   }
@@ -34,7 +34,7 @@ class ElementValueConverterTest {
     );
 
     assertEquals(
-        "<p class=\"text-sm italic\" style=\"padding-left: 5mm; padding-right: 5mm; margin-bottom: 0; margin-top: 0;\">Example text for value, Example 2</p>",
+        "<p class=\"text-sm italic px-[5mm]\">Example text for value, Example 2</p>",
         result.toString()
     );
   }
