@@ -1,18 +1,16 @@
 package se.inera.intyg.certificateprintservice.playwright.element;
 
-import static se.inera.intyg.certificateprintservice.playwright.Constants.STYLE;
 import static se.inera.intyg.certificateprintservice.playwright.element.ElementProvider.element;
 
 import java.util.Base64;
 import java.util.List;
 import javax.swing.text.html.HTML.Tag;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.jsoup.nodes.Element;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HeaderElementFactory {
-
-  private HeaderElementFactory() {
-    throw new IllegalStateException("Utility class");
-  }
 
   private static final String DRAFT_ALERT_MESSAGE = "Detta är en utskrift av ett elektroniskt intygsutkast och ska INTE skickas till %s.";
   private static final String SENT_ALERT_MESSAGE = "Detta är en utskrift av ett elektroniskt intyg. Intyget har signerats elektroniskt av intygsutfärdaren. Notera att intyget redan har skickats till %s.";
@@ -21,38 +19,32 @@ public class HeaderElementFactory {
 
   public static Element recipientLogo(byte[] logoBytes) {
     final var logoBase64 = new String(Base64.getEncoder().encode(logoBytes));
-    final var logo = element(Tag.IMG)
-        .attr("src", "data:image/png;base64, " + logoBase64)
-        .attr("alt", "recipient-logo")
-        .attr(STYLE, "max-height: 15mm; max-width: 35mm;");
-
-    return element(Tag.DIV).appendChild(logo);
+    return element(Tag.DIV).appendChild(
+        element(Tag.IMG)
+            .addClass("max-h-[15mm] max-w-[35mm]")
+            .attr("src", "data:image/png;base64, " + logoBase64)
+            .attr("alt", "logotyp intygsmottagare")
+    );
   }
 
   public static Element personId(String personId) {
-    final var id = element(Tag.DIV)
-        .attr(STYLE, "float: right; text-align: right;")
+    return element(Tag.DIV)
+        .addClass("float-right text-right w-full")
         .appendChildren(List.of(
-            element(Tag.P).attr(STYLE, "font-weight: bold;").appendText(PERSON_SAMORDNINGS_NR),
+            element(Tag.P).addClass("font-bold").appendText(PERSON_SAMORDNINGS_NR),
             element(Tag.P).appendText(personId))
         );
-    return element(Tag.DIV)
-        .attr(STYLE, "width: 100%")
-        .appendChild(id);
   }
 
   public static Element title(String name, String type, String version) {
     return element(Tag.DIV)
-        .attr(STYLE, """
-            font-size: 14pt;
-            padding-bottom: 1mm;
-            border-bottom: black solid 1px;
-            """)
+        .addClass("text-[14pt] pb-[1mm] border-b border-solid border-black")
         .appendChildren(List.of(
-            element(Tag.SPAN)
-                .attr(STYLE, "font-weight: bold;")
+            element(Tag.P)
+                .addClass("font-bold inline")
                 .appendText(name),
-            element(Tag.SPAN)
+            element(Tag.P)
+                .addClass("inline")
                 .appendText(" (%s v%s)".formatted(type, version))
         ));
   }
@@ -61,11 +53,7 @@ public class HeaderElementFactory {
     final var alertMessage = alertMessage(recipientName, isDraft, isSent);
     return element(Tag.DIV)
         .appendChild(element(Tag.P).appendText(alertMessage))
-        .attr(STYLE, """
-            margin-top: 5mm;
-            padding: 3mm 5mm;
-            border: red solid 1px;
-            """);
+        .addClass("mt-[5mm] py-[3mm] px-[5mm] border border-solid border-red-600");
   }
 
   private static String alertMessage(String recipientName, boolean isDraft, boolean isSent) {

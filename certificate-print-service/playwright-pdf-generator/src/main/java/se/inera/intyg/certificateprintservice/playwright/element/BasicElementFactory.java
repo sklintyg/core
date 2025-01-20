@@ -5,14 +5,13 @@ import static se.inera.intyg.certificateprintservice.playwright.element.ElementP
 
 import java.util.List;
 import javax.swing.text.html.HTML.Tag;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.jsoup.nodes.Element;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.value.ElementValueTable;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BasicElementFactory {
-
-  private BasicElementFactory() {
-    throw new IllegalStateException("Utility class");
-  }
 
   public static Element table(ElementValueTable tableValue) {
     final var headerColumns = tableValue.getHeadings().size();

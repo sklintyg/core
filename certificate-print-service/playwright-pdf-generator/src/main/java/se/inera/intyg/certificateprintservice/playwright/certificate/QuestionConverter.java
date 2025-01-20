@@ -5,14 +5,13 @@ import static se.inera.intyg.certificateprintservice.playwright.Constants.STYLE;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.text.html.HTML.Tag;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.jsoup.nodes.Element;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.Question;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class QuestionConverter {
-
-  private QuestionConverter() {
-    throw new IllegalStateException("Utility class");
-  }
 
   public static List<Element> question(Question question, boolean isSubQuestion) {
     final var name = new Element(Tag.H3.toString())

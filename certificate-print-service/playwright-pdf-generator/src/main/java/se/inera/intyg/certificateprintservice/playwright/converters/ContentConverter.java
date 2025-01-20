@@ -1,15 +1,13 @@
 package se.inera.intyg.certificateprintservice.playwright.converters;
 
+import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.Certificate;
 import se.inera.intyg.certificateprintservice.playwright.document.Content;
 
+@Component
 public class ContentConverter {
 
-  private ContentConverter() {
-    throw new IllegalStateException("Utility class");
-  }
-
-  public static Content convert(Certificate certificate) {
+  public Content convert(Certificate certificate) {
     return Content.builder()
         .categories(certificate.getCategories())
         .issuerName(certificate.getMetadata().getIssuerName())

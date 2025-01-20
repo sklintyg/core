@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateprintservice.playwright.document;
 
-import static se.inera.intyg.certificateprintservice.playwright.Constants.STYLE;
 import static se.inera.intyg.certificateprintservice.playwright.element.ElementProvider.element;
 
 import java.util.List;
@@ -29,7 +28,6 @@ public class Content {
 
   public Element create() {
     return element(Tag.DIV)
-        .attr(STYLE, "margin: 0 20mm;")
         .appendChildren(content())
         .appendChildren(List.of(
             ContentElementFactory.issuerInfo(issuerName, issuingUnit, issuingUnitInfo,

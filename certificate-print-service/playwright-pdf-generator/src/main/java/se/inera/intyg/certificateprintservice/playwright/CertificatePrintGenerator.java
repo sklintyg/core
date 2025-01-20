@@ -32,10 +32,16 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator, Ini
   private Resource tailwindScript;
 
   private final BrowserPool browserPool;
+  private final ContentConverter contentConverter;
+  private final FooterConverter footerConverter;
+  private final HeaderConverter headerConverter;
+  private final LeftMarginInfoConverter leftMarginInfoConverter;
+  private final RightMarginInfoConverter rightMarginInfoConverter;
+
   private String tailwindCSS;
 
   private static final PdfOptions PDF_OPTIONS =
-      new PdfOptions().setFormat("A4").setPrintBackground(true).setDisplayHeaderFooter(false);
+      new PdfOptions().setFormat("A4").setTagged(true);
 
   @Override
   public void afterPropertiesSet() throws Exception {
@@ -63,11 +69,11 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator, Ini
     ) {
       final var metadata = certificate.getMetadata();
       final var document = Document.builder()
-          .header(HeaderConverter.convert(metadata))
-          .footer(FooterConverter.convert(metadata))
-          .content(ContentConverter.convert(certificate))
-          .leftMarginInfo(LeftMarginInfoConverter.convert(metadata))
-          .rightMarginInfo(RightMarginInfoConverter.convert(metadata))
+          .header(headerConverter.convert(metadata))
+          .footer(footerConverter.convert(metadata))
+          .content(contentConverter.convert(certificate))
+          .leftMarginInfo(leftMarginInfoConverter.convert(metadata))
+          .rightMarginInfo(rightMarginInfoConverter.convert(metadata))
           .watermark(Watermark.builder().build())
           .certificateName(metadata.getName())
           .certificateType(metadata.getTypeId())

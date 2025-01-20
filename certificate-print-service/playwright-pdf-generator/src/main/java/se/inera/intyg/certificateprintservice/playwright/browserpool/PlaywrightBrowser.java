@@ -17,4 +17,5 @@ public class PlaywrightBrowser {
   public BrowserContext getBrowserContext() {
     return this.browser.newContext();
   }
+
 }

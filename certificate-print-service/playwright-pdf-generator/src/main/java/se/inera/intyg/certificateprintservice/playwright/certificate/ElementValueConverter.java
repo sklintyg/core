@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateprintservice.playwright.certificate;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.jsoup.nodes.Element;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.value.ElementValue;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.value.ElementValueList;
@@ -7,11 +9,8 @@ import se.inera.intyg.certificateprintservice.pdfgenerator.api.value.ElementValu
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.value.ElementValueText;
 import se.inera.intyg.certificateprintservice.playwright.element.BasicElementFactory;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ElementValueConverter {
-
-  private ElementValueConverter() {
-    throw new IllegalStateException("Utility class");
-  }
 
   public static Element html(ElementValue elementValue) {
     if (elementValue instanceof ElementValueText textValue) {

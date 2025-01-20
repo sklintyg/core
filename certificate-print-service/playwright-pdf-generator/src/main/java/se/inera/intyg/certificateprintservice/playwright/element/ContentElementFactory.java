@@ -5,15 +5,14 @@ import static se.inera.intyg.certificateprintservice.playwright.element.ElementP
 
 import java.util.List;
 import javax.swing.text.html.HTML.Tag;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.jsoup.nodes.Element;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ContentElementFactory {
 
-  private ContentElementFactory() {
-    throw new IllegalStateException("Utility class");
-  }
-
-  private static final String ISSUER = "IntygsUtfärdare:";
+  private static final String ISSUER = "Intygsutfärdare:";
   private static final String CONTACT_INFO = "Kontaktuppgifter:";
   private static final String SIGN_INFO = "Intyget signerades:";
   private static final String SEND_CERTIFICATE_TEXT = "Skicka intyg till mottagare";
@@ -22,7 +21,7 @@ public class ContentElementFactory {
   public static Element issuerInfo(String name, String unit, List<String> unitInfo,
       String signDate, boolean isDraft) {
     final var issuerInfo = element(Tag.DIV)
-        .attr(STYLE, "break-inside: avoid;");
+        .addClass("break-inside-avoid");
 
     if (!isDraft) {
       issuerInfo.appendChild(issuerName(name));
@@ -39,36 +38,36 @@ public class ContentElementFactory {
 
   private static Element issuerName(String issuerName) {
     return element(Tag.DIV)
-        .attr(STYLE, "display: grid; margin-top: 1cm;")
+        .addClass("grid mt-[5mm]")
         .appendChildren(List.of(
-            element(Tag.P).attr(STYLE, "font-weight: bold;").text(ISSUER),
+            element(Tag.P).addClass("font-bold").text(ISSUER),
             element(Tag.P).text(issuerName)));
   }
 
   private static Element contactInfo(String issuingUnit, List<String> issuingUnitInfo) {
     return element(Tag.DIV)
-        .attr(STYLE, "display: grid; margin-top: 5mm;")
+        .addClass("grid mt-[5mm]")
         .appendChildren(List.of(
-            element(Tag.SPAN).attr(STYLE, "font-weight: bold;").text(CONTACT_INFO),
-            element(Tag.SPAN).text(issuingUnit)))
-        .appendChildren(issuingUnitInfo.stream().map(i -> element(Tag.SPAN).text(i))
+            element(Tag.P).addClass("font-bold").text(CONTACT_INFO),
+            element(Tag.P).text(issuingUnit)))
+        .appendChildren(issuingUnitInfo.stream().map(i -> element(Tag.P).text(i))
             .toList());
   }
 
   private static Element signingDate(String signDate) {
     return element(Tag.DIV)
-        .attr(STYLE, "display: grid; margin-top: 5mm;")
+        .addClass("grid mt-[5mm]")
         .appendChildren(List.of(
-            element(Tag.SPAN).attr(STYLE, "font-weight: bold;").text(SIGN_INFO),
-            element(Tag.SPAN).text(signDate)));
+            element(Tag.P).addClass("font-bold").text(SIGN_INFO),
+            element(Tag.P).text(signDate)));
   }
 
   public static Element certificateInformation(String name, String description) {
     final var certificateInfo = element(Tag.DIV)
-        .attr(STYLE, "page-break-before:always")
+        .addClass("break-before-page")
         .appendChildren(List.of(
             element(Tag.STRONG).text(name),
-            element(Tag.P).attr(STYLE, "white-space: pre-line;").append(description),
+            element(Tag.P).addClass("whitespace-pre-line").append(description),
             element(Tag.BR)))
         .appendChildren(citizenInfo());
 
@@ -80,7 +79,7 @@ public class ContentElementFactory {
     return List.of(
         element(Tag.STRONG).text(SEND_CERTIFICATE_TEXT),
         element(Tag.P)
-            .attr(STYLE, "white-space: pre-line;")
+            .addClass("whitespace-pre-line")
             .append(HANDLE_CERTIFICATE_TEXT));
   }
 

@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateprintservice.playwright.document;
 
-import static se.inera.intyg.certificateprintservice.playwright.Constants.STYLE;
 import static se.inera.intyg.certificateprintservice.playwright.element.ElementProvider.element;
 
 import java.util.List;
@@ -27,13 +26,7 @@ public class Header {
 
   public Element create() {
     return element(Tag.DIV)
-        .appendChild(header());
-  }
-
-  private Element header() {
-    return element(Tag.DIV)
-        .appendChild(pageHeader())
-        .appendChild(certificateHeader());
+        .appendChildren(List.of(pageHeader(), certificateHeader()));
   }
 
   private Element pageHeader() {
@@ -41,16 +34,12 @@ public class Header {
         .appendChildren(List.of(
             HeaderElementFactory.recipientLogo(recipientLogo),
             HeaderElementFactory.personId(personId)))
-        .attr(STYLE, """
-              display: flex;
-              top: 0; left: 0;
-              margin: 0 0 10mm 0;
-            """);
+        .addClass("flex top-0 left-0 mb-[10mm]");
   }
 
   private Element certificateHeader() {
     return element(Tag.DIV)
-        .attr(STYLE, "margin-bottom: 5mm;")
+        .addClass("mb-[5mm]")
         .appendChildren(List.of(
             HeaderElementFactory.title(certificateName, certificateType, certificateVersion),
             HeaderElementFactory.alert(recipientName, isDraft, isSent)
