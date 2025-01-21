@@ -4,12 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.A;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.ATTRIBUTES;
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.CLASS;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.DIV;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.HREF;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.NUM_ATTRIBUTES;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.NUM_CHILDREN;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.P;
-import static se.inera.intyg.certificateprintservice.playwright.document.Constants.STYLE;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.TAG_TYPE;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.TEXT;
 
@@ -53,8 +53,8 @@ class FooterTest {
             () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
             () -> assertEquals(expectedText, element.text(), "Text"),
             () -> assertEquals(1, element.attributes().asList().size(), NUM_ATTRIBUTES),
-            () -> assertEquals("display: block;\nmargin-top: 5mm;\nmargin-bottom: 2mm;\n",
-                Objects.requireNonNull(element.attribute(STYLE)).getValue(), ATTRIBUTES)
+            () -> assertEquals("block mt-[5mm] mb-[2mm]",
+                Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
         );
       }
 
@@ -65,7 +65,7 @@ class FooterTest {
             () -> assertEquals(A, element.tag(), TAG_TYPE),
             () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
             () -> assertEquals(FOOTER_LINK_TEXT, element.text(), TEXT),
-            () -> assertEquals(1, element.attributes().asList().size(), NUM_ATTRIBUTES),
+            () -> assertEquals(2, element.attributes().asList().size(), NUM_ATTRIBUTES),
             () -> assertEquals(FOOTER_LINK_URL,
                 Objects.requireNonNull(element.attribute(HREF)).getValue(), ATTRIBUTES)
         );

@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateprintservice.playwright.element;
 
-import static se.inera.intyg.certificateprintservice.playwright.Constants.STYLE;
 import static se.inera.intyg.certificateprintservice.playwright.element.ElementProvider.element;
 
 import java.util.List;
@@ -20,13 +19,11 @@ public class FooterElementFactory {
     return element(Tag.DIV)
         .appendChildren(List.of(
             element(Tag.P)
-                .text(FOOTER_INFO_TEXT.formatted(origin))
-                .attr(STYLE, """
-                    display: block;
-                    margin-top: 5mm;
-                    margin-bottom: 2mm;
-                    """),
-            element(Tag.A).attr("href", LINK_URL).text(LINK_TEXT)
+                .addClass("block mt-[5mm] mb-[2mm]")
+                .text(FOOTER_INFO_TEXT.formatted(origin)),
+            element(Tag.A)
+                .addClass("text-[#0000ee]")
+                .attr("href", LINK_URL).text(LINK_TEXT)
         ));
   }
 

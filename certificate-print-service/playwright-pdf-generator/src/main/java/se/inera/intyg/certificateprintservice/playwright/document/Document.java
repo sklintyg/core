@@ -1,7 +1,5 @@
 package se.inera.intyg.certificateprintservice.playwright.document;
 
-import static se.inera.intyg.certificateprintservice.playwright.Constants.STYLE;
-
 import com.microsoft.playwright.Page;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -32,21 +30,30 @@ public class Document {
   String tailWindScript;
   boolean isDraft;
 
+  private static final String HEADER_ID = "header";
+  private static final String HEADER_SPACE_ID = "header-space";
+  private static final String CONTENT_ID = "content";
+  private static final String FOOTER_ID = "footer";
+  private static final String LEFT_MARGIN_INFO_ID = "leftMarginInfo";
+  private static final String RIGHT_MARGIN_INFO_ID = "rightMarginInfo";
+  private static final String WATERMARK_ID = "watermark";
+  private static final String TITLE_ID = "title";
+
   public org.jsoup.nodes.Document build(Resource template, Page page) throws IOException {
     final var document = document(template);
     setTitle(document);
     setTailWindScript(document);
     setHeader(document, page);
-    getElement(document, "footer").appendChild(footer.create());
-    getElement(document, "content").appendChild(content.create());
-    getElement(document, "leftMarginInfo").appendChild(leftMarginInfo.create());
+    getElement(document, FOOTER_ID).appendChild(footer.create());
+    getElement(document, CONTENT_ID).appendChild(content.create());
+    getElement(document, LEFT_MARGIN_INFO_ID).appendChild(leftMarginInfo.create());
 
     if (!isDraft) {
-      getElement(document, "rightMarginInfo").appendChild(rightMarginInfo.create());
+      getElement(document, RIGHT_MARGIN_INFO_ID).appendChild(rightMarginInfo.create());
     }
 
     if (isDraft) {
-      getElement(document, "watermark").appendChild(watermark.create());
+      getElement(document, WATERMARK_ID).appendChild(watermark.create());
     }
 
     return document;
@@ -57,11 +64,11 @@ public class Document {
   }
 
   private void setHeader(org.jsoup.nodes.Document document, Page page) {
-    getElement(document, "header").appendChild(header.create());
+    getElement(document, HEADER_ID).appendChild(header.create());
 
     final var headerHeight = calculateHeaderHeight(page, document.html());
-    getElement(document, "header-space")
-        .attr(STYLE, "height: calc(%spx);".formatted(headerHeight));
+    getElement(document, HEADER_SPACE_ID)
+        .addClass("h-[%spx]".formatted(headerHeight));
   }
 
   private org.jsoup.nodes.Document document(Resource template) throws IOException {
@@ -76,14 +83,14 @@ public class Document {
   }
 
   private void setTitle(org.jsoup.nodes.Document document) {
-    final var titleElement = getElement(document, "title");
+    final var titleElement = getElement(document, TITLE_ID);
     final var title = "%s (%s v%s)".formatted(certificateName, certificateType, certificateVersion);
     titleElement.appendText(title);
   }
 
   private int calculateHeaderHeight(Page page, String header) {
     page.setContent(header);
-    return (int) page.getByTitle("header").evaluate("node => node.offsetHeight");
+    return (int) page.getByTitle(HEADER_ID).evaluate("node => node.offsetHeight");
   }
 
 }

@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateprintservice.playwright.element;
 
-import static se.inera.intyg.certificateprintservice.playwright.Constants.STYLE;
 import static se.inera.intyg.certificateprintservice.playwright.element.ElementProvider.element;
 
 import java.util.List;
@@ -86,7 +85,7 @@ public class ContentElementFactory {
   private static void setLinkColor(Element infoWrapper) {
     infoWrapper.getAllElements().stream().flatMap(element -> element.children().stream())
         .filter(element -> element.tagName().equals(Tag.A.toString()))
-        .forEach(element -> element.attr(STYLE, "color: #0000EE;"));
+        .forEach(element -> element.addClass("text-[#0000ee]"));
   }
 
 }

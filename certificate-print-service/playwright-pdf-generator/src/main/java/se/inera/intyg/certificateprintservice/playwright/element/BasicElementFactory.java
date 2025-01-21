@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateprintservice.playwright.element;
 
-import static se.inera.intyg.certificateprintservice.playwright.Constants.STYLE;
 import static se.inera.intyg.certificateprintservice.playwright.element.ElementProvider.element;
 
 import java.util.List;
@@ -17,8 +16,7 @@ public class BasicElementFactory {
     final var headerColumns = tableValue.getHeadings().size();
     final var valueColumns = tableValue.getValues().getFirst().size();
     final var tableElement = element(Tag.TABLE)
-        .addClass("text-sm")
-        .attr(STYLE, "margin-left: 5mm; margin-right: 5mm;");
+        .addClass("text-sm mx-[5mm]");
 
     tableElement.appendChild(th(tableValue, headerColumns, valueColumns));
 
@@ -32,11 +30,10 @@ public class BasicElementFactory {
   private static Element th(ElementValueTable tableValue, int headerColumns,
       int valueColumns) {
     final var trHeader = element(Tag.TR)
-        .attr(STYLE, "border-bottom: black solid 1px;");
+        .addClass("border-b border-black border-solid");
     for (int i = 0; i < valueColumns; i++) {
       final var th = element(Tag.TH)
-          .addClass("font-bold")
-          .attr(STYLE, "padding-right: 10mm;");
+          .addClass("font-bold pr-[10mm]");
       if (valueColumns - i > headerColumns) {
         th.appendText("");
       } else {
