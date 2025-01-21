@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 Inera AB (http://www.inera.se)
+ * Copyright (C) 2025 Inera AB (http://www.inera.se)
  *
  * This file is part of sklintyg (https://github.com/sklintyg).
  *
@@ -28,18 +28,18 @@ import lombok.Value;
 @Builder
 public class CredentialsForPerson {
 
-    String personalIdentityNumber;
-    @Builder.Default
-    List<HealthCareProfessionalLicence> healthCareProfessionalLicence = new ArrayList<>();
-    String personalPrescriptionCode;
-    @Builder.Default
-    List<HCPSpecialityCodes> healthCareProfessionalLicenceSpeciality = new ArrayList<>();
-    @Builder.Default
-    List<NursePrescriptionRight> nursePrescriptionRight = new ArrayList<>();
-    String healthcareProfessionalLicenseIdentityNumber;
-    @Builder.Default
-    List<String> educationCode = new ArrayList<>();
-    @Builder.Default
-    List<Restriction> restrictions = new ArrayList<>();
-    Boolean feignedPerson;
+  String personalIdentityNumber;
+  @Builder.Default
+  List<HealthCareProfessionalLicence> healthCareProfessionalLicence = new ArrayList<>();
+  String personalPrescriptionCode;
+  @Builder.Default
+  List<HCPSpecialityCodes> healthCareProfessionalLicenceSpeciality = new ArrayList<>();
+  @Builder.Default
+  List<NursePrescriptionRight> nursePrescriptionRight = new ArrayList<>();
+  String healthcareProfessionalLicenseIdentityNumber;
+  @Builder.Default
+  List<String> educationCode = new ArrayList<>();
+  @Builder.Default
+  List<Restriction> restrictions = new ArrayList<>();
+  Boolean feignedPerson;
 }

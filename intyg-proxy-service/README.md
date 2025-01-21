@@ -9,7 +9,8 @@ See [Integrations](##Integrations) for a description of each integration.
 You can either run the locally inside IntelliJ (using Run-configurations) or by using the included
 Gradle wrapper.
 
-When starting the service locally for development and testing, you want to make sure that the following
+When starting the service locally for development and testing, you want to make sure that the
+following
 Spring profiles are active: `testability,dev`
 
 They are activated automatically when running Gradle (`./gradlew bootRun`), but in IntelliJ you have
@@ -18,11 +19,12 @@ service.
 
 ## Integrations
 
-**PersonUppgiftsTjänsten** - Infrastructure service that enables fetching of persons. Communication is done via NTjP and through TjänsteKontrakt (SOAP Webservices)
+**PersonUppgiftsTjänsten** - Infrastructure service that enables fetching of persons. Communication
+is done via NTjP and through TjänsteKontrakt (SOAP Webservices)
 
 ### Integrations locally
 
-When running the service locally in the development environment, the default configuration will use 
+When running the service locally in the development environment, the default configuration will use
 a stub-implementation that returns data based on json-files.
 
 ## Swagger Api Documentation
@@ -32,9 +34,10 @@ URL: https://ips.localtest.me/swagger-ui/index.html
 
 ## Licens
 
-Copyright (C) 2024 Inera AB (http://www.inera.se)
+Copyright (C) 2025 Inera AB (http://www.inera.se)
 
-Intyg Proxy Service is free software: you can redistribute it and/or modify it under the terms of the
+Intyg Proxy Service is free software: you can redistribute it and/or modify it under the terms of
+the
 GNU Affero General Public License as published by the Free Software Foundation, either version 3 of
 the License, or (at your option) any later version.
 
