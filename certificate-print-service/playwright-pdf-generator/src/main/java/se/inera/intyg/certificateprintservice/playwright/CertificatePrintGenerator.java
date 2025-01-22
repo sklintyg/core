@@ -2,6 +2,8 @@ package se.inera.intyg.certificateprintservice.playwright;
 
 import com.microsoft.playwright.Page.PdfOptions;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Base64;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +13,9 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateprintservice.pdfgenerator.PrintCertificateGenerator;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.Certificate;
+import se.inera.intyg.certificateprintservice.pdfgenerator.event.CertificatePrintEventService;
+import se.inera.intyg.certificateprintservice.pdfgenerator.event.model.CertificatePrintEvent;
+import se.inera.intyg.certificateprintservice.pdfgenerator.event.model.CertificatePrintEventType;
 import se.inera.intyg.certificateprintservice.playwright.browserpool.BrowserPool;
 import se.inera.intyg.certificateprintservice.playwright.browserpool.PlaywrightBrowser;
 import se.inera.intyg.certificateprintservice.playwright.converters.ContentConverter;
@@ -32,7 +37,7 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator, Ini
   private final ContentConverter contentConverter;
   private final FooterConverter footerConverter;
   private final HeaderConverter headerConverter;
-
+  private final CertificatePrintEventService certificatePrintEventService;
   private String tailwindCSS;
 
   @Override
@@ -42,6 +47,8 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator, Ini
 
   @Override
   public byte[] generate(final Certificate certificate) {
+    final var start = LocalDateTime.now(ZoneId.systemDefault());
+
     PlaywrightBrowser playwrightBrowser = null;
     try {
       playwrightBrowser = browserPool.borrowObject();
@@ -50,6 +57,14 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator, Ini
       throw new IllegalStateException("Failure creating certificate details pdf", e);
     } finally {
       browserPool.returnObject(playwrightBrowser);
+      certificatePrintEventService.publish(
+          CertificatePrintEvent.builder()
+              .start(start)
+              .end(LocalDateTime.now(ZoneId.systemDefault()))
+              .type(CertificatePrintEventType.CREATED)
+              .certificateId(certificate.getMetadata().getCertificateId())
+              .build()
+      );
     }
   }
 
