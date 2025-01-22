@@ -50,14 +50,6 @@ class DocumentTest {
   private Locator locator;
 
   private final Document.DocumentBuilder documentBuilder = Document.builder()
-      .header(Header.builder()
-          .certificateName(CERTIFICATE_NAME)
-          .certificateType(CERTIFICATE_TYPE)
-          .certificateType(CERTIFICATE_TYPE)
-          .personId("19121212-1212")
-          .recipientLogo("reciptientLogo".getBytes())
-          .build())
-      .footer(Footer.builder().build())
       .content(Content.builder()
           .issuerName("issuerName")
           .issuingUnit("issuingUnit")
@@ -67,9 +59,6 @@ class DocumentTest {
           .categories(Collections.emptyList())
           .isDraft(true)
           .build())
-      .leftMarginInfo(LeftMarginInfo.builder().build())
-      .rightMarginInfo(RightMarginInfo.builder().build())
-      .watermark(Watermark.builder().build())
       .certificateName(CERTIFICATE_NAME)
       .certificateType(CERTIFICATE_TYPE)
       .certificateVersion(CERTIFICATE_VERSION)
@@ -102,7 +91,7 @@ class DocumentTest {
     @Test
     void shouldSetHeader() throws IOException {
       final var elementBefore = jsoupDocument.getElementById(HEADER);
-      final var elementAfter = document.build(template, page).getElementById(HEADER);
+      final var elementAfter = document.build(template, 77).getElementById(HEADER);
       assertEquals(0, requireNonNull(elementBefore).children().size());
       assertNotEquals(0, requireNonNull(elementAfter).children().size());
     }
@@ -110,7 +99,7 @@ class DocumentTest {
     @Test
     void shouldSetContent() throws IOException {
       final var elementBefore = jsoupDocument.getElementById(CONTENT);
-      final var elementAfter = document.build(template, page).getElementById(CONTENT);
+      final var elementAfter = document.build(template, 77).getElementById(CONTENT);
       assertEquals(0, requireNonNull(elementBefore).children().size());
       assertNotEquals(0, requireNonNull(elementAfter).children().size());
     }
@@ -118,7 +107,7 @@ class DocumentTest {
     @Test
     void shouldSetFooter() throws IOException {
       final var elementBefore = jsoupDocument.getElementById(FOOTER);
-      final var elementAfter = document.build(template, page).getElementById(FOOTER);
+      final var elementAfter = document.build(template, 77).getElementById(FOOTER);
       assertEquals(0, requireNonNull(elementBefore).children().size());
       assertNotEquals(0, requireNonNull(elementAfter).children().size());
     }
@@ -126,7 +115,7 @@ class DocumentTest {
     @Test
     void shouldSetLeftMarginInfo() throws IOException {
       final var elementBefore = jsoupDocument.getElementById(LEFT_MARGIN_INFO);
-      final var elementAfter = document.build(template, page).getElementById(LEFT_MARGIN_INFO);
+      final var elementAfter = document.build(template, 77).getElementById(LEFT_MARGIN_INFO);
       assertEquals(0, requireNonNull(elementBefore).children().size());
       assertNotEquals(0, requireNonNull(elementAfter).children().size());
     }
@@ -134,7 +123,7 @@ class DocumentTest {
     @Test
     void shouldNotSetRightMarginInfo() throws IOException {
       final var elementBefore = jsoupDocument.getElementById(RIGHT_MARGIN_INFO);
-      final var elementAfter = document.build(template, page).getElementById(RIGHT_MARGIN_INFO);
+      final var elementAfter = document.build(template, 77).getElementById(RIGHT_MARGIN_INFO);
       assertEquals(0, requireNonNull(elementBefore).children().size());
       assertEquals(0, requireNonNull(elementAfter).children().size());
     }
@@ -142,7 +131,7 @@ class DocumentTest {
     @Test
     void shouldSetWatermark() throws IOException {
       final var elementBefore = jsoupDocument.getElementById(WATERMARK);
-      final var elementAfter = document.build(template, page).getElementById(WATERMARK);
+      final var elementAfter = document.build(template, 77).getElementById(WATERMARK);
       assertEquals(0, requireNonNull(elementBefore).children().size());
       assertNotEquals(0, requireNonNull(elementAfter).children().size());
     }
@@ -150,7 +139,7 @@ class DocumentTest {
     @Test
     void shouldSetTitle() throws IOException {
       final var elementBefore = jsoupDocument.getElementById(TITLE);
-      final var elementAfter = document.build(template, page).getElementById(TITLE);
+      final var elementAfter = document.build(template, 77).getElementById(TITLE);
       assertEquals("", requireNonNull(elementBefore).text());
       assertEquals("%s (%s v%s)".formatted(CERTIFICATE_NAME, CERTIFICATE_TYPE, CERTIFICATE_VERSION),
           requireNonNull(elementAfter).text());
@@ -159,7 +148,7 @@ class DocumentTest {
     @Test
     void shouldSetTailwindScript() throws IOException {
       final var elementBefore = jsoupDocument.getElementById(SCRIPT);
-      final var elementAfter = document.build(template, page).getElementById(SCRIPT);
+      final var elementAfter = document.build(template, 77).getElementById(SCRIPT);
       assertNull(requireNonNull(elementBefore).attribute(SRC));
       assertEquals("data:text/javascript;base64, %s".formatted(TAILWIND_CSS_SCRIPT), requireNonNull(
           requireNonNull(elementAfter).attribute(SRC)).getValue());
@@ -168,7 +157,7 @@ class DocumentTest {
     @Test
     void shouldSetHeaderHeight() throws IOException {
       final var elementBefore = jsoupDocument.getElementById(HEADER_SPACE);
-      final var elementAfter = document.build(template, page).getElementById(HEADER_SPACE);
+      final var elementAfter = document.build(template, 77).getElementById(HEADER_SPACE);
       assertNull(requireNonNull(elementBefore).attribute(CLASS));
       assertEquals("h-[%spx]".formatted(HEADER_HEIGHT), requireNonNull(
           requireNonNull(elementAfter).attribute(CLASS)).getValue());
@@ -186,7 +175,7 @@ class DocumentTest {
     @Test
     void shouldSetHeader() throws IOException {
       final var elementBefore = jsoupDocument.getElementById(HEADER);
-      final var elementAfter = document.build(template, page).getElementById(HEADER);
+      final var elementAfter = document.build(template, 77).getElementById(HEADER);
       assertEquals(0, requireNonNull(elementBefore).children().size());
       assertNotEquals(0, requireNonNull(elementAfter).children().size());
     }
@@ -194,7 +183,7 @@ class DocumentTest {
     @Test
     void shouldSetContent() throws IOException {
       final var elementBefore = jsoupDocument.getElementById(CONTENT);
-      final var elementAfter = document.build(template, page).getElementById(CONTENT);
+      final var elementAfter = document.build(template, 77).getElementById(CONTENT);
       assertEquals(0, requireNonNull(elementBefore).children().size());
       assertNotEquals(0, requireNonNull(elementAfter).children().size());
     }
@@ -202,7 +191,7 @@ class DocumentTest {
     @Test
     void shouldSetFooter() throws IOException {
       final var elementBefore = jsoupDocument.getElementById(FOOTER);
-      final var elementAfter = document.build(template, page).getElementById(FOOTER);
+      final var elementAfter = document.build(template, 77).getElementById(FOOTER);
       assertEquals(0, requireNonNull(elementBefore).children().size());
       assertNotEquals(0, requireNonNull(elementAfter).children().size());
     }
@@ -210,7 +199,7 @@ class DocumentTest {
     @Test
     void shouldSetLeftMarginInfo() throws IOException {
       final var elementBefore = jsoupDocument.getElementById(LEFT_MARGIN_INFO);
-      final var elementAfter = document.build(template, page).getElementById(LEFT_MARGIN_INFO);
+      final var elementAfter = document.build(template, 77).getElementById(LEFT_MARGIN_INFO);
       assertEquals(0, requireNonNull(elementBefore).children().size());
       assertNotEquals(0, requireNonNull(elementAfter).children().size());
     }
@@ -218,7 +207,7 @@ class DocumentTest {
     @Test
     void shouldSetRightMarginInfo() throws IOException {
       final var elementBefore = jsoupDocument.getElementById(RIGHT_MARGIN_INFO);
-      final var elementAfter = document.build(template, page).getElementById(RIGHT_MARGIN_INFO);
+      final var elementAfter = document.build(template, 77).getElementById(RIGHT_MARGIN_INFO);
       assertEquals(0, requireNonNull(elementBefore).children().size());
       assertNotEquals(0, requireNonNull(elementAfter).children().size());
     }
@@ -226,7 +215,7 @@ class DocumentTest {
     @Test
     void shouldNotSetWatermark() throws IOException {
       final var elementBefore = jsoupDocument.getElementById(WATERMARK);
-      final var elementAfter = document.build(template, page).getElementById(WATERMARK);
+      final var elementAfter = document.build(template, 77).getElementById(WATERMARK);
       assertEquals(0, requireNonNull(elementBefore).children().size());
       assertEquals(0, requireNonNull(elementAfter).children().size());
     }
@@ -234,7 +223,7 @@ class DocumentTest {
     @Test
     void shouldSetTitle() throws IOException {
       final var elementBefore = jsoupDocument.getElementById(TITLE);
-      final var elementAfter = document.build(template, page).getElementById(TITLE);
+      final var elementAfter = document.build(template, 77).getElementById(TITLE);
       assertEquals("", requireNonNull(elementBefore).text());
       assertEquals("%s (%s v%s)".formatted(CERTIFICATE_NAME, CERTIFICATE_TYPE, CERTIFICATE_VERSION),
           requireNonNull(elementAfter).text());
@@ -243,7 +232,7 @@ class DocumentTest {
     @Test
     void shouldSetTailwindScript() throws IOException {
       final var elementBefore = jsoupDocument.getElementById(SCRIPT);
-      final var elementAfter = document.build(template, page).getElementById(SCRIPT);
+      final var elementAfter = document.build(template, 77).getElementById(SCRIPT);
       assertNull(requireNonNull(elementBefore).attribute(SRC));
       assertEquals("data:text/javascript;base64, %s".formatted(TAILWIND_CSS_SCRIPT), requireNonNull(
           requireNonNull(elementAfter).attribute(SRC)).getValue());
@@ -252,7 +241,7 @@ class DocumentTest {
     @Test
     void shouldSetHeaderHeight() throws IOException {
       final var elementBefore = jsoupDocument.getElementById(HEADER_SPACE);
-      final var elementAfter = document.build(template, page).getElementById(HEADER_SPACE);
+      final var elementAfter = document.build(template, 77).getElementById(HEADER_SPACE);
       assertNull(requireNonNull(elementBefore).attribute(CLASS));
       assertEquals("h-[%spx]".formatted(HEADER_HEIGHT), requireNonNull(
           requireNonNull(elementAfter).attribute(CLASS)).getValue());

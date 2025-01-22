@@ -9,101 +9,13 @@
     @tailwind base;
     @tailwind components;
     @tailwind utilities;
-
-    @page {
-      size: A4 portrait;
-      margin: 15mm 0 0 0;
-    }
-
     body, html {
       font-size: 10pt;
       font-family: "Liberation Sans", "LiberationSans", system-ui, sans-serif;
     }
-
-    #footer-space {
-      height: 40mm;
-    }
-
-    #header {
-      position: fixed;
-      top: 0;
-      margin: 0 20mm;
-      display: grid;
-      width: 17cm;
-    }
-
-    #content {
-      margin: 0 20mm;
-    }
-
-    #footer {
-      position: fixed;
-      bottom: 0;
-      margin: 0 20mm;
-      width: 17cm;
-      height: 30mm;
-      border-top: black solid 1px;
-      justify-content: space-between;
-      display: flex;
-    }
-
-    #leftMarginInfo {
-      position: fixed;
-      left: 1cm;
-      bottom: 35mm;
-      transform: rotate(-90deg) translateY(-50%);
-      transform-origin: top left;
-    }
-
-    #rightMarginInfo {
-      position: fixed;
-      left: 20cm;
-      bottom: 35mm;
-      width: 100%;
-      transform: rotate(-90deg) translateY(-50%);
-      transform-origin: top left;
-    }
-
-    #watermark {
-      position: fixed;
-      top: calc(50% - 8mm);
-      left: 50%;
-      transform: translateX(-50%) translateY(-50%) rotate(315deg);
-      font-size: 100pt;
-      color: rgb(128, 128, 128);
-      opacity: 0.5;
-      z-index: -1;
-    }
   </style>
 </head>
 <body>
-<table>
-  <thead>
-  <tr>
-    <td>
-      <div id="header-space"></div>
-    </td>
-  </tr>
-  </thead>
-  <tbody>
-  <tr>
-    <td>
-      <div id="content" class="content"></div>
-    </td>
-  </tr>
-  </tbody>
-  <tfoot>
-  <tr>
-    <td>
-      <div id="footer-space" class="counter"></div>
-    </td>
-  </tr>
-  </tfoot>
-</table>
-<div id="header" title="header" class="header"></div>
-<div id="footer" title="footer" class="footer"></div>
-<div id="leftMarginInfo" class="leftMarginInfo"></div>
-<div id="rightMarginInfo" class="rightMarginInfo"></div>
-<div id="watermark" class="watermark"></div>
+<div id="content"></div>
 </body>
 </html>

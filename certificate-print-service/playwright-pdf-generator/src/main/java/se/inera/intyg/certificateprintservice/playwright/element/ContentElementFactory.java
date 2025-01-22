@@ -85,7 +85,7 @@ public class ContentElementFactory {
   private static void setLinkColor(Element infoWrapper) {
     infoWrapper.getAllElements().stream().flatMap(element -> element.children().stream())
         .filter(element -> element.tagName().equals(Tag.A.toString()))
-        .forEach(element -> element.addClass("text-[#0000ee]"));
+        .forEach(element -> element.addClass("text-[#0000ee] underline"));
   }
 
 }

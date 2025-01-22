@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateprintservice.playwright.document;
 
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.RIGHT_MARGIN_INFO_STYLE;
 import static se.inera.intyg.certificateprintservice.playwright.element.ElementProvider.element;
 
 import javax.swing.text.html.HTML.Tag;
@@ -15,16 +16,19 @@ public class RightMarginInfo {
 
   String certificateId;
 
-  private static final String Certificate_ID_TEXT = "Intygs-ID: %s";
+  private static final String CERTIFICATE_ID_TEXT = "Intygs-ID: %s";
 
   public Element create() {
     return element(Tag.DIV)
+        .attr("style", RIGHT_MARGIN_INFO_STYLE)
         .appendChild(rightMarginInfo());
   }
 
   private Element rightMarginInfo() {
-    final var info = Certificate_ID_TEXT.formatted(certificateId);
-    return element(Tag.P).text(info);
+    final var info = CERTIFICATE_ID_TEXT.formatted(certificateId);
+    return element(Tag.P)
+        .attr("style", "margin: 0;")
+        .text(info);
   }
 
 }

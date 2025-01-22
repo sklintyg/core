@@ -21,7 +21,7 @@ public class HeaderElementFactory {
     final var logoBase64 = new String(Base64.getEncoder().encode(logoBytes));
     return element(Tag.DIV).appendChild(
         element(Tag.IMG)
-            .addClass("max-h-[15mm] max-w-[35mm]")
+            .attr("style", "max-height: 15mm; max-width: 35mm;")
             .attr("src", "data:image/png;base64, " + logoBase64)
             .attr("alt", "logotyp intygsmottagare")
     );
@@ -29,22 +29,26 @@ public class HeaderElementFactory {
 
   public static Element personId(String personId) {
     return element(Tag.DIV)
-        .addClass("float-right text-right w-full")
+        .attr("style", "float: right; text-align: right; width: 100%;")
         .appendChildren(List.of(
-            element(Tag.P).addClass("font-bold").appendText(PERSON_SAMORDNINGS_NR),
-            element(Tag.P).appendText(personId))
+                element(Tag.P)
+                    .attr("style", "font-weight: bold; margin: 0;")
+                    .appendText(PERSON_SAMORDNINGS_NR),
+                element(Tag.P).appendText(personId)
+                    .attr("style", "margin: 0;")
+            )
         );
   }
 
   public static Element title(String name, String type, String version) {
     return element(Tag.DIV)
-        .addClass("text-[14pt] pb-[1mm] border-b border-solid border-black")
+        .attr("style", "font-size: 14pt; border-bottom: black solid 1px; margin: 0;")
         .appendChildren(List.of(
             element(Tag.P)
-                .addClass("font-bold inline")
+                .attr("style", "font-weight: bold; display: inline; margin: 0;")
                 .appendText(name),
             element(Tag.P)
-                .addClass("inline")
+                .attr("style", "display: inline; margin: 0;")
                 .appendText(" (%s v%s)".formatted(type, version))
         ));
   }
@@ -52,8 +56,11 @@ public class HeaderElementFactory {
   public static Element alert(String recipientName, boolean isDraft, boolean isSent) {
     final var alertMessage = alertMessage(recipientName, isDraft, isSent);
     return element(Tag.DIV)
-        .appendChild(element(Tag.P).appendText(alertMessage))
-        .addClass("mt-[5mm] py-[3mm] px-[5mm] border border-solid border-red-600");
+        .attr("style", "font-size: 10pt; margin-top: 5mm; padding: 3mm 5mm; border: red solid 1px;")
+        .appendChild(element(Tag.P)
+            .attr("style",
+                "margin: 0; font-family: 'Liberation Sans', sans-serif; font-size: 10pt;")
+            .appendText(alertMessage));
   }
 
   private static String alertMessage(String recipientName, boolean isDraft, boolean isSent) {

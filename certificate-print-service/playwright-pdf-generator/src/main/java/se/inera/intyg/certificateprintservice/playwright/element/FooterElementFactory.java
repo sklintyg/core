@@ -19,11 +19,20 @@ public class FooterElementFactory {
     return element(Tag.DIV)
         .appendChildren(List.of(
             element(Tag.P)
-                .addClass("block mt-[5mm] mb-[2mm]")
+                .attr("style", "display: block margin-top: 5mm; margind-bottom: 2mm;")
                 .text(FOOTER_INFO_TEXT.formatted(origin)),
             element(Tag.A)
-                .addClass("text-[#0000ee]")
-                .attr("href", LINK_URL).text(LINK_TEXT)
+                .attr("href", LINK_URL).text(LINK_TEXT)));
+  }
+
+  public static Element pageNumber() {
+    return element(Tag.DIV)
+        .attr("style", "margin-top: 5mm;")
+        .appendChildren(List.of(
+            element(Tag.SPAN).addClass("pageNumber"),
+            element(Tag.SPAN).text(" ("),
+            element(Tag.SPAN).addClass("totalPages"),
+            element(Tag.SPAN).text(")")
         ));
   }
 

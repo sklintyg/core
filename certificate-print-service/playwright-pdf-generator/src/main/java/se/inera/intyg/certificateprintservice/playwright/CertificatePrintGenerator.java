@@ -16,10 +16,7 @@ import se.inera.intyg.certificateprintservice.playwright.browserpool.PlaywrightB
 import se.inera.intyg.certificateprintservice.playwright.converters.ContentConverter;
 import se.inera.intyg.certificateprintservice.playwright.converters.FooterConverter;
 import se.inera.intyg.certificateprintservice.playwright.converters.HeaderConverter;
-import se.inera.intyg.certificateprintservice.playwright.converters.LeftMarginInfoConverter;
-import se.inera.intyg.certificateprintservice.playwright.converters.RightMarginInfoConverter;
 import se.inera.intyg.certificateprintservice.playwright.document.Document;
-import se.inera.intyg.certificateprintservice.playwright.document.Watermark;
 
 @Service
 @Slf4j
@@ -35,13 +32,8 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator, Ini
   private final ContentConverter contentConverter;
   private final FooterConverter footerConverter;
   private final HeaderConverter headerConverter;
-  private final LeftMarginInfoConverter leftMarginInfoConverter;
-  private final RightMarginInfoConverter rightMarginInfoConverter;
 
   private String tailwindCSS;
-
-  private static final PdfOptions PDF_OPTIONS =
-      new PdfOptions().setFormat("A4").setTagged(true);
 
   @Override
   public void afterPropertiesSet() throws Exception {
@@ -68,13 +60,12 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator, Ini
         final var page = context.newPage();
     ) {
       final var metadata = certificate.getMetadata();
+      final var header = headerConverter.convert(metadata).create().html();
+      final var footer = footerConverter.convert(metadata).create().html();
+      final var headerHeight = headerConverter.headerHeight(page, header);
+
       final var document = Document.builder()
-          .header(headerConverter.convert(metadata))
-          .footer(footerConverter.convert(metadata))
           .content(contentConverter.convert(certificate))
-          .leftMarginInfo(leftMarginInfoConverter.convert(metadata))
-          .rightMarginInfo(rightMarginInfoConverter.convert(metadata))
-          .watermark(Watermark.builder().build())
           .certificateName(metadata.getName())
           .certificateType(metadata.getTypeId())
           .certificateVersion(metadata.getVersion())
@@ -82,9 +73,19 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator, Ini
           .isDraft(metadata.isDraft())
           .build();
 
-      page.setContent(document.build(template, page).html());
-      return page.pdf(PDF_OPTIONS);
+      final var jsoupDocument = document.build(template, headerHeight);
+      page.setContent(jsoupDocument.html());
+      return page.pdf(pdfOptions(header, footer));
     }
+  }
+
+  private PdfOptions pdfOptions(String header, String footer) {
+    return new PdfOptions()
+        .setFormat("A4")
+        .setTagged(true)
+        .setDisplayHeaderFooter(true)
+        .setHeaderTemplate(header)
+        .setFooterTemplate(footer);
   }
 
 }

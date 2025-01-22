@@ -1,5 +1,10 @@
 package se.inera.intyg.certificateprintservice.playwright.document;
 
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.FOOTER_STYLE;
+import static se.inera.intyg.certificateprintservice.playwright.element.ElementProvider.element;
+
+import java.util.List;
+import javax.swing.text.html.HTML.Tag;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -14,7 +19,16 @@ public class Footer {
   String applicationOrigin;
 
   public Element create() {
-    return FooterElementFactory.info(applicationOrigin);
+    return element(Tag.DIV)
+        .appendChild(footer());
+  }
+
+  public Element footer() {
+    return element(Tag.DIV)
+        .attr("style", FOOTER_STYLE)
+        .appendChildren(List.of(
+            FooterElementFactory.info(applicationOrigin),
+            FooterElementFactory.pageNumber()));
   }
 
 }
