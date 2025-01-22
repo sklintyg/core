@@ -15,6 +15,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.Metadata;
+import se.inera.intyg.certificateprintservice.playwright.element.ElementProvider;
 import se.inera.intyg.certificateprintservice.playwright.element.InformationElementFactory;
 import se.inera.intyg.certificateprintservice.playwright.pdf.TemplateToDocumentConverter;
 import se.inera.intyg.certificateprintservice.playwright.text.TextFactory;
@@ -34,6 +35,8 @@ public class HtmlConverter {
     if (content == null) {
       throw new IllegalStateException("Could not find element 'content' in document");
     }
+    content.appendChildren(
+        ElementProvider.accessibleHeader(printInformation.getcertificateMetadata()));
 
     content.attr(STYLE, "font-family: 'Liberation Sans', sans-serif;");
     content.appendChildren(children);
