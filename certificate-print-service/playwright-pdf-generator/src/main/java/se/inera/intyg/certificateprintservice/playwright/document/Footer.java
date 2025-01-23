@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateprintservice.playwright.document;
 
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.FOOTER_STYLE;
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.STYLE;
 import static se.inera.intyg.certificateprintservice.playwright.element.ElementProvider.element;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class Footer {
 
   public Element footer() {
     return element(Tag.DIV)
-        .attr("style", FOOTER_STYLE)
+        .attr(STYLE, FOOTER_STYLE)
         .appendChildren(List.of(
             FooterElementFactory.info(applicationOrigin),
             FooterElementFactory.pageNumber()));

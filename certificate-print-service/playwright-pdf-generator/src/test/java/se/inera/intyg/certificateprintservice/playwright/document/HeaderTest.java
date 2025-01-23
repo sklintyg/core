@@ -2,19 +2,23 @@ package se.inera.intyg.certificateprintservice.playwright.document;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.ALT;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.ATTRIBUTES;
-import static se.inera.intyg.certificateprintservice.playwright.document.Constants.CLASS;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.DIV;
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.HEADER;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.IMG;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.NUM_ATTRIBUTES;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.NUM_CHILDREN;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.P;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.SRC;
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.STYLE;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.TAG_TYPE;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.TEXT;
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.TITLE;
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.attributes;
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.attributesSize;
 
-import java.util.Objects;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -30,245 +34,358 @@ class HeaderTest {
   private static final String DRAFT_ALERT_MESSAGE = "Detta är en utskrift av ett elektroniskt intygsutkast och ska INTE skickas till %s.";
   private static final String SENT_ALERT_MESSAGE = "Detta är en utskrift av ett elektroniskt intyg. Intyget har signerats elektroniskt av intygsutfärdaren. Notera att intyget redan har skickats till %s.";
   private static final String SIGNED_ALERT_MESSAGE = "Detta är en utskrift av ett elektroniskt intyg. Intyget har signerats elektroniskt av intygsutfärdaren.";
+  private static final String LEFT_MARGIN_TEXT = "%s - Fastställd av %s";
+  private static final String CERTIFICATE_ID = "certificateId";
+  private static final String RIGHT_MARGIN_TEXT = "Intygs-ID: %s";
 
   private final Header.HeaderBuilder headerBuilder = Header.builder()
-      .recipientLogo(RECIPIENT_LOGO)
-      .personId(PERSON_ID)
       .certificateName(CERTIFICATE_NAME)
       .certificateType(CERTIFICATE_TYPE)
       .certificateVersion(CERTIFICATE_VERSION)
-      .recipientName(RECIPIENT_NAME);
+      .personId(PERSON_ID)
+      .recipientLogo(RECIPIENT_LOGO)
+      .recipientName(RECIPIENT_NAME)
+      .leftMarginInfo(LeftMarginInfo.builder()
+          .certificateType(CERTIFICATE_TYPE).
+          recipientName(RECIPIENT_NAME)
+          .build())
+      .rightMarginInfo(RightMarginInfo.builder().certificateId(CERTIFICATE_ID).build())
+      .watermark(Watermark.builder().build());
 
   @Nested
   class HeaderWrapper {
 
     @Test
-    void headerWrapper() {
-      final var header = headerBuilder.isDraft(true).isSent(false).build();
+    void BaseWrapper() {
+      final var header = headerBuilder.isDraft(false).isSent(false).build();
       final var element = header.create();
       assertAll(
           () -> assertEquals(DIV, element.tag(), TAG_TYPE),
-          () -> assertEquals(0, element.attributes().asList().size(), NUM_ATTRIBUTES),
-          () -> assertEquals(2, element.children().size(), NUM_CHILDREN)
+          () -> assertEquals(3, element.children().size(), NUM_CHILDREN),
+          () -> assertEquals(0, attributesSize(element), NUM_ATTRIBUTES)
       );
     }
 
     @Nested
-    class PageHeader {
+    class Header {
 
       @Test
-      void pageHeaderWrapper() {
+      void headerWrapper() {
         final var header = headerBuilder.isDraft(true).isSent(false).build();
         final var element = header.create().child(0);
         assertAll(
             () -> assertEquals(DIV, element.tag(), TAG_TYPE),
             () -> assertEquals(2, element.children().size(), NUM_CHILDREN),
-            () -> assertEquals(1, element.attributes().asList().size(), NUM_ATTRIBUTES),
-            () -> assertEquals("flex top-0 left-0 mb-[10mm]",
-                Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
+            () -> assertEquals(2, attributesSize(element), NUM_ATTRIBUTES),
+            () -> assertEquals(HEADER, attributes(element, TITLE), ATTRIBUTES),
+            () -> assertEquals(
+                "margin: 10mm 20mm; display: grid; width: 17cm; font-family: 'Liberation Sans', sans-serif; font-size: 10pt;",
+                attributes(element, STYLE), ATTRIBUTES)
         );
       }
 
       @Nested
-      class PageHeaderElements {
+      class PageHeader {
 
         @Test
-        void recipientLogoWrapper() {
+        void pageHeaderWrapper() {
           final var header = headerBuilder.isDraft(true).isSent(false).build();
           final var element = header.create().child(0).child(0);
           assertAll(
               () -> assertEquals(DIV, element.tag(), TAG_TYPE),
-              () -> assertEquals(1, element.children().size(), NUM_CHILDREN),
-              () -> assertEquals(0, element.attributes().asList().size(), NUM_ATTRIBUTES)
+              () -> assertEquals(2, element.children().size(), NUM_CHILDREN),
+              () -> assertEquals(1, attributesSize(element), NUM_ATTRIBUTES),
+              () -> assertEquals("display: flex; top: 0; left: 0; margin-bottom: 10mm",
+                  attributes(element, STYLE), ATTRIBUTES)
           );
         }
 
+        @Nested
+        class PageHeaderElements {
+
+          @Test
+          void recipientLogoWrapper() {
+            final var header = headerBuilder.isDraft(true).isSent(false).build();
+            final var element = header.create().child(0).child(0).child(0);
+            assertAll(
+                () -> assertEquals(DIV, element.tag(), TAG_TYPE),
+                () -> assertEquals(1, element.children().size(), NUM_CHILDREN),
+                () -> assertEquals(0, attributesSize(element), NUM_ATTRIBUTES)
+            );
+          }
+
+          @Test
+          void personIdWrapper() {
+            final var header = headerBuilder.isDraft(true).isSent(false).build();
+            final var element = header.create().child(0).child(0).child(1);
+            assertAll(
+                () -> assertEquals(DIV, element.tag(), TAG_TYPE),
+                () -> assertEquals(2, element.children().size(), NUM_CHILDREN),
+                () -> assertEquals(1, attributesSize(element), NUM_ATTRIBUTES),
+                () -> assertEquals("float: right; text-align: right; width: 100%;",
+                    attributes(element, STYLE), ATTRIBUTES)
+            );
+          }
+
+          @Nested
+          class RecipientLogo {
+
+            @Test
+            void recipientLogo() throws NullPointerException {
+              final var header = headerBuilder.isDraft(true).isSent(false).build();
+              final var element = header.create().child(0).child(0).child(0).child(0);
+              assertAll(
+                  () -> assertEquals(IMG, element.tag(), TAG_TYPE),
+                  () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
+                  () -> assertEquals(3, attributesSize(element), NUM_ATTRIBUTES),
+                  () -> assertEquals("data:image/png;base64, cmVjaXBpZW50TG9nbw==",
+                      attributes(element, SRC), ATTRIBUTES),
+                  () -> assertEquals("%s logotyp".formatted(RECIPIENT_NAME),
+                      attributes(element, ALT), ATTRIBUTES),
+                  () -> assertEquals("max-height: 15mm; max-width: 35mm;",
+                      attributes(element, STYLE), ATTRIBUTES)
+              );
+            }
+          }
+
+          @Nested
+          class PersonId {
+
+            @Test
+            void personIdHeader() throws NullPointerException {
+              final var header = headerBuilder.isDraft(true).isSent(false).build();
+              final var element = header.create().child(0).child(0).child(1).child(0);
+              assertAll(
+                  () -> assertEquals(P, element.tag(), TAG_TYPE),
+                  () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
+                  () -> assertEquals(1, attributesSize(element), NUM_ATTRIBUTES),
+                  () -> assertEquals("Person- /samordningsnr", element.text(), TEXT),
+                  () -> assertEquals("font-weight: bold; margin: 0;", attributes(element, STYLE),
+                      ATTRIBUTES)
+              );
+            }
+
+            @Test
+            void personId() throws NullPointerException {
+              final var header = headerBuilder.isDraft(true).isSent(false).build();
+              final var element = header.create().child(0).child(0).child(1).child(1);
+              assertAll(
+                  () -> assertEquals(P, element.tag(), TAG_TYPE),
+                  () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
+                  () -> assertEquals(1, attributesSize(element), NUM_ATTRIBUTES),
+                  () -> assertEquals(PERSON_ID, element.text(), TEXT),
+                  () -> assertEquals("margin: 0;", attributes(element, STYLE), ATTRIBUTES)
+              );
+            }
+          }
+        }
+      }
+
+      @Nested
+      class CertificateHeader {
+
         @Test
-        void personIdWrapper() {
+        void certificateHeaderWrapper() {
           final var header = headerBuilder.isDraft(true).isSent(false).build();
           final var element = header.create().child(0).child(1);
           assertAll(
               () -> assertEquals(DIV, element.tag(), TAG_TYPE),
               () -> assertEquals(2, element.children().size(), NUM_CHILDREN),
-              () -> assertEquals(1, element.attributes().asList().size(), NUM_ATTRIBUTES),
-              () -> assertEquals("float-right text-right w-full",
-                  Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
+              () -> assertEquals(1, attributesSize(element), NUM_ATTRIBUTES),
+              () -> assertEquals("margin-bottom: 5mm", attributes(element, STYLE), ATTRIBUTES)
           );
         }
 
         @Nested
-        class RecipientLogo {
+        class CertificateHeaderElements {
 
           @Test
-          void recipientLogo() throws NullPointerException {
-            final var header = headerBuilder.isDraft(true).isSent(false).build();
-            final var element = header.create().child(0).child(0).child(0);
-            assertAll(
-                () -> assertEquals(IMG, element.tag(), TAG_TYPE),
-                () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
-                () -> assertEquals(3, element.attributes().asList().size(), NUM_ATTRIBUTES),
-                () -> assertEquals("data:image/png;base64, cmVjaXBpZW50TG9nbw==",
-                    Objects.requireNonNull(element.attribute(SRC)).getValue(), ATTRIBUTES),
-                () -> assertEquals("logotyp intygsmottagare",
-                    Objects.requireNonNull(element.attribute(ALT)).getValue(), ATTRIBUTES),
-                () -> assertEquals("max-h-[15mm] max-w-[35mm]",
-                    Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
-            );
-          }
-        }
-
-        @Nested
-        class PersonId {
-
-          @Test
-          void personIdHeader() throws NullPointerException {
+          void titleWrapper() {
             final var header = headerBuilder.isDraft(true).isSent(false).build();
             final var element = header.create().child(0).child(1).child(0);
             assertAll(
-                () -> assertEquals(P, element.tag(), TAG_TYPE),
-                () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
-                () -> assertEquals(1, element.attributes().asList().size(), NUM_ATTRIBUTES),
-                () -> assertEquals("Person- /samordningsnr", element.text(), TEXT),
-                () -> assertEquals("font-bold",
-                    Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
+                () -> assertEquals(DIV, element.tag(), TAG_TYPE),
+                () -> assertEquals(2, element.children().size(), NUM_CHILDREN),
+                () -> assertEquals(1, attributesSize(element), NUM_ATTRIBUTES),
+                () -> assertEquals(
+                    "font-size: 14pt; border-bottom: black solid 1px; margin: 0; padding-bottom: 1mm;",
+                    attributes(element, STYLE), ATTRIBUTES)
             );
           }
 
           @Test
-          void personId() throws NullPointerException {
+          void alertWrapper() {
             final var header = headerBuilder.isDraft(true).isSent(false).build();
             final var element = header.create().child(0).child(1).child(1);
             assertAll(
-                () -> assertEquals(P, element.tag(), TAG_TYPE),
-                () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
-                () -> assertEquals(0, element.attributes().asList().size(), NUM_ATTRIBUTES),
-                () -> assertEquals(PERSON_ID, element.text(), TEXT)
+                () -> assertEquals(DIV, element.tag(), TAG_TYPE),
+                () -> assertEquals(1, element.children().size(), NUM_CHILDREN),
+                () -> assertEquals(1, attributesSize(element), NUM_ATTRIBUTES),
+                () -> assertEquals("margin-top: 5mm; padding: 3mm 5mm; border: red solid 1px;",
+                    attributes(element, STYLE), ATTRIBUTES)
             );
+          }
+
+          @Nested
+          class Title {
+
+            @Test
+            void certificateName() throws NullPointerException {
+              final var header = headerBuilder.isDraft(true).isSent(false).build();
+              final var element = header.create().child(0).child(1).child(0).child(0);
+              assertAll(
+                  () -> assertEquals(P, element.tag(), TAG_TYPE),
+                  () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
+                  () -> assertEquals(1, attributesSize(element), NUM_ATTRIBUTES),
+                  () -> assertEquals(CERTIFICATE_NAME, element.text(), TEXT),
+                  () -> assertEquals("font-weight: bold; display: inline; margin: 0;",
+                      attributes(element, STYLE), ATTRIBUTES)
+              );
+            }
+
+            @Test
+            void certificateType() throws NullPointerException {
+              final var expectedText = TYPE_VERSION_TEXT.formatted(CERTIFICATE_TYPE,
+                  CERTIFICATE_VERSION);
+              final var header = headerBuilder.isDraft(true).isSent(false).build();
+              final var element = header.create().child(0).child(1).child(0).child(1);
+              assertAll(
+                  () -> assertEquals(P, element.tag(), TAG_TYPE),
+                  () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
+                  () -> assertEquals(1, attributesSize(element), NUM_ATTRIBUTES),
+                  () -> assertEquals(expectedText, element.text(), TEXT),
+                  () -> assertEquals("display: inline; margin: 0;", attributes(element, STYLE),
+                      ATTRIBUTES)
+              );
+            }
+          }
+
+          @Nested
+          class Alert {
+
+            @Test
+            void alertMessageDraft() throws NullPointerException {
+              final var header = headerBuilder.isDraft(true).isSent(false).build();
+              final var element = header.create().child(0).child(1).child(1).child(0);
+              assertAll(
+                  () -> assertEquals(P, element.tag(), TAG_TYPE),
+                  () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
+                  () -> assertEquals(1, attributesSize(element), NUM_ATTRIBUTES),
+                  () -> assertEquals(DRAFT_ALERT_MESSAGE.formatted(RECIPIENT_NAME), element.text(),
+                      TEXT),
+                  () -> assertEquals("margin: 0;", attributes(element, STYLE), ATTRIBUTES)
+              );
+            }
+
+            @Test
+            void alertMessageSigned() throws NullPointerException {
+              final var header = headerBuilder.isDraft(false).isSent(false).build();
+              final var element = header.create().child(0).child(1).child(1).child(0);
+              assertAll(
+                  () -> assertEquals(P, element.tag(), TAG_TYPE),
+                  () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
+                  () -> assertEquals(1, attributesSize(element), NUM_ATTRIBUTES),
+                  () -> assertEquals(SIGNED_ALERT_MESSAGE, element.text(), TEXT),
+                  () -> assertEquals("margin: 0;", attributes(element, STYLE), ATTRIBUTES)
+              );
+            }
+
+            @Test
+            void alertMessageSent() throws NullPointerException {
+              final var header = headerBuilder.isDraft(false).isSent(true).build();
+              final var element = header.create().child(0).child(1).child(1).child(0);
+              assertAll(
+                  () -> assertEquals(P, element.tag(), TAG_TYPE),
+                  () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
+                  () -> assertEquals(1, attributesSize(element), NUM_ATTRIBUTES),
+                  () -> assertEquals(SENT_ALERT_MESSAGE.formatted(RECIPIENT_NAME), element.text(),
+                      TEXT),
+                  () -> assertEquals("margin: 0;", attributes(element, STYLE), ATTRIBUTES)
+              );
+            }
           }
         }
       }
     }
 
     @Nested
-    class CertificateHeader {
+    class Watermark {
+
+      String expectedText = "UTKAST";
 
       @Test
-      void certificateHeaderWrapper() {
+      void watermarkDraft() {
         final var header = headerBuilder.isDraft(true).isSent(false).build();
-        final var element = header.create().child(1);
-        assertAll(
-            () -> assertEquals(DIV, element.tag(), TAG_TYPE),
-            () -> assertEquals(2, element.children().size(), NUM_CHILDREN),
-            () -> assertEquals(1, element.attributes().asList().size(), NUM_ATTRIBUTES),
-            () -> assertEquals("mb-[5mm]",
-                Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
-        );
+        final var element = header.create();
+        assertNotEquals(0, element.getElementsMatchingText(expectedText).size());
       }
 
-      @Nested
-      class CertificateHeaderElements {
+      @Test
+      void watermarkSigned() {
+        final var header = headerBuilder.isDraft(false).isSent(false).build();
+        final var element = header.create().child(2);
+        assertEquals(0, element.getElementsMatchingText(expectedText).size());
+      }
 
-        @Test
-        void titleWrapper() {
-          final var header = headerBuilder.isDraft(true).isSent(false).build();
-          final var element = header.create().child(1).child(0);
-          assertAll(
-              () -> assertEquals(DIV, element.tag(), TAG_TYPE),
-              () -> assertEquals(2, element.children().size(), NUM_CHILDREN),
-              () -> assertEquals(1, element.attributes().asList().size(), NUM_ATTRIBUTES),
-              () -> assertEquals("text-[14pt] pb-[1mm] border-b border-solid border-black",
-                  Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
-          );
-        }
+      @Test
+      void watermarkSent() {
+        final var header = headerBuilder.isDraft(false).isSent(true).build();
+        final var element = header.create().child(2);
+        assertEquals(0, element.getElementsMatchingText(expectedText).size());
+      }
+    }
 
-        @Test
-        void alertWrapper() {
-          final var header = headerBuilder.isDraft(true).isSent(false).build();
-          final var element = header.create().child(1).child(1);
-          assertAll(
-              () -> assertEquals(DIV, element.tag(), TAG_TYPE),
-              () -> assertEquals(1, element.children().size(), NUM_CHILDREN),
-              () -> assertEquals(1, element.attributes().asList().size(), NUM_ATTRIBUTES),
-              () -> assertEquals("mt-[5mm] py-[3mm] px-[5mm] border border-solid border-red-600",
-                  Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
-          );
-        }
+    @Nested
+    class RightMarginInfo {
 
-        @Nested
-        class Title {
+      String expectedText = RIGHT_MARGIN_TEXT.formatted(CERTIFICATE_ID);
 
-          @Test
-          void certificateName() throws NullPointerException {
-            final var header = headerBuilder.isDraft(true).isSent(false).build();
-            final var element = header.create().child(1).child(0).child(0);
-            assertAll(
-                () -> assertEquals(P, element.tag(), TAG_TYPE),
-                () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
-                () -> assertEquals(1, element.attributes().asList().size(), NUM_ATTRIBUTES),
-                () -> assertEquals(CERTIFICATE_NAME, element.text(), TEXT),
-                () -> assertEquals("font-bold inline",
-                    Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
-            );
-          }
+      @Test
+      void rightMarginInfoDraft() {
+        final var header = headerBuilder.isDraft(true).isSent(false).build();
+        final var element = header.create();
+        assertEquals(0, element.getElementsMatchingText(expectedText).size());
+      }
 
-          @Test
-          void certificateType() throws NullPointerException {
-            final var expectedText = TYPE_VERSION_TEXT.formatted(CERTIFICATE_TYPE,
-                CERTIFICATE_VERSION);
-            final var header = headerBuilder.isDraft(true).isSent(false).build();
-            final var element = header.create().child(1).child(0).child(1);
-            assertAll(
-                () -> assertEquals(P, element.tag(), TAG_TYPE),
-                () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
-                () -> assertEquals(1, element.attributes().asList().size(), NUM_ATTRIBUTES),
-                () -> assertEquals(expectedText, element.text(), TEXT),
-                () -> assertEquals("inline",
-                    Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
-            );
-          }
-        }
+      @Test
+      void rightMarginInfoSigned() {
+        final var header = headerBuilder.isDraft(false).isSent(false).build();
+        final var element = header.create().child(2);
+        assertNotEquals(0, element.getElementsMatchingText(expectedText).size());
+      }
 
-        @Nested
-        class Alert {
+      @Test
+      void rightMarginInfoSent() {
+        final var header = headerBuilder.isDraft(false).isSent(true).build();
+        final var element = header.create().child(2);
+        assertNotEquals(0, element.getElementsMatchingText(expectedText).size());
+      }
+    }
 
-          @Test
-          void alertMessageDraft() throws NullPointerException {
-            final var header = headerBuilder.isDraft(true).isSent(false).build();
-            final var element = header.create().child(1).child(1).child(0);
-            assertAll(
-                () -> assertEquals(P, element.tag(), TAG_TYPE),
-                () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
-                () -> assertEquals(0, element.attributes().asList().size(), NUM_ATTRIBUTES),
-                () -> assertEquals(DRAFT_ALERT_MESSAGE.formatted(RECIPIENT_NAME), element.text(),
-                    TEXT)
-            );
-          }
+    @Nested
+    class LeftMarginInfo {
 
-          @Test
-          void alertMessageSigned() throws NullPointerException {
-            final var header = headerBuilder.isDraft(false).isSent(false).build();
-            final var element = header.create().child(1).child(1).child(0);
-            assertAll(
-                () -> assertEquals(P, element.tag(), TAG_TYPE),
-                () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
-                () -> assertEquals(0, element.attributes().asList().size(), NUM_ATTRIBUTES),
-                () -> assertEquals(SIGNED_ALERT_MESSAGE, element.text(), TEXT)
-            );
-          }
+      String expectedText = LEFT_MARGIN_TEXT.formatted(CERTIFICATE_TYPE, RECIPIENT_NAME);
 
-          @Test
-          void alertMessageSent() throws NullPointerException {
-            final var header = headerBuilder.isDraft(false).isSent(true).build();
-            final var element = header.create().child(1).child(1).child(0);
-            assertAll(
-                () -> assertEquals(P, element.tag(), TAG_TYPE),
-                () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
-                () -> assertEquals(0, element.attributes().asList().size(), NUM_ATTRIBUTES),
-                () -> assertEquals(SENT_ALERT_MESSAGE.formatted(RECIPIENT_NAME), element.text(),
-                    TEXT)
-            );
-          }
-        }
+      @Test
+      void leftMarginInfoDraft() {
+        final var header = headerBuilder.isDraft(true).isSent(false).build();
+        final var element = header.create().child(1);
+        assertNotEquals(0, element.getElementsMatchingText(expectedText).size());
+      }
+
+      @Test
+      void leftMarginInfoSigned() {
+        final var header = headerBuilder.isDraft(false).isSent(false).build();
+        final var element = header.create().child(1);
+        assertNotEquals(0, element.getElementsMatchingText(expectedText).size());
+      }
+
+      @Test
+      void leftMarginInfoSent() {
+        final var header = headerBuilder.isDraft(false).isSent(true).build();
+        final var element = header.create().child(1);
+        assertNotEquals(0, element.getElementsMatchingText(expectedText).size());
       }
     }
   }

@@ -18,16 +18,23 @@ import se.inera.intyg.certificateprintservice.playwright.element.ContentElementF
 public class Content {
 
   List<Category> categories;
+  String certificateName;
+  String certificateType;
+  String certificateVersion;
+  String recipientName;
+  String personId;
   String issuerName;
   String issuingUnit;
   List<String> issuingUnitInfo;
   String signDate;
   String description;
-  String certificateName;
   boolean isDraft;
+  boolean isSent;
 
   public Element create() {
     return element(Tag.DIV)
+        .appendChild(ContentElementFactory.hiddenAccessibleHeader(certificateName, certificateType,
+            certificateVersion, recipientName, personId, isDraft, isSent))
         .appendChildren(content())
         .appendChildren(List.of(
             ContentElementFactory.issuerInfo(issuerName, issuingUnit, issuingUnitInfo,

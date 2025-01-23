@@ -8,16 +8,21 @@ import se.inera.intyg.certificateprintservice.playwright.document.Content;
 public class ContentConverter {
 
   public Content convert(Certificate certificate) {
+    final var metadata = certificate.getMetadata();
     return Content.builder()
         .categories(certificate.getCategories())
-        .issuerName(certificate.getMetadata().getIssuerName())
-        .issuingUnit(certificate.getMetadata().getIssuingUnit())
-        .issuingUnitInfo(certificate.getMetadata().getIssuingUnitInfo())
-        .signDate(certificate.getMetadata().isSigned() ? certificate.getMetadata()
-            .getSigningDateAsString() : null)
-        .description(certificate.getMetadata().getDescription())
-        .certificateName(certificate.getMetadata().getName())
-        .isDraft(certificate.getMetadata().isDraft())
+        .certificateName(metadata.getName())
+        .certificateType(metadata.getTypeId())
+        .certificateVersion(metadata.getVersion())
+        .recipientName(metadata.getRecipientName())
+        .personId(metadata.getPersonId())
+        .issuerName(metadata.getIssuerName())
+        .issuingUnit(metadata.getIssuingUnit())
+        .issuingUnitInfo(metadata.getIssuingUnitInfo())
+        .signDate(metadata.isSigned() ? metadata.getSigningDateAsString() : null)
+        .description(metadata.getDescription())
+        .isDraft(metadata.isDraft())
+        .isSent(metadata.isSent())
         .build();
   }
 }

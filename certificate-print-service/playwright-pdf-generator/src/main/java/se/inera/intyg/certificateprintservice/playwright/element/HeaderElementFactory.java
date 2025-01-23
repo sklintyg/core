@@ -1,5 +1,8 @@
 package se.inera.intyg.certificateprintservice.playwright.element;
 
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.ALT;
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.SRC;
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.STYLE;
 import static se.inera.intyg.certificateprintservice.playwright.element.ElementProvider.element;
 
 import java.util.Base64;
@@ -17,38 +20,39 @@ public class HeaderElementFactory {
   private static final String SIGNED_ALERT_MESSAGE = "Detta är en utskrift av ett elektroniskt intyg. Intyget har signerats elektroniskt av intygsutfärdaren.";
   private static final String PERSON_SAMORDNINGS_NR = "Person- /samordningsnr";
 
-  public static Element recipientLogo(byte[] logoBytes) {
+  public static Element recipientLogo(byte[] logoBytes, String recipientName) {
     final var logoBase64 = new String(Base64.getEncoder().encode(logoBytes));
     return element(Tag.DIV).appendChild(
         element(Tag.IMG)
-            .attr("style", "max-height: 15mm; max-width: 35mm;")
-            .attr("src", "data:image/png;base64, " + logoBase64)
-            .attr("alt", "logotyp intygsmottagare")
+            .attr(STYLE, "max-height: 15mm; max-width: 35mm;")
+            .attr(SRC, "data:image/png;base64, " + logoBase64)
+            .attr(ALT, "%s logotyp".formatted(recipientName))
     );
   }
 
   public static Element personId(String personId) {
     return element(Tag.DIV)
-        .attr("style", "float: right; text-align: right; width: 100%;")
+        .attr(STYLE, "float: right; text-align: right; width: 100%;")
         .appendChildren(List.of(
                 element(Tag.P)
-                    .attr("style", "font-weight: bold; margin: 0;")
+                    .attr(STYLE, "font-weight: bold; margin: 0;")
                     .appendText(PERSON_SAMORDNINGS_NR),
                 element(Tag.P).appendText(personId)
-                    .attr("style", "margin: 0;")
+                    .attr(STYLE, "margin: 0;")
             )
         );
   }
 
   public static Element title(String name, String type, String version) {
     return element(Tag.DIV)
-        .attr("style", "font-size: 14pt; border-bottom: black solid 1px; margin: 0;")
+        .attr(STYLE,
+            "font-size: 14pt; border-bottom: black solid 1px; margin: 0; padding-bottom: 1mm;")
         .appendChildren(List.of(
             element(Tag.P)
-                .attr("style", "font-weight: bold; display: inline; margin: 0;")
+                .attr(STYLE, "font-weight: bold; display: inline; margin: 0;")
                 .appendText(name),
             element(Tag.P)
-                .attr("style", "display: inline; margin: 0;")
+                .attr(STYLE, "display: inline; margin: 0;")
                 .appendText(" (%s v%s)".formatted(type, version))
         ));
   }
@@ -56,14 +60,13 @@ public class HeaderElementFactory {
   public static Element alert(String recipientName, boolean isDraft, boolean isSent) {
     final var alertMessage = alertMessage(recipientName, isDraft, isSent);
     return element(Tag.DIV)
-        .attr("style", "font-size: 10pt; margin-top: 5mm; padding: 3mm 5mm; border: red solid 1px;")
+        .attr(STYLE, "margin-top: 5mm; padding: 3mm 5mm; border: red solid 1px;")
         .appendChild(element(Tag.P)
-            .attr("style",
-                "margin: 0; font-family: 'Liberation Sans', sans-serif; font-size: 10pt;")
+            .attr(STYLE, "margin: 0;")
             .appendText(alertMessage));
   }
 
-  private static String alertMessage(String recipientName, boolean isDraft, boolean isSent) {
+  public static String alertMessage(String recipientName, boolean isDraft, boolean isSent) {
     if (isDraft) {
       return DRAFT_ALERT_MESSAGE.formatted(recipientName);
     }

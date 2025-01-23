@@ -6,6 +6,7 @@ import static se.inera.intyg.certificateprintservice.playwright.document.Constan
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.BR;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.CLASS;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.DIV;
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.H1;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.H2;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.H3;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.NUM_ATTRIBUTES;
@@ -14,10 +15,11 @@ import static se.inera.intyg.certificateprintservice.playwright.document.Constan
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.STRONG;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.TAG_TYPE;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.TEXT;
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.attributes;
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.attributesSize;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.Category;
@@ -34,6 +36,10 @@ class ContentTest {
   private static final String SUB_QUESTION_ID = "subQuestionId";
   private static final String SUB_QUESTION_NAME = "subQuestionName";
   private static final String SUB_QUESTION_VALUE = "subQuestionValue";
+  private static final String CERTIFICATE_TYPE = "certificateType";
+  private static final String CERTIFICATE_VERSION = "certificateVersion";
+  private static final String RECIPIENT_NAME = "recipientName";
+  private static final String PERSON_ID = "personId";
   private static final String ISSUER_NAME = "issuerName";
   private static final String ISSUING_UNIT = "issuingUnit";
   private static final String ADDRESS = "address";
@@ -47,6 +53,9 @@ class ContentTest {
   private static final String SIGN_DATE_HEADER = "Intyget signerades:";
   private static final String SKICKA_INTYG_TILL_MOTTAGARE = "Skicka intyg till mottagare";
   private static final String INFO_1177 = "Du kan hantera ditt intyg genom att logga in på 1177.se Där kan du till exempel skicka intyget till mottagaren";
+  private static final String DRAFT_ALERT_MESSAGE = "Detta är en utskrift av ett elektroniskt intygsutkast och ska INTE skickas till %s.";
+  private static final String SENT_ALERT_MESSAGE = "Detta är en utskrift av ett elektroniskt intyg. Intyget har signerats elektroniskt av intygsutfärdaren. Notera att intyget redan har skickats till %s.";
+  private static final String SIGNED_ALERT_MESSAGE = "Detta är en utskrift av ett elektroniskt intyg. Intyget har signerats elektroniskt av intygsutfärdaren.";
 
   private static final List<Question> SUB_QUESTIONS = List.of(Question.builder()
       .id(SUB_QUESTION_ID)
@@ -76,25 +85,123 @@ class ContentTest {
 
 
   private final Content.ContentBuilder contentBuilder = Content.builder()
+      .categories(CATEGORIES)
+      .certificateName(CERTIFICATE_NAME)
+      .certificateType(CERTIFICATE_TYPE)
+      .certificateVersion(CERTIFICATE_VERSION)
+      .recipientName(RECIPIENT_NAME)
+      .personId(PERSON_ID)
       .issuerName(ISSUER_NAME)
       .issuingUnit(ISSUING_UNIT)
       .issuingUnitInfo(List.of(ADDRESS, ZIP_CODE, CITY))
       .certificateName(CERTIFICATE_NAME)
-      .description(DESCRIPTION)
-      .categories(CATEGORIES);
+      .description(DESCRIPTION);
 
   @Nested
   class ContentWrapper {
 
     @Test
     void contentWrapper() {
-      final var content = contentBuilder.isDraft(true).signDate(null).build();
+      final var content = contentBuilder.signDate(null).isDraft(true).isSent(false).build();
       final var element = content.create();
       assertAll(
           () -> assertEquals(DIV, element.tag(), TAG_TYPE),
-          () -> assertEquals(3, element.children().size(), NUM_CHILDREN),
-          () -> assertEquals(0, element.attributes().asList().size(), NUM_ATTRIBUTES)
+          () -> assertEquals(4, element.children().size(), NUM_CHILDREN),
+          () -> assertEquals(0, attributesSize(element), NUM_ATTRIBUTES)
       );
+    }
+
+    @Nested
+    class HiddenAccessibleHeader {
+
+      @Test
+      void hiddenAccessibleHeaderWrapper() {
+        final var content = contentBuilder.signDate(null).isDraft(true).isSent(false).build();
+        final var element = content.create().child(0);
+        assertAll(
+            () -> assertEquals(DIV, element.tag(), TAG_TYPE),
+            () -> assertEquals(3, element.children().size(), NUM_CHILDREN),
+            () -> assertEquals(0, attributesSize(element), NUM_ATTRIBUTES)
+        );
+      }
+
+      @Nested
+      class HiddenAccessibleHeaderElements {
+
+        @Test
+        void personIdText() {
+          final var content = contentBuilder.signDate(null).isDraft(true).isSent(false).build();
+          final var element = content.create().child(0).child(0);
+          assertAll(
+              () -> assertEquals(P, element.tag(), TAG_TYPE),
+              () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
+              () -> assertEquals(1, attributesSize(element), NUM_ATTRIBUTES),
+              () -> assertEquals("Person- /samordningsnr personId", element.text(), TEXT),
+              () -> assertEquals("absolute h-px w-[17cm] text-[1px] -z-50 text-white",
+                  attributes(element, CLASS), ATTRIBUTES)
+          );
+        }
+
+        @Test
+        void certificateInfoText() {
+          final var content = contentBuilder.signDate(null).isDraft(true).isSent(false).build();
+          final var element = content.create().child(0).child(1);
+          assertAll(
+              () -> assertEquals(H1, element.tag(), TAG_TYPE),
+              () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
+              () -> assertEquals(1, attributesSize(element), NUM_ATTRIBUTES),
+              () -> assertEquals(
+                  "%s (%s v%s)".formatted(CERTIFICATE_NAME, CERTIFICATE_TYPE, CERTIFICATE_VERSION),
+                  element.text(), TEXT),
+              () -> assertEquals("absolute h-px w-[17cm] text-[1px] -z-50 text-white",
+                  attributes(element, CLASS), ATTRIBUTES)
+          );
+        }
+
+        @Test
+        void alertTextDraft() {
+          final var content = contentBuilder.signDate(null).isDraft(true).isSent(false).build();
+          final var element = content.create().child(0).child(2);
+          assertAll(
+              () -> assertEquals(P, element.tag(), TAG_TYPE),
+              () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
+              () -> assertEquals(1, attributesSize(element), NUM_ATTRIBUTES),
+              () -> assertEquals(DRAFT_ALERT_MESSAGE.formatted(RECIPIENT_NAME), element.text(),
+                  TEXT),
+              () -> assertEquals("absolute h-px w-[17cm] text-[1px] -z-50 text-white",
+                  attributes(element, CLASS), ATTRIBUTES)
+          );
+        }
+
+        @Test
+        void alertTextSigned() {
+          final var content = contentBuilder.signDate(SIGN_DATE).isDraft(false).isSent(false)
+              .build();
+          final var element = content.create().child(0).child(2);
+          assertAll(
+              () -> assertEquals(P, element.tag(), TAG_TYPE),
+              () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
+              () -> assertEquals(1, attributesSize(element), NUM_ATTRIBUTES),
+              () -> assertEquals(SIGNED_ALERT_MESSAGE, element.text(), TEXT),
+              () -> assertEquals("absolute h-px w-[17cm] text-[1px] -z-50 text-white",
+                  attributes(element, CLASS), ATTRIBUTES));
+        }
+
+        @Test
+        void alertTextSent() {
+          final var content = contentBuilder.signDate(SIGN_DATE).isDraft(false).isSent(true)
+              .build();
+          final var element = content.create().child(0).child(2);
+          assertAll(
+              () -> assertEquals(P, element.tag(), TAG_TYPE),
+              () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
+              () -> assertEquals(1, attributesSize(element), NUM_ATTRIBUTES),
+              () -> assertEquals(SENT_ALERT_MESSAGE.formatted(RECIPIENT_NAME), element.text(),
+                  TEXT),
+              () -> assertEquals("absolute h-px w-[17cm] text-[1px] -z-50 text-white",
+                  attributes(element, CLASS), ATTRIBUTES));
+        }
+      }
     }
 
     @Nested
@@ -102,16 +209,15 @@ class ContentTest {
 
       @Test
       void categoriesWrapper() {
-        final var content = contentBuilder.isDraft(true).signDate(null).build();
-        final var element = content.create().child(0);
+        final var content = contentBuilder.isDraft(true).signDate(null).isSent(false).build();
+        final var element = content.create().child(1);
         assertAll(
             () -> assertEquals(DIV, element.tag(), TAG_TYPE),
             () -> assertEquals(5, element.children().size(), NUM_CHILDREN),
-            () -> assertEquals(1, element.attributes().asList().size(), NUM_ATTRIBUTES),
+            () -> assertEquals(1, attributesSize(element), NUM_ATTRIBUTES),
             () -> assertEquals(
                 "box-decoration-clone border border-solid border-black mb-[5mm] pb-[3mm]",
-                Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
-        );
+                attributes(element, CLASS), ATTRIBUTES));
       }
 
       @Nested
@@ -119,76 +225,70 @@ class ContentTest {
 
         @Test
         void categoryName() {
-          final var content = contentBuilder.isDraft(true).signDate(null).build();
-          final var element = content.create().child(0).child(0);
+          final var content = contentBuilder.isDraft(true).signDate(null).isSent(false).build();
+          final var element = content.create().child(1).child(0);
           assertAll(
               () -> assertEquals(H2, element.tag(), TAG_TYPE),
               () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
-              () -> assertEquals(1, element.attributes().asList().size(), NUM_ATTRIBUTES),
+              () -> assertEquals(1, attributesSize(element), NUM_ATTRIBUTES),
               () -> assertEquals(CATEGORY_NAME, element.text(), TEXT),
               () -> assertEquals(
                   "text-base font-bold uppercase border-b border-black border-solid px-[5mm]",
-                  Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
-          );
+                  attributes(element, CLASS), ATTRIBUTES));
         }
 
         @Test
         void questionName() {
-          final var content = contentBuilder.isDraft(true).signDate(null).build();
-          final var element = content.create().child(0).child(1);
+          final var content = contentBuilder.isDraft(true).signDate(null).isSent(false).build();
+          final var element = content.create().child(1).child(1);
           assertAll(
               () -> assertEquals(H3, element.tag(), TAG_TYPE),
               () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
-              () -> assertEquals(1, element.attributes().asList().size(), NUM_ATTRIBUTES),
+              () -> assertEquals(1, attributesSize(element), NUM_ATTRIBUTES),
               () -> assertEquals(QUESTION_NAME, element.text(), TEXT),
-              () -> assertEquals(
-                  "text-sm font-bold pt-[1mm] px-[5mm]",
-                  Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
+              () -> assertEquals("text-sm font-bold pt-[1mm] px-[5mm]", attributes(element, CLASS),
+                  ATTRIBUTES)
           );
         }
 
         @Test
         void questionValue() {
-          final var content = contentBuilder.isDraft(true).signDate(null).build();
-          final var element = content.create().child(0).child(2);
+          final var content = contentBuilder.isDraft(true).signDate(null).isSent(false).build();
+          final var element = content.create().child(1).child(2);
           assertAll(
               () -> assertEquals(P, element.tag(), TAG_TYPE),
               () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
-              () -> assertEquals(1, element.attributes().asList().size(), NUM_ATTRIBUTES),
+              () -> assertEquals(1, attributesSize(element), NUM_ATTRIBUTES),
               () -> assertEquals(QUESTION_VALUE, element.text(), TEXT),
-              () -> assertEquals(
-                  "text-sm italic px-[5mm]",
-                  Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
+              () -> assertEquals("text-sm italic px-[5mm]", attributes(element, CLASS),
+                  ATTRIBUTES)
           );
         }
 
         @Test
         void subQuestionName() {
-          final var content = contentBuilder.isDraft(true).signDate(null).build();
-          final var element = content.create().child(0).child(3);
+          final var content = contentBuilder.isDraft(true).signDate(null).isSent(false).build();
+          final var element = content.create().child(1).child(3);
           assertAll(
               () -> assertEquals(H3, element.tag(), TAG_TYPE),
               () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
-              () -> assertEquals(1, element.attributes().asList().size(), NUM_ATTRIBUTES),
+              () -> assertEquals(1, attributesSize(element), NUM_ATTRIBUTES),
               () -> assertEquals(SUB_QUESTION_NAME, element.text(), TEXT),
-              () -> assertEquals(
-                  "text-sm font-bold pt-[1mm] px-[5mm] text-neutral-600",
-                  Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
+              () -> assertEquals("text-sm font-bold pt-[1mm] px-[5mm] text-neutral-600",
+                  attributes(element, CLASS), ATTRIBUTES)
           );
         }
 
         @Test
         void subQuestionValue() {
-          final var content = contentBuilder.isDraft(true).signDate(null).build();
-          final var element = content.create().child(0).child(4);
+          final var content = contentBuilder.isDraft(true).signDate(null).isSent(false).build();
+          final var element = content.create().child(1).child(4);
           assertAll(
               () -> assertEquals(P, element.tag(), TAG_TYPE),
               () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
-              () -> assertEquals(1, element.attributes().asList().size(), NUM_ATTRIBUTES),
+              () -> assertEquals(1, attributesSize(element), NUM_ATTRIBUTES),
               () -> assertEquals(SUB_QUESTION_VALUE, element.text(), TEXT),
-              () -> assertEquals(
-                  "text-sm italic px-[5mm]",
-                  Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
+              () -> assertEquals("text-sm italic px-[5mm]", attributes(element, CLASS), ATTRIBUTES)
           );
         }
       }
@@ -200,26 +300,24 @@ class ContentTest {
       @Test
       void issuerInfoWrapperDraft() {
         final var content = contentBuilder.isDraft(true).signDate(null).build();
-        final var element = content.create().child(1);
+        final var element = content.create().child(2);
         assertAll(
             () -> assertEquals(DIV, element.tag(), TAG_TYPE),
             () -> assertEquals(1, element.children().size(), NUM_CHILDREN),
-            () -> assertEquals(1, element.attributes().asList().size(), ATTRIBUTES),
-            () -> assertEquals("break-inside-avoid",
-                Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
+            () -> assertEquals(1, attributesSize(element), ATTRIBUTES),
+            () -> assertEquals("break-inside-avoid", attributes(element, CLASS), ATTRIBUTES)
         );
       }
 
       @Test
       void issuerInfoWrapperSigned() {
         final var content = contentBuilder.isDraft(false).signDate(SIGN_DATE).build();
-        final var element = content.create().child(1);
+        final var element = content.create().child(2);
         assertAll(
             () -> assertEquals(DIV, element.tag(), TAG_TYPE),
             () -> assertEquals(3, element.children().size(), NUM_CHILDREN),
-            () -> assertEquals(1, element.attributes().asList().size(), ATTRIBUTES),
-            () -> assertEquals("break-inside-avoid",
-                Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
+            () -> assertEquals(1, attributesSize(element), ATTRIBUTES),
+            () -> assertEquals("break-inside-avoid", attributes(element, CLASS), ATTRIBUTES)
         );
       }
 
@@ -229,52 +327,48 @@ class ContentTest {
         @Test
         void issuerInfoDraft() {
           final var content = contentBuilder.isDraft(true).signDate(null).build();
-          final var element = content.create().child(1).child(0);
+          final var element = content.create().child(2).child(0);
           assertAll(
               () -> assertEquals(DIV, element.tag(), TAG_TYPE),
               () -> assertEquals(5, element.children().size(), NUM_CHILDREN),
-              () -> assertEquals(1, element.attributes().asList().size(), ATTRIBUTES),
-              () -> assertEquals("grid mt-[5mm]",
-                  Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
+              () -> assertEquals(1, attributesSize(element), ATTRIBUTES),
+              () -> assertEquals("grid mt-[5mm]", attributes(element, CLASS), ATTRIBUTES)
           );
         }
 
         @Test
         void issuerInfoSignedIssuerName() {
           final var content = contentBuilder.isDraft(false).signDate(SIGN_DATE).build();
-          final var element = content.create().child(1).child(0);
+          final var element = content.create().child(2).child(0);
           assertAll(
               () -> assertEquals(DIV, element.tag(), TAG_TYPE),
               () -> assertEquals(2, element.children().size(), NUM_CHILDREN),
-              () -> assertEquals(1, element.attributes().asList().size(), ATTRIBUTES),
-              () -> assertEquals("grid mt-[5mm]",
-                  Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
+              () -> assertEquals(1, attributesSize(element), ATTRIBUTES),
+              () -> assertEquals("grid mt-[5mm]", attributes(element, CLASS), ATTRIBUTES)
           );
         }
 
         @Test
         void issuerInfoSignedContactInfo() {
           final var content = contentBuilder.isDraft(false).signDate(SIGN_DATE).build();
-          final var element = content.create().child(1).child(1);
+          final var element = content.create().child(2).child(1);
           assertAll(
               () -> assertEquals(DIV, element.tag(), TAG_TYPE),
               () -> assertEquals(5, element.children().size(), NUM_CHILDREN),
-              () -> assertEquals(1, element.attributes().asList().size(), ATTRIBUTES),
-              () -> assertEquals("grid mt-[5mm]",
-                  Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
+              () -> assertEquals(1, attributesSize(element), ATTRIBUTES),
+              () -> assertEquals("grid mt-[5mm]", attributes(element, CLASS), ATTRIBUTES)
           );
         }
 
         @Test
         void issuerInfoSignedSignDate() {
           final var content = contentBuilder.isDraft(false).signDate(SIGN_DATE).build();
-          final var element = content.create().child(1).child(2);
+          final var element = content.create().child(2).child(2);
           assertAll(
               () -> assertEquals(DIV, element.tag(), TAG_TYPE),
               () -> assertEquals(2, element.children().size(), NUM_CHILDREN),
-              () -> assertEquals(1, element.attributes().asList().size(), ATTRIBUTES),
-              () -> assertEquals("grid mt-[5mm]",
-                  Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
+              () -> assertEquals(1, attributesSize(element), ATTRIBUTES),
+              () -> assertEquals("grid mt-[5mm]", attributes(element, CLASS), ATTRIBUTES)
           );
         }
 
@@ -284,25 +378,24 @@ class ContentTest {
           @Test
           void issuerNameHeader() {
             final var content = contentBuilder.isDraft(false).signDate(SIGN_DATE).build();
-            final var element = content.create().child(1).child(0).child(0);
+            final var element = content.create().child(2).child(0).child(0);
             assertAll(
                 () -> assertEquals(P, element.tag(), TAG_TYPE),
                 () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
-                () -> assertEquals(1, element.attributes().asList().size(), ATTRIBUTES),
+                () -> assertEquals(1, attributesSize(element), ATTRIBUTES),
                 () -> assertEquals(ISSUER_NAME_HEADER, element.text(), TEXT),
-                () -> assertEquals("font-bold",
-                    Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
+                () -> assertEquals("font-bold", attributes(element, CLASS), ATTRIBUTES)
             );
           }
 
           @Test
           void issuerName() {
             final var content = contentBuilder.isDraft(false).signDate(SIGN_DATE).build();
-            final var element = content.create().child(1).child(0).child(1);
+            final var element = content.create().child(2).child(0).child(1);
             assertAll(
                 () -> assertEquals(P, element.tag(), TAG_TYPE),
                 () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
-                () -> assertEquals(0, element.attributes().asList().size(), ATTRIBUTES),
+                () -> assertEquals(0, attributesSize(element), ATTRIBUTES),
                 () -> assertEquals(ISSUER_NAME, element.text(), TEXT)
             );
           }
@@ -314,26 +407,24 @@ class ContentTest {
           @Test
           void contactInfoHeader() {
             final var content = contentBuilder.isDraft(false).signDate(SIGN_DATE).build();
-            final var element = content.create().child(1).child(1).child(0);
+            final var element = content.create().child(2).child(1).child(0);
             assertAll(
                 () -> assertEquals(P, element.tag(), TAG_TYPE),
                 () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
-                () -> assertEquals(1, element.attributes().asList().size(), ATTRIBUTES),
+                () -> assertEquals(1, attributesSize(element), ATTRIBUTES),
                 () -> assertEquals(CONTACT_INFO_HEADER, element.text(), TEXT),
-                () -> assertEquals("font-bold",
-                    Objects.requireNonNull(element.attribute(CLASS)).getValue(),
-                    ATTRIBUTES)
+                () -> assertEquals("font-bold", attributes(element, CLASS), ATTRIBUTES)
             );
           }
 
           @Test
           void issuingUnit() {
             final var content = contentBuilder.isDraft(false).signDate(SIGN_DATE).build();
-            final var element = content.create().child(1).child(1).child(1);
+            final var element = content.create().child(2).child(1).child(1);
             assertAll(
                 () -> assertEquals(P, element.tag(), TAG_TYPE),
                 () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
-                () -> assertEquals(0, element.attributes().asList().size(), ATTRIBUTES),
+                () -> assertEquals(0, attributesSize(element), ATTRIBUTES),
                 () -> assertEquals(ISSUING_UNIT, element.text(), TEXT)
             );
           }
@@ -341,11 +432,11 @@ class ContentTest {
           @Test
           void address() {
             final var content = contentBuilder.isDraft(false).signDate(SIGN_DATE).build();
-            final var element = content.create().child(1).child(1).child(2);
+            final var element = content.create().child(2).child(1).child(2);
             assertAll(
                 () -> assertEquals(P, element.tag(), TAG_TYPE),
                 () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
-                () -> assertEquals(0, element.attributes().asList().size(), ATTRIBUTES),
+                () -> assertEquals(0, attributesSize(element), ATTRIBUTES),
                 () -> assertEquals(ADDRESS, element.text(), TEXT)
             );
           }
@@ -353,11 +444,11 @@ class ContentTest {
           @Test
           void zipCode() {
             final var content = contentBuilder.isDraft(false).signDate(SIGN_DATE).build();
-            final var element = content.create().child(1).child(1).child(3);
+            final var element = content.create().child(2).child(1).child(3);
             assertAll(
                 () -> assertEquals(P, element.tag(), TAG_TYPE),
                 () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
-                () -> assertEquals(0, element.attributes().asList().size(), ATTRIBUTES),
+                () -> assertEquals(0, attributesSize(element), ATTRIBUTES),
                 () -> assertEquals(ZIP_CODE, element.text(), TEXT)
             );
           }
@@ -365,11 +456,11 @@ class ContentTest {
           @Test
           void city() {
             final var content = contentBuilder.isDraft(false).signDate(SIGN_DATE).build();
-            final var element = content.create().child(1).child(1).child(4);
+            final var element = content.create().child(2).child(1).child(4);
             assertAll(
                 () -> assertEquals(P, element.tag(), TAG_TYPE),
                 () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
-                () -> assertEquals(0, element.attributes().asList().size(), ATTRIBUTES),
+                () -> assertEquals(0, attributesSize(element), ATTRIBUTES),
                 () -> assertEquals(CITY, element.text(), TEXT)
             );
           }
@@ -381,25 +472,24 @@ class ContentTest {
           @Test
           void signDateHeader() {
             final var content = contentBuilder.isDraft(false).signDate(SIGN_DATE).build();
-            final var element = content.create().child(1).child(2).child(0);
+            final var element = content.create().child(2).child(2).child(0);
             assertAll(
                 () -> assertEquals(P, element.tag(), TAG_TYPE),
                 () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
-                () -> assertEquals(1, element.attributes().asList().size(), ATTRIBUTES),
+                () -> assertEquals(1, attributesSize(element), ATTRIBUTES),
                 () -> assertEquals(SIGN_DATE_HEADER, element.text(), TEXT),
-                () -> assertEquals("font-bold",
-                    Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
+                () -> assertEquals("font-bold", attributes(element, CLASS), ATTRIBUTES)
             );
           }
 
           @Test
           void signDate() {
             final var content = contentBuilder.isDraft(false).signDate(SIGN_DATE).build();
-            final var element = content.create().child(1).child(2).child(1);
+            final var element = content.create().child(2).child(2).child(1);
             assertAll(
                 () -> assertEquals(P, element.tag(), TAG_TYPE),
                 () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
-                () -> assertEquals(0, element.attributes().asList().size(), ATTRIBUTES),
+                () -> assertEquals(0, attributesSize(element), ATTRIBUTES),
                 () -> assertEquals(SIGN_DATE, element.text(), TEXT)
             );
           }
@@ -413,13 +503,12 @@ class ContentTest {
       @Test
       void certificateInfoInfoWrapper() {
         final var content = contentBuilder.isDraft(true).signDate(null).build();
-        final var element = content.create().child(2);
+        final var element = content.create().child(3);
         assertAll(
             () -> assertEquals(DIV, element.tag(), TAG_TYPE),
             () -> assertEquals(5, element.children().size(), NUM_CHILDREN),
-            () -> assertEquals(1, element.attributes().asList().size(), ATTRIBUTES),
-            () -> assertEquals("break-before-page",
-                Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
+            () -> assertEquals(1, attributesSize(element), ATTRIBUTES),
+            () -> assertEquals("break-before-page", attributes(element, CLASS), ATTRIBUTES)
         );
       }
 
@@ -429,11 +518,11 @@ class ContentTest {
         @Test
         void certificateName() {
           final var content = contentBuilder.isDraft(true).signDate(null).build();
-          final var element = content.create().child(2).child(0);
+          final var element = content.create().child(3).child(0);
           assertAll(
               () -> assertEquals(STRONG, element.tag(), TAG_TYPE),
               () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
-              () -> assertEquals(0, element.attributes().asList().size(), ATTRIBUTES),
+              () -> assertEquals(0, attributesSize(element), ATTRIBUTES),
               () -> assertEquals(CERTIFICATE_NAME, element.text(), TEXT)
           );
         }
@@ -441,36 +530,35 @@ class ContentTest {
         @Test
         void description() {
           final var content = contentBuilder.isDraft(true).signDate(null).build();
-          final var element = content.create().child(2).child(1);
+          final var element = content.create().child(3).child(1);
           assertAll(
               () -> assertEquals(P, element.tag(), TAG_TYPE),
               () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
-              () -> assertEquals(1, element.attributes().asList().size(), ATTRIBUTES),
+              () -> assertEquals(1, attributesSize(element), ATTRIBUTES),
               () -> assertEquals(DESCRIPTION, element.text(), TEXT),
-              () -> assertEquals("whitespace-pre-line",
-                  Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
+              () -> assertEquals("whitespace-pre-line", attributes(element, CLASS), ATTRIBUTES)
           );
         }
 
         @Test
         void emptyLine() {
           final var content = contentBuilder.isDraft(true).signDate(null).build();
-          final var element = content.create().child(2).child(2);
+          final var element = content.create().child(3).child(2);
           assertAll(
               () -> assertEquals(BR, element.tag(), TAG_TYPE),
               () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
-              () -> assertEquals(0, element.attributes().asList().size(), ATTRIBUTES)
+              () -> assertEquals(0, attributesSize(element), ATTRIBUTES)
           );
         }
 
         @Test
         void sendCertificateToRecipientText() {
           final var content = contentBuilder.isDraft(true).signDate(null).build();
-          final var element = content.create().child(2).child(3);
+          final var element = content.create().child(3).child(3);
           assertAll(
               () -> assertEquals(STRONG, element.tag(), TAG_TYPE),
               () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
-              () -> assertEquals(0, element.attributes().asList().size(), ATTRIBUTES),
+              () -> assertEquals(0, attributesSize(element), ATTRIBUTES),
               () -> assertEquals(SKICKA_INTYG_TILL_MOTTAGARE, element.text(), TEXT)
           );
         }
@@ -478,14 +566,13 @@ class ContentTest {
         @Test
         void info1177() {
           final var content = contentBuilder.isDraft(true).signDate(null).build();
-          final var element = content.create().child(2).child(4);
+          final var element = content.create().child(3).child(4);
           assertAll(
               () -> assertEquals(P, element.tag(), TAG_TYPE),
               () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
-              () -> assertEquals(1, element.attributes().asList().size(), ATTRIBUTES),
+              () -> assertEquals(1, attributesSize(element), ATTRIBUTES),
               () -> assertEquals(INFO_1177, element.text(), TEXT),
-              () -> assertEquals("whitespace-pre-line",
-                  Objects.requireNonNull(element.attribute(CLASS)).getValue(), ATTRIBUTES)
+              () -> assertEquals("whitespace-pre-line", attributes(element, CLASS), ATTRIBUTES)
           );
         }
       }

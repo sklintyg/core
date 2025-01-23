@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateprintservice.playwright.document;
 
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.STYLE;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.WATERMARK_STYLE;
 import static se.inera.intyg.certificateprintservice.playwright.element.ElementProvider.element;
 
@@ -19,7 +20,7 @@ public class Watermark {
 
   public Element create() {
     return element(Tag.DIV)
-        .attr("style", WATERMARK_STYLE)
+        .attr(STYLE, WATERMARK_STYLE)
         .appendChild(element(Tag.P).text(watermarkText));
   }
 

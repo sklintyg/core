@@ -4,10 +4,12 @@ import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.Mockito.when;
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.CONTENT;
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.SCRIPT;
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.SRC;
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.STYLE;
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.TITLE;
 
-import com.microsoft.playwright.Locator;
-import com.microsoft.playwright.Page;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
@@ -19,7 +21,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -27,27 +28,12 @@ import org.springframework.core.io.Resource;
 @ExtendWith(MockitoExtension.class)
 class DocumentTest {
 
-  private static final String HEADER = "header";
-  private static final String CONTENT = "content";
-  private static final String FOOTER = "footer";
-  private static final String LEFT_MARGIN_INFO = "leftMarginInfo";
-  private static final String RIGHT_MARGIN_INFO = "rightMarginInfo";
-  private static final String WATERMARK = "watermark";
-  private static final String HEADER_SPACE = "header-space";
-  private static final String TITLE = "title";
-  private static final String SCRIPT = "script";
   private static final String TAILWIND_CSS_SCRIPT = "tailwindCssScript";
-  private static final String CLASS = "class";
-  private static final String SRC = "src";
   private static final String CERTIFICATE_NAME = "certificateName";
   private static final String CERTIFICATE_TYPE = "certificateType";
   private static final String CERTIFICATE_VERSION = "certificateVersion";
+  private static final String TEST_TEMPLATE_FILENAME = "testCertificateTemplate.html";
   private static final int HEADER_HEIGHT = 77;
-
-  @Mock
-  private Page page;
-  @Mock
-  private Locator locator;
 
   private final Document.DocumentBuilder documentBuilder = Document.builder()
       .content(Content.builder()
@@ -64,7 +50,7 @@ class DocumentTest {
       .certificateVersion(CERTIFICATE_VERSION)
       .tailWindScript(TAILWIND_CSS_SCRIPT);
 
-  private static final Resource template = new ClassPathResource("testCertificateTemplate.html");
+  private static final Resource template = new ClassPathResource(TEST_TEMPLATE_FILENAME);
   private static org.jsoup.nodes.Document jsoupDocument;
   private Document document;
 
@@ -72,12 +58,6 @@ class DocumentTest {
   static void init() throws IOException {
     jsoupDocument = Jsoup.parse(template.getInputStream(), StandardCharsets.UTF_8.name(),
         "", Parser.xmlParser());
-  }
-
-  @BeforeEach
-  void setup() {
-    when(page.getByTitle(HEADER)).thenReturn(locator);
-    when(locator.evaluate("node => node.offsetHeight")).thenReturn(HEADER_HEIGHT);
   }
 
   @Nested
@@ -89,49 +69,18 @@ class DocumentTest {
     }
 
     @Test
-    void shouldSetHeader() throws IOException {
-      final var elementBefore = jsoupDocument.getElementById(HEADER);
-      final var elementAfter = document.build(template, 77).getElementById(HEADER);
-      assertEquals(0, requireNonNull(elementBefore).children().size());
-      assertNotEquals(0, requireNonNull(elementAfter).children().size());
+    void shouldSetPageStyle() throws IOException {
+      final var elementBefore = jsoupDocument.getElementById(STYLE);
+      final var elementAfter = document.build(template, HEADER_HEIGHT).getElementById(STYLE);
+      assertEquals("", requireNonNull(elementBefore).text());
+      assertEquals("@page { margin: calc(%spx + 16mm) 20mm 39mm 20mm; }".formatted(HEADER_HEIGHT),
+          requireNonNull(elementAfter).text());
     }
 
     @Test
     void shouldSetContent() throws IOException {
       final var elementBefore = jsoupDocument.getElementById(CONTENT);
-      final var elementAfter = document.build(template, 77).getElementById(CONTENT);
-      assertEquals(0, requireNonNull(elementBefore).children().size());
-      assertNotEquals(0, requireNonNull(elementAfter).children().size());
-    }
-
-    @Test
-    void shouldSetFooter() throws IOException {
-      final var elementBefore = jsoupDocument.getElementById(FOOTER);
-      final var elementAfter = document.build(template, 77).getElementById(FOOTER);
-      assertEquals(0, requireNonNull(elementBefore).children().size());
-      assertNotEquals(0, requireNonNull(elementAfter).children().size());
-    }
-
-    @Test
-    void shouldSetLeftMarginInfo() throws IOException {
-      final var elementBefore = jsoupDocument.getElementById(LEFT_MARGIN_INFO);
-      final var elementAfter = document.build(template, 77).getElementById(LEFT_MARGIN_INFO);
-      assertEquals(0, requireNonNull(elementBefore).children().size());
-      assertNotEquals(0, requireNonNull(elementAfter).children().size());
-    }
-
-    @Test
-    void shouldNotSetRightMarginInfo() throws IOException {
-      final var elementBefore = jsoupDocument.getElementById(RIGHT_MARGIN_INFO);
-      final var elementAfter = document.build(template, 77).getElementById(RIGHT_MARGIN_INFO);
-      assertEquals(0, requireNonNull(elementBefore).children().size());
-      assertEquals(0, requireNonNull(elementAfter).children().size());
-    }
-
-    @Test
-    void shouldSetWatermark() throws IOException {
-      final var elementBefore = jsoupDocument.getElementById(WATERMARK);
-      final var elementAfter = document.build(template, 77).getElementById(WATERMARK);
+      final var elementAfter = document.build(template, HEADER_HEIGHT).getElementById(CONTENT);
       assertEquals(0, requireNonNull(elementBefore).children().size());
       assertNotEquals(0, requireNonNull(elementAfter).children().size());
     }
@@ -139,7 +88,7 @@ class DocumentTest {
     @Test
     void shouldSetTitle() throws IOException {
       final var elementBefore = jsoupDocument.getElementById(TITLE);
-      final var elementAfter = document.build(template, 77).getElementById(TITLE);
+      final var elementAfter = document.build(template, HEADER_HEIGHT).getElementById(TITLE);
       assertEquals("", requireNonNull(elementBefore).text());
       assertEquals("%s (%s v%s)".formatted(CERTIFICATE_NAME, CERTIFICATE_TYPE, CERTIFICATE_VERSION),
           requireNonNull(elementAfter).text());
@@ -148,19 +97,10 @@ class DocumentTest {
     @Test
     void shouldSetTailwindScript() throws IOException {
       final var elementBefore = jsoupDocument.getElementById(SCRIPT);
-      final var elementAfter = document.build(template, 77).getElementById(SCRIPT);
+      final var elementAfter = document.build(template, HEADER_HEIGHT).getElementById(SCRIPT);
       assertNull(requireNonNull(elementBefore).attribute(SRC));
       assertEquals("data:text/javascript;base64, %s".formatted(TAILWIND_CSS_SCRIPT), requireNonNull(
           requireNonNull(elementAfter).attribute(SRC)).getValue());
-    }
-
-    @Test
-    void shouldSetHeaderHeight() throws IOException {
-      final var elementBefore = jsoupDocument.getElementById(HEADER_SPACE);
-      final var elementAfter = document.build(template, 77).getElementById(HEADER_SPACE);
-      assertNull(requireNonNull(elementBefore).attribute(CLASS));
-      assertEquals("h-[%spx]".formatted(HEADER_HEIGHT), requireNonNull(
-          requireNonNull(elementAfter).attribute(CLASS)).getValue());
     }
   }
 
@@ -173,57 +113,27 @@ class DocumentTest {
     }
 
     @Test
-    void shouldSetHeader() throws IOException {
-      final var elementBefore = jsoupDocument.getElementById(HEADER);
-      final var elementAfter = document.build(template, 77).getElementById(HEADER);
-      assertEquals(0, requireNonNull(elementBefore).children().size());
-      assertNotEquals(0, requireNonNull(elementAfter).children().size());
+    void shouldSetPageStyle() throws IOException {
+      final var elementBefore = jsoupDocument.getElementById(STYLE);
+      final var elementAfter = document.build(template, HEADER_HEIGHT).getElementById(STYLE);
+      assertEquals("", requireNonNull(elementBefore).text());
+      assertEquals("@page { margin: calc(%spx + 16mm) 20mm 39mm 20mm; }".formatted(HEADER_HEIGHT),
+          requireNonNull(elementAfter).text());
     }
 
     @Test
     void shouldSetContent() throws IOException {
       final var elementBefore = jsoupDocument.getElementById(CONTENT);
-      final var elementAfter = document.build(template, 77).getElementById(CONTENT);
+      final var elementAfter = document.build(template, HEADER_HEIGHT).getElementById(CONTENT);
       assertEquals(0, requireNonNull(elementBefore).children().size());
       assertNotEquals(0, requireNonNull(elementAfter).children().size());
     }
 
-    @Test
-    void shouldSetFooter() throws IOException {
-      final var elementBefore = jsoupDocument.getElementById(FOOTER);
-      final var elementAfter = document.build(template, 77).getElementById(FOOTER);
-      assertEquals(0, requireNonNull(elementBefore).children().size());
-      assertNotEquals(0, requireNonNull(elementAfter).children().size());
-    }
-
-    @Test
-    void shouldSetLeftMarginInfo() throws IOException {
-      final var elementBefore = jsoupDocument.getElementById(LEFT_MARGIN_INFO);
-      final var elementAfter = document.build(template, 77).getElementById(LEFT_MARGIN_INFO);
-      assertEquals(0, requireNonNull(elementBefore).children().size());
-      assertNotEquals(0, requireNonNull(elementAfter).children().size());
-    }
-
-    @Test
-    void shouldSetRightMarginInfo() throws IOException {
-      final var elementBefore = jsoupDocument.getElementById(RIGHT_MARGIN_INFO);
-      final var elementAfter = document.build(template, 77).getElementById(RIGHT_MARGIN_INFO);
-      assertEquals(0, requireNonNull(elementBefore).children().size());
-      assertNotEquals(0, requireNonNull(elementAfter).children().size());
-    }
-
-    @Test
-    void shouldNotSetWatermark() throws IOException {
-      final var elementBefore = jsoupDocument.getElementById(WATERMARK);
-      final var elementAfter = document.build(template, 77).getElementById(WATERMARK);
-      assertEquals(0, requireNonNull(elementBefore).children().size());
-      assertEquals(0, requireNonNull(elementAfter).children().size());
-    }
 
     @Test
     void shouldSetTitle() throws IOException {
       final var elementBefore = jsoupDocument.getElementById(TITLE);
-      final var elementAfter = document.build(template, 77).getElementById(TITLE);
+      final var elementAfter = document.build(template, HEADER_HEIGHT).getElementById(TITLE);
       assertEquals("", requireNonNull(elementBefore).text());
       assertEquals("%s (%s v%s)".formatted(CERTIFICATE_NAME, CERTIFICATE_TYPE, CERTIFICATE_VERSION),
           requireNonNull(elementAfter).text());
@@ -232,19 +142,10 @@ class DocumentTest {
     @Test
     void shouldSetTailwindScript() throws IOException {
       final var elementBefore = jsoupDocument.getElementById(SCRIPT);
-      final var elementAfter = document.build(template, 77).getElementById(SCRIPT);
+      final var elementAfter = document.build(template, HEADER_HEIGHT).getElementById(SCRIPT);
       assertNull(requireNonNull(elementBefore).attribute(SRC));
       assertEquals("data:text/javascript;base64, %s".formatted(TAILWIND_CSS_SCRIPT), requireNonNull(
           requireNonNull(elementAfter).attribute(SRC)).getValue());
-    }
-
-    @Test
-    void shouldSetHeaderHeight() throws IOException {
-      final var elementBefore = jsoupDocument.getElementById(HEADER_SPACE);
-      final var elementAfter = document.build(template, 77).getElementById(HEADER_SPACE);
-      assertNull(requireNonNull(elementBefore).attribute(CLASS));
-      assertEquals("h-[%spx]".formatted(HEADER_HEIGHT), requireNonNull(
-          requireNonNull(elementAfter).attribute(CLASS)).getValue());
     }
   }
 

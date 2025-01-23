@@ -54,7 +54,7 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator, Ini
       playwrightBrowser = browserPool.borrowObject();
       return createPdf(playwrightBrowser, certificate);
     } catch (Exception e) {
-      throw new IllegalStateException("Failure creating certificate details pdf", e);
+      throw new IllegalStateException("Failure creating certificate pdf", e);
     } finally {
       browserPool.returnObject(playwrightBrowser);
       certificatePrintEventService.publish(
@@ -98,6 +98,7 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator, Ini
     return new PdfOptions()
         .setFormat("A4")
         .setTagged(true)
+        .setPrintBackground(true)
         .setDisplayHeaderFooter(true)
         .setHeaderTemplate(header)
         .setFooterTemplate(footer);
