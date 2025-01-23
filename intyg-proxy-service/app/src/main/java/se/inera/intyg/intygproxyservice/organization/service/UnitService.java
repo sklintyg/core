@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 Inera AB (http://www.inera.se)
+ * Copyright (C) 2025 Inera AB (http://www.inera.se)
  *
  * This file is part of sklintyg (https://github.com/sklintyg).
  *
@@ -24,8 +24,8 @@ import static se.inera.intyg.intygproxyservice.common.ValidationUtility.isString
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import se.inera.intyg.intygproxyservice.integration.api.organization.GetUnitIntegrationService;
 import se.inera.intyg.intygproxyservice.integration.api.organization.GetUnitIntegrationRequest;
+import se.inera.intyg.intygproxyservice.integration.api.organization.GetUnitIntegrationService;
 import se.inera.intyg.intygproxyservice.organization.dto.UnitRequest;
 import se.inera.intyg.intygproxyservice.organization.dto.UnitResponse;
 

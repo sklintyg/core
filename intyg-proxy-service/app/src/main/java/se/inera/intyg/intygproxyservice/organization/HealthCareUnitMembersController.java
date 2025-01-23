@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 Inera AB (http://www.inera.se)
+ * Copyright (C) 2025 Inera AB (http://www.inera.se)
  *
  * This file is part of sklintyg (https://github.com/sklintyg).
  *
@@ -40,7 +40,8 @@ public class HealthCareUnitMembersController {
 
   @PostMapping("")
   @PerformanceLogging(eventAction = "retrieve-health-care-unit-members", eventType = EVENT_TYPE_ACCESSED)
-  HealthCareUnitMembersResponse getHealthCareUnitMembers(@RequestBody HealthCareUnitMembersRequest request) {
+  HealthCareUnitMembersResponse getHealthCareUnitMembers(
+      @RequestBody HealthCareUnitMembersRequest request) {
     return healthCareUnitMembersService.get(request);
   }
 }

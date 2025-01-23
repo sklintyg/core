@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 Inera AB (http://www.inera.se)
+ * Copyright (C) 2025 Inera AB (http://www.inera.se)
  *
  * This file is part of sklintyg (https://github.com/sklintyg).
  *
@@ -33,9 +33,9 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.intygproxyservice.integration.api.organization.GetUnitIntegrationService;
 import se.inera.intyg.intygproxyservice.integration.api.organization.GetUnitIntegrationRequest;
 import se.inera.intyg.intygproxyservice.integration.api.organization.GetUnitIntegrationResponse;
+import se.inera.intyg.intygproxyservice.integration.api.organization.GetUnitIntegrationService;
 import se.inera.intyg.intygproxyservice.integration.api.organization.model.Unit;
 import se.inera.intyg.intygproxyservice.organization.dto.UnitRequest;
 
