@@ -1,6 +1,9 @@
 package se.inera.intyg.certificateprintservice.playwright.document;
 
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.HEADER;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.HEADER_STYLE;
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.STYLE;
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.TITLE;
 import static se.inera.intyg.certificateprintservice.playwright.element.ElementProvider.element;
 
 import java.util.ArrayList;
@@ -45,22 +48,22 @@ public class Header {
 
   private Element header() {
     return element(Tag.DIV)
-        .attr("style", HEADER_STYLE)
-        .attr("title", "header")
+        .attr(STYLE, HEADER_STYLE)
+        .attr(TITLE, HEADER)
         .appendChildren(List.of(pageHeader(), certificateHeader()));
   }
 
   private Element pageHeader() {
     return element(Tag.DIV)
-        .attr("style", "display: flex; top: 0; left: 0; margin-bottom: 10mm")
+        .attr(STYLE, "display: flex; top: 0; left: 0; margin-bottom: 10mm")
         .appendChildren(List.of(
-            HeaderElementFactory.recipientLogo(recipientLogo),
+            HeaderElementFactory.recipientLogo(recipientLogo, recipientName),
             HeaderElementFactory.personId(personId)));
   }
 
   private Element certificateHeader() {
     return element(Tag.DIV)
-        .attr("style", "margin-bottom: 5mm")
+        .attr(STYLE, "margin-bottom: 5mm")
         .appendChildren(List.of(
             HeaderElementFactory.title(certificateName, certificateType, certificateVersion),
             HeaderElementFactory.alert(recipientName, isDraft, isSent)

@@ -6,13 +6,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Constants {
 
+  public static final String STYLE = "style";
+  public static final String SRC = "src";
+  public static final String ALT = "alt";
+  public static final String TITLE = "title";
+  public static final String HEADER = "header";
+  public static final String HREF = "href";
+  public static final String CONTENT = "content";
+
   public static final String HEADER_STYLE = """
       margin: 10mm 20mm;
       display: grid;
       width: 17cm;
-      font-family: 'Times New Roman', sans-serif;
-      font-size: 10pt;
-      """;
+      font-family: 'Liberation Sans', sans-serif;
+      font-size: 10pt;""";
 
   public static final String FOOTER_STYLE = """
       margin: 0 20mm;
@@ -22,8 +29,7 @@ public class Constants {
       justify-content: space-between;
       display: flex;
       font-family: 'Liberation Sans', sans-serif;
-      font-size: 10pt;
-      """;
+      font-size: 10pt;""";
 
   public static final String LEFT_MARGIN_INFO_STYLE = """
       position: absolute;
@@ -32,8 +38,7 @@ public class Constants {
       transform: rotate(-90deg) translateY(-50%);
       transform-origin: top left;
       font-family: 'Liberation Sans', sans-serif;
-      font-size: 10pt;
-      """;
+      font-size: 10pt;""";
 
   public static final String RIGHT_MARGIN_INFO_STYLE = """
       position: absolute;
@@ -43,8 +48,7 @@ public class Constants {
       transform: rotate(-90deg) translateY(-50%);
       transform-origin: top left;
       font-family: 'Liberation Sans', sans-serif;
-      font-size: 10pt;
-      """;
+      font-size: 10pt;""";
 
   public static final String WATERMARK_STYLE = """
       position: absolute;
@@ -55,7 +59,6 @@ public class Constants {
       opacity: 0.5;
       z-index: -1;
       font-family: 'Liberation Sans', sans-serif;
-      font-size: 100pt;
-      """;
+      font-size: 100pt;""";
 
 }

@@ -1,5 +1,10 @@
 package se.inera.intyg.certificateprintservice.playwright.document;
 
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.CONTENT;
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.SRC;
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.STYLE;
+import static se.inera.intyg.certificateprintservice.playwright.document.Constants.TITLE;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
@@ -24,21 +29,12 @@ public class Document {
   String tailWindScript;
   boolean isDraft;
 
-  private static final String HEADER_ID = "header";
-  private static final String HEADER_SPACE_ID = "header-space";
-  private static final String CONTENT_ID = "content";
-  private static final String FOOTER_ID = "footer";
-  private static final String LEFT_MARGIN_INFO_ID = "leftMarginInfo";
-  private static final String RIGHT_MARGIN_INFO_ID = "rightMarginInfo";
-  private static final String WATERMARK_ID = "watermark";
-  private static final String TITLE_ID = "title";
-
   public org.jsoup.nodes.Document build(Resource template, int headerHeight) throws IOException {
     final var document = document(template);
     setPageStyle(document, headerHeight);
     setTitle(document);
     setTailWindScript(document);
-    getElement(document, CONTENT_ID).appendChild(content.create());
+    getElement(document, CONTENT).appendChild(content.create());
     return document;
   }
 
@@ -51,11 +47,11 @@ public class Document {
         @page {
           margin: calc(%spx + 16mm) 20mm 39mm 20mm;
         }""".formatted(headerHeight);
-    Objects.requireNonNull(document.getElementById("style")).append(style);
+    Objects.requireNonNull(document.getElementById(STYLE)).append(style);
   }
 
   private void setTitle(org.jsoup.nodes.Document document) {
-    final var titleElement = getElement(document, TITLE_ID);
+    final var titleElement = getElement(document, TITLE);
     final var title = "%s (%s v%s)".formatted(certificateName, certificateType, certificateVersion);
     titleElement.appendText(title);
   }
@@ -68,7 +64,7 @@ public class Document {
   private void setTailWindScript(org.jsoup.nodes.Document document) {
     final var script = "data:text/javascript;base64, %s".formatted(tailWindScript);
     document.getElementsByTag(Tag.SCRIPT.toString())
-        .attr("src", script);
+        .attr(SRC, script);
   }
 
 }

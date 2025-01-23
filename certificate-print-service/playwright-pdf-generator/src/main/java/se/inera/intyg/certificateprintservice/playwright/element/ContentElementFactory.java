@@ -17,6 +17,25 @@ public class ContentElementFactory {
   private static final String SEND_CERTIFICATE_TEXT = "Skicka intyg till mottagare";
   private static final String HANDLE_CERTIFICATE_TEXT = "Du kan hantera ditt intyg genom att logga in på 1177.se Där kan du till exempel skicka intyget till mottagaren";
 
+  private static final String INVISIBLE_STYLE = "absolute h-px w-[17cm] text-[1px] -z-50 text-white";
+
+  public static Element hiddenAccessibleHeader(String name, String type, String version,
+      String recipientName, String personId, boolean isDraft,
+      boolean isSent) {
+    return element(Tag.DIV)
+        .appendChildren(List.of(
+            element(Tag.P)
+                .addClass(INVISIBLE_STYLE)
+                .text("Person- /samordningsnr %s".formatted(personId)),
+            element(Tag.H1)
+                .addClass(INVISIBLE_STYLE)
+                .text("%s (%s v%s)".formatted(name, type, version)),
+            element(Tag.P)
+                .addClass(INVISIBLE_STYLE)
+                .text(HeaderElementFactory.alertMessage(recipientName, isDraft, isSent))
+        ));
+  }
+
   public static Element issuerInfo(String name, String unit, List<String> unitInfo,
       String signDate, boolean isDraft) {
     final var issuerInfo = element(Tag.DIV)
