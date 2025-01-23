@@ -23,9 +23,6 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-devtools"
     implementation "org.springframework.boot:spring-boot-starter"
 
-    implementation ("org.apache.pdfbox:pdfbox:${pdfBoxVersion}") {
-        exclude group: "commons-logging", module: "commons-logging"
-    }
 
     compileOnly "org.projectlombok:lombok"
     annotationProcessor "org.projectlombok:lombok"

@@ -9,10 +9,10 @@ plugins {
 
 ext {
     jsoupVersion = "1.18.3"
-    pdfBoxVersion = "3.0.3"
     playwrightVersion = "1.49.0" // On updated version, set new CHROME_VERSION in Dockerfile
     springbootMavenBomVersion = '3.4.0'
-    tailwindCssVersion= '3.4.16'
+    tailwindCssVersion = '3.4.16'
+    logbackEcsEncoderVersion = '1.6.0'
 
     ineraMavenRepository = 'https://nexus.drift.inera.se/repository/it-public/'
     nvdMirror = 'https://vulnz-nvd-mirror-devtest.intyg.nordicmedtest.se'
