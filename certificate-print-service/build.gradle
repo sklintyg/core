@@ -1,21 +1,19 @@
 plugins {
-    id 'org.springframework.boot' version '3.4.0'
-    id 'io.spring.dependency-management' version '1.1.4'
-    id 'org.sonarqube' version '5.1.0.4882'
-    id "org.owasp.dependencycheck" version "10.0.4"
+    alias(libs.plugins.org.springframework.boot)
+    alias(libs.plugins.org.sonarqube)
+    alias(libs.plugins.org.owasp.dependencycheck)
+    alias(libs.plugins.com.github.ben.manes.versions)
+    alias(libs.plugins.io.spring.dependency.management)
     id 'test-report-aggregation'
     id 'application'
 }
 
 ext {
-    jsoupVersion = "1.18.3"
-    playwrightVersion = "1.49.0" // On updated version, set new CHROME_VERSION in Dockerfile
-    springbootMavenBomVersion = '3.4.0'
     tailwindCssVersion = '3.4.16'
-    logbackEcsEncoderVersion = '1.6.0'
-
     ineraMavenRepository = 'https://nexus.drift.inera.se/repository/it-public/'
     nvdMirror = 'https://vulnz-nvd-mirror-devtest.intyg.nordicmedtest.se'
+
+    intygBomVersion = System.properties['intygBomVersion'] ?: '0.0.1-SNAPSHOT'
 }
 
 group = 'se.inera.intyg.certificateprintservice'
@@ -48,7 +46,11 @@ dependencyCheck {
 subprojects {
     apply plugin: 'java'
     apply plugin: 'jacoco'
-    apply plugin: 'io.spring.dependency-management'
+
+    dependencies {
+        implementation platform("se.inera.intyg.bom:platform:${intygBomVersion}")
+        annotationProcessor platform("se.inera.intyg.bom:platform:${intygBomVersion}")
+    }
 
     sourceCompatibility = '21'
     targetCompatibility = '21'
@@ -56,12 +58,6 @@ subprojects {
     configurations {
         compileOnly {
             extendsFrom annotationProcessor
-        }
-    }
-
-    dependencyManagement {
-        imports {
-            mavenBom "org.springframework.boot:spring-boot-dependencies:${springbootMavenBomVersion}"
         }
     }
 
