@@ -112,7 +112,18 @@ public class TestDataCertificate {
                             .dateId(new FieldId("54.1"))
                             .date(LocalDate.now())
                             .build()
-                    ).build()
+                    ).build(),
+                ElementData.builder()
+                    .id(UNIT_CONTACT_INFORMATION)
+                    .value(
+                        ElementValueUnitContactInformation.builder()
+                            .address(ALFA_ALLERGIMOTTAGNINGEN_ADDRESS)
+                            .city(ALFA_ALLERGIMOTTAGNINGEN_CITY)
+                            .zipCode(ALFA_ALLERGIMOTTAGNINGEN_ZIP_CODE)
+                            .phoneNumber(ALFA_ALLERGIMOTTAGNINGEN_PHONENUMBER)
+                            .build()
+                    )
+                    .build()
             )
         )
         .certificateMetaData(
