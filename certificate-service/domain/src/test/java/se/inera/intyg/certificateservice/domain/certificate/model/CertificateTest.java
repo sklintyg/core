@@ -13,6 +13,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
 import static se.inera.intyg.certificateservice.domain.common.model.PersonIdType.COORDINATION_NUMBER;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.BETA_REGIONEN;
@@ -2713,6 +2714,45 @@ class CertificateTest {
           .build();
 
       assertThrows(IllegalStateException.class, draftCertificate::lock);
+    }
+  }
+
+  @Nested
+  class UnitContactInformationTests {
+
+    @Test
+    void shallReturnUnitContactInformationIfPresent() {
+      final var expectedValue = ElementValueUnitContactInformation.builder().build();
+      final var unitContactInformation = ElementData.builder()
+          .id(UNIT_CONTACT_INFORMATION)
+          .value(
+              expectedValue
+          )
+          .build();
+
+      final var certificateWithUnitContactInformation =
+          Certificate.builder()
+              .elementData(List.of(unitContactInformation))
+              .build();
+
+      assertEquals(Optional.of(expectedValue),
+          certificateWithUnitContactInformation.unitContactInformation());
+    }
+
+    @Test
+    void shallReturnOptionalEmptyIfUnitContactInformationIsMissing() {
+      final var certificateWithoutUnitContactInformation = Certificate.builder()
+          .elementData(
+              List.of(
+                  ElementData.builder()
+                      .id(new ElementId("someOtherElement"))
+                      .build()
+              )
+          )
+          .build();
+
+      assertEquals(Optional.empty(),
+          certificateWithoutUnitContactInformation.unitContactInformation());
     }
   }
 }

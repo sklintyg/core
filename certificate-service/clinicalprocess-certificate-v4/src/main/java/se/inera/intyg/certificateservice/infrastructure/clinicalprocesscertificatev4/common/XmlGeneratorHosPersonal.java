@@ -2,8 +2,10 @@ package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertific
 
 import static se.inera.intyg.certificateservice.domain.common.model.HsaId.OID;
 
+import java.util.Optional;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.common.model.HealthCareProfessionalLicence;
 import se.inera.intyg.certificateservice.domain.common.model.PaTitle;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
@@ -33,7 +35,7 @@ public class XmlGeneratorHosPersonal {
     );
 
     hosPersonal.setEnhet(
-        enhet(certificate.certificateMetaData())
+        enhet(certificate.certificateMetaData(), certificate.unitContactInformation())
     );
 
     return hosPersonal;
@@ -86,17 +88,22 @@ public class XmlGeneratorHosPersonal {
     return hosPersonal;
   }
 
-  public static Enhet enhet(CertificateMetaData certificateMetaData) {
+  public static Enhet enhet(CertificateMetaData certificateMetaData,
+      Optional<ElementValueUnitContactInformation> unitContactInformation) {
     final var enhet = new Enhet();
     final var hsaId = new HsaId();
     hsaId.setRoot(OID);
     hsaId.setExtension(certificateMetaData.issuingUnit().hsaId().id());
     enhet.setEnhetsId(hsaId);
     enhet.setEnhetsnamn(certificateMetaData.issuingUnit().name().name());
-    enhet.setPostadress(certificateMetaData.issuingUnit().address().address());
-    enhet.setPostnummer(certificateMetaData.issuingUnit().address().zipCode());
-    enhet.setPostort(certificateMetaData.issuingUnit().address().city());
-    enhet.setTelefonnummer(certificateMetaData.issuingUnit().contactInfo().phoneNumber());
+    enhet.setPostadress(
+        unitContactInformation.map(ElementValueUnitContactInformation::address).orElse(""));
+    enhet.setPostnummer(
+        unitContactInformation.map(ElementValueUnitContactInformation::zipCode).orElse(""));
+    enhet.setPostort(
+        unitContactInformation.map(ElementValueUnitContactInformation::city).orElse(""));
+    enhet.setTelefonnummer(
+        unitContactInformation.map(ElementValueUnitContactInformation::phoneNumber).orElse(""));
     enhet.setEpost(certificateMetaData.issuingUnit().contactInfo().email());
 
     final var arbetsplatsKod = new ArbetsplatsKod();
