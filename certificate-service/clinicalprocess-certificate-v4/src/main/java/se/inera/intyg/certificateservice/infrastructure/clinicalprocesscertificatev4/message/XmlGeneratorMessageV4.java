@@ -187,7 +187,7 @@ public class XmlGeneratorMessageV4 implements XmlGeneratorMessage {
   private static HosPersonal skickatAv(Staff authoredStaff, Certificate certificate) {
     final var hosPersonal = hosPersonalWithoutEnhet(authoredStaff);
     hosPersonal.setEnhet(
-        enhet(certificate.certificateMetaData())
+        enhet(certificate.certificateMetaData(), certificate.unitContactInformation())
     );
     return hosPersonal;
   }
@@ -208,4 +208,3 @@ public class XmlGeneratorMessageV4 implements XmlGeneratorMessage {
     }
   }
 }
-

@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.domain.certificate.model;
 
+import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
@@ -510,5 +512,12 @@ public class Certificate {
     return certificateMetaData.issuingUnit().hsaId().equals(
         actionEvaluation.subUnit().hsaId()
     );
+  }
+
+  public Optional<ElementValueUnitContactInformation> unitContactInformation() {
+    return elementData.stream()
+        .filter(data -> data.id().equals(UNIT_CONTACT_INFORMATION))
+        .map(data -> (ElementValueUnitContactInformation) data.value())
+        .findFirst();
   }
 }
