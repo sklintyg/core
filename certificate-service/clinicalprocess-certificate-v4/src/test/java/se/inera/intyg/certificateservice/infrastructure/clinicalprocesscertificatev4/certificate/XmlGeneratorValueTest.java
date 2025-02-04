@@ -188,24 +188,6 @@ class XmlGeneratorValueTest {
               response.getDelsvar().get(0).getContent().get(0))
       );
     }
-
-    @Test
-    void shouldMapEmptyIfNoValue() {
-      final var data = ElementData.builder()
-          .id(new ElementId(QUESTION_ID_ONE))
-          .value(
-              ElementValueText.builder()
-                  .textId(new FieldId(ANSWER_ID_ONE))
-                  .build()
-          )
-          .build();
-
-      doReturn(List.of(data)).when(certificate).elementData();
-
-      final var response = xmlGeneratorValue.generate(certificate);
-
-      assertEquals(Collections.emptyList(), response);
-    }
   }
 
   @Nested
@@ -219,6 +201,32 @@ class XmlGeneratorValueTest {
       xmlGeneratorValue = new XmlGeneratorValue(
           List.of(xmlGeneratorElementDataOne, xmlGeneratorElementDataTwo)
       );
+    }
+
+    @Test
+    void shouldMapEmptyIfNoValue() {
+      final var data = ElementData.builder()
+          .id(new ElementId(QUESTION_ID_ONE))
+          .value(
+              ElementValueText.builder()
+                  .textId(new FieldId(ANSWER_ID_ONE))
+                  .build()
+          )
+          .build();
+
+      final var elementMapping = new ElementMapping(new ElementId(QUESTION_ID_TWO), null);
+      final var elementSpecification = mock(ElementSpecification.class);
+
+      doReturn(certificateModel).when(certificate).certificateModel();
+      doReturn(true).when(elementSpecification).includeInXml();
+      doReturn(elementSpecification).when(certificateModel)
+          .elementSpecification(new ElementId(QUESTION_ID_ONE));
+      doReturn(elementMapping).when(elementSpecification).mapping();
+      doReturn(List.of(data)).when(certificate).elementData();
+
+      final var response = xmlGeneratorValue.generate(certificate);
+
+      assertEquals(Collections.emptyList(), response);
     }
 
     @Test
