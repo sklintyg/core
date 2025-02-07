@@ -10,7 +10,8 @@ plugins {
 
 ext {
     tailwindCssVersion = '3.4.16'
-    ineraMavenRepository = 'https://nexus.drift.inera.se/repository/it-public/'
+    //ineraMavenRepository = 'https://nexus.drift.inera.se/repository/it-public/'
+    ineraMavenRepository = 'http://172.21.0.1:37373/repository/it-public/'
     nvdMirror = 'https://vulnz-nvd-mirror-devtest.intyg.nordicmedtest.se'
 
     bomVersion = System.properties['bomVersion'] ?: '0.0.1-SNAPSHOT'
