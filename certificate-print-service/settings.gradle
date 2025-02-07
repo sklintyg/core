@@ -9,7 +9,7 @@ dependencyResolutionManagement {
     }
     versionCatalogs {
         libs {
-            from("se.inera.intyg.bom:catalog:${System.properties['bomVersion'] ?: '0.1.0.1'}")
+            from("se.inera.intyg.bom:catalog:${System.properties['bomVersion'] ?: '0.0.1-SNAPSHOT'}")
         }
     }
 }
