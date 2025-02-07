@@ -13,7 +13,7 @@ ext {
     ineraMavenRepository = 'https://nexus.drift.inera.se/repository/it-public/'
     nvdMirror = 'https://vulnz-nvd-mirror-devtest.intyg.nordicmedtest.se'
 
-    intygBomVersion = System.properties['intygBomVersion'] ?: '0.0.1-SNAPSHOT'
+    bomVersion = System.properties['bomVersion'] ?: '0.0.1-SNAPSHOT'
 }
 
 group = 'se.inera.intyg.certificateprintservice'
@@ -48,8 +48,8 @@ subprojects {
     apply plugin: 'jacoco'
 
     dependencies {
-        implementation platform("se.inera.intyg.bom:platform:${intygBomVersion}")
-        annotationProcessor platform("se.inera.intyg.bom:platform:${intygBomVersion}")
+        implementation platform("se.inera.intyg.bom:platform:${bomVersion}")
+        annotationProcessor platform("se.inera.intyg.bom:platform:${bomVersion}")
     }
 
     sourceCompatibility = '21'
