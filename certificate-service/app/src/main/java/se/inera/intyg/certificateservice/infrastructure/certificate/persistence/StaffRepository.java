@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffEntityRepository;
@@ -28,7 +29,7 @@ public class StaffRepository {
         );
   }
 
-  public Map<String, StaffEntity> staffs(Certificate certificate) {
+  public Map<HsaId, StaffEntity> staffs(Certificate certificate) {
     final var staffs = new ArrayList<Staff>();
     staffs.add(certificate.certificateMetaData().issuer());
     if (certificate.sent() != null && certificate.sent().sentBy() != null) {
@@ -51,12 +52,12 @@ public class StaffRepository {
     );
 
     final var staffEntityMap = staffEntities.stream()
-        .collect(Collectors.toMap(StaffEntity::getHsaId, Function.identity()));
+        .collect(Collectors.toMap(staff -> HsaId.create(staff.getHsaId()), Function.identity()));
 
     staffs.forEach(staff -> {
-          if (!staffEntityMap.containsKey(staff.hsaId().id())) {
+          if (!staffEntityMap.containsKey(staff.hsaId())) {
             final var staffEntity = staffEntityRepository.save(toEntity(staff));
-            staffEntityMap.put(staffEntity.getHsaId(), staffEntity);
+            staffEntityMap.put(HsaId.create(staffEntity.getHsaId()), staffEntity);
           }
         }
     );

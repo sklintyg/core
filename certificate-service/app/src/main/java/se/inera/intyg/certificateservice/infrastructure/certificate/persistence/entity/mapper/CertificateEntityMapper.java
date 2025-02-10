@@ -22,6 +22,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
+import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
 import se.inera.intyg.certificateservice.domain.message.model.Forwarded;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
@@ -121,7 +122,7 @@ public class CertificateEntityMapper {
         unitRepository.issuingUnit(certificateMetaData.issuingUnit())
     );
     certificateEntity.setIssuedBy(
-        staffMap.get(certificateMetaData.issuer().hsaId().id())
+        staffMap.get(certificateMetaData.issuer().hsaId())
     );
 
     if (certificateEntity.getCreatedBy() == null) {
@@ -149,7 +150,7 @@ public class CertificateEntityMapper {
     if (certificate.sent() != null) {
       certificateEntity.setSentBy(
           certificate.sent().sentBy() != null
-              ? staffMap.get(certificate.sent().sentBy().hsaId().id())
+              ? staffMap.get(certificate.sent().sentBy().hsaId())
               : null
       );
 
@@ -160,7 +161,7 @@ public class CertificateEntityMapper {
 
     if (certificate.readyForSign() != null) {
       certificateEntity.setReadyForSignBy(
-          staffMap.get(certificate.readyForSign().readyForSignBy().hsaId().id())
+          staffMap.get(certificate.readyForSign().readyForSignBy().hsaId())
       );
 
       certificateEntity.setReadyForSign(
@@ -190,7 +191,7 @@ public class CertificateEntityMapper {
   }
 
   private static void handleRevoked(Certificate certificate, CertificateEntity certificateEntity,
-      Map<String, StaffEntity> staffMap) {
+      Map<HsaId, StaffEntity> staffMap) {
     final var reason = RevokedReason.valueOf(
         certificate.revoked().revokedInformation().reason()
     );
@@ -207,7 +208,7 @@ public class CertificateEntityMapper {
     );
 
     certificateEntity.setRevokedBy(
-        staffMap.get(certificate.revoked().revokedBy().hsaId().id())
+        staffMap.get(certificate.revoked().revokedBy().hsaId())
     );
 
     certificateEntity.setRevoked(
