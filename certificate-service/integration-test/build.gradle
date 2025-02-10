@@ -12,10 +12,10 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-test'
-    testImplementation "org.testcontainers:mysql:${testContainersMysqlVersion}"
-    testImplementation "org.testcontainers:activemq:${testContainersActivemqVersion}"
+    testImplementation "org.testcontainers:mysql"
+    testImplementation "org.testcontainers:activemq"
     testImplementation 'org.testcontainers:mockserver'
-    testImplementation "org.mock-server:mockserver-client-java:${mockServerClientVersion}"
+    testImplementation "org.mock-server:mockserver-client-java"
     testImplementation 'org.springframework.boot:spring-boot-starter-activemq'
     testImplementation testFixtures(project(":app"))
     testImplementation testFixtures(project(":domain"))

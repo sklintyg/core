@@ -1,24 +1,17 @@
 plugins {
-    id 'org.springframework.boot' version '3.3.4'
-    id 'io.spring.dependency-management' version '1.1.4'
-    id 'org.sonarqube' version '5.1.0.4882'
-    id "org.owasp.dependencycheck" version "10.0.4"
+    alias(libs.plugins.org.springframework.boot)
+    alias(libs.plugins.org.sonarqube)
+    alias(libs.plugins.org.owasp.dependencycheck)
+    alias(libs.plugins.com.github.ben.manes.versions)
     id 'test-report-aggregation'
     id 'application'
 }
 
 ext {
-    cxfVersion = "4.0.5"
-    cxfPluginVersion = "4.0.0"
-    jaxb2NamespacePrefixVersion = "2.0"
-    jakartaWsVersion = "4.0.2"
-    guavaVersion = '33.0.0-jre'
-    logbackEcsEncoderVersion = '1.6.0'
-    springbootMavenBomVersion = '3.3.4'
-    testContainersMysqlVersion = '1.20.2'
-    testContainersActivemqVersion = '1.20.2'
-    mockServerClientVersion = '5.15.0'
-    schematronVersion = '8.0.3'
+    cxfVersion = "4.1.0"
+    cxfPluginVersion = "4.1.0"
+
+    bomVersion = System.properties['bomVersion'] ?: '0.0.1-SNAPSHOT'
     ineraMavenRepository = 'https://nexus.drift.inera.se/repository/it-public/'
     nvdMirror = 'https://vulnz-nvd-mirror-devtest.intyg.nordicmedtest.se'
 }
@@ -63,12 +56,10 @@ subprojects {
         }
     }
 
-    apply plugin: 'io.spring.dependency-management'
-
-    dependencyManagement {
-        imports {
-            mavenBom "org.springframework.boot:spring-boot-dependencies:${springbootMavenBomVersion}"
-        }
+    dependencies {
+        implementation platform("se.inera.intyg.bom:platform:${bomVersion}")
+        annotationProcessor platform("se.inera.intyg.bom:platform:${bomVersion}")
+        testAnnotationProcessor platform("se.inera.intyg.bom:platform:${bomVersion}")
     }
 
     jacocoTestReport {

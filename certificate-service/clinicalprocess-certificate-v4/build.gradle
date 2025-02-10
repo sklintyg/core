@@ -1,12 +1,12 @@
 plugins {
-    id "com.yupzip.wsdl2java" version "3.0.0" apply true
+    alias libs.plugins.com.yupzip.wsdl2java
 }
 
 dependencies {
     implementation project(':domain')
-    implementation "jakarta.xml.ws:jakarta.xml.ws-api:${jakartaWsVersion}"
-    implementation "com.helger.schematron:ph-schematron-xslt:${schematronVersion}"
-    implementation "org.apache.cxf:cxf-core:${cxfVersion}"
+    implementation "jakarta.xml.ws:jakarta.xml.ws-api"
+    implementation "com.helger.schematron:ph-schematron-xslt"
+    implementation "org.apache.cxf:cxf-core"
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
     runtimeOnly "org.glassfish.jaxb:jaxb-runtime"
@@ -15,8 +15,9 @@ dependencies {
     compileOnly "org.slf4j:slf4j-api"
     annotationProcessor "org.projectlombok:lombok"
 
-    wsdl2java "jakarta.xml.ws:jakarta.xml.ws-api:${jakartaWsVersion}"
-    wsdl2java "org.jvnet.jaxb2_commons:jaxb2-namespace-prefix:${jaxb2NamespacePrefixVersion}"
+    wsdl2java platform("se.inera.intyg.bom:platform:${bomVersion}")
+    wsdl2java "jakarta.xml.ws:jakarta.xml.ws-api"
+    wsdl2java "org.jvnet.jaxb2_commons:jaxb2-namespace-prefix"
 
     testImplementation "org.junit.jupiter:junit-jupiter"
     testImplementation "org.junit.jupiter:junit-jupiter-params"

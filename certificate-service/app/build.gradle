@@ -1,5 +1,5 @@
 plugins {
-    id 'org.springframework.boot' version '3.3.4'
+    alias(libs.plugins.org.springframework.boot)
     id 'java-test-fixtures'
 }
 
@@ -10,7 +10,7 @@ dependencies {
     implementation project(':clinicalprocess-certificate-v4')
     implementation project(':logging')
 
-    implementation "co.elastic.logging:logback-ecs-encoder:${logbackEcsEncoderVersion}"
+    implementation "co.elastic.logging:logback-ecs-encoder"
     implementation 'com.fasterxml.jackson.core:jackson-annotations'
     implementation 'org.liquibase:liquibase-core'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
