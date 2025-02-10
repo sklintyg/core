@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -24,23 +25,23 @@ class CacheUtilityTest {
   @Mock
   private PuResponse puResponse;
 
+  private static final String OBJECT_KEY = "objectKey";
+
+  @BeforeEach
+  void setUp() {
+    when(cacheManager.getCache(RedisConfig.PERSON_CACHE)).thenThrow(new RuntimeException());
+  }
+
   @Test
   void shouldReturnOptionalEmptyIfExceptionOnCacheGetRequest() {
-    final var objectKey = "objectKey";
     final var objectClass = PuResponse.class;
-    when(cacheManager.getCache(RedisConfig.PERSON_CACHE)).thenThrow(new RuntimeException());
-
-    final var result = CacheUtility.get(cacheManager, objectMapper, objectKey, objectClass);
+    final var result = CacheUtility.get(cacheManager, objectMapper, OBJECT_KEY, objectClass);
     assertEquals(Optional.empty(), result);
   }
 
   @Test
   void shouldNotThrowIfExceptionOnCacheSaveRequest() {
-    final var objectKey = "objectKey";
-    final var objectClass = PuResponse.class;
-    when(cacheManager.getCache(RedisConfig.PERSON_CACHE)).thenThrow(new RuntimeException());
-
-    assertDoesNotThrow(() -> CacheUtility.save(cacheManager, objectMapper, puResponse, objectKey,
+    assertDoesNotThrow(() -> CacheUtility.save(cacheManager, objectMapper, puResponse, OBJECT_KEY,
         RedisConfig.PERSON_CACHE));
   }
 
