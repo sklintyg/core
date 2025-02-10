@@ -1,6 +1,5 @@
 package se.inera.intyg.intygproxyservice.common;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Objects;
 import java.util.Optional;
@@ -26,9 +25,9 @@ public class CacheUtility {
       }
 
       return Optional.of(objectMapper.readValue(cacheValue, objectClass));
-    } catch (JsonProcessingException e) {
-      log.warn("Failed to deserialize PuResponse");
-      throw new IllegalStateException(e);
+    } catch (Exception e) {
+      log.error("Error retrieving person from personCache", e);
+      return Optional.empty();
     }
   }
 
@@ -37,8 +36,8 @@ public class CacheUtility {
     try {
       Objects.requireNonNull(cacheManager.getCache(cacheKey))
           .put(objectKey, objectMapper.writeValueAsString(object));
-    } catch (JsonProcessingException e) {
-      throw new IllegalStateException("Failed to serialize person", e);
+    } catch (Exception e) {
+      log.error("Error saving person to personCache", e);
     }
   }
 
