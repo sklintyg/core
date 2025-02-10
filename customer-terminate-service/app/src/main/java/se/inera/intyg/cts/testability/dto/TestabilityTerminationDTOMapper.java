@@ -8,7 +8,7 @@ public class TestabilityTerminationDTOMapper {
 
   public static TerminationEntity toEntity(TestabilityTerminationDTO testabilityTerminationDTO) {
     return new TerminationEntity(
-        0L,
+        null,
         testabilityTerminationDTO.terminationId(),
         testabilityTerminationDTO.created(),
         testabilityTerminationDTO.created(),

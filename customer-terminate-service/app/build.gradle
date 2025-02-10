@@ -1,5 +1,5 @@
 plugins {
-    id 'org.springframework.boot' version '3.3.4'
+    alias(libs.plugins.org.springframework.boot)
 }
 
 def applicationDir = "${rootProject.projectDir}/devops/dev"
@@ -8,12 +8,12 @@ dependencies {
     implementation project(':domain')
     implementation project(':logging')
 
-    implementation "co.elastic.logging:logback-ecs-encoder:${logbackEcsEncoderVersion}"
-    implementation "net.javacrumbs.shedlock:shedlock-spring:${shedlockVersion}"
-    implementation "net.javacrumbs.shedlock:shedlock-provider-redis-spring:${shedlockVersion}"
-    implementation "net.lingala.zip4j:zip4j:${zip4jVersion}"
-    implementation "org.springdoc:springdoc-openapi-ui:${springDocVersion}"
-    implementation "org.springdoc:springdoc-openapi-data-rest:${springDocVersion}"
+    implementation "co.elastic.logging:logback-ecs-encoder"
+    implementation "net.javacrumbs.shedlock:shedlock-spring"
+    implementation "net.javacrumbs.shedlock:shedlock-provider-redis-spring"
+    implementation "net.lingala.zip4j:zip4j"
+    implementation "org.springdoc:springdoc-openapi-ui"
+    implementation "org.springdoc:springdoc-openapi-data-rest"
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -23,6 +23,7 @@ dependencies {
 
     compileOnly 'org.projectlombok:lombok'
 
+    developmentOnly platform("se.inera.intyg.bom:platform:${bomVersion}")
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
     runtimeOnly 'com.mysql:mysql-connector-j'
@@ -33,8 +34,8 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation "com.squareup.okhttp3:okhttp:${okhttpVersion}"
-    testImplementation "com.squareup.okhttp3:mockwebserver:${okhttpVersion}"
+    testImplementation "com.squareup.okhttp3:okhttp"
+    testImplementation "com.squareup.okhttp3:mockwebserver"
     testImplementation 'com.h2database:h2'
 }
 

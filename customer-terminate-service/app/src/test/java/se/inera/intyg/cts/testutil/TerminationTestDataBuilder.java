@@ -66,7 +66,7 @@ public class TerminationTestDataBuilder {
 
   public static TerminationEntity defaultTerminationEntity() {
     return new TerminationEntity(
-        DEFAULT_ID,
+        null,
         DEFAULT_TERMINATION_ID,
         DEFAULT_CREATED,
         DEFAULT_MODIFIED,
@@ -85,7 +85,7 @@ public class TerminationTestDataBuilder {
 
   public static TerminationEntity defaultTerminationEntity(UUID terminationId) {
     return new TerminationEntity(
-        RandomGenerator.getDefault().nextLong(),
+        null,
         terminationId,
         DEFAULT_CREATED,
         DEFAULT_MODIFIED,
