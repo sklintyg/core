@@ -55,7 +55,7 @@ class StaffRepositoryTest {
 
   @Test
   void shallReturnMapOfOneStaffWhenOneUniqueStaffExists() {
-    final var expectedStaffs = Map.of(AJLA_DOKTOR_ENTITY.getHsaId(), AJLA_DOKTOR_ENTITY);
+    final var expectedStaffs = Map.of(AJLA_DOKTOR.hsaId(), AJLA_DOKTOR_ENTITY);
     final var certificate = fk7210CertificateBuilder()
         .sent(
             Sent.builder()
@@ -75,7 +75,7 @@ class StaffRepositoryTest {
 
   @Test
   void shallReturnMapOfOneStaffWhenOneUniqueStaffDontExists() {
-    final var expectedStaffs = Map.of(AJLA_DOKTOR_ENTITY.getHsaId(), AJLA_DOKTOR_ENTITY);
+    final var expectedStaffs = Map.of(AJLA_DOKTOR.hsaId(), AJLA_DOKTOR_ENTITY);
     final var certificate = fk7210CertificateBuilder()
         .sent(
             Sent.builder()
@@ -100,8 +100,8 @@ class StaffRepositoryTest {
   @Test
   void shallReturnMapOfTwoStaffWhenTwoUniqueStaffBothExists() {
     final var expectedStaffs = Map.of(
-        AJLA_DOKTOR_ENTITY.getHsaId(), AJLA_DOKTOR_ENTITY,
-        ALF_DOKTOR_ENTITY.getHsaId(), ALF_DOKTOR_ENTITY
+        AJLA_DOKTOR.hsaId(), AJLA_DOKTOR_ENTITY,
+        ALF_DOKTOR.hsaId(), ALF_DOKTOR_ENTITY
     );
 
     final var certificate = fk7210CertificateBuilder()
@@ -124,8 +124,8 @@ class StaffRepositoryTest {
   @Test
   void shallReturnMapOfTwoStaffWhenTwoUniqueStaffOneExists() {
     final var expectedStaffs = Map.of(
-        AJLA_DOKTOR_ENTITY.getHsaId(), AJLA_DOKTOR_ENTITY,
-        ALF_DOKTOR_ENTITY.getHsaId(), ALF_DOKTOR_ENTITY
+        AJLA_DOKTOR.hsaId(), AJLA_DOKTOR_ENTITY,
+        ALF_DOKTOR.hsaId(), ALF_DOKTOR_ENTITY
     );
 
     final var certificate = fk7210CertificateBuilder()
@@ -152,8 +152,8 @@ class StaffRepositoryTest {
   @Test
   void shallReturnMapOfTwoStaffWhenTwoUniqueStaffNoneExists() {
     final var expectedStaffs = Map.of(
-        AJLA_DOKTOR_ENTITY.getHsaId(), AJLA_DOKTOR_ENTITY,
-        ALF_DOKTOR_ENTITY.getHsaId(), ALF_DOKTOR_ENTITY
+        AJLA_DOKTOR.hsaId(), AJLA_DOKTOR_ENTITY,
+        ALF_DOKTOR.hsaId(), ALF_DOKTOR_ENTITY
     );
 
     final var certificate = fk7210CertificateBuilder()
@@ -184,8 +184,8 @@ class StaffRepositoryTest {
   @Test
   void shallIncludeRevokedStaffInMap() {
     final var expectedStaffs = Map.of(
-        AJLA_DOKTOR_ENTITY.getHsaId(), AJLA_DOKTOR_ENTITY,
-        ALF_DOKTOR_ENTITY.getHsaId(), ALF_DOKTOR_ENTITY
+        AJLA_DOKTOR.hsaId(), AJLA_DOKTOR_ENTITY,
+        ALF_DOKTOR.hsaId(), ALF_DOKTOR_ENTITY
     );
 
     final var certificate = fk7210CertificateBuilder()
@@ -216,8 +216,8 @@ class StaffRepositoryTest {
   @Test
   void shallIncludeReadyForSignStaffInMap() {
     final var expectedStaffs = Map.of(
-        AJLA_DOKTOR_ENTITY.getHsaId(), AJLA_DOKTOR_ENTITY,
-        ALF_DOKTOR_ENTITY.getHsaId(), ALF_DOKTOR_ENTITY
+        AJLA_DOKTOR.hsaId(), AJLA_DOKTOR_ENTITY,
+        ALF_DOKTOR.hsaId(), ALF_DOKTOR_ENTITY
     );
 
     final var certificate = fk7210CertificateBuilder()
