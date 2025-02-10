@@ -3,13 +3,11 @@ plugins {
     alias(libs.plugins.org.sonarqube)
     alias(libs.plugins.org.owasp.dependencycheck)
     alias(libs.plugins.com.github.ben.manes.versions)
-    alias(libs.plugins.io.spring.dependency.management)
     id 'test-report-aggregation'
     id 'application'
 }
 
 ext {
-    tailwindCssVersion = '3.4.16'
     ineraMavenRepository = 'https://nexus.drift.inera.se/repository/it-public/'
     //ineraMavenRepository = 'http://172.21.0.1:37373/repository/it-public/'
     nvdMirror = 'https://vulnz-nvd-mirror-devtest.intyg.nordicmedtest.se'
@@ -33,14 +31,15 @@ sonar {
 allprojects {
     repositories {
         mavenLocal()
-        //maven { url "${ineraMavenRepository}" }
-        maven {
-            url "http://172.21.0.1:37373/repository/it-public/"
-            allowInsecureProtocol = true
-        }
+        maven { url "${ineraMavenRepository}" }
+//        maven {
+//            url "http://172.21.0.1:37373/repository/it-public/"
+//            allowInsecureProtocol = true
+//        }
         mavenCentral()
     }
 }
+
 
 dependencyCheck {
     formats = List.of("HTML", "JSON")

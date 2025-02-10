@@ -30,7 +30,7 @@ public class CertificatePrintGenerator implements PrintCertificateGenerator, Ini
 
   @Value("classpath:templates/certificateTemplate.html")
   private Resource template;
-  @Value("classpath:templates/tailwindCSS.js")
+  @Value("classpath:templates/tailwind.js")
   private Resource tailwindScript;
 
   private final BrowserPool browserPool;
