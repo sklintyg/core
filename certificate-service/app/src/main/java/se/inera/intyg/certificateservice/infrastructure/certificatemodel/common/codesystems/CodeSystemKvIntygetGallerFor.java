@@ -39,7 +39,7 @@ public class CodeSystemKvIntygetGallerFor {
   public static final Code TAXI = new Code(
       "tax_leg",
       CODE_SYSTEM,
-      "Taxiförarlegitimation"
+      "Ansökan om taxiförarlegitimation"
   );
 
   public static final Code ANNAT = new Code(
