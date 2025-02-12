@@ -1,25 +1,29 @@
 package se.inera.intyg.certificateservice.logging;
 
-import com.google.common.base.Strings;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 import com.google.common.io.BaseEncoding;
 import java.nio.charset.StandardCharsets;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
+@Component
 public final class HashUtility {
 
-  public static final String EMPTY = "EMPTY";
+  @Value("${hash.salt}")
+  private String salt;
 
+  public static final String EMPTY = "EMPTY";
   private static final HashFunction hf = Hashing.sha256();
 
-  private HashUtility() {
-  }
-
-  public static String hash(final String payload) {
-    if (Strings.isNullOrEmpty(payload)) {
+  public String hash(final String payload) {
+    if (!StringUtils.hasText(payload)) {
       return EMPTY;
     }
-    final byte[] digest = hf.hashString(payload, StandardCharsets.UTF_8).asBytes();
+
+    final var saltedPayload = salt + payload;
+    final var digest = hf.hashString(saltedPayload, StandardCharsets.UTF_8).asBytes();
     return BaseEncoding.base16().lowerCase().encode(digest);
   }
 }

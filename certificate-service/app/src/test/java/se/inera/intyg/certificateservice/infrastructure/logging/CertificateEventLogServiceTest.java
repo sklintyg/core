@@ -46,6 +46,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.LoggerFactory;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
@@ -56,6 +57,8 @@ import se.inera.intyg.certificateservice.logging.HashUtility;
 @ExtendWith(MockitoExtension.class)
 class CertificateEventLogServiceTest {
 
+  @Spy
+  private HashUtility hashUtility;
   @Mock
   private Appender<ILoggingEvent> mockAppender;
   @Captor
@@ -175,7 +178,7 @@ class CertificateEventLogServiceTest {
   void shallIncludeCertificatePatientIdAsHashInMDC() {
     certificateEventLogService.event(certificateEvent);
     assertEquals(
-        HashUtility.hash(ATHENA_REACT_ANDERSSON_ID),
+        hashUtility.hash(ATHENA_REACT_ANDERSSON_ID),
         getValueFromMDC(EVENT_CERTIFICATE_PATIENT_ID)
     );
   }
@@ -218,7 +221,7 @@ class CertificateEventLogServiceTest {
         .build();
     certificateEventLogService.event(event);
     assertEquals(
-        HashUtility.hash(ATHENA_REACT_ANDERSSON_ID),
+        hashUtility.hash(ATHENA_REACT_ANDERSSON_ID),
         getValueFromMDC(USER_ID));
   }
 
