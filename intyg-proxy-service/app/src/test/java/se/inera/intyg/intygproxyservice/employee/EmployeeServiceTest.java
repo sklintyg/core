@@ -41,6 +41,7 @@ import se.inera.intyg.intygproxyservice.integration.api.employee.Employee;
 import se.inera.intyg.intygproxyservice.integration.api.employee.GetEmployeeIntegrationRequest;
 import se.inera.intyg.intygproxyservice.integration.api.employee.GetEmployeeIntegrationResponse;
 import se.inera.intyg.intygproxyservice.integration.api.employee.GetEmployeeIntegrationService;
+import se.inera.intyg.intygproxyservice.logging.LogHashUtility;
 
 @ExtendWith(MockitoExtension.class)
 class EmployeeServiceTest {
@@ -63,6 +64,8 @@ class EmployeeServiceTest {
 
   @Mock
   private GetEmployeeIntegrationService getEmployeeIntegrationService;
+  @Mock
+  private LogHashUtility logHashUtility;
 
   @InjectMocks
   private EmployeeService employeeService;

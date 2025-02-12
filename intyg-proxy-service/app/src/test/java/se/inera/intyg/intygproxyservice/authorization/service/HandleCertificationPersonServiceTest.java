@@ -19,6 +19,7 @@ import se.inera.intyg.intygproxyservice.integration.api.authorization.HandleCert
 import se.inera.intyg.intygproxyservice.integration.api.authorization.HandleCertificationPersonIntegrationResponse;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.HandleCertificationPersonIntegrationService;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.model.Result;
+import se.inera.intyg.intygproxyservice.logging.LogHashUtility;
 
 @ExtendWith(MockitoExtension.class)
 class HandleCertificationPersonServiceTest {
@@ -47,13 +48,16 @@ class HandleCertificationPersonServiceTest {
 
   @Mock
   private HandleCertificationPersonIntegrationService handleCertificationPersonIntegrationService;
-
+  @Mock
+  private LogHashUtility logHashUtility;
+  
   @InjectMocks
   private HandleCertificationPersonService handleCertificationPersonService;
 
   @Test
   void shouldThrowIllegalArgumentExceptionIfRequestIsNull() {
-    assertThrows(IllegalArgumentException.class, () -> handleCertificationPersonService.handle(null));
+    assertThrows(IllegalArgumentException.class,
+        () -> handleCertificationPersonService.handle(null));
   }
 
   @Test

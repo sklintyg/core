@@ -26,9 +26,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.intygproxyservice.authorization.dto.HandleCertificationPersonRequest;
 import se.inera.intyg.intygproxyservice.authorization.dto.HandleCertificationPersonResponse;
-import se.inera.intyg.intygproxyservice.common.HashUtility;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.HandleCertificationPersonIntegrationRequest;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.HandleCertificationPersonIntegrationService;
+import se.inera.intyg.intygproxyservice.logging.LogHashUtility;
 
 @Service
 @AllArgsConstructor
@@ -36,6 +36,7 @@ import se.inera.intyg.intygproxyservice.integration.api.authorization.HandleCert
 public class HandleCertificationPersonService {
 
   private final HandleCertificationPersonIntegrationService handleCertificationPersonIntegrationService;
+  private final LogHashUtility logHashUtility;
 
   public HandleCertificationPersonResponse handle(HandleCertificationPersonRequest request) {
     validateRequest(request);
@@ -45,7 +46,7 @@ public class HandleCertificationPersonService {
             "Performing operation '%s' with reason '%s' on certification person with personId: '%s'",
             request.getOperation(),
             request.getReason(),
-            HashUtility.hash(request.getPersonId())
+            logHashUtility.hash(request.getPersonId())
         )
     );
 
@@ -63,7 +64,7 @@ public class HandleCertificationPersonService {
             "Performed operation '%s' with reason '%s' on certification person with personId: '%s'. Result code: '%s'. Result text: '%s'.",
             request.getOperation(),
             request.getReason(),
-            HashUtility.hash(request.getPersonId()),
+            logHashUtility.hash(request.getPersonId()),
             response.getResult().getResultCode(),
             response.getResult().getResultText()
         )
@@ -75,12 +76,12 @@ public class HandleCertificationPersonService {
         .build();
   }
 
-  private static void validateRequest(HandleCertificationPersonRequest request) {
+  private void validateRequest(HandleCertificationPersonRequest request) {
     if (request == null) {
       throw new IllegalArgumentException("Request to handle certification person is null");
     }
 
-    validateString(request.getPersonId(), HashUtility.hash(request.getPersonId()), "PersonId");
+    validateString(request.getPersonId(), logHashUtility.hash(request.getPersonId()), "PersonId");
     validateString(request.getOperation(), "Operation");
   }
 
