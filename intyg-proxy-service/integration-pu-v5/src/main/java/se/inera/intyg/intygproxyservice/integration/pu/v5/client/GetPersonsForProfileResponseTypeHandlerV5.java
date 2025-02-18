@@ -66,7 +66,7 @@ public class GetPersonsForProfileResponseTypeHandlerV5 {
         .filter(
             requestedPersonRecordType -> personId.equals(
                 PersonalIdentityTypeConverter.extension(
-                    requestedPersonRecordType.getPersonRecord().getPersonalIdentity()
+                    requestedPersonRecordType.getRequestedPersonalIdentity()
                 )
             )
         )
