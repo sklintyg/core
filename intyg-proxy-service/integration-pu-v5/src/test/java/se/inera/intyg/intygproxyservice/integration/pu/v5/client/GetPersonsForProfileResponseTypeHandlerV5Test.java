@@ -174,11 +174,13 @@ class GetPersonsForProfileResponseTypeHandlerV5Test {
 
       private static final String PATIENT_ID_1 = "191212121212";
       private static final String PATIENT_ID_2 = "201212121212";
+      private static final String PATIENT_ID_3 = "201212121213";
 
       private GetPersonsForProfileResponseType getPersonsForProfileReponseType;
       private RequestedPersonRecordType recordPatient1;
       private RequestedPersonRecordType recordPatient11;
       private RequestedPersonRecordType recordPatient2;
+      private RequestedPersonRecordType recordWithNull;
 
       @BeforeEach
       void setUp() {
@@ -190,10 +192,13 @@ class GetPersonsForProfileResponseTypeHandlerV5Test {
         id11.setExtension(PATIENT_ID_1);
         final var id2 = new IIType();
         id2.setExtension(PATIENT_ID_2);
+        final var id3 = new IIType();
+        id3.setExtension(PATIENT_ID_3);
 
         recordPatient11 = new RequestedPersonRecordType();
         recordPatient1 = new RequestedPersonRecordType();
         recordPatient2 = new RequestedPersonRecordType();
+        recordWithNull = new RequestedPersonRecordType();
 
         final var personRecord1 = new PersonRecordType();
         final var personRecord11 = new PersonRecordType();
@@ -202,10 +207,16 @@ class GetPersonsForProfileResponseTypeHandlerV5Test {
         recordPatient1.setPersonRecord(personRecord1);
         recordPatient11.setPersonRecord(personRecord11);
         recordPatient2.setPersonRecord(personRecord2);
+        recordWithNull.setPersonRecord(null);
 
         personRecord1.setPersonalIdentity(id1);
         personRecord11.setPersonalIdentity(id11);
         personRecord2.setPersonalIdentity(id2);
+
+        recordPatient11.setRequestedPersonalIdentity(id11);
+        recordPatient1.setRequestedPersonalIdentity(id1);
+        recordPatient2.setRequestedPersonalIdentity(id2);
+        recordWithNull.setRequestedPersonalIdentity(id3);
       }
 
       @Test
@@ -261,6 +272,26 @@ class GetPersonsForProfileResponseTypeHandlerV5Test {
             () -> assertEquals(Status.FOUND, actualPuResponse.getPersons().getFirst().status()),
             () -> assertEquals(
                 PATIENT_ID_2,
+                actualPuResponse.getPersons().get(1).person().getPersonnummer()
+            )
+        );
+      }
+
+      @Test
+      void shallReturnStatusNotFoundIfNullPersonRecordIsReturned() {
+        getPersonsForProfileReponseType.getRequestedPersonRecord()
+            .addAll(List.of(recordWithNull, recordPatient1));
+
+        final var actualPuResponse = getPersonsForProfileResponseTypeHandlerV5.handle(
+            List.of(PATIENT_ID_1, PATIENT_ID_3),
+            getPersonsForProfileReponseType
+        );
+
+        assertAll(
+            () -> assertEquals(Status.NOT_FOUND, actualPuResponse.getPersons().get(1).status()),
+            () -> assertEquals(Status.FOUND, actualPuResponse.getPersons().getFirst().status()),
+            () -> assertEquals(
+                PATIENT_ID_3,
                 actualPuResponse.getPersons().get(1).person().getPersonnummer()
             )
         );
