@@ -38,8 +38,8 @@ tasks.named('test') {
 
 wsdl2java {
     wsdlDir = file("src/main/resources/schemas")
-    cxfVersion = project.getProperties().get("cxfVersion")
-    cxfPluginVersion = project.getProperties().get("cxfPluginVersion")
+    cxfVersion = project.getProperties().get("wsdlCxfVersion")
+    cxfPluginVersion = project.getProperties().get("wsdlCxfPluginVersion")
     includeJava8XmlDependencies = false
 
     def personVersion = "3.1"

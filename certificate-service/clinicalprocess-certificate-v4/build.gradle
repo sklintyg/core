@@ -34,8 +34,8 @@ tasks.named('test') {
 
 wsdl2java {
     wsdlDir = file("src/main/resources/schemas")
-    cxfVersion = project.getProperties().get("cxfVersion")
-    cxfPluginVersion = project.getProperties().get("cxfPluginVersion")
+    cxfVersion = rootProject.ext.wsdlCxfVersion
+    cxfPluginVersion = rootProject.ext.wsdlCxfPluginVersion
     includeJava8XmlDependencies = false
 
     def certificateVersion = "4.0"

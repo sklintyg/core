@@ -103,3 +103,15 @@ reporting {
         testReportAggregation project(':pdf-generator-api')
     }
 }
+
+configurations {
+    bomProperties {
+        extendsFrom compileClasspath
+        dependencies {
+            implementation "se.inera.intyg.bom:bom:${bomVersion}"
+        }
+        def properties = new Properties()
+        incoming.files.find { it.name == "bom-${bomVersion}.properties" }.withInputStream { properties.load(it) }
+        properties.each { key, value -> project.ext."${key}" = value }
+    }
+}

@@ -1,20 +1,18 @@
-configurations {
-    tailWind
-}
-
-dependencies {
-    tailWind "se.inera.intyg.bom:tailwind:${bomVersion}"
-}
-
-tasks.register('copyTailwind', Copy) {
-    mustRunAfter jar, compileTestJava, test
-    from configurations.tailWind
-    into "${layout.buildDirectory.get()}/resources/main/templates"
-    rename { "tailwind.js" }
+tasks.register('downloadTailwind') {
+    doLast {
+        String tailwindPath = "${layout.buildDirectory.get()}/resources/main/templates/tailwind.js"
+        String tailwindUrl = "https://cdn.tailwindcss.com/${rootProject.ext.tailwindVersion}"
+        File file = new File(tailwindPath)
+        if (!file.exists()) {
+            URI.create(tailwindUrl).toURL().withInputStream {
+                i -> file.withOutputStream { it << i }
+            }
+        }
+    }
 }
 
 processResources {
-    finalizedBy copyTailwind
+    finalizedBy downloadTailwind
 }
 
 dependencies {

@@ -8,9 +8,6 @@ plugins {
 }
 
 ext {
-    cxfVersion = "4.1.0"
-    cxfPluginVersion = "4.1.0"
-
     bomVersion = System.properties['bomVersion'] ?: '0.0.1-SNAPSHOT'
     ineraMavenRepository = 'https://nexus.drift.inera.se/repository/it-public/'
     nvdMirror = 'https://vulnz-nvd-mirror-devtest.intyg.nordicmedtest.se'
@@ -98,5 +95,23 @@ reporting {
         testReportAggregation project(':app')
         testReportAggregation project(':domain')
         testReportAggregation project(':integration-test')
+    }
+}
+
+configurations {
+    bomProperties {
+        //extendsFrom compileClasspath
+        dependencies {
+            bomProperties "se.inera.intyg.bom:bom:${bomVersion}"
+        }
+        attributes {
+            def properties = new Properties()
+            incoming.files.find { it.name == "bom-${bomVersion}.properties" }.withInputStream { properties.load(it) }
+            properties.each { key, value ->
+                    //project.ext."${key}" = value
+
+                attribute(key, value)
+            }
+        }
     }
 }
