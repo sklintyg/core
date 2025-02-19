@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.logging;
+package se.inera.intyg.intygproxyservice.logging;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -6,9 +6,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
-class HashUtilityTest {
+class LogHashUtilityTest {
 
-  private final HashUtility hashUtility = new HashUtility();
+  private final LogHashUtility hashUtility = new LogHashUtility();
 
   @BeforeEach
   void setUp() {
@@ -25,13 +25,13 @@ class HashUtilityTest {
   @Test
   void shouldReturnEmptyHashConstantWhenPayloadIsNull() {
     final var hashedPayload = hashUtility.hash(null);
-    assertEquals(HashUtility.EMPTY, hashedPayload);
+    assertEquals(LogHashUtility.EMPTY, hashedPayload);
   }
 
   @Test
   void shouldReturnEmptyHashConstantWhenPayloadIsEmpty() {
     final var payload = "";
     final var hashedPayload = hashUtility.hash(payload);
-    assertEquals(HashUtility.EMPTY, hashedPayload);
+    assertEquals(LogHashUtility.EMPTY, hashedPayload);
   }
 }

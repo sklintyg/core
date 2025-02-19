@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.logging;
+package se.inera.intyg.intygproxyservice.logging;
 
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 @Component
-public final class HashUtility {
+public class LogHashUtility {
 
   @Value("${hash.salt}")
   private String salt;
@@ -26,4 +26,5 @@ public final class HashUtility {
     final var digest = hf.hashString(saltedPayload, StandardCharsets.UTF_8).asBytes();
     return BaseEncoding.base16().lowerCase().encode(digest);
   }
+
 }

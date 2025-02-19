@@ -1,6 +1,7 @@
 package se.inera.intyg.intygproxyservice.authorization.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -18,6 +19,7 @@ import se.inera.intyg.intygproxyservice.integration.api.authorization.GetCredent
 import se.inera.intyg.intygproxyservice.integration.api.authorization.GetCredentialsForPersonIntegrationResponse;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.GetCredentialsForPersonIntegrationService;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.model.CredentialsForPerson;
+import se.inera.intyg.intygproxyservice.logging.LogHashUtility;
 
 @ExtendWith(MockitoExtension.class)
 class CredentialsForPersonServiceTest {
@@ -36,6 +38,8 @@ class CredentialsForPersonServiceTest {
 
   @Mock
   private GetCredentialsForPersonIntegrationService getCredentialsForPersonIntegrationService;
+  @Mock
+  private LogHashUtility logHashUtility;
 
   @InjectMocks
   private CredentialsForPersonService credentialsForPersonService;
