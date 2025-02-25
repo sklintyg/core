@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.application.certificate.service.converter;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -33,6 +34,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_TEST_INDICATED;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_ZIP_CODE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.ALF_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_FIRST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_FULLNAME;
@@ -73,6 +75,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ReadyForSign;
 import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
+import se.inera.intyg.certificateservice.domain.certificate.model.Revoked;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateConfirmationModal;
@@ -155,6 +158,11 @@ class CertificateMetadataConverterTest {
         .signed(SIGNED)
         .modified(MODIFIED)
         .forwarded(FORWARDED)
+        .revoked(
+            Revoked.builder()
+                .revokedAt(LocalDateTime.now())
+                .build()
+        )
         .readyForSign(
             ReadyForSign.builder()
                 .readyForSignAt(LocalDateTime.now())
@@ -236,6 +244,7 @@ class CertificateMetadataConverterTest {
                         )
                         .build()
                 )
+                .creator(ALF_DOKTOR)
                 .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
                 .careUnit(ALFA_MEDICINCENTRUM)
                 .careProvider(ALFA_REGIONEN)
@@ -282,6 +291,35 @@ class CertificateMetadataConverterTest {
   void shallIncludeConfirmationModal() {
     assertEquals(CONVERTED_MODAL,
         certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getConfirmationModal()
+    );
+  }
+
+  @Test
+  void shallIncludeRevoked() {
+    assertEquals(certificate.revoked().revokedAt(),
+        certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getRevoked()
+    );
+  }
+
+  @Test
+  void shallIncludeCreatedBy() {
+    final var response = certificateMetadataConverter.convert(certificate, ACTION_EVALUATION);
+    assertAll(
+        () -> assertEquals(certificate.certificateMetaData().creator().hsaId().id(),
+            response.getCreatedBy().getPersonId()
+        ),
+        () -> assertEquals(certificate.certificateMetaData().creator().name().fullName(),
+            response.getCreatedBy().getFullName()
+        ),
+        () -> assertEquals(certificate.certificateMetaData().creator().name().firstName(),
+            response.getCreatedBy().getFirstName()
+        ),
+        () -> assertEquals(certificate.certificateMetaData().creator().name().middleName(),
+            response.getCreatedBy().getMiddleName()
+        ),
+        () -> assertEquals(certificate.certificateMetaData().creator().name().lastName(),
+            response.getCreatedBy().getLastName()
+        )
     );
   }
 
@@ -856,7 +894,7 @@ class CertificateMetadataConverterTest {
     final var certificateMessageTypeDTO = CertificateMessageTypeDTO.builder().build();
     final var expectedMessageTypes = List.of(certificateMessageTypeDTO);
     doReturn(certificateMessageTypeDTO).when(certificateMessageTypeConverter)
-        .convert(CERTIFICATE_MESSAGE_TYPES.get(0));
+        .convert(CERTIFICATE_MESSAGE_TYPES.getFirst());
 
     assertEquals(expectedMessageTypes,
         certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getMessageTypes()

@@ -94,6 +94,15 @@ public class CertificateMetadataConverter {
                 )
                 .build()
         )
+        .createdBy(
+            StaffDTO.builder()
+                .personId(certificate.certificateMetaData().creator().hsaId().id())
+                .firstName(certificate.certificateMetaData().creator().name().firstName())
+                .middleName(certificate.certificateMetaData().creator().name().middleName())
+                .lastName(certificate.certificateMetaData().creator().name().lastName())
+                .fullName(certificate.certificateMetaData().creator().name().fullName())
+                .build()
+        )
         .forwarded(certificate.forwarded() != null && certificate.forwarded().value())
         .latestMajorVersion(LATEST_MAJOR_VERSION)
         .sent(certificate.sent() != null)
@@ -129,6 +138,7 @@ public class CertificateMetadataConverter {
         )
         .readyForSign(
             certificate.readyForSign() != null ? certificate.readyForSign().readyForSignAt() : null)
+        .revoked(certificate.revoked() != null ? certificate.revoked().revokedAt() : null)
         .build();
   }
 

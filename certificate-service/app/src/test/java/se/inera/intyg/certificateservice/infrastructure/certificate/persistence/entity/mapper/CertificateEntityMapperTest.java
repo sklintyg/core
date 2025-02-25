@@ -26,6 +26,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_LAST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_MIDDLE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.ALF_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.ALVA_VARDADMINISTRATOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.RevokedReason.INCORRECT_PATIENT;
@@ -307,6 +308,17 @@ class CertificateEntityMapperTest {
     }
 
     @Test
+    void shouldMapCreatedBy() {
+      final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
+          FK7210_CERTIFICATE_MODEL);
+
+      assertEquals(
+          ALF_DOKTOR,
+          response.certificateMetaData().creator()
+      );
+    }
+
+    @Test
     void shouldMapSigned() {
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
           FK7210_CERTIFICATE_MODEL);
@@ -449,7 +461,7 @@ class CertificateEntityMapperTest {
           .build();
       final var response = certificateEntityMapper.toDomain(certificateEntity,
           FK7210_CERTIFICATE_MODEL);
-      
+
       assertNull(response.sent().sentBy());
     }
 
@@ -536,9 +548,10 @@ class CertificateEntityMapperTest {
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
           FK7210_CERTIFICATE_MODEL);
 
-      assertEquals(expectedChild.certificate().id(), response.children().get(0).certificate().id());
-      assertEquals(expectedChild.type(), response.children().get(0).type());
-      assertNotNull(response.children().get(0).created());
+      assertEquals(expectedChild.certificate().id(),
+          response.children().getFirst().certificate().id());
+      assertEquals(expectedChild.type(), response.children().getFirst().type());
+      assertNotNull(response.children().getFirst().created());
     }
 
     @Test

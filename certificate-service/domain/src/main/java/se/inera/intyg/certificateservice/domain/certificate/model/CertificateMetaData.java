@@ -20,4 +20,5 @@ public class CertificateMetaData {
   CareUnit careUnit;
   CareProvider careProvider;
   ResponsibleIssuer responsibleIssuer;
+  Staff creator;
 }
