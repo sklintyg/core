@@ -10,6 +10,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.SUBJECT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.ALF_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ADDRESS;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_CITY;
@@ -129,6 +130,7 @@ public class TestDataCertificate {
         .certificateMetaData(
             CertificateMetaData.builder()
                 .issuer(AJLA_DOKTOR)
+                .creator(ALF_DOKTOR)
                 .patient(ATHENA_REACT_ANDERSSON)
                 .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
                 .careUnit(ALFA_MEDICINCENTRUM)
@@ -212,6 +214,7 @@ public class TestDataCertificate {
         )
         .certificateMetaData(
             CertificateMetaData.builder()
+                .creator(ALF_DOKTOR)
                 .issuer(AJLA_DOKTOR)
                 .patient(ATHENA_REACT_ANDERSSON)
                 .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
@@ -275,6 +278,7 @@ public class TestDataCertificate {
         )
         .certificateMetaData(
             CertificateMetaData.builder()
+                .creator(ALF_DOKTOR)
                 .issuer(AJLA_DOKTOR)
                 .patient(ATHENA_REACT_ANDERSSON)
                 .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
@@ -403,6 +407,7 @@ public class TestDataCertificate {
         .certificateMetaData(
             CertificateMetaData.builder()
                 .issuer(AJLA_DOKTOR)
+                .creator(ALF_DOKTOR)
                 .patient(ATHENA_REACT_ANDERSSON)
                 .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
                 .careUnit(ALFA_MEDICINCENTRUM)
