@@ -35,6 +35,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_ZIP_CODE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.ALF_DOKTOR;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.ALVA_VARDADMINISTRATOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_FIRST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_FULLNAME;
@@ -161,6 +162,7 @@ class CertificateMetadataConverterTest {
         .revoked(
             Revoked.builder()
                 .revokedAt(LocalDateTime.now())
+                .revokedBy(ALVA_VARDADMINISTRATOR)
                 .build()
         )
         .readyForSign(
@@ -297,7 +299,29 @@ class CertificateMetadataConverterTest {
   @Test
   void shallIncludeRevoked() {
     assertEquals(certificate.revoked().revokedAt(),
-        certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getRevoked()
+        certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getRevokedAt()
+    );
+  }
+
+  @Test
+  void shallIncludeRevokedBy() {
+    final var response = certificateMetadataConverter.convert(certificate, ACTION_EVALUATION);
+    assertAll(
+        () -> assertEquals(certificate.revoked().revokedBy().hsaId().id(),
+            response.getRevokedBy().getPersonId()
+        ),
+        () -> assertEquals(certificate.revoked().revokedBy().name().fullName(),
+            response.getRevokedBy().getFullName()
+        ),
+        () -> assertEquals(certificate.revoked().revokedBy().name().firstName(),
+            response.getRevokedBy().getFirstName()
+        ),
+        () -> assertEquals(certificate.revoked().revokedBy().name().middleName(),
+            response.getRevokedBy().getMiddleName()
+        ),
+        () -> assertEquals(certificate.revoked().revokedBy().name().lastName(),
+            response.getRevokedBy().getLastName()
+        )
     );
   }
 
