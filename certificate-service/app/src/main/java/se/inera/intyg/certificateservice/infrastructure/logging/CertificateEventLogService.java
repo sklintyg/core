@@ -22,6 +22,7 @@ import static se.inera.intyg.certificateservice.logging.MdcLogConstants.USER_ROL
 
 import java.util.Arrays;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
@@ -31,7 +32,10 @@ import se.inera.intyg.certificateservice.logging.MdcCloseableMap;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class CertificateEventLogService implements CertificateEventSubscriber {
+
+  private final HashUtility hashUtility;
 
   @Override
   public void event(CertificateEvent event) {
@@ -116,8 +120,8 @@ public class CertificateEventLogService implements CertificateEventSubscriber {
     return event.certificate().certificateMetaData().careProvider().hsaId().id();
   }
 
-  private static String eventCertificatePatientId(CertificateEvent event) {
-    return HashUtility.hash(event.certificate().certificateMetaData().patient().id().id());
+  private String eventCertificatePatientId(CertificateEvent event) {
+    return hashUtility.hash(event.certificate().certificateMetaData().patient().id().id());
   }
 
   private static String userId(CertificateEvent event) {

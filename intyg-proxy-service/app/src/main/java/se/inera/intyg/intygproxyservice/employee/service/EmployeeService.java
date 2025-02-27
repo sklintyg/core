@@ -24,11 +24,11 @@ import static se.inera.intyg.intygproxyservice.common.ValidationUtility.isString
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import se.inera.intyg.intygproxyservice.common.HashUtility;
 import se.inera.intyg.intygproxyservice.employee.dto.EmployeeRequest;
 import se.inera.intyg.intygproxyservice.employee.dto.EmployeeResponse;
 import se.inera.intyg.intygproxyservice.integration.api.employee.GetEmployeeIntegrationRequest;
 import se.inera.intyg.intygproxyservice.integration.api.employee.GetEmployeeIntegrationService;
+import se.inera.intyg.intygproxyservice.logging.LogHashUtility;
 
 @Service
 @AllArgsConstructor
@@ -36,6 +36,7 @@ import se.inera.intyg.intygproxyservice.integration.api.employee.GetEmployeeInte
 public class EmployeeService {
 
   private final GetEmployeeIntegrationService getEmployeeIntegrationService;
+  private final LogHashUtility logHashUtility;
 
   public EmployeeResponse getEmployee(EmployeeRequest request) {
     validateRequest(request);
@@ -43,7 +44,7 @@ public class EmployeeService {
     log.info(String.format(
             "Getting employee with hsaId: '%s' and personId: '%s'",
             request.getHsaId(),
-            HashUtility.hash(request.getPersonId())
+            logHashUtility.hash(request.getPersonId())
         )
     );
 
@@ -57,7 +58,7 @@ public class EmployeeService {
     log.info(String.format(
             "Employee with hsaId: '%s' and personId: '%s' was retrieved, response had length: '%s'",
             request.getHsaId(),
-            HashUtility.hash(request.getPersonId()),
+            logHashUtility.hash(request.getPersonId()),
             response.getEmployee().getPersonInformation().size()
         )
     );
