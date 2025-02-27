@@ -62,7 +62,7 @@ public class QuestionPeriod {
                 .label("Andel av ordinarie tid:")
                 .id(new FieldId(QUESTION_PERIOD_FIELD_ID))
                 .dateRanges(dateRanges)
-                .min(Period.ofMonths(-3))
+                .min(Period.ofDays(-90))
                 .hideWorkingHours(true)
                 .build()
         )
@@ -77,7 +77,7 @@ public class QuestionPeriod {
         .validations(
             List.of(
                 ElementValidationDateRangeList.builder()
-                    .min(Period.ofMonths(-3))
+                    .min(Period.ofDays(-90))
                     .mandatory(true)
                     .build()
             )
