@@ -9,6 +9,7 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCer
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCertificateXmlEntity.CERTIFICATE_XML_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataPatientEntity.ATHENA_REACT_ANDERSSON_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffEntity.AJLA_DOKTOR_ENTITY;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffEntity.ALF_DOKTOR_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitEntity.ALFA_ALLERGIMOTTAGNINGEN_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitEntity.ALFA_MEDICINCENTRUM_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitEntity.ALFA_REGIONEN_ENTITY;
@@ -41,6 +42,7 @@ public class TestDataCertificateEntity {
         .careUnit(ALFA_MEDICINCENTRUM_ENTITY)
         .issuedOnUnit(ALFA_ALLERGIMOTTAGNINGEN_ENTITY)
         .issuedBy(AJLA_DOKTOR_ENTITY)
+        .createdBy(ALF_DOKTOR_ENTITY)
         .patient(ATHENA_REACT_ANDERSSON_ENTITY)
         .data(CERTIFICATE_DATA_ENTITY)
         .xml(CERTIFICATE_XML_ENTITY)
@@ -69,6 +71,7 @@ public class TestDataCertificateEntity {
         .careProvider(ALFA_REGIONEN_ENTITY)
         .careUnit(ALFA_MEDICINCENTRUM_ENTITY)
         .issuedOnUnit(ALFA_ALLERGIMOTTAGNINGEN_ENTITY)
+        .createdBy(ALF_DOKTOR_ENTITY)
         .issuedBy(AJLA_DOKTOR_ENTITY)
         .patient(ATHENA_REACT_ANDERSSON_ENTITY)
         .data(CERTIFICATE_DATA_ENTITY)

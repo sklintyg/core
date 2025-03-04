@@ -276,6 +276,7 @@ public class CertificateEntityMapper {
                 .patient(
                     PatientEntityMapper.toDomain(certificateEntity.getPatient())
                 )
+                .creator(StaffEntityMapper.toDomain(certificateEntity.getCreatedBy()))
                 .build()
         )
         .elementData(

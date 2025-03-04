@@ -35,7 +35,7 @@ class QuestionPeriodTest {
         .label("Andel av ordinarie tid:")
         .id(new FieldId("56.1"))
         .hideWorkingHours(true)
-        .min(Period.ofMonths(-1))
+        .min(Period.ofDays(-90))
         .dateRanges(
             List.of(
                 new ElementConfigurationCode(
@@ -95,7 +95,7 @@ class QuestionPeriodTest {
   void shallIncludeValidations() {
     final var expectedValidations = List.of(
         ElementValidationDateRangeList.builder()
-            .min(Period.ofMonths(-1))
+            .min(Period.ofDays(-90))
             .mandatory(true)
             .build()
     );
