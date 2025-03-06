@@ -26,9 +26,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.intygproxyservice.authorization.dto.CredentialsForPersonRequest;
 import se.inera.intyg.intygproxyservice.authorization.dto.CredentialsForPersonResponse;
-import se.inera.intyg.intygproxyservice.common.HashUtility;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.GetCredentialsForPersonIntegrationRequest;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.GetCredentialsForPersonIntegrationService;
+import se.inera.intyg.intygproxyservice.logging.LogHashUtility;
 
 @Service
 @AllArgsConstructor
@@ -36,6 +36,7 @@ import se.inera.intyg.intygproxyservice.integration.api.authorization.GetCredent
 public class CredentialsForPersonService {
 
   private final GetCredentialsForPersonIntegrationService getCredentialsForPersonIntegrationService;
+  private final LogHashUtility logHashUtility;
 
   public CredentialsForPersonResponse get(CredentialsForPersonRequest request) {
     validateRequest(request);
@@ -43,7 +44,7 @@ public class CredentialsForPersonService {
     log.info(
         String.format(
             "Getting credential info for person with personId: '%s'",
-            HashUtility.hash(request.getPersonId())
+            logHashUtility.hash(request.getPersonId())
         )
     );
 
@@ -55,7 +56,7 @@ public class CredentialsForPersonService {
 
     log.info(String.format(
             "Credentials for person with personId: '%s' was retrieved",
-            HashUtility.hash(request.getPersonId())
+            logHashUtility.hash(request.getPersonId())
         )
     );
 
@@ -65,7 +66,7 @@ public class CredentialsForPersonService {
         .build();
   }
 
-  private static void validateRequest(CredentialsForPersonRequest request) {
+  private void validateRequest(CredentialsForPersonRequest request) {
     if (request == null) {
       throw new IllegalArgumentException("Request to get credentials for person is null");
     }
@@ -74,7 +75,7 @@ public class CredentialsForPersonService {
       throw new IllegalArgumentException(
           String.format(
               "PersonId is not valid: '%s'",
-              HashUtility.hash(request.getPersonId())
+              logHashUtility.hash(request.getPersonId())
           )
       );
     }
