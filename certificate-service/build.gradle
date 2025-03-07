@@ -17,6 +17,17 @@ group = 'se.inera.intyg.certificateservice'
 version = System.properties['buildVersion'] ?: '0.0.1-SNAPSHOT'
 mainClassName = 'se.inera.intyg.certificateservice.CertificateServiceApplication'
 
+configurations {
+    bomProperties {
+        dependencies {
+            bomProperties "se.inera.intyg.bom:bom:${bomVersion}"
+        }
+        def properties = new Properties()
+        incoming.files.find { it.name == "bom-${bomVersion}.properties" }.withInputStream { properties.load(it) }
+        properties.each { key, value -> project.ext."${key}" = value }
+    }
+}
+
 sonar {
     properties {
         property "sonar.projectKey", "intyg-certificate-service"
@@ -44,8 +55,8 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'jacoco'
 
-    sourceCompatibility = '21'
-    targetCompatibility = '21'
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
 
     configurations {
         compileOnly {
@@ -98,20 +109,6 @@ reporting {
     }
 }
 
-configurations {
-    bomProperties {
-        //extendsFrom compileClasspath
-        dependencies {
-            bomProperties "se.inera.intyg.bom:bom:${bomVersion}"
-        }
-        attributes {
-            def properties = new Properties()
-            incoming.files.find { it.name == "bom-${bomVersion}.properties" }.withInputStream { properties.load(it) }
-            properties.each { key, value ->
-                    //project.ext."${key}" = value
 
-                attribute(key, value)
-            }
-        }
-    }
-}
+
+
