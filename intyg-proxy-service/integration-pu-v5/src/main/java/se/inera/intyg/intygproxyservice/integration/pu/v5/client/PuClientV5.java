@@ -38,7 +38,7 @@ public class PuClientV5 {
 
   @PerformanceLogging(eventAction = "find-person", eventType = EVENT_TYPE_ACCESSED)
   public PuResponse findPerson(PuRequest puRequest) {
-    final var parameters = getParameters(puRequest.getPersonId());
+    final var parameters = getParameters(List.of(puRequest.getPersonId()));
 
     try {
       final var getPersonsForProfileResponseType = getPersonsForProfileResponderInterface
@@ -75,17 +75,11 @@ public class PuClientV5 {
     return PuResponse.error();
   }
 
-  private static GetPersonsForProfileType getParameters(String personId) {
-    final var parameters = new GetPersonsForProfileType();
-    parameters.setProfile(LookupProfileType.P_2);
-    parameters.getPersonId().add(getIIType(personId));
-    return parameters;
-  }
-
   private static GetPersonsForProfileType getParameters(List<String> personIds) {
     final var parameters = new GetPersonsForProfileType();
     parameters.setProfile(LookupProfileType.P_2);
     personIds.forEach(id -> parameters.getPersonId().add(getIIType(id)));
+    parameters.setIgnoreReferredIdentity(true);
 
     return parameters;
   }
