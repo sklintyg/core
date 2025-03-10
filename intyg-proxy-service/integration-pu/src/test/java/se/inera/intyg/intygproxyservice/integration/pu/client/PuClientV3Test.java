@@ -1,6 +1,7 @@
 package se.inera.intyg.intygproxyservice.integration.pu.client;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
@@ -122,6 +123,24 @@ class PuClientV3Test {
       assertEquals(LookupProfileType.P_2,
           getPersonsForProfileTypeArgumentCaptor.getValue().getProfile()
       );
+    }
+
+    @Test
+    void shallCallPuWithIgnoredReferredIdentity() {
+
+      final var getPersonsForProfileTypeArgumentCaptor = ArgumentCaptor.forClass(
+          GetPersonsForProfileType.class);
+
+      puClientV3.findPerson(
+          PuRequest.builder()
+              .personId(PERSON_ID_AS_PERSONNUMMER)
+              .build()
+      );
+
+      verify(getPersonsForProfileResponderInterface)
+          .getPersonsForProfile(anyString(), getPersonsForProfileTypeArgumentCaptor.capture());
+
+      assertTrue(getPersonsForProfileTypeArgumentCaptor.getValue().isIgnoreReferredIdentity());
     }
 
     @Test
