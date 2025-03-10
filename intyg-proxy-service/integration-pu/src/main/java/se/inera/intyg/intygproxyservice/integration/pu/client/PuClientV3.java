@@ -54,6 +54,8 @@ public class PuClientV3 {
     parameters.getPersonId().add(
         getIIType(personId)
     );
+    parameters.setIgnoreReferredIdentity(true);
+
     return parameters;
   }
 
