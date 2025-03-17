@@ -40,15 +40,15 @@ public class GetCertificateBatchFromIntygstjanst implements GetCertificateBatch 
 
   @Override
   @PerformanceLogging(eventAction = "get-certificate-batch", eventType = EVENT_TYPE_ACCESSED)
-  public CertificateBatch get(String careProvider, int limit, int offset) {
+  public CertificateBatch get(String careProvider, int limit, int collected) {
     final var certificateExportPageDTOMono = webClient.get()
         .uri(uriBuilder -> uriBuilder
             .scheme(scheme)
             .host(baseUrl)
             .port(port)
             .path(certificatesEndpoint + "/{careProvider}")
-            .queryParam("size", limit)
-            .queryParam("page", offset / limit)
+            .queryParam("batchSize", limit)
+            .queryParam("collected", collected)
             .build(careProvider))
         .retrieve()
         .bodyToMono(CertificateExportPageDTO.class)
