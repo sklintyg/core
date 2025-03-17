@@ -13,15 +13,20 @@ import org.springframework.web.bind.annotation.RestController;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.ExportCertificateInternalRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.ExportInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.LockDraftsRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.LockDraftsResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.TotalExportsInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.service.CertificateExistsService;
+import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateExportsInternalForCareProviderService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalMetadataService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalXmlService;
+import se.inera.intyg.certificateservice.application.certificate.service.GetTotalExportsInternalForCareProviderService;
 import se.inera.intyg.certificateservice.application.certificate.service.LockDraftsInternalService;
 import se.inera.intyg.certificateservice.application.patient.service.GetCertificatesWithQAInternalService;
 import se.inera.intyg.certificateservice.logging.PerformanceLogging;
@@ -31,6 +36,8 @@ import se.inera.intyg.certificateservice.logging.PerformanceLogging;
 @RequestMapping("/internalapi/certificate")
 public class CertificateInternalApiController {
 
+  private final GetTotalExportsInternalForCareProviderService getTotalExportsInternalForCareProviderService;
+  private final GetCertificateExportsInternalForCareProviderService getCertificateExportsInternalForCareProviderService;
   private final GetCertificateInternalXmlService getCertificateInternalXmlService;
   private final GetCertificateInternalMetadataService getCertificateInternalMetadataService;
   private final GetCertificateInternalService getCertificateInternalService;
@@ -77,5 +84,18 @@ public class CertificateInternalApiController {
   CertificatesWithQAInternalResponse getCertificatesWithQA(
       @RequestBody CertificatesWithQAInternalRequest request) {
     return getCertificatesWithQAInternalService.get(request);
+  }
+
+  @PostMapping("/export/{careProviderId}")
+  @PerformanceLogging(eventAction = "internal-retrieve-export-certificates-for-care-provider", eventType = EVENT_TYPE_ACCESSED)
+  ExportInternalResponse getExportCertificatesForCareProvider(
+      @RequestBody ExportCertificateInternalRequest request, @PathVariable("careProviderId") String careProviderId) {
+    return getCertificateExportsInternalForCareProviderService.get(request, careProviderId);
+  }
+
+  @GetMapping("/export/{careProviderId}/total")
+  @PerformanceLogging(eventAction = "internal-retrieve-total-export-for-care-provider", eventType = EVENT_TYPE_ACCESSED)
+  TotalExportsInternalResponse getTotalExportsForCareProvider(@PathVariable("careProviderId") String careProviderId) {
+    return getTotalExportsInternalForCareProviderService.get(careProviderId);
   }
 }
