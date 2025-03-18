@@ -20,6 +20,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,6 +32,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateExportPage;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
@@ -501,10 +503,15 @@ class JpaCertificateRepositoryTest {
   @Nested
   class DeleteByCareProviderId {
 
+    @BeforeEach
+    void setUp() {
+      ReflectionTestUtils.setField(jpaCertificateRepository, "eraseCertificatesPageSize", 10);
+    }
+
     @Test
     void shouldThrowExceptionIfCareProviderIdIsNull() {
       assertThrows(IllegalArgumentException.class,
-          () -> jpaCertificateRepository.deleteByCareProviderId(null, 10));
+          () -> jpaCertificateRepository.deleteByCareProviderId(null));
     }
 
     @Test
@@ -522,7 +529,7 @@ class JpaCertificateRepositoryTest {
       doReturn(false).when(page).hasNext();
       doReturn(1L).when(page).getTotalElements();
 
-      final var deletedCount = jpaCertificateRepository.deleteByCareProviderId(CARE_PROVIDER.getHsaId(), 10);
+      final var deletedCount = jpaCertificateRepository.deleteByCareProviderId(CARE_PROVIDER.getHsaId());
 
       verify(certificateRelationRepository).deleteRelations(certificateEntity);
       verify(certificateEntityRepository).deleteAllByCertificateIdIn(List.of(certificateEntity.getCertificateId()));

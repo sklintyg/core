@@ -5,6 +5,7 @@ import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_TY
 import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_TYPE_DELETION;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalResponse;
-import se.inera.intyg.certificateservice.application.certificate.dto.EraseCertificateInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ExportCertificateInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ExportInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse;
@@ -103,9 +103,9 @@ public class CertificateInternalApiController {
     return getTotalExportsInternalForCareProviderService.get(careProviderId);
   }
 
-  @PostMapping("/erase/{careProviderId}")
+  @DeleteMapping("/erase/{careProviderId}")
   @PerformanceLogging(eventAction = "internal-erase-certificates-for-care-provider", eventType = EVENT_TYPE_DELETION)
-  void eraseCertificates(@RequestBody EraseCertificateInternalRequest request, @PathVariable("careProviderId") String careProviderId) {
-    eraseCertificateInternalForCareProviderService.erase(request, careProviderId);
+  void eraseCertificates( @PathVariable("careProviderId") String careProviderId) {
+    eraseCertificateInternalForCareProviderService.erase(careProviderId);
   }
 }

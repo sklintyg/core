@@ -25,5 +25,5 @@ public interface CertificateRepository {
 
   CertificateExportPage getExportByCareProviderId(String careProviderId, int page, int size);
 
-  long deleteByCareProviderId(String careProviderId, int size);
+  long deleteByCareProviderId(String careProviderId);
 }

@@ -15,7 +15,6 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateMetadataDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalResponse;
-import se.inera.intyg.certificateservice.application.certificate.dto.EraseCertificateInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ExportCertificateInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ExportInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse;
@@ -156,8 +155,7 @@ class CertificateInternalApiControllerTest {
 
   @Test
   void shallCallEraseCertificateInternalForCareProviderService() {
-    final var request = EraseCertificateInternalRequest.builder().build();
-    certificateInternalApiController.eraseCertificates(request, "careProviderId");
-    verify(eraseCertificateInternalForCareProviderService).erase(request, "careProviderId");
+    certificateInternalApiController.eraseCertificates("careProviderId");
+    verify(eraseCertificateInternalForCareProviderService).erase("careProviderId");
   }
 }

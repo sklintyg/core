@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -29,6 +30,9 @@ import se.inera.intyg.certificateservice.testability.certificate.service.reposit
 @Repository
 @RequiredArgsConstructor
 public class JpaCertificateRepository implements TestabilityCertificateRepository {
+
+  @Value("${erase.certificates.page.size:1000}")
+  private int eraseCertificatesPageSize;
 
   private final CertificateEntityRepository certificateEntityRepository;
   private final CertificateEntityMapper certificateEntityMapper;
@@ -205,12 +209,12 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
   }
 
   @Override
-  public long deleteByCareProviderId(String careProviderId, int size) {
+  public long deleteByCareProviderId(String careProviderId) {
     if (careProviderId == null) {
       throw new IllegalArgumentException("Cannot delete certificates if careProviderId is null");
     }
 
-    final var pageable = PageRequest.of(0, size, Sort.by(Direction.ASC, "signed", "certificateId"));
+    final var pageable = PageRequest.of(0, eraseCertificatesPageSize, Sort.by(Direction.ASC, "signed", "certificateId"));
     Page<CertificateEntity> certificateEntitiesPage;
 
     do {

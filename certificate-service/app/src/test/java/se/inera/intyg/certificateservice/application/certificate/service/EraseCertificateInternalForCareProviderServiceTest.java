@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
-import se.inera.intyg.certificateservice.application.certificate.dto.EraseCertificateInternalRequest;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -25,25 +24,17 @@ class EraseCertificateInternalForCareProviderServiceTest {
 
     @Test
     void shallDeleteByCareProviderId() {
-        final var request = EraseCertificateInternalRequest.builder()
-            .batchSize(5)
-            .build();
+        eraseCertificateInternalForCareProviderService.erase(CARE_PROVIDER_ID);
 
-        eraseCertificateInternalForCareProviderService.erase(request, CARE_PROVIDER_ID);
-
-        verify(certificateRepository).deleteByCareProviderId(CARE_PROVIDER_ID, request.getBatchSize());
+        verify(certificateRepository).deleteByCareProviderId(CARE_PROVIDER_ID);
     }
 
     @Test
     @ExtendWith(OutputCaptureExtension.class)
     void shallLog(CapturedOutput output) {
-        final var request = EraseCertificateInternalRequest.builder()
-            .batchSize(5)
-            .build();
+        doReturn(5L).when(certificateRepository).deleteByCareProviderId(CARE_PROVIDER_ID);
 
-        doReturn(5L).when(certificateRepository).deleteByCareProviderId(CARE_PROVIDER_ID, request.getBatchSize());
-
-        eraseCertificateInternalForCareProviderService.erase(request, CARE_PROVIDER_ID);
+        eraseCertificateInternalForCareProviderService.erase(CARE_PROVIDER_ID);
         assertThat(output).contains("Successfully completed erasure of certificates for care provider 'careProviderId' Total number of erased certificates: 5");
     }
 }
