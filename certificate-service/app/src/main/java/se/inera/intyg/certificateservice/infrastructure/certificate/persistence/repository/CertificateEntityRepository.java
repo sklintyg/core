@@ -23,7 +23,7 @@ public interface CertificateEntityRepository extends CrudRepository<CertificateE
 
   void deleteAllByCertificateIdIn(List<String> certificateIds);
 
-  @Query("SELECT c FROM CertificateEntity c WHERE c.careProvider.hsaId = :careProviderHsaId AND c.signed IS NOT null")
+  @Query("SELECT c FROM CertificateEntity c WHERE c.careProvider.hsaId = :careProviderHsaId")
   Page<CertificateEntity> findCertificateEntitiesByCareProviderHsaId(@Param("careProviderHsaId") String careProviderHsaId, Pageable pageable);
 
 
