@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.application.certificate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.verify;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateConstants.CERTIFICATE_ID;
 
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateMetadataDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.EraseCertificateInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ExportCertificateInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ExportInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse;
@@ -23,6 +25,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.LockDraftsR
 import se.inera.intyg.certificateservice.application.certificate.dto.LockDraftsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.TotalExportsInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.service.CertificateExistsService;
+import se.inera.intyg.certificateservice.application.certificate.service.EraseCertificateInternalForCareProviderService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateExportsInternalForCareProviderService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalMetadataService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalService;
@@ -34,6 +37,8 @@ import se.inera.intyg.certificateservice.application.patient.service.GetCertific
 @ExtendWith(MockitoExtension.class)
 class CertificateInternalApiControllerTest {
 
+  @Mock
+  private EraseCertificateInternalForCareProviderService eraseCertificateInternalForCareProviderService;
   @Mock
   private GetCertificateExportsInternalForCareProviderService getCertificateExportsInternalForCareProviderService;
   @Mock
@@ -147,5 +152,12 @@ class CertificateInternalApiControllerTest {
 
     final var actualResult = certificateInternalApiController.getTotalExportsForCareProvider("careProviderId");
     assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  void shallCallEraseCertificateInternalForCareProviderService() {
+    final var request = EraseCertificateInternalRequest.builder().build();
+    certificateInternalApiController.eraseCertificates(request, "careProviderId");
+    verify(eraseCertificateInternalForCareProviderService).erase(request, "careProviderId");
   }
 }
