@@ -6,6 +6,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateExp
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
+import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 
 public interface CertificateRepository {
 
@@ -23,7 +24,7 @@ public interface CertificateRepository {
 
   List<Certificate> findByCertificatesRequest(CertificatesRequest request);
 
-  CertificateExportPage getExportByCareProviderId(String careProviderId, int page, int size);
+  CertificateExportPage getExportByCareProviderId(HsaId careProviderId, int page, int size);
 
-  long deleteByCareProviderId(String careProviderId);
+  long deleteByCareProviderId(HsaId careProviderId);
 }

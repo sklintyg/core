@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
+import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 
 @ExtendWith(MockitoExtension.class)
 class EraseCertificateInternalForCareProviderServiceTest {
@@ -26,13 +27,13 @@ class EraseCertificateInternalForCareProviderServiceTest {
     void shallDeleteByCareProviderId() {
         eraseCertificateInternalForCareProviderService.erase(CARE_PROVIDER_ID);
 
-        verify(certificateRepository).deleteByCareProviderId(CARE_PROVIDER_ID);
+        verify(certificateRepository).deleteByCareProviderId(new HsaId(CARE_PROVIDER_ID));
     }
 
     @Test
     @ExtendWith(OutputCaptureExtension.class)
     void shallLog(CapturedOutput output) {
-        doReturn(5L).when(certificateRepository).deleteByCareProviderId(CARE_PROVIDER_ID);
+        doReturn(5L).when(certificateRepository).deleteByCareProviderId(new HsaId(CARE_PROVIDER_ID));
 
         eraseCertificateInternalForCareProviderService.erase(CARE_PROVIDER_ID);
         assertThat(output).contains("Successfully completed erasure of certificates for care provider 'careProviderId' Total number of erased certificates: 5");

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
+import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 
 @Slf4j
 @Service
@@ -15,7 +16,9 @@ public class EraseCertificateInternalForCareProviderService {
 
   @Transactional
   public void erase(String careProviderId) {
-    final var numberOfDeletedCertificates = certificateRepository.deleteByCareProviderId(careProviderId);
+    final var numberOfDeletedCertificates = certificateRepository.deleteByCareProviderId(
+        new HsaId(careProviderId)
+    );
     log.info("Successfully completed erasure of certificates for care provider '{}' Total number of erased certificates: {}",
         careProviderId, numberOfDeletedCertificates);
   }

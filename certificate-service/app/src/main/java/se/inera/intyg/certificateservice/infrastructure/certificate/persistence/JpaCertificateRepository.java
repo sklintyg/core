@@ -20,6 +20,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
+import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
@@ -182,7 +183,7 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
   }
 
   @Override
-  public CertificateExportPage getExportByCareProviderId(String careProviderId, int page, int size) {
+  public CertificateExportPage getExportByCareProviderId(HsaId careProviderId, int page, int size) {
     if (careProviderId == null) {
       throw new IllegalArgumentException("Cannot get certificates if careProviderId is null");
     }
@@ -190,11 +191,11 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
     final var pageable = PageRequest.of(page, size, Sort.by(Direction.ASC, "signed", "certificateId"));
 
     final var certificateEntitiesPage = certificateEntityRepository.findCertificateEntitiesByCareProviderHsaId(
-        careProviderId, pageable
+        careProviderId.id(), pageable
     );
 
     final var revokedCertificatesOnCareProvider = certificateEntityRepository.findRevokedCertificateEntitiesByCareProviderHsaId(
-        careProviderId
+        careProviderId.id()
     );
 
     return CertificateExportPage.builder()
@@ -209,7 +210,7 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
   }
 
   @Override
-  public long deleteByCareProviderId(String careProviderId) {
+  public long deleteByCareProviderId(HsaId careProviderId) {
     if (careProviderId == null) {
       throw new IllegalArgumentException("Cannot delete certificates if careProviderId is null");
     }
@@ -219,7 +220,7 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
 
     do {
       certificateEntitiesPage = certificateEntityRepository.findCertificateEntitiesByCareProviderHsaId(
-          careProviderId, pageable
+          careProviderId.id(), pageable
       );
 
       final var certificateEntities = certificateEntitiesPage.getContent();

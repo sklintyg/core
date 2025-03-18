@@ -18,6 +18,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.ExportInter
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateExportPage;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
+import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 
 @ExtendWith(MockitoExtension.class)
 class GetCertificateExportsInternalForCareProviderServiceTest {
@@ -60,7 +61,7 @@ class GetCertificateExportsInternalForCareProviderServiceTest {
             .size(SIZE)
             .build();
 
-        doReturn(certificateExportPage).when(certificateRepository).getExportByCareProviderId(CARE_PROVIDER_ID, PAGE, SIZE);
+        doReturn(certificateExportPage).when(certificateRepository).getExportByCareProviderId(new HsaId(CARE_PROVIDER_ID), PAGE, SIZE);
 
         final var actualResult = getCertificateExportsInternalForCareProviderService.get(internalRequest, CARE_PROVIDER_ID);
         assertEquals(expectedResult, actualResult);

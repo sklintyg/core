@@ -38,6 +38,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateExp
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateDataEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
@@ -495,7 +496,7 @@ class JpaCertificateRepositoryTest {
       doReturn(2L).when(page).getTotalElements();
       doReturn(FK3226_CERTIFICATE).when(certificateEntityMapper).toDomain(certificateEntity);
 
-      final var actualResult = jpaCertificateRepository.getExportByCareProviderId(CARE_PROVIDER.getHsaId(), 0, 10);
+      final var actualResult = jpaCertificateRepository.getExportByCareProviderId(new HsaId(CARE_PROVIDER.getHsaId()), 0, 10);
       assertEquals(expectedResult, actualResult);
     }
   }
@@ -529,7 +530,7 @@ class JpaCertificateRepositoryTest {
       doReturn(false).when(page).hasNext();
       doReturn(1L).when(page).getTotalElements();
 
-      final var deletedCount = jpaCertificateRepository.deleteByCareProviderId(CARE_PROVIDER.getHsaId());
+      final var deletedCount = jpaCertificateRepository.deleteByCareProviderId(new HsaId(CARE_PROVIDER.getHsaId()));
 
       verify(certificateRelationRepository).deleteRelations(certificateEntity);
       verify(certificateEntityRepository).deleteAllByCertificateIdIn(List.of(certificateEntity.getCertificateId()));
