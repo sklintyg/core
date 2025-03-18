@@ -7,8 +7,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateExportPage;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
@@ -169,6 +173,33 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
     return certificateEntityRepository.findAll(specification).stream()
         .map(certificateEntityMapper::toDomain)
         .toList();
+  }
+
+  @Override
+  public CertificateExportPage getByCareProviderId(String careProviderId, int page, int size) {
+    if (careProviderId == null) {
+      throw new IllegalArgumentException("Cannot get certificates if careProviderId is null");
+    }
+
+    final var pageable = PageRequest.of(page, size, Sort.by(Direction.ASC, "signed", "certificateId"));
+
+    final var certificateEntitiesPage = certificateEntityRepository.findCertificateEntitiesByCareProviderHsaId(
+        careProviderId, pageable
+    );
+
+    final var revokedCertificatesOnCareProvider = certificateEntityRepository.findRevokedCertificateEntitiesByCareProviderHsaId(
+        careProviderId
+    );
+
+    return CertificateExportPage.builder()
+        .total(certificateEntitiesPage.getTotalElements())
+        .totalRevoked(revokedCertificatesOnCareProvider)
+        .certificates(
+            certificateEntitiesPage.getContent().stream()
+                .map(certificateEntityMapper::toDomain)
+                .toList()
+        )
+        .build();
   }
 
   @Override

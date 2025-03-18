@@ -5,10 +5,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK3226_CERTIFICATE;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,7 +26,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateExportPage;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
@@ -448,6 +455,43 @@ class JpaCertificateRepositoryTest {
 
       assertEquals("Cannot get certificate if certificateIds is null",
           illegalArgumentException.getMessage());
+    }
+  }
+
+  @Nested
+  class GetByCareProviderIdTests {
+
+    @Test
+    void shallThrowIfCareProviderIdIsNull() {
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> jpaCertificateRepository.getByCareProviderId(null, 0, 0));
+
+      assertEquals("Cannot get certificates if careProviderId is null", illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallReturnCertificateExportPage() {
+      final var expectedResult = CertificateExportPage.builder()
+          .totalRevoked(2L)
+          .total(2L)
+          .certificates(Collections.singletonList(FK3226_CERTIFICATE))
+          .build();
+
+      final var page = mock(Page.class);
+      final var certificateEntity = CertificateEntity.builder().build();
+
+      doReturn(page).when(certificateEntityRepository).findCertificateEntitiesByCareProviderHsaId(
+          eq(CARE_PROVIDER.getHsaId()), any(Pageable.class)
+      );
+      doReturn(2L).when(certificateEntityRepository).findRevokedCertificateEntitiesByCareProviderHsaId(
+          CARE_PROVIDER.getHsaId()
+      );
+      doReturn(Collections.singletonList(certificateEntity)).when(page).getContent();
+      doReturn(2L).when(page).getTotalElements();
+      doReturn(FK3226_CERTIFICATE).when(certificateEntityMapper).toDomain(certificateEntity);
+
+      final var actualResult = jpaCertificateRepository.getByCareProviderId(CARE_PROVIDER.getHsaId(), 0, 10);
+      assertEquals(expectedResult, actualResult);
     }
   }
 }
