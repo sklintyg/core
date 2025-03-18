@@ -9,6 +9,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
+import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 
 @Service
 @RequiredArgsConstructor
@@ -18,8 +19,8 @@ public class GetCertificateExportsInternalForCareProviderService {
   private final XmlGenerator xmlGenerator;
 
   public ExportInternalResponse get(ExportCertificateInternalRequest request, String careProviderId) {
-    final var certificateExportPage = certificateRepository.getByCareProviderId(
-        careProviderId,
+    final var certificateExportPage = certificateRepository.getExportByCareProviderId(
+        new HsaId(careProviderId),
         request.getPage(),
         request.getSize()
     );

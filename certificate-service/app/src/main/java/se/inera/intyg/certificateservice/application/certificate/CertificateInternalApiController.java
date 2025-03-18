@@ -2,8 +2,10 @@ package se.inera.intyg.certificateservice.application.certificate;
 
 import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_TYPE_ACCESSED;
 import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_TYPE_CHANGE;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_TYPE_DELETION;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +24,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.LockDraftsR
 import se.inera.intyg.certificateservice.application.certificate.dto.LockDraftsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.TotalExportsInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.service.CertificateExistsService;
+import se.inera.intyg.certificateservice.application.certificate.service.EraseCertificateInternalForCareProviderService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateExportsInternalForCareProviderService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalMetadataService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalService;
@@ -36,6 +39,7 @@ import se.inera.intyg.certificateservice.logging.PerformanceLogging;
 @RequestMapping("/internalapi/certificate")
 public class CertificateInternalApiController {
 
+  private final EraseCertificateInternalForCareProviderService eraseCertificateInternalForCareProviderService;
   private final GetTotalExportsInternalForCareProviderService getTotalExportsInternalForCareProviderService;
   private final GetCertificateExportsInternalForCareProviderService getCertificateExportsInternalForCareProviderService;
   private final GetCertificateInternalXmlService getCertificateInternalXmlService;
@@ -97,5 +101,11 @@ public class CertificateInternalApiController {
   @PerformanceLogging(eventAction = "internal-retrieve-total-export-for-care-provider", eventType = EVENT_TYPE_ACCESSED)
   TotalExportsInternalResponse getTotalExportsForCareProvider(@PathVariable("careProviderId") String careProviderId) {
     return getTotalExportsInternalForCareProviderService.get(careProviderId);
+  }
+
+  @DeleteMapping("/erase/{careProviderId}")
+  @PerformanceLogging(eventAction = "internal-erase-certificates-for-care-provider", eventType = EVENT_TYPE_DELETION)
+  void eraseCertificates( @PathVariable("careProviderId") String careProviderId) {
+    eraseCertificateInternalForCareProviderService.erase(careProviderId);
   }
 }

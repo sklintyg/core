@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.application.certificate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.verify;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateConstants.CERTIFICATE_ID;
 
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.LockDraftsR
 import se.inera.intyg.certificateservice.application.certificate.dto.LockDraftsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.TotalExportsInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.service.CertificateExistsService;
+import se.inera.intyg.certificateservice.application.certificate.service.EraseCertificateInternalForCareProviderService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateExportsInternalForCareProviderService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalMetadataService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalService;
@@ -34,6 +36,8 @@ import se.inera.intyg.certificateservice.application.patient.service.GetCertific
 @ExtendWith(MockitoExtension.class)
 class CertificateInternalApiControllerTest {
 
+  @Mock
+  private EraseCertificateInternalForCareProviderService eraseCertificateInternalForCareProviderService;
   @Mock
   private GetCertificateExportsInternalForCareProviderService getCertificateExportsInternalForCareProviderService;
   @Mock
@@ -147,5 +151,11 @@ class CertificateInternalApiControllerTest {
 
     final var actualResult = certificateInternalApiController.getTotalExportsForCareProvider("careProviderId");
     assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  void shallCallEraseCertificateInternalForCareProviderService() {
+    certificateInternalApiController.eraseCertificates("careProviderId");
+    verify(eraseCertificateInternalForCareProviderService).erase("careProviderId");
   }
 }

@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.TotalExportsInternalResponse;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateExportPage;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
+import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 
 @ExtendWith(MockitoExtension.class)
 class GetTotalExportsInternalForCareProviderServiceTest {
@@ -33,7 +34,7 @@ class GetTotalExportsInternalForCareProviderServiceTest {
             .totalRevoked(2)
             .build();
 
-        doReturn(certificateExportPage).when(certificateRepository).getByCareProviderId(CARE_PROVIDER_ID, 0, 1);
+        doReturn(certificateExportPage).when(certificateRepository).getExportByCareProviderId(new HsaId(CARE_PROVIDER_ID), 0, 1);
 
         final var actualResponse = getTotalExportsInternalForCareProviderService.get(CARE_PROVIDER_ID);
         assertEquals(expectedResult, actualResponse);
