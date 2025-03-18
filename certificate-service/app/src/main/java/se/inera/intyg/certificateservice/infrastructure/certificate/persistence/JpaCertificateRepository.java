@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -18,6 +19,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecificationFactory;
@@ -176,7 +178,7 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
   }
 
   @Override
-  public CertificateExportPage getByCareProviderId(String careProviderId, int page, int size) {
+  public CertificateExportPage getExportByCareProviderId(String careProviderId, int page, int size) {
     if (careProviderId == null) {
       throw new IllegalArgumentException("Cannot get certificates if careProviderId is null");
     }
@@ -200,6 +202,35 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
                 .toList()
         )
         .build();
+  }
+
+  @Override
+  public long deleteByCareProviderId(String careProviderId, int size) {
+    if (careProviderId == null) {
+      throw new IllegalArgumentException("Cannot delete certificates if careProviderId is null");
+    }
+
+    final var pageable = PageRequest.of(0, size, Sort.by(Direction.ASC, "signed", "certificateId"));
+    Page<CertificateEntity> certificateEntitiesPage;
+
+    do {
+      certificateEntitiesPage = certificateEntityRepository.findCertificateEntitiesByCareProviderHsaId(
+          careProviderId, pageable
+      );
+
+      final var certificateEntities = certificateEntitiesPage.getContent();
+
+      certificateEntities.forEach(certificateRelationRepository::deleteRelations);
+
+      certificateEntityRepository.deleteAllByCertificateIdIn(
+          certificateEntities.stream()
+              .map(CertificateEntity::getCertificateId)
+              .toList()
+      );
+
+    } while (certificateEntitiesPage.hasNext());
+
+    return certificateEntitiesPage.getTotalElements();
   }
 
   @Override

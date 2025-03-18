@@ -23,5 +23,7 @@ public interface CertificateRepository {
 
   List<Certificate> findByCertificatesRequest(CertificatesRequest request);
 
-  CertificateExportPage getByCareProviderId(String careProviderId, int page, int size);
+  CertificateExportPage getExportByCareProviderId(String careProviderId, int page, int size);
+
+  long deleteByCareProviderId(String careProviderId, int size);
 }
