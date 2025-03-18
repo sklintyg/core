@@ -33,7 +33,7 @@ class GetTotalExportsInternalForCareProviderServiceTest {
             .totalRevoked(2)
             .build();
 
-        doReturn(certificateExportPage).when(certificateRepository).getByCareProviderId(CARE_PROVIDER_ID, 0, 1);
+        doReturn(certificateExportPage).when(certificateRepository).getExportByCareProviderId(CARE_PROVIDER_ID, 0, 1);
 
         final var actualResponse = getTotalExportsInternalForCareProviderService.get(CARE_PROVIDER_ID);
         assertEquals(expectedResult, actualResponse);

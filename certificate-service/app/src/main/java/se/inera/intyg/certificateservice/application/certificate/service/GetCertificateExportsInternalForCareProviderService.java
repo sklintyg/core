@@ -18,7 +18,7 @@ public class GetCertificateExportsInternalForCareProviderService {
   private final XmlGenerator xmlGenerator;
 
   public ExportInternalResponse get(ExportCertificateInternalRequest request, String careProviderId) {
-    final var certificateExportPage = certificateRepository.getByCareProviderId(
+    final var certificateExportPage = certificateRepository.getExportByCareProviderId(
         careProviderId,
         request.getPage(),
         request.getSize()

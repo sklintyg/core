@@ -12,7 +12,7 @@ public class GetTotalExportsInternalForCareProviderService {
   private final CertificateRepository certificateRepository;
 
   public TotalExportsInternalResponse get(String careProviderId) {
-    final var certificateExportPage = certificateRepository.getByCareProviderId(
+    final var certificateExportPage = certificateRepository.getExportByCareProviderId(
         careProviderId,
         0,
         1

@@ -60,7 +60,7 @@ class GetCertificateExportsInternalForCareProviderServiceTest {
             .size(SIZE)
             .build();
 
-        doReturn(certificateExportPage).when(certificateRepository).getByCareProviderId(CARE_PROVIDER_ID, PAGE, SIZE);
+        doReturn(certificateExportPage).when(certificateRepository).getExportByCareProviderId(CARE_PROVIDER_ID, PAGE, SIZE);
 
         final var actualResult = getCertificateExportsInternalForCareProviderService.get(internalRequest, CARE_PROVIDER_ID);
         assertEquals(expectedResult, actualResult);
