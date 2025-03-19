@@ -276,7 +276,7 @@ public class CertificateActionFactory {
               List.of(
                   new ActionRuleUserNotBlocked(),
                   new ActionRuleRole(
-                      List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE)
+                      List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE, Role.CARE_ADMIN)
                   ),
                   new ActionRuleSent(true),
                   new ActionRuleStatus(List.of(Status.SIGNED)),

@@ -186,12 +186,10 @@ class CertificateActionComplementTest {
         .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
         .build();
 
-    final var certificate = certificateBuilder.build();
-
     assertFalse(
-        certificateActionComplement.evaluate(Optional.of(certificate),
+        certificateActionComplement.evaluate(Optional.empty(),
             Optional.of(actionEvaluation)),
-        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+        () -> "Expected false when passing %s".formatted(actionEvaluation)
     );
   }
 
