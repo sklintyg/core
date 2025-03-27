@@ -486,7 +486,7 @@ class JpaCertificateRepositoryTest {
       final var page = mock(Page.class);
       final var certificateEntity = CertificateEntity.builder().build();
 
-      doReturn(page).when(certificateEntityRepository).findCertificateEntitiesByCareProviderHsaId(
+      doReturn(page).when(certificateEntityRepository).findSignedCertificateEntitiesByCareProviderHsaId(
           eq(CARE_PROVIDER.getHsaId()), any(Pageable.class)
       );
       doReturn(2L).when(certificateEntityRepository).findRevokedCertificateEntitiesByCareProviderHsaId(

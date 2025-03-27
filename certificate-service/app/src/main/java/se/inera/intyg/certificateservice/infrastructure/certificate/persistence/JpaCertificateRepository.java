@@ -190,7 +190,7 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
 
     final var pageable = PageRequest.of(page, size, Sort.by(Direction.ASC, "signed", "certificateId"));
 
-    final var certificateEntitiesPage = certificateEntityRepository.findCertificateEntitiesByCareProviderHsaId(
+    final var certificateEntitiesPage = certificateEntityRepository.findSignedCertificateEntitiesByCareProviderHsaId(
         careProviderId.id(), pageable
     );
 
