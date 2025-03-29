@@ -46,6 +46,9 @@ public class CertificateMetadataDTO {
   String externalReference;
   List<CertificateMessageTypeDTO> messageTypes;
   CertificateConfirmationModalDTO confirmationModal;
+  StaffDTO createdBy;
+  LocalDateTime revokedAt;
+  StaffDTO revokedBy;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class CertificateMetadataDTOBuilder {

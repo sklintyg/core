@@ -5,10 +5,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK3226_CERTIFICATE;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,16 +20,25 @@ import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateExportPage;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateDataEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
@@ -448,6 +461,80 @@ class JpaCertificateRepositoryTest {
 
       assertEquals("Cannot get certificate if certificateIds is null",
           illegalArgumentException.getMessage());
+    }
+  }
+
+  @Nested
+  class GetByCareProviderIdTests {
+
+    @Test
+    void shallThrowIfCareProviderIdIsNull() {
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> jpaCertificateRepository.getExportByCareProviderId(null, 0, 0));
+
+      assertEquals("Cannot get certificates if careProviderId is null", illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallReturnCertificateExportPage() {
+      final var expectedResult = CertificateExportPage.builder()
+          .totalRevoked(2L)
+          .total(2L)
+          .certificates(Collections.singletonList(FK3226_CERTIFICATE))
+          .build();
+
+      final var page = mock(Page.class);
+      final var certificateEntity = CertificateEntity.builder().build();
+
+      doReturn(page).when(certificateEntityRepository).findSignedCertificateEntitiesByCareProviderHsaId(
+          eq(CARE_PROVIDER.getHsaId()), any(Pageable.class)
+      );
+      doReturn(2L).when(certificateEntityRepository).findRevokedCertificateEntitiesByCareProviderHsaId(
+          CARE_PROVIDER.getHsaId()
+      );
+      doReturn(Collections.singletonList(certificateEntity)).when(page).getContent();
+      doReturn(2L).when(page).getTotalElements();
+      doReturn(FK3226_CERTIFICATE).when(certificateEntityMapper).toDomain(certificateEntity);
+
+      final var actualResult = jpaCertificateRepository.getExportByCareProviderId(new HsaId(CARE_PROVIDER.getHsaId()), 0, 10);
+      assertEquals(expectedResult, actualResult);
+    }
+  }
+
+  @Nested
+  class DeleteByCareProviderId {
+
+    @BeforeEach
+    void setUp() {
+      ReflectionTestUtils.setField(jpaCertificateRepository, "eraseCertificatesPageSize", 10);
+    }
+
+    @Test
+    void shouldThrowExceptionIfCareProviderIdIsNull() {
+      assertThrows(IllegalArgumentException.class,
+          () -> jpaCertificateRepository.deleteByCareProviderId(null));
+    }
+
+    @Test
+    void shouldDeleteCertificateByCareProviderId() {
+      final var pageable = PageRequest.of(0, 10, Sort.by(Direction.ASC, "signed", "certificateId"));
+      final var page = mock(Page.class);
+      final var certificateEntity = CertificateEntity.builder()
+          .certificateId("ID")
+          .build();
+
+      doReturn(page).when(certificateEntityRepository).findCertificateEntitiesByCareProviderHsaId(
+          CARE_PROVIDER.getHsaId(), pageable
+      );
+      doReturn(List.of(certificateEntity)).when(page).getContent();
+      doReturn(false).when(page).hasNext();
+      doReturn(1L).when(page).getTotalElements();
+
+      final var deletedCount = jpaCertificateRepository.deleteByCareProviderId(new HsaId(CARE_PROVIDER.getHsaId()));
+
+      verify(certificateRelationRepository).deleteRelations(certificateEntity);
+      verify(certificateEntityRepository).deleteAllByCertificateIdIn(List.of(certificateEntity.getCertificateId()));
+      assertEquals(1L, deletedCount);
     }
   }
 }

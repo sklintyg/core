@@ -94,6 +94,16 @@ public class CertificateMetadataConverter {
                 )
                 .build()
         )
+        .createdBy(
+            certificate.certificateMetaData().creator() != null ?
+                StaffDTO.builder()
+                    .personId(certificate.certificateMetaData().creator().hsaId().id())
+                    .firstName(certificate.certificateMetaData().creator().name().firstName())
+                    .middleName(certificate.certificateMetaData().creator().name().middleName())
+                    .lastName(certificate.certificateMetaData().creator().name().lastName())
+                    .fullName(certificate.certificateMetaData().creator().name().fullName())
+                    .build() : null
+        )
         .forwarded(certificate.forwarded() != null && certificate.forwarded().value())
         .latestMajorVersion(LATEST_MAJOR_VERSION)
         .sent(certificate.sent() != null)
@@ -129,6 +139,15 @@ public class CertificateMetadataConverter {
         )
         .readyForSign(
             certificate.readyForSign() != null ? certificate.readyForSign().readyForSignAt() : null)
+        .revokedAt(certificate.revoked() != null ? certificate.revoked().revokedAt() : null)
+        .revokedBy(certificate.revoked() != null && certificate.revoked().revokedBy() != null ?
+            StaffDTO.builder()
+                .personId(certificate.revoked().revokedBy().hsaId().id())
+                .firstName(certificate.revoked().revokedBy().name().firstName())
+                .middleName(certificate.revoked().revokedBy().name().middleName())
+                .lastName(certificate.revoked().revokedBy().name().lastName())
+                .fullName(certificate.revoked().revokedBy().name().fullName())
+                .build() : null)
         .build();
   }
 

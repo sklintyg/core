@@ -32,6 +32,10 @@ public class XmlGeneratorValue {
 
     mappings(certificate.certificateModel(), certificate.elementData())
         .forEach(mapping -> {
+              if (mapping.getAnswers().isEmpty()) {
+                return;
+              }
+
               if (noCustomMapping(mapping)) {
                 answerList.addAll(mapping.getAnswers());
                 return;

@@ -7,13 +7,21 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateExportPage;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
+import se.inera.intyg.certificateservice.domain.common.model.HsaId;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecificationFactory;
@@ -23,6 +31,9 @@ import se.inera.intyg.certificateservice.testability.certificate.service.reposit
 @Repository
 @RequiredArgsConstructor
 public class JpaCertificateRepository implements TestabilityCertificateRepository {
+
+  @Value("${erase.certificates.page.size:1000}")
+  private int eraseCertificatesPageSize;
 
   private final CertificateEntityRepository certificateEntityRepository;
   private final CertificateEntityMapper certificateEntityMapper;
@@ -169,6 +180,62 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
     return certificateEntityRepository.findAll(specification).stream()
         .map(certificateEntityMapper::toDomain)
         .toList();
+  }
+
+  @Override
+  public CertificateExportPage getExportByCareProviderId(HsaId careProviderId, int page, int size) {
+    if (careProviderId == null) {
+      throw new IllegalArgumentException("Cannot get certificates if careProviderId is null");
+    }
+
+    final var pageable = PageRequest.of(page, size, Sort.by(Direction.ASC, "signed", "certificateId"));
+
+    final var certificateEntitiesPage = certificateEntityRepository.findSignedCertificateEntitiesByCareProviderHsaId(
+        careProviderId.id(), pageable
+    );
+
+    final var revokedCertificatesOnCareProvider = certificateEntityRepository.findRevokedCertificateEntitiesByCareProviderHsaId(
+        careProviderId.id()
+    );
+
+    return CertificateExportPage.builder()
+        .total(certificateEntitiesPage.getTotalElements())
+        .totalRevoked(revokedCertificatesOnCareProvider)
+        .certificates(
+            certificateEntitiesPage.getContent().stream()
+                .map(certificateEntityMapper::toDomain)
+                .toList()
+        )
+        .build();
+  }
+
+  @Override
+  public long deleteByCareProviderId(HsaId careProviderId) {
+    if (careProviderId == null) {
+      throw new IllegalArgumentException("Cannot delete certificates if careProviderId is null");
+    }
+
+    final var pageable = PageRequest.of(0, eraseCertificatesPageSize, Sort.by(Direction.ASC, "signed", "certificateId"));
+    Page<CertificateEntity> certificateEntitiesPage;
+
+    do {
+      certificateEntitiesPage = certificateEntityRepository.findCertificateEntitiesByCareProviderHsaId(
+          careProviderId.id(), pageable
+      );
+
+      final var certificateEntities = certificateEntitiesPage.getContent();
+
+      certificateEntities.forEach(certificateRelationRepository::deleteRelations);
+
+      certificateEntityRepository.deleteAllByCertificateIdIn(
+          certificateEntities.stream()
+              .map(CertificateEntity::getCertificateId)
+              .toList()
+      );
+
+    } while (certificateEntitiesPage.hasNext());
+
+    return certificateEntitiesPage.getTotalElements();
   }
 
   @Override

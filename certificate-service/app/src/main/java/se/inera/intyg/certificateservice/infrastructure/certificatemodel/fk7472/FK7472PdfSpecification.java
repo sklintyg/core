@@ -15,7 +15,7 @@ public class FK7472PdfSpecification {
       "form1[0].#subform[0].flt_txtPersonNrBarn[0]");
   private static final PdfMcid PDF_PDF_MCID = new PdfMcid(120);
   private static final PdfTagIndex PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX = new PdfTagIndex(50);
-  private static final PdfTagIndex PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX = new PdfTagIndex(42);
+  private static final PdfTagIndex PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX = new PdfTagIndex(47);
   private static final int PDF_SIGNATURE_PAGE_INDEX = 0;
   private static final PdfFieldId PDF_SIGNED_DATE_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[0].flt_datUnderskrift[0]");

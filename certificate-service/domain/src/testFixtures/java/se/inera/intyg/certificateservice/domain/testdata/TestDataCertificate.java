@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.domain.testdata;
 
+import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK3226_CERTIFICATE_MODEL;
@@ -9,7 +10,12 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.SUBJECT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.ALF_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ADDRESS;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_CITY;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_PHONENUMBER;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ZIP_CODE;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -29,6 +35,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDi
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueMedicalInvestigationList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalInvestigation;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revoked;
@@ -106,12 +113,24 @@ public class TestDataCertificate {
                             .dateId(new FieldId("54.1"))
                             .date(LocalDate.now())
                             .build()
-                    ).build()
+                    ).build(),
+                ElementData.builder()
+                    .id(UNIT_CONTACT_INFORMATION)
+                    .value(
+                        ElementValueUnitContactInformation.builder()
+                            .address(ALFA_ALLERGIMOTTAGNINGEN_ADDRESS)
+                            .city(ALFA_ALLERGIMOTTAGNINGEN_CITY)
+                            .zipCode(ALFA_ALLERGIMOTTAGNINGEN_ZIP_CODE)
+                            .phoneNumber(ALFA_ALLERGIMOTTAGNINGEN_PHONENUMBER)
+                            .build()
+                    )
+                    .build()
             )
         )
         .certificateMetaData(
             CertificateMetaData.builder()
                 .issuer(AJLA_DOKTOR)
+                .creator(ALF_DOKTOR)
                 .patient(ATHENA_REACT_ANDERSSON)
                 .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
                 .careUnit(ALFA_MEDICINCENTRUM)
@@ -195,6 +214,7 @@ public class TestDataCertificate {
         )
         .certificateMetaData(
             CertificateMetaData.builder()
+                .creator(ALF_DOKTOR)
                 .issuer(AJLA_DOKTOR)
                 .patient(ATHENA_REACT_ANDERSSON)
                 .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
@@ -242,11 +262,23 @@ public class TestDataCertificate {
                             )
                             .dateRangeListId(new FieldId("3.2"))
                             .build())
+                    .build(),
+                ElementData.builder()
+                    .id(UNIT_CONTACT_INFORMATION)
+                    .value(
+                        ElementValueUnitContactInformation.builder()
+                            .address(ALFA_ALLERGIMOTTAGNINGEN_ADDRESS)
+                            .city(ALFA_ALLERGIMOTTAGNINGEN_CITY)
+                            .zipCode(ALFA_ALLERGIMOTTAGNINGEN_ZIP_CODE)
+                            .phoneNumber(ALFA_ALLERGIMOTTAGNINGEN_PHONENUMBER)
+                            .build()
+                    )
                     .build()
             )
         )
         .certificateMetaData(
             CertificateMetaData.builder()
+                .creator(ALF_DOKTOR)
                 .issuer(AJLA_DOKTOR)
                 .patient(ATHENA_REACT_ANDERSSON)
                 .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
@@ -375,6 +407,7 @@ public class TestDataCertificate {
         .certificateMetaData(
             CertificateMetaData.builder()
                 .issuer(AJLA_DOKTOR)
+                .creator(ALF_DOKTOR)
                 .patient(ATHENA_REACT_ANDERSSON)
                 .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
                 .careUnit(ALFA_MEDICINCENTRUM)
