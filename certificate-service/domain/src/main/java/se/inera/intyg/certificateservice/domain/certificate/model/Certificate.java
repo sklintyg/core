@@ -321,6 +321,10 @@ public class Certificate {
     this.externalReference = externalReference;
   }
 
+  public void elementData(List<ElementData> elementData) {
+    this.elementData = elementData;
+  }
+
   public Optional<ElementData> getElementDataById(ElementId id) {
     return elementData.stream()
         .filter(data -> id.id().equals(data.id().id()))

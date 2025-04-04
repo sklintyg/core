@@ -7,6 +7,7 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ALVA_VARDADMINISTRATOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ajlaDoktorDtoBuilder;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customCreateCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCreateCertificateAIRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCreateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificate;
 
@@ -29,6 +30,20 @@ public abstract class CreateCertificateIT extends BaseIntegrationIT {
   void shallReturnCertificateWhenActive() {
     final var response = api.createCertificate(
         defaultCreateCertificateRequest(type(), typeVersion())
+    );
+
+    assertNotNull(
+        certificate(response.getBody()),
+        "Should return certificate as it is active!"
+    );
+  }
+
+  @Test
+  @DisplayName("Om utkastet framgångsrikt skapats med AI förifyllnad skall utkastet returneras")
+  void shallReturnPrefilledCertificateWhenActive() {
+    final var response = api.createCertificateAI(
+        defaultCreateCertificateAIRequest(type(), typeVersion(),
+            "Barnets har mycket hosta och feber. Förkylningssymtom. Ont i hela kroppen men mest fötterna. Jag rekommenderar att patienten vilar upp sig innan den återkommer.")
     );
 
     assertNotNull(

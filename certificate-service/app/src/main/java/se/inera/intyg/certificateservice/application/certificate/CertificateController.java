@@ -35,6 +35,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetCertific
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.PrefillAICertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.RenewCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.RenewCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ReplaceCertificateRequest;
@@ -53,6 +54,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.config.Vali
 import se.inera.intyg.certificateservice.application.certificate.service.AnswerComplementService;
 import se.inera.intyg.certificateservice.application.certificate.service.CertificateExistsService;
 import se.inera.intyg.certificateservice.application.certificate.service.ComplementCertificateService;
+import se.inera.intyg.certificateservice.application.certificate.service.CreateCertificateAIService;
 import se.inera.intyg.certificateservice.application.certificate.service.CreateCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.DeleteCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.ForwardCertificateService;
@@ -95,6 +97,7 @@ public class CertificateController {
   private final ForwardCertificateService forwardCertificateService;
   private final GetCertificateEventsService getCertificateEventsService;
   private final SetCertificateReadyForSignService setCertificateReadyForSignService;
+  private final CreateCertificateAIService createCertificateAIService;
 
   @PostMapping
   @PerformanceLogging(eventAction = "create-certificate", eventType = EVENT_TYPE_CREATION)
@@ -245,5 +248,12 @@ public class CertificateController {
       @RequestBody CertificateReadyForSignRequest request,
       @PathVariable("certificateId") String certificateId) {
     return setCertificateReadyForSignService.set(request, certificateId);
+  }
+
+  @PostMapping("/ai/prefill")
+  @PerformanceLogging(eventAction = "prefill-certificate", eventType = EVENT_TYPE_CREATION)
+  CreateCertificateResponse prefillCertificate(
+      @RequestBody PrefillAICertificateRequest request) {
+    return createCertificateAIService.create(request);
   }
 }

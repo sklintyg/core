@@ -11,6 +11,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetCertific
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificatePdfRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.PrefillAICertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.RenewCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ReplaceCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.RevokeCertificateRequest;
@@ -67,6 +68,19 @@ public class ApiRequestUtil {
                 .version(version)
                 .build()
         )
+        .build();
+  }
+
+  public static PrefillAICertificateRequest defaultCreateCertificateAIRequest(String type,
+      String version, String text) {
+    return PrefillAICertificateRequestBuilder.create()
+        .certificateModelId(
+            CertificateModelIdDTO.builder()
+                .type(type)
+                .version(version)
+                .build()
+        )
+        .text(text)
         .build();
   }
 

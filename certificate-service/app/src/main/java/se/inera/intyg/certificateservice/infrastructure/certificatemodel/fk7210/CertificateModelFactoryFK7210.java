@@ -62,8 +62,8 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
   public static final String LINK_FK_ID = "LINK_FK";
   public static final String PREAMBLE_TEXT =
       "Det här är ditt intyg. Intyget innehåller all information som vården fyllt i. Du kan inte ändra något i ditt intyg. "
-          + "Har du frågor kontaktar du den som skrivit ditt intyg. Om du vill ansöka om föräldrapenning, gör du det på {"
-          + LINK_FK_ID + "}. \nDen externa länken leder till forsakringskassan.se";
+          + "Har du frågor kontaktar du den som skrivit ditt intyg. Om du vill ansöka om föräldrapenning, gör du det på ..."
+          + LINK_FK_ID + ".... \nDen externa länken leder till forsakringskassan.se";
   public static final String URL_FK = "https://www.forsakringskassan.se/";
   public static final String FK_NAME = "Försäkringskassan";
 

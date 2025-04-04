@@ -35,6 +35,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetCertific
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.PrefillAICertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.RenewCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.RenewCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ReplaceCertificateRequest;
@@ -116,6 +117,19 @@ public class ApiUtil {
   public ResponseEntity<CreateCertificateResponse> createCertificate(
       CreateCertificateRequest request) {
     final var requestUrl = "http://localhost:%s/api/certificate".formatted(port);
+
+    final var response = sendRequest(request, requestUrl, CreateCertificateResponse.class);
+
+    if (certificateId(response.getBody()) != null) {
+      certificateIds.add(certificateId(response.getBody()));
+    }
+
+    return response;
+  }
+
+  public ResponseEntity<CreateCertificateResponse> createCertificateAI(
+      PrefillAICertificateRequest request) {
+    final var requestUrl = "http://localhost:%s/api/certificate/ai/prefill".formatted(port);
 
     final var response = sendRequest(request, requestUrl, CreateCertificateResponse.class);
 
