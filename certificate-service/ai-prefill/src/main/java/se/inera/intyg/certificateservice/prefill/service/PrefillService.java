@@ -1,5 +1,12 @@
 package se.inera.intyg.certificateservice.prefill.service;
+import static model.AIPrefillValueType.CODE_LIST;
+import static model.AIPrefillValueType.DATE;
+import static model.AIPrefillValueType.DATE_LIST;
+import static model.AIPrefillValueType.DIAGNOSIS_LIST;
+import static model.AIPrefillValueType.TEXT;
+
 import java.util.Map;
+import java.util.Objects;
 import model.AIPrefillResponse;
 import model.AIPrefillValueCodeList;
 import model.AIPrefillValueDate;
@@ -27,9 +34,10 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 @Service
 public class PrefillService {
 
-  private static final String SYSTEM_PROMPT = "Generate a map placing the question ids as the key. The value you need to extract from the prompt. In the prompt you will recieve a certificatemodel which has different questions defined with an id and a question name. Using the question name you will extract data from the text, which is electronic health records for the patient, and set as the value in the map. The question id is the key.";
+  private static final String SYSTEM_PROMPT = "Generate a map placing the question ids as the key. The value you need to extract from the prompt. In the prompt you will recieve a certificatemodel which has different questions defined with an id and a question name. Using the question name you will extract data from the text, which is electronic health records for the patient, and set as the value in the map. The question id is the key. Do not use the interface AIPrefillValue, that is not an object with a value. If you don't find fitting value type - skip the question.";
   private static final String ONLY_TEXT_PROMPT = "The value will be strings so if you in the model find something that is not a string, skip that value and dont add it to the map.";
-  private static final String MORE_VALUES_PROMPT = "The value will be strings, date, date list (you will use the id and the date to create a list), checkboxes (codes that you will take from the config), and diagnosis so if you in the model find something that is not these values, skip that value and dont add it to the map. When you've generated the whole map, then add a entry in the map with key INFO where you add a text that describes what information you have used and how you have used it.";
+  private static final String MORE_VALUES_PROMPT = "The value will be strings, date, date list (you will use the id and the date to create a list), checkboxes (codes that you will take from the config), and diagnosis so if you in the model find something that is not these values, skip that value and dont add it to the map. When you've generated the whole map.";
+  private static final String INFO_PROMPT = "Then add a entry in the map with key INFO where you add a text that describes what information you have used and how you have used it.";
 
   @Value("${ai.prefill.system.prompt:}")
   private String systemPrompt;
@@ -47,22 +55,24 @@ public class PrefillService {
     final var elementData = data.entrySet().stream()
         .map(entry -> ElementData.builder()
             .id(new ElementId(entry.getKey()))
-            .value(convertToElementValue(certificate, entry.getValue(), entry.getKey()))
+            //.value(convertToElementValue(certificate, entry.getValue(), entry.getKey()))
+            .value(convertElementValueText(certificate, entry.getValue(), entry.getKey()))
             .build()
         )
+        .filter(Objects::nonNull)
         .toList();
     certificate.elementData(elementData);
 
     return AIPrefillResponse.builder()
         .certificate(certificate)
-        .informationAboutAIGeneration((((AIPrefillValueText)data.get("INFO")).getText()))
+        //.informationAboutAIGeneration((((AIPrefillValueText)data.get("INFO")).getText()))
         .build();
   }
 
-  private Map<String, AIPrefillValue> generateMap(Certificate certificate, String ehrData) {
+  private Map<String, String> generateMap(Certificate certificate, String ehrData) {
     return chatClient.prompt()
-        .system(systemPrompt != null && !systemPrompt.isEmpty() ? systemPrompt : SYSTEM_PROMPT + MORE_VALUES_PROMPT)
-        .user(String.format("CertificateModel: %s, \n Text: %s", certificate.certificateModel(),
+        .system(systemPrompt != null && !systemPrompt.isEmpty() ? systemPrompt : SYSTEM_PROMPT + ONLY_TEXT_PROMPT)
+        .user(String.format("CertificateModel: %s, \n Text: %s", "test",
             ehrData))
         .call()
         .entity(new ParameterizedTypeReference<>() {
@@ -139,5 +149,18 @@ public class PrefillService {
     final var emptyValue = elementSpecification.configuration().emptyValue();
     return ((ElementValueText) emptyValue).withText(
         aiPrefillValue.getText());
+  }
+
+  private static ElementValueText convertElementValueText(Certificate certificate,
+      String text, String id) {
+    final var elementSpecification = certificate.certificateModel()
+        .elementSpecification(new ElementId(id));
+    final var emptyValue = elementSpecification.configuration().emptyValue();
+
+    if (emptyValue instanceof ElementValueText textValue) {
+      return  textValue.withText(text);
+    }
+
+    return null;
   }
 }

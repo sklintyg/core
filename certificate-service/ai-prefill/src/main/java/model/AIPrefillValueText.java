@@ -1,5 +1,6 @@
 package model;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Builder;
 import lombok.Value;
 
@@ -8,10 +9,11 @@ import lombok.Value;
 public class AIPrefillValueText implements AIPrefillValue {
   
     String text;
+    AIPrefillValueType type = AIPrefillValueType.TEXT;
 
     @Override
     public AIPrefillValueType getType() {
-        return AIPrefillValueType.TEXT;
+        return type;
     }
 }
 

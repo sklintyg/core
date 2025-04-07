@@ -1,5 +1,6 @@
 package model;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Builder;
 import lombok.Value;
 import java.util.List;
@@ -9,10 +10,11 @@ import java.util.List;
 public class AIPrefillValueCodeList implements AIPrefillValue {
   
     List<String> codes;
+    AIPrefillValueType type = AIPrefillValueType.CODE_LIST;
 
     @Override
     public AIPrefillValueType getType() {
-        return AIPrefillValueType.CODE_LIST;
+        return type;
     }
 }
 
