@@ -33,8 +33,8 @@ public class CertificateAIPrefillService {
     );
 
     final var certificate = certificateRepository.getById(new CertificateId(certificateId));
-    final var prefilledCertificate = prefillService.prefill(certificate, request.getPreFillData());
-    certificateRepository.save(prefilledCertificate);
+    final var prefilledResponse = prefillService.prefill(certificate, request.getPreFillData());
+    certificateRepository.save(prefilledResponse.getCertificate());
 
     return CertificateAIPrefillResponse.builder()
         .certificate(
