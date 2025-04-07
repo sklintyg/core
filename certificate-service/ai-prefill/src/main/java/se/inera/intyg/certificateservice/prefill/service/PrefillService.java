@@ -31,7 +31,7 @@ public class PrefillService {
   private static final String ONLY_TEXT_PROMPT = "The value will be strings so if you in the model find something that is not a string, skip that value and dont add it to the map.";
   private static final String MORE_VALUES_PROMPT = "The value will be strings, date, date list (you will use the id and the date to create a list), checkboxes (codes that you will take from the config), and diagnosis so if you in the model find something that is not these values, skip that value and dont add it to the map. When you've generated the whole map, then add a entry in the map with key INFO where you add a text that describes what information you have used and how you have used it.";
 
-  @Value("${ai.prefill.system.prompt}")
+  @Value("${ai.prefill.system.prompt:}")
   private String systemPrompt;
 
   private final ChatClient chatClient;
