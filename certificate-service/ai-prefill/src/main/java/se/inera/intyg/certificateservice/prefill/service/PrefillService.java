@@ -1,13 +1,19 @@
-package se.inera.intyg.certificateservice.prefill;
+package se.inera.intyg.certificateservice.prefill.service;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import model.AIPrefillValueCodeList;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCodeList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import model.AIPrefillValue;
+import model.AIPrefillValueText;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +30,7 @@ public class PrefillService {
     final var elementData = data.entrySet().stream()
         .map(entry -> ElementData.builder()
             .id(new ElementId(entry.getKey()))
-            .value(ElementValueText.builder().text(entry.getValue()).build())
+            .value(convertToElementValue(entry.getValue()))
             .build()
         )
         .toList();
@@ -33,7 +39,7 @@ public class PrefillService {
     return certificate;
   }
 
-  private Map<String, String> generateMap(Certificate certificate, String ehrData) {
+  private Map<String, AIPrefillValue> generateMap(Certificate certificate, String ehrData) {
     return chatClient.prompt()
         .system(SYSTEM_PROMPT + ONLY_TEXT_PROMPT)
         .user(String.format("CertificateModel: %s, \n Text: %s", certificate.certificateModel(),
@@ -41,5 +47,21 @@ public class PrefillService {
         .call()
         .entity(new ParameterizedTypeReference<>() {
         });
+  }
+
+  private ElementValue convertToElementValue(AIPrefillValue aiPrefillValue) {
+    return switch (aiPrefillValue.getType()) {
+      case TEXT -> ElementValueText.builder()
+          .text(((AIPrefillValueText) aiPrefillValue).getText()) // TODO: Fix field id
+          .build();
+      case CODE_LIST -> ElementValueCodeList.builder()
+          .list(((AIPrefillValueCodeList) aiPrefillValue).getCodes()
+              .stream()
+              .map(code -> ElementValueCode.builder()
+                  .code(code)
+                  .build()).toList()
+          )
+          .build();
+    };
   }
 }
