@@ -8,6 +8,7 @@ def applicationDir = "${rootProject.projectDir}/devops/dev"
 dependencies {
     implementation project(':domain')
     implementation project(':clinicalprocess-certificate-v4')
+    implementation project(':ai-prefill')
     implementation project(':logging')
 
     implementation "co.elastic.logging:logback-ecs-encoder:${logbackEcsEncoderVersion}"
