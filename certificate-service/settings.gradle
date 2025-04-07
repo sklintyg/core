@@ -7,4 +7,5 @@ include 'integration-test'
 include 'logging'
 include 'pdfbox-generator'
 include 'integration-certificate-print-service'
+include 'ai-prefill'
 
