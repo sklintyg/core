@@ -1,14 +1,17 @@
 package se.inera.intyg.certificateservice.prefill.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.stream.Stream;
 import model.AIPrefillResponse;
 import model.AIPrefillValueCodeList;
 import model.AIPrefillValueDate;
 import model.AIPrefillValueDateList;
 import model.AIPrefillValueDiagnosisList;
+import model.CodeSystemFunktionsnedsattning;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -30,6 +33,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import model.AIPrefillValue;
 import model.AIPrefillValueText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.common.model.Code;
 
 @Service
 public class PrefillService {
@@ -62,6 +66,19 @@ public class PrefillService {
         IDS.put("9.1", "9");
   }
 
+  private static final Map<String, Code> CODES = new HashMap<>();
+  static {
+    CODES.put("8", CodeSystemFunktionsnedsattning.INTELLEKTUELL_FUNKTION);
+    CODES.put("9", CodeSystemFunktionsnedsattning.KOMMUNIKATION_SOCIAL_INTERAKTION);
+    CODES.put("10", CodeSystemFunktionsnedsattning.UPPMARKSAMHET);
+    CODES.put("11", CodeSystemFunktionsnedsattning.PSYKISK_FUNKTION);
+    CODES.put("48", CodeSystemFunktionsnedsattning.HORSELFUNKTION);
+    CODES.put("49", CodeSystemFunktionsnedsattning.SYNFUNKTION);
+    CODES.put("12", CodeSystemFunktionsnedsattning.SINNESFUNKTION);
+    CODES.put("13", CodeSystemFunktionsnedsattning.KOORDINATION);
+    CODES.put("14", CodeSystemFunktionsnedsattning.ANNAN_KROPPSILIG_FUNKTION);
+  }
+
   @Value("${ai.prefill.system.prompt:}")
   private String systemPrompt;
 
@@ -90,7 +107,32 @@ public class PrefillService {
         )
         .filter(Objects::nonNull)
         .toList();
-    certificate.elementData(elementData);
+
+    final var chosenCodes = CODES.entrySet().stream()
+        .filter(entry -> elementData.stream().anyMatch(element -> element.id().id().equals(entry.getKey())))
+        .toList();
+
+    final var checkboxes = List.of(ElementData.builder()
+        .id(new ElementId("funktionsnedsattning"))
+        .value(ElementValueCodeList.builder()
+            .id(new FieldId("100.1"))
+            .list(
+                chosenCodes.stream()
+                    .map(
+                        entry ->
+                        ElementValueCode.builder()
+                            .codeId(new FieldId(entry.getValue().code()))
+                            .code(entry.getValue().code())
+                            .build()
+                    )
+                    .toList()
+            )
+            .build()
+        )
+        .build());
+
+    final var mergedElementData = Stream.concat(elementData.stream(), checkboxes.stream()).toList();
+    certificate.elementData(mergedElementData);
 
     return AIPrefillResponse.builder()
         .certificate(certificate)
