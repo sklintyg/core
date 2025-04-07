@@ -10,6 +10,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonSubTypes({
     @Type(value = AIPrefillValueText.class, name = "TEXT"),
     @Type(value = AIPrefillValueCodeList.class, name = "CODE_LIST"),
+    @Type(value = AIPrefillValueDiagnosisList.class, name = "DIAGNOSIS_LIST"),
+    @Type(value = AIPrefillValueDate.class, name = "DATE"),
+    @Type(value = AIPrefillValueDateList.class, name = "DATE_LIST"),
 })
 public interface AIPrefillValue {
   AIPrefillValueType getType();
