@@ -10,7 +10,7 @@ import se.inera.intyg.certificateservice.application.common.ActionEvaluationFact
 import se.inera.intyg.certificateservice.application.common.converter.ResourceLinkConverter;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
-import se.inera.intyg.certificateservice.prefill.PrefillService;
+import se.inera.intyg.certificateservice.prefill.service.PrefillService;
 
 @Service
 @RequiredArgsConstructor
