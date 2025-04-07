@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateservice.prefill.service;
 import java.util.Map;
-import lombok.RequiredArgsConstructor;
 import model.AIPrefillValueCodeList;
 import model.AIPrefillValueDiagnosisList;
 import org.springframework.ai.chat.client.ChatClient;
@@ -20,7 +19,6 @@ import model.AIPrefillValueText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
 @Service
-@RequiredArgsConstructor
 public class PrefillService {
 
   private static final String SYSTEM_PROMPT = "Generate a map placing the question ids as the key. The value you need to extract from the prompt. In the prompt you will recieve a certificatemodel which has different questions defined with an id and a question name. Using the question name you will extract data from the text, which is electronic health records for the patient, and set as the value in the map. The question id is the key.";
@@ -28,6 +26,11 @@ public class PrefillService {
   private static final String MORE_VALUES_PROMPT = "The value will be strings, checkboxes (codes that you will take from the config), and diagnosis so if you in the model find something that is not these values, skip that value and dont add it to the map.";
 
   private final ChatClient chatClient;
+
+  public PrefillService(ChatClient.Builder chatClientBuilder) {
+    this.chatClient = chatClientBuilder.build();
+  }
+
 
   public Certificate prefill(Certificate certificate, String ehrData) {
     final var data = generateMap(certificate, ehrData);
