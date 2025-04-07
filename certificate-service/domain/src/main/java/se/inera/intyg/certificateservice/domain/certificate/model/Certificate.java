@@ -190,6 +190,9 @@ public class Certificate {
     this.xml = xmlGenerator.generate(this, signature);
   }
 
+  public void elementData(List<ElementData> elementData) {
+    this.elementData = elementData;
+  }
 
   private void sign(Revision revision, ActionEvaluation actionEvaluation) {
     throwIfConcurrentModification(revision, "sign", actionEvaluation);
