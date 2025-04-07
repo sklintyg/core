@@ -14,6 +14,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueTe
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import model.AIPrefillValue;
 import model.AIPrefillValueText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +31,7 @@ public class PrefillService {
     final var elementData = data.entrySet().stream()
         .map(entry -> ElementData.builder()
             .id(new ElementId(entry.getKey()))
-            .value(convertToElementValue(entry.getValue()))
+            .value(convertToElementValue(certificate, entry.getValue(), entry.getKey()))
             .build()
         )
         .toList();
@@ -49,19 +50,34 @@ public class PrefillService {
         });
   }
 
-  private ElementValue convertToElementValue(AIPrefillValue aiPrefillValue) {
+  private ElementValue convertToElementValue(Certificate certificate, AIPrefillValue aiPrefillValue, String id) {
     return switch (aiPrefillValue.getType()) {
-      case TEXT -> ElementValueText.builder()
-          .text(((AIPrefillValueText) aiPrefillValue).getText()) // TODO: Fix field id
-          .build();
-      case CODE_LIST -> ElementValueCodeList.builder()
-          .list(((AIPrefillValueCodeList) aiPrefillValue).getCodes()
-              .stream()
-              .map(code -> ElementValueCode.builder()
-                  .code(code)
-                  .build()).toList()
-          )
-          .build();
+      case TEXT -> convertElementValueText(certificate, (AIPrefillValueText) aiPrefillValue, id);
+      case CODE_LIST -> convertElementValueCodeList(certificate, (AIPrefillValueCodeList) aiPrefillValue, id);
     };
+  }
+
+  private static ElementValueCodeList convertElementValueCodeList(Certificate certificate,
+      AIPrefillValueCodeList aiPrefillValue, String id) {
+    final var elementSpecification = certificate.certificateModel()
+        .elementSpecification(new ElementId(id));
+    final var emptyValue = elementSpecification.configuration().emptyValue();
+    return ((ElementValueCodeList) emptyValue).withList(
+        aiPrefillValue.getCodes().stream()
+            .map(code ->
+                ElementValueCode.builder()
+                    .code(code)
+                    .codeId(new FieldId(code))
+                    .build())
+            .toList());
+  }
+
+  private static ElementValueText convertElementValueText(Certificate certificate,
+      AIPrefillValueText aiPrefillValue, String id) {
+    final var elementSpecification = certificate.certificateModel()
+        .elementSpecification(new ElementId(id));
+    final var emptyValue = elementSpecification.configuration().emptyValue();
+    return ((ElementValueText) emptyValue).withText(
+        aiPrefillValue.getText());
   }
 }
