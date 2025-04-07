@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import se.inera.intyg.certificateservice.application.certificate.dto.AnswerComplementRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.AnswerComplementResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateAIPrefillRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateAIPrefillResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateReadyForSignRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateReadyForSignResponse;
@@ -51,6 +53,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCerti
 import se.inera.intyg.certificateservice.application.certificate.dto.ValidateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.ValidateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.service.AnswerComplementService;
+import se.inera.intyg.certificateservice.application.certificate.service.CertificateAIPrefillService;
 import se.inera.intyg.certificateservice.application.certificate.service.CertificateExistsService;
 import se.inera.intyg.certificateservice.application.certificate.service.ComplementCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.CreateCertificateService;
@@ -95,6 +98,7 @@ public class CertificateController {
   private final ForwardCertificateService forwardCertificateService;
   private final GetCertificateEventsService getCertificateEventsService;
   private final SetCertificateReadyForSignService setCertificateReadyForSignService;
+  private final CertificateAIPrefillService certificateAIPrefillService;
 
   @PostMapping
   @PerformanceLogging(eventAction = "create-certificate", eventType = EVENT_TYPE_CREATION)
@@ -245,5 +249,13 @@ public class CertificateController {
       @RequestBody CertificateReadyForSignRequest request,
       @PathVariable("certificateId") String certificateId) {
     return setCertificateReadyForSignService.set(request, certificateId);
+  }
+
+  @PostMapping("/{certificateId}/aiPrefill")
+  @PerformanceLogging(eventAction = "ai-prefill-certificate", eventType = EVENT_TYPE_CHANGE)
+  CertificateAIPrefillResponse setCertificateAiPrefill(
+      @RequestBody CertificateAIPrefillRequest request,
+      @PathVariable("certificateId") String certificateId) {
+    return certificateAIPrefillService.prefill(request, certificateId);
   }
 }
