@@ -1,9 +1,4 @@
 package se.inera.intyg.certificateservice.prefill.service;
-import static model.AIPrefillValueType.CODE_LIST;
-import static model.AIPrefillValueType.DATE;
-import static model.AIPrefillValueType.DATE_LIST;
-import static model.AIPrefillValueType.DIAGNOSIS_LIST;
-import static model.AIPrefillValueType.TEXT;
 
 import java.util.Map;
 import java.util.Objects;
@@ -26,6 +21,9 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDa
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextField;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import model.AIPrefillValue;
 import model.AIPrefillValueText;
@@ -48,15 +46,21 @@ public class PrefillService {
     this.chatClient = chatClientBuilder.build();
   }
 
-
   public AIPrefillResponse prefill(Certificate certificate, String ehrData) {
     final var data = generateMap(certificate, ehrData);
 
     final var elementData = data.entrySet().stream()
+        .filter(entry -> certificate.certificateModel().elementSpecificationExists(new ElementId(entry.getKey())))
+        .filter(entry -> certificate.certificateModel().elementSpecification(new ElementId(entry.getKey())).configuration() instanceof ElementConfigurationTextField
+            || certificate.certificateModel().elementSpecification(new ElementId(entry.getKey())).configuration() instanceof ElementConfigurationTextArea)
         .map(entry -> ElementData.builder()
             .id(new ElementId(entry.getKey()))
             //.value(convertToElementValue(certificate, entry.getValue(), entry.getKey()))
-            .value(convertElementValueText(certificate, entry.getValue(), entry.getKey()))
+            .value(ElementValueText.builder()
+                .text(entry.getValue())
+                .textId(new FieldId(entry.getKey()))
+                .build()
+            )
             .build()
         )
         .filter(Objects::nonNull)
@@ -71,12 +75,15 @@ public class PrefillService {
 
   private Map<String, String> generateMap(Certificate certificate, String ehrData) {
     return chatClient.prompt()
-        .system(systemPrompt != null && !systemPrompt.isEmpty() ? systemPrompt : SYSTEM_PROMPT + ONLY_TEXT_PROMPT)
-        .user(String.format("CertificateModel: %s, \n Text: %s", "test",
-            ehrData))
+        .system(SYSTEM_PROMPT + ONLY_TEXT_PROMPT)
+        .user(String.format("CertificateModel: %s, \n Text: %s", certificateModelToString(certificate.certificateModel()), ehrData))
         .call()
         .entity(new ParameterizedTypeReference<>() {
         });
+  }
+
+  private String certificateModelToString(CertificateModel model) {
+    return model.toString().replaceAll("[\\[\\]{}]", "");
   }
 
   private ElementValue convertToElementValue(Certificate certificate, AIPrefillValue aiPrefillValue, String id) {
@@ -149,18 +156,5 @@ public class PrefillService {
     final var emptyValue = elementSpecification.configuration().emptyValue();
     return ((ElementValueText) emptyValue).withText(
         aiPrefillValue.getText());
-  }
-
-  private static ElementValueText convertElementValueText(Certificate certificate,
-      String text, String id) {
-    final var elementSpecification = certificate.certificateModel()
-        .elementSpecification(new ElementId(id));
-    final var emptyValue = elementSpecification.configuration().emptyValue();
-
-    if (emptyValue instanceof ElementValueText textValue) {
-      return  textValue.withText(text);
-    }
-
-    return null;
   }
 }
