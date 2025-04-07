@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.integrationtest.util;
 
 import se.inera.intyg.certificateservice.application.certificate.dto.AnswerComplementRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateAIPrefillRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateRequest;
@@ -67,6 +68,12 @@ public class ApiRequestUtil {
                 .version(version)
                 .build()
         )
+        .build();
+  }
+
+  public static CertificateAIPrefillRequest defaultAIPrefillCertificateRequest(String text) {
+    return PrefillCertificateRequestBuilder.create()
+        .prefillData(text)
         .build();
   }
 

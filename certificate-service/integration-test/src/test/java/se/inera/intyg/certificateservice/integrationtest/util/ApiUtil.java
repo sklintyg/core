@@ -17,6 +17,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import se.inera.intyg.certificateservice.application.certificate.dto.AnswerComplementRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.AnswerComplementResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateAIPrefillRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateAIPrefillResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateReadyForSignRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateReadyForSignResponse;
@@ -124,6 +126,13 @@ public class ApiUtil {
     }
 
     return response;
+  }
+
+  public ResponseEntity<CertificateAIPrefillResponse> prefillCertificate(
+      CertificateAIPrefillRequest request, String certificateId) {
+    final var requestUrl = "http://localhost:%s/api/certificate/%s/aiPrefill".formatted(port, certificateId);
+
+    return sendRequest(request, requestUrl, CertificateAIPrefillResponse.class);
   }
 
   public ResponseEntity<GetCertificateResponse> getCertificate(
