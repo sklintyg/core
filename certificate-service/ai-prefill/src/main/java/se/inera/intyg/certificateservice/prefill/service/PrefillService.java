@@ -1,6 +1,8 @@
 package se.inera.intyg.certificateservice.prefill.service;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import model.AIPrefillResponse;
 import model.AIPrefillValueCodeList;
@@ -32,10 +34,33 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 @Service
 public class PrefillService {
 
-  private static final String SYSTEM_PROMPT = "Generate a map placing the question ids as the key. The value you need to extract from the prompt. In the prompt you will recieve a certificatemodel which has different questions defined with an id and a question name. Using the question name you will extract data from the text, which is electronic health records for the patient, and set as the value in the map. The question id is the key. Do not use the interface AIPrefillValue, that is not an object with a value. If you don't find fitting value type - skip the question.";
+  //private static final String SYSTEM_PROMPT = "Generate a map placing the question ids as the key. The value you need to extract from the prompt. In the prompt you will recieve a certificatemodel which has different questions defined with an id and a question name. Using the question name you will extract data from the text, which is electronic health records for the patient, and set as the value in the map. The question id is the key. If you don't find fitting value type - skip the question.";
+  private static final String SYSTEM_PROMPT = "Generate a map placing the question ids as the key. The value you need to extract from the prompt. In the prompt you will recieve a certificatemodel which has different questions defined with an id and a question name. Using the question name you will extract data from the text, which is electronic health records for the patient, and set as the value in the map. The question id is the key. If you don't find fitting value type - skip the question.";
   private static final String ONLY_TEXT_PROMPT = "The value will be strings so if you in the model find something that is not a string, skip that value and dont add it to the map.";
   private static final String MORE_VALUES_PROMPT = "The value will be strings, date, date list (you will use the id and the date to create a list), checkboxes (codes that you will take from the config), and diagnosis so if you in the model find something that is not these values, skip that value and dont add it to the map. When you've generated the whole map.";
   private static final String INFO_PROMPT = "Then add a entry in the map with key INFO where you add a text that describes what information you have used and how you have used it.";
+
+  private static final Map<String, String> IDS = new HashMap<>();
+  static {
+        IDS.put("25.1", "25");
+        IDS.put("48.1", "48");
+        IDS.put("49.1", "49");
+        IDS.put("50.2", "50.2");
+        IDS.put("50.1", "50");
+        IDS.put("51.1", "51");
+        IDS.put("10.1", "10");
+        IDS.put("11.1", "11");
+        IDS.put("12.1", "12");
+        IDS.put("13.1", "13");
+        IDS.put("58.1", "58");
+        IDS.put("14.1", "14");
+        IDS.put("17.1", "17");
+        IDS.put("5.1", "5");
+        IDS.put("1.3", "1.3");
+        IDS.put("1.4", "1.4");
+        IDS.put("8.1", "8");
+        IDS.put("9.1", "9");
+  }
 
   @Value("${ai.prefill.system.prompt:}")
   private String systemPrompt;
@@ -50,11 +75,11 @@ public class PrefillService {
     final var data = generateMap(certificate, ehrData);
 
     final var elementData = data.entrySet().stream()
-        .filter(entry -> certificate.certificateModel().elementSpecificationExists(new ElementId(entry.getKey())))
-        .filter(entry -> certificate.certificateModel().elementSpecification(new ElementId(entry.getKey())).configuration() instanceof ElementConfigurationTextField
-            || certificate.certificateModel().elementSpecification(new ElementId(entry.getKey())).configuration() instanceof ElementConfigurationTextArea)
+        .filter(entry -> certificate.certificateModel().elementSpecificationExists(new ElementId(getId(entry.getKey()))))
+        .filter(entry -> certificate.certificateModel().elementSpecification(new ElementId(getId(entry.getKey()))).configuration() instanceof ElementConfigurationTextField
+            || certificate.certificateModel().elementSpecification(new ElementId(getId(entry.getKey()))).configuration() instanceof ElementConfigurationTextArea)
         .map(entry -> ElementData.builder()
-            .id(new ElementId(entry.getKey()))
+            .id(new ElementId(getId(entry.getKey())))
             //.value(convertToElementValue(certificate, entry.getValue(), entry.getKey()))
             .value(ElementValueText.builder()
                 .text(entry.getValue())
@@ -71,6 +96,10 @@ public class PrefillService {
         .certificate(certificate)
         //.informationAboutAIGeneration((((AIPrefillValueText)data.get("INFO")).getText()))
         .build();
+  }
+
+  private String getId(String id) {
+    return IDS.get(id) == null ? id : IDS.get(id);
   }
 
   private Map<String, String> generateMap(Certificate certificate, String ehrData) {
