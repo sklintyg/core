@@ -52,6 +52,7 @@ public class CertificateAIPrefillService {
                 actionEvaluation
             )
         )
+        .informationAboutAIGeneration(prefilledResponse.getInformationAboutAIGeneration())
         .build();
   }
 }

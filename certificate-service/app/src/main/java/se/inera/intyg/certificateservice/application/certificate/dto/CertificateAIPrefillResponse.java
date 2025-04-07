@@ -12,6 +12,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 public class CertificateAIPrefillResponse {
 
   CertificateDTO certificate;
+  String informationAboutAIGeneration;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class CertificateAIPrefillResponseBuilder {
