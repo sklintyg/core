@@ -30,6 +30,24 @@ public class CodeSystemKvFkmu0001 {
       "anhörig eller annans beskrivning av patienten"
   );
 
+  public static final Code FYSISKUNDERSOKNING = new Code(
+      "FYSISKUNDERSOKNING",
+      CODE_SYSTEM,
+      "min undersökning vid fysiskt vårdmöte"
+  );
+
+  public static final Code DIGITALUNDERSOKNING = new Code(
+      "DIGITALUNDERSOKNING",
+      CODE_SYSTEM,
+      "min undersökning vid digitalt vårdmöte"
+  );
+
+  public static final Code FORALDER = new Code(
+      "FORALDER",
+      CODE_SYSTEM,
+      "förälders beskrivning av barnet"
+  );
+
   private CodeSystemKvFkmu0001() {
     throw new IllegalStateException("Utility class");
   }
