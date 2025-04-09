@@ -1,6 +1,8 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.elements.ElementUnitContactInformation.issuingUnitContactInfo;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.CategoryGrundForMedicinsktUnderlag.categoryGrundForMedicinsktUnderlag;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionGrundForMedicinsktUnderlag.questionGrundForMedicinsktUnderlag;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -73,7 +75,10 @@ När ett barn mellan 12 och 16 år är sjukt kan den förälder som behöver avs
         .messageActionSpecifications(FK7427MessageActionSpecification.create())
         .elementSpecifications(
             List.of(
-            categoryGrundForMedicinsktUnderlag()
+            categoryGrundForMedicinsktUnderlag(
+                questionGrundForMedicinsktUnderlag()
+            ),
+                issuingUnitContactInfo()
         )
         )
         .certificateActionFactory(certificateActionFactory)

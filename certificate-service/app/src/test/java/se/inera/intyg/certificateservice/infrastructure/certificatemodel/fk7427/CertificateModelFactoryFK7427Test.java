@@ -150,5 +150,28 @@ class CertificateModelFactoryFK7427Test {
               certificateModel.elementSpecifications())
       );
     }
+
+    @Test
+    void shallIncludeQuestionGrundForMedicinsktUnderlag() {
+      final var certificateModel = certificateModelFactoryFK7427.create();
+
+      assertTrue(certificateModel.elementSpecificationExists(new ElementId("1")),
+          "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+              new ElementId("1"),
+              certificateModel.elementSpecifications())
+      );
+    }
+
+    @Test
+    void shallIncludeIssuingUnitContactInfo() {
+      final var certificateModel = certificateModelFactoryFK7427.create();
+
+      assertTrue(
+          certificateModel.elementSpecificationExists(new ElementId("UNIT_CONTACT_INFORMATION")),
+          "Expected elementId: '%s' to exists in elementSpecifications '%s'"
+              .formatted(new ElementId("UNIT_CONTACT_INFORMATION"),
+                  certificateModel.elementSpecifications())
+      );
+    }
   }
 }
