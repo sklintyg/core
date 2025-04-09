@@ -20,6 +20,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
+import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 
 class CertificateModelFactoryFK7427Test {
 
@@ -31,9 +32,13 @@ class CertificateModelFactoryFK7427Test {
 
   private static final String LOGICAL_ADDRESS = "L-A";
 
+  @Mock
+  private DiagnosisCodeRepository diagnosisCodeRepository;
+
   @BeforeEach
   void setUp() {
-    certificateModelFactoryFK7427 = new CertificateModelFactoryFK7427(certificateActionFactory);
+    certificateModelFactoryFK7427 = new CertificateModelFactoryFK7427(certificateActionFactory,
+        diagnosisCodeRepository);
 
     ReflectionTestUtils.setField(certificateModelFactoryFK7427, "fkLogicalAddress",
         LOGICAL_ADDRESS);
@@ -195,5 +200,17 @@ class CertificateModelFactoryFK7427Test {
               certificateModel.elementSpecifications())
       );
     }
+
+    @Test
+    void shallIncludeQuestionDiagnos() {
+      final var certificateModel = certificateModelFactoryFK7427.create();
+
+      assertTrue(certificateModel.elementSpecificationExists(new ElementId("58")),
+          "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+              new ElementId("58"),
+              certificateModel.elementSpecifications())
+      );
+    }
+
   }
 }

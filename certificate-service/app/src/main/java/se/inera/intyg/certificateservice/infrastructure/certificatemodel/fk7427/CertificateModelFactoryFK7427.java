@@ -4,6 +4,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.CategoryDiagnos.categoryDiagnos;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.CategoryGrundForMedicinsktUnderlag.categoryGrundForMedicinsktUnderlag;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionAnnanGrundForMedicinsktUnderlag.questionAnnanGrundForMedicinsktUnderlag;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionDiagnos.questionDiagnos;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionGrundForMedicinsktUnderlag.questionGrundForMedicinsktUnderlag;
 
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
+import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateRecipientFactory;
 
@@ -30,6 +32,8 @@ public class CertificateModelFactoryFK7427 implements CertificateModelFactory {
 
   @Value("${sendmessagetofk.logicaladdress}")
   private String fkLogicalAddress;
+
+  private final DiagnosisCodeRepository diagnosisCodeRepository;
 
   private static final String TYPE = "fk7427";
   private static final String VERSION = "1.0";
@@ -82,7 +86,11 @@ public class CertificateModelFactoryFK7427 implements CertificateModelFactory {
                         questionAnnanGrundForMedicinsktUnderlag()
                     )
                 ),
-                categoryDiagnos(),
+                categoryDiagnos(
+                    questionDiagnos(
+                        diagnosisCodeRepository
+                    )
+                ),
                 issuingUnitContactInfo()
             )
         )
