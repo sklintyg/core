@@ -245,6 +245,28 @@ class CertificateModelFactoryFK7427Test {
       );
     }
 
+    @Test
+    void shallIncludeCategoryVardEllerTillsyn() {
+      final var certificateModel = certificateModelFactoryFK7427.create();
+
+      assertTrue(certificateModel.elementSpecificationExists(new ElementId("KAT_4")),
+          "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+              new ElementId("KAT_3"),
+              certificateModel.elementSpecifications())
+      );
+    }
+
+    @Test
+    void shallIncludeQuestionVardEllerTillsyn() {
+      final var certificateModel = certificateModelFactoryFK7427.create();
+
+      assertTrue(certificateModel.elementSpecificationExists(new ElementId("62")),
+          "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+              new ElementId("62"),
+              certificateModel.elementSpecifications())
+      );
+    }
+
 
   }
 }
