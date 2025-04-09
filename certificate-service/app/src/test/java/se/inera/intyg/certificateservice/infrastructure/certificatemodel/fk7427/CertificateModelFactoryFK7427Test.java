@@ -184,5 +184,16 @@ class CertificateModelFactoryFK7427Test {
                   certificateModel.elementSpecifications())
       );
     }
+
+    @Test
+    void shallIncludeCategoryDiagnos() {
+      final var certificateModel = certificateModelFactoryFK7427.create();
+
+      assertTrue(certificateModel.elementSpecificationExists(new ElementId("KAT_2")),
+          "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+              new ElementId("KAT_2"),
+              certificateModel.elementSpecifications())
+      );
+    }
   }
 }
