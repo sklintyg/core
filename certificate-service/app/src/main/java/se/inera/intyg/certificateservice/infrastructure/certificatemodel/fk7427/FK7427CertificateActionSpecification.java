@@ -27,24 +27,18 @@ public class FK7427CertificateActionSpecification {
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.SIGN)
-            .allowedRoles(
-                List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR)
-            )
+            .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.SEND)
-            .allowedRoles(
-                List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.CARE_ADMIN)
-            )
+            .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.CARE_ADMIN))
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.PRINT)
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.REVOKE)
-            .allowedRoles(
-                List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR)
-            )
+            .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.REPLACE)
