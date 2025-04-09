@@ -12,13 +12,13 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 
-class QuestionSymptomTest {
+class QuestionSymtomTest {
 
-  private static final ElementId ELEMENT_ID = new ElementId("58.2");
+  private static final ElementId ELEMENT_ID = new ElementId("55");
 
   @Test
   void shallIncludeId() {
-    final var element = QuestionSymptom.questionSymptom();
+    final var element = QuestionSymtom.questionSymtom();
 
     assertEquals(ELEMENT_ID, element.id());
   }
@@ -26,11 +26,11 @@ class QuestionSymptomTest {
   @Test
   void shallIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationTextArea.builder()
-        .name("Fyll i vilka symptom barnet har om diagnos inte är fastställd")
-        .id(new FieldId("58.2"))
+        .name("Fyll i vilka symtom barnet har om diagnos inte är fastställd")
+        .id(new FieldId("55.1"))
         .build();
 
-    final var element = QuestionSymptom.questionSymptom();
+    final var element = QuestionSymtom.questionSymtom();
 
     assertEquals(expectedConfiguration, element.configuration());
   }
@@ -39,13 +39,13 @@ class QuestionSymptomTest {
   void shallIncludeRules() {
     final var expectedRules = List.of(
         ElementRuleLimit.builder()
-            .id(new ElementId("58.2"))
+            .id(new ElementId("55"))
             .type(ElementRuleType.TEXT_LIMIT)
             .limit(new RuleLimit((short) 4000))
             .build()
     );
 
-    final var element = QuestionSymptom.questionSymptom();
+    final var element = QuestionSymtom.questionSymtom();
 
     assertEquals(expectedRules, element.rules());
   }
@@ -58,17 +58,9 @@ class QuestionSymptomTest {
             .build()
     );
 
-    final var element = QuestionSymptom.questionSymptom();
+    final var element = QuestionSymtom.questionSymtom();
 
     assertEquals(expectedValidations, element.validations());
   }
-
-  @Test
-  void shallIncludeWhenRenewingTrue() {
-    final var element = QuestionSymptom.questionSymptom();
-
-    assertEquals(Boolean.TRUE, element.includeWhenRenewing());
-  }
-
 
 }
