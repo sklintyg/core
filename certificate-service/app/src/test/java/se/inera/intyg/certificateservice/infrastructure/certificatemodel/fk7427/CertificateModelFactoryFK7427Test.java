@@ -163,6 +163,17 @@ class CertificateModelFactoryFK7427Test {
     }
 
     @Test
+    void shallIncludeQuestionAnnanGrundForMedicinsktUnderlag() {
+      final var certificateModel = certificateModelFactoryFK7427.create();
+
+      assertTrue(certificateModel.elementSpecificationExists(new ElementId("1.3")),
+          "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+              new ElementId("1.3"),
+              certificateModel.elementSpecifications())
+      );
+    }
+
+    @Test
     void shallIncludeIssuingUnitContactInfo() {
       final var certificateModel = certificateModelFactoryFK7427.create();
 

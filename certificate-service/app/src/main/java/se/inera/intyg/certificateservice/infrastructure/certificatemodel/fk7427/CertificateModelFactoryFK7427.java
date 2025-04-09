@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.elements.ElementUnitContactInformation.issuingUnitContactInfo;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.CategoryGrundForMedicinsktUnderlag.categoryGrundForMedicinsktUnderlag;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionAnnanGrundForMedicinsktUnderlag.questionAnnanGrundForMedicinsktUnderlag;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionGrundForMedicinsktUnderlag.questionGrundForMedicinsktUnderlag;
 
 import java.time.LocalDateTime;
@@ -33,8 +34,8 @@ public class CertificateModelFactoryFK7427 implements CertificateModelFactory {
   private static final String VERSION = "1.0";
   private static final String NAME = "Läkarutlåtande tillfällig föräldrapenning barn 12–16 år";
   private static final String DESCRIPTION = """
-När ett barn mellan 12 och 16 år är sjukt kan den förälder som behöver avstå från sitt arbete för att vårda barnet få tillfällig föräldrapenning om barnet har ett särskilt behov av vård eller tillsyn. Läkarutlåtandet behövs från den första dagen i barnets vårdperiod.
-""";
+      När ett barn mellan 12 och 16 år är sjukt kan den förälder som behöver avstå från sitt arbete för att vårda barnet få tillfällig föräldrapenning om barnet har ett särskilt behov av vård eller tillsyn. Läkarutlåtandet behövs från den första dagen i barnets vårdperiod.
+      """;
   private static final String DETAILED_DESCRIPTION = """
       <b className="iu-fw-heading">Vad är Läkarutlåtande tillfällig föräldrapenning barn 12 - 16 år?</b><br>
       <p>När en förälder behöver avstå från arbete för att vårda ett sjukt barn som fyllt 12 men inte 16 år behövs ett läkarutlåtande från och med den första ersättningsdagen i vårdperioden.</p>
@@ -75,11 +76,13 @@ När ett barn mellan 12 och 16 år är sjukt kan den förälder som behöver avs
         .messageActionSpecifications(FK7427MessageActionSpecification.create())
         .elementSpecifications(
             List.of(
-            categoryGrundForMedicinsktUnderlag(
-                questionGrundForMedicinsktUnderlag()
-            ),
+                categoryGrundForMedicinsktUnderlag(
+                    questionGrundForMedicinsktUnderlag(
+                        questionAnnanGrundForMedicinsktUnderlag()
+                    )
+                ),
                 issuingUnitContactInfo()
-        )
+            )
         )
         .certificateActionFactory(certificateActionFactory)
         .confirmationModalProvider(new FK7427CertificateConfirmationModalProvider())
