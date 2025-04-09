@@ -6,6 +6,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
@@ -64,5 +65,12 @@ class QuestionVardasBarnetInneliggandePaSjukhusTest {
     final var expectedChild = QuestionVardasBarnetInneliggandePaSjukhus.questionVardasBarnetInneliggandePaSjukhus();
     final var elementSpecification = QuestionVardasBarnetInneliggandePaSjukhus.questionVardasBarnetInneliggandePaSjukhus(expectedChild);
     assertEquals(List.of(expectedChild), elementSpecification.children());
+  }
+
+  @Test
+  void shallIncludeMapping() {
+    final var expectedMapping = new ElementMapping(new ElementId("62"), null);
+    final var elementSpecification = QuestionVardasBarnetInneliggandePaSjukhus.questionVardasBarnetInneliggandePaSjukhus();
+    assertEquals(expectedMapping, elementSpecification.mapping());
   }
 }
