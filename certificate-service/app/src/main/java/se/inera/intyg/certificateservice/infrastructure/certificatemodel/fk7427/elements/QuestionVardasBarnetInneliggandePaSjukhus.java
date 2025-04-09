@@ -38,7 +38,7 @@ public class QuestionVardasBarnetInneliggandePaSjukhus {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatory(
+                CertificateElementRuleFactory.mandatoryExist(
                     QUESTION_VARDAS_BARNET_INNELIGGANDE_PA_SJUKHUS_ID,
                     QUESTION_VARDAS_BARNET_INNELIGGANDE_PA_SJUKHUS_FIELD_ID
                 )

@@ -49,7 +49,7 @@ class QuestionVardasBarnetInneliggandePaSjukhusTest {
   @Test
   void shallIncludeRules() {
     final var expectedRules = List.of(
-        CertificateElementRuleFactory.mandatory(
+        CertificateElementRuleFactory.mandatoryExist(
             new ElementId("62.1"),
             new FieldId("62.1")
         )
