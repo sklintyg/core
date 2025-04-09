@@ -62,9 +62,6 @@ public class FK7427CertificateActionSpecification {
             .certificateActionType(CertificateActionType.RECEIVE_COMPLEMENT)
             .build(),
         CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.RECEIVE_REMINDER)
-            .build(),
-        CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.COMPLEMENT)
             .build(),
         CertificateActionSpecification.builder()
@@ -72,9 +69,6 @@ public class FK7427CertificateActionSpecification {
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.CANNOT_COMPLEMENT)
-            .build(),
-        CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.FORWARD_MESSAGE)
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.HANDLE_COMPLEMENT)
@@ -89,7 +83,7 @@ public class FK7427CertificateActionSpecification {
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.LIST_CERTIFICATE_TYPE)
-            .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.CARE_ADMIN))
+            .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE, Role.CARE_ADMIN))
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.QUESTIONS_NOT_AVAILABLE)

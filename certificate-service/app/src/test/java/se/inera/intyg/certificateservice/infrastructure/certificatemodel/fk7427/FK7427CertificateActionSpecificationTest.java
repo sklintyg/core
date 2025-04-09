@@ -213,18 +213,6 @@ class FK7427CertificateActionSpecificationTest {
   }
 
   @Test
-  void shallIncludeCertificateActionForwardMessage() {
-    final var expectedType = CertificateActionType.FORWARD_MESSAGE;
-
-    final var actionSpecifications = FK7427CertificateActionSpecification.create();
-
-    assertTrue(actionSpecifications.stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
-  }
-
-  @Test
   void shallIncludeCertificateActionForwardCertificate() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE)
@@ -241,18 +229,6 @@ class FK7427CertificateActionSpecificationTest {
   @Test
   void shallIncludeCertificateActionHandleComplement() {
     final var expectedType = CertificateActionType.HANDLE_COMPLEMENT;
-
-    final var actionSpecifications = FK7427CertificateActionSpecification.create();
-
-    assertTrue(actionSpecifications.stream().anyMatch(
-            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
-        ),
-        "Expected type: %s".formatted(expectedType));
-  }
-
-  @Test
-  void shallIncludeCertificateActionReceiveReminder() {
-    final var expectedType = CertificateActionType.RECEIVE_REMINDER;
 
     final var actionSpecifications = FK7427CertificateActionSpecification.create();
 
@@ -280,7 +256,8 @@ class FK7427CertificateActionSpecificationTest {
   void shallIncludeCertificateActionAccessForRoles() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.LIST_CERTIFICATE_TYPE)
-        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.CARE_ADMIN))
+        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
+            Role.CARE_ADMIN))
         .build();
 
     final var actionSpecifications = FK7427CertificateActionSpecification.create();
