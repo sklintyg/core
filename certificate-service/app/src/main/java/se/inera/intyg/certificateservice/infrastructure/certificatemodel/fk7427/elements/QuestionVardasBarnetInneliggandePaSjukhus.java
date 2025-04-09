@@ -10,7 +10,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionVardasBarnetInneliggandePaSjukhus {
 
-  public static final ElementId QUESTION_VARDAS_BARNET_INNELIGGANDE_PA_SJUKHUS_ID = new ElementId("62");
+  public static final ElementId QUESTION_VARDAS_BARNET_INNELIGGANDE_PA_SJUKHUS_ID = new ElementId("62.1");
   public static final FieldId QUESTION_VARDAS_BARNET_INNELIGGANDE_PA_SJUKHUS_FIELD_ID = new FieldId("62.1");
 
   private QuestionVardasBarnetInneliggandePaSjukhus() {
