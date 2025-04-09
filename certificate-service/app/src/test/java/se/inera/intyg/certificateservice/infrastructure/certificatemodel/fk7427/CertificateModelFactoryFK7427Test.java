@@ -212,5 +212,16 @@ class CertificateModelFactoryFK7427Test {
       );
     }
 
+    @Test
+    void shallIncludeQuestionSymptom() {
+      final var certificateModel = certificateModelFactoryFK7427.create();
+
+      assertTrue(certificateModel.elementSpecificationExists(new ElementId("58")),
+          "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+              new ElementId("58"),
+              certificateModel.elementSpecifications())
+      );
+    }
+
   }
 }

@@ -6,6 +6,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionAnnanGrundForMedicinsktUnderlag.questionAnnanGrundForMedicinsktUnderlag;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionDiagnos.questionDiagnos;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionGrundForMedicinsktUnderlag.questionGrundForMedicinsktUnderlag;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionSymptom.questionSymptom;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -89,7 +90,8 @@ public class CertificateModelFactoryFK7427 implements CertificateModelFactory {
                 categoryDiagnos(
                     questionDiagnos(
                         diagnosisCodeRepository
-                    )
+                    ),
+                    questionSymptom()
                 ),
                 issuingUnitContactInfo()
             )
