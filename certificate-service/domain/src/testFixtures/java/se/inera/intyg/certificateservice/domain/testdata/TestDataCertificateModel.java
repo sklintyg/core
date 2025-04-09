@@ -10,6 +10,10 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_SCHEMATRON_PATH;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_VERSION;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7427_CODE_TYPE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7427_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7427_TYPE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7427_VERSION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_CODE_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_SCHEMATRON_PATH;
@@ -37,6 +41,7 @@ public class TestDataCertificateModel {
   public static final CertificateModel FK3226_CERTIFICATE_MODEL = fk3226certificateModelBuilder().build();
   public static final CertificateModel FK7472_CERTIFICATE_MODEL = fk7472certificateModelBuilder().build();
   public static final CertificateModel FK7809_CERTIFICATE_MODEL = fk7809certificateModelBuilder().build();
+  public static final CertificateModel FK7427_CERTIFICATE_MODEL = fk7427certificateModelBuilder().build();
 
   public static CertificateModel.CertificateModelBuilder fk7210certificateModelBuilder() {
     return CertificateModel.builder()
@@ -107,6 +112,22 @@ public class TestDataCertificateModel {
         .availableForCitizen(true)
         .schematronPath(FK7809_SCHEMATRON_PATH)
         .pdfSpecification(FK7809_PDF_SPECIFICATION)
+        .recipient(FK_RECIPIENT)
+        .certificateActionFactory(new CertificateActionFactory(null));
+  }
+
+  public static CertificateModel.CertificateModelBuilder fk7427certificateModelBuilder() {
+    return CertificateModel.builder()
+        .id(
+            CertificateModelId.builder()
+                .type(FK7427_TYPE)
+                .version(FK7427_VERSION)
+                .build()
+        )
+        .certificateActionSpecifications(Collections.emptyList())
+        .name(FK7427_NAME)
+        .type(FK7427_CODE_TYPE)
+        .availableForCitizen(false)
         .recipient(FK_RECIPIENT)
         .certificateActionFactory(new CertificateActionFactory(null));
   }

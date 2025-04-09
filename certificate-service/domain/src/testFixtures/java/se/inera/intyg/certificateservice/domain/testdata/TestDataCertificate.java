@@ -5,6 +5,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProv
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK3226_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7210_CERTIFICATE_MODEL;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7427_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7472_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7809_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.SUBJECT;
@@ -20,6 +21,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitC
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Collections;
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
@@ -404,6 +406,29 @@ public class TestDataCertificate {
                     .build()
             )
         )
+        .certificateMetaData(
+            CertificateMetaData.builder()
+                .issuer(AJLA_DOKTOR)
+                .creator(ALF_DOKTOR)
+                .patient(ATHENA_REACT_ANDERSSON)
+                .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
+                .careUnit(ALFA_MEDICINCENTRUM)
+                .careProvider(ALFA_REGIONEN)
+                .build()
+        );
+  }
+
+  public static Certificate.CertificateBuilder fk7427CertificateBuilder() {
+    return Certificate.builder()
+        .id(CERTIFICATE_ID)
+        .revision(REVISION)
+        .created(LocalDateTime.now(ZoneId.systemDefault()))
+        .certificateModel(FK7427_CERTIFICATE_MODEL)
+        .xml(XML)
+        .sent(SENT)
+        .revoked(REVOKED)
+        .externalReference(EXTERNAL_REFERENCE)
+        .elementData(Collections.emptyList())
         .certificateMetaData(
             CertificateMetaData.builder()
                 .issuer(AJLA_DOKTOR)

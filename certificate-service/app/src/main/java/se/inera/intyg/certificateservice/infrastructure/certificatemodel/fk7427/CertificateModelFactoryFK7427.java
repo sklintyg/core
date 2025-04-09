@@ -71,6 +71,7 @@ När ett barn mellan 12 och 16 år är sjukt kan den förälder som behöver avs
         .messageActionSpecifications(FK7427MessageActionSpecification.create())
         .elementSpecifications(Collections.emptyList())
         .certificateActionFactory(certificateActionFactory)
+        .confirmationModalProvider(new FK7427CertificateConfirmationModalProvider())
         .build();
   }
 }
