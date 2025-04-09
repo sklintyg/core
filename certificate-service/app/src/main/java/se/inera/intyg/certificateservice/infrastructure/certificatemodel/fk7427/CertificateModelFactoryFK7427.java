@@ -3,10 +3,11 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.elements.ElementUnitContactInformation.issuingUnitContactInfo;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.CategoryDiagnos.categoryDiagnos;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.CategoryGrundForMedicinsktUnderlag.categoryGrundForMedicinsktUnderlag;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.CategoryHalsotillstand.categoryHalsotillstand;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionAnnanGrundForMedicinsktUnderlag.questionAnnanGrundForMedicinsktUnderlag;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionDiagnos.questionDiagnos;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionGrundForMedicinsktUnderlag.questionGrundForMedicinsktUnderlag;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionSymptom.questionSymptom;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionHalsotillstand.questionHalsotillstand;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionSymtom.questionSymtom;
 
 import java.time.LocalDateTime;
@@ -93,6 +94,9 @@ public class CertificateModelFactoryFK7427 implements CertificateModelFactory {
                         diagnosisCodeRepository
                     ),
                     questionSymtom()
+                ),
+                categoryHalsotillstand(
+                    questionHalsotillstand()
                 ),
                 issuingUnitContactInfo()
             )

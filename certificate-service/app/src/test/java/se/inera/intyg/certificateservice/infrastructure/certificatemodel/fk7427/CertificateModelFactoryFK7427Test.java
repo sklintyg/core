@@ -216,12 +216,35 @@ class CertificateModelFactoryFK7427Test {
     void shallIncludeQuestionSymptom() {
       final var certificateModel = certificateModelFactoryFK7427.create();
 
-      assertTrue(certificateModel.elementSpecificationExists(new ElementId("58")),
+      assertTrue(certificateModel.elementSpecificationExists(new ElementId("55")),
           "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
-              new ElementId("58"),
+              new ElementId("55"),
               certificateModel.elementSpecifications())
       );
     }
+
+    @Test
+    void shallIncludeCategoryHalsotillstand() {
+      final var certificateModel = certificateModelFactoryFK7427.create();
+
+      assertTrue(certificateModel.elementSpecificationExists(new ElementId("KAT_3")),
+          "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+              new ElementId("KAT_3"),
+              certificateModel.elementSpecifications())
+      );
+    }
+
+    @Test
+    void shallIncludeQuestionHalsotillstand() {
+      final var certificateModel = certificateModelFactoryFK7427.create();
+
+      assertTrue(certificateModel.elementSpecificationExists(new ElementId("59")),
+          "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+              new ElementId("59"),
+              certificateModel.elementSpecifications())
+      );
+    }
+
 
   }
 }
