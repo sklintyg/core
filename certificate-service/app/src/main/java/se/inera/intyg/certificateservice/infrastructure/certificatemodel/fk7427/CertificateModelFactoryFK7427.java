@@ -56,7 +56,7 @@ När ett barn mellan 12 och 16 år är sjukt kan den förälder som behöver avs
         .id(FK7427_V1_0)
         .type(
             new Code(
-                "ITFP",
+                "LU_TFP_B12_16",
                 "b64ea353-e8f6-4832-b563-fc7d46f29548",
                 NAME
             )
