@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationBoolean;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 
@@ -22,6 +23,10 @@ public class PdfBooleanValueGenerator implements PdfElementValue<ElementValueBoo
   @Override
   public List<PdfField> generate(ElementSpecification elementSpecification,
       ElementValueBoolean elementValue) {
+    if (elementSpecification.pdfConfiguration() instanceof PdfConfigurationRadioBoolean radioConfig) {
+      return getFields(elementValue, radioConfig);
+    }
+
     final var pdfConfiguration = (PdfConfigurationBoolean) elementSpecification.pdfConfiguration();
     return getFields(elementValue, pdfConfiguration);
   }
@@ -38,6 +43,23 @@ public class PdfBooleanValueGenerator implements PdfElementValue<ElementValueBoo
         PdfField.builder()
             .id(pdfFieldId.id())
             .value(CHECKED_BOX_VALUE)
+            .build()
+    );
+  }
+
+  private List<PdfField> getFields(ElementValueBoolean valueBoolean,
+      PdfConfigurationRadioBoolean configuration) {
+    if (valueBoolean.value() == null) {
+      return Collections.emptyList();
+    }
+
+    return List.of(
+        PdfField.builder()
+            .id(configuration.pdfFieldId().id())
+            .value(valueBoolean.value() ?
+                configuration.optionTrue().value()
+                : configuration.optionFalse().value()
+            )
             .build()
     );
   }

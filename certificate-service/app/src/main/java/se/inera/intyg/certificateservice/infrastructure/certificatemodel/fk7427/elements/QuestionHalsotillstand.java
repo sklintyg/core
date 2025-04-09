@@ -7,12 +7,16 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 
 public class QuestionHalsotillstand {
 
   public static final ElementId QUESTION_HALSOTILLSTAND_ID = new ElementId("59");
   private static final FieldId QUESTION_HALSOTILLSTAND_FIELD_ID = new FieldId("59.3");
   private static final short LIMIT = 4000;
+  private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[2].flt_txtBeskrivBarnetsHalsotillstand[1]");
 
   private QuestionHalsotillstand() {
     throw new IllegalStateException("Utility class");
@@ -44,6 +48,13 @@ public class QuestionHalsotillstand {
                     .build()
             )
         )
+        .pdfConfiguration(
+            PdfConfigurationText.builder()
+                .pdfFieldId(PDF_FIELD_ID)
+                .maxLength(4000)
+                .build()
+        )
         .build();
   }
 }
+
