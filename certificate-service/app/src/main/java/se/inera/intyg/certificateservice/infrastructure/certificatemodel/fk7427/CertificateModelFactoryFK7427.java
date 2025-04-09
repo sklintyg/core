@@ -91,7 +91,7 @@ public class CertificateModelFactoryFK7427 implements CertificateModelFactory {
                     questionDiagnos(
                         diagnosisCodeRepository
                     ),
-                    questionSymptom()
+                    questionSymtom()
                 ),
                 issuingUnitContactInfo()
             )
