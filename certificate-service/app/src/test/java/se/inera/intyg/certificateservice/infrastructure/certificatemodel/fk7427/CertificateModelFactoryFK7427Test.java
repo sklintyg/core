@@ -4,10 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -15,6 +17,7 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.Certifi
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 
@@ -132,5 +135,20 @@ class CertificateModelFactoryFK7427Test {
     final var certificateModel = certificateModelFactoryFK7427.create();
 
     assertEquals(certificateActionFactory, certificateModel.certificateActionFactory());
+  }
+
+  @Nested
+  class ElementSpecificationTests {
+
+    @Test
+    void shallIncludeCategoryGrundForMedicinsktUnderlag() {
+      final var certificateModel = certificateModelFactoryFK7427.create();
+
+      assertTrue(certificateModel.elementSpecificationExists(new ElementId("KAT_1")),
+          "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+              new ElementId("KAT_1"),
+              certificateModel.elementSpecifications())
+      );
+    }
   }
 }

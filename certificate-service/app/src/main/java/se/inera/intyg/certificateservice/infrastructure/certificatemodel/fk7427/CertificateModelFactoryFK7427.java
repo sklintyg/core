@@ -1,7 +1,9 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.CategoryGrundForMedicinsktUnderlag.categoryGrundForMedicinsktUnderlag;
+
 import java.time.LocalDateTime;
-import java.util.Collections;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -69,7 +71,11 @@ När ett barn mellan 12 och 16 år är sjukt kan den förälder som behöver avs
         .recipient(CertificateRecipientFactory.fkassa(fkLogicalAddress))
         .certificateActionSpecifications(FK7427CertificateActionSpecification.create())
         .messageActionSpecifications(FK7427MessageActionSpecification.create())
-        .elementSpecifications(Collections.emptyList())
+        .elementSpecifications(
+            List.of(
+            categoryGrundForMedicinsktUnderlag()
+        )
+        )
         .certificateActionFactory(certificateActionFactory)
         .confirmationModalProvider(new FK7427CertificateConfirmationModalProvider())
         .build();
