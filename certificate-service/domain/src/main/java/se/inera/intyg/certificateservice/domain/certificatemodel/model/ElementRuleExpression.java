@@ -13,8 +13,4 @@ public class ElementRuleExpression implements ElementRule {
   RuleExpression expression;
   List<FieldId> affectedSubElements;
 
-  @Override
-  public Rule rule() {
-    return expression;
-  }
 }
