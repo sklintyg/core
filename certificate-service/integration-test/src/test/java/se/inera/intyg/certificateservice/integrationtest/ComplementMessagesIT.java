@@ -45,7 +45,7 @@ import se.inera.intyg.certificateservice.application.unit.dto.MessagesQueryCrite
 import se.inera.intyg.certificateservice.application.unit.dto.QuestionSenderTypeDTO;
 import se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil;
 
-public abstract class MessagesIT extends BaseIntegrationIT {
+public abstract class ComplementMessagesIT extends BaseIntegrationIT {
 
   protected abstract String type();
 
