@@ -45,6 +45,7 @@ import se.inera.intyg.certificateservice.integrationtest.ExistsCertificateTypeIn
 import se.inera.intyg.certificateservice.integrationtest.ForwardCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateEventsIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.GetCertificatePdfIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateTypeInfoIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateXmlIT;
 import se.inera.intyg.certificateservice.integrationtest.GetPatientCertificatesIT;
@@ -320,7 +321,7 @@ public class FK7427ActiveIT {
     }
   }
 
-/*  @Nested
+  @Nested
   @DisplayName(TYPE + "Hämta intygspdf")
   class GetCertificatePdf extends GetCertificatePdfIT {
 
@@ -339,7 +340,7 @@ public class FK7427ActiveIT {
           Arguments.of(ALVA_VARDADMINISTRATOR_DTO)
       );
     }
-  }*/
+  }
 
   @Nested
   @DisplayName(TYPE + "Hämta intygstyp när den är aktiv")
@@ -532,7 +533,7 @@ public class FK7427ActiveIT {
 
     protected static Stream<Arguments> rolesNoAccessToProtectedPerson() {
       return Stream.of(
-                   Arguments.of(ALVA_VARDADMINISTRATOR_DTO),
+          Arguments.of(ALVA_VARDADMINISTRATOR_DTO),
           Arguments.of(BERTIL_BARNMORSKA_DTO),
           Arguments.of(ANNA_SJUKSKOTERSKA_DTO)
       );

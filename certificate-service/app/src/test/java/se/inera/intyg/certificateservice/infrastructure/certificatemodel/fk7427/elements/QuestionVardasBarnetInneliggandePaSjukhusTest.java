@@ -10,6 +10,9 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMa
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationRadioBoolean;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfRadioOption;
 
 class QuestionVardasBarnetInneliggandePaSjukhusTest {
 
@@ -63,7 +66,8 @@ class QuestionVardasBarnetInneliggandePaSjukhusTest {
   @Test
   void shallIncludeChildren() {
     final var expectedChild = QuestionVardasBarnetInneliggandePaSjukhus.questionVardasBarnetInneliggandePaSjukhus();
-    final var elementSpecification = QuestionVardasBarnetInneliggandePaSjukhus.questionVardasBarnetInneliggandePaSjukhus(expectedChild);
+    final var elementSpecification = QuestionVardasBarnetInneliggandePaSjukhus.questionVardasBarnetInneliggandePaSjukhus(
+        expectedChild);
     assertEquals(List.of(expectedChild), elementSpecification.children());
   }
 
@@ -72,5 +76,17 @@ class QuestionVardasBarnetInneliggandePaSjukhusTest {
     final var expectedMapping = new ElementMapping(new ElementId("62"), null);
     final var elementSpecification = QuestionVardasBarnetInneliggandePaSjukhus.questionVardasBarnetInneliggandePaSjukhus();
     assertEquals(expectedMapping, elementSpecification.mapping());
+  }
+
+  @Test
+  void shallIncludePdfConfiguration() {
+    final var expectedPdfConfiguration = PdfConfigurationRadioBoolean.builder()
+        .pdfFieldId(new PdfFieldId("form1[0].#subform[2].RadioButtonList_2[0]"))
+        .optionTrue(new PdfRadioOption("1"))
+        .optionFalse(new PdfRadioOption("2"))
+        .build();
+
+    final var elementSpecification = QuestionVardasBarnetInneliggandePaSjukhus.questionVardasBarnetInneliggandePaSjukhus();
+    assertEquals(expectedPdfConfiguration, elementSpecification.pdfConfiguration());
   }
 }
