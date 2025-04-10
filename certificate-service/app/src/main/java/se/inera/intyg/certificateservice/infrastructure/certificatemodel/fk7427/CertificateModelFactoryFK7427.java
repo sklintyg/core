@@ -25,6 +25,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
@@ -67,6 +68,8 @@ public class CertificateModelFactoryFK7427 implements CertificateModelFactory {
       .version(new CertificateVersion(VERSION))
       .build();
 
+  public static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
+      "fk7427/schematron/lu_tfp_b12_16.v1.sch");
 
   @Override
   public CertificateModel create() {
@@ -83,6 +86,7 @@ public class CertificateModelFactoryFK7427 implements CertificateModelFactory {
         .description(DESCRIPTION)
         .detailedDescription(DETAILED_DESCRIPTION)
         .activeFrom(activeFrom)
+        .schematronPath(SCHEMATRON_PATH)
         .availableForCitizen(false)
         .recipient(CertificateRecipientFactory.fkassa(fkLogicalAddress))
         .certificateActionSpecifications(FK7427CertificateActionSpecification.create())
