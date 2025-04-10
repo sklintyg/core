@@ -43,8 +43,8 @@ class FK7427PdfSpecificationTest {
   void shallIncludeSignatureFields() {
     final var expected = PdfSignature.builder()
         .signaturePageIndex(1)
-        .signatureWithAddressTagIndex(new PdfTagIndex(24))
-        .signatureWithoutAddressTagIndex(new PdfTagIndex(24))
+        .signatureWithAddressTagIndex(new PdfTagIndex(28))
+        .signatureWithoutAddressTagIndex(new PdfTagIndex(28))
         .signedDateFieldId(new PdfFieldId("form1[0].#subform[2].flt_datUnderskrift[0]"))
         .signedByNameFieldId(new PdfFieldId("form1[0].#subform[2].flt_txtNamnfortydligande[0]"))
         .paTitleFieldId(new PdfFieldId("form1[0].#subform[2].flt_txtBefattning[0]"))
