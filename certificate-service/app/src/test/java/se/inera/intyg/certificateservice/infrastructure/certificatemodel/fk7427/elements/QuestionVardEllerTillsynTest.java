@@ -13,6 +13,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 
 class QuestionVardEllerTillsynTest {
 
@@ -71,6 +73,18 @@ class QuestionVardEllerTillsynTest {
     final var element = QuestionVardEllerTillsyn.questionVardEllerTillsyn();
 
     assertEquals(expectedValidations, element.validations());
+  }
+
+  @Test
+  void shallIncludePdfConfiguration() {
+    final var expected = PdfConfigurationText.builder()
+        .pdfFieldId(new PdfFieldId("form1[0].#subform[2].flt_txtVilkenVardTillsyn[0]"))
+        .maxLength(4000)
+        .build();
+
+    final var element = QuestionVardEllerTillsyn.questionVardEllerTillsyn();
+
+    assertEquals(expected, element.pdfConfiguration());
   }
 
 }

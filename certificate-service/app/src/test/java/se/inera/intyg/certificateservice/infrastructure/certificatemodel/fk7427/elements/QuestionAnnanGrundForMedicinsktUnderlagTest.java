@@ -19,6 +19,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 
 class QuestionAnnanGrundForMedicinsktUnderlagTest {
 
@@ -92,6 +94,18 @@ class QuestionAnnanGrundForMedicinsktUnderlagTest {
     assertEquals(expectedValidations, element.validations());
   }
 
+  @Test
+  void shallIncludePdfConfiguration() {
+    final var expected = PdfConfigurationText.builder()
+        .pdfFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtAngeAnnat[0]"))
+        .maxLength(50)
+        .overflowSheetFieldId(new PdfFieldId("form1[0].#subform[3].flt_txtFortsattningsblad[0]"))
+        .build();
+
+    final var element = QuestionAnnanGrundForMedicinsktUnderlag.questionAnnanGrundForMedicinsktUnderlag();
+
+    assertEquals(expected, element.pdfConfiguration());
+  }
 
   @Nested
   class ShouldValidate {
