@@ -1,15 +1,22 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.copilot;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.io.InputStreamReader;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDNonTerminalField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDRadioButton;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 class PdfSpecificationCopilotHelperTest {
@@ -36,62 +43,111 @@ class PdfSpecificationCopilotHelperTest {
    */
 
   private PDDocument document;
+  private StringBuilder originalStructure;
 
-  private static final String CERTIFICATE_TYPE = "fk7427";
+  private static final String FK_7427 = "fk7427";
 
-  @BeforeEach
-  void setup() {
-    final var classloader = getClass().getClassLoader();
-    final var inputStream = classloader.getResourceAsStream(
-        String.format("%s/pdf/%s_v1.pdf", CERTIFICATE_TYPE, CERTIFICATE_TYPE));
+  /**
+   * To verify that the PDF templates that are delivered by the certificate recipient follows the
+   * correct structure these tests can be used.
+   * <p>
+   * If completely new PDF: - Generate structure using writeToFile method - Place this in the pdf
+   * folder for the type in the resources in app
+   * <p>
+   * If new PDF templates for existing PDF-implementation: - Run these tests to see if the new
+   * templates have differences that disrupt the previous implementation - If so, then fix what
+   * needs to be fixed and save a new structure file for the type
+   */
+  @Nested
+  class FK7427 {
 
-    try {
-      document = Loader.loadPDF(inputStream.readAllBytes());
-    } catch (IOException e) {
-      throw new RuntimeException(e);
+    @BeforeEach
+    void setup() {
+      final var classloader = getClass().getClassLoader();
+      final var inputStream = classloader.getResourceAsStream(
+          String.format("%s/pdf/%s_v1.pdf", FK_7427, FK_7427));
+
+      try {
+        document = Loader.loadPDF(inputStream.readAllBytes());
+        originalStructure = readFileFromResources(
+            String.format("%s/pdf/%s_structure.txt", FK_7427, FK_7427)
+        );
+        //writeToFile(FK_7427, getPdfStructure());
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    }
+
+    @Test
+    void shouldHaveSameStructureAsOriginalDocument() {
+      final var contentNewStructure = getPdfStructure();
+
+      final var normalizedOriginalStructure = originalStructure.toString().replaceAll("\r\n", "\n")
+          .trim();
+      final var normalizedExpectedText = contentNewStructure.toString().replaceAll("\r\n", "\n")
+          .trim();
+
+      assertEquals(normalizedExpectedText, normalizedOriginalStructure);
     }
   }
 
-  @Test
-  void shouldPrintFieldIds() {
-    PDAcroForm acroForm = document.getDocumentCatalog().getAcroForm();
+  private StringBuilder getPdfStructure() {
+    final var acroForm = document.getDocumentCatalog().getAcroForm();
     final var parentField = (PDNonTerminalField) acroForm.getFields().getFirst();
+    final var content = new StringBuilder();
     var count = 0;
-    try (BufferedWriter writer = new BufferedWriter(
-        // Changge the file name to generate a new file if you are comparing if a PDF-version has changed when new PDFs are delivered by certificate recipient
-        new FileWriter(String.format("pdf_specification_context_%s.txt", CERTIFICATE_TYPE)))) {
-      writer.write(
-          "General mapping for pdf specification per question type follows pattern ElementValueBoolean maps to PdfConfigurationBoolean and ElementValueDateList maps to PdfConfigurationDateList etc.\n");
-      writer.write(
-          "This part of the file contains ids and names and types of fields extracted from the pdf.\n");
-      for (PDField page : parentField.getChildren()) {
-        writer.write(String.format("//Page index %s\n", count++));
-        for (PDField field : ((PDNonTerminalField) page).getChildren()) {
-          if (field.getAlternateFieldName() != null && field.getAlternateFieldName()
-              .contains("Fortsättningsblad")) {
-            writer.write("// This is the overflow page\n");
-          }
 
-          StringBuilder extraText = new StringBuilder();
-          if (field instanceof PDRadioButton radioButtonField) {
-            extraText = new StringBuilder(
-                "For radio boolean assume first option is true and second option is false. Use the options as field ids. Options:\n");
-            for (String option : radioButtonField.getExportValues()) {
-              extraText.append(option).append("\n");
-            }
-          }
-
-          writer.write(String.format(
-              "Field ID: %s\nName: %s\nField Type: %s\n%s\n",
-              field.getFullyQualifiedName(),
-              field.getAlternateFieldName(),
-              field.getClass(),
-              extraText)
-          );
+    content.append(
+        "General mapping for pdf specification per question type follows pattern ElementValueBoolean maps to PdfConfigurationBoolean and ElementValueDateList maps to PdfConfigurationDateList etc.\n");
+    content.append(
+        "This part of the file contains ids and names and types of fields extracted from the pdf.\n");
+    for (PDField page : parentField.getChildren()) {
+      content.append(String.format("//Page index %s\n", count++));
+      for (PDField field : ((PDNonTerminalField) page).getChildren()) {
+        if (field.getAlternateFieldName() != null && field.getAlternateFieldName()
+            .contains("Fortsättningsblad")) {
+          content.append("// This is the overflow page\n");
         }
+
+        final var extraText = new StringBuilder();
+        if (field instanceof PDRadioButton radioButtonField) {
+          extraText.append(
+              "For radio boolean assume first option is true and second option is false. Use the options as field ids. Options:\n");
+          for (String option : radioButtonField.getExportValues()) {
+            extraText.append(option).append("\n");
+          }
+        }
+
+        content.append(String.format(
+            "Field ID: %s\nName: %s\nField Type: %s\n%s\n",
+            field.getFullyQualifiedName(),
+            field.getAlternateFieldName(),
+            field.getClass(),
+            extraText)
+        );
       }
-    } catch (IOException e) {
-      throw new RuntimeException("Failed to write field IDs to file", e);
     }
+    return content;
+  }
+
+  private void writeToFile(String certificateType, StringBuilder content) {
+    final var fileName = String.format("%s_structure.txt", certificateType);
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+      writer.write(content.toString());
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to write content to file", e);
+    }
+  }
+
+  private StringBuilder readFileFromResources(String fileName) throws IOException {
+    final var classloader = getClass().getClassLoader();
+    final var inputStream = classloader.getResourceAsStream(fileName);
+    final var reader = new BufferedReader(new InputStreamReader(inputStream));
+    final var fileContent = new StringBuilder();
+    String line;
+    while ((line = reader.readLine()) != null) {
+      fileContent.append(line).append("\n");
+    }
+    return fileContent;
   }
 }
