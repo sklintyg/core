@@ -12,7 +12,7 @@ import org.apache.pdfbox.pdmodel.interactive.form.PDRadioButton;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class PdfSpecificationCopilotHelper {
+class PdfSpecificationCopilotHelperTest {
 
   /**
    * This class can be used to build PdfSpecification and PdfConfigurations for a certificate using
