@@ -6,11 +6,13 @@ import se.inera.intyg.certificateservice.application.certificate.dto.validation.
 import se.inera.intyg.certificateservice.application.certificate.dto.validation.CertificateDataValidationMandatory;
 import se.inera.intyg.certificateservice.application.certificate.dto.validation.ExpressionTypeEnum;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRule;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleMandatoryCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 
 @Component
-public class CertificateDataValidationCategoryMandatoryConverter implements CertificateDataValidationConverter{
+public class CertificateDataValidationCategoryMandatoryConverter implements
+    CertificateDataValidationConverter {
 
   @Override
   public ElementRuleType getType() {
@@ -24,13 +26,15 @@ public class CertificateDataValidationCategoryMandatoryConverter implements Cert
     }
 
     return CertificateDataValidationCategoryMandatory.builder()
-        .expressionType(ExpressionTypeEnum.fromValue(elementRuleMandatoryCategory.ruleType().name()))
+        .expressionType(
+            ExpressionTypeEnum.fromValue(elementRuleMandatoryCategory.ruleType().name()))
         .questions(
             elementRuleMandatoryCategory.elementRuleExpressions().stream()
                 .map(elementRuleExpression ->
                     CertificateDataValidationMandatory.builder()
-                        .questionId(elementRuleExpression.id().id())
-                        .expression(elementRuleExpression.expression().value())
+                        .questionId(((ElementRuleExpression) elementRuleExpression).id().id())
+                        .expression(
+                            ((ElementRuleExpression) elementRuleExpression).expression().value())
                         .build()
                 )
                 .toList()
