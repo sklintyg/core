@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.FK7427PdfSpecification.ROW_MAX_LENGTH;
+
 import java.util.List;
 import java.util.Map;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDiagnosis;
@@ -108,7 +110,7 @@ public class QuestionDiagnos {
         )
         .pdfConfiguration(
             PdfConfigurationDiagnoses.builder()
-                .maxLength(172)
+                .maxLength(ROW_MAX_LENGTH)
                 .appearance("/ArialMT 9.00 Tf 0 g")
                 .diagnoses(
                     Map.of(

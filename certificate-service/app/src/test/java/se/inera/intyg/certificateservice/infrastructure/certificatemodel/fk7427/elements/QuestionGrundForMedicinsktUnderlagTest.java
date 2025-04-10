@@ -168,6 +168,9 @@ class QuestionGrundForMedicinsktUnderlagTest {
                 PdfConfigurationDateCheckbox.builder()
                     .checkboxFieldId(
                         new PdfFieldId("form1[0].#subform[0].ksr_ForaldersBeskrivning[0]"))
+                    .dateFieldId(
+                        new PdfFieldId("form1[0].#subform[0].flt_datumAnhorig[0]")
+                    )
                     .build(),
                 new FieldId("annat"),
                 PdfConfigurationDateCheckbox.builder()

@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.FK7427PdfSpecification.ROW_MAX_LENGTH;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -79,7 +80,9 @@ class QuestionHalsotillstandTest {
   void shallIncludePdfConfiguration() {
     final var expected = PdfConfigurationText.builder()
         .pdfFieldId(new PdfFieldId("form1[0].#subform[2].flt_txtBeskrivBarnetsHalsotillstand[1]"))
-        .maxLength(4000)
+        .maxLength(ROW_MAX_LENGTH * 8)
+        .overflowSheetFieldId(
+            new PdfFieldId("form1[0].#subform[3].flt_txtFortsattningsblad[0]"))
         .build();
 
     final var element = QuestionHalsotillstand.questionHalsotillstand();

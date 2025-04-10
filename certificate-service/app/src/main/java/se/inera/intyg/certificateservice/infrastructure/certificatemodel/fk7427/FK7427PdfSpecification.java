@@ -10,10 +10,12 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagInd
 
 public class FK7427PdfSpecification {
 
+  public static final int ROW_MAX_LENGTH = 90;
   public static final String PDF_FK_7427_PDF = "fk7427/pdf/fk7427_v1.pdf";
+  public static final String PDF_FK_7427_PDF_NO_ADDRESS = "fk7427/pdf/fk7427_v1_no_address.pdf";
   public static final PdfMcid PDF_MCID = new PdfMcid(300);
   private static final int PDF_SIGNATURE_PAGE_INDEX = 1;
-  private static final PdfTagIndex PDF_SIGNATURE_TAG_INDEX = new PdfTagIndex(15);
+  private static final PdfTagIndex PDF_SIGNATURE_TAG_INDEX = new PdfTagIndex(24);
   private static final List<PdfFieldId> PDF_PATIENT_ID_FIELD_IDS = List.of(
       new PdfFieldId("form1[0].#subform[0].flt_txtPersonNrBarnet[0]"),
       new PdfFieldId("form1[0].#subform[2].flt_txtPersonNrBarnet[1]"),
@@ -41,6 +43,7 @@ public class FK7427PdfSpecification {
   public static PdfSpecification create() {
     return PdfSpecification.builder()
         .pdfTemplatePath(PDF_FK_7427_PDF)
+        .pdfNoAddressTemplatePath(PDF_FK_7427_PDF_NO_ADDRESS)
         .patientIdFieldIds(PDF_PATIENT_ID_FIELD_IDS)
         .pdfMcid(PDF_MCID)
         .signature(PdfSignature.builder()

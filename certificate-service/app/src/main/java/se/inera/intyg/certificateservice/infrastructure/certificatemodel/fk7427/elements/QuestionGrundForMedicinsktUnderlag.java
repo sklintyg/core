@@ -44,6 +44,8 @@ public class QuestionGrundForMedicinsktUnderlag {
       "form1[0].#subform[0].flt_datumJournaluppgifter[0]");
   public static final PdfFieldId PDF_PARENT_DESCRIPTION_CHECKBOX_ID = new PdfFieldId(
       "form1[0].#subform[0].ksr_ForaldersBeskrivning[0]");
+  public static final PdfFieldId PDF_PARENT_DESCRIPTION_DATE_ID = new PdfFieldId(
+      "form1[0].#subform[0].flt_datumAnhorig[0]");
   public static final PdfFieldId PDF_OTHER_CHECKBOX_ID = new PdfFieldId(
       "form1[0].#subform[0].ksr_AnnatFyll[0]");
   public static final PdfFieldId PDF_OTHER_DATE_ID = new PdfFieldId(
@@ -140,6 +142,7 @@ public class QuestionGrundForMedicinsktUnderlag {
                         UTLATANDE_BASERAT_PA_FORALDERS_BESKRIVNING_FIELD_ID,
                         PdfConfigurationDateCheckbox.builder()
                             .checkboxFieldId(PDF_PARENT_DESCRIPTION_CHECKBOX_ID)
+                            .dateFieldId(PDF_PARENT_DESCRIPTION_DATE_ID)
                             .build(),
                         UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID,
                         PdfConfigurationDateCheckbox.builder()

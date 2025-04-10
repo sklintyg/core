@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.FK7427PdfSpecification.ROW_MAX_LENGTH;
 
 import java.util.List;
 import java.util.Map;
@@ -103,7 +104,7 @@ class QuestionDiagnosTest {
   @Test
   void shallIncludePdfConfiguration() {
     final var expectedPdfConfiguration = PdfConfigurationDiagnoses.builder()
-        .maxLength(172)
+        .maxLength(ROW_MAX_LENGTH)
         .appearance("/ArialMT 9.00 Tf 0 g")
         .diagnoses(
             Map.of(
