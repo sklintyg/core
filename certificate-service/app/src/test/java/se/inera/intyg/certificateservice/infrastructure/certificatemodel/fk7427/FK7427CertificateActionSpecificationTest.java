@@ -79,7 +79,8 @@ class FK7427CertificateActionSpecificationTest {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.SEND)
         .allowedRoles(
-            List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.CARE_ADMIN))
+            List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.CARE_ADMIN, Role.NURSE,
+                Role.MIDWIFE))
         .build();
 
     final var actionSpecifications = FK7427CertificateActionSpecification.create();
