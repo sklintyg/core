@@ -23,8 +23,8 @@ public class QuestionVardasBarnetInneliggandePaSjukhus {
 
   private static final PdfFieldId PDF_VARDAS_BARNET_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[2].RadioButtonList_2[0]");
-  private static final PdfRadioOption PDF_VARDAS_BARNET_OPTION_TRUE = new PdfRadioOption("2");
-  private static final PdfRadioOption PDF_VARDAS_BARNET_OPTION_FALSE = new PdfRadioOption("1");
+  private static final PdfRadioOption PDF_VARDAS_BARNET_OPTION_TRUE = new PdfRadioOption("1");
+  private static final PdfRadioOption PDF_VARDAS_BARNET_OPTION_FALSE = new PdfRadioOption("2");
 
   private QuestionVardasBarnetInneliggandePaSjukhus() {
     throw new IllegalStateException("Utility class");

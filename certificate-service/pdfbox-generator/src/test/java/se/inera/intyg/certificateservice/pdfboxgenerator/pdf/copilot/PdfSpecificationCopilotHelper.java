@@ -75,7 +75,7 @@ class PdfSpecificationCopilotHelper {
           StringBuilder extraText = new StringBuilder();
           if (field instanceof PDRadioButton radioButtonField) {
             extraText = new StringBuilder(
-                "For radio boolean assume first option is false and second option is true. Use the options as field ids. Options:\n");
+                "For radio boolean assume first option is true and second option is false. Use the options as field ids. Options:\n");
             for (String option : radioButtonField.getExportValues()) {
               extraText.append(option).append("\n");
             }

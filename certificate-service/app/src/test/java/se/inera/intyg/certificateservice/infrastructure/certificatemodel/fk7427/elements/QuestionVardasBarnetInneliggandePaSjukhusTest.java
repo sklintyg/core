@@ -82,8 +82,8 @@ class QuestionVardasBarnetInneliggandePaSjukhusTest {
   void shallIncludePdfConfiguration() {
     final var expectedPdfConfiguration = PdfConfigurationRadioBoolean.builder()
         .pdfFieldId(new PdfFieldId("form1[0].#subform[2].RadioButtonList_2[0]"))
-        .optionTrue(new PdfRadioOption("2"))
-        .optionFalse(new PdfRadioOption("1"))
+        .optionTrue(new PdfRadioOption("1"))
+        .optionFalse(new PdfRadioOption("2"))
         .build();
 
     final var elementSpecification = QuestionVardasBarnetInneliggandePaSjukhus.questionVardasBarnetInneliggandePaSjukhus();
