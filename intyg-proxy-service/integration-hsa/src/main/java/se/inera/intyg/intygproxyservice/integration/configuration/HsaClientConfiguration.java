@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Configuration;
 import se.inera.intyg.intygproxyservice.integration.common.WebServiceClientFactory;
 import se.riv.infrastructure.directory.authorizationmanagement.getcredentialsforpersonincludingprotectedperson.v2.rivtabp21.GetCredentialsForPersonIncludingProtectedPersonResponderInterface;
 import se.riv.infrastructure.directory.authorizationmanagement.gethospcredentialsforperson.v1.rivtabp21.GetHospCredentialsForPersonResponderInterface;
-import se.riv.infrastructure.directory.authorizationmanagement.handlehospcertificationperson.v1.rivtabp21.HandleHospCertificationPersonResponderInterface;
 import se.riv.infrastructure.directory.authorizationmanagement.gethosplastupdate.v1.rivtabp21.GetHospLastUpdateResponderInterface;
+import se.riv.infrastructure.directory.authorizationmanagement.handlehospcertificationperson.v1.rivtabp21.HandleHospCertificationPersonResponderInterface;
 import se.riv.infrastructure.directory.employee.getemployeeincludingprotectedperson.v3.rivtabp21.GetEmployeeIncludingProtectedPersonResponderInterface;
 import se.riv.infrastructure.directory.organization.gethealthcareprovider.v1.rivtabp21.GetHealthCareProviderResponderInterface;
 import se.riv.infrastructure.directory.organization.gethealthcareunit.v2.rivtabp21.GetHealthCareUnitResponderInterface;
@@ -38,7 +38,7 @@ public class HsaClientConfiguration {
   @Value("${integration.hsa.getunit.endpoint}")
   private String getUnitEndpoint;
 
-  @Value("${integration.hsa.gethealthcareunitmembers.endpoint}")
+  @Value("${integration.hsa.getcredentialinformation.endpoint}")
   private String getCredentialInformationEndpoint;
 
   @Value("${integration.hsa.getlastupdate.endpoint}")
