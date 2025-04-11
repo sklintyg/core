@@ -12,6 +12,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ExpressionRuleType;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCategory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
 public class CategoryDiagnos {
@@ -48,6 +49,14 @@ public class CategoryDiagnos {
                             )
                         )
                     )
+                    .build()
+            )
+        )
+        .validations(
+            List.of(
+                ElementValidationCategory.builder()
+                    .mandatory(true)
+                    .elements(List.of(DIAGNOSIS_ID, QUESTION_SYMTOM_ID))
                     .build()
             )
         )

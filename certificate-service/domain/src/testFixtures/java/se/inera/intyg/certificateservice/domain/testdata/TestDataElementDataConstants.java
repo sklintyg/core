@@ -17,4 +17,13 @@ public class TestDataElementDataConstants {
   public static final String CATEGORY_ELEMENT_NAME = "categoryElementName";
   public static final String UNIT_ELEMENT_ID = "UNIT_CONTACT_INFORMATION";
 
+  public static final String TEXT_ELEMENT_ID = "textElementId";
+  public static final String TEXT_ELEMENT_FIELD_ID = "textElementFieldId";
+  public static final String TEXT_ELEMENT_VALUE_DATE = "textValue";
+
+  public static final String BOOLEAN_ELEMENT_ID = "booleanElementId";
+  public static final String BOOLEAN_ELEMENT_FIELD_ID = "booleanElementFieldId";
+  public static final Boolean BOOLEAN_ELEMENT_VALUE_DATE = false;
+
+
 }
