@@ -21,7 +21,6 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitC
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Collections;
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
@@ -428,7 +427,94 @@ public class TestDataCertificate {
         .sent(SENT)
         .revoked(REVOKED)
         .externalReference(EXTERNAL_REFERENCE)
-        .elementData(Collections.emptyList())
+        .elementData(
+            List.of(
+                ElementData.builder()
+                    .id(new ElementId("1"))
+                    .value(
+                        ElementValueDateList.builder()
+                            .dateListId(new FieldId("1.1"))
+                            .dateList(
+                                List.of(
+                                    ElementValueDate.builder()
+                                        .dateId(new FieldId("fysisktMote"))
+                                        .date(LocalDate.now())
+                                        .build()
+                                )
+                            )
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("1.3"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("1.3"))
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("58"))
+                    .value(
+                        ElementValueDiagnosisList.builder()
+                            .diagnoses(
+                                List.of(
+                                    ElementValueDiagnosis.builder()
+                                        .code("A013")
+                                        .description("Paratyfoidfeber C")
+                                        .terminology("ICD_10_SE")
+                                        .build()
+                                )
+                            )
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("55"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("55.1"))
+                            .text("Barnets symtom")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("59"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("59.3"))
+                            .text("Barnets aktuella hälsotillstånd")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("62"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("62.5"))
+                            .text("Stort behov av vård och tillsyn")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("62.1"))
+                    .value(
+                        ElementValueBoolean.builder()
+                            .booleanId(new FieldId("62.1"))
+                            .value(true)
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("19"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("19.1"))
+                            .build()
+                    )
+                    .build()
+            )
+        )
         .certificateMetaData(
             CertificateMetaData.builder()
                 .issuer(AJLA_DOKTOR)

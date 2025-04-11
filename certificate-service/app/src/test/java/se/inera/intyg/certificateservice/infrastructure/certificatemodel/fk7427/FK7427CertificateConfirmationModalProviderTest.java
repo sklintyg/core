@@ -144,7 +144,7 @@ class FK7427CertificateConfirmationModalProviderTest {
             .type(MessageLevel.INFO)
             .text(
                 """
-                    <p>Du är på väg att utfärda Läkarutlåtande tillfällig föräldrapenning Barn 12-16 år för</p>
+                    <p>Du är på väg att utfärda Läkarutlåtande tillfällig föräldrapenning barn 12-16 år för</p>
                     <b>%s - %s.</b>
                     """.formatted(
                     PATIENT_FULL_NAME,
@@ -158,7 +158,7 @@ class FK7427CertificateConfirmationModalProviderTest {
       @Test
       void shallContainText() {
         final var expectedText = """
-            <p>Läkarutlåtande tillfällig föräldrapenning Barn 12-16 år ska endast användas när ett barn på grund av sjukdom behöver vård eller tillsyn av en förälder.</p><br>
+            <p>Läkarutlåtande tillfällig föräldrapenning barn 12-16 år ska endast användas när ett barn på grund av sjukdom behöver vård eller tillsyn av en förälder.</p><br>
             <p>Om barnet är allvarligt sjukt används istället Läkarutlåtande för tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har fyllt 18 år.</p>
             """;
         final var certificateConfirmationModal = provider.of(null, actionEvaluation);
@@ -167,7 +167,7 @@ class FK7427CertificateConfirmationModalProviderTest {
 
       @Test
       void shallContainCheckboxText() {
-        final var expectedCheckboxText = "Jag är säker på att jag vill utfärda Läkarutlåtande tillfällig föräldrapenning Barn 12-16 år";
+        final var expectedCheckboxText = "Jag är säker på att jag vill utfärda Läkarutlåtande tillfällig föräldrapenning barn 12-16 år";
         final var certificateConfirmationModal = provider.of(null, actionEvaluation);
         assertEquals(expectedCheckboxText, certificateConfirmationModal.checkboxText());
       }
@@ -388,7 +388,7 @@ class FK7427CertificateConfirmationModalProviderTest {
             .type(MessageLevel.INFO)
             .text(
                 """
-                    <p>Du är på väg att utfärda Läkarutlåtande tillfällig föräldrapenning Barn 12-16 år för</p>
+                    <p>Du är på väg att utfärda Läkarutlåtande tillfällig föräldrapenning barn 12-16 år för</p>
                     <b>%s - %s.</b>
                     """.formatted(
                     PATIENT_FULL_NAME,
@@ -402,7 +402,7 @@ class FK7427CertificateConfirmationModalProviderTest {
       @Test
       void shallContainText() {
         final var expectedText = """
-            <p>Läkarutlåtande tillfällig föräldrapenning Barn 12-16 år ska endast användas när ett barn på grund av sjukdom behöver vård eller tillsyn av en förälder.</p><br>
+            <p>Läkarutlåtande tillfällig föräldrapenning barn 12-16 år ska endast användas när ett barn på grund av sjukdom behöver vård eller tillsyn av en förälder.</p><br>
             <p>Om barnet är allvarligt sjukt används istället Läkarutlåtande för tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har fyllt 18 år.</p>
             """;
         final var certificateConfirmationModal = provider.of(certificate, actionEvaluation);
@@ -411,7 +411,7 @@ class FK7427CertificateConfirmationModalProviderTest {
 
       @Test
       void shallContainCheckboxText() {
-        final var expectedCheckboxText = "Jag är säker på att jag vill utfärda Läkarutlåtande tillfällig föräldrapenning Barn 12-16 år";
+        final var expectedCheckboxText = "Jag är säker på att jag vill utfärda Läkarutlåtande tillfällig föräldrapenning barn 12-16 år";
         final var certificateConfirmationModal = provider.of(certificate, actionEvaluation);
         assertEquals(expectedCheckboxText, certificateConfirmationModal.checkboxText());
       }
