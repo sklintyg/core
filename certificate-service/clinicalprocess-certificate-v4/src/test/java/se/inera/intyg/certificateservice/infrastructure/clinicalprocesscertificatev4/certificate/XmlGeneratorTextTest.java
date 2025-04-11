@@ -56,10 +56,26 @@ class XmlGeneratorTextTest {
   }
 
   @Test
-  void shouldMapEmptyIfNoValue() {
+  void shouldMapEmptyIfNullValue() {
     final var data = ElementData.builder()
         .value(ElementValueText.builder()
             .textId(new FieldId(ANSWER_ID))
+            .build()
+        )
+        .id(new ElementId(QUESTION_ID))
+        .build();
+
+    final var response = xmlGeneratorText.generate(data, ELEMENT_SPECIFICATION);
+
+    assertTrue(response.isEmpty());
+  }
+
+  @Test
+  void shouldMapEmptyIfEmptyValue() {
+    final var data = ElementData.builder()
+        .value(ElementValueText.builder()
+            .textId(new FieldId(ANSWER_ID))
+                .text("")
             .build()
         )
         .id(new ElementId(QUESTION_ID))
