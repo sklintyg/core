@@ -22,7 +22,7 @@ public class XmlGeneratorText implements XmlGeneratorElementData {
       return Collections.emptyList();
     }
 
-    if (textValue.text() == null) {
+    if (textValue.text() == null || textValue.text().isEmpty()) {
       return Collections.emptyList();
     }
 
