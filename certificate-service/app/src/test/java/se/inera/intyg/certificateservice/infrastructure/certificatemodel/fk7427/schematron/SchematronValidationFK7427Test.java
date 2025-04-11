@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -14,9 +15,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -67,7 +70,8 @@ public class SchematronValidationFK7427Test {
   @BeforeEach
   void setUp() {
     schematronValidator = new SchematronValidator();
-    certificateModelFactoryFK7427 = new CertificateModelFactoryFK7427(certificateActionFactory,diagnosisCodeRepository);
+    certificateModelFactoryFK7427 = new CertificateModelFactoryFK7427(certificateActionFactory,
+        diagnosisCodeRepository);
   }
 
   @Test
@@ -162,6 +166,43 @@ public class SchematronValidationFK7427Test {
       final var updatedElementData = certificate.elementData().stream()
           .map(data -> data.id().equals(new ElementId("1")) ? elementData : data)
           .toList();
+      certificate.updateData(updatedElementData, new Revision(0), ACTION_EVALUATION);
+
+      final var xml = generator.generate(certificate, false);
+      assertFalse(schematronValidator.validate(certificate.id(), xml,
+          CertificateModelFactoryFK7427.SCHEMATRON_PATH));
+    }
+  }
+
+  @Nested
+  class TestDiagnos {
+
+    @Test
+    void shallReturnFalseIfMissingValuesOnBothBarnetsDiagnosAndSymtom() {
+      final var certificate = TestDataCertificate.fk7427CertificateBuilder()
+          .certificateModel(certificateModelFactoryFK7427.create())
+          .build();
+
+      final var diagnosisId = new ElementId("58");
+      final var symtomId = new ElementId("55");
+
+      final var elements = certificate.elementData().stream()
+          .filter(elementData -> elementData.id().equals(diagnosisId) || elementData.id()
+              .equals(symtomId))
+          .collect(Collectors.toMap(ElementData::id, data -> data));
+
+      final var valueSymtom = (ElementValueText) elements.get(symtomId).value();
+      final var elementDataSymtom = elements.get(symtomId).withValue(valueSymtom.withText(null));
+
+      final var valueDiagnosis = (ElementValueDiagnosisList) elements.get(diagnosisId).value();
+      final var elementDataDiagnosis = elements.get(diagnosisId)
+          .withValue(valueDiagnosis.withDiagnoses(Collections.emptyList()));
+
+      final var updatedElementData = certificate.elementData().stream()
+          .map(data -> data.id().equals(diagnosisId) ? elementDataDiagnosis : data)
+          .map(data -> data.id().equals(symtomId) ? elementDataSymtom : data)
+          .toList();
+
       certificate.updateData(updatedElementData, new Revision(0), ACTION_EVALUATION);
 
       final var xml = generator.generate(certificate, false);
