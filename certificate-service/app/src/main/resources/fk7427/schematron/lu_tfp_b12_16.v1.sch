@@ -5,7 +5,9 @@
   queryBinding='xslt2'
   schemaVersion='ISO19757-3'>
 
-  <iso:title>Schematron file for "Läkarutlåtande tillfällig föräldrapenning barn 12–16 år" - Version 1.</iso:title>
+  <iso:title>Schematron file for "Läkarutlåtande tillfällig föräldrapenning barn 12–16 år" - Version
+    1.
+  </iso:title>
 
   <iso:ns prefix="xs" uri="http://www.w3.org/2001/XMLSchema"/>
   <iso:ns prefix="rg"
@@ -17,16 +19,25 @@
   <iso:pattern id="intyg">
     <iso:rule context="//rg:intyg">
       <iso:assert test="count(gn:svar[@id='1']) ge 1">
-        Ett 'Läkarutlåtande tillfällig föräldrapenning barn 12–16 år' måsta ha ett 'Grund för medicinskt underlag' svar
+        Ett 'Läkarutlåtande tillfällig föräldrapenning barn 12–16 år' måsta ha ett 'Grund för
+        medicinskt underlag' svar
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='1']) le 5">
-        Ett 'Läkarutlåtande tillfällig föräldrapenning barn 12–16 år' får ha max 5 'Grund för medicinskt underlag'
+        Ett 'Läkarutlåtande tillfällig föräldrapenning barn 12–16 år' får ha max 5 'Grund för
+        medicinskt underlag'
+      </iso:assert>
+      <iso:assert test="count(gn:svar[@id='58']) = 1 or count(gn:svar[@id='55']) = 1">
+        Ett 'Läkarutlåtande tillfällig föräldrapenning barn 12–16 år' måste minst ha ett svar på
+        någon av frågorna 'Barnets diagnos' eller 'Fyll i vilka symtom barnet har om diagnos inte är
+        fastställd'
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='59']) = 1">
-        Ett 'Läkarutlåtande tillfällig föräldrapenning barn 12–16 år' måste ha ett 'Hälsotillstånd' svar
+        Ett 'Läkarutlåtande tillfällig föräldrapenning barn 12–16 år' måste ha ett 'Hälsotillstånd'
+        svar
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='62']) = 1">
-        Ett 'Läkarutlåtande tillfällig föräldrapenning barn 12–16 år' måste ha ett 'Vård eller tillsyn' svar
+        Ett 'Läkarutlåtande tillfällig föräldrapenning barn 12–16 år' måste ha ett 'Vård eller
+        tillsyn' svar
       </iso:assert>
     </iso:rule>
   </iso:pattern>
@@ -115,6 +126,12 @@
     </iso:rule>
   </iso:pattern>
 
+  <iso:pattern id="q55">
+    <iso:rule context="//gn:delsvar[@id='55.1']">
+      <iso:extends rule="non-empty-string"/>
+    </iso:rule>
+  </iso:pattern>
+
   <iso:pattern id="q59">
     <iso:rule context="//gn:svar[@id='59']">
       <iso:assert test="count(gn:delsvar[@id='59.3']) = 1">
@@ -126,7 +143,8 @@
   <iso:pattern id="q62-5">
     <iso:rule context="//gn:svar[@id='62']">
       <iso:assert test="count(gn:delsvar[@id='62.5']) = 1">
-        Ett 'Vård eller tillsyn' svar måste ha ett delsvar av frågan 'Beskriv barnets behov av vård eller tillsyn'
+        Ett 'Vård eller tillsyn' svar måste ha ett delsvar av frågan 'Beskriv barnets behov av vård
+        eller tillsyn'
       </iso:assert>
     </iso:rule>
   </iso:pattern>
@@ -134,7 +152,8 @@
   <iso:pattern id="q62-1">
     <iso:rule context="//gn:svar[@id='62']">
       <iso:assert test="count(gn:delsvar[@id='62.1']) = 1">
-        Ett 'Vård eller tillsyn' svar måste ha ett delsvar av frågan 'Vårdas barnet inneliggande på sjukhus?'
+        Ett 'Vård eller tillsyn' svar måste ha ett delsvar av frågan 'Vårdas barnet inneliggande på
+        sjukhus?'
       </iso:assert>
     </iso:rule>
   </iso:pattern>

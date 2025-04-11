@@ -7,15 +7,15 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
 public class QuestionSymtom {
 
   public static final ElementId QUESTION_SYMTOM_ID = new ElementId("55");
-  private static final FieldId QUESTION_SYMTOM_FIELD_ID = new FieldId("55.1");
+  public static final FieldId QUESTION_SYMTOM_FIELD_ID = new FieldId("55.1");
   private static final short LIMIT = 4000;
   private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[0].flt_txtFlerradig[0]");
@@ -56,4 +56,3 @@ public class QuestionSymtom {
         .build();
   }
 }
-
