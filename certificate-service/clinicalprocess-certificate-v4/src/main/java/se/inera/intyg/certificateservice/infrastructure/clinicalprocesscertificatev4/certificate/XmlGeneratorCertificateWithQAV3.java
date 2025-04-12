@@ -10,6 +10,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGeneratorCertificatesForCareWithQA;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.common.XmlGeneratorIntyg;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.common.XmlNamespaceTrimmer;
 import se.riv.clinicalprocess.healthcond.certificate.listCertificatesForCareWithQA.v3.List;
 import se.riv.clinicalprocess.healthcond.certificate.listCertificatesForCareWithQA.v3.ListCertificatesForCareWithQAResponseType;
 import se.riv.clinicalprocess.healthcond.certificate.listCertificatesForCareWithQA.v3.ListItem;
@@ -118,7 +119,7 @@ public class XmlGeneratorCertificateWithQAV3 implements XmlGeneratorCertificates
       );
       final var writer = new StringWriter();
       context.createMarshaller().marshal(element, writer);
-      return new Xml(writer.toString());
+      return new Xml(XmlNamespaceTrimmer.trim(writer.toString()));
     } catch (Exception e) {
       throw new IllegalStateException(e);
     }
