@@ -17,6 +17,7 @@ import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.service.XmlGeneratorMessage;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.common.XmlNamespaceTrimmer;
 import se.riv.clinicalprocess.healthcond.certificate.sendMessageToRecipient.v2.ObjectFactory;
 import se.riv.clinicalprocess.healthcond.certificate.sendMessageToRecipient.v2.SendMessageToRecipientType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.Amneskod;
@@ -202,7 +203,7 @@ public class XmlGeneratorMessageV4 implements XmlGeneratorMessage {
       );
       final var writer = new StringWriter();
       context.createMarshaller().marshal(element, writer);
-      return new Xml(writer.toString());
+      return new Xml(XmlNamespaceTrimmer.trim(writer.toString()));
     } catch (Exception e) {
       throw new IllegalStateException(e);
     }
