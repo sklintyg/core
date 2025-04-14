@@ -11,7 +11,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleMandatoryCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ExpressionRuleType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ExpressionOperandType;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCategory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
@@ -35,7 +35,7 @@ public class CategoryDiagnos {
         .rules(
             List.of(
                 ElementRuleMandatoryCategory.builder()
-                    .ruleType(ExpressionRuleType.OR)
+                    .operandType(ExpressionOperandType.OR)
                     .type(ElementRuleType.CATEGORY_MANDATORY)
                     .elementRuleExpressions(
                         List.of(

@@ -27,7 +27,7 @@ public class CertificateDataValidationCategoryMandatoryConverter implements
 
     return CertificateDataValidationCategoryMandatory.builder()
         .expressionType(
-            ExpressionTypeEnum.fromValue(elementRuleMandatoryCategory.ruleType().name()))
+            ExpressionTypeEnum.fromValue(elementRuleMandatoryCategory.operandType().name()))
         .questions(
             elementRuleMandatoryCategory.elementRuleExpressions().stream()
                 .map(elementRuleExpression ->

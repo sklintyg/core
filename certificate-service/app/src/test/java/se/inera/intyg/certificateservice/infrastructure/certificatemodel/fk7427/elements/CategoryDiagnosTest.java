@@ -8,7 +8,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleMandatoryCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ExpressionRuleType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ExpressionOperandType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
@@ -38,7 +38,7 @@ class CategoryDiagnosTest {
   void shallIncludeRules() {
     final var expectedRules = List.of(
         ElementRuleMandatoryCategory.builder()
-            .ruleType(ExpressionRuleType.OR)
+            .operandType(ExpressionOperandType.OR)
             .type(ElementRuleType.CATEGORY_MANDATORY)
             .elementRuleExpressions(
                 List.of(

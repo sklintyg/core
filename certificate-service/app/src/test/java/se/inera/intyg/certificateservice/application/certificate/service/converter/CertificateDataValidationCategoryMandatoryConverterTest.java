@@ -13,7 +13,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleMandatoryCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ExpressionRuleType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ExpressionOperandType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 
 class CertificateDataValidationCategoryMandatoryConverterTest {
@@ -44,7 +44,7 @@ class CertificateDataValidationCategoryMandatoryConverterTest {
   @Test
   void shallReturnCertificateDataValidationCategoryMandatoryWithExpressionType() {
     final var elementRuleMandatoryCategory = ElementRuleMandatoryCategory.builder()
-        .ruleType(ExpressionRuleType.OR)
+        .operandType(ExpressionOperandType.OR)
         .build();
     final var result = (CertificateDataValidationCategoryMandatory) converter.convert(
         elementRuleMandatoryCategory);
@@ -54,7 +54,7 @@ class CertificateDataValidationCategoryMandatoryConverterTest {
   @Test
   void shallReturnCertificateDataValidationCategoryMandatoryWithExpression() {
     final var elementRuleMandatoryCategory = ElementRuleMandatoryCategory.builder()
-        .ruleType(ExpressionRuleType.OR)
+        .operandType(ExpressionOperandType.OR)
         .elementRuleExpressions(
             List.of(
                 ElementRuleExpression.builder()

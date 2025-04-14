@@ -8,9 +8,9 @@ import lombok.Value;
 @Value
 @Builder
 public class ElementRuleMandatoryCategory implements ElementRule {
-  
+
   ElementRuleType type;
-  ExpressionRuleType ruleType;
+  ExpressionOperandType operandType;
   @Builder.Default
   List<ElementRule> elementRuleExpressions = Collections.emptyList();
 }
