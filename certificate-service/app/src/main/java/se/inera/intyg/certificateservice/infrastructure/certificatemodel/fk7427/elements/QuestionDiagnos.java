@@ -19,7 +19,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionDiagnos {
 
-  private static final FieldId DIAGNOSIS_FIELD_ID = new FieldId("58.1");
+  public static final FieldId DIAGNOSIS_FIELD_ID = new FieldId("58.1");
   public static final ElementId DIAGNOSIS_ID = new ElementId("58");
   public static final FieldId DIAGNOS_1 = new FieldId("huvuddiagnos");
   public static final FieldId DIAGNOS_2 = new FieldId("diagnos2");
