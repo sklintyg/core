@@ -1,14 +1,17 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionVardEllerTillsyn.QUESTION_VARD_ELLER_TILLSYN_ID;
+
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDateRange;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateRange;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateRange;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateRange;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
 public class QuestionPeriodVardEllerTillsyn {
 
@@ -54,6 +57,8 @@ public class QuestionPeriodVardEllerTillsyn {
                 .to(PDF_FIELD_ID_TO)
                 .build()
         )
+        .mapping(new ElementMapping(QUESTION_VARD_ELLER_TILLSYN_ID, null))
+
         .build();
   }
 }
