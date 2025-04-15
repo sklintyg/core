@@ -25,6 +25,7 @@ public class ElementValueConverterDateRange implements ElementValueConverter {
           "Invalid value type. Type was '%s'".formatted(value.getType())
       );
     }
+    
     return ElementValueDateRange.builder()
         .id(new FieldId(dateRangeValue.getId()))
         .fromDate(dateRangeValue.getFrom())
