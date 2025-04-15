@@ -26,7 +26,7 @@ public class CertificateDataDateRangeConfigConverter implements CertificateDataC
     }
 
     return CertificateDataConfigDateRange.builder()
-        .id(elementSpecification.id().id())
+        .id(configuration.id().value())
         .text(configuration.name())
         .fromLabel(configuration.labelFrom())
         .toLabel(configuration.labelTo())
