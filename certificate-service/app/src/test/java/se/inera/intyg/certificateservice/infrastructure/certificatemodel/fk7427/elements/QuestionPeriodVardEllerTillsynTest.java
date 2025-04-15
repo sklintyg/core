@@ -1,0 +1,54 @@
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.List;
+import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDateRange;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
+
+class QuestionPeriodVardEllerTillsynTest {
+
+  private static final ElementId ELEMENT_ID = new ElementId("62.6");
+
+  @Test
+  void shallIncludeId() {
+    final var element = QuestionPeriodVardEllerTillsyn.questionPeriodVardEllerTillsyn();
+
+    assertEquals(ELEMENT_ID, element.id());
+  }
+
+  @Test
+  void shallIncludeConfiguration() {
+    final var expectedConfiguration = ElementConfigurationDateRange.builder()
+        .name("Under vilken period behöver barnet vård eller tillsyn?")
+        .labelFrom("Fr.o.m")
+        .labelTo("T.o.m")
+        .id(new FieldId("62.6"))
+        .build();
+
+    final var element = QuestionPeriodVardEllerTillsyn.questionPeriodVardEllerTillsyn();
+
+    assertEquals(expectedConfiguration, element.configuration());
+  }
+
+  @Test
+  void shallIncludeRules() {
+    final var expectedRules = List.of(
+        ElementRuleExpression.builder()
+            .id(new ElementId("62.6"))
+            .type(ElementRuleType.MANDATORY)
+            .expression(new RuleExpression("$62.6"))
+            .build()
+    );
+
+    final var element = QuestionPeriodVardEllerTillsyn.questionPeriodVardEllerTillsyn();
+
+    assertEquals(expectedRules, element.rules());
+  }
+
+}
