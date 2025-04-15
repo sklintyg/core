@@ -31,11 +31,11 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBo
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueMedicalInvestigationList;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValuePeriod;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalInvestigation;
@@ -502,17 +502,9 @@ public class TestDataCertificate {
                 ElementData.builder()
                     .id(new ElementId("62.6"))
                     .value(
-                        ElementValuePeriod.builder()
-                            .fromDate(
-                                ElementValueDate.builder()
-                                    .date(LocalDate.now())
-                                    .build()
-                            )
-                            .toDate(
-                                ElementValueDate.builder()
-                                    .date(LocalDate.now())
-                                    .build()
-                            )
+                        ElementValueDateRange.builder()
+                            .fromDate(LocalDate.now())
+                            .toDate(LocalDate.now().plusDays(14))
                             .build()
                     )
                     .build(),
@@ -528,17 +520,9 @@ public class TestDataCertificate {
                 ElementData.builder()
                     .id(new ElementId("62.2"))
                     .value(
-                        ElementValuePeriod.builder()
-                            .fromDate(
-                                ElementValueDate.builder()
-                                    .date(LocalDate.now())
-                                    .build()
-                            )
-                            .toDate(
-                                ElementValueDate.builder()
-                                    .date(LocalDate.now())
-                                    .build()
-                            )
+                        ElementValueDateRange.builder()
+                            .fromDate(LocalDate.now())
+                            .toDate(LocalDate.now().plusDays(14))
                             .build()
                     )
                     .build(),

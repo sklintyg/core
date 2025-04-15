@@ -11,6 +11,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionGrundForMedicinsktUnderlag.questionGrundForMedicinsktUnderlag;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionHalsotillstand.questionHalsotillstand;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionPagaendeOchPlaneradeBehandlingar.questionPagaendeOchPlaneradeBehandlingar;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionPeriodVardEllerTillsyn.questionPeriodVardEllerTillsyn;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionSymtom.questionSymtom;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionVardEllerTillsyn.questionVardEllerTillsyn;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionVardasBarnetInneliggandePaSjukhus.questionVardasBarnetInneliggandePaSjukhus;
@@ -109,6 +110,7 @@ public class CertificateModelFactoryFK7427 implements CertificateModelFactory {
                 ),
                 categoryVardEllerTillsyn(
                     questionVardEllerTillsyn(),
+                    questionPeriodVardEllerTillsyn(),
                     questionVardasBarnetInneliggandePaSjukhus()
                 ),
                 categoryBehandling(

@@ -5,15 +5,15 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
-import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigPeriod.CertificateDataConfigPeriodBuilder;
+import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigDateRange.CertificateDataConfigDateRangeBuilder;
 
-@JsonDeserialize(builder = CertificateDataConfigPeriodBuilder.class)
+@JsonDeserialize(builder = CertificateDataConfigDateRangeBuilder.class)
 @Value
 @Builder
-public class CertificateDataConfigPeriod implements CertificateDataConfig {
+public class CertificateDataConfigDateRange implements CertificateDataConfig {
 
   @Getter(onMethod = @__(@Override))
-  CertificateDataConfigType type = CertificateDataConfigType.UE_PERIOD;
+  CertificateDataConfigType type = CertificateDataConfigType.UE_DATE_RANGE;
   @Getter(onMethod = @__(@Override))
   String header;
   @Getter(onMethod = @__(@Override))
@@ -28,12 +28,12 @@ public class CertificateDataConfigPeriod implements CertificateDataConfig {
   Accordion accordion;
   @Getter(onMethod = @__(@Override))
   Message message;
-  DatePeriodDate fromDate;
-  DatePeriodDate toDate;
   String id;
+  String fromLabel;
+  String toLabel;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class CertificateDataConfigPeriodBuilder {
+  public static class CertificateDataConfigDateRangeBuilder {
 
   }
 }
