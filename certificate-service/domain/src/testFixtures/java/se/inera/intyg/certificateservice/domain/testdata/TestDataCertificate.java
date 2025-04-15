@@ -35,6 +35,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDa
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueMedicalInvestigationList;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValuePeriod;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalInvestigation;
@@ -417,6 +418,8 @@ public class TestDataCertificate {
         );
   }
 
+  public static final Certificate FK7427_CERTIFICATE = fk7427CertificateBuilder().build();
+
   public static Certificate.CertificateBuilder fk7427CertificateBuilder() {
     return Certificate.builder()
         .id(CERTIFICATE_ID)
@@ -497,11 +500,45 @@ public class TestDataCertificate {
                     )
                     .build(),
                 ElementData.builder()
+                    .id(new ElementId("62.6"))
+                    .value(
+                        ElementValuePeriod.builder()
+                            .fromDate(
+                                ElementValueDate.builder()
+                                    .date(LocalDate.now())
+                                    .build()
+                            )
+                            .toDate(
+                                ElementValueDate.builder()
+                                    .date(LocalDate.now())
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
                     .id(new ElementId("62.1"))
                     .value(
                         ElementValueBoolean.builder()
                             .booleanId(new FieldId("62.1"))
                             .value(true)
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("62.2"))
+                    .value(
+                        ElementValuePeriod.builder()
+                            .fromDate(
+                                ElementValueDate.builder()
+                                    .date(LocalDate.now())
+                                    .build()
+                            )
+                            .toDate(
+                                ElementValueDate.builder()
+                                    .date(LocalDate.now())
+                                    .build()
+                            )
                             .build()
                     )
                     .build(),
