@@ -5,6 +5,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateRange;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
 public class QuestionPeriodVardEllerTillsyn {
@@ -31,6 +32,13 @@ public class QuestionPeriodVardEllerTillsyn {
             List.of(
                 CertificateElementRuleFactory.mandatory(QUESTION_PERIOD_VARD_ELLER_TILLSYN_ID,
                     QUESTION_PERIOD_VARD_ELER_TILLSYN_FIELD_ID)
+            )
+        )
+        .validations(
+            List.of(
+                ElementValidationDateRange.builder()
+                    .mandatory(true)
+                    .build()
             )
         )
         .build();

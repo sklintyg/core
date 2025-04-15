@@ -10,20 +10,21 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateRange;
 
 class QuestionPeriodVardEllerTillsynTest {
 
   private static final ElementId ELEMENT_ID = new ElementId("62.6");
 
   @Test
-  void shallIncludeId() {
+  void shouldIncludeId() {
     final var element = QuestionPeriodVardEllerTillsyn.questionPeriodVardEllerTillsyn();
 
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
-  void shallIncludeConfiguration() {
+  void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationDateRange.builder()
         .name("Under vilken period behöver barnet vård eller tillsyn?")
         .labelFrom("Fr.o.m")
@@ -37,7 +38,7 @@ class QuestionPeriodVardEllerTillsynTest {
   }
 
   @Test
-  void shallIncludeRules() {
+  void shouldIncludeRules() {
     final var expectedRules = List.of(
         ElementRuleExpression.builder()
             .id(new ElementId("62.6"))
@@ -51,4 +52,14 @@ class QuestionPeriodVardEllerTillsynTest {
     assertEquals(expectedRules, element.rules());
   }
 
+  @Test
+  void shouldIncludeValidation() {
+    final var expectedValidation = ElementValidationDateRange.builder()
+        .mandatory(true)
+        .build();
+
+    final var element = QuestionPeriodVardEllerTillsyn.questionPeriodVardEllerTillsyn();
+
+    assertEquals(List.of(expectedValidation), element.validations());
+  }
 }
