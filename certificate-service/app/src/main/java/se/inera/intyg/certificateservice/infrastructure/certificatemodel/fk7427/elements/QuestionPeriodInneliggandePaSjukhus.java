@@ -6,12 +6,13 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDateRange;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateRange;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateRange;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateRange;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
 public class QuestionPeriodInneliggandePaSjukhus {
 
@@ -56,6 +57,9 @@ public class QuestionPeriodInneliggandePaSjukhus {
                     .mandatory(true)
                     .build()
             )
+        )
+        .mapping(
+            new ElementMapping(QUESTION_VARDAS_BARNET_INNELIGGANDE_PA_SJUKHUS_ID, null)
         )
         .pdfConfiguration(
             PdfConfigurationDateRange.builder()

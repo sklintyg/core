@@ -6,6 +6,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDateRange;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
@@ -80,5 +81,15 @@ class QuestionPeriodInneliggandePaSjukhusTest {
     final var element = QuestionPeriodInneliggandePaSjukhus.questionPeriodInneliggandePaSjukhus();
 
     assertEquals(expectedPdfConfiguration, element.pdfConfiguration());
+  }
+
+  @Test
+  void shouldIncludeElementMapping() {
+    final var element = QuestionPeriodInneliggandePaSjukhus.questionPeriodInneliggandePaSjukhus();
+
+    assertEquals(
+        new ElementMapping(new ElementId("62.1"), null),
+        element.mapping()
+    );
   }
 }
