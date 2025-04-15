@@ -7,11 +7,18 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateRange;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateRange;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 
 public class QuestionPeriodVardEllerTillsyn {
 
   public static final ElementId QUESTION_PERIOD_VARD_ELLER_TILLSYN_ID = new ElementId("62.6");
   private static final FieldId QUESTION_PERIOD_VARD_ELER_TILLSYN_FIELD_ID = new FieldId("62.6");
+
+  private static final PdfFieldId PDF_FIELD_ID_FROM = new PdfFieldId(
+      "form1[0].#subform[2].flt_datumFranMed[0]");
+  private static final PdfFieldId PDF_FIELD_ID_TO = new PdfFieldId(
+      "form1[0].#subform[2].flt_datumTillMed[0]");
 
   private QuestionPeriodVardEllerTillsyn() {
     throw new IllegalStateException("Utility class");
@@ -41,7 +48,12 @@ public class QuestionPeriodVardEllerTillsyn {
                     .build()
             )
         )
+        .pdfConfiguration(
+            PdfConfigurationDateRange.builder()
+                .from(PDF_FIELD_ID_FROM)
+                .to(PDF_FIELD_ID_TO)
+                .build()
+        )
         .build();
   }
 }
-

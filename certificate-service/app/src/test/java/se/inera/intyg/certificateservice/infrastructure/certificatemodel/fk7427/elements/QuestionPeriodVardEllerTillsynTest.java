@@ -11,6 +11,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateRange;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateRange;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 
 class QuestionPeriodVardEllerTillsynTest {
 
@@ -61,5 +63,17 @@ class QuestionPeriodVardEllerTillsynTest {
     final var element = QuestionPeriodVardEllerTillsyn.questionPeriodVardEllerTillsyn();
 
     assertEquals(List.of(expectedValidation), element.validations());
+  }
+
+  @Test
+  void shouldIncludePdfConfiguration() {
+    final var expectedPdfConfiguration = PdfConfigurationDateRange.builder()
+        .from(new PdfFieldId("form1[0].#subform[2].flt_datumFranMed[0]"))
+        .to(new PdfFieldId("form1[0].#subform[2].flt_datumTillMed[0]"))
+        .build();
+
+    final var element = QuestionPeriodVardEllerTillsyn.questionPeriodVardEllerTillsyn();
+
+    assertEquals(expectedPdfConfiguration, element.pdfConfiguration());
   }
 }
