@@ -43,7 +43,7 @@ public class ElementValidationDateRange implements ElementValidation {
               .elementId(data.id())
               .fieldId(dateRange.id())
               .categoryId(categoryId.orElse(null))
-              .message(ErrorMessageFactory.missingMultipleOption())
+              .message(ErrorMessageFactory.missingDateRange())
               .build()
       );
     }

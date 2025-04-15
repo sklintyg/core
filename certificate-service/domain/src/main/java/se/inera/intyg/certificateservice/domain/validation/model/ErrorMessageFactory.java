@@ -34,6 +34,10 @@ public class ErrorMessageFactory {
     return new ErrorMessage("Välj minst ett alternativ.");
   }
 
+  public static ErrorMessage missingDateRange() {
+    return new ErrorMessage("Ange period.");
+  }
+
   public static ErrorMessage missingOption() {
     return new ErrorMessage("Välj ett alternativ.");
   }

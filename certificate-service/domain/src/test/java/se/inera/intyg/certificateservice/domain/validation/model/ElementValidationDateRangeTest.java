@@ -62,6 +62,28 @@ class ElementValidationDateRangeTest {
     }
 
     @Test
+    void shouldReturnValidationErrorIfDateIsEmpty() {
+      final var expectedValidationError = getExpectedValidationError(
+          "Ange period.", new FieldId(FIELD_ID.value())
+      );
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDateRange.builder()
+                  .id(FIELD_ID)
+                  .build()
+          )
+          .build();
+
+      final var actualResult = elementValidationDateRange.validate(
+          elementData,
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
+
+      assertEquals(List.of(expectedValidationError), actualResult);
+    }
+
+    @Test
     void shouldReturnValidationErrorIfFromDateIsMissing() {
       final var expectedValidationError = getExpectedValidationError(
           "Ange ett datum.", new FieldId(FIELD_ID.value() + ".from")
@@ -160,6 +182,77 @@ class ElementValidationDateRangeTest {
           Collections.emptyList());
 
       assertEquals(Collections.emptyList(), actualResult);
+    }
+
+    @Test
+    void shouldReturnValidationErrorIfFromDateIsMissing() {
+      final var expectedValidationError = getExpectedValidationError(
+          "Ange ett datum.", new FieldId(FIELD_ID.value() + ".from")
+      );
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDateRange.builder()
+                  .id(FIELD_ID)
+                  .toDate(LocalDate.now())
+                  .build()
+          )
+          .build();
+
+      final var actualResult = elementValidationDateRange.validate(
+          elementData,
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
+
+      assertEquals(List.of(expectedValidationError), actualResult);
+    }
+
+    @Test
+    void shouldReturnValidationErrorIfToDateIsMissing() {
+      final var expectedValidationError = getExpectedValidationError(
+          "Ange ett datum.", new FieldId(FIELD_ID.value() + ".to")
+      );
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDateRange.builder()
+                  .id(FIELD_ID)
+                  .fromDate(LocalDate.now())
+                  .build()
+          )
+          .build();
+
+      final var actualResult = elementValidationDateRange.validate(
+          elementData,
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
+
+      assertEquals(List.of(expectedValidationError), actualResult);
+    }
+
+    @Test
+    void shouldReturnValidationErrorIfToDateIsBeforeFromDate() {
+      final var expectedValidationError = getExpectedValidationError(
+          "Ange ett slutdatum som infaller efter startdatumet.",
+          new FieldId(FIELD_ID.value() + ".range")
+      );
+      final var elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDateRange.builder()
+                  .id(FIELD_ID)
+                  .fromDate(LocalDate.now())
+                  .toDate(LocalDate.now().minusDays(1))
+                  .build()
+          )
+          .build();
+
+      final var actualResult = elementValidationDateRange.validate(
+          elementData,
+          Optional.of(CATEGORY_ID),
+          Collections.emptyList());
+
+      assertEquals(List.of(expectedValidationError), actualResult);
     }
   }
 
