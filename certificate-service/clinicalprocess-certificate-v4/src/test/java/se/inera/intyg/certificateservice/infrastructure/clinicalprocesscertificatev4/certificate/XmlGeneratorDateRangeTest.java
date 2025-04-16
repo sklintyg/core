@@ -16,6 +16,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRange;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.DatePeriodType;
 
 @ExtendWith(MockitoExtension.class)
@@ -36,6 +37,7 @@ class XmlGeneratorDateRangeTest {
     data = ElementData.builder()
         .id(new ElementId(QUESTION_ID))
         .value(ElementValueDateRange.builder()
+            .id(new FieldId("ID"))
             .fromDate(FROM)
             .toDate(TO)
             .build())

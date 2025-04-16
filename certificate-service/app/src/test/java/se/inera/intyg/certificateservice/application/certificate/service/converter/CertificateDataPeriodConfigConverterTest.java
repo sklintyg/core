@@ -11,12 +11,14 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
 class CertificateDataPeriodConfigConverterTest {
 
   private static final ElementSpecification ELEMENT_SPECIFICATION = ElementSpecification.builder()
       .id(new ElementId("ID"))
       .configuration(ElementConfigurationDateRange.builder()
+          .id(new FieldId("ID"))
           .labelTo("LABEL_TO")
           .labelFrom("LABEL_FROM")
           .build())

@@ -503,6 +503,7 @@ public class TestDataCertificate {
                     .id(new ElementId("62.6"))
                     .value(
                         ElementValueDateRange.builder()
+                            .id(new FieldId("62.6"))
                             .fromDate(LocalDate.now())
                             .toDate(LocalDate.now().plusDays(14))
                             .build()
@@ -521,6 +522,7 @@ public class TestDataCertificate {
                     .id(new ElementId("62.2"))
                     .value(
                         ElementValueDateRange.builder()
+                            .id(new FieldId("62.2"))
                             .fromDate(LocalDate.now())
                             .toDate(LocalDate.now().plusDays(14))
                             .build()
