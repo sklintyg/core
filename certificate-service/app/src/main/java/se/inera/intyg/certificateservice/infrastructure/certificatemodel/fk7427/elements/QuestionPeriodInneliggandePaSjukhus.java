@@ -22,9 +22,9 @@ public class QuestionPeriodInneliggandePaSjukhus {
   private static final FieldId QUESTION_PERIOD_INNELIGGANDE_FIELD_ID = new FieldId("62.2");
 
   private static final PdfFieldId PDF_FIELD_ID_FROM = new PdfFieldId(
-      "form1[0].#subform[2].flt_datumFranMed[0]");
+      "form1[0].#subform[2].flt_datumFranMed2[0]");
   private static final PdfFieldId PDF_FIELD_ID_TO = new PdfFieldId(
-      "form1[0].#subform[2].flt_datumTillMed[0]");
+      "form1[0].#subform[2].flt_datumTillMed2[0]");
 
   private QuestionPeriodInneliggandePaSjukhus() {
     throw new IllegalStateException("Utility class");

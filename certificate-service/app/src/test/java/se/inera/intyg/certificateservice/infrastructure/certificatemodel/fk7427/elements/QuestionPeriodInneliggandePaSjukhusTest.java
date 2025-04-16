@@ -79,8 +79,8 @@ class QuestionPeriodInneliggandePaSjukhusTest {
   @Test
   void shouldIncludePdfConfiguration() {
     final var expectedPdfConfiguration = PdfConfigurationDateRange.builder()
-        .from(new PdfFieldId("form1[0].#subform[2].flt_datumFranMed[0]"))
-        .to(new PdfFieldId("form1[0].#subform[2].flt_datumTillMed[0]"))
+        .from(new PdfFieldId("form1[0].#subform[2].flt_datumFranMed2[0]"))
+        .to(new PdfFieldId("form1[0].#subform[2].flt_datumTillMed2[0]"))
         .build();
 
     final var element = QuestionPeriodInneliggandePaSjukhus.questionPeriodInneliggandePaSjukhus();
