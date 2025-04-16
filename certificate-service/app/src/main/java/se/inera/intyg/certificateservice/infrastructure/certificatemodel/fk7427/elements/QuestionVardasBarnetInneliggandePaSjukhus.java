@@ -1,8 +1,11 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionVardEllerTillsyn.QUESTION_VARD_ELLER_TILLSYN_ID;
+
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationRadioBoolean;
@@ -55,6 +58,7 @@ public class QuestionVardasBarnetInneliggandePaSjukhus {
                 )
             )
         )
+        .mapping(new ElementMapping(QUESTION_VARD_ELLER_TILLSYN_ID, null))
         .pdfConfiguration(
             PdfConfigurationRadioBoolean.builder()
                 .pdfFieldId(PDF_VARDAS_BARNET_FIELD_ID)

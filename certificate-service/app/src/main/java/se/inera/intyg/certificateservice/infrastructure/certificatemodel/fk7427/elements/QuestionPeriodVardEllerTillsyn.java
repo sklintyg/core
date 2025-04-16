@@ -58,7 +58,6 @@ public class QuestionPeriodVardEllerTillsyn {
                 .build()
         )
         .mapping(new ElementMapping(QUESTION_VARD_ELLER_TILLSYN_ID, null))
-
         .build();
   }
 }
