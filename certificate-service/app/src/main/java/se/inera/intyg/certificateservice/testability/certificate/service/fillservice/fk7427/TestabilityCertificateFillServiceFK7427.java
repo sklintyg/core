@@ -14,6 +14,8 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionGrundForMedicinsktUnderlag.UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionHalsotillstand.QUESTION_HALSOTILLSTAND_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionPagaendeOchPlaneradeBehandlingar.QUESTION_PAGAENDE_OCH_PLANERAD_BEHANDLING_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionPeriodInneliggandePaSjukhus.QUESTION_PERIOD_INNELIGGANDE_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionPeriodVardEllerTillsyn.QUESTION_PERIOD_VARD_ELLER_TILLSYN_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionSymtom.QUESTION_SYMTOM_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionVardEllerTillsyn.QUESTION_VARD_ELLER_TILLSYN_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionVardasBarnetInneliggandePaSjukhus.QUESTION_VARDAS_BARNET_INNELIGGANDE_PA_SJUKHUS_ID;
@@ -34,6 +36,7 @@ import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
@@ -64,14 +67,22 @@ public class TestabilityCertificateFillServiceFK7427 implements
   private static List<ElementData> fillWithValues(CertificateModel certificateModel,
       TestabilityFillTypeDTO fillType) {
     final var elementData = new ArrayList<ElementData>();
-    final var specGrundForMedicinsktUnderlag = spec(QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID, certificateModel);
-    final var specAnnanGrundForMedicinskitUnderlag = spec(QUESTION_ANNAN_GRUND_FOR_MEDICINSKT_UNDERLAG_ID, certificateModel);
+    final var specGrundForMedicinsktUnderlag = spec(QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID,
+        certificateModel);
+    final var specAnnanGrundForMedicinskitUnderlag = spec(
+        QUESTION_ANNAN_GRUND_FOR_MEDICINSKT_UNDERLAG_ID, certificateModel);
     final var specDiagnos = spec(DIAGNOSIS_ID, certificateModel);
     final var specSymtom = spec(QUESTION_SYMTOM_ID, certificateModel);
     final var specHalsotillstand = spec(QUESTION_HALSOTILLSTAND_ID, certificateModel);
     final var specVardEllerTillsyn = spec(QUESTION_VARD_ELLER_TILLSYN_ID, certificateModel);
-    final var specVardasBarnetInneliggandePaSjukhus = spec(QUESTION_VARDAS_BARNET_INNELIGGANDE_PA_SJUKHUS_ID, certificateModel);
-    final var specPagaendeOchPlaneradBehandling = spec(QUESTION_PAGAENDE_OCH_PLANERAD_BEHANDLING_ID, certificateModel);
+    final var specVardasBarnetInneliggandePaSjukhus = spec(
+        QUESTION_VARDAS_BARNET_INNELIGGANDE_PA_SJUKHUS_ID, certificateModel);
+    final var specPagaendeOchPlaneradBehandling = spec(QUESTION_PAGAENDE_OCH_PLANERAD_BEHANDLING_ID,
+        certificateModel);
+    final var specPeriodVardEllerTillsyn = spec(QUESTION_PERIOD_VARD_ELLER_TILLSYN_ID,
+        certificateModel);
+    final var specPeriodInneliggandePaSjukhus = spec(QUESTION_PERIOD_INNELIGGANDE_ID,
+        certificateModel);
 
     grundForMedicinsktUnderlag(specGrundForMedicinsktUnderlag, elementData, fillType);
     baseratPaAnnat(specAnnanGrundForMedicinskitUnderlag, elementData, fillType);
@@ -81,6 +92,8 @@ public class TestabilityCertificateFillServiceFK7427 implements
     vardEllerTillsyn(specVardEllerTillsyn, elementData);
     vardasBarnetInneliggandePaSjukhus(specVardasBarnetInneliggandePaSjukhus, elementData, fillType);
     behandling(specPagaendeOchPlaneradBehandling, elementData, fillType);
+    periodVardEllerTillsyn(specPeriodVardEllerTillsyn, elementData, fillType);
+    periodInneliggandePaSjukhus(specPeriodInneliggandePaSjukhus, elementData, fillType);
 
     return elementData;
   }
@@ -146,7 +159,8 @@ public class TestabilityCertificateFillServiceFK7427 implements
     }
   }
 
-  private static void vardasBarnetInneliggandePaSjukhus(ElementSpecification spec, List<ElementData> list, TestabilityFillTypeDTO fillType) {
+  private static void vardasBarnetInneliggandePaSjukhus(ElementSpecification spec,
+      List<ElementData> list, TestabilityFillTypeDTO fillType) {
     if (emptyValue(spec) instanceof ElementValueBoolean elementValueBoolean) {
       final var text = elementValueBoolean.withValue(fillType == MAXIMAL);
       list.add(elementData(spec.id(), text));
@@ -158,6 +172,26 @@ public class TestabilityCertificateFillServiceFK7427 implements
     if (fillType == MAXIMAL && emptyValue(spec) instanceof ElementValueText elementValueText) {
       final var text = elementValueText.withText("Det finns behov av behandling");
       list.add(elementData(spec.id(), text));
+    }
+  }
+
+  private static void periodVardEllerTillsyn(ElementSpecification spec, List<ElementData> list,
+      TestabilityFillTypeDTO fillType) {
+    if (emptyValue(spec) instanceof ElementValueDateRange elementValueDateRange) {
+      final var valueDateRange = elementValueDateRange
+          .withFromDate(now())
+          .withToDate(fillType == MAXIMAL ? now().plusDays(7) : now());
+      list.add(elementData(spec.id(), valueDateRange));
+    }
+  }
+
+  private static void periodInneliggandePaSjukhus(ElementSpecification spec, List<ElementData> list,
+      TestabilityFillTypeDTO fillType) {
+    if (emptyValue(spec) instanceof ElementValueDateRange elementValueDateRange) {
+      final var valueDateRange = elementValueDateRange
+          .withFromDate(now())
+          .withToDate(fillType == MAXIMAL ? now().plusDays(5) : now());
+      list.add(elementData(spec.id(), valueDateRange));
     }
   }
 }
