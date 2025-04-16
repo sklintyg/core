@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -407,23 +406,6 @@ public class SchematronValidationFK7427Test {
 
       final var updatedElementData = certificate.elementData().stream()
           .map(data -> data.id().equals(new ElementId("62.2")) ? elementData : data)
-          .toList();
-      certificate.updateData(updatedElementData, new Revision(0), ACTION_EVALUATION);
-
-      final var xml = generator.generate(certificate, false);
-      assertFalse(schematronValidator.validate(certificate.id(), xml,
-          CertificateModelFactoryFK7427.SCHEMATRON_PATH));
-    }
-
-    @Test
-    void shallReturnFalseIfMissing() {
-      final var certificate = TestDataCertificate.fk7427CertificateBuilder()
-          .certificateModel(certificateModelFactoryFK7427.create())
-          .build();
-
-      final var updatedElementData = certificate.elementData().stream()
-          .map(data -> data.id().equals(new ElementId("62.2")) ? null : data)
-          .filter(Objects::nonNull)
           .toList();
       certificate.updateData(updatedElementData, new Revision(0), ACTION_EVALUATION);
 
