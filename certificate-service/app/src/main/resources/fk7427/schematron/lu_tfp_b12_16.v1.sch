@@ -160,51 +160,31 @@
 
   <iso:pattern id="q62.6">
     <iso:rule context="//gn:delsvar[@id='62.6']">
-      <iso:assert test="tp:datePeriod">
-        'Under vilken period behöver barnet vård eller tillsyn?' måste ha en period angiven.
-      </iso:assert>
-      <iso:assert test="tp:datePeriod/tp:start castable as xs:date">
-        'Fr.o.m' måste vara ett giltigt datum.
-      </iso:assert>
-      <iso:assert test="tp:datePeriod/tp:end castable as xs:date">
-        'T.o.m' måste vara ett giltigt datum.
-      </iso:assert>
-      <iso:assert test="normalize-space(tp:datePeriod/tp:start) le normalize-space(tp:datePeriod/tp:end)">
-        'Fr.o.m' måste vara mindre än eller lika med 'T.o.m'.
-      </iso:assert>
+      <iso:extends rule="period"/>
     </iso:rule>
   </iso:pattern>
 
   <iso:pattern id="q62.2">
     <iso:rule context="//gn:delsvar[@id='62.2']">
+      <iso:extends rule="period"/>
       <iso:assert test="not(//gn:delsvar[@id='62.1']/tp:booleanValue = 'true') or tp:datePeriod">
         'Ange period' för 'Inneliggande på sjukhus' måste ha en period angiven om 'Vårdas barnet inneliggande på sjukhus?' är markerad som 'Ja'.
-      </iso:assert>
-      <iso:assert test="not(//gn:delsvar[@id='62.1']/tp:booleanValue = 'true') or tp:datePeriod/tp:start castable as xs:date">
-        'Fr.o.m' måste vara ett giltigt datum om 'Vårdas barnet inneliggande på sjukhus?' är markerad som 'Ja'.
-      </iso:assert>
-      <iso:assert test="not(//gn:delsvar[@id='62.1']/tp:booleanValue = 'true') or tp:datePeriod/tp:end castable as xs:date">
-        'T.o.m' måste vara ett giltigt datum om 'Vårdas barnet inneliggande på sjukhus?' är markerad som 'Ja'.
-      </iso:assert>
-      <iso:assert test="not(//gn:delsvar[@id='62.1']/tp:booleanValue = 'true') or normalize-space(tp:datePeriod/tp:start) le normalize-space(tp:datePeriod/tp:end)">
-        'Fr.o.m' måste vara mindre än eller lika med 'T.o.m' om 'Vårdas barnet inneliggande på sjukhus?' är markerad som 'Ja'.
       </iso:assert>
     </iso:rule>
   </iso:pattern>
 
-   <iso:pattern id="period-pattern">
-      <iso:rule id="period" abstract="true">
-        <iso:assert test="tp:datePeriod">En period måste inneslutas av ett 'datePeriod'-element</iso:assert>
-        <iso:assert test="tp:datePeriod/tp:start/count(*) = 0">'from' får inte vara inbäddat i något element.</iso:assert>
-        <iso:assert test="tp:datePeriod/tp:start castable as xs:date">'from' måste vara ett giltigt datum.</iso:assert>
-        <iso:assert test="matches(tp:datePeriod/tp:start, '^\d{4}-\d\d-\d\d')">'from' måste uttryckas som YYYY-MM-DD.</iso:assert>
-        <iso:assert test="tp:datePeriod/tp:end/count(*) = 0">'tom' får inte vara inbäddat i något element.</iso:assert>
-        <iso:assert test="tp:datePeriod/tp:end castable as xs:date">'tom' måste vara ett giltigt datum.</iso:assert>
-        <iso:assert test="matches(tp:datePeriod/tp:end, '^\d{4}-\d\d-\d\d')">'end' måste uttryckas som YYYY-MM-DD.</iso:assert>
-        <iso:assert test="normalize-space(tp:datePeriod/tp:start) le normalize-space(tp:datePeriod/tp:end)">
-          'from' måste vara mindre än eller lika med 'to'
-        </iso:assert>
-      </iso:rule>
-    </iso:pattern>
-
+ <iso:pattern id="period-pattern">
+    <iso:rule id="period" abstract="true">
+      <iso:assert test="tp:datePeriod">En period måste inneslutas av ett 'datePeriod'-element</iso:assert>
+      <iso:assert test="tp:datePeriod/tp:start/count(*) = 0">'from' får inte vara inbäddat i något element.</iso:assert>
+      <iso:assert test="tp:datePeriod/tp:start castable as xs:date">'from' måste vara ett giltigt datum.</iso:assert>
+      <iso:assert test="matches(tp:datePeriod/tp:start, '^\d{4}-\d\d-\d\d')">'from' måste uttryckas som YYYY-MM-DD.</iso:assert>
+      <iso:assert test="tp:datePeriod/tp:end/count(*) = 0">'tom' får inte vara inbäddat i något element.</iso:assert>
+      <iso:assert test="tp:datePeriod/tp:end castable as xs:date">'tom' måste vara ett giltigt datum.</iso:assert>
+      <iso:assert test="matches(tp:datePeriod/tp:end, '^\d{4}-\d\d-\d\d')">'end' måste uttryckas som YYYY-MM-DD.</iso:assert>
+      <iso:assert test="normalize-space(tp:datePeriod/tp:start) le normalize-space(tp:datePeriod/tp:end)">
+        'from' måste vara mindre än eller lika med 'to'
+      </iso:assert>
+    </iso:rule>
+  </iso:pattern>
 </iso:schema>
