@@ -456,11 +456,11 @@ class CertificatePdfFillServiceTest {
     }
 
     @Test
-    void shouldSetMarginTextOnEachPage() throws IOException {
+    void shouldSetMarginTextOnEachPageButNotAppendPageIfAppendPageIsNotUsed() throws IOException {
       final var captor = ArgumentCaptor.forClass(String.class);
       certificatePdfFillService.fillDocument(certificate, TEXT, false);
 
-      verify(pdfAdditionalInformationTextGenerator, times(5))
+      verify(pdfAdditionalInformationTextGenerator, times(4))
           .addMarginAdditionalInfoText(any(), anyString(), captor.capture(), anyInt(), anyInt());
 
       assertEquals(TEXT, captor.getValue());
