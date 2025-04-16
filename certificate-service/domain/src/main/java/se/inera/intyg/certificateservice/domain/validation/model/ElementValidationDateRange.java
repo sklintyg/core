@@ -32,7 +32,7 @@ public class ElementValidationDateRange implements ElementValidation {
 
     final var dateRange = getValue(data.value());
 
-    final var rangeValidationErrors = getRangeValidationErrors(data, categoryId, dateRange);
+    final var rangeValidationErrors = getDateRangeValidationErrors(data, categoryId, dateRange);
     if (rangeValidationErrors != null && !rangeValidationErrors.isEmpty()) {
       return rangeValidationErrors;
     }
@@ -56,7 +56,7 @@ public class ElementValidationDateRange implements ElementValidation {
         || (dateRange.toDate() == null && dateRange.fromDate() == null);
   }
 
-  private List<ValidationError> getRangeValidationErrors(ElementData data,
+  private List<ValidationError> getDateRangeValidationErrors(ElementData data,
       Optional<ElementId> categoryId, ElementValueDateRange dateRange) {
     if (dateRange == null) {
       return Collections.emptyList();
