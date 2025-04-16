@@ -31,6 +31,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBo
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
@@ -417,6 +418,8 @@ public class TestDataCertificate {
         );
   }
 
+  public static final Certificate FK7427_CERTIFICATE = fk7427CertificateBuilder().build();
+
   public static Certificate.CertificateBuilder fk7427CertificateBuilder() {
     return Certificate.builder()
         .id(CERTIFICATE_ID)
@@ -497,11 +500,31 @@ public class TestDataCertificate {
                     )
                     .build(),
                 ElementData.builder()
+                    .id(new ElementId("62.6"))
+                    .value(
+                        ElementValueDateRange.builder()
+                            .id(new FieldId("62.6"))
+                            .fromDate(LocalDate.now())
+                            .toDate(LocalDate.now().plusDays(14))
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
                     .id(new ElementId("62.1"))
                     .value(
                         ElementValueBoolean.builder()
                             .booleanId(new FieldId("62.1"))
                             .value(true)
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("62.2"))
+                    .value(
+                        ElementValueDateRange.builder()
+                            .id(new FieldId("62.2"))
+                            .fromDate(LocalDate.now())
+                            .toDate(LocalDate.now().plusDays(14))
                             .build()
                     )
                     .build(),

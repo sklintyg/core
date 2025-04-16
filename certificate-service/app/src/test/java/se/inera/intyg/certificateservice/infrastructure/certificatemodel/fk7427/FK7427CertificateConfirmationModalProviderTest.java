@@ -159,7 +159,7 @@ class FK7427CertificateConfirmationModalProviderTest {
       void shallContainText() {
         final var expectedText = """
             <p>Läkarutlåtande tillfällig föräldrapenning barn 12-16 år ska endast användas när ett barn på grund av sjukdom behöver vård eller tillsyn av en förälder.</p><br>
-            <p>Om barnet är allvarligt sjukt används istället Läkarutlåtande för tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har fyllt 18 år.</p>
+            <p>Om barnet är allvarligt sjukt används istället Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har fyllt 18 år.</p>
             """;
         final var certificateConfirmationModal = provider.of(null, actionEvaluation);
         assertEquals(expectedText, certificateConfirmationModal.text());
@@ -181,7 +181,8 @@ class FK7427CertificateConfirmationModalProviderTest {
       @Test
       void shallContainSecondaryAction() {
         final var certificateConfirmationModal = provider.of(null, actionEvaluation);
-        assertEquals(CertificateModalActionType.CANCEL, certificateConfirmationModal.secondaryAction());
+        assertEquals(CertificateModalActionType.CANCEL,
+            certificateConfirmationModal.secondaryAction());
       }
     }
   }
@@ -403,7 +404,7 @@ class FK7427CertificateConfirmationModalProviderTest {
       void shallContainText() {
         final var expectedText = """
             <p>Läkarutlåtande tillfällig föräldrapenning barn 12-16 år ska endast användas när ett barn på grund av sjukdom behöver vård eller tillsyn av en förälder.</p><br>
-            <p>Om barnet är allvarligt sjukt används istället Läkarutlåtande för tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har fyllt 18 år.</p>
+            <p>Om barnet är allvarligt sjukt används istället Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har fyllt 18 år.</p>
             """;
         final var certificateConfirmationModal = provider.of(certificate, actionEvaluation);
         assertEquals(expectedText, certificateConfirmationModal.text());
@@ -425,7 +426,8 @@ class FK7427CertificateConfirmationModalProviderTest {
       @Test
       void shallContainSecondaryAction() {
         final var certificateConfirmationModal = provider.of(certificate, actionEvaluation);
-        assertEquals(CertificateModalActionType.DELETE, certificateConfirmationModal.secondaryAction());
+        assertEquals(CertificateModalActionType.DELETE,
+            certificateConfirmationModal.secondaryAction());
       }
     }
   }
