@@ -167,7 +167,7 @@
   <iso:pattern id="q62.2">
     <iso:rule context="//gn:delsvar[@id='62.2']">
       <iso:extends rule="period"/>
-      <iso:assert test="not(//gn:delsvar[@id='62.1']/tp:booleanValue = 'true') or tp:datePeriod">
+      <iso:assert test="//gn:delsvar[@id='62.1']/tp:booleanValue = 'false' or (tp:datePeriod/tp:start/count(*) = 1 and tp:datePeriod/tp:end/count(*) = 1)">
         'Ange period' för 'Inneliggande på sjukhus' måste ha en period angiven om 'Vårdas barnet inneliggande på sjukhus?' är markerad som 'Ja'.
       </iso:assert>
     </iso:rule>
