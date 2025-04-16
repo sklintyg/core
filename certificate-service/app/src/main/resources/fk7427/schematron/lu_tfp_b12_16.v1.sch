@@ -159,7 +159,7 @@
   </iso:pattern>
 
   <iso:pattern id="q62.6">
-    <iso:rule context="//gn:svar[@id='62.6']">
+    <iso:rule context="//gn:delsvar[@id='62.6']">
       <iso:assert test="tp:datePeriod">
         'Under vilken period behöver barnet vård eller tillsyn?' måste ha en period angiven.
       </iso:assert>
@@ -176,17 +176,17 @@
   </iso:pattern>
 
   <iso:pattern id="q62.2">
-    <iso:rule context="//gn:svar[@id='62.2']">
-      <iso:assert test="not(//gn:svar[@id='62.1']/tp:booleanValue = 'true') or tp:datePeriod">
+    <iso:rule context="//gn:delsvar[@id='62.2']">
+      <iso:assert test="not(//gn:delsvar[@id='62.1']/tp:booleanValue = 'true') or tp:datePeriod">
         'Ange period' för 'Inneliggande på sjukhus' måste ha en period angiven om 'Vårdas barnet inneliggande på sjukhus?' är markerad som 'Ja'.
       </iso:assert>
-      <iso:assert test="not(//gn:svar[@id='62.1']/tp:booleanValue = 'true') or tp:datePeriod/tp:start castable as xs:date">
+      <iso:assert test="not(//gn:delsvar[@id='62.1']/tp:booleanValue = 'true') or tp:datePeriod/tp:start castable as xs:date">
         'Fr.o.m' måste vara ett giltigt datum om 'Vårdas barnet inneliggande på sjukhus?' är markerad som 'Ja'.
       </iso:assert>
-      <iso:assert test="not(//gn:svar[@id='62.1']/tp:booleanValue = 'true') or tp:datePeriod/tp:end castable as xs:date">
+      <iso:assert test="not(//gn:delsvar[@id='62.1']/tp:booleanValue = 'true') or tp:datePeriod/tp:end castable as xs:date">
         'T.o.m' måste vara ett giltigt datum om 'Vårdas barnet inneliggande på sjukhus?' är markerad som 'Ja'.
       </iso:assert>
-      <iso:assert test="not(//gn:svar[@id='62.1']/tp:booleanValue = 'true') or normalize-space(tp:datePeriod/tp:start) le normalize-space(tp:datePeriod/tp:end)">
+      <iso:assert test="not(//gn:delsvar[@id='62.1']/tp:booleanValue = 'true') or normalize-space(tp:datePeriod/tp:start) le normalize-space(tp:datePeriod/tp:end)">
         'Fr.o.m' måste vara mindre än eller lika med 'T.o.m' om 'Vårdas barnet inneliggande på sjukhus?' är markerad som 'Ja'.
       </iso:assert>
     </iso:rule>
