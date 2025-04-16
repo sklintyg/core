@@ -35,11 +35,7 @@ public class XmlGeneratorDateRange implements XmlGeneratorElementData {
     final var objectFactory = new ObjectFactory();
 
     final var dateRangeAnswer = new Svar();
-    dateRangeAnswer.setId(
-        specification.mapping() != null
-            ? specification.mapping().elementId().id()
-            : data.id().id()
-    );
+    dateRangeAnswer.setId(data.id().id());
 
     final var subAnswerDateRange = new Delsvar();
     final var dateRangeType = new DatePeriodType();
