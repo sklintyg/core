@@ -298,7 +298,7 @@ public class SchematronValidationFK7427Test {
   class TestPeriodVardEllerTillsyn {
 
     @Test
-    void shallReturnFalseIfMissingPeriodValues() {
+    void shallReturnFalseIfMissingToValue() {
       final var certificate = TestDataCertificate.fk7427CertificateBuilder()
           .certificateModel(certificateModelFactoryFK7427.create())
           .build();
@@ -308,8 +308,69 @@ public class SchematronValidationFK7427Test {
           .findFirst()
           .orElseThrow();
 
-      final var value = (ElementValueDateRange) element.value();
-      final var elementData = element.withValue(value.withFromDate(null).withToDate(null));
+      final var elementData = element.withValue(
+          ElementValueDateRange.builder()
+              .id(new FieldId("62.6"))
+              .fromDate(LocalDate.now())
+              .build()
+      );
+
+      final var updatedElementData = certificate.elementData().stream()
+          .map(data -> data.id().equals(new ElementId("62.6")) ? elementData : data)
+          .toList();
+      certificate.updateData(updatedElementData, new Revision(0), ACTION_EVALUATION);
+
+      final var xml = generator.generate(certificate, false);
+      assertFalse(schematronValidator.validate(certificate.id(), xml,
+          CertificateModelFactoryFK7427.SCHEMATRON_PATH));
+    }
+
+    @Test
+    void shallReturnFalseIfMissingFromValue() {
+      final var certificate = TestDataCertificate.fk7427CertificateBuilder()
+          .certificateModel(certificateModelFactoryFK7427.create())
+          .build();
+
+      final var element = certificate.elementData().stream()
+          .filter(elementData -> elementData.id().equals(new ElementId("62.6")))
+          .findFirst()
+          .orElseThrow();
+
+      final var elementData = element.withValue(
+          ElementValueDateRange.builder()
+              .id(new FieldId("62.6"))
+              .toDate(LocalDate.now())
+              .build()
+      );
+
+      final var updatedElementData = certificate.elementData().stream()
+          .map(data -> data.id().equals(new ElementId("62.6")) ? elementData : data)
+          .toList();
+      certificate.updateData(updatedElementData, new Revision(0), ACTION_EVALUATION);
+
+      final var xml = generator.generate(certificate, false);
+      assertFalse(schematronValidator.validate(certificate.id(), xml,
+          CertificateModelFactoryFK7427.SCHEMATRON_PATH));
+    }
+
+    @Test
+    void shallReturnFalseIfInvalidDateRange() {
+      final var certificate = TestDataCertificate.fk7427CertificateBuilder()
+          .certificateModel(certificateModelFactoryFK7427.create())
+          .build();
+
+      final var element = certificate.elementData().stream()
+          .filter(elementData -> elementData.id().equals(new ElementId("62.6")))
+          .findFirst()
+          .orElseThrow();
+
+      final var elementData = element.withValue(
+          ElementValueDateRange.builder()
+              .id(new FieldId("62.6"))
+              .fromDate(LocalDate.of(2023, 12, 31))
+              .toDate(LocalDate.of(2023, 1, 1))
+              .build()
+      );
 
       final var updatedElementData = certificate.elementData().stream()
           .map(data -> data.id().equals(new ElementId("62.6")) ? elementData : data)
@@ -326,7 +387,7 @@ public class SchematronValidationFK7427Test {
   class TestPeriodInneliggandePaSjukhus {
 
     @Test
-    void shallReturnFalseIfMissingPeriodValues() {
+    void shallReturnFalseIfMissingToValue() {
       final var certificate = TestDataCertificate.fk7427CertificateBuilder()
           .certificateModel(certificateModelFactoryFK7427.create())
           .build();
@@ -338,7 +399,36 @@ public class SchematronValidationFK7427Test {
 
       final var elementData = element.withValue(
           ElementValueDateRange.builder()
+              .id(new FieldId("62.2"))
               .fromDate(LocalDate.now())
+              .build()
+      );
+
+      final var updatedElementData = certificate.elementData().stream()
+          .map(data -> data.id().equals(new ElementId("62.2")) ? elementData : data)
+          .toList();
+      certificate.updateData(updatedElementData, new Revision(0), ACTION_EVALUATION);
+
+      final var xml = generator.generate(certificate, false);
+      assertFalse(schematronValidator.validate(certificate.id(), xml,
+          CertificateModelFactoryFK7427.SCHEMATRON_PATH));
+    }
+
+    @Test
+    void shallReturnFalseIfMissingFromValue() {
+      final var certificate = TestDataCertificate.fk7427CertificateBuilder()
+          .certificateModel(certificateModelFactoryFK7427.create())
+          .build();
+
+      final var element = certificate.elementData().stream()
+          .filter(elementData -> elementData.id().equals(new ElementId("62.2")))
+          .findFirst()
+          .orElseThrow();
+
+      final var elementData = element.withValue(
+          ElementValueDateRange.builder()
+              .id(new FieldId("62.2"))
+              .toDate(LocalDate.now())
               .build()
       );
 
