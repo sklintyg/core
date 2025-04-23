@@ -12,7 +12,7 @@ public class PersonalIdentityTypeConverter {
 
   public static PersonId personId(IIType iiType) {
     if (iiType == null) {
-      return null;
+      return PersonId.of(null);
     }
     return PersonId.of(iiType.getExtension());
   }
