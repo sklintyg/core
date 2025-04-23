@@ -6,6 +6,7 @@ import static se.inera.intyg.intygproxyservice.config.RedisConfig.PERSON_CACHE;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,9 +42,30 @@ public class PersonsService {
         .filter(person -> person.status().equals(Status.FOUND))
         .forEach(this::savePersonInCache);
 
+    final var persons = mergeResponses(personsFromPu, personsFromCache);
+
+    log.info(
+        "Processed request for {} persons. {} retrieved ({} from cache, {} from PU). Duplicate entries found: {}.",
+        request.getPersonIds().size(),
+        persons.size(),
+        personsFromCache.size(),
+        personsFromPu.getPersons().size(),
+        persons.stream()
+            .collect(
+                Collectors.groupingBy(
+                    person -> person.person().getPersonnummer().id(),
+                    Collectors.counting()
+                )
+            )
+            .values()
+            .stream()
+            .filter(count -> count > 1)
+            .count()
+    );
+
     return convert(
         PuPersonsResponse.builder()
-            .persons(mergeResponses(personsFromPu, personsFromCache))
+            .persons(persons)
             .build()
     );
   }

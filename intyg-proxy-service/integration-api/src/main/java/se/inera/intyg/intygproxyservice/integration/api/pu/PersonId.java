@@ -1,7 +1,11 @@
 package se.inera.intyg.intygproxyservice.integration.api.pu;
 
-public record PersonId(String id) {
+import com.fasterxml.jackson.annotation.JsonCreator;
+import java.io.Serializable;
 
+public record PersonId(String id) implements Serializable {
+
+  @JsonCreator
   public PersonId(String id) {
     this.id = id != null ? id.replace("-", "").replace("+", "") : null;
   }
