@@ -157,6 +157,9 @@ class CertificateModelFactoryFK7426Test {
             .subject(new Subject(MessageType.OTHER.displayName()))
             .build()
     );
+
+    final var certificateModel = certificateModelFactoryFK7426.create();
+    assertEquals(expectedMessageTypes, certificateModel.messageTypes());
   }
 
   @Test
