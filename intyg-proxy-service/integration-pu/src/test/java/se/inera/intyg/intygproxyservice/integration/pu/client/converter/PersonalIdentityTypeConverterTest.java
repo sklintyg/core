@@ -17,6 +17,6 @@ class PersonalIdentityTypeConverterTest {
 
   @Test
   void shallReturnNullIfPersonalIdentityIsNull() {
-    assertNull(personId(null));
+    assertNull(personId(null).id());
   }
 }
