@@ -1,18 +1,5 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.*;
-import se.inera.intyg.certificateservice.domain.common.model.Code;
-import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateRecipientFactory;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.elements.ElementUnitContactInformation.issuingUnitContactInfo;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.CategoryBehandling.categoryBehandling;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.CategoryDiagnos.categoryDiagnos;
@@ -20,6 +7,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.CategoryGrundForMedicinsktUnderlag.categoryGrundForMedicinsktUnderlag;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.CategoryHalsotillstand.categoryHalsotillstand;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.CategoryPeriodSjukdom.categoryPeriodSjukdom;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.CategoryVard.categoryVard;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionAnnanGrundForMedicinsktUnderlag.questionAnnanGrundForMedicinsktUnderlag;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionDiagnos.questionDiagnos;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionGrundForBedomning.questionGrundForBedomning;
@@ -29,8 +17,28 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionPagaendeBehandlingar.questionPagaendeBehandlingar;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionPeriodSjukdom.questionPeriodSjukdom;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionPeriodSjukdomMotivering.questionPeriodSjukdomMotivering;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionPeriodVardasBarnInneliggandePaSjukhus.questionPeriodVardasBarnInneliggandePaSjukhus;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionPeriodVardasBarnetInskrivetMedHemsjukvard.questionPeriodVardasBarnetInskrivetMedHemsjukvard;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionPlaneradeBehandlingar.questionPlaneradeBehandlingar;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionSymtom.questionSymtom;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionVardasBarnetInneliggandePaSjukhus.questionVardasBarnetInneliggandePaSjukhus;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionVardasBarnetInskrivetMedHemsjukvard.questionVardasBarnetInskrivetMedHemsjukvard;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
+import se.inera.intyg.certificateservice.domain.common.model.Code;
+import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateRecipientFactory;
 
 @Component
 @RequiredArgsConstructor
@@ -95,30 +103,38 @@ public class CertificateModelFactoryFK7426 implements CertificateModelFactory {
         .messageActionSpecifications(FK7426MessageActionSpecification.create())
         .elementSpecifications(
             List.of(
-                    categoryGrundForMedicinsktUnderlag(
-                                    questionGrundForMedicinsktUnderlag(
-                                            questionAnnanGrundForMedicinsktUnderlag()
-                                    )
-                            ),
-                    categoryDiagnos(
-                            questionDiagnos(diagnosisCodeRepository),
-                            questionSymtom()
+                categoryGrundForMedicinsktUnderlag(
+                    questionGrundForMedicinsktUnderlag(
+                        questionAnnanGrundForMedicinsktUnderlag()
+                    )
+                ),
+                categoryDiagnos(
+                    questionDiagnos(diagnosisCodeRepository),
+                    questionSymtom()
+                ),
+                categoryHalsotillstand(
+                    questionHalsotillstandSomatiska(),
+                    questionHalsotillstandPsykiska()
+                ),
+                categoryGrundForBedomning(
+                    questionGrundForBedomning()
+                ),
+                categoryBehandling(
+                    questionPagaendeBehandlingar(),
+                    questionPlaneradeBehandlingar()
+                ),
+                categoryPeriodSjukdom(
+                    questionPeriodSjukdom(),
+                    questionPeriodSjukdomMotivering()
+                ),
+                categoryVard(
+                    questionVardasBarnetInneliggandePaSjukhus(
+                        questionPeriodVardasBarnInneliggandePaSjukhus()
                     ),
-                    categoryHalsotillstand(
-                            questionHalsotillstandSomatiska(),
-                            questionHalsotillstandPsykiska()
-                    ),
-                    categoryGrundForBedomning(
-                            questionGrundForBedomning()
-                    ),
-                    categoryBehandling(
-                            questionPagaendeBehandlingar(),
-                            questionPlaneradeBehandlingar()
-                    ),
-                    categoryPeriodSjukdom(
-                            questionPeriodSjukdom(),
-                            questionPeriodSjukdomMotivering()
-                    ),
+                    questionVardasBarnetInskrivetMedHemsjukvard(
+                        questionPeriodVardasBarnetInskrivetMedHemsjukvard()
+                    )
+                ),
                 issuingUnitContactInfo()
             )
         )
