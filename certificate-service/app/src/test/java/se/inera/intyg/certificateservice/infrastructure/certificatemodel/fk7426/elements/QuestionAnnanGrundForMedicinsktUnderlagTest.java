@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionAnnanGrundForMedicinsktUnderlag.questionAnnanGrundForMedicinsktUnderlag;
 
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -13,6 +14,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDa
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextField;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
@@ -20,6 +22,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0001;
 
 class QuestionAnnanGrundForMedicinsktUnderlagTest {
 
@@ -27,7 +30,7 @@ class QuestionAnnanGrundForMedicinsktUnderlagTest {
 
   @Test
   void shallIncludeId() {
-    final var element = QuestionAnnanGrundForMedicinsktUnderlag.questionAnnanGrundForMedicinsktUnderlag();
+    final var element = questionAnnanGrundForMedicinsktUnderlag();
 
     assertEquals(ELEMENT_ID, element.id());
   }
@@ -39,7 +42,7 @@ class QuestionAnnanGrundForMedicinsktUnderlagTest {
         .name("Ange vad annat är")
         .build();
 
-    final var element = QuestionAnnanGrundForMedicinsktUnderlag.questionAnnanGrundForMedicinsktUnderlag();
+    final var element = questionAnnanGrundForMedicinsktUnderlag();
 
     assertEquals(expectedConfiguration, element.configuration());
   }
@@ -64,7 +67,7 @@ class QuestionAnnanGrundForMedicinsktUnderlagTest {
             .build()
     );
 
-    final var element = QuestionAnnanGrundForMedicinsktUnderlag.questionAnnanGrundForMedicinsktUnderlag();
+    final var element = questionAnnanGrundForMedicinsktUnderlag();
 
     assertIterableEquals(expectedRules, element.rules());
   }
@@ -78,9 +81,20 @@ class QuestionAnnanGrundForMedicinsktUnderlagTest {
             .build()
     );
 
-    final var element = QuestionAnnanGrundForMedicinsktUnderlag.questionAnnanGrundForMedicinsktUnderlag();
+    final var element = questionAnnanGrundForMedicinsktUnderlag();
 
     assertIterableEquals(expectedValidations, element.validations());
+  }
+
+  @Test
+  void shallIncludeCustomMapping() {
+    final var expectedConfiguration = new ElementMapping(
+        new ElementId("1"), CodeSystemKvFkmu0001.ANNAT
+    );
+
+    final var element = questionAnnanGrundForMedicinsktUnderlag();
+
+    assertEquals(expectedConfiguration, element.mapping());
   }
 
   @Nested
@@ -105,7 +119,7 @@ class QuestionAnnanGrundForMedicinsktUnderlagTest {
               .build()
       );
 
-      final var element = QuestionAnnanGrundForMedicinsktUnderlag.questionAnnanGrundForMedicinsktUnderlag();
+      final var element = questionAnnanGrundForMedicinsktUnderlag();
 
       final var shouldValidate = element
           .shouldValidate();
@@ -132,7 +146,7 @@ class QuestionAnnanGrundForMedicinsktUnderlagTest {
               .build()
       );
 
-      final var element = QuestionAnnanGrundForMedicinsktUnderlag.questionAnnanGrundForMedicinsktUnderlag();
+      final var element = questionAnnanGrundForMedicinsktUnderlag();
 
       final var shouldValidate = element
           .shouldValidate();

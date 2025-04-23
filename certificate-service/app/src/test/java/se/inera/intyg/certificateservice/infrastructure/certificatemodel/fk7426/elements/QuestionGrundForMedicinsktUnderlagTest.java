@@ -1,6 +1,8 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionGrundForMedicinsktUnderlag.questionGrundForMedicinsktUnderlag;
 
 import java.time.Period;
 import java.util.List;
@@ -8,8 +10,12 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateList;
 
 class QuestionGrundForMedicinsktUnderlagTest {
 
@@ -17,7 +23,7 @@ class QuestionGrundForMedicinsktUnderlagTest {
 
   @Test
   void shallIncludeId() {
-    final var element = QuestionGrundForMedicinsktUnderlag.questionGrundForMedicinsktUnderlag();
+    final var element = questionGrundForMedicinsktUnderlag();
 
     assertEquals(ELEMENT_ID, element.id());
   }
@@ -93,8 +99,42 @@ class QuestionGrundForMedicinsktUnderlagTest {
         )
         .build();
 
-    final var element = QuestionGrundForMedicinsktUnderlag.questionGrundForMedicinsktUnderlag();
+    final var element = questionGrundForMedicinsktUnderlag();
 
     assertEquals(expectedConfiguration, element.configuration());
   }
+
+  @Test
+  void shallIncludeRules() {
+    final var expectedRules = List.of(
+        ElementRuleExpression.builder()
+            .id(ELEMENT_ID)
+            .type(ElementRuleType.MANDATORY)
+            .expression(
+                new RuleExpression(
+                    "$fysisktMote || $digitaltMote || $journaluppgifter || $foraldersBeskrivning || $annat"
+                )
+            )
+            .build()
+    );
+
+    final var element = questionGrundForMedicinsktUnderlag();
+
+    assertIterableEquals(expectedRules, element.rules());
+  }
+
+  @Test
+  void shallIncludeValidations() {
+    final var expectedValidations = List.of(
+        ElementValidationDateList.builder()
+            .mandatory(true)
+            .max(Period.ofDays(0))
+            .build()
+    );
+
+    final var element = questionGrundForMedicinsktUnderlag();
+
+    assertIterableEquals(expectedValidations, element.validations());
+  }
+
 }

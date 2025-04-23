@@ -1,13 +1,19 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements;
 
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.*;
-import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateList;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0001;
-
 import java.time.Period;
 import java.util.List;
 import java.util.Map;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateCheckbox;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateList;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateList;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0001;
 
 public class QuestionGrundForMedicinsktUnderlag {
 

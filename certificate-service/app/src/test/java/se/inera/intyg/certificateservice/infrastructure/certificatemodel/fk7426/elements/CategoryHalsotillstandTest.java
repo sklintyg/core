@@ -1,6 +1,8 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionHalsotillstandPsykiska.QUESTION_HALSOTILLSTAND_PSYKISKA_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionHalsotillstandSomatiska.QUESTION_HALSOTILLSTAND_SOMATISKA_ID;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -9,6 +11,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleMandatoryCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ExpressionOperandType;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCategory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
 class CategoryHalsotillstandTest {
@@ -57,5 +60,20 @@ class CategoryHalsotillstandTest {
     final var element = CategoryHalsotillstand.categoryHalsotillstand();
 
     assertEquals(expectedRules, element.rules());
+  }
+
+  @Test
+  void shallIncludeValidations() {
+    final var expectedValidations = List.of(
+        ElementValidationCategory.builder()
+            .mandatory(true)
+            .elements(
+                List.of(QUESTION_HALSOTILLSTAND_PSYKISKA_ID, QUESTION_HALSOTILLSTAND_SOMATISKA_ID))
+            .build()
+    );
+
+    final var element = CategoryHalsotillstand.categoryHalsotillstand();
+
+    assertEquals(expectedValidations, element.validations());
   }
 }
