@@ -26,7 +26,7 @@ public class QuestionGrundForBedomning {
                 .name(
                     "Varför bedömer du att barnet är allvarligt sjukt eller att det finns en stark misstanke om allvarlig diagnos?")
                 .description(
-                    "Beskriv varför du bedömer att barnet är allvarligt sjukt utifrån det påtagliga hotet mot barnets liv eller om det utan behandling finns fara för barnets liv. (Om det påtagliga livshotet upphör men barnet fortsatt har behandling eller stor påverkan efter sjukdom så behöver du beskriva detta)")
+                    "Beskriv varför du bedömer att barnet är allvarligt sjukt utifrån det påtagliga hotet mot barnets liv eller om det utan behandling finns fara för barnets liv. Om det påtagliga livshotet upphör men barnet fortsatt har behandling eller stor påverkan efter sjukdom så behöver du beskriva detta.")
                 .id(QUESTION_GRUND_FOR_BEDOMNING_FIELD_ID)
                 .build()
         )
