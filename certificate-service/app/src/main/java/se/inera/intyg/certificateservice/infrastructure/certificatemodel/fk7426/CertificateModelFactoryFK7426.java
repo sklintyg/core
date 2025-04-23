@@ -139,7 +139,7 @@ public class CertificateModelFactoryFK7426 implements CertificateModelFactory {
             )
         )
         .certificateActionFactory(certificateActionFactory)
-        //.confirmationModalProvider(new FK7426CertificateConfirmationModalProvider())
+        .confirmationModalProvider(new FK7426CertificateConfirmationModalProvider())
         .build();
   }
 }
