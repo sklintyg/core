@@ -18,6 +18,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateMessageType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
@@ -25,6 +26,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
+import se.inera.intyg.certificateservice.domain.message.model.MessageType;
+import se.inera.intyg.certificateservice.domain.message.model.Subject;
 
 class CertificateModelFactoryFK7426Test {
 
@@ -135,6 +138,24 @@ class CertificateModelFactoryFK7426Test {
     assertAll(
         () -> assertNotNull(certificateModel.messageActionSpecifications()),
         () -> assertFalse(certificateModel.messageActionSpecifications().isEmpty())
+    );
+  }
+
+  @Test
+  void shallIncludeMessageTypes() {
+    final var expectedMessageTypes = List.of(
+        CertificateMessageType.builder()
+            .type(MessageType.MISSING)
+            .subject(new Subject(MessageType.MISSING.displayName()))
+            .build(),
+        CertificateMessageType.builder()
+            .type(MessageType.CONTACT)
+            .subject(new Subject(MessageType.CONTACT.displayName()))
+            .build(),
+        CertificateMessageType.builder()
+            .type(MessageType.OTHER)
+            .subject(new Subject(MessageType.OTHER.displayName()))
+            .build()
     );
   }
 

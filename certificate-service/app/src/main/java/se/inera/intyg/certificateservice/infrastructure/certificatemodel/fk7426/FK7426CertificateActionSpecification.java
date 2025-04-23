@@ -61,6 +61,27 @@ public class FK7426CertificateActionSpecification {
             .enabled(true)
             .build(),
         CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.FORWARD_MESSAGE)
+            .build(),
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.CREATE_MESSAGE)
+            .build(),
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.ANSWER_MESSAGE)
+            .build(),
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.SAVE_MESSAGE)
+            .build(),
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.DELETE_MESSAGE)
+            .build(),
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.SEND_MESSAGE)
+            .build(),
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.HANDLE_MESSAGE)
+            .build(),
+        CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.RECEIVE_COMPLEMENT)
             .build(),
         CertificateActionSpecification.builder()

@@ -280,4 +280,114 @@ class FK7426CertificateActionSpecificationTest {
             expectedSpecification::equals),
         "Expected type: %s".formatted(expectedSpecification));
   }
+
+  @Test
+  void shallIncludeCertificateActionMessagesAdministrative() {
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.MESSAGES_ADMINISTRATIVE)
+        .enabled(true)
+        .build();
+
+    final var actionSpecifications = FK7426CertificateActionSpecification.create();
+
+    assertTrue(actionSpecifications.stream().anyMatch(
+            expectedSpecification::equals),
+        "Expected type: %s".formatted(expectedSpecification));
+  }
+
+  @Test
+  void shallIncludeCertificateActionForwardMessage() {
+    final var expectedType = CertificateActionType.FORWARD_MESSAGE;
+
+    final var actionSpecifications = FK7426CertificateActionSpecification.create();
+
+    assertTrue(actionSpecifications.stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
+  void shallIncludeCertificateActionCreateMessage() {
+    final var expectedType = CertificateActionType.CREATE_MESSAGE;
+
+    final var actionSpecifications = FK7426CertificateActionSpecification.create();
+
+    assertTrue(actionSpecifications.stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
+  void shallIncludeCertificateActionAnswerMessage() {
+    final var expectedType = CertificateActionType.ANSWER_MESSAGE;
+
+    final var actionSpecifications = FK7426CertificateActionSpecification.create();
+
+    assertTrue(actionSpecifications.stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
+  void shallIncludeCertificateActionSaveMessage() {
+    final var expectedType = CertificateActionType.SAVE_MESSAGE;
+
+    final var actionSpecifications = FK7426CertificateActionSpecification.create();
+
+    assertTrue(actionSpecifications.stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
+  void shallIncludeCertificateActionDeleteMessage() {
+    final var expectedType = CertificateActionType.DELETE_MESSAGE;
+
+    final var actionSpecifications = FK7426CertificateActionSpecification.create();
+
+    assertTrue(actionSpecifications.stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
+  void shallIncludeCertificateActionSendMessage() {
+    final var expectedType = CertificateActionType.SEND_MESSAGE;
+
+    final var actionSpecifications = FK7426CertificateActionSpecification.create();
+
+    assertTrue(actionSpecifications.stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
+  void shallIncludeCertificateActionHandleMessage() {
+    final var expectedType = CertificateActionType.HANDLE_MESSAGE;
+
+    final var actionSpecifications = FK7426CertificateActionSpecification.create();
+
+    assertTrue(actionSpecifications.stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
+  void shallIncludeCertificateActionQuestionsNotAvailable() {
+    final var expectedType = CertificateActionType.QUESTIONS_NOT_AVAILABLE;
+
+    final var actionSpecifications = FK7426CertificateActionSpecification.create();
+
+    assertTrue(actionSpecifications.stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
 }

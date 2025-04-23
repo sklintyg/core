@@ -30,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateMessageType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
@@ -37,6 +38,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
+import se.inera.intyg.certificateservice.domain.message.model.MessageType;
+import se.inera.intyg.certificateservice.domain.message.model.Subject;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateRecipientFactory;
 
@@ -101,6 +104,22 @@ public class CertificateModelFactoryFK7426 implements CertificateModelFactory {
         .recipient(CertificateRecipientFactory.fkassa(fkLogicalAddress))
         .certificateActionSpecifications(FK7426CertificateActionSpecification.create())
         .messageActionSpecifications(FK7426MessageActionSpecification.create())
+        .messageTypes(
+            List.of(
+                CertificateMessageType.builder()
+                    .type(MessageType.MISSING)
+                    .subject(new Subject(MessageType.MISSING.displayName()))
+                    .build(),
+                CertificateMessageType.builder()
+                    .type(MessageType.CONTACT)
+                    .subject(new Subject(MessageType.CONTACT.displayName()))
+                    .build(),
+                CertificateMessageType.builder()
+                    .type(MessageType.OTHER)
+                    .subject(new Subject(MessageType.OTHER.displayName()))
+                    .build()
+            )
+        )
         .elementSpecifications(
             List.of(
                 categoryGrundForMedicinsktUnderlag(
