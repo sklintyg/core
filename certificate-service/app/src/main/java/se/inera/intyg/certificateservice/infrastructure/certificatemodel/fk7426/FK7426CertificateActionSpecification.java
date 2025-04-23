@@ -1,10 +1,9 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426;
 
+import java.util.List;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
-
-import java.util.List;
 
 public class FK7426CertificateActionSpecification {
 
@@ -59,6 +58,7 @@ public class FK7426CertificateActionSpecification {
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.MESSAGES_ADMINISTRATIVE)
+            .enabled(true)
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.RECEIVE_COMPLEMENT)
@@ -85,7 +85,8 @@ public class FK7426CertificateActionSpecification {
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.LIST_CERTIFICATE_TYPE)
-            .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE, Role.CARE_ADMIN))
+            .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
+                Role.CARE_ADMIN))
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.QUESTIONS_NOT_AVAILABLE)
