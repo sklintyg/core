@@ -31,7 +31,7 @@ class GetPersonsForProfileResponseTypeConverterV5Test {
         requestedPersonRecordType()
     );
 
-    assertEquals(PERSON_ID_AS_PERSONNUMMER, actualPerson.getPersonnummer());
+    assertEquals(PERSON_ID_AS_PERSONNUMMER, actualPerson.getPersonnummer().id());
   }
 
   @Test

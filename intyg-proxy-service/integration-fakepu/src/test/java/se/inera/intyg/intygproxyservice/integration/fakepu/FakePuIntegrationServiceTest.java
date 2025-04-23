@@ -16,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.intygproxyservice.integration.api.pu.Person;
+import se.inera.intyg.intygproxyservice.integration.api.pu.PersonId;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuPersonsRequest;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuRequest;
 import se.inera.intyg.intygproxyservice.integration.api.pu.Status;
@@ -41,7 +42,7 @@ class FakePuIntegrationServiceTest {
       @BeforeEach
       void setUp() {
         personFound = Person.builder()
-            .personnummer(PERSON_ID)
+            .personnummer(PersonId.of(PERSON_ID))
             .build();
 
         doReturn(personFound)
@@ -118,11 +119,11 @@ class FakePuIntegrationServiceTest {
       @BeforeEach
       void setUp() {
         personFound = Person.builder()
-            .personnummer(PERSON_ID)
+            .personnummer(PersonId.of(PERSON_ID))
             .build();
 
         personFound2 = Person.builder()
-            .personnummer(PERSON_ID_2)
+            .personnummer(PersonId.of(PERSON_ID_2))
             .build();
 
         doReturn(personFound)
@@ -167,7 +168,7 @@ class FakePuIntegrationServiceTest {
       @BeforeEach
       void setUp() {
         personFound2 = Person.builder()
-            .personnummer(PERSON_ID_2)
+            .personnummer(PersonId.of(PERSON_ID_2))
             .build();
 
         doReturn(null)

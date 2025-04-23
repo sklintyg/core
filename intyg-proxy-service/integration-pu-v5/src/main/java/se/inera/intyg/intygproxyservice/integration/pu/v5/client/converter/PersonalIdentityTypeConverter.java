@@ -1,6 +1,7 @@
 package se.inera.intyg.intygproxyservice.integration.pu.v5.client.converter;
 
 
+import se.inera.intyg.intygproxyservice.integration.api.pu.PersonId;
 import se.riv.strategicresourcemanagement.persons.person.v5.IIType;
 
 public class PersonalIdentityTypeConverter {
@@ -9,10 +10,10 @@ public class PersonalIdentityTypeConverter {
     throw new IllegalStateException("Utility class");
   }
 
-  public static String extension(IIType iiType) {
+  public static PersonId personId(IIType iiType) {
     if (iiType == null) {
       return null;
     }
-    return iiType.getExtension();
+    return PersonId.of(iiType.getExtension());
   }
 }

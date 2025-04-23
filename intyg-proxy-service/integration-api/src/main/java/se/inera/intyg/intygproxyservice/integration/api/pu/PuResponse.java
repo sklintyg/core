@@ -12,11 +12,13 @@ public record PuResponse(Person person, Status status) {
   }
 
   public static PuResponse notFound(String patientId) {
-    return new PuResponse(Person.builder().personnummer(patientId).build(), Status.NOT_FOUND);
+    return new PuResponse(Person.builder().personnummer(PersonId.of(patientId)).build(),
+        Status.NOT_FOUND);
   }
 
   public static PuResponse error(String patientId) {
-    return new PuResponse(Person.builder().personnummer(patientId).build(), Status.ERROR);
+    return new PuResponse(Person.builder().personnummer(PersonId.of(patientId)).build(),
+        Status.ERROR);
   }
 
   public static PuResponse error() {

@@ -4,6 +4,7 @@ import static se.inera.intyg.intygproxyservice.integration.pu.v5.configuration.c
 import static se.inera.intyg.intygproxyservice.integration.pu.v5.configuration.configuration.PuConstants.DEREGISTRATION_REASON_CODE_FOR_DECEASED;
 
 import se.inera.intyg.intygproxyservice.integration.api.pu.Person;
+import se.inera.intyg.intygproxyservice.integration.api.pu.PersonId;
 import se.riv.strategicresourcemanagement.persons.person.v5.AddressInformationType;
 import se.riv.strategicresourcemanagement.persons.person.v5.DeregistrationType;
 import se.riv.strategicresourcemanagement.persons.person.v5.IIType;
@@ -29,7 +30,7 @@ public class TestData {
   public static final boolean TEST_INDICATED = true;
 
   public static Person PERSON = Person.builder()
-      .personnummer(PERSON_ID_AS_PERSONNUMMER)
+      .personnummer(PersonId.of(PERSON_ID_AS_PERSONNUMMER))
       .fornamn(GIVEN_NAME)
       .mellannamn(MIDDLE_NAME)
       .efternamn(SURNAME)

@@ -7,6 +7,7 @@ import static se.inera.intyg.intygproxyservice.integration.fakepu.TestData.PERSO
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.intygproxyservice.integration.api.pu.Person;
+import se.inera.intyg.intygproxyservice.integration.api.pu.PersonId;
 
 class FakePuRepositoryTest {
 
@@ -20,7 +21,7 @@ class FakePuRepositoryTest {
   @Test
   void shallAddPersonToRepository() {
     final var expectedPerson = Person.builder()
-        .personnummer(PERSON_ID)
+        .personnummer(PersonId.of(PERSON_ID))
         .build();
     fakePuRepository.addPerson(expectedPerson);
 
@@ -46,7 +47,7 @@ class FakePuRepositoryTest {
   @Test
   void shallThrowExceptionWhenAddingPersonWithEmptyPersonnummer() {
     final var person = Person.builder()
-        .personnummer("")
+        .personnummer(PersonId.of(""))
         .build();
 
     assertThrows(IllegalArgumentException.class,
@@ -57,7 +58,7 @@ class FakePuRepositoryTest {
   @Test
   void shallThrowExceptionWhenAddingPersonWithExistingPersonnummer() {
     final var person = Person.builder()
-        .personnummer(PERSON_ID)
+        .personnummer(PersonId.of(PERSON_ID))
         .build();
 
     fakePuRepository.addPerson(person);

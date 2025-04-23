@@ -238,7 +238,7 @@ class GetPersonsForProfileResponseTypeHandlerV5Test {
         assertAll(
             () -> assertEquals(Status.ERROR, actualPuResponse.getPersons().getFirst().status()),
             () -> assertEquals(PATIENT_ID_1,
-                actualPuResponse.getPersons().getFirst().person().getPersonnummer())
+                actualPuResponse.getPersons().getFirst().person().getPersonnummer().id())
         );
       }
 
@@ -253,7 +253,7 @@ class GetPersonsForProfileResponseTypeHandlerV5Test {
             () -> assertEquals(Status.NOT_FOUND,
                 actualPuResponse.getPersons().getFirst().status()),
             () -> assertEquals(PATIENT_ID_1,
-                actualPuResponse.getPersons().getFirst().person().getPersonnummer())
+                actualPuResponse.getPersons().getFirst().person().getPersonnummer().id())
         );
       }
 
@@ -272,7 +272,7 @@ class GetPersonsForProfileResponseTypeHandlerV5Test {
             () -> assertEquals(Status.FOUND, actualPuResponse.getPersons().getFirst().status()),
             () -> assertEquals(
                 PATIENT_ID_2,
-                actualPuResponse.getPersons().get(1).person().getPersonnummer()
+                actualPuResponse.getPersons().get(1).person().getPersonnummer().id()
             )
         );
       }
@@ -292,7 +292,7 @@ class GetPersonsForProfileResponseTypeHandlerV5Test {
             () -> assertEquals(Status.FOUND, actualPuResponse.getPersons().getFirst().status()),
             () -> assertEquals(
                 PATIENT_ID_3,
-                actualPuResponse.getPersons().get(1).person().getPersonnummer()
+                actualPuResponse.getPersons().get(1).person().getPersonnummer().id()
             )
         );
       }

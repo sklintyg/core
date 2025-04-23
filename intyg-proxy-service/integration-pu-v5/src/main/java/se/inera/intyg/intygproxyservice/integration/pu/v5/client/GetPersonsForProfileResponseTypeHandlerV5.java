@@ -1,5 +1,7 @@
 package se.inera.intyg.intygproxyservice.integration.pu.v5.client;
 
+import static se.inera.intyg.intygproxyservice.integration.pu.v5.client.converter.PersonalIdentityTypeConverter.personId;
+
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,7 +9,6 @@ import org.springframework.stereotype.Component;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuPersonsResponse;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuResponse;
 import se.inera.intyg.intygproxyservice.integration.pu.v5.client.converter.GetPersonsForProfileResponseTypeConverterV5;
-import se.inera.intyg.intygproxyservice.integration.pu.v5.client.converter.PersonalIdentityTypeConverter;
 import se.riv.strategicresourcemanagement.persons.person.getpersonsforprofileresponder.v5.GetPersonsForProfileResponseType;
 import se.riv.strategicresourcemanagement.persons.person.v5.RequestedPersonRecordType;
 
@@ -65,9 +66,7 @@ public class GetPersonsForProfileResponseTypeHandlerV5 {
     final var personRecords = records.stream()
         .filter(
             requestedPersonRecordType -> personId.equals(
-                PersonalIdentityTypeConverter.extension(
-                    requestedPersonRecordType.getRequestedPersonalIdentity()
-                )
+                personId(requestedPersonRecordType.getRequestedPersonalIdentity()).id()
             )
         )
         .toList();

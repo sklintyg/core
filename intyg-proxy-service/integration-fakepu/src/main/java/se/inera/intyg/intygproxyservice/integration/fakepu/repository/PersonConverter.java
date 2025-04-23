@@ -1,6 +1,7 @@
 package se.inera.intyg.intygproxyservice.integration.fakepu.repository;
 
 import se.inera.intyg.intygproxyservice.integration.api.pu.Person;
+import se.inera.intyg.intygproxyservice.integration.api.pu.PersonId;
 import se.inera.intyg.intygproxyservice.integration.fakepu.repository.model.ParsedAddress;
 import se.inera.intyg.intygproxyservice.integration.fakepu.repository.model.ParsedAddressInformation;
 import se.inera.intyg.intygproxyservice.integration.fakepu.repository.model.ParsedName;
@@ -15,7 +16,7 @@ public class PersonConverter {
   public static Person convert(ParsedPerson parsedPerson) {
     return Person.builder()
         .personnummer(
-            parsedPerson.getPersonalIdentity().getExtension()
+            PersonId.of(parsedPerson.getPersonalIdentity().getExtension())
         )
         .fornamn(
             name(parsedPerson.getName().getGivenName())

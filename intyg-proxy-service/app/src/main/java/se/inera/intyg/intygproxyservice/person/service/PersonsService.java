@@ -79,7 +79,7 @@ public class PersonsService {
 
   private void savePersonInCache(PuResponse puResponse) {
     CacheUtility.save(cacheManager, objectMapper, puResponse,
-        HashUtility.hash(puResponse.person().getPersonnummer()), PERSON_CACHE);
+        HashUtility.hash(puResponse.person().getPersonnummer().id()), PERSON_CACHE);
   }
 
   private static PersonsRequest getPersonIdsNotInCache(PersonsRequest request,
@@ -90,7 +90,7 @@ public class PersonsService {
                 .stream()
                 .filter(
                     id -> personsFromCache.stream()
-                        .noneMatch(person -> person.person().getPersonnummer().equals(id))
+                        .noneMatch(person -> person.person().getPersonnummer().id().equals(id))
                 )
                 .toList()
         )
