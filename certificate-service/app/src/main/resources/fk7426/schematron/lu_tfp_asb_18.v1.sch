@@ -32,10 +32,16 @@
         fastställd'
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='59']) = 1">
-        Ett 'Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har fyllt 18' måste ha ett 'Hälsotillstånd'
+        Ett 'Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har fyllt 18' måste ha ett 'Barnets hälsotillstånd'
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='60']) = 1">
         Ett 'Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har fyllt 18' måste ha ett 'Grund för bedömning' svar
+      </iso:assert>
+      <iso:assert test="count(gn:svar[@id='61']) = 1">
+        Ett 'Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har fyllt 18' måste ha ett 'För vilken period bedömer du att barnet är allvarligt sjukt?' svar
+      </iso:assert>
+      <iso:assert test="count(gn:svar[@id='62']) = 1">
+        Ett 'Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har fyllt 18' måste ha ett 'Sjukhusvård eller hemsjukvård' svar
       </iso:assert>
     </iso:rule>
   </iso:pattern>
@@ -149,6 +155,11 @@
     <iso:rule context="//gn:svar[@id='61']">
       <iso:assert test="count(gn:delsvar[@id='61.2']) = 1">
         Ett 'Period för sjukdom' svar måste ha ett delsvar
+      </iso:assert>
+    </iso:rule>
+    <iso:rule context="//gn:svar[@id='62']">
+      <iso:assert test="count(gn:delsvar[@id='62.1']) = 1 and count(gn:delsvar[@id='62.3']) = 1">
+        Ett 'Sjukhusvård eller hemsjukvård' svar måste ha två delsvar
       </iso:assert>
     </iso:rule>
   </iso:pattern>
