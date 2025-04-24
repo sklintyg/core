@@ -5,6 +5,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProv
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK3226_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7210_CERTIFICATE_MODEL;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7426_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7427_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7472_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7809_CERTIFICATE_MODEL;
@@ -533,6 +534,197 @@ public class TestDataCertificate {
                     .value(
                         ElementValueText.builder()
                             .textId(new FieldId("19.1"))
+                            .build()
+                    )
+                    .build()
+            )
+        )
+        .certificateMetaData(
+            CertificateMetaData.builder()
+                .issuer(AJLA_DOKTOR)
+                .creator(ALF_DOKTOR)
+                .patient(ATHENA_REACT_ANDERSSON)
+                .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
+                .careUnit(ALFA_MEDICINCENTRUM)
+                .careProvider(ALFA_REGIONEN)
+                .build()
+        );
+  }
+
+  public static final Certificate FK7426_CERTIFICATE = fk7426CertificateBuilder().build();
+
+  public static Certificate.CertificateBuilder fk7426CertificateBuilder() {
+    return Certificate.builder()
+        .id(CERTIFICATE_ID)
+        .revision(REVISION)
+        .created(LocalDateTime.now(ZoneId.systemDefault()))
+        .certificateModel(FK7426_CERTIFICATE_MODEL)
+        .xml(XML)
+        .sent(SENT)
+        .revoked(REVOKED)
+        .externalReference(EXTERNAL_REFERENCE)
+        .elementData(
+            List.of(
+                ElementData.builder()
+                    .id(new ElementId("1"))
+                    .value(
+                        ElementValueDateList.builder()
+                            .dateListId(new FieldId("1.1"))
+                            .dateList(
+                                List.of(
+                                    ElementValueDate.builder()
+                                        .dateId(new FieldId("fysisktMote"))
+                                        .date(LocalDate.now())
+                                        .build()
+                                )
+                            )
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("2"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("2.1"))
+                            .text("Example text")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(UNIT_CONTACT_INFORMATION)
+                    .value(
+                        ElementValueUnitContactInformation.builder()
+                            .address(ALFA_ALLERGIMOTTAGNINGEN_ADDRESS)
+                            .city(ALFA_ALLERGIMOTTAGNINGEN_CITY)
+                            .zipCode(ALFA_ALLERGIMOTTAGNINGEN_ZIP_CODE)
+                            .phoneNumber(ALFA_ALLERGIMOTTAGNINGEN_PHONENUMBER)
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("58"))
+                    .value(
+                        ElementValueDiagnosisList.builder()
+                            .diagnoses(
+                                List.of(
+                                    ElementValueDiagnosis.builder()
+                                        .code("A013")
+                                        .description("Paratyfoidfeber C")
+                                        .terminology("ICD_10_SE")
+                                        .build()
+                                )
+                            )
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("55"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("55.1"))
+                            .text("Example symptom description")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("59.1"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("59.1"))
+                            .text("Example health condition")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("59.2"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("59.2"))
+                            .text("Additional health details")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("60"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("60.1"))
+                            .text("Care and supervision needs")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("19"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("19.1"))
+                            .text("Additional notes")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("20"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("20.1"))
+                            .text("Further observations")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("61"))
+                    .value(
+                        ElementValueDateRange.builder()
+                            .id(new FieldId("61.1"))
+                            .fromDate(LocalDate.now())
+                            .toDate(LocalDate.now().plusDays(7))
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("61.2"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("61.2"))
+                            .text("Date range description")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("62"))
+                    .value(
+                        ElementValueBoolean.builder()
+                            .booleanId(new FieldId("62.1"))
+                            .value(true)
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("62.2"))
+                    .value(
+                        ElementValueDateRange.builder()
+                            .id(new FieldId("62.2"))
+                            .fromDate(LocalDate.now())
+                            .toDate(LocalDate.now().plusDays(14))
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("62.3"))
+                    .value(
+                        ElementValueBoolean.builder()
+                            .booleanId(new FieldId("62.3"))
+                            .value(false)
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("62.4"))
+                    .value(
+                        ElementValueDateRange.builder()
+                            .id(new FieldId("62.4"))
+                            .fromDate(LocalDate.now().minusDays(3))
+                            .toDate(LocalDate.now().plusDays(10))
                             .build()
                     )
                     .build()
