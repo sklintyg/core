@@ -12,7 +12,7 @@ import se.inera.intyg.intygproxyservice.integration.api.pu.Person.PersonBuilder;
 @JsonDeserialize(builder = PersonBuilder.class)
 public class Person implements Serializable {
 
-  String personnummer;
+  PersonId personnummer;
   boolean sekretessmarkering;
   boolean avliden;
   String fornamn;

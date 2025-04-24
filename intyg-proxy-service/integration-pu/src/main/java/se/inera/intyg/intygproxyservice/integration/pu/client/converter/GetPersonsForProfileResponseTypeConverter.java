@@ -4,7 +4,7 @@ import static se.inera.intyg.intygproxyservice.integration.pu.client.converter.D
 import static se.inera.intyg.intygproxyservice.integration.pu.client.converter.NameTypeConverter.givenName;
 import static se.inera.intyg.intygproxyservice.integration.pu.client.converter.NameTypeConverter.middleName;
 import static se.inera.intyg.intygproxyservice.integration.pu.client.converter.NameTypeConverter.surname;
-import static se.inera.intyg.intygproxyservice.integration.pu.client.converter.PersonalIdentityTypeConverter.extension;
+import static se.inera.intyg.intygproxyservice.integration.pu.client.converter.PersonalIdentityTypeConverter.personId;
 import static se.inera.intyg.intygproxyservice.integration.pu.client.converter.ProtectedPersonConverter.protectedPerson;
 import static se.inera.intyg.intygproxyservice.integration.pu.client.converter.ResidentialAddressTypeConverter.city;
 import static se.inera.intyg.intygproxyservice.integration.pu.client.converter.ResidentialAddressTypeConverter.postalAddress;
@@ -21,7 +21,7 @@ public class GetPersonsForProfileResponseTypeConverter {
     final var personRecord = requestedPersonRecordType.getPersonRecord();
     return Person.builder()
         .personnummer(
-            extension(personRecord.getPersonalIdentity())
+            personId(personRecord.getPersonalIdentity())
         )
         .fornamn(
             givenName(personRecord.getName())
