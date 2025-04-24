@@ -51,6 +51,7 @@ public class PersonsService {
         personsFromCache.size(),
         personsFromPu.getPersons().size(),
         persons.stream()
+            .filter(person -> person.person().getPersonnummer().id() != null)
             .collect(
                 Collectors.groupingBy(
                     person -> person.person().getPersonnummer().id(),
