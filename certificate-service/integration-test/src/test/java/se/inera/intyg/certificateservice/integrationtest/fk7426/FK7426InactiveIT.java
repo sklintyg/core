@@ -14,7 +14,7 @@ class FK7426InactiveIT {
 
   @DynamicPropertySource
   static void testProperties(DynamicPropertyRegistry registry) {
-    registry.add("certificate.model.fk7427.v1_0.active.from", () -> "2099-01-01T00:00:00");
+    registry.add("certificate.model.fk7426.v1_0.active.from", () -> "2099-01-01T00:00:00");
   }
 
   @Nested

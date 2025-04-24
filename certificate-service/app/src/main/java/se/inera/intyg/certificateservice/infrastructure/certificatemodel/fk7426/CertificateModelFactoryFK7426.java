@@ -65,11 +65,7 @@ public class CertificateModelFactoryFK7426 implements CertificateModelFactory {
   private static final String DETAILED_DESCRIPTION = """
       <b className="iu-fw-heading">Vad är Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har fyllt 18 år?</b><br>
       <p>Läkarutlåtandet används när ett barn är allvarligt sjukt. För att barnet ska bedömas vara allvarligt sjukt måste någon av följande punkter vara uppfyllda:</p>
-      <ul>
-        <li>Barnet misstänks lida av en sjukdom som är förenad med ett påtagligt hot mot barnets liv.</li>
-        <li>Barnet har diagnosticerats med en sjukdom som är förenad med ett påtagligt hot mot barnets liv.</li>
-        <li>Barnet har lidit av en sådan sjukdom som är förenad med ett påtagligt hot mot barnets liv och barnets hälsotillstånd under eftervårdsfasen är allvarligt påverkat.</li>
-       </ul>
+      <ul><li>Barnet misstänks lida av en sjukdom som är förenad med ett påtagligt hot mot barnets liv.</li><li>Barnet har diagnosticerats med en sjukdom som är förenad med ett påtagligt hot mot barnets liv.</li><li>Barnet har lidit av en sådan sjukdom som är förenad med ett påtagligt hot mot barnets liv och barnets hälsotillstånd under eftervårdsfasen är allvarligt påverkat.</li></ul>
       <b className="iu-fw-heading">Förutsättningar för att få tillfällig föräldrapenning</b><br>
       <p>Tillfällig föräldrapenning kan betalas ut om en förälder behöver avstå från arbete för att vårda ett sjukt barn.</p>
       <p>När ett barn bedöms vara allvarligt sjukt gäller särskilda regler för tillfällig föräldrapenning. Ersättningen kan då betalas ut under ett obegränsat antal dagar och båda föräldrarna kan få ersättning samtidigt, för samma barn.</p>
