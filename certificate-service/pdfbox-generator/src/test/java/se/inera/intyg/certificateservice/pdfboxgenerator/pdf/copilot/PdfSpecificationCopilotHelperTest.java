@@ -3,18 +3,15 @@ package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.copilot;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDNonTerminalField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDRadioButton;
-import org.apache.pdfbox.text.PDFTextStripper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -32,7 +29,7 @@ class PdfSpecificationCopilotHelperTest {
    * <p>
    * Prompt PdfSpecification: Generate a pdf specification for FK4727 following the previous pattern
    * in PdfSpecification file in your context, but not the values. The values like ids, page indexes
-   * etc. you will get from pdf_specification_context. If overflow page is defined then set those
+   * etc. you will get from certificate_type_structure. If overflow page is defined then set those
    * values. Remember that when values are indexes they start from 0 so it will not be the page
    * number but page index. If more than one page remember there should be more than one patient id
    * field in list, one per page.
@@ -46,6 +43,7 @@ class PdfSpecificationCopilotHelperTest {
   private StringBuilder originalStructure;
 
   private static final String FK_7427 = "fk7427";
+  private static final String FK_7426 = "fk7426";
 
   /**
    * To verify that the PDF templates that are delivered by the certificate recipient follows the
@@ -85,6 +83,40 @@ class PdfSpecificationCopilotHelperTest {
       final var normalizedOriginalStructure = originalStructure.toString().replaceAll("\r\n", "\n")
           .trim();
       final var normalizedExpectedText = contentNewStructure.toString().replaceAll("\r\n", "\n")
+          .trim();
+
+      assertEquals(normalizedExpectedText, normalizedOriginalStructure);
+    }
+  }
+
+  @Nested
+  class FK7426 {
+
+    @BeforeEach
+    void setup() {
+      final var classloader = getClass().getClassLoader();
+      final var inputStream = classloader.getResourceAsStream(
+          String.format("%s/pdf/%s_v1.pdf", FK_7426, FK_7426));
+
+      try {
+        document = Loader.loadPDF(inputStream.readAllBytes());
+        originalStructure = readFileFromResources(
+            String.format("%s/pdf/%s_structure.txt", FK_7426, FK_7426)
+        );
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+
+      //writeToFile(FK_7426, getPdfStructure());
+    }
+
+    @Test
+    void shouldHaveSameStructureAsOriginalDocument() {
+      final var contentNewStructure = getPdfStructure();
+
+      final var normalizedOriginalStructure = originalStructure.toString().replaceAll("\r\n", "")
+          .trim();
+      final var normalizedExpectedText = contentNewStructure.toString().replaceAll("\r\n", "")
           .trim();
 
       assertEquals(normalizedExpectedText, normalizedOriginalStructure);
