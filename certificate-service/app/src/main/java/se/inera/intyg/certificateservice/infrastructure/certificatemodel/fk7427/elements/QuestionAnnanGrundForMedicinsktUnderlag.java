@@ -10,11 +10,11 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0001;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 
 public class QuestionAnnanGrundForMedicinsktUnderlag {
 
@@ -23,6 +23,7 @@ public class QuestionAnnanGrundForMedicinsktUnderlag {
   private static final FieldId QUESTION_ANNAN_GRUND_FOR_MEDICINSKT_UNDERLAG_FIELD_ID = new FieldId(
       "1.3");
   public static final String PDF_FIELD_ID = "form1[0].#subform[0].flt_txtAngeAnnat[0]";
+  private static final int LIMIT = 3500;
 
   private QuestionAnnanGrundForMedicinsktUnderlag() {
     throw new IllegalStateException("Utility class");
@@ -46,7 +47,7 @@ public class QuestionAnnanGrundForMedicinsktUnderlag {
                 ),
                 CertificateElementRuleFactory.limit(
                     QUESTION_ANNAN_GRUND_FOR_MEDICINSKT_UNDERLAG_ID,
-                    (short) 50),
+                    (short) LIMIT),
                 CertificateElementRuleFactory.show(
                     QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID,
                     UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID
@@ -57,7 +58,7 @@ public class QuestionAnnanGrundForMedicinsktUnderlag {
             List.of(
                 ElementValidationText.builder()
                     .mandatory(true)
-                    .limit(50)
+                    .limit(LIMIT)
                     .build()
             )
         )
@@ -78,7 +79,7 @@ public class QuestionAnnanGrundForMedicinsktUnderlag {
         .pdfConfiguration(
             PdfConfigurationText.builder()
                 .pdfFieldId(new PdfFieldId(PDF_FIELD_ID))
-                .maxLength(50)
+                .maxLength(66)
                 .overflowSheetFieldId(
                     new PdfFieldId("form1[0].#subform[3].flt_txtFortsattningsblad[0]"))
                 .build()
