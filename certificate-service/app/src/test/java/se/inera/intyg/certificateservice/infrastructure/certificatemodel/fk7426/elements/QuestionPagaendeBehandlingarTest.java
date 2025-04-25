@@ -71,12 +71,12 @@ class QuestionPagaendeBehandlingarTest {
   void shallIncludePdfConfiguration() {
     final var expected = PdfConfigurationText.builder()
         .pdfFieldId(new PdfFieldId("form1[0].#subform[2].flt_txt_PagaendeBehandling[0]"))
-        .maxLength(4000)
+        .maxLength(69 * 4)
         .overflowSheetFieldId(
             new PdfFieldId("form1[0].#subform[4].flt_txtFortsattningsblad[0]"))
         .build();
 
-    final var element = QuestionHalsotillstandSomatiska.questionHalsotillstandSomatiska();
+    final var element = QuestionPagaendeBehandlingar.questionPagaendeBehandlingar();
 
     assertEquals(expected, element.pdfConfiguration());
   }

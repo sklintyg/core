@@ -72,7 +72,7 @@ class QuestionHalsotillstandPsykiskaTest {
   void shallIncludePdfConfiguration() {
     final var expected = PdfConfigurationText.builder()
         .pdfFieldId(new PdfFieldId("form1[0].#subform[2].flt_txtBarnetsHalsotillstand[0]"))
-        .maxLength(21)
+        .maxLength(69 * 5)
         .overflowSheetFieldId(
             new PdfFieldId("form1[0].#subform[4].flt_txtFortsattningsblad[0]"))
         .build();

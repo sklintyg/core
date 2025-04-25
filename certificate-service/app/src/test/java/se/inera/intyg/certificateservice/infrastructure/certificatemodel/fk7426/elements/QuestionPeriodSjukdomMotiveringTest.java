@@ -79,12 +79,12 @@ class QuestionPeriodSjukdomMotiveringTest {
   void shallIncludePdfConfiguration() {
     final var expected = PdfConfigurationText.builder()
         .pdfFieldId(new PdfFieldId("form1[0].#subform[3].flt_txtMotiveraBedömn[0]"))
-        .maxLength(2)
+        .maxLength(69 * 6)
         .overflowSheetFieldId(
             new PdfFieldId("form1[0].#subform[4].flt_txtFortsattningsblad[0]"))
         .build();
 
-    final var element = QuestionHalsotillstandSomatiska.questionHalsotillstandSomatiska();
+    final var element = QuestionPeriodSjukdomMotivering.questionPeriodSjukdomMotivering();
 
     assertEquals(expected, element.pdfConfiguration());
   }

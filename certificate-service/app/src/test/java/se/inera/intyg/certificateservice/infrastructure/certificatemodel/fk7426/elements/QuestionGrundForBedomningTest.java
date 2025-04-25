@@ -81,7 +81,7 @@ class QuestionGrundForBedomningTest {
   void shallIncludePdfConfiguration() {
     final var expected = PdfConfigurationText.builder()
         .pdfFieldId(new PdfFieldId("form1[0].#subform[2].flt_txtBarnetsHalsotillstand[1]"))
-        .maxLength(12)
+        .maxLength(69 * 8)
         .overflowSheetFieldId(
             new PdfFieldId("form1[0].#subform[4].flt_txtFortsattningsblad[0]"))
         .build();

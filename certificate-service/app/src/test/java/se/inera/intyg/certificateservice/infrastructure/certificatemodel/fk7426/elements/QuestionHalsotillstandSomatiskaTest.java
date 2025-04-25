@@ -72,7 +72,7 @@ class QuestionHalsotillstandSomatiskaTest {
   void shallIncludePdfConfiguration() {
     final var expected = PdfConfigurationText.builder()
         .pdfFieldId(new PdfFieldId("form1[0].#subform[2].flt_txtBeskrivProvsvar[0]"))
-        .maxLength(4000)
+        .maxLength(69 * 8)
         .overflowSheetFieldId(
             new PdfFieldId("form1[0].#subform[4].flt_txtFortsattningsblad[0]"))
         .build();
