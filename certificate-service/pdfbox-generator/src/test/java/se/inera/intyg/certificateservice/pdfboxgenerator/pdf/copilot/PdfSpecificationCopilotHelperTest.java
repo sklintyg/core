@@ -35,8 +35,7 @@ class PdfSpecificationCopilotHelperTest {
    * field in list, one per page.
    * <p>
    * Prompt PdfConfiguration for question: Generate a pdf configuration for this question using the
-   * attached Question as idea for structure but the pdf_specification_context for the actual
-   * values
+   * attached Question as idea for structure but the pdf structure for the actual values
    */
 
   private PDDocument document;
