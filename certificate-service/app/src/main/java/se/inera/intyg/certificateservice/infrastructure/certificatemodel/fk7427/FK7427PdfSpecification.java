@@ -10,7 +10,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagInd
 
 public class FK7427PdfSpecification {
 
-  public static final int ROW_MAX_LENGTH = 45;
+  public static final int ROW_MAX_LENGTH = 69;
   public static final String PDF_FK_7427_PDF = "fk7427/pdf/fk7427_v1.pdf";
   public static final String PDF_FK_7427_PDF_NO_ADDRESS = "fk7427/pdf/fk7427_v1_no_address.pdf";
   public static final PdfMcid PDF_MCID = new PdfMcid(300);

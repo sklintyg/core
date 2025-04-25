@@ -1,7 +1,5 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.FK7427PdfSpecification.ROW_MAX_LENGTH;
-
 import java.util.List;
 import java.util.Map;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDiagnosis;
@@ -25,7 +23,7 @@ public class QuestionDiagnos {
   public static final FieldId DIAGNOS_2 = new FieldId("diagnos2");
   public static final FieldId DIAGNOS_3 = new FieldId("diagnos3");
 
-  private static final short DIAGNOSIS_CODE_LIMIT = (short) 81;
+  private static final short DIAGNOSIS_DESCRIPTION_LIMIT = (short) 81;
 
   private static final PdfFieldId PDF_DIAGNOSIS_ID_1 = new PdfFieldId(
       "form1[0].#subform[0].flt_txtAngeFunktionsnedsattning[0]");
@@ -95,7 +93,7 @@ public class QuestionDiagnos {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.limit(DIAGNOSIS_ID, DIAGNOSIS_CODE_LIMIT)
+                CertificateElementRuleFactory.limit(DIAGNOSIS_ID, DIAGNOSIS_DESCRIPTION_LIMIT)
             )
         )
         .validations(
@@ -110,7 +108,7 @@ public class QuestionDiagnos {
         )
         .pdfConfiguration(
             PdfConfigurationDiagnoses.builder()
-                .maxLength(ROW_MAX_LENGTH)
+                .maxLength(53)
                 .appearance("/ArialMT 9.00 Tf 0 g")
                 .diagnoses(
                     Map.of(

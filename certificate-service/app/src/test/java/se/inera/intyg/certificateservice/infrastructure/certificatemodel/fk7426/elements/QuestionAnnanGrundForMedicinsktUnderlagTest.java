@@ -60,7 +60,7 @@ class QuestionAnnanGrundForMedicinsktUnderlagTest {
         ElementRuleLimit.builder()
             .id(ELEMENT_ID)
             .type(ElementRuleType.TEXT_LIMIT)
-            .limit(new RuleLimit((short) 50))
+            .limit(new RuleLimit((short) 3500))
             .build(),
         ElementRuleExpression.builder()
             .id(new ElementId("1"))
@@ -79,7 +79,7 @@ class QuestionAnnanGrundForMedicinsktUnderlagTest {
     final var expectedValidations = List.of(
         ElementValidationText.builder()
             .mandatory(true)
-            .limit(50)
+            .limit(3500)
             .build()
     );
 
@@ -103,7 +103,7 @@ class QuestionAnnanGrundForMedicinsktUnderlagTest {
   void shallIncludePdfConfiguration() {
     final var expected = PdfConfigurationText.builder()
         .pdfFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtAnhorig[0]"))
-        .maxLength(50)
+        .maxLength(66)
         .overflowSheetFieldId(new PdfFieldId("form1[0].#subform[4].flt_txtFortsattningsblad[0]"))
         .build();
 
