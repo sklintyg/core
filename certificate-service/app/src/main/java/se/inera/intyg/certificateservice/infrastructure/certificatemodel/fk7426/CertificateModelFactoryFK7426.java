@@ -78,7 +78,7 @@ public class CertificateModelFactoryFK7426 implements CertificateModelFactory {
       .build();
 
   public static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
-      "fk7426/schematron/lu_tfp_b12_16.v1.sch");
+      "fk7426/schematron/lu_tfp_asb_18.v1.sch");
 
   @Override
   public CertificateModel create() {
