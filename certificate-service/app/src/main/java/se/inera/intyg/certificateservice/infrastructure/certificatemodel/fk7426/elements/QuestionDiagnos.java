@@ -108,7 +108,7 @@ public class QuestionDiagnos {
         )
         .pdfConfiguration(
             PdfConfigurationDiagnoses.builder()
-                .maxLength(81)
+                .maxLength(54)
                 .appearance("/ArialMT 9.00 Tf 0 g")
                 .diagnoses(
                     Map.of(
