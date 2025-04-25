@@ -1,12 +1,16 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionVardasBarnetInneliggandePaSjukhus.questionVardasBarnetInneliggandePaSjukhus;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationRadioBoolean;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfRadioOption;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
@@ -17,7 +21,7 @@ class QuestionVardasBarnetInneliggandePaSjukhusTest {
 
   @Test
   void shallIncludeId() {
-    final var elementSpecification = QuestionVardasBarnetInneliggandePaSjukhus.questionVardasBarnetInneliggandePaSjukhus();
+    final var elementSpecification = questionVardasBarnetInneliggandePaSjukhus();
     assertEquals(ELEMENT_ID, elementSpecification.id());
   }
 
@@ -30,7 +34,7 @@ class QuestionVardasBarnetInneliggandePaSjukhusTest {
         .name("Vårdas barnet inneliggande på sjukhus?")
         .build();
 
-    final var elementSpecification = QuestionVardasBarnetInneliggandePaSjukhus.questionVardasBarnetInneliggandePaSjukhus();
+    final var elementSpecification = questionVardasBarnetInneliggandePaSjukhus();
     assertEquals(configurationRadioBoolean, elementSpecification.configuration());
   }
 
@@ -42,7 +46,7 @@ class QuestionVardasBarnetInneliggandePaSjukhusTest {
             .build()
     );
 
-    final var elementSpecification = QuestionVardasBarnetInneliggandePaSjukhus.questionVardasBarnetInneliggandePaSjukhus();
+    final var elementSpecification = questionVardasBarnetInneliggandePaSjukhus();
     assertEquals(expectedValidation, elementSpecification.validations());
   }
 
@@ -55,15 +59,27 @@ class QuestionVardasBarnetInneliggandePaSjukhusTest {
         )
     );
 
-    final var elementSpecification = QuestionVardasBarnetInneliggandePaSjukhus.questionVardasBarnetInneliggandePaSjukhus();
+    final var elementSpecification = questionVardasBarnetInneliggandePaSjukhus();
     assertEquals(expectedRules, elementSpecification.rules());
   }
 
   @Test
   void shallIncludeChildren() {
-    final var expectedChild = QuestionVardasBarnetInneliggandePaSjukhus.questionVardasBarnetInneliggandePaSjukhus();
-    final var elementSpecification = QuestionVardasBarnetInneliggandePaSjukhus.questionVardasBarnetInneliggandePaSjukhus(
+    final var expectedChild = questionVardasBarnetInneliggandePaSjukhus();
+    final var elementSpecification = questionVardasBarnetInneliggandePaSjukhus(
         expectedChild);
     assertEquals(List.of(expectedChild), elementSpecification.children());
+  }
+
+  @Test
+  void shallIncludePdfConfiguration() {
+    final var expectedPdfConfiguration = PdfConfigurationRadioBoolean.builder()
+        .pdfFieldId(new PdfFieldId("form1[0].#subform[3].RadioButtonList2[1]"))
+        .optionTrue(new PdfRadioOption("1"))
+        .optionFalse(new PdfRadioOption("2"))
+        .build();
+
+    final var elementSpecification = questionVardasBarnetInneliggandePaSjukhus();
+    assertEquals(expectedPdfConfiguration, elementSpecification.pdfConfiguration());
   }
 }

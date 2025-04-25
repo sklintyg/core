@@ -35,6 +35,8 @@ public class FK7426PdfSpecification {
       "form1[0].#subform[3].flt_txtArbetsplatskod[0]");
   private static final PdfFieldId PDF_CONTACT_INFORMATION = new PdfFieldId(
       "form1[0].#subform[3].flt_txtVardgivarensNamnAdressTelefon[0]");
+  public static final PdfFieldId FORTSATTNINGSBLAD_ID = new PdfFieldId(
+      "form1[0].#subform[4].flt_txtFortsattningsblad[0]");
 
   private FK7426PdfSpecification() {
     throw new IllegalStateException("Utility class");

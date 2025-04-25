@@ -155,6 +155,9 @@ public class CertificateModelFactoryFK7426 implements CertificateModelFactory {
         )
         .certificateActionFactory(certificateActionFactory)
         .confirmationModalProvider(new FK7426CertificateConfirmationModalProvider())
+        .pdfSpecification(
+            FK7426PdfSpecification.create()
+        )
         .build();
   }
 }

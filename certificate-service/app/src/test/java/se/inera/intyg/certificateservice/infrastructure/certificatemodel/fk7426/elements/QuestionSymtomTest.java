@@ -1,6 +1,8 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionSymtom.questionSymtom;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.FK7427PdfSpecification.ROW_MAX_LENGTH;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -9,6 +11,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 
@@ -19,7 +23,7 @@ class QuestionSymtomTest {
 
   @Test
   void shallIncludeId() {
-    final var element = QuestionSymtom.questionSymtom();
+    final var element = questionSymtom();
 
     assertEquals(ELEMENT_ID, element.id());
   }
@@ -31,7 +35,7 @@ class QuestionSymtomTest {
         .id(FIELD_ID)
         .build();
 
-    final var element = QuestionSymtom.questionSymtom();
+    final var element = questionSymtom();
 
     assertEquals(expectedConfiguration, element.configuration());
   }
@@ -46,7 +50,7 @@ class QuestionSymtomTest {
             .build()
     );
 
-    final var element = QuestionSymtom.questionSymtom();
+    final var element = questionSymtom();
 
     assertEquals(expectedRules, element.rules());
   }
@@ -59,8 +63,22 @@ class QuestionSymtomTest {
             .build()
     );
 
-    final var element = QuestionSymtom.questionSymtom();
+    final var element = questionSymtom();
 
     assertEquals(expectedValidations, element.validations());
+  }
+
+  @Test
+  void shallIncludePdfConfiguration() {
+    final var expected = PdfConfigurationText.builder()
+        .pdfFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtFlerradig[0]"))
+        .maxLength(ROW_MAX_LENGTH * 6)
+        .overflowSheetFieldId(
+            new PdfFieldId("form1[0].#subform[3].flt_txtFortsattningsblad[0]"))
+        .build();
+
+    final var element = questionSymtom();
+
+    assertEquals(expected, element.pdfConfiguration());
   }
 }

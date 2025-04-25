@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionPeriodVardasBarnInneliggandePaSjukhus.questionPeriodVardasBarnInneliggandePaSjukhus;
 
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -15,6 +16,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMa
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateRange;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateRange;
 
@@ -24,7 +27,7 @@ class QuestionPeriodVardasBarnInneliggandePaSjukhusTest {
 
   @Test
   void shouldIncludeId() {
-    final var element = QuestionPeriodVardasBarnInneliggandePaSjukhus.questionPeriodVardasBarnInneliggandePaSjukhus();
+    final var element = questionPeriodVardasBarnInneliggandePaSjukhus();
 
     assertEquals(ELEMENT_ID, element.id());
   }
@@ -38,7 +41,7 @@ class QuestionPeriodVardasBarnInneliggandePaSjukhusTest {
         .id(new FieldId("62.2"))
         .build();
 
-    final var element = QuestionPeriodVardasBarnInneliggandePaSjukhus.questionPeriodVardasBarnInneliggandePaSjukhus();
+    final var element = questionPeriodVardasBarnInneliggandePaSjukhus();
 
     assertEquals(expectedConfiguration, element.configuration());
   }
@@ -58,7 +61,7 @@ class QuestionPeriodVardasBarnInneliggandePaSjukhusTest {
             .build()
     );
 
-    final var element = QuestionPeriodVardasBarnInneliggandePaSjukhus.questionPeriodVardasBarnInneliggandePaSjukhus();
+    final var element = questionPeriodVardasBarnInneliggandePaSjukhus();
 
     assertEquals(expectedRules, element.rules());
   }
@@ -69,14 +72,14 @@ class QuestionPeriodVardasBarnInneliggandePaSjukhusTest {
         .mandatory(true)
         .build();
 
-    final var element = QuestionPeriodVardasBarnInneliggandePaSjukhus.questionPeriodVardasBarnInneliggandePaSjukhus();
+    final var element = questionPeriodVardasBarnInneliggandePaSjukhus();
 
     assertEquals(List.of(expectedValidation), element.validations());
   }
 
   @Test
   void shouldIncludeElementMapping() {
-    final var element = QuestionPeriodVardasBarnInneliggandePaSjukhus.questionPeriodVardasBarnInneliggandePaSjukhus();
+    final var element = questionPeriodVardasBarnInneliggandePaSjukhus();
 
     assertEquals(
         new ElementMapping(new ElementId("62"), null),
@@ -100,7 +103,7 @@ class QuestionPeriodVardasBarnInneliggandePaSjukhusTest {
               .build()
       );
 
-      final var element = QuestionPeriodVardasBarnInneliggandePaSjukhus.questionPeriodVardasBarnInneliggandePaSjukhus();
+      final var element = questionPeriodVardasBarnInneliggandePaSjukhus();
 
       final var shouldValidate = element.shouldValidate();
 
@@ -120,7 +123,7 @@ class QuestionPeriodVardasBarnInneliggandePaSjukhusTest {
               .build()
       );
 
-      final var element = QuestionPeriodVardasBarnInneliggandePaSjukhus.questionPeriodVardasBarnInneliggandePaSjukhus();
+      final var element = questionPeriodVardasBarnInneliggandePaSjukhus();
 
       final var shouldValidate = element.shouldValidate();
 
@@ -140,11 +143,23 @@ class QuestionPeriodVardasBarnInneliggandePaSjukhusTest {
               .build()
       );
 
-      final var element = QuestionPeriodVardasBarnInneliggandePaSjukhus.questionPeriodVardasBarnInneliggandePaSjukhus();
+      final var element = questionPeriodVardasBarnInneliggandePaSjukhus();
 
       final var shouldValidate = element.shouldValidate();
 
       assertFalse(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shouldIncludePdfConfiguration() {
+      final var expectedPdfConfiguration = PdfConfigurationDateRange.builder()
+          .from(new PdfFieldId("form1[0].#subform[3].flt_datFranMed[0]"))
+          .to(new PdfFieldId("form1[0].#subform[3].flt_datTillMed[1]"))
+          .build();
+
+      final var element = questionPeriodVardasBarnInneliggandePaSjukhus();
+
+      assertEquals(expectedPdfConfiguration, element.pdfConfiguration());
     }
   }
 }

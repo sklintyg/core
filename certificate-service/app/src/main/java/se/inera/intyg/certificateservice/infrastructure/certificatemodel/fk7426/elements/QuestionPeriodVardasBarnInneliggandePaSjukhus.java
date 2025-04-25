@@ -9,6 +9,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateRange;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateRange;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
@@ -18,6 +20,10 @@ public class QuestionPeriodVardasBarnInneliggandePaSjukhus {
   public static final ElementId QUESTION_PERIOD_VARDAS_BARN_INNE_SJUKHUS_ID = new ElementId("62.2");
   private static final FieldId QUESTION_PERIOD_VARDAS_BARN_INNE_SJUKHUS_FIELD_ID = new FieldId(
       "62.2");
+  private static final PdfFieldId PDF_FIELD_ID_FROM = new PdfFieldId(
+      "form1[0].#subform[3].flt_datFranMed[0]");
+  private static final PdfFieldId PDF_FIELD_ID_TO = new PdfFieldId(
+      "form1[0].#subform[3].flt_datTillMed[1]");
 
   private QuestionPeriodVardasBarnInneliggandePaSjukhus() {
     throw new IllegalStateException("Utility class");
@@ -54,6 +60,12 @@ public class QuestionPeriodVardasBarnInneliggandePaSjukhus {
             ShouldValidateFactory.radioBoolean(QUESTION_VARDAS_BARNET_INNELIGGANDE_PA_SJUKHUS_ID)
         )
         .mapping(new ElementMapping(QUESTION_VARDAS_BARNET_INNELIGGANDE_PA_SJUKHUS_ID, null))
+        .pdfConfiguration(
+            PdfConfigurationDateRange.builder()
+                .from(PDF_FIELD_ID_FROM)
+                .to(PDF_FIELD_ID_TO)
+                .build()
+        )
         .build();
   }
 }

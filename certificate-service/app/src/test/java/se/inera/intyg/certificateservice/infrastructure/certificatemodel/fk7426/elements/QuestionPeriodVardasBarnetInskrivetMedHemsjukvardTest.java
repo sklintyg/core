@@ -15,6 +15,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMa
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateRange;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateRange;
 
@@ -145,6 +147,18 @@ class QuestionPeriodVardasBarnetInskrivetMedHemsjukvardTest {
       final var shouldValidate = element.shouldValidate();
 
       assertFalse(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shouldIncludePdfConfiguration() {
+      final var expectedPdfConfiguration = PdfConfigurationDateRange.builder()
+          .from(new PdfFieldId("form1[0].#subform[3].flt_datFranMed[1]"))
+          .to(new PdfFieldId("form1[0].#subform[3].flt_datTillMed[0]"))
+          .build();
+
+      final var element = QuestionPeriodVardasBarnetInskrivetMedHemsjukvard.questionPeriodVardasBarnetInskrivetMedHemsjukvard();
+
+      assertEquals(expectedPdfConfiguration, element.pdfConfiguration());
     }
   }
 }
