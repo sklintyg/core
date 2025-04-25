@@ -34,8 +34,9 @@ class PdfSpecificationCopilotHelperTest {
    * number but page index. If more than one page remember there should be more than one patient id
    * field in list, one per page.
    * <p>
-   * Prompt PdfConfiguration for question: Generate a pdf configuration for this question using the
-   * attached Question as idea for structure but the pdf structure for the actual values
+   * Prompt PdfConfiguration for question: Generate a pdf configuration and tests for this question
+   * using the attached Question as idea for structure but the pdf structure for the actual values.
+   * If overflow sheet use constant from PdfSpecification.
    */
 
   private PDDocument document;
