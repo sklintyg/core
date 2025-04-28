@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.CertificateModelFactoryFK7426.TEXT_FIELD_LIMIT;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.FK7426PdfSpecification.FORTSATTNINGSBLAD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.FK7426PdfSpecification.ROW_MAX_LENGTH;
 
@@ -18,7 +19,6 @@ public class QuestionPlaneradeBehandlingar {
   public static final ElementId QUESTION_PLANERADE_BEHANDLING_ID = new ElementId("20");
   private static final FieldId QUESTION_PLANERADE_BEHANDLING_FIELD_ID = new FieldId(
       "20.1");
-  private static final short LIMIT = 4000;
   private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[2].flt_txt_PlaneradeMedicinska[0]");
 
@@ -39,14 +39,14 @@ public class QuestionPlaneradeBehandlingar {
         .rules(
             List.of(
                 CertificateElementRuleFactory.limit(QUESTION_PLANERADE_BEHANDLING_ID,
-                    LIMIT)
+                    TEXT_FIELD_LIMIT)
             )
         )
         .validations(
             List.of(
                 ElementValidationText.builder()
                     .mandatory(false)
-                    .limit(4000)
+                    .limit((int) TEXT_FIELD_LIMIT)
                     .build()
             )
         )

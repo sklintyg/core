@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.CertificateModelFactoryFK7426.TEXT_FIELD_LIMIT;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.FK7426PdfSpecification.FORTSATTNINGSBLAD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.FK7426PdfSpecification.ROW_MAX_LENGTH;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionPeriodSjukdom.QUESTION_PERIOD_SJUKDOM_ID;
@@ -19,7 +20,6 @@ public class QuestionPeriodSjukdomMotivering {
 
   public static final ElementId QUESTION_PERIOD_SJUKDOM_MOTIVERING_ID = new ElementId("61.2");
   private static final FieldId QUESTION_PERIOD_SJUKDOM_MOTIVERING_FIELD_ID = new FieldId("61.2");
-  private static final short LIMIT = 4000;
   private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[3].flt_txtMotiveraBedömn[0]");
 
@@ -41,14 +41,15 @@ public class QuestionPeriodSjukdomMotivering {
             List.of(
                 CertificateElementRuleFactory.mandatory(QUESTION_PERIOD_SJUKDOM_MOTIVERING_ID,
                     QUESTION_PERIOD_SJUKDOM_MOTIVERING_FIELD_ID),
-                CertificateElementRuleFactory.limit(QUESTION_PERIOD_SJUKDOM_MOTIVERING_ID, LIMIT)
+                CertificateElementRuleFactory.limit(QUESTION_PERIOD_SJUKDOM_MOTIVERING_ID,
+                    TEXT_FIELD_LIMIT)
             )
         )
         .validations(
             List.of(
                 ElementValidationText.builder()
                     .mandatory(true)
-                    .limit(4000)
+                    .limit((int) TEXT_FIELD_LIMIT)
                     .build()
             )
         )

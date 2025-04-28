@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.CertificateModelFactoryFK7426.TEXT_FIELD_LIMIT;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionGrundForMedicinsktUnderlag.QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionGrundForMedicinsktUnderlag.UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID;
 
@@ -23,7 +24,6 @@ public class QuestionAnnanGrundForMedicinsktUnderlag {
   private static final FieldId QUESTION_ANNAN_GRUND_FOR_MEDICINSKT_UNDERLAG_FIELD_ID = new FieldId(
       "1.3");
   public static final String PDF_FIELD_ID = "form1[0].#subform[0].flt_txtAnhorig[0]";
-  private static final int LIMIT = 3500;
 
   private QuestionAnnanGrundForMedicinsktUnderlag() {
     throw new IllegalStateException("Utility class");
@@ -47,7 +47,7 @@ public class QuestionAnnanGrundForMedicinsktUnderlag {
                 ),
                 CertificateElementRuleFactory.limit(
                     QUESTION_ANNAN_GRUND_FOR_MEDICINSKT_UNDERLAG_ID,
-                    (short) LIMIT),
+                    TEXT_FIELD_LIMIT),
                 CertificateElementRuleFactory.show(
                     QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID,
                     UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID
@@ -58,7 +58,7 @@ public class QuestionAnnanGrundForMedicinsktUnderlag {
             List.of(
                 ElementValidationText.builder()
                     .mandatory(true)
-                    .limit(LIMIT)
+                    .limit((int) TEXT_FIELD_LIMIT)
                     .build()
             )
         )

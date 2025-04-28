@@ -80,6 +80,8 @@ public class CertificateModelFactoryFK7426 implements CertificateModelFactory {
   public static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
       "fk7426/schematron/lu_tfp_b12_16.v1.sch");
 
+  public static final short TEXT_FIELD_LIMIT = 4000;
+
   @Override
   public CertificateModel create() {
     return CertificateModel.builder()

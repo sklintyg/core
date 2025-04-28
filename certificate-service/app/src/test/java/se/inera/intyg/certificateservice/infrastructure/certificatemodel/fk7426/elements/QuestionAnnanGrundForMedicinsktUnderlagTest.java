@@ -60,7 +60,7 @@ class QuestionAnnanGrundForMedicinsktUnderlagTest {
         ElementRuleLimit.builder()
             .id(ELEMENT_ID)
             .type(ElementRuleType.TEXT_LIMIT)
-            .limit(new RuleLimit((short) 3500))
+            .limit(new RuleLimit((short) 4000))
             .build(),
         ElementRuleExpression.builder()
             .id(new ElementId("1"))
@@ -79,7 +79,7 @@ class QuestionAnnanGrundForMedicinsktUnderlagTest {
     final var expectedValidations = List.of(
         ElementValidationText.builder()
             .mandatory(true)
-            .limit(3500)
+            .limit(4000)
             .build()
     );
 

@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.CertificateModelFactoryFK7426.TEXT_FIELD_LIMIT;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.FK7426PdfSpecification.FORTSATTNINGSBLAD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.FK7426PdfSpecification.ROW_MAX_LENGTH;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionHalsotillstandSomatiska.QUESTION_HALSOTILLSTAND_SOMATISKA_PARENT_ID;
@@ -19,7 +20,6 @@ public class QuestionHalsotillstandPsykiska {
 
   public static final ElementId QUESTION_HALSOTILLSTAND_PSYKISKA_ID = new ElementId("59.2");
   public static final FieldId QUESTION_HALSOTILLSTAND_PSYKISKA_FIELD_ID = new FieldId("59.2");
-  private static final short LIMIT = 4000;
   private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[2].flt_txtBarnetsHalsotillstand[0]");
 
@@ -40,14 +40,15 @@ public class QuestionHalsotillstandPsykiska {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.limit(QUESTION_HALSOTILLSTAND_PSYKISKA_ID, LIMIT)
+                CertificateElementRuleFactory.limit(QUESTION_HALSOTILLSTAND_PSYKISKA_ID,
+                    TEXT_FIELD_LIMIT)
             )
         )
         .validations(
             List.of(
                 ElementValidationText.builder()
                     .mandatory(false)
-                    .limit(4000)
+                    .limit((int) TEXT_FIELD_LIMIT)
                     .build()
             )
         )

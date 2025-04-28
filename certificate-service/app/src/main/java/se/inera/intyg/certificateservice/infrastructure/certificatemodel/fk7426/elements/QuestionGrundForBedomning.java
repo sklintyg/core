@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.CertificateModelFactoryFK7426.TEXT_FIELD_LIMIT;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.FK7426PdfSpecification.FORTSATTNINGSBLAD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.FK7426PdfSpecification.ROW_MAX_LENGTH;
 
@@ -17,7 +18,6 @@ public class QuestionGrundForBedomning {
 
   public static final ElementId QUESTION_GRUND_FOR_BEDOMNING_ID = new ElementId("60");
   private static final FieldId QUESTION_GRUND_FOR_BEDOMNING_FIELD_ID = new FieldId("60.1");
-  private static final short LIMIT = 4000;
   private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[2].flt_txtBarnetsHalsotillstand[1]");
 
@@ -41,14 +41,15 @@ public class QuestionGrundForBedomning {
             List.of(
                 CertificateElementRuleFactory.mandatory(QUESTION_GRUND_FOR_BEDOMNING_ID,
                     QUESTION_GRUND_FOR_BEDOMNING_FIELD_ID),
-                CertificateElementRuleFactory.limit(QUESTION_GRUND_FOR_BEDOMNING_ID, LIMIT)
+                CertificateElementRuleFactory.limit(QUESTION_GRUND_FOR_BEDOMNING_ID,
+                    TEXT_FIELD_LIMIT)
             )
         )
         .validations(
             List.of(
                 ElementValidationText.builder()
                     .mandatory(true)
-                    .limit(4000)
+                    .limit((int) TEXT_FIELD_LIMIT)
                     .build()
             )
         )

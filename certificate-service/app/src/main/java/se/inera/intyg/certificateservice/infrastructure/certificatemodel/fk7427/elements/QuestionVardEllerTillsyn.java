@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.CertificateModelFactoryFK7427.TEXT_FIELD_LIMIT;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.FK7427PdfSpecification.ROW_MAX_LENGTH;
 
 import java.util.List;
@@ -16,7 +17,6 @@ public class QuestionVardEllerTillsyn {
 
   public static final ElementId QUESTION_VARD_ELLER_TILLSYN_ID = new ElementId("62");
   private static final FieldId QUESTION_VARD_ELLER_TILLSYN_FIELD_ID = new FieldId("62.5");
-  private static final short LIMIT = 4000;
   private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[2].flt_txtVilkenVardTillsyn[0]");
 
@@ -39,14 +39,15 @@ public class QuestionVardEllerTillsyn {
             List.of(
                 CertificateElementRuleFactory.mandatory(QUESTION_VARD_ELLER_TILLSYN_ID,
                     QUESTION_VARD_ELLER_TILLSYN_FIELD_ID),
-                CertificateElementRuleFactory.limit(QUESTION_VARD_ELLER_TILLSYN_ID, LIMIT)
+                CertificateElementRuleFactory.limit(QUESTION_VARD_ELLER_TILLSYN_ID,
+                    TEXT_FIELD_LIMIT)
             )
         )
         .validations(
             List.of(
                 ElementValidationText.builder()
                     .mandatory(true)
-                    .limit(4000)
+                    .limit((int) TEXT_FIELD_LIMIT)
                     .build()
             )
         )

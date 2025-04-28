@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.CertificateModelFactoryFK7426.TEXT_FIELD_LIMIT;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.FK7426PdfSpecification.FORTSATTNINGSBLAD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.FK7426PdfSpecification.ROW_MAX_LENGTH;
 
@@ -17,7 +18,6 @@ public class QuestionSymtom {
 
   public static final ElementId QUESTION_SYMTOM_ID = new ElementId("55");
   public static final FieldId QUESTION_SYMTOM_FIELD_ID = new FieldId("55.1");
-  private static final short LIMIT = 4000;
   private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[0].flt_txtFlerradig[0]");
 
@@ -37,13 +37,13 @@ public class QuestionSymtom {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.limit(QUESTION_SYMTOM_ID, LIMIT)
+                CertificateElementRuleFactory.limit(QUESTION_SYMTOM_ID, TEXT_FIELD_LIMIT)
             )
         )
         .validations(
             List.of(
                 ElementValidationText.builder()
-                    .limit(4000)
+                    .limit((int) TEXT_FIELD_LIMIT)
                     .build()
             )
         )

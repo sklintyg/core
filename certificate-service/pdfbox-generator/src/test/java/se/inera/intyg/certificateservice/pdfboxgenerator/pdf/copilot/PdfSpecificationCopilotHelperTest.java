@@ -114,9 +114,13 @@ class PdfSpecificationCopilotHelperTest {
     void shouldHaveSameStructureAsOriginalDocument() {
       final var contentNewStructure = getPdfStructure();
 
-      final var normalizedOriginalStructure = originalStructure.toString().replaceAll("\r\n", "")
+      final var normalizedOriginalStructure = originalStructure.toString()
+          .replaceAll("\r\n", "")
+          .replaceAll("\\s+", " ")
           .trim();
-      final var normalizedExpectedText = contentNewStructure.toString().replaceAll("\r\n", "")
+      final var normalizedExpectedText = contentNewStructure.toString()
+          .replaceAll("\r\n", "")
+          .replaceAll("\\s+", " ")
           .trim();
 
       assertEquals(normalizedExpectedText, normalizedOriginalStructure);
