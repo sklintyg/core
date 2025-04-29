@@ -24,6 +24,7 @@ public class QuestionDiagnos {
   public static final FieldId DIAGNOS_3 = new FieldId("diagnos3");
 
   private static final short DIAGNOSIS_DESCRIPTION_LIMIT = (short) 81;
+  private static final Integer DIAGNOSIS_DESCRIPTION_LIMIT_PDF = 45;
 
   private static final PdfFieldId PDF_DIAGNOSIS_ID_1 = new PdfFieldId(
       "form1[0].#subform[0].flt_txtAngeFunktionsnedsattning[0]");
@@ -108,7 +109,7 @@ public class QuestionDiagnos {
         )
         .pdfConfiguration(
             PdfConfigurationDiagnoses.builder()
-                .maxLength(53)
+                .maxLength(DIAGNOSIS_DESCRIPTION_LIMIT_PDF)
                 .appearance("/ArialMT 9.00 Tf 0 g")
                 .diagnoses(
                     Map.of(

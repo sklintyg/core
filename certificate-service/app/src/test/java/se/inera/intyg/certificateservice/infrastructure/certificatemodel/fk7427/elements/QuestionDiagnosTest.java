@@ -103,7 +103,7 @@ class QuestionDiagnosTest {
   @Test
   void shallIncludePdfConfiguration() {
     final var expectedPdfConfiguration = PdfConfigurationDiagnoses.builder()
-        .maxLength(53)
+        .maxLength(45)
         .appearance("/ArialMT 9.00 Tf 0 g")
         .diagnoses(
             Map.of(

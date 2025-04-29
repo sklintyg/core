@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.FK7426PdfSpecification.ROW_MAX_LENGTH;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionAnnanGrundForMedicinsktUnderlag.questionAnnanGrundForMedicinsktUnderlag;
 
 import java.util.List;
@@ -103,7 +104,7 @@ class QuestionAnnanGrundForMedicinsktUnderlagTest {
   void shallIncludePdfConfiguration() {
     final var expected = PdfConfigurationText.builder()
         .pdfFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtAnhorig[0]"))
-        .maxLength(66)
+        .maxLength(ROW_MAX_LENGTH)
         .overflowSheetFieldId(new PdfFieldId("form1[0].#subform[4].flt_txtFortsattningsblad[0]"))
         .build();
 

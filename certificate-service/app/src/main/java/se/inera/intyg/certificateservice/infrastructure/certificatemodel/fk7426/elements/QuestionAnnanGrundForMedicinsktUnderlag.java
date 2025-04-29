@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements;
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.CertificateModelFactoryFK7426.TEXT_FIELD_LIMIT;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.FK7426PdfSpecification.ROW_MAX_LENGTH;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionGrundForMedicinsktUnderlag.QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionGrundForMedicinsktUnderlag.UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID;
 
@@ -79,7 +80,7 @@ public class QuestionAnnanGrundForMedicinsktUnderlag {
         .pdfConfiguration(
             PdfConfigurationText.builder()
                 .pdfFieldId(new PdfFieldId(PDF_FIELD_ID))
-                .maxLength(66)
+                .maxLength(ROW_MAX_LENGTH)
                 .overflowSheetFieldId(
                     new PdfFieldId("form1[0].#subform[4].flt_txtFortsattningsblad[0]"))
                 .build()
