@@ -23,9 +23,9 @@ public class QuestionPeriodVardasBarnetInskrivetMedHemsjukvard {
   private static final FieldId QUESTION_PERIOD_VARDAS_BARN_INSKRIVET_MED_HEMSJUKVARD_FIELD_ID = new FieldId(
       "62.4");
   private static final PdfFieldId PDF_FIELD_ID_FROM = new PdfFieldId(
-      "form1[0].#subform[3].flt_datFranMed[1]");
+      "form1[0].#subform[3].flt_datFranMed2[0]");
   private static final PdfFieldId PDF_FIELD_ID_TO = new PdfFieldId(
-      "form1[0].#subform[3].flt_datTillMed[0]");
+      "form1[0].#subform[3].flt_datTillMed2[0]");
 
   private QuestionPeriodVardasBarnetInskrivetMedHemsjukvard() {
     throw new IllegalStateException("Utility class");

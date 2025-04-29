@@ -21,9 +21,9 @@ public class QuestionPeriodVardasBarnInneliggandePaSjukhus {
   private static final FieldId QUESTION_PERIOD_VARDAS_BARN_INNE_SJUKHUS_FIELD_ID = new FieldId(
       "62.2");
   private static final PdfFieldId PDF_FIELD_ID_FROM = new PdfFieldId(
-      "form1[0].#subform[3].flt_datFranMed[0]");
+      "form1[0].#subform[3].flt_datFranMed1[0]");
   private static final PdfFieldId PDF_FIELD_ID_TO = new PdfFieldId(
-      "form1[0].#subform[3].flt_datTillMed[1]");
+      "form1[0].#subform[3].flt_datTillMed1[0]");
 
   private QuestionPeriodVardasBarnInneliggandePaSjukhus() {
     throw new IllegalStateException("Utility class");
