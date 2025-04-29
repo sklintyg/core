@@ -8,9 +8,8 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationRadioBoolean;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfRadioOption;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
@@ -73,10 +72,9 @@ class QuestionVardasBarnetInneliggandePaSjukhusTest {
 
   @Test
   void shallIncludePdfConfiguration() {
-    final var expectedPdfConfiguration = PdfConfigurationRadioBoolean.builder()
-        .pdfFieldId(new PdfFieldId("form1[0].#subform[3].RadioButtonList2[1]"))
-        .optionTrue(new PdfRadioOption("1"))
-        .optionFalse(new PdfRadioOption("2"))
+    final var expectedPdfConfiguration = PdfConfigurationBoolean.builder()
+        .checkboxFalse(new PdfFieldId("form1[0].#subform[3].ksr_Nej_1[0]"))
+        .checkboxTrue(new PdfFieldId("form1[0].#subform[3].ksr_Ja_1[0]"))
         .build();
 
     final var elementSpecification = questionVardasBarnetInneliggandePaSjukhus();

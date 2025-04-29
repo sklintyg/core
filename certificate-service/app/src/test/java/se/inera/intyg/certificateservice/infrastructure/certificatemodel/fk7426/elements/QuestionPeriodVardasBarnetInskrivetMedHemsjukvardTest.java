@@ -152,8 +152,8 @@ class QuestionPeriodVardasBarnetInskrivetMedHemsjukvardTest {
     @Test
     void shouldIncludePdfConfiguration() {
       final var expectedPdfConfiguration = PdfConfigurationDateRange.builder()
-          .from(new PdfFieldId("form1[0].#subform[3].flt_datFranMed[1]"))
-          .to(new PdfFieldId("form1[0].#subform[3].flt_datTillMed[0]"))
+          .from(new PdfFieldId("form1[0].#subform[3].flt_datFranMed2[0]"))
+          .to(new PdfFieldId("form1[0].#subform[3].flt_datTillMed2[0]"))
           .build();
 
       final var element = QuestionPeriodVardasBarnetInskrivetMedHemsjukvard.questionPeriodVardasBarnetInskrivetMedHemsjukvard();

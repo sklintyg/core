@@ -31,7 +31,8 @@ class FK7426PdfSpecificationTest {
     final var expected = List.of(
         new PdfFieldId("form1[0].#subform[0].flt_txtBarnPersonNr[0]"),
         new PdfFieldId("form1[0].#subform[2].flt_txtBarnPersonNr[1]"),
-        new PdfFieldId("form1[0].#subform[3].flt_txtBarnPersonNr[2]")
+        new PdfFieldId("form1[0].#subform[3].flt_txtBarnPersonNr[2]"),
+        new PdfFieldId("form1[0].#subform[4].flt_txtBarnPersonNr[3]")
     );
 
     final var pdfSpecification = FK7426PdfSpecification.create();
@@ -43,8 +44,8 @@ class FK7426PdfSpecificationTest {
   void shallIncludeSignatureFields() {
     final var expected = PdfSignature.builder()
         .signaturePageIndex(2)
-        .signatureWithAddressTagIndex(new PdfTagIndex(28))
-        .signatureWithoutAddressTagIndex(new PdfTagIndex(28))
+        .signatureWithAddressTagIndex(new PdfTagIndex(31))
+        .signatureWithoutAddressTagIndex(new PdfTagIndex(31))
         .signedDateFieldId(new PdfFieldId("form1[0].#subform[3].flt_datUnderskrift[0]"))
         .signedByNameFieldId(new PdfFieldId("form1[0].#subform[3].flt_txtNamnfortydligande[0]"))
         .paTitleFieldId(new PdfFieldId("form1[0].#subform[3].flt_txtBefattning[0]"))
