@@ -19,7 +19,8 @@ public class FK7426PdfSpecification {
   private static final List<PdfFieldId> PDF_PATIENT_ID_FIELD_IDS = List.of(
       new PdfFieldId("form1[0].#subform[0].flt_txtBarnPersonNr[0]"),
       new PdfFieldId("form1[0].#subform[2].flt_txtBarnPersonNr[1]"),
-      new PdfFieldId("form1[0].#subform[3].flt_txtBarnPersonNr[2]")
+      new PdfFieldId("form1[0].#subform[3].flt_txtBarnPersonNr[2]"),
+      new PdfFieldId("form1[0].#subform[4].flt_txtBarnPersonNr[3]")
   );
   private static final PdfFieldId PDF_SIGNED_DATE_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[3].flt_datUnderskrift[0]");
