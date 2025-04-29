@@ -3,21 +3,19 @@ package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.copilot;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDNonTerminalField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDRadioButton;
-import org.apache.pdfbox.text.PDFTextStripper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class PdfSpecificationCopilotHelperTest {
 
@@ -32,20 +30,22 @@ class PdfSpecificationCopilotHelperTest {
    * <p>
    * Prompt PdfSpecification: Generate a pdf specification for FK4727 following the previous pattern
    * in PdfSpecification file in your context, but not the values. The values like ids, page indexes
-   * etc. you will get from pdf_specification_context. If overflow page is defined then set those
+   * etc. you will get from certificate_type_structure. If overflow page is defined then set those
    * values. Remember that when values are indexes they start from 0 so it will not be the page
    * number but page index. If more than one page remember there should be more than one patient id
    * field in list, one per page.
    * <p>
-   * Prompt PdfConfiguration for question: Generate a pdf configuration for this question using the
-   * attached Question as idea for structure but the pdf_specification_context for the actual
-   * values
+   * Prompt PdfConfiguration for question: Generate a pdf configuration and tests for this question
+   * using the attached Question as idea for structure but the pdf structure for the actual values.
+   * If overflow sheet use constant from PdfSpecification.
    */
 
-  private PDDocument document;
+  private PDDocument documentWithAddress;
+  private PDDocument documentWithoutAddress;
   private StringBuilder originalStructure;
 
   private static final String FK_7427 = "fk7427";
+  private static final String FK_7426 = "fk7426";
 
   /**
    * To verify that the PDF templates that are delivered by the certificate recipient follows the
@@ -58,41 +58,57 @@ class PdfSpecificationCopilotHelperTest {
    * templates have differences that disrupt the previous implementation - If so, then fix what
    * needs to be fixed and save a new structure file for the type
    */
-  @Nested
-  class FK7427 {
+  @ParameterizedTest
+  @ValueSource(strings = {FK_7427, FK_7426})
+  void shouldHaveSameStructureAsOriginalDocument(String certificateType) {
+    setup(certificateType);
 
-    @BeforeEach
-    void setup() {
-      final var classloader = getClass().getClassLoader();
-      final var inputStream = classloader.getResourceAsStream(
-          String.format("%s/pdf/%s_v1.pdf", FK_7427, FK_7427));
+    final var contentNewStructure = getPdfStructure();
 
-      try {
-        document = Loader.loadPDF(inputStream.readAllBytes());
-        originalStructure = readFileFromResources(
-            String.format("%s/pdf/%s_structure.txt", FK_7427, FK_7427)
-        );
-        //writeToFile(FK_7427, getPdfStructure());
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
-    }
+    final var normalizedOriginalStructure = originalStructure.toString()
+        .replaceAll("\r\n", "\n")
+        .replaceAll("\\s+", " ")
+        .trim();
+    final var normalizedExpectedText = contentNewStructure.toString()
+        .replaceAll("\r\n", "\n")
+        .replaceAll("\\s+", " ")
+        .trim();
 
-    @Test
-    void shouldHaveSameStructureAsOriginalDocument() {
-      final var contentNewStructure = getPdfStructure();
+    //writeToFile(certificateType, contentNewStructure);
+    assertEquals(normalizedExpectedText, normalizedOriginalStructure);
+  }
 
-      final var normalizedOriginalStructure = originalStructure.toString().replaceAll("\r\n", "\n")
-          .trim();
-      final var normalizedExpectedText = contentNewStructure.toString().replaceAll("\r\n", "\n")
-          .trim();
+  @ParameterizedTest
+  @ValueSource(strings = {FK_7427, FK_7426})
+  void shouldHaveSameIdsForTemplateWithAndWithoutAddress(String certificateType) {
+    setup(certificateType);
 
-      assertEquals(normalizedExpectedText, normalizedOriginalStructure);
+    final var idsForTemplateWithAddress = getFieldIds(documentWithAddress);
+    final var idsForTemplateWithoutAddress = getFieldIds(documentWithoutAddress);
+
+    assertEquals(idsForTemplateWithoutAddress, idsForTemplateWithAddress);
+  }
+
+  private void setup(String certificateType) {
+    final var classloader = getClass().getClassLoader();
+    final var inputStream = classloader.getResourceAsStream(
+        String.format("%s/pdf/%s_v1.pdf", certificateType, certificateType));
+    final var inputStreamWithoutAddress = classloader.getResourceAsStream(
+        String.format("%s/pdf/%s_v1_no_address.pdf", certificateType, certificateType));
+
+    try {
+      documentWithAddress = Loader.loadPDF(inputStream.readAllBytes());
+      documentWithoutAddress = Loader.loadPDF(inputStreamWithoutAddress.readAllBytes());
+      originalStructure = readFileFromResources(
+          String.format("%s/pdf/%s_structure.txt", certificateType, certificateType)
+      );
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
   }
 
   private StringBuilder getPdfStructure() {
-    final var acroForm = document.getDocumentCatalog().getAcroForm();
+    final var acroForm = documentWithAddress.getDocumentCatalog().getAcroForm();
     final var parentField = (PDNonTerminalField) acroForm.getFields().getFirst();
     final var content = new StringBuilder();
     var count = 0;
@@ -128,6 +144,22 @@ class PdfSpecificationCopilotHelperTest {
       }
     }
     return content;
+  }
+
+  private List<String> getFieldIds(PDDocument document) {
+    final var acroForm = document.getDocumentCatalog().getAcroForm();
+    final var parentField = (PDNonTerminalField) acroForm.getFields().getFirst();
+    final var ids = new ArrayList<String>();
+
+    for (PDField page : parentField.getChildren()) {
+      for (PDField field : ((PDNonTerminalField) page).getChildren()) {
+        if (field instanceof PDRadioButton radioButtonField) {
+          ids.addAll(radioButtonField.getExportValues());
+        }
+        ids.add(field.getFullyQualifiedName());
+      }
+    }
+    return ids;
   }
 
   private void writeToFile(String certificateType, StringBuilder content) {

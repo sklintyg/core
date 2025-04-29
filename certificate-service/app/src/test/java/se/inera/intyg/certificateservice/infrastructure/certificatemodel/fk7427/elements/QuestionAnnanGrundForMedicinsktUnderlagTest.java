@@ -16,11 +16,11 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 
 class QuestionAnnanGrundForMedicinsktUnderlagTest {
 
@@ -61,7 +61,7 @@ class QuestionAnnanGrundForMedicinsktUnderlagTest {
         ElementRuleLimit.builder()
             .id(ELEMENT_ID)
             .type(ElementRuleType.TEXT_LIMIT)
-            .limit(new RuleLimit((short) 50))
+            .limit(new RuleLimit((short) 4000))
             .build(),
         ElementRuleExpression.builder()
             .id(new ElementId("1"))
@@ -85,7 +85,7 @@ class QuestionAnnanGrundForMedicinsktUnderlagTest {
     final var expectedValidations = List.of(
         ElementValidationText.builder()
             .mandatory(true)
-            .limit(50)
+            .limit(4000)
             .build()
     );
 
@@ -98,7 +98,7 @@ class QuestionAnnanGrundForMedicinsktUnderlagTest {
   void shallIncludePdfConfiguration() {
     final var expected = PdfConfigurationText.builder()
         .pdfFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtAngeAnnat[0]"))
-        .maxLength(50)
+        .maxLength(66)
         .overflowSheetFieldId(new PdfFieldId("form1[0].#subform[3].flt_txtFortsattningsblad[0]"))
         .build();
 

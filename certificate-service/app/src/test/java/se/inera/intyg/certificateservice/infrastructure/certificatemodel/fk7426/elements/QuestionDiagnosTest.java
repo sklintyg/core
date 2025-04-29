@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -15,6 +16,9 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDiagnoses;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDiagnosis;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDiagnosis;
@@ -91,5 +95,63 @@ class QuestionDiagnosTest {
     final var element = QuestionDiagnos.questionDiagnos(diagnosisCodeRepository);
 
     assertIterableEquals(expectedValidations, element.validations());
+  }
+
+  @Test
+  void shallIncludePdfConfiguration() {
+    final var expectedPdfConfiguration = PdfConfigurationDiagnoses.builder()
+        .maxLength(45)
+        .appearance("/ArialMT 9.00 Tf 0 g")
+        .diagnoses(
+            Map.of(
+                new FieldId("huvuddiagnos"),
+                PdfConfigurationDiagnosis.builder()
+                    .pdfNameFieldId(
+                        new PdfFieldId("form1[0].#subform[0].flt_txtAngeFunktionsnedsattning[0]"))
+                    .pdfCodeFieldIds(
+                        List.of(
+                            new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod1[0]"),
+                            new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod2[0]"),
+                            new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod3[0]"),
+                            new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod4[0]"),
+                            new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod5[0]")
+                        )
+                    )
+                    .build(),
+                new FieldId("diagnos2"),
+                PdfConfigurationDiagnosis.builder()
+                    .pdfNameFieldId(
+                        new PdfFieldId("form1[0].#subform[0].flt_txtAngeFunktionsnedsattning2[0]"))
+                    .pdfCodeFieldIds(
+                        List.of(
+                            new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod6[0]"),
+                            new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod7[0]"),
+                            new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod8[0]"),
+                            new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod9[0]"),
+                            new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod10[0]")
+                        )
+                    )
+                    .build(),
+                new FieldId("diagnos3"),
+                PdfConfigurationDiagnosis.builder()
+                    .pdfNameFieldId(
+                        new PdfFieldId("form1[0].#subform[0].flt_txtAngeFunktionsnedsattning3[0]"))
+                    .pdfCodeFieldIds(
+                        List.of(
+                            new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod11[0]"),
+                            new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod12[0]"),
+                            new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod13[0]"),
+                            new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod14[0]"),
+                            new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod15[0]")
+                        )
+                    )
+                    .build()
+            )
+        )
+        .build();
+
+    final var element = QuestionDiagnos.questionDiagnos(diagnosisCodeRepository);
+
+    assertEquals(expectedPdfConfiguration, element.pdfConfiguration());
   }
 }

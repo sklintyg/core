@@ -9,6 +9,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateRange;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateRange;
 
@@ -61,5 +63,17 @@ class QuestionPeriodSjukdomTest {
     final var element = QuestionPeriodSjukdom.questionPeriodSjukdom();
 
     assertEquals(List.of(expectedValidation), element.validations());
+  }
+
+  @Test
+  void shouldIncludePdfConfiguration() {
+    final var expectedPdfConfiguration = PdfConfigurationDateRange.builder()
+        .from(new PdfFieldId("form1[0].#subform[3].flt_datumFranMed[0]"))
+        .to(new PdfFieldId("form1[0].#subform[3].flt_datumTillMed[0]"))
+        .build();
+
+    final var element = QuestionPeriodSjukdom.questionPeriodSjukdom();
+
+    assertEquals(expectedPdfConfiguration, element.pdfConfiguration());
   }
 }

@@ -29,7 +29,7 @@ public class PdfDiagnosisListValueGenerator implements PdfElementValue<ElementVa
         .anyMatch(diagnosis -> isDiagnosisDescriptionOverflowing(pdfConfiguration, diagnosis));
 
     final var fields = new ArrayList<>(elementValueDiagnosisList.diagnoses().stream()
-        .map(diagnose -> getFields(diagnose, pdfConfiguration))
+        .map(diagnosis -> getFields(diagnosis, pdfConfiguration))
         .flatMap(Collection::stream)
         .toList());
 

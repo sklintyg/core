@@ -1,7 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.FK7427PdfSpecification.ROW_MAX_LENGTH;
 
 import java.util.List;
 import java.util.Map;
@@ -16,10 +15,10 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDiagnoses;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDiagnosis;
 
@@ -104,7 +103,7 @@ class QuestionDiagnosTest {
   @Test
   void shallIncludePdfConfiguration() {
     final var expectedPdfConfiguration = PdfConfigurationDiagnoses.builder()
-        .maxLength(ROW_MAX_LENGTH)
+        .maxLength(45)
         .appearance("/ArialMT 9.00 Tf 0 g")
         .diagnoses(
             Map.of(
