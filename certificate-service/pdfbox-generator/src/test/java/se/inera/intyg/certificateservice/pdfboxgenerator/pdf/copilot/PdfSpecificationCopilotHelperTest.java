@@ -74,6 +74,7 @@ class PdfSpecificationCopilotHelperTest {
         .replaceAll("\\s+", " ")
         .trim();
 
+    //writeToFile(certificateType, contentNewStructure);
     assertEquals(normalizedExpectedText, normalizedOriginalStructure);
   }
 
