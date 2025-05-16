@@ -66,7 +66,7 @@ class CertificateModelFactoryFK7426Test {
 
   @Test
   void shallIncludeName() {
-    final var expectedName = "Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har fyllt 18";
+    final var expectedName = "Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har fyllt 18 år";
 
     final var certificateModel = certificateModelFactoryFK7426.create();
 
