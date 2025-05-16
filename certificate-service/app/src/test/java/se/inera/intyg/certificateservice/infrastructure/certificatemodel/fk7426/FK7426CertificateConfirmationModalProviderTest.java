@@ -145,7 +145,7 @@ class FK7426CertificateConfirmationModalProviderTest {
             .text(
                 """
                     <p>Du är på väg att utfärda Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har fyllt 18 år för</p>
-                    <b>%s - %s.</b>
+                    <b>%s - %s</b>
                     """.formatted(
                     PATIENT_FULL_NAME,
                     PATIENT_ID_WITH_DASH
@@ -389,7 +389,7 @@ class FK7426CertificateConfirmationModalProviderTest {
             .text(
                 """
                     <p>Du är på väg att utfärda Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har fyllt 18 år för</p>
-                    <b>%s - %s.</b>
+                    <b>%s - %s</b>
                     """.formatted(
                     PATIENT_FULL_NAME,
                     PATIENT_ID_WITH_DASH
