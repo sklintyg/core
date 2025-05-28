@@ -85,32 +85,33 @@ public class PdfTextGenerator {
       String actualText
   ) throws IOException {
     final var page = pdf.getPage(pageIndex);
-    final var contentStream = createContentStream(pdf, page);
 
-    if (matrix != null) {
-      contentStream.transform(matrix);
-    }
-    contentStream.beginText();
+    try (final var contentStream = createContentStream(pdf, page)) {
 
-    if (offsetX != null && offsetY != null) {
-      contentStream.newLineAtOffset(offsetX, offsetY);
-    }
+      if (matrix != null) {
+        contentStream.transform(matrix);
+      }
+      contentStream.beginText();
 
-    contentStream.setNonStrokingColor(strokingColor);
-    contentStream.setFont(new PDType1Font(
-        isBold
-            ? FontName.HELVETICA_BOLD
-            : FontName.HELVETICA
-    ), fontSize);
-    final var dictionary = beginMarkedContent(contentStream, COSName.P, mcid);
-    contentStream.showText(text);
-    contentStream.endMarkedContent();
-    if (section != null) {
-      addContentToCurrentSection(page, dictionary, section, COSName.P, StandardStructureTypes.P,
-          actualText);
+      if (offsetX != null && offsetY != null) {
+        contentStream.newLineAtOffset(offsetX, offsetY);
+      }
+
+      contentStream.setNonStrokingColor(strokingColor);
+      contentStream.setFont(new PDType1Font(
+          isBold
+              ? FontName.HELVETICA_BOLD
+              : FontName.HELVETICA
+      ), fontSize);
+      final var dictionary = beginMarkedContent(contentStream, COSName.P, mcid);
+      contentStream.showText(text);
+      contentStream.endMarkedContent();
+      if (section != null) {
+        addContentToCurrentSection(page, dictionary, section, COSName.P, StandardStructureTypes.P,
+            actualText);
+      }
+      contentStream.endText();
     }
-    contentStream.endText();
-    contentStream.close();
   }
 
   public void addTopWatermark(PDDocument document, String text, Matrix matrix, int fontSize,
@@ -166,39 +167,38 @@ public class PdfTextGenerator {
     int pageIndex = 0;
     for (PDPage page : document.getPages()) {
       final var section = createNewDivOnPage(document, 0, pageIndex);
-      final var contentStream = createContentStream(document, page);
+      try (final var contentStream = createContentStream(document, page)) {
 
-      final var fontHeight = 105;
-      final var font = new PDType1Font(FontName.HELVETICA);
+        final var fontHeight = 105;
+        final var font = new PDType1Font(FontName.HELVETICA);
 
-      final var width = page.getMediaBox().getWidth();
-      final var height = page.getMediaBox().getHeight();
+        final var width = page.getMediaBox().getWidth();
+        final var height = page.getMediaBox().getHeight();
 
-      final var stringWidth = font.getStringWidth(text) / 1000 * fontHeight;
-      final var diagonalLength = (float) Math.sqrt(width * width + height * height);
-      final var angle = (float) Math.atan2(height, width);
-      final var x = (diagonalLength - stringWidth) / 2;
-      final var y = -fontHeight / 4;
+        final var stringWidth = font.getStringWidth(text) / 1000 * fontHeight;
+        final var diagonalLength = (float) Math.sqrt(width * width + height * height);
+        final var angle = (float) Math.atan2(height, width);
+        final var x = (diagonalLength - stringWidth) / 2;
+        final var y = -fontHeight / 4;
 
-      contentStream.transform(Matrix.getRotateInstance(angle, 0, 0));
-      contentStream.setFont(font, fontHeight);
+        contentStream.transform(Matrix.getRotateInstance(angle, 0, 0));
+        contentStream.setFont(font, fontHeight);
 
-      final var gs = new PDExtendedGraphicsState();
-      gs.setNonStrokingAlphaConstant(0.5f);
-      gs.setStrokingAlphaConstant(0.5f);
-      contentStream.setGraphicsStateParameters(gs);
-      contentStream.setNonStrokingColor(Color.gray);
+        final var gs = new PDExtendedGraphicsState();
+        gs.setNonStrokingAlphaConstant(0.5f);
+        gs.setStrokingAlphaConstant(0.5f);
+        contentStream.setGraphicsStateParameters(gs);
+        contentStream.setNonStrokingColor(Color.gray);
 
-      contentStream.beginText();
-      contentStream.newLineAtOffset(x, y);
-      final var markedContentDictionary = beginMarkedContent(contentStream, COSName.P, mcid);
-      contentStream.showText(text);
-      contentStream.endMarkedContent();
-      contentStream.endText();
-      addContentToCurrentSection(page, markedContentDictionary, section, COSName.P,
-          StandardStructureTypes.P, "Detta är ett " + text.toLowerCase());
-
-      contentStream.close();
+        contentStream.beginText();
+        contentStream.newLineAtOffset(x, y);
+        final var markedContentDictionary = beginMarkedContent(contentStream, COSName.P, mcid);
+        contentStream.showText(text);
+        contentStream.endMarkedContent();
+        contentStream.endText();
+        addContentToCurrentSection(page, markedContentDictionary, section, COSName.P,
+            StandardStructureTypes.P, "Detta är ett " + text.toLowerCase());
+      }
       pageIndex++;
     }
   }
@@ -208,28 +208,28 @@ public class PdfTextGenerator {
       throws IOException {
 
     final var page = document.getPage(pageIndex);
-    final var contentStream = createContentStream(document, page);
+    try (final var contentStream = createContentStream(document, page)) {
 
-    contentStream.beginText();
-    if (xPosition != null && yPosition != null) {
-      contentStream.newLineAtOffset(xPosition, yPosition);
+      contentStream.beginText();
+      if (xPosition != null && yPosition != null) {
+        contentStream.newLineAtOffset(xPosition, yPosition);
+      }
+      contentStream.setFont(font, fontSize);
+
+      final var markedContentDictionary = beginMarkedContent(contentStream, COSName.P, mcid);
+      final var section = createNewDivOnPage(document, 1, pageIndex);
+
+      addContentToCurrentSection(page, markedContentDictionary, section, COSName.P,
+          StandardStructureTypes.P, String.join(" ", lines));
+
+      float leading = TEXT_FIELD_LINE_HEIGHT * fontSize;
+      for (String line : lines) {
+        contentStream.showText(line);
+        contentStream.newLineAtOffset(0, -leading);
+      }
+
+      contentStream.endMarkedContent();
+      contentStream.endText();
     }
-    contentStream.setFont(font, fontSize);
-
-    final var markedContentDictionary = beginMarkedContent(contentStream, COSName.P, mcid);
-    final var section = createNewDivOnPage(document, 1, pageIndex);
-
-    addContentToCurrentSection(page, markedContentDictionary, section, COSName.P,
-        StandardStructureTypes.P, String.join(" ", lines));
-
-    float leading = TEXT_FIELD_LINE_HEIGHT * fontSize;
-    for (String line : lines) {
-      contentStream.showText(line);
-      contentStream.newLineAtOffset(0, -leading);
-    }
-
-    contentStream.endMarkedContent();
-    contentStream.endText();
-    contentStream.close();
   }
 }
