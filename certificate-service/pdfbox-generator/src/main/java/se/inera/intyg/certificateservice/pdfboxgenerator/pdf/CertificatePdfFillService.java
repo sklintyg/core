@@ -114,6 +114,10 @@ public class CertificatePdfFillService {
         .filter(field -> !field.getAppend())
         .toList();
 
+    if (pdfSpecification.overFlowPageIndex() != null && appendedFields.isEmpty()) {
+      document.removePage(document.getPage(pdfSpecification.overFlowPageIndex().value()));
+    }
+
     setFieldValuesAppendix(document, certificate, pdfSpecification, appendedFields, mcid);
     setFieldValues(document, fieldsWithoutAppend);
     setFieldValues(document, pdfUnitValueGenerator.generate(certificate));

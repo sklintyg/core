@@ -173,12 +173,12 @@ class GetPersonsForProfileV5IT {
           "redis-cli",
           "set",
           String.format("%s::%s", PERSON_CACHE,
-              HashUtility.hash(ATHENA_REACT_ANDERSSON.getPersonnummer())),
+              HashUtility.hash(ATHENA_REACT_ANDERSSON.getPersonnummer().id())),
           String.format("\"%s\"", cacheString)
       );
 
       final var request = PersonRequest.builder()
-          .personId(ATHENA_REACT_ANDERSSON.getPersonnummer())
+          .personId(ATHENA_REACT_ANDERSSON.getPersonnummer().id())
           .build();
 
       final var response = api.person(request);

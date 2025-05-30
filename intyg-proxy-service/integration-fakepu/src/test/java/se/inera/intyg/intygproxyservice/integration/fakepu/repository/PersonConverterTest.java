@@ -20,7 +20,7 @@ class PersonConverterTest {
 
   @Test
   void shallIncludePersonnummer() {
-    assertEquals(PERSON_ID, convert(PARSED_PERSON).getPersonnummer());
+    assertEquals(PERSON_ID, convert(PARSED_PERSON).getPersonnummer().id());
   }
 
   @Test

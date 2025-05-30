@@ -9,4 +9,7 @@ public class PdfConfigurationBoolean implements PdfConfiguration {
 
   PdfFieldId checkboxTrue;
   PdfFieldId checkboxFalse;
+  boolean isRadioButton;
+  String valueTrue;
+  String valueFalse;
 }

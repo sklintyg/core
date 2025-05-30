@@ -1,5 +1,7 @@
 package se.inera.intyg.intygproxyservice.integration.pu.v5.client.converter;
 
+import static se.inera.intyg.intygproxyservice.integration.pu.v5.client.converter.PersonalIdentityTypeConverter.personId;
+
 import org.springframework.stereotype.Component;
 import se.inera.intyg.intygproxyservice.integration.api.pu.Person;
 import se.riv.strategicresourcemanagement.persons.person.v5.RequestedPersonRecordType;
@@ -11,7 +13,7 @@ public class GetPersonsForProfileResponseTypeConverterV5 {
     final var personRecord = requestedPersonRecordType.getPersonRecord();
     return Person.builder()
         .personnummer(
-            PersonalIdentityTypeConverter.extension(personRecord.getPersonalIdentity())
+            personId(personRecord.getPersonalIdentity())
         )
         .fornamn(
             NameTypeConverter.givenName(personRecord.getName())

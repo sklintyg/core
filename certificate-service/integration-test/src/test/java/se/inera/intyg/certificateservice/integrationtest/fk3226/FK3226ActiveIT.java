@@ -24,6 +24,7 @@ import se.inera.intyg.certificateservice.integrationtest.CertificateFromMessageI
 import se.inera.intyg.certificateservice.integrationtest.CertificateReadyForSignIT;
 import se.inera.intyg.certificateservice.integrationtest.CertificatesWithQAForCareIT;
 import se.inera.intyg.certificateservice.integrationtest.ComplementIT;
+import se.inera.intyg.certificateservice.integrationtest.ComplementMessagesIT;
 import se.inera.intyg.certificateservice.integrationtest.CreateCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.DeleteCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ExistsCertificateExternalTypeInfoIT;
@@ -43,7 +44,6 @@ import se.inera.intyg.certificateservice.integrationtest.GetUnitCertificatesWhen
 import se.inera.intyg.certificateservice.integrationtest.InternalApiIT;
 import se.inera.intyg.certificateservice.integrationtest.InternalApiMessagesIT;
 import se.inera.intyg.certificateservice.integrationtest.MessageExistsIT;
-import se.inera.intyg.certificateservice.integrationtest.MessagesIT;
 import se.inera.intyg.certificateservice.integrationtest.RenewCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ReplaceCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.RevokeCertificateIT;
@@ -501,7 +501,7 @@ public class FK3226ActiveIT {
 
   @Nested
   @DisplayName(TYPE + "Hantering av frågor för intyg")
-  class Messages extends MessagesIT {
+  class ComplementMessages extends ComplementMessagesIT {
 
     @Override
     protected String type() {

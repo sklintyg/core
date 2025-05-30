@@ -18,7 +18,7 @@ public class PersonDTOMapper {
     }
 
     return PersonDTO.builder()
-        .personnummer(person.getPersonnummer())
+        .personnummer(person.getPersonnummer().id())
         .sekretessmarkering(person.isSekretessmarkering())
         .avliden(person.isAvliden())
         .fornamn(person.getFornamn())
@@ -28,7 +28,7 @@ public class PersonDTOMapper {
         .postnummer(person.getPostnummer())
         .postort(person.getPostort())
         .testIndicator(testIndicatedPersonIds != null && !testIndicatedPersonIds.isEmpty()
-            ? testIndicatedPersonIds.contains(person.getPersonnummer())
+            ? testIndicatedPersonIds.contains(person.getPersonnummer().id())
             : person.isTestIndicator())
         .build();
   }

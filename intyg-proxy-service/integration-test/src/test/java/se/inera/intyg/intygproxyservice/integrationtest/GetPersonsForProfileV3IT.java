@@ -72,7 +72,7 @@ class GetPersonsForProfileV3IT {
   @Test
   void shallReturnDeceasedTestIndicatedPerson() {
     final var request = PersonRequest.builder()
-        .personId(PROTECTED_PERSON.getPersonnummer())
+        .personId(PROTECTED_PERSON.getPersonnummer().id())
         .build();
 
     final var response = api.person(request);

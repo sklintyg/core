@@ -12,6 +12,7 @@ import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.common.XmlGeneratorIntyg;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.common.XmlNamespaceTrimmer;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.validation.XmlValidationService;
 import se.riv.clinicalprocess.healthcond.certificate.registerCertificate.v3.ObjectFactory;
 import se.riv.clinicalprocess.healthcond.certificate.registerCertificate.v3.RegisterCertificateType;
@@ -24,7 +25,6 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
 
   private final XmlGeneratorValue xmlGeneratorValue;
   private final XmlValidationService xmlValidationService;
-
 
   @Override
   public Xml generate(Certificate certificate, boolean validate) {
@@ -103,7 +103,7 @@ public class XmlGeneratorCertificateV4 implements XmlGenerator {
       );
       final var writer = new StringWriter();
       context.createMarshaller().marshal(element, writer);
-      return new Xml(writer.toString());
+      return new Xml(XmlNamespaceTrimmer.trim(writer.toString()));
     } catch (Exception e) {
       throw new IllegalStateException(e);
     }

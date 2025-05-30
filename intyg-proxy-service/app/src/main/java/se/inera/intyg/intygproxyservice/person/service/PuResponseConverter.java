@@ -33,6 +33,6 @@ public class PuResponseConverter {
 
     return FOUND.equals(status)
         ? mapper.toDTO(person)
-        : PersonDTO.builder().personnummer(person.getPersonnummer()).build();
+        : PersonDTO.builder().personnummer(person.getPersonnummer().id()).build();
   }
 }

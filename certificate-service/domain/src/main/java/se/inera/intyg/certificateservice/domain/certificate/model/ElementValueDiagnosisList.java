@@ -4,11 +4,13 @@ import java.util.Collections;
 import java.util.List;
 import lombok.Builder;
 import lombok.Value;
+import lombok.With;
 
 @Value
 @Builder
 public class ElementValueDiagnosisList implements ElementValue {
 
+  @With
   @Builder.Default
   List<ElementValueDiagnosis> diagnoses = Collections.emptyList();
 

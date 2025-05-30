@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.intygproxyservice.integration.api.pu.Person;
+import se.inera.intyg.intygproxyservice.integration.api.pu.PersonId;
 
 
 class PersonDTOMapperTest {
@@ -60,7 +61,7 @@ class PersonDTOMapperTest {
     @Test
     void shouldConvertPersonId() {
       assertEquals(
-          PERSON_NO_FLAGS.getPersonnummer(),
+          PERSON_NO_FLAGS.getPersonnummer().id(),
           personDTOMapper.toDTO(PERSON_NO_FLAGS).getPersonnummer()
       );
     }
@@ -147,7 +148,7 @@ class PersonDTOMapperTest {
   private static Person getPerson(String patientId, boolean avliden, boolean sekretess,
       boolean testIndicated) {
     return Person.builder()
-        .personnummer(patientId)
+        .personnummer(PersonId.of(patientId))
         .postadress("Postadress")
         .postnummer("Postnummer")
         .postort("Postort")

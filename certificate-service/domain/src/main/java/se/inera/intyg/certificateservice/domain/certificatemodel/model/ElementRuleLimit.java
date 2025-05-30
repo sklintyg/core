@@ -11,8 +11,4 @@ public class ElementRuleLimit implements ElementRule {
   ElementRuleType type;
   RuleLimit limit;
 
-  @Override
-  public Rule rule() {
-    return limit;
-  }
 }

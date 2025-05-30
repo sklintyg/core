@@ -47,7 +47,7 @@ public class QuestionIntygetAvser {
                         .level(MessageLevel.OBSERVE)
                         .includedForStatuses(List.of(Status.DRAFT))
                         .content(
-                            "Endast ett alternativ kan väljas. Undantaget är om intyget avser taxiförarlegitimation, då kan två val göras.")
+                            "Välj \"ansökan om taxiförarlegitimation\" endast om personen saknar taxiförarlegitimation och ansöker om en sådan i samband med detta intyg.")
                         .build()
                 )
                 .build()

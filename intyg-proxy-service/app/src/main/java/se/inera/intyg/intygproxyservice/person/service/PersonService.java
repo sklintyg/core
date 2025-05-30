@@ -67,7 +67,7 @@ public class PersonService {
 
   private void savePersonInCache(PuResponse puResponse) {
     CacheUtility.save(cacheManager, objectMapper, puResponse,
-        HashUtility.hash(puResponse.person().getPersonnummer()), PERSON_CACHE);
+        HashUtility.hash(puResponse.person().getPersonnummer().id()), PERSON_CACHE);
   }
 
   private Optional<PuResponse> getPersonFromCache(String id) {

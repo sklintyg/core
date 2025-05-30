@@ -4,6 +4,7 @@ import static se.inera.intyg.intygproxyservice.integration.pu.configuration.PuCo
 import static se.inera.intyg.intygproxyservice.integration.pu.configuration.PuConstants.KODVERK_PERSONNUMMER;
 
 import se.inera.intyg.intygproxyservice.integration.api.pu.Person;
+import se.inera.intyg.intygproxyservice.integration.api.pu.PersonId;
 import se.riv.strategicresourcemanagement.persons.person.v3.AddressInformationType;
 import se.riv.strategicresourcemanagement.persons.person.v3.DeregistrationType;
 import se.riv.strategicresourcemanagement.persons.person.v3.IIType;
@@ -29,8 +30,8 @@ public class TestData {
   public static final boolean PROTECTED_PERSON = true;
   public static final boolean TEST_INDICATED = true;
 
-  public static Person PERSON = Person.builder()
-      .personnummer(PERSON_ID_AS_PERSONNUMMER)
+  public static final Person PERSON = Person.builder()
+      .personnummer(PersonId.of(PERSON_ID_AS_PERSONNUMMER))
       .fornamn(GIVEN_NAME)
       .mellannamn(MIDDLE_NAME)
       .efternamn(SURNAME)

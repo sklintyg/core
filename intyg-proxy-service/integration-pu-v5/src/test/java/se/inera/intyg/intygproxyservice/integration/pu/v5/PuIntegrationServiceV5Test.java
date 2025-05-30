@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.intygproxyservice.integration.api.pu.Person;
+import se.inera.intyg.intygproxyservice.integration.api.pu.PersonId;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuPersonsRequest;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuPersonsResponse;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuResponse;
@@ -30,21 +31,21 @@ class PuIntegrationServiceV5Test {
 
   private static final PuPersonsResponse RESPONSE_B1 = PuPersonsResponse.builder()
       .persons(List.of(
-              PuResponse.found(Person.builder().personnummer("1").build()),
-              PuResponse.found(Person.builder().personnummer("2").build()),
-              PuResponse.found(Person.builder().personnummer("3").build()),
-              PuResponse.found(Person.builder().personnummer("4").build()),
-              PuResponse.found(Person.builder().personnummer("5").build())
+              PuResponse.found(Person.builder().personnummer(PersonId.of("1")).build()),
+              PuResponse.found(Person.builder().personnummer(PersonId.of("2")).build()),
+              PuResponse.found(Person.builder().personnummer(PersonId.of("3")).build()),
+              PuResponse.found(Person.builder().personnummer(PersonId.of("4")).build()),
+              PuResponse.found(Person.builder().personnummer(PersonId.of("5")).build())
           )
       )
       .build();
 
   private static final PuPersonsResponse RESPONSE_B2 = PuPersonsResponse.builder()
       .persons(List.of(
-              PuResponse.found(Person.builder().personnummer("6").build()),
-              PuResponse.found(Person.builder().personnummer("7").build()),
-              PuResponse.found(Person.builder().personnummer("8").build()),
-              PuResponse.found(Person.builder().personnummer("9").build())
+              PuResponse.found(Person.builder().personnummer(PersonId.of("6")).build()),
+              PuResponse.found(Person.builder().personnummer(PersonId.of("7")).build()),
+              PuResponse.found(Person.builder().personnummer(PersonId.of("8")).build()),
+              PuResponse.found(Person.builder().personnummer(PersonId.of("9")).build())
           )
       )
       .build();

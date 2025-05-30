@@ -6,6 +6,7 @@ import static se.inera.intyg.intygproxyservice.config.RedisConfig.PERSON_CACHE;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,9 +42,31 @@ public class PersonsService {
         .filter(person -> person.status().equals(Status.FOUND))
         .forEach(this::savePersonInCache);
 
+    final var persons = mergeResponses(personsFromPu, personsFromCache);
+
+    log.info(
+        "Processed request for {} persons. {} retrieved ({} from cache, {} from PU). Duplicate entries found: {}.",
+        request.getPersonIds().size(),
+        persons.size(),
+        personsFromCache.size(),
+        personsFromPu.getPersons().size(),
+        persons.stream()
+            .filter(person -> person.person().getPersonnummer().id() != null)
+            .collect(
+                Collectors.groupingBy(
+                    person -> person.person().getPersonnummer().id(),
+                    Collectors.counting()
+                )
+            )
+            .values()
+            .stream()
+            .filter(count -> count > 1)
+            .count()
+    );
+
     return convert(
         PuPersonsResponse.builder()
-            .persons(mergeResponses(personsFromPu, personsFromCache))
+            .persons(persons)
             .build()
     );
   }
@@ -79,7 +102,7 @@ public class PersonsService {
 
   private void savePersonInCache(PuResponse puResponse) {
     CacheUtility.save(cacheManager, objectMapper, puResponse,
-        HashUtility.hash(puResponse.person().getPersonnummer()), PERSON_CACHE);
+        HashUtility.hash(puResponse.person().getPersonnummer().id()), PERSON_CACHE);
   }
 
   private static PersonsRequest getPersonIdsNotInCache(PersonsRequest request,
@@ -90,7 +113,7 @@ public class PersonsService {
                 .stream()
                 .filter(
                     id -> personsFromCache.stream()
-                        .noneMatch(person -> person.person().getPersonnummer().equals(id))
+                        .noneMatch(person -> person.person().getPersonnummer().id().equals(id))
                 )
                 .toList()
         )

@@ -24,6 +24,7 @@ import org.springframework.cache.CacheManager;
 import se.inera.intyg.intygproxyservice.common.HashUtility;
 import se.inera.intyg.intygproxyservice.config.RedisConfig;
 import se.inera.intyg.intygproxyservice.integration.api.pu.Person;
+import se.inera.intyg.intygproxyservice.integration.api.pu.PersonId;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuPersonsRequest;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuPersonsResponse;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuResponse;
@@ -42,12 +43,12 @@ class PersonsServiceTest {
 
   private static final PuResponse PERSON_RESPONSE_1 = PuResponse.found(
       Person.builder()
-          .personnummer(PERSON_ID_1)
+          .personnummer(PersonId.of(PERSON_ID_1))
           .build()
   );
   private static final PuResponse PERSON_RESPONSE_2 = PuResponse.found(
       Person.builder()
-          .personnummer(PERSON_ID_2)
+          .personnummer(PersonId.of(PERSON_ID_2))
           .build()
   );
   private static final PuResponse NOT_FOUND = PuResponse.notFound(

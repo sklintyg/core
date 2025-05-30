@@ -11,19 +11,20 @@ public class FakePuRepository {
   private final Map<String, Person> personMap = new HashMap<>();
 
   public void addPerson(Person person) {
-    if (person == null || person.getPersonnummer() == null || person.getPersonnummer().isBlank()) {
+    if (person == null || person.getPersonnummer() == null || person.getPersonnummer().id()
+        .isBlank()) {
       throw new IllegalArgumentException(
           String.format("Invalid person: '%s'", person)
       );
     }
 
-    if (personMap.containsKey(person.getPersonnummer())) {
+    if (personMap.containsKey(person.getPersonnummer().id())) {
       throw new IllegalArgumentException(
           String.format("Person with id '%s' already exists!", person.getPersonnummer())
       );
     }
 
-    personMap.put(person.getPersonnummer(), person);
+    personMap.put(person.getPersonnummer().id(), person);
   }
 
   public Person getPerson(String personId) {
