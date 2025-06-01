@@ -1,0 +1,10 @@
+configurations {
+    bomProperties {
+        dependencies {
+            bomProperties "se.inera.intyg.bom:bom:${bomVersion}"
+        }
+        def props = new Properties()
+        incoming.files.find { it.name == "bom-${bomVersion}.properties" }.withInputStream { props.load(it) }
+        props.each { key, value -> project.ext."${key}" = value }
+    }
+}
