@@ -2,10 +2,11 @@ package se.inera.intyg.css.infrastructure.persistence;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import lombok.Getter;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.css.application.dto.CertificateTextDTO;
 import se.inera.intyg.css.application.dto.CertificateXmlDTO;
@@ -14,6 +15,7 @@ import se.inera.intyg.css.application.dto.CertificateXmlDTO;
 public class IntygstjanstRepository {
 
   private final Map<String, List<CertificateXmlDTO>> certificates = new HashMap<>();
+  @Getter
   private final List<CertificateTextDTO> certificateTexts = new ArrayList<>();
   private final List<String> erasedCareProvider = new ArrayList<>();
 
@@ -21,11 +23,12 @@ public class IntygstjanstRepository {
     certificates.put(careProvider, certificateXmlDTOList);
   }
 
-  public List<CertificateXmlDTO> get(String careProvider, int limit, int offset) {
-    return certificates.getOrDefault(careProvider, Collections.emptyList()).stream()
-        .skip(offset)
-        .limit(limit)
-        .collect(Collectors.toList());
+  public List<CertificateXmlDTO> get(String careProviderId, int collected, int batchSize) {
+    return certificates.getOrDefault(careProviderId, Collections.emptyList()).stream()
+        .skip(collected)
+        .limit(batchSize)
+        .sorted(Comparator.comparing(CertificateXmlDTO::id))
+        .toList();
   }
 
   public void remove(String careProvider) {
@@ -49,10 +52,6 @@ public class IntygstjanstRepository {
 
   public void removeCertificateTexts() {
     certificateTexts.clear();
-  }
-
-  public List<CertificateTextDTO> getCertificateTexts() {
-    return certificateTexts;
   }
 
   public void eraseCareProvider(String careProviderId) {

@@ -15,12 +15,11 @@ public class IntygstjanstService {
     this.intygstjanstRepository = intygstjanstRepository;
   }
 
-  public CertificateExportPageDTO getCertificateExportPage(String careProviderId, int size,
-      int page) {
-    final var certificateXmlDTOS = intygstjanstRepository.get(careProviderId, size, size * page);
+  public CertificateExportPageDTO getCertificateExportPage(String careProviderId, int collected,
+      int batchSize) {
+    final var certificateXmlDTOS = intygstjanstRepository.get(careProviderId, collected, batchSize);
     return new CertificateExportPageDTO(
         careProviderId,
-        page,
         certificateXmlDTOS.size(),
         intygstjanstRepository.count(careProviderId),
         intygstjanstRepository.countRevoked(careProviderId),

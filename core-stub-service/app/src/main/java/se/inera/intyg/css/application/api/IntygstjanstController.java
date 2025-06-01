@@ -1,8 +1,7 @@
 package se.inera.intyg.css.application.api;
 
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,11 +12,10 @@ import se.inera.intyg.css.application.dto.CertificateExportPageDTO;
 import se.inera.intyg.css.application.dto.CertificateTextDTO;
 import se.inera.intyg.css.application.service.IntygstjanstService;
 
+@Slf4j
 @RestController
 @RequestMapping("/inera-certificate/internalapi/v1")
 public class IntygstjanstController {
-
-  private final static Logger LOG = LoggerFactory.getLogger(IntygstjanstController.class);
 
   private final IntygstjanstService intygstjanstService;
 
@@ -25,25 +23,25 @@ public class IntygstjanstController {
     this.intygstjanstService = intygstjanstService;
   }
 
-  @GetMapping("/certificates/{careProvider}")
+  @GetMapping("/certificates/{id}")
   public CertificateExportPageDTO getCertificates(
-      @PathVariable("careProvider") String careProviderId,
-      @RequestParam("size") int size,
-      @RequestParam("page") int page) {
-    LOG.info(String.format("Get certificates for care provider '%s', size '%s' and page '%s'.",
-        careProviderId, size, page));
-    return intygstjanstService.getCertificateExportPage(careProviderId, size, page);
+      @PathVariable("id") String careProviderId,
+      @RequestParam("batchSize") int batchSize,
+      @RequestParam("collected") int collected) {
+    log.info("Get certificates for care provider '{}', size '{}' and page '{}'.",
+        careProviderId, batchSize, collected);
+    return intygstjanstService.getCertificateExportPage(careProviderId, collected, batchSize);
   }
 
   @GetMapping("/certificatetexts")
   public List<CertificateTextDTO> getCertificateTexts() {
-    LOG.info("Get certificate texts.");
+    log.info("Get certificate texts.");
     return intygstjanstService.getCertificateTexts();
   }
 
   @DeleteMapping("/certificates/{careProvider}")
   public void eraseCareProvider(@PathVariable("careProvider") String careProviderId) {
-    LOG.info(String.format("Erase care provider '%s'.", careProviderId));
+    log.info("Erase care provider '{}}.", careProviderId);
     intygstjanstService.eraseCareProvider(careProviderId);
   }
 }
