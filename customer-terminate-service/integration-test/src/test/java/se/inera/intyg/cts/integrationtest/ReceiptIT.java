@@ -4,32 +4,14 @@ import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import io.restassured.RestAssured;
 import java.util.UUID;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import se.inera.intyg.cts.application.dto.TerminationDTO;
 import se.inera.intyg.cts.domain.model.TerminationStatus;
 import se.inera.intyg.cts.testability.dto.TestabilityExportEmbeddableDTO;
 
-class ReceiptIT {
-
-  private TestData testData;
-
-  @BeforeEach
-  void setUp() {
-    RestAssured.baseURI = System.getProperty("integration.tests.baseUrl",
-        "http://cts.localtest.me");
-    testData = TestData.create();
-  }
-
-  @AfterEach
-  void tearDown() {
-    testData.cleanUp();
-    RestAssured.reset();
-  }
+class ReceiptIT extends BaseIntegrationIT {
 
   @Test
   void shallUpdateStatusWhenReceiptReceived() {

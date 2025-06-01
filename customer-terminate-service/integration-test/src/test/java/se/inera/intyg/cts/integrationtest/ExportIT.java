@@ -5,33 +5,15 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import io.restassured.RestAssured;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import net.lingala.zip4j.ZipFile;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
-class ExportIT {
-
-  private TestData testData;
-
-  @BeforeEach
-  void setUp() {
-    RestAssured.baseURI = System.getProperty("integration.tests.baseUrl",
-        "http://cts.localtest.me");
-    testData = TestData.create();
-  }
-
-  @AfterEach
-  void tearDown() {
-    testData.cleanUp();
-    RestAssured.reset();
-  }
+class ExportIT extends BaseIntegrationIT {
 
   @Test
   void shallCollectCertificatesToExport() {

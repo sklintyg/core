@@ -5,39 +5,21 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
-public class NotificationIT {
-
-  private TestData testData;
+class NotificationIT extends BaseIntegrationIT {
 
   private static final TypeRef<List<Map<String, List<String>>>> LIST_MESSAGES = new TypeRef<>() {
   };
 
-  @BeforeEach
-  void setUp() {
-    RestAssured.baseURI = System.getProperty("integration.tests.baseUrl",
-        "http://cts.localtest.me");
-    testData = TestData.create();
-  }
-
-  @AfterEach
-  void tearDown() {
-    testData.cleanUp();
-    RestAssured.reset();
-  }
-
   @Nested
-  class TestNotificationSMS {
+  class NotificationIT_TestNotificationSMS {
 
     @Test
     void shouldSendSmsNotificationToOrganizationRepresentativeWhenUploadedPackage() {
@@ -112,7 +94,7 @@ public class NotificationIT {
   }
 
   @Nested
-  class TestNotificationEmail {
+  class NotificationIT_TestNotificationEmail {
 
     @Test
     void shouldSendEmailNotificationToOrganizationRepresentativeWhenUploadedPackage() {
