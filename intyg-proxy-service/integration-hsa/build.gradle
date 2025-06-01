@@ -1,5 +1,5 @@
 plugins {
-    alias libs.plugins.com.yupzip.wsdl2java
+    alias(libs.plugins.se.inera.intyg.wsdl2java)
 }
 
 dependencies {
@@ -26,21 +26,18 @@ dependencies {
 
     testImplementation "org.springframework:spring-context"
     testImplementation "org.springframework:spring-test"
-    testImplementation "org.junit.jupiter:junit-jupiter"
-    testImplementation "org.junit.jupiter:junit-jupiter-params"
     testImplementation "org.mockito:mockito-junit-jupiter"
     testRuntimeOnly "org.slf4j:slf4j-simple"
 }
 
-tasks.named('test') {
-    useJUnitPlatform()
+testing.suites {
+    test { useJUnitJupiter() }
 }
 
 wsdl2java {
     wsdlDir = file("src/main/resources/schemas")
-    cxfVersion = project.getProperties().get("cxfVersion")
-    cxfPluginVersion = project.getProperties().get("cxfPluginVersion")
-    includeJava8XmlDependencies = false
+    cxfVersion = wsdlCxfVersion
+    cxfPluginVersion = wsdlCxfPluginVersion
 
     def authorizationManagementVersion = "2.4.3"
     def employeeVersion = "3.0.1"

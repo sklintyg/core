@@ -1,5 +1,5 @@
 plugins {
-    id "com.yupzip.wsdl2java" version "3.0.0" apply true
+    alias(libs.plugins.se.inera.intyg.wsdl2java)
 }
 
 dependencies {
@@ -32,15 +32,14 @@ dependencies {
     testRuntimeOnly "org.slf4j:slf4j-simple"
 }
 
-tasks.named('test') {
-    useJUnitPlatform()
+testing.suites {
+    test { useJUnitJupiter() }
 }
 
 wsdl2java {
     wsdlDir = file("src/main/resources/schemas")
-    cxfVersion = project.getProperties().get("wsdlCxfVersion")
-    cxfPluginVersion = project.getProperties().get("wsdlCxfPluginVersion")
-    includeJava8XmlDependencies = false
+    cxfVersion = wsdlCxfVersion
+    cxfPluginVersion = wsdlCxfPluginVersion
 
     def personVersion = "3.1"
 

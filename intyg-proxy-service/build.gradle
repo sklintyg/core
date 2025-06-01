@@ -8,49 +8,42 @@ plugins {
 }
 
 ext {
-    cxfPluginVersion = "4.1.0"
-    cxfVersion = "4.1.0"
-
     bomVersion = System.properties['bomVersion'] ?: '0.0.1-SNAPSHOT'
     ineraMavenRepository = 'https://nexus.drift.inera.se/repository/it-public/'
     nvdMirror = 'https://vulnz-nvd-mirror-devtest.intyg.nordicmedtest.se'
 }
 
+application {
+    mainClass = 'se.inera.intyg.intygproxyservice.IntygProxyServiceApplication'
+}
+
 group = 'se.inera.intyg.intyg-proxy-service'
 version = System.properties['buildVersion'] ?: '0.0.1-SNAPSHOT'
-mainClassName = 'se.inera.intyg.intygproxyservice.IntygProxyServiceApplication'
+
+apply from: 'gradle/configureIntygBom.gradle'
 
 allprojects {
     repositories {
         mavenLocal()
-        maven { url "${ineraMavenRepository}" }
+        maven { url = ineraMavenRepository }
         mavenCentral()
-    }
-}
-
-sonar {
-    properties {
-        property "sonar.projectKey", "intyg-intyg-proxy-service"
-        property "sonar.projectName", "intyg-intyg-proxy-service"
-        property "sonar.dependencyCheck.jsonReportPath", "${layout.buildDirectory.get()}/reports/dependency-check-report.json" as String
-        property "sonar.dependencyCheck.htmlReportPath", "${layout.buildDirectory.get()}/reports/dependency-check-report.html" as String
     }
 }
 
 dependencyCheck {
     formats = List.of("HTML", "JSON")
-
-    nvd {
-        datafeedUrl = "${nvdMirror}"
-    }
+    nvd.setDatafeedUrl(nvdMirror)
+    analyzers.setAssemblyEnabled(false)
 }
 
 subprojects {
     apply plugin: 'java'
     apply plugin: 'jacoco'
 
-    sourceCompatibility = '21'
-    targetCompatibility = '21'
+    java {
+        sourceCompatibility = javaVersion
+        targetCompatibility = javaVersion
+    }
 
     configurations {
         compileOnly {
@@ -81,12 +74,26 @@ subprojects {
             }))
         }
     }
+
+    sonar {
+        properties {
+            property "sonar.projectKey", "intyg-intyg-proxy-service"
+            property "sonar.projectName", "intyg-intyg-proxy-service"
+            property "sonar.dependencyCheck.jsonReportPath", "${layout.buildDirectory}/reports/dependency-check-report.json"
+            property "sonar.dependencyCheck.htmlReportPath", "${layout.buildDirectory}/reports/dependency-check-report.html"
+            property "sonar.exclusions", "**/testability/**,**/integrationtest/**"
+        }
+    }
+
+    tasks.withType(Test).configureEach {
+        jvmArgs '-Xshare:off'
+    }
 }
 
 reporting {
     reports {
         integrationTestAggregateTestReport(AggregateTestReport) {
-            testType = TestSuiteType.INTEGRATION_TEST
+            testSuiteName = 'integrationTest'
         }
     }
 

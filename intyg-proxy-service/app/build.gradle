@@ -15,7 +15,7 @@ dependencies {
     runtimeOnly project(':integration-fakehsa')
 
     implementation "co.elastic.logging:logback-ecs-encoder"
-    implementation "com.google.guava:guava-gwt"
+    implementation "com.google.guava:guava"
     implementation "org.mapstruct:mapstruct"
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
@@ -35,9 +35,8 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
-tasks.named('test') {
-    useJUnitPlatform {
-    }
+testing.suites {
+    test { useJUnitJupiter() }
 }
 
 bootRun {
