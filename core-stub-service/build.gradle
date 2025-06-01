@@ -1,3 +1,8 @@
+plugins {
+    alias(libs.plugins.com.github.ben.manes.versions)
+    id 'application'
+}
+
 ext {
     bomVersion = System.properties['bomVersion'] ?: '0.0.1-SNAPSHOT'
     ineraMavenRepository = 'https://nexus.drift.inera.se/repository/it-public/'
@@ -6,10 +11,12 @@ ext {
 group = 'se.inera.intyg.css'
 version = '0.0.1-SNAPSHOT'
 
+apply from: 'gradle/configureIntygBom.gradle'
+
 allprojects {
     repositories {
         mavenLocal()
-        maven { url "${ineraMavenRepository}" }
+        maven { url = ineraMavenRepository }
         mavenCentral()
     }
 }
@@ -17,8 +24,10 @@ allprojects {
 subprojects {
     apply plugin: 'java'
 
-    sourceCompatibility = '21'
-    targetCompatibility = '21'
+    java {
+        sourceCompatibility = javaVersion
+        targetCompatibility = javaVersion
+    }
 
     configurations {
         compileOnly {
