@@ -9,7 +9,7 @@ dependencies {
     runtimeOnly 'org.eclipse.angus:jakarta.mail'
     compileOnly 'org.projectlombok:lombok'
 
-    developmentOnly platform("se.inera.intyg.bom:platform:${bomVersion}")
+    developmentOnly platform("se.inera.intyg.bom:platform:${intygBomVersion}")
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'

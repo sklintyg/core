@@ -15,7 +15,7 @@ dependencies {
     compileOnly "org.slf4j:slf4j-api"
     annotationProcessor "org.projectlombok:lombok"
 
-    wsdl2java platform("se.inera.intyg.bom:platform:${bomVersion}")
+    wsdl2java platform("se.inera.intyg.bom:platform:${intygBomVersion}")
     wsdl2java "codes.rafael.jaxb2_commons:jaxb2-basics"
     wsdl2java "codes.rafael.jaxb2_commons:jaxb2-basics-runtime"
     wsdl2java "com.sun.xml.bind:jaxb-impl"

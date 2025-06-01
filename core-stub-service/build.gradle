@@ -4,7 +4,7 @@ plugins {
 }
 
 ext {
-    bomVersion = System.properties['bomVersion'] ?: '0.0.1-SNAPSHOT'
+    intygBomVersion = System.properties['intygBomVersion'] ?: '0.0.1-SNAPSHOT'
     ineraMavenRepository = 'https://nexus.drift.inera.se/repository/it-public/'
 }
 
@@ -36,7 +36,7 @@ subprojects {
     }
 
     dependencies {
-        implementation platform("se.inera.intyg.bom:platform:${bomVersion}")
-        annotationProcessor platform("se.inera.intyg.bom:platform:${bomVersion}")
+        implementation platform("se.inera.intyg.bom:platform:${intygBomVersion}")
+        annotationProcessor platform("se.inera.intyg.bom:platform:${intygBomVersion}")
     }
 }

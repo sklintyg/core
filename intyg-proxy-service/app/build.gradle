@@ -24,7 +24,7 @@ dependencies {
 
     compileOnly 'org.projectlombok:lombok'
 
-    developmentOnly platform("se.inera.intyg.bom:platform:${bomVersion}")
+    developmentOnly platform("se.inera.intyg.bom:platform:${intygBomVersion}")
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
     annotationProcessor "org.mapstruct:mapstruct-processor"

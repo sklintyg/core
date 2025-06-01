@@ -31,7 +31,7 @@ dependencies {
     testImplementation 'org.testcontainers:mysql'
     testImplementation testFixtures(project(":domain"))
 
-    testFixturesImplementation platform("se.inera.intyg.bom:platform:${bomVersion}")
+    testFixturesImplementation platform("se.inera.intyg.bom:platform:${intygBomVersion}")
     testFixturesCompileOnly 'jakarta.persistence:jakarta.persistence-api'
     testFixturesImplementation 'com.fasterxml.jackson.core:jackson-annotations'
     testFixturesImplementation testFixtures(project(":domain"))
