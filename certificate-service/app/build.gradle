@@ -33,12 +33,12 @@ dependencies {
 
     testFixturesImplementation platform("se.inera.intyg.bom:platform:${bomVersion}")
     testFixturesCompileOnly 'jakarta.persistence:jakarta.persistence-api'
+    testFixturesImplementation 'com.fasterxml.jackson.core:jackson-annotations'
     testFixturesImplementation testFixtures(project(":domain"))
 }
 
-tasks.named('test') {
-    useJUnitPlatform {
-    }
+testing.suites {
+    test { useJUnitJupiter() }
 }
 
 bootRun {

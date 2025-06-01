@@ -1,5 +1,5 @@
 plugins {
-    alias libs.plugins.com.yupzip.wsdl2java
+    alias(libs.plugins.se.inera.intyg.wsdl2java)
 }
 
 dependencies {
@@ -19,8 +19,6 @@ dependencies {
     wsdl2java "jakarta.xml.ws:jakarta.xml.ws-api"
     wsdl2java "org.jvnet.jaxb2_commons:jaxb2-namespace-prefix"
 
-    testImplementation "org.junit.jupiter:junit-jupiter"
-    testImplementation "org.junit.jupiter:junit-jupiter-params"
     testImplementation "org.mockito:mockito-junit-jupiter"
     testImplementation "org.springframework:spring-test"
     testImplementation testFixtures(project(":domain"))
@@ -28,15 +26,14 @@ dependencies {
     testImplementation project(':app')
 }
 
-tasks.named('test') {
-    useJUnitPlatform()
+testing.suites {
+    test { useJUnitJupiter() }
 }
 
 wsdl2java {
     wsdlDir = file("src/main/resources/schemas")
     cxfVersion = wsdlCxfVersion
     cxfPluginVersion = wsdlCxfPluginVersion
-    includeJava8XmlDependencies = false
 
     def certificateVersion = "4.0"
 
@@ -98,3 +95,4 @@ wsdl2java {
                     "$wsdlDir/certificate/$certificateVersion/interactions/ListCertificatesForCareWithQAInteraction/ListCertificatesForCareWithQAInteraction_3.3_RIVTABP21.wsdl"],
     ]
 }
+

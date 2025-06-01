@@ -21,12 +21,14 @@ dependencies {
     testImplementation testFixtures(project(":domain"))
 }
 
+test {
+    enabled = false
+}
+
 testing {
     suites {
         integrationTest(JvmTestSuite) {
-            testType = TestSuiteType.INTEGRATION_TEST
-            description = 'Runs integration tests.'
-            group = 'verification'
+            useJUnitJupiter()
 
             sources {
                 java {
