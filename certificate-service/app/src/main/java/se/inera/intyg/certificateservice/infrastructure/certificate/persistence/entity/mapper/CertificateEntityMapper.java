@@ -141,10 +141,15 @@ public class CertificateEntityMapper {
     certificateEntity.setData(certificateDataEntity);
 
     if (certificate.xml() != null) {
-      final var certificateXmlEntity = new CertificateXmlEntity(certificate.xml().xml());
-      certificateXmlEntity.setKey(certificateEntity.getKey());
-      certificateXmlEntity.setCertificate(certificateEntity);
-      certificateEntity.setXml(certificateXmlEntity);
+      final var existingCertificateXmlEntity = certificateDataEntity.getCertificate().getXml();
+      if (existingCertificateXmlEntity != null) {
+        existingCertificateXmlEntity.setCertificate(certificateEntity);
+        existingCertificateXmlEntity.setData(certificate.xml().xml());
+      } else {
+        final var certificateXmlEntity = new CertificateXmlEntity(certificate.xml().xml());
+        certificateXmlEntity.setCertificate(certificateEntity);
+        certificateEntity.setXml(certificateXmlEntity);
+      }
     }
 
     if (certificate.sent() != null) {
