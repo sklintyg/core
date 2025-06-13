@@ -64,6 +64,14 @@ public class ElementSpecification {
         );
   }
 
+  public Optional<ElementSpecification> elementSpecificationOptional(ElementId id) {
+    try {
+      return Optional.of(elementSpecification(id));
+    } catch (IllegalArgumentException e) {
+      return Optional.empty();
+    }
+  }
+
   public Stream<ElementSpecification> flatten() {
     return Stream.concat(
         Stream.of(this),

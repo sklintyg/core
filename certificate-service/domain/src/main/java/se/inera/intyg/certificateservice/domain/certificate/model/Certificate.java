@@ -14,9 +14,11 @@ import java.util.stream.Stream;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.certificate.service.PrefillProcessor;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -35,6 +37,7 @@ import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationResult;
 
+@Slf4j
 @Getter
 @Builder
 @EqualsAndHashCode
@@ -519,5 +522,13 @@ public class Certificate {
         .filter(data -> data.id().equals(UNIT_CONTACT_INFORMATION))
         .map(data -> (ElementValueUnitContactInformation) data.value())
         .findFirst();
+  }
+
+  public void prefill(PrefillXml prefillXml, PrefillProcessor prefillProcessor) {
+    try {
+      this.elementData = prefillProcessor.prefill(certificateModel, prefillXml);
+    } catch (Exception e) {
+      log.warn("Failed to prefill certificate.", e);
+    }
   }
 }

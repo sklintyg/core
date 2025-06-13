@@ -20,4 +20,10 @@ public class ElementConfigurationMessage implements ElementConfiguration {
   public ElementValue emptyValue() {
     return null;
   }
+
+  @Override
+
+  public FieldId id() {
+    return null;
+  }
 }

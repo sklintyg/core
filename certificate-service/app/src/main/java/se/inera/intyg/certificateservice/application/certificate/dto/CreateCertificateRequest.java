@@ -22,6 +22,7 @@ public class CreateCertificateRequest {
   PatientDTO patient;
   CertificateModelIdDTO certificateModelId;
   String externalReference;
+  PrefillXmlDTO prefillXml;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class CreateCertificateRequestBuilder {

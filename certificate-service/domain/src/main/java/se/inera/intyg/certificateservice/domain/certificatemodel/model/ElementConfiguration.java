@@ -31,4 +31,8 @@ public interface ElementConfiguration {
   }
 
   ElementMessage message();
+
+  FieldId id();
+
+
 }

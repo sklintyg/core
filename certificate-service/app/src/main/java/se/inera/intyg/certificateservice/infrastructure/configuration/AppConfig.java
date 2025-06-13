@@ -22,6 +22,7 @@ import se.inera.intyg.certificateservice.domain.certificate.service.GetCertifica
 import se.inera.intyg.certificateservice.domain.certificate.service.LockCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGenerator;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGeneratorProvider;
+import se.inera.intyg.certificateservice.domain.certificate.service.PrefillProcessor;
 import se.inera.intyg.certificateservice.domain.certificate.service.RenewCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.ReplaceCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.RevokeCertificateDomainService;
@@ -68,6 +69,8 @@ import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertifica
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorCertificateWithQAV3;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorValue;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.message.XmlGeneratorMessageV4;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.ConfigurationConvertertMapper;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.PrefillProcessorV4;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.validation.SchemaValidatorV4;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.validation.SchematronValidator;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.validation.XmlSchemaValidator;
@@ -82,9 +85,10 @@ public class AppConfig {
       CertificateModelRepository certificateModelRepository,
       CertificateRepository certificateRepository,
       CertificateEventDomainService certificateEventDomainService,
-      CertificateActionConfigurationRepository certificateActionConfigurationRepository) {
+      CertificateActionConfigurationRepository certificateActionConfigurationRepository,
+      PrefillProcessor prefillProcessor) {
     return new CreateCertificateDomainService(certificateModelRepository, certificateRepository,
-        certificateEventDomainService, certificateActionConfigurationRepository);
+        certificateEventDomainService, certificateActionConfigurationRepository, prefillProcessor);
   }
 
   @Bean
@@ -150,6 +154,12 @@ public class AppConfig {
   public XmlGenerator xmlGenerator(XmlGeneratorValue xmlGeneratorValue,
       XmlValidationService xmlValidationService) {
     return new XmlGeneratorCertificateV4(xmlGeneratorValue, xmlValidationService);
+  }
+
+  @Bean
+  public PrefillProcessor prefillProcessor(
+      ConfigurationConvertertMapper configurationConvertertMapper) {
+    return new PrefillProcessorV4(configurationConvertertMapper);
   }
 
   @Bean
