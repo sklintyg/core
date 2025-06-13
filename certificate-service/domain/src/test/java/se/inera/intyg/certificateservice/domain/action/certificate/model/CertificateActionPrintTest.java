@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.domain.action.certificate.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.BETA_REGIONEN;
@@ -395,6 +396,45 @@ class CertificateActionPrintTest {
             () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
         );
       }
+    }
+  }
+
+  @Nested
+  class BodyTests {
+
+    @Test
+    void shallReturnNullIfPatientNotFoundOnCertificate() {
+      final var certificate = certificateBuilder
+          .certificateMetaData(CertificateMetaData.builder().build())
+          .build();
+
+      assertNull(certificateActionPrint.getBody(Optional.of(certificate), Optional.empty()));
+    }
+
+    @Test
+    void shallReturnNullIfPatientIsNotProtectedPerson() {
+      final var certificate = certificateBuilder
+          .build();
+
+      assertNull(certificateActionPrint.getBody(Optional.of(certificate), Optional.empty()));
+    }
+
+
+    @Test
+    void shallReturnBodyIfPatientIsProtectedPerson() {
+      final var certificate = certificateBuilder
+          .certificateMetaData(
+              CertificateMetaData.builder()
+                  .patient(ANONYMA_REACT_ATTILA)
+                  .build()
+          )
+          .build();
+
+      final var expectedBody = "<div class='ic-alert ic-alert--status ic-alert--info'>\n"
+          + "<i class='ic-alert__icon ic-info-icon'></i><p>Patienten har skyddade personuppgifter. Hantera utskriften varsamt.</p></div>";
+
+      assertEquals(expectedBody,
+          certificateActionPrint.getBody(Optional.of(certificate), Optional.empty()));
     }
   }
 }
