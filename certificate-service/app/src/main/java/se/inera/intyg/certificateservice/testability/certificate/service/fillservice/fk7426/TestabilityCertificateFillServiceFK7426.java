@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.testability.certificate.service.fillse
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.CertificateModelFactoryFK7426.FK7426_V1_0;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionGrundForMedicinsktUnderlag.UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionGrundForMedicinsktUnderlag.UTLATANDE_BASERAT_PA_FORALDERS_BESKRIVNING_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionGrundForMedicinsktUnderlag.UTLATANDE_BASERAT_PA_FYSISKT_MOTE_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionHalsotillstandSomatiska.QUESTION_HALSOTILLSTAND_SOMATISKA_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionPeriodSjukdom.QUESTION_PERIOD_SJUKDOM_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionPeriodSjukdomMotivering.QUESTION_PERIOD_SJUKDOM_MOTIVERING_ID;
@@ -10,7 +11,15 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionPeriodVardasBarnetInskrivetMedHemsjukvard.QUESTION_PERIOD_VARDAS_BARN_INSKRIVET_MED_HEMSJUKVARD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionVardasBarnetInneliggandePaSjukhus.QUESTION_VARDAS_BARNET_INNELIGGANDE_PA_SJUKHUS_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionVardasBarnetInskrivetMedHemsjukvard.QUESTION_VARDAS_BARN_INSKRIVET_MED_HEMSJUKVARD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionDiagnos.DIAGNOS_1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionDiagnos.DIAGNOS_2;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionDiagnos.DIAGNOS_3;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionGrundForMedicinsktUnderlag.UTLATANDE_BASERAT_PA_DIGITALT_VARDMOTE_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionGrundForMedicinsktUnderlag.UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID;
 import static se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityFillTypeDTO.MAXIMAL;
+import static se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityFIllCertificateUtil.now;
+import static se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityFIllCertificateUtil.valueDate;
+import static se.inera.intyg.certificateservice.testability.certificate.service.fillservice.TestabilityFIllCertificateUtil.valueDiagnosis;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -22,14 +31,12 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBo
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRange;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemIcd10Se;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionAnnanGrundForMedicinsktUnderlag;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionDiagnos;
@@ -136,41 +143,34 @@ public class TestabilityCertificateFillServiceFK7426 implements TestabilityCerti
     }
 
     if (value instanceof ElementValueDateList elementValueDateList) {
-      final var minimal = List.of(
-          ElementValueDate.builder()
-              .dateId(UTLATANDE_BASERAT_PA_FORALDERS_BESKRIVNING_FIELD_ID)
-              .date(LocalDate.now().minusDays(3))
-              .build()
+      final var dateList = List.of(
+          valueDate(UTLATANDE_BASERAT_PA_FYSISKT_MOTE_FIELD_ID, now()),
+          valueDate(UTLATANDE_BASERAT_PA_DIGITALT_VARDMOTE_FIELD_ID, now()),
+          valueDate(UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID, now()),
+          valueDate(UTLATANDE_BASERAT_PA_FORALDERS_BESKRIVNING_FIELD_ID, now()),
+          valueDate(UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID, now())
       );
 
-      final var maximal = List.of(
-          ElementValueDate.builder()
-              .dateId(UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID)
-              .date(LocalDate.now().minusDays(3))
-              .build()
-      );
+      final var valueDateList = elementValueDateList
+          .withDateList(fillType == MAXIMAL ? dateList : dateList.subList(0, 1));
 
       return ElementData.builder()
           .id(elementSpecification.id())
-          .value(elementValueDateList.withDateList(
-              fillType == MAXIMAL ? maximal : minimal
-          ))
+          .value(valueDateList)
           .build();
     }
 
     if (value instanceof ElementValueDiagnosisList elementValueDiagnosisList) {
+      final var diagnoses = List.of(
+          valueDiagnosis(DIAGNOS_1, "A78", "Q-feber", CodeSystemIcd10Se.DIAGNOS_ICD_10_ID),
+          valueDiagnosis(DIAGNOS_2, "A25", "Råttbettsfeber", CodeSystemIcd10Se.DIAGNOS_ICD_10_ID),
+          valueDiagnosis(DIAGNOS_3, "A23", "Undulantfeber", CodeSystemIcd10Se.DIAGNOS_ICD_10_ID)
+      );
+
+      final var diagnosisList = fillType == MAXIMAL ? diagnoses : diagnoses.subList(0, 1);
       return ElementData.builder()
           .id(elementSpecification.id())
-          .value(elementValueDiagnosisList.withDiagnoses(
-              List.of(
-                  ElementValueDiagnosis.builder()
-                      .id(new FieldId("huvuddiagnos"))
-                      .code("A78")
-                      .description("Q-feber")
-                      .terminology(CodeSystemIcd10Se.DIAGNOS_ICD_10_ID)
-                      .build()
-              )
-          ))
+          .value(elementValueDiagnosisList.withDiagnoses(diagnosisList))
           .build();
     }
 
