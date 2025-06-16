@@ -12,7 +12,7 @@ public class QuestionPrognos {
 
   public static final ElementId QUESTION_PROGNOS_ID = new ElementId(
       "39");
-  private static final FieldId QUESTION_PROGNOS_FIELD_ID = new FieldId("39.1");
+  private static final FieldId QUESTION_PROGNOS_FIELD_ID = new FieldId("39.2");
 
   private QuestionPrognos() {
     throw new IllegalStateException("Utility class");

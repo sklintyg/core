@@ -24,7 +24,7 @@ public class QuestionAktivitetsbegransningar {
             ElementConfigurationTextArea.builder()
                 .id(QUESTION_AKTIVITETSBEGRANSNINGAR_FIELD_ID)
                 .name(
-                    "Beskriv vad patienten har svårt att göra på grund av sin funktionsnedsättning")
+                    "Beskriv vad barnet har svårt att göra på grund av sin funktionsnedsättning")
                 .label(
                     "Ge konkreta exempel på aktiviteter i barnets vardag där svårigheter uppstår.")
                 .build())

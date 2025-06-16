@@ -47,7 +47,7 @@ public class QuestionGrundForMedicinsktUnderlag {
             .build(),
         CheckboxDate.builder()
             .id(new FieldId(UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID))
-            .label("journaluppgifter från och med")
+            .label(CodeSystemKvFkmu0001.JOURNALUPGIFTER.displayName())
             .code(CodeSystemKvFkmu0001.JOURNALUPGIFTER)
             .min(null)
             .max(Period.ofDays(0))
