@@ -65,10 +65,22 @@ public class CodeSystemKvFkmu0005 {
       "Underlag från psykolog"
   );
 
+  public static final Code VARDCENTRAL = new Code(
+      "VARDCENTRAL",
+      CODE_SYSTEM,
+      "Underlag från vårdcentral"
+  );
+
   public static final Code SPECIALISTKLINIK = new Code(
       "SPECIALISTKLINIK",
       CODE_SYSTEM,
       "Utredning av annan specialistklinik"
+  );
+
+  public static final Code SKOLHALSOVARD = new Code(
+      "SKOLHALSOVARD",
+      CODE_SYSTEM,
+      "Underlag från skolhälsovården"
   );
 
   public static final Code VARD_UTOMLANDS = new Code(

@@ -1,6 +1,33 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221;
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.elements.ElementUnitContactInformation.issuingUnitContactInfo;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.CategoryAktivitetsbegransningar.categoryAktivitetsbegransningar;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.CategoryDiagnos.categoryDiagnos;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.CategoryFunktionsnedsattning.categoryFunktionsnedsattning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.CategoryGrundForMedicinsktUnderlag.categoryGrundForMedicinsktUnderlag;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.CategoryMedicinskBehandling.categoryMedicinskBehandling;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.CategoryOvrigt.categoryOvrigt;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.CategoryPrognos.categoryPrognos;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionAktivitetsbegransningar.questionAktivitetsbegransningar;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionAnnanGrundForMedicinsktUnderlag.questionAnnanGrundForMedicinsktUnderlag;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionAnnanKroppsligFunktionMotivering.questionAnnanKroppsligFunktionMotivering;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionBaseratPaAnnatMedicinsktUnderlag.questionBaseratPaAnnatMedicinsktUnderlag;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionDiagnos.questionDiagnos;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionDiagnosHistorik.questionDiagnosHistorik;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionFunktionsnedsattning.questionFunktionsnedsattning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionGrundForMedicinsktUnderlag.questionGrundForMedicinsktUnderlag;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionIntellektuellFunktionMotivering.questionIntellektuellFunktionMotivering;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionKommunikationSocialInteraktionMotivering.questionKommunikationSocialInteraktionMotivering;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionKoordinationMotivering.questionKoordinationMotivering;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionOvrigt.questionOvrigt;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionPagaendeOchPlaneradeBehandlingar.questionPagaendeOchPlaneradeBehandlingar;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionPrognos.questionPrognos;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionPsykiskFunktionMotivering.questionPsykiskFunktionMotivering;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionRelationTillPatienten.questionRelationTillPatienten;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionSinnesfunktionMotivering.questionSinnesfunktionMotivering;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionUppmarksamhetMotivering.questionUppmarksamhetMotivering;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionUtredningEllerUnderlag.questionUtredningEllerUnderlag;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionVardenhetOchTidplan.questionVardenhetOchTidplan;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -100,6 +127,42 @@ public class CertificateModelFactoryFK3221 implements CertificateModelFactory {
         .messageActionSpecifications(FK3221MessageActionSpecification.create())
         .elementSpecifications(
             List.of(
+                categoryGrundForMedicinsktUnderlag(
+                    questionGrundForMedicinsktUnderlag(
+                        questionRelationTillPatienten(),
+                        questionAnnanGrundForMedicinsktUnderlag()
+                    ),
+                    questionBaseratPaAnnatMedicinsktUnderlag(),
+                    questionUtredningEllerUnderlag()
+                ),
+                categoryDiagnos(
+                    questionDiagnos(diagnosisCodeRepository),
+                    questionDiagnosHistorik()
+                ),
+                categoryFunktionsnedsattning(
+                    questionFunktionsnedsattning(),
+                    questionIntellektuellFunktionMotivering(),
+                    questionKommunikationSocialInteraktionMotivering(),
+                    questionUppmarksamhetMotivering(),
+                    questionPsykiskFunktionMotivering(),
+                    questionSinnesfunktionMotivering(),
+                    questionKoordinationMotivering(),
+                    questionAnnanKroppsligFunktionMotivering()
+                ),
+                categoryAktivitetsbegransningar(
+                    questionAktivitetsbegransningar()
+                ),
+                categoryMedicinskBehandling(
+                    questionPagaendeOchPlaneradeBehandlingar(
+                        questionVardenhetOchTidplan()
+                    )
+                ),
+                categoryPrognos(
+                    questionPrognos()
+                ),
+                categoryOvrigt(
+                    questionOvrigt()
+                ),
                 issuingUnitContactInfo()
             )
         )
