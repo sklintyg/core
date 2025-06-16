@@ -524,7 +524,7 @@ public class Certificate {
         .findFirst();
   }
 
-  public void prefill(PrefillXml prefillXml, PrefillProcessor prefillProcessor) {
+  public void prefill(Xml prefillXml, PrefillProcessor prefillProcessor) {
     try {
       this.elementData = prefillProcessor.prefill(certificateModel, prefillXml);
     } catch (Exception e) {

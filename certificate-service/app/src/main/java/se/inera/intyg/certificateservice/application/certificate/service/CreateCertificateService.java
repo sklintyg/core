@@ -10,7 +10,7 @@ import se.inera.intyg.certificateservice.application.certificate.service.convert
 import se.inera.intyg.certificateservice.application.certificate.service.validation.CreateCertificateRequestValidator;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
 import se.inera.intyg.certificateservice.application.common.converter.ResourceLinkConverter;
-import se.inera.intyg.certificateservice.domain.certificate.model.PrefillXml;
+import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificate.service.CreateCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
@@ -45,9 +45,7 @@ public class CreateCertificateService {
             ? new ExternalReference(createCertificateRequest.getExternalReference())
             : null,
         createCertificateRequest.getPrefillXml() != null ?
-            PrefillXml.builder()
-                .value(createCertificateRequest.getPrefillXml().value())
-                .build() : null
+            new Xml(createCertificateRequest.getPrefillXml().value()) : null
     );
 
     return CreateCertificateResponse.builder()

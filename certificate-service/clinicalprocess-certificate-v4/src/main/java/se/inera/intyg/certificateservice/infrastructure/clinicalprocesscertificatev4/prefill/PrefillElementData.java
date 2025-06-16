@@ -10,9 +10,10 @@ public interface PrefillElementData {
 
   Class<? extends ElementConfiguration> supports();
 
-  PrefillResult prefillSubAnswer(Delsvar data, ElementSpecification specification);
+  PrefillAnswer prefillSubAnswer(Collection<Delsvar> subAnswers,
+      ElementSpecification specification);
 
-  PrefillResult prefillAnswer(Collection<Svar> data, ElementSpecification specification);
+  PrefillAnswer prefillAnswer(Collection<Svar> answers, ElementSpecification specification);
 
 
 }

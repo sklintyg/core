@@ -1,0 +1,8 @@
+package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill;
+
+public enum PrefillErrorType {
+  ANSWER_NOT_FOUND,
+  SUB_ANSWER_NOT_FOUND,
+  UNMARSHALL_ERROR,
+
+}

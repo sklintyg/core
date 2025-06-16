@@ -110,13 +110,6 @@ public class CertificateModel implements Comparator<ElementId> {
         );
   }
 
-  public Optional<ElementSpecification> elementSpecificationOptional(ElementId id) {
-    return elementSpecifications.stream()
-        .filter(elementSpecification -> elementSpecification.exists(id))
-        .map(elementSpecification -> elementSpecification.elementSpecification(id))
-        .findFirst();
-  }
-
   public boolean certificateActionExists(CertificateActionType certificateActionType) {
     return certificateActionSpecifications()
         .stream()

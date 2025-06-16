@@ -11,24 +11,25 @@ import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 
 @Component
-public class ConfigurationConvertertMapper {
+public class ConfigurationConverterMapper {
 
   private final Map<Class<? extends ElementConfiguration>, PrefillElementData> converters;
 
-  public ConfigurationConvertertMapper(List<PrefillElementData> converters) {
+  public ConfigurationConverterMapper(List<PrefillElementData> converters) {
     this.converters = converters.stream()
         .collect(Collectors.toMap(PrefillElementData::supports, Function.identity()));
   }
 
-  public PrefillResult prefillAnswer(List<Svar> svar, ElementSpecification elementSpecification) {
+  public PrefillAnswer prefillAnswer(List<Svar> answer, ElementSpecification elementSpecification) {
     final var converter = converters.get(elementSpecification.configuration().getClass());
-    return converter.prefillAnswer(svar, elementSpecification);
+    return converter.prefillAnswer(answer, elementSpecification);
   }
 
-  public PrefillResult prefillSubAnswer(List<Delsvar> delsvar,
+  public PrefillAnswer prefillSubAnswer(List<Delsvar> subAnswers,
       ElementSpecification elementSpecification) {
     final var converter = converters.get(elementSpecification.configuration().getClass());
-    return converter.prefillSubAnswer(delsvar.getFirst(), elementSpecification);
+    //TODO: error handling for missing converter
+    return converter.prefillSubAnswer(subAnswers, elementSpecification);
   }
 
 }

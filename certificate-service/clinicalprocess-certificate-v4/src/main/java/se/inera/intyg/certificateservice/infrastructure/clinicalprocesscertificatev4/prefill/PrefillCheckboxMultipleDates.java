@@ -26,17 +26,19 @@ public class PrefillCheckboxMultipleDates implements PrefillElementData {
   }
 
   @Override
-  public PrefillResult prefillSubAnswer(Delsvar data, ElementSpecification specification) {
+  public PrefillAnswer prefillSubAnswer(Collection<Delsvar> subAnswers,
+      ElementSpecification specification) {
     return null;
   }
 
-  public PrefillResult prefillAnswer(Collection<Svar> answers, ElementSpecification specification) {
+  public PrefillAnswer prefillAnswer(Collection<Svar> answers, ElementSpecification specification) {
     var elementData = ElementData.builder()
         .id(specification.id())
         .value(ElementValueDateList.builder()
             .dateListId(new FieldId(null))
             .dateList(answers.stream()
                 .map(s -> {
+                  //TODO: Do we want to create error for each unmarshalling failure ?
 
                   CVType cv = unmarshalCVType(s.getDelsvar().stream()
                       .filter(d -> d.getId().equals(specification.id().id() + ".1"))
@@ -65,15 +67,14 @@ public class PrefillCheckboxMultipleDates implements PrefillElementData {
             .build())
         .build();
 
-    PrefillResult.builder().elementData(elementData);
-    return PrefillResult.builder()
+    PrefillAnswer.builder().elementData(elementData);
+    return PrefillAnswer.builder()
         .elementData(elementData)
         .build();
   }
 
 
   private CVType unmarshalCVType(List<Object> content) {
-
     final var contentObj = content.stream()
         .filter(obj -> obj instanceof org.w3c.dom.Element)
         .map(obj -> (org.w3c.dom.Element) obj)

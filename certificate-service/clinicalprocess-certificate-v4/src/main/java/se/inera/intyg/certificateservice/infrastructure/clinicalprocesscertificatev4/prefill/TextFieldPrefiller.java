@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill;
 
+import static se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.PrefillErrorType.UNMARSHALL_ERROR;
+
 import java.util.Collection;
 import java.util.List;
 import org.springframework.stereotype.Component;
@@ -20,16 +22,18 @@ public class TextFieldPrefiller implements PrefillElementData {
   }
 
 
-  public PrefillResult prefillAnswer(Collection<Svar> data, ElementSpecification specification) {
+  public PrefillAnswer prefillAnswer(Collection<Svar> answers, ElementSpecification specification) {
     return null;
   }
 
   @Override
-  public PrefillResult prefillSubAnswer(Delsvar delsvar, ElementSpecification specification) {
-    final var content = delsvar.getContent();
+  public PrefillAnswer prefillSubAnswer(Collection<Delsvar> subAnswers,
+      ElementSpecification specification) {
+    //TODO: handle empty subanswer and multiple subanswers?
+    final var content = subAnswers.stream().findFirst().get().getContent();
     if (content != null && !content.isEmpty()) {
       var text = (String) content.getFirst();
-      return PrefillResult.builder()
+      return PrefillAnswer.builder()
           .elementData(ElementData.builder()
               .id(specification.id())
               .value(ElementValueText.builder()
@@ -40,8 +44,8 @@ public class TextFieldPrefiller implements PrefillElementData {
           .build();
     }
 
-    return PrefillResult.builder()
-        .error(List.of(new PrefillError(
+    return PrefillAnswer.builder()
+        .errors(List.of(new PrefillError(UNMARSHALL_ERROR,
             "Empty content in Delsvar for element: " + specification.id().id())))
         .build();
   }

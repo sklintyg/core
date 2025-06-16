@@ -9,7 +9,7 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionE
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionRuleCertificateTypeActiveForUnit;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
-import se.inera.intyg.certificateservice.domain.certificate.model.PrefillXml;
+import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
@@ -32,7 +32,7 @@ public class CreateCertificateDomainService {
 
   public Certificate create(CertificateModelId certificateModelId,
       ActionEvaluation actionEvaluation, ExternalReference externalReference,
-      PrefillXml prefillXml) {
+      Xml prefillXml) {
 
     final var start = LocalDateTime.now(ZoneId.systemDefault());
 
