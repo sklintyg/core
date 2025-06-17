@@ -41,7 +41,11 @@ class QuestionUppmarksamhetMotiveringTest {
         .label(
             "Beskriv funktionsnedsättningen, om möjligt med grad. Ange även eventuella undersökningsfynd.")
         .description(
-            "Uppmärksamhet handlar om förmågan att rikta fokus på rätt sak vid rätt tillfälle samt att skifta, fördela och vidmakthålla uppmärksamheten. En person behöver även viljemässigt kunna rikta sin uppmärksamhet under en längre tid. Med exekutiv funktion menas förmågan att planera, initiera, genomföra, korrigera och avsluta en handling.")
+            """
+                Uppmärksamhet handlar om förmågan att rikta fokus på rätt sak vid rätt tillfälle samt att skifta, fördela och vidmakthålla uppmärksamheten. En person behöver även viljemässigt kunna rikta sin uppmärksamhet under en längre tid. 
+                
+                Med exekutiv funktion menas förmågan att planera, initiera, genomföra, korrigera och avsluta en handling.
+                """)
         .id(new FieldId("10.1"))
         .build();
 
