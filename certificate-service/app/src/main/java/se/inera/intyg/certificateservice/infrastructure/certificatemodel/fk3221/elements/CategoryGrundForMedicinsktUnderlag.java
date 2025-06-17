@@ -7,7 +7,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 
 public class CategoryGrundForMedicinsktUnderlag {
 
-  private static final ElementId GRUND_FOR_MEDICINSKT_UNDERLAG_CATEGORY_ID = new ElementId("KAT_1");
+  public static final ElementId GRUND_FOR_MEDICINSKT_UNDERLAG_CATEGORY_ID = new ElementId("KAT_1");
 
   private CategoryGrundForMedicinsktUnderlag() {
     throw new IllegalStateException("Utility class");
