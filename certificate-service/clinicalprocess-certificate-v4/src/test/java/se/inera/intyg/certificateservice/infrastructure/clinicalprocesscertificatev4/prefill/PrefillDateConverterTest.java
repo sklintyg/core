@@ -15,6 +15,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorDate;
+import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
+import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 
 
 class PrefillDateConverterTest {
@@ -121,43 +123,59 @@ class PrefillDateConverterTest {
       );
     }
 
-    @Nested
-    class SubAnswer {
+    @Test
+    void shouldReturnErrorIfInvalidDateFormat() {
+      final var answer = new Svar();
+      final var subAnswer = new Delsvar();
+      final var content = List.of("invalid-date-format");
+      subAnswer.getContent().add(content);
+      answer.getDelsvar().add(subAnswer);
 
-      @Test
-      void shouldReturnPrefillAnswerForSubAnswer() {
-        final var expected = PrefillAnswer.builder()
-            .elementData(EXPECTED_ELEMENT_DATA)
-            .build();
+      final var result = prefillDateConverter.prefillAnswer(List.of(answer), SPECIFICATION);
 
-        final var answer = xmlGeneratorDate.generate(EXPECTED_ELEMENT_DATA, SPECIFICATION);
+      assertEquals(
+          PrefillErrorType.INVALID_DATE_FORMAT,
+          result.getErrors().getFirst().type()
+      );
+    }
+  }
 
-        final var result = prefillDateConverter.prefillSubAnswer(answer.getFirst().getDelsvar(),
-            SPECIFICATION);
+  @Nested
+  class SubAnswer {
 
-        assertEquals(expected, result);
-      }
+    @Test
+    void shouldReturnPrefillAnswerForSubAnswer() {
+      final var expected = PrefillAnswer.builder()
+          .elementData(EXPECTED_ELEMENT_DATA)
+          .build();
 
-      @Test
-      void shouldReturnErrorIfWrongConfigurationTypeForSubAnswer() {
-        final var wrongConfiguration = ElementSpecification.builder()
-            .id(ELEMENT_ID)
-            .configuration(ElementConfigurationCategory.builder().build())
-            .build();
+      final var answer = xmlGeneratorDate.generate(EXPECTED_ELEMENT_DATA, SPECIFICATION);
 
-        final var answer = xmlGeneratorDate.generate(
-            EXPECTED_ELEMENT_DATA,
-            wrongConfiguration
-        );
+      final var result = prefillDateConverter.prefillSubAnswer(answer.getFirst().getDelsvar(),
+          SPECIFICATION);
 
-        final var result = prefillDateConverter.prefillSubAnswer(answer.getFirst().getDelsvar(),
-            wrongConfiguration);
+      assertEquals(expected, result);
+    }
 
-        assertEquals(
-            PrefillErrorType.TECHNICAL_ERROR,
-            result.getErrors().getFirst().type()
-        );
-      }
+    @Test
+    void shouldReturnErrorIfWrongConfigurationTypeForSubAnswer() {
+      final var wrongConfiguration = ElementSpecification.builder()
+          .id(ELEMENT_ID)
+          .configuration(ElementConfigurationCategory.builder().build())
+          .build();
+
+      final var answer = xmlGeneratorDate.generate(
+          EXPECTED_ELEMENT_DATA,
+          wrongConfiguration
+      );
+
+      final var result = prefillDateConverter.prefillSubAnswer(answer.getFirst().getDelsvar(),
+          wrongConfiguration);
+
+      assertEquals(
+          PrefillErrorType.TECHNICAL_ERROR,
+          result.getErrors().getFirst().type()
+      );
     }
 
     @Test

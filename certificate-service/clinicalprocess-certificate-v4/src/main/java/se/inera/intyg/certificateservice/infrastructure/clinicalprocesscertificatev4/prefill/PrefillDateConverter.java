@@ -36,13 +36,22 @@ public class PrefillDateConverter implements PrefillConverter {
           .build();
     }
 
+    LocalDate date;
+    try {
+      date = LocalDate.parse((String) subAnswers.getFirst().getContent().getFirst());
+    } catch (Exception e) {
+      return PrefillAnswer.builder()
+          .errors(List.of(PrefillError.invalidDateFormat("Invalid date format")))
+          .build();
+    }
+
     return PrefillAnswer.builder()
         .elementData(
             ElementData.builder()
                 .id(specification.id())
                 .value(ElementValueDate.builder()
                     .dateId(configurationDate.id())
-                    .date(LocalDate.parse((String) subAnswers.getFirst().getContent().getFirst()))
+                    .date(date)
                     .build()
                 ).build()
         ).build();

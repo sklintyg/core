@@ -24,4 +24,9 @@ public record PrefillError(PrefillErrorType type, String details) {
     return new PrefillError(PrefillErrorType.TECHNICAL_ERROR,
         "A technical error occurred %s".formatted(s));
   }
+
+  public static PrefillError invalidDateFormat(String s) {
+    return new PrefillError(PrefillErrorType.INVALID_DATE_FORMAT,
+        "Invalid date format: %s".formatted(s));
+  }
 }
