@@ -39,9 +39,7 @@ public class PrefillRadioBooleanConverter implements PrefillConverter {
     try {
       value = Boolean.parseBoolean((String) subAnswers.getFirst().getContent().getFirst());
     } catch (Exception e) {
-      return PrefillAnswer.builder()
-          .errors(List.of(PrefillError.invalidFormat()))
-          .build();
+      return PrefillAnswer.invalidFormat();
     }
 
     return PrefillAnswer.builder()

@@ -1,30 +1,29 @@
 package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill;
 
-import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfiguration;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 
 @Component
-public class PrefillDateConverter implements PrefillConverter {
+public class PrefillRadioMultipleCodeConverter implements PrefillConverter {
 
   @Override
   public Class<? extends ElementConfiguration> supports() {
-    return ElementConfigurationDate.class;
+    return ElementConfigurationRadioMultipleCode.class;
   }
 
   @Override
   public PrefillAnswer prefillSubAnswer(List<Delsvar> subAnswers,
       ElementSpecification specification) {
-    if (!(specification.configuration() instanceof ElementConfigurationDate configurationDate)) {
+    if (!(specification.configuration() instanceof ElementConfigurationRadioMultipleCode configurationRadioMultipleCode)) {
       return PrefillAnswer.builder()
           .errors(List.of(PrefillError.wrongConfigurationType()))
           .build();
@@ -36,9 +35,15 @@ public class PrefillDateConverter implements PrefillConverter {
           .build();
     }
 
-    LocalDate date;
+    String code;
     try {
-      date = LocalDate.parse((String) subAnswers.getFirst().getContent().getFirst());
+      final var cvType = PrefillAnswer.unmarshalCVType(subAnswers.getFirst().getContent());
+
+      if (cvType.isEmpty()) {
+        return PrefillAnswer.invalidFormat();
+      }
+
+      code = cvType.get().getCode();
     } catch (Exception e) {
       return PrefillAnswer.invalidFormat();
     }
@@ -47,16 +52,16 @@ public class PrefillDateConverter implements PrefillConverter {
         .elementData(
             ElementData.builder()
                 .id(specification.id())
-                .value(ElementValueDate.builder()
-                    .dateId(configurationDate.id())
-                    .date(date)
+                .value(ElementValueCode.builder()
+                    .codeId(configurationRadioMultipleCode.id())
+                    .code(code)
                     .build()
                 ).build()
         ).build();
   }
 
   public PrefillAnswer prefillAnswer(List<Svar> answers, ElementSpecification specification) {
-    if (!(specification.configuration() instanceof ElementConfigurationDate)) {
+    if (!(specification.configuration() instanceof ElementConfigurationRadioMultipleCode)) {
       return PrefillAnswer.builder()
           .errors(List.of(PrefillError.wrongConfigurationType()))
           .build();
