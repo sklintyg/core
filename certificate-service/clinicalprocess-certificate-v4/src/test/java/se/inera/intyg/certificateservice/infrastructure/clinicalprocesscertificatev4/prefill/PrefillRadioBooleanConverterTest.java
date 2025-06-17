@@ -2,51 +2,49 @@ package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertific
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorDate;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorBoolean;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 
-
-class PrefillDateConverterTest {
+class PrefillRadioBooleanConverterTest {
 
   private static final ElementId ELEMENT_ID = new ElementId("1");
-  private static final FieldId DATE_ID = new FieldId("2");
-  private static final LocalDate DATE = LocalDate.now();
+  private static final FieldId RADIOBOOLEAN_ID = new FieldId("2");
+  private static final Boolean BOOLEAN = true;
   private static final ElementSpecification SPECIFICATION = ElementSpecification.builder()
       .id(ELEMENT_ID)
       .configuration(
-          ElementConfigurationDate.builder()
-              .id(DATE_ID)
+          ElementConfigurationRadioBoolean.builder()
+              .id(RADIOBOOLEAN_ID)
               .build()
       )
       .build();
   private static final ElementData EXPECTED_ELEMENT_DATA = ElementData.builder()
       .id(ELEMENT_ID)
       .value(
-          ElementValueDate.builder()
-              .dateId(DATE_ID)
-              .date(DATE)
+          ElementValueBoolean.builder()
+              .booleanId(RADIOBOOLEAN_ID)
+              .value(BOOLEAN)
               .build()
       ).build();
 
-  private final PrefillDateConverter prefillDateConverter = new PrefillDateConverter();
-  private final XmlGeneratorDate xmlGeneratorDate = new XmlGeneratorDate();
+  private final PrefillRadioBooleanConverter prefillRadioBooleanConverter = new PrefillRadioBooleanConverter();
+  private final XmlGeneratorBoolean xmlGeneratorRadioBoolean = new XmlGeneratorBoolean();
 
   @Test
-  void shouldReturnSupportsDate() {
-    assertEquals(ElementConfigurationDate.class, prefillDateConverter.supports());
+  void shouldReturnSupportsRadioBoolean() {
+    assertEquals(ElementConfigurationRadioBoolean.class, prefillRadioBooleanConverter.supports());
   }
 
   @Nested
@@ -56,19 +54,19 @@ class PrefillDateConverterTest {
     void shouldReturnEmptyListForUnknownIds() {
       assertEquals(
           Collections.emptyList(),
-          prefillDateConverter.unknownIds(null, null)
+          prefillRadioBooleanConverter.unknownIds(null, null)
       );
     }
 
     @Test
-    void shouldCreatPrefillAnswerForDate() {
+    void shouldCreatPrefillAnswerForRadioBoolean() {
       final var expected = PrefillAnswer.builder()
           .elementData(EXPECTED_ELEMENT_DATA)
           .build();
 
-      final var answer = xmlGeneratorDate.generate(EXPECTED_ELEMENT_DATA, SPECIFICATION);
+      final var answer = xmlGeneratorRadioBoolean.generate(EXPECTED_ELEMENT_DATA, SPECIFICATION);
 
-      final var result = prefillDateConverter.prefillAnswer(answer, SPECIFICATION);
+      final var result = prefillRadioBooleanConverter.prefillAnswer(answer, SPECIFICATION);
 
       assertEquals(expected, result);
     }
@@ -80,12 +78,12 @@ class PrefillDateConverterTest {
           .configuration(ElementConfigurationCategory.builder().build())
           .build();
 
-      final var answer = xmlGeneratorDate.generate(
+      final var answer = xmlGeneratorRadioBoolean.generate(
           EXPECTED_ELEMENT_DATA,
           wrongConfiguration
       );
 
-      final var result = prefillDateConverter.prefillAnswer(answer, wrongConfiguration);
+      final var result = prefillRadioBooleanConverter.prefillAnswer(answer, wrongConfiguration);
 
       assertEquals(
           PrefillErrorType.TECHNICAL_ERROR,
@@ -95,16 +93,16 @@ class PrefillDateConverterTest {
 
     @Test
     void shouldReturnErrorIfMoreThanOneAnswer() {
-      final var answer = xmlGeneratorDate.generate(
+      final var answer = xmlGeneratorRadioBoolean.generate(
           EXPECTED_ELEMENT_DATA,
           SPECIFICATION
       );
-      final var answer2 = xmlGeneratorDate.generate(
+      final var answer2 = xmlGeneratorRadioBoolean.generate(
           EXPECTED_ELEMENT_DATA,
           SPECIFICATION
       );
 
-      final var result = prefillDateConverter.prefillAnswer(
+      final var result = prefillRadioBooleanConverter.prefillAnswer(
           List.of(answer.getFirst(), answer2.getFirst()), SPECIFICATION);
 
       assertEquals(
@@ -115,7 +113,7 @@ class PrefillDateConverterTest {
 
     @Test
     void shouldReturnErrorIfNoAnswers() {
-      final var result = prefillDateConverter.prefillAnswer(List.of(), SPECIFICATION);
+      final var result = prefillRadioBooleanConverter.prefillAnswer(List.of(), SPECIFICATION);
 
       assertEquals(
           PrefillErrorType.WRONG_NUMBER_OF_ANSWERS,
@@ -124,14 +122,14 @@ class PrefillDateConverterTest {
     }
 
     @Test
-    void shouldReturnErrorIfInvalidDateFormat() {
+    void shouldReturnErrorIfInvalidRadioBooleanFormat() {
       final var answer = new Svar();
       final var subAnswer = new Delsvar();
-      final var content = List.of("invalid-date-format");
+      final var content = List.of("invalid-radioBoolean-format");
       subAnswer.getContent().add(content);
       answer.getDelsvar().add(subAnswer);
 
-      final var result = prefillDateConverter.prefillAnswer(List.of(answer), SPECIFICATION);
+      final var result = prefillRadioBooleanConverter.prefillAnswer(List.of(answer), SPECIFICATION);
 
       assertEquals(
           PrefillErrorType.INVALID_FORMAT,
@@ -149,9 +147,10 @@ class PrefillDateConverterTest {
           .elementData(EXPECTED_ELEMENT_DATA)
           .build();
 
-      final var answer = xmlGeneratorDate.generate(EXPECTED_ELEMENT_DATA, SPECIFICATION);
+      final var answer = xmlGeneratorRadioBoolean.generate(EXPECTED_ELEMENT_DATA, SPECIFICATION);
 
-      final var result = prefillDateConverter.prefillSubAnswer(answer.getFirst().getDelsvar(),
+      final var result = prefillRadioBooleanConverter.prefillSubAnswer(
+          answer.getFirst().getDelsvar(),
           SPECIFICATION);
 
       assertEquals(expected, result);
@@ -164,12 +163,13 @@ class PrefillDateConverterTest {
           .configuration(ElementConfigurationCategory.builder().build())
           .build();
 
-      final var answer = xmlGeneratorDate.generate(
+      final var answer = xmlGeneratorRadioBoolean.generate(
           EXPECTED_ELEMENT_DATA,
           wrongConfiguration
       );
 
-      final var result = prefillDateConverter.prefillSubAnswer(answer.getFirst().getDelsvar(),
+      final var result = prefillRadioBooleanConverter.prefillSubAnswer(
+          answer.getFirst().getDelsvar(),
           wrongConfiguration);
 
       assertEquals(
@@ -180,16 +180,16 @@ class PrefillDateConverterTest {
 
     @Test
     void shouldReturnErrorIfMoreThanOneSubAnswer() {
-      final var answer = xmlGeneratorDate.generate(
+      final var answer = xmlGeneratorRadioBoolean.generate(
           EXPECTED_ELEMENT_DATA,
           SPECIFICATION
       );
-      final var answer2 = xmlGeneratorDate.generate(
+      final var answer2 = xmlGeneratorRadioBoolean.generate(
           EXPECTED_ELEMENT_DATA,
           SPECIFICATION
       );
 
-      final var result = prefillDateConverter.prefillSubAnswer(
+      final var result = prefillRadioBooleanConverter.prefillSubAnswer(
           List.of(answer.getFirst().getDelsvar().getFirst(),
               answer2.getFirst().getDelsvar().getFirst()), SPECIFICATION);
 
@@ -201,7 +201,7 @@ class PrefillDateConverterTest {
 
     @Test
     void shouldReturnErrorIfNoSubAnswers() {
-      final var result = prefillDateConverter.prefillSubAnswer(List.of(), SPECIFICATION);
+      final var result = prefillRadioBooleanConverter.prefillSubAnswer(List.of(), SPECIFICATION);
 
       assertEquals(
           PrefillErrorType.WRONG_NUMBER_OF_ANSWERS,
