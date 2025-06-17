@@ -20,7 +20,8 @@ public class QuestionGrundForMedicinsktUnderlag {
       "fysisktMote");
   public static final FieldId UTLATANDE_BASERAT_PA_DIGITALT_VARDMOTE_FIELD_ID = new FieldId(
       "digitaltMote");
-  public static final String UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID = "journaluppgifter";
+  public static final FieldId UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID = new FieldId(
+      "journaluppgifter");
   public static final FieldId UTLATANDE_BASERAT_PA_ANHORIG_FIELD_ID = new FieldId("anhorig");
   public static final FieldId UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID = new FieldId("annat");
 
@@ -46,7 +47,7 @@ public class QuestionGrundForMedicinsktUnderlag {
             .max(Period.ofDays(0))
             .build(),
         CheckboxDate.builder()
-            .id(new FieldId(UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID))
+            .id(UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID)
             .label(CodeSystemKvFkmu0001.JOURNALUPGIFTER.displayName())
             .code(CodeSystemKvFkmu0001.JOURNALUPGIFTER)
             .min(null)
