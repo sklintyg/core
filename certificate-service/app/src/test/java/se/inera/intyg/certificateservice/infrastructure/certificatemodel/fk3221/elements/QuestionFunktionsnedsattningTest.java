@@ -6,7 +6,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemFunktionsnedsattning.KOMMUNIKATION_SOCIAL_INTERAKTION;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemFunktionsnedsattning.KOORDINATION;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemFunktionsnedsattning.PSYKISK_FUNKTION;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemFunktionsnedsattning.SINNESFUNKTION;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemFunktionsnedsattning.SINNESFUNKTION_V2;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemFunktionsnedsattning.UPPMARKSAMHET;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionFunktionsnedsattning.questionFunktionsnedsattning;
 
@@ -51,8 +51,8 @@ class QuestionFunktionsnedsattningTest {
                 UPPMARKSAMHET),
             new ElementConfigurationCode(new FieldId("11.2"), PSYKISK_FUNKTION.displayName(),
                 PSYKISK_FUNKTION),
-            new ElementConfigurationCode(new FieldId("12.2"), SINNESFUNKTION.displayName(),
-                SINNESFUNKTION),
+            new ElementConfigurationCode(new FieldId("12.2"), SINNESFUNKTION_V2.displayName(),
+                SINNESFUNKTION_V2),
             new ElementConfigurationCode(new FieldId("13.2"), KOORDINATION.displayName(),
                 KOORDINATION),
             new ElementConfigurationCode(new FieldId("14.2"),

@@ -51,6 +51,12 @@ public class CodeSystemFunktionsnedsattning {
       "Övriga sinnesfunktioner och smärta"
   );
 
+  public static final Code SINNESFUNKTION_V2 = new Code(
+      "Sinnesfunktion",
+      CODE_SYSTEM,
+      "Sinnesfunktioner och smärta"
+  );
+
   public static final Code KOORDINATION = new Code(
       "KOORDINATION",
       CODE_SYSTEM,

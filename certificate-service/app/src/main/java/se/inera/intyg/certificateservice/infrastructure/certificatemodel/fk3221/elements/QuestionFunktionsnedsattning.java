@@ -5,7 +5,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemFunktionsnedsattning.KOMMUNIKATION_SOCIAL_INTERAKTION;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemFunktionsnedsattning.KOORDINATION;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemFunktionsnedsattning.PSYKISK_FUNKTION;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemFunktionsnedsattning.SINNESFUNKTION;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemFunktionsnedsattning.SINNESFUNKTION_V2;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemFunktionsnedsattning.UPPMARKSAMHET;
 
 import java.util.List;
@@ -45,7 +45,7 @@ public class QuestionFunktionsnedsattning {
             KOMMUNIKATION_SOCIAL_INTERAKTION),
         getCodeConfig(FUNKTIONSNEDSATTNING_UPPMAKRMSAHET_ID, UPPMARKSAMHET),
         getCodeConfig(FUNKTIONSNEDSATTNING_PSYKISK_FUNKTION_ID, PSYKISK_FUNKTION),
-        getCodeConfig(FUNKTIONSNEDSATTNING_SINNESFUNKTION_ID, SINNESFUNKTION),
+        getCodeConfig(FUNKTIONSNEDSATTNING_SINNESFUNKTION_ID, SINNESFUNKTION_V2),
         getCodeConfig(FUNKTIONSNEDSATTNING_KOORDINATION_ID, KOORDINATION),
         getCodeConfig(FUNKTIONSNEDSATTNING_ANNAN_KROPPSILIG_FUNKTION_ID, ANNAN_KROPPSILIG_FUNKTION)
     );
