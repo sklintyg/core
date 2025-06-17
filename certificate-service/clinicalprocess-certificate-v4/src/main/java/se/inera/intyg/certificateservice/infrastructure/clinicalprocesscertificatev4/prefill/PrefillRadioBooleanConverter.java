@@ -25,7 +25,7 @@ public class PrefillRadioBooleanConverter implements PrefillConverter {
       ElementSpecification specification) {
     if (!(specification.configuration() instanceof ElementConfigurationRadioBoolean configurationRadioBoolean)) {
       return PrefillAnswer.builder()
-          .errors(List.of(PrefillError.technicalError("Wrong configuration type")))
+          .errors(List.of(PrefillError.wrongConfigurationType()))
           .build();
     }
 
@@ -59,7 +59,7 @@ public class PrefillRadioBooleanConverter implements PrefillConverter {
   public PrefillAnswer prefillAnswer(List<Svar> answers, ElementSpecification specification) {
     if (!(specification.configuration() instanceof ElementConfigurationRadioBoolean)) {
       return PrefillAnswer.builder()
-          .errors(List.of(PrefillError.technicalError("Wrong configuration type")))
+          .errors(List.of(PrefillError.wrongConfigurationType()))
           .build();
     }
 

@@ -25,6 +25,10 @@ public record PrefillError(PrefillErrorType type, String details) {
         "A technical error occurred %s".formatted(s));
   }
 
+  public static PrefillError wrongConfigurationType() {
+    return technicalError("Wrong configuration type");
+  }
+
   public static PrefillError invalidFormat() {
     return new PrefillError(PrefillErrorType.INVALID_FORMAT, "Invalid format");
   }
