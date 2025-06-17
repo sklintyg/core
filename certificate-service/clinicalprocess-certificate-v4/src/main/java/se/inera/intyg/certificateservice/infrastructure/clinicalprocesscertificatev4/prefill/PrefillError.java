@@ -2,6 +2,8 @@ package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertific
 
 import static se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.PrefillErrorType.ANSWER_NOT_FOUND;
 import static se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.PrefillErrorType.SUB_ANSWER_NOT_FOUND;
+import static se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.PrefillErrorType.UNMARSHALL_ERROR;
+import static se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.PrefillErrorType.WRONG_NUMBER_OF_ANSWERS;
 
 public record PrefillError(PrefillErrorType type, String details) {
 
@@ -16,7 +18,7 @@ public record PrefillError(PrefillErrorType type, String details) {
   }
 
   public static PrefillError wrongNumberOfAnswers(int expected, int actual) {
-    return new PrefillError(PrefillErrorType.WRONG_NUMBER_OF_ANSWERS,
+    return new PrefillError(WRONG_NUMBER_OF_ANSWERS,
         "Expected %d answers but got %d".formatted(expected, actual));
   }
 
@@ -31,5 +33,29 @@ public record PrefillError(PrefillErrorType type, String details) {
 
   public static PrefillError invalidFormat() {
     return new PrefillError(PrefillErrorType.INVALID_FORMAT, "Invalid format");
+  }
+
+  public static PrefillError subAnswersNotFound(String answerId) {
+    return new PrefillError(SUB_ANSWER_NOT_FOUND,
+        "Sub-answer expected in answer with id %s".formatted(answerId));
+  }
+
+  public static PrefillError tooManyAnswersFound(String answerId, int expected, int actual) {
+    return new PrefillError(WRONG_NUMBER_OF_ANSWERS,
+        "Expected %d answers but got %d for Answer with id %s ".formatted(expected, actual,
+            answerId));
+  }
+
+  public static PrefillError tooManySubAnswersFound(String answerId, int expected, int actual) {
+    return new PrefillError(WRONG_NUMBER_OF_ANSWERS,
+        "Expected %d sub-answers but got %d for Answer with id %s".formatted(expected, actual,
+            answerId));
+  }
+
+  public static PrefillError unmarshallingError(String answerId, String subAnswerId) {
+    return new PrefillError(UNMARSHALL_ERROR,
+        "Content of sub-answer with id %s in answer with id %s could not be unmarshalled".formatted(
+            answerId,
+            subAnswerId));
   }
 }

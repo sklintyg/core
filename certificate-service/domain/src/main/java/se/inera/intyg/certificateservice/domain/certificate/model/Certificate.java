@@ -4,6 +4,7 @@ import static se.inera.intyg.certificateservice.domain.certificatemodel.model.El
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -526,7 +527,7 @@ public class Certificate {
 
   public void prefill(Xml prefillXml, PrefillProcessor prefillProcessor) {
     try {
-      this.elementData = prefillProcessor.prefill(certificateModel, prefillXml);
+      this.elementData = new ArrayList<>(prefillProcessor.prefill(certificateModel, prefillXml));
     } catch (Exception e) {
       log.warn("Failed to prefill certificate.", e);
     }

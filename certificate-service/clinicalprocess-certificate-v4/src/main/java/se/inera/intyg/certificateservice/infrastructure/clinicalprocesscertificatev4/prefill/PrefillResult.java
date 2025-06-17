@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.Builder;
 import lombok.Data;
@@ -33,14 +34,12 @@ public class PrefillResult {
         .prefill(unmarshalledPrefill)
         .prefilledAnswers(new ArrayList<>()).build();
   }
-
-
+  
   public void prefill() {
     addErrorForUnknownAnswerIds();
     prefillAnswers();
     prefillSubAnswers();
   }
-
 
   private void addErrorForUnknownAnswerIds() {
     prefill.getSvar().forEach(answer ->
@@ -51,16 +50,19 @@ public class PrefillResult {
   }
 
   private void prefillSubAnswers() {
-    prefilledAnswers.addAll(
-        prefill.getSvar().stream()
-            .flatMap(answer -> answer.getDelsvar().stream())
-            .filter(subAnswer -> certificateModel.elementSpecificationExists(
-                new ElementId(subAnswer.getId())))
-            .map(subAnswer -> prefillHandler.prefillSubAnswer(List.of(subAnswer),
-                certificateModel.elementSpecification(new ElementId(subAnswer.getId()))))
-            .toList()
-    );
 
+    prefill.getSvar().forEach(
+        answer -> {
+          final var subAnswers = answer.getDelsvar().stream()
+              .filter(subAnswer -> certificateModel.elementSpecificationExists(
+                  new ElementId(subAnswer.getId())))
+              .collect(Collectors.groupingBy(Svar.Delsvar::getId));
+
+          subAnswers.forEach((key, value) -> prefilledAnswers.add(
+              prefillHandler.prefillSubAnswer(value,
+                  certificateModel.elementSpecification(new ElementId(key)))
+          ));
+        });
   }
 
   private void prefillAnswers() {
@@ -76,11 +78,11 @@ public class PrefillResult {
 
   }
 
-  public List<ElementData> prefilledElements() {
+  public Set<ElementData> prefilledElements() {
     return prefilledAnswers.stream()
         .map(PrefillAnswer::getElementData)
         .filter(Objects::nonNull)
-        .toList();
+        .collect(Collectors.toSet());
   }
 
   public String toJsonReport() {

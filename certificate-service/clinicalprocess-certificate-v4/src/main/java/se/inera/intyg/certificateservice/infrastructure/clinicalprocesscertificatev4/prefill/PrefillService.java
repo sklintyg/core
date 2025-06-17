@@ -3,7 +3,7 @@ package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertific
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBElement;
 import java.io.StringReader;
-import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
@@ -19,10 +19,10 @@ public class PrefillService implements PrefillProcessor {
   private final PrefillHandler prefillHandler;
 
   @Override
-  public List<ElementData> prefill(CertificateModel certificateModel, Xml prefillXml) {
+  public Set<ElementData> prefill(CertificateModel certificateModel, Xml prefillXml) {
     final var unmarshalledPrefill = unmarshallPrefill(prefillXml);
     if (unmarshalledPrefill == null) {
-      return List.of();
+      return Set.of();
     }
 
     final var prefillResult = PrefillResult.create(certificateModel, unmarshalledPrefill,
