@@ -3,7 +3,6 @@ package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertific
 import jakarta.xml.bind.JAXBContext;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
@@ -29,12 +28,12 @@ public class CheckboxMultipleDatesConverter implements PrefillConverter {
   }
 
   @Override
-  public PrefillAnswer prefillSubAnswer(Collection<Delsvar> subAnswers,
+  public PrefillAnswer prefillSubAnswer(List<Delsvar> subAnswers,
       ElementSpecification specification) {
     return null;
   }
 
-  public PrefillAnswer prefillAnswer(Collection<Svar> answers, ElementSpecification specification) {
+  public PrefillAnswer prefillAnswer(List<Svar> answers, ElementSpecification specification) {
     var elementData = ElementData.builder()
         .id(specification.id())
         .value(ElementValueDateList.builder()
@@ -77,7 +76,7 @@ public class CheckboxMultipleDatesConverter implements PrefillConverter {
   }
 
   @Override
-  public Collection<PrefillAnswer> unknownIds(Svar answer, CertificateModel model) {
+  public List<PrefillAnswer> unknownIds(Svar answer, CertificateModel model) {
     if (!model.elementSpecificationExists(new ElementId(answer.getId()))) {
       return List.of(PrefillAnswer.answerNotFound(answer.getId()));
     }

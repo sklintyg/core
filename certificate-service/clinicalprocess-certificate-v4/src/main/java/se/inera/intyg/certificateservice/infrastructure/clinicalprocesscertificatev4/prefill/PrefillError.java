@@ -14,4 +14,14 @@ public record PrefillError(PrefillErrorType type, String details) {
     return new PrefillError(SUB_ANSWER_NOT_FOUND,
         "Sub-answer with id %s not found in answer with id %s".formatted(subAnswerId, answerId));
   }
+
+  public static PrefillError wrongNumberOfAnswers(int expected, int actual) {
+    return new PrefillError(PrefillErrorType.WRONG_NUMBER_OF_ANSWERS,
+        "Expected %d answers but got %d".formatted(expected, actual));
+  }
+
+  public static PrefillError technicalError(String s) {
+    return new PrefillError(PrefillErrorType.TECHNICAL_ERROR,
+        "A technical error occurred %s".formatted(s));
+  }
 }

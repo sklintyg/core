@@ -2,7 +2,6 @@ package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertific
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import lombok.Builder;
 import lombok.Builder.Default;
@@ -16,7 +15,7 @@ public class PrefillAnswer {
   @JsonIgnore
   private ElementData elementData;
   @Default
-  private Collection<PrefillError> errors = new ArrayList<>();
+  private List<PrefillError> errors = new ArrayList<>();
 
   public static PrefillAnswer answerNotFound(String id) {
     return PrefillAnswer.builder()

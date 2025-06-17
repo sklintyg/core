@@ -2,7 +2,6 @@ package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertific
 
 import static se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.PrefillErrorType.UNMARSHALL_ERROR;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 import org.springframework.stereotype.Component;
@@ -26,12 +25,12 @@ public class TextFieldConverter implements PrefillConverter {
 
 
   @Override
-  public PrefillAnswer prefillAnswer(Collection<Svar> answers, ElementSpecification specification) {
+  public PrefillAnswer prefillAnswer(List<Svar> answers, ElementSpecification specification) {
     return null;
   }
 
   @Override
-  public Collection<PrefillAnswer> unknownIds(Svar answer, CertificateModel model) {
+  public List<PrefillAnswer> unknownIds(Svar answer, CertificateModel model) {
     if (!model.elementSpecificationExists(new ElementId(answer.getId()))) {
       return List.of(PrefillAnswer.answerNotFound(answer.getId()));
     }
@@ -51,7 +50,7 @@ public class TextFieldConverter implements PrefillConverter {
   }
 
   @Override
-  public PrefillAnswer prefillSubAnswer(Collection<Delsvar> subAnswers,
+  public PrefillAnswer prefillSubAnswer(List<Delsvar> subAnswers,
       ElementSpecification specification) {
     //TODO: handle empty subanswer and multiple subanswers?
     final var content = subAnswers.stream().findFirst().get().getContent();
