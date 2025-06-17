@@ -11,10 +11,10 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 
-class TextFieldPrefillerTest {
+class TextFieldConverterTest {
 
   private static final String DELSVAR_ID = "1.3";
-  private final TextFieldPrefiller textFieldPrefiller = new TextFieldPrefiller();
+  private final TextFieldConverter textFieldConverter = new TextFieldConverter();
 
   @Test
   void shallParseDelsvar() {
@@ -33,7 +33,7 @@ class TextFieldPrefillerTest {
     delsvar.getContent().add(text);
     delsvar.setId(DELSVAR_ID);
 
-    var result = textFieldPrefiller.prefillSubAnswer(List.of(delsvar),
+    var result = textFieldConverter.prefillSubAnswer(List.of(delsvar),
         questionAnnanGrundForMedicinsktUnderlag());
 
     assertEquals(expected, result);

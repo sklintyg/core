@@ -17,9 +17,9 @@ import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
-class PrefillCheckboxMultipleDatesTest {
+class CheckboxMultipleDatesConverterTest {
 
-  PrefillCheckboxMultipleDates prefillCheckboxMultipleDates = new PrefillCheckboxMultipleDates();
+  CheckboxMultipleDatesConverter checkboxMultipleDatesConverter = new CheckboxMultipleDatesConverter();
 
   @Test
   void testPrefillCheckboxMultipleDates() throws JAXBException, ParserConfigurationException {
@@ -53,7 +53,7 @@ class PrefillCheckboxMultipleDatesTest {
     delsvarDate.setId("1.2");
     delsvarDate.getContent().add("2023-10-01");
     svar.getDelsvar().add(delsvarDate);
-    prefillCheckboxMultipleDates.prefillAnswer(List.of(svar),
+    checkboxMultipleDatesConverter.prefillAnswer(List.of(svar),
         questionGrundForMedicinsktUnderlag());
 
 

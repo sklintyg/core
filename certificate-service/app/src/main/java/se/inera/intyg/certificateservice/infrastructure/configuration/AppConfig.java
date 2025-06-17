@@ -69,8 +69,8 @@ import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertifica
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorCertificateWithQAV3;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorValue;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.message.XmlGeneratorMessageV4;
-import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.ConfigurationConverterMapper;
-import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.PrefillProcessorV4;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.PrefillHandler;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.PrefillService;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.validation.SchemaValidatorV4;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.validation.SchematronValidator;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.validation.XmlSchemaValidator;
@@ -158,8 +158,8 @@ public class AppConfig {
 
   @Bean
   public PrefillProcessor prefillProcessor(
-      ConfigurationConverterMapper configurationConverterMapper) {
-    return new PrefillProcessorV4(configurationConverterMapper);
+      PrefillHandler prefillHandler) {
+    return new PrefillService(prefillHandler);
   }
 
   @Bean

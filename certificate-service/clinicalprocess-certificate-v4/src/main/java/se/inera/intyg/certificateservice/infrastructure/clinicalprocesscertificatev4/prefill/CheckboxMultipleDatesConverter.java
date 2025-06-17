@@ -2,14 +2,17 @@ package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertific
 
 import jakarta.xml.bind.JAXBContext;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfiguration;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleDate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
@@ -18,7 +21,7 @@ import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 
 @Component
-public class PrefillCheckboxMultipleDates implements PrefillElementData {
+public class CheckboxMultipleDatesConverter implements PrefillConverter {
 
   @Override
   public Class<? extends ElementConfiguration> supports() {
@@ -71,6 +74,24 @@ public class PrefillCheckboxMultipleDates implements PrefillElementData {
     return PrefillAnswer.builder()
         .elementData(elementData)
         .build();
+  }
+
+  @Override
+  public Collection<PrefillAnswer> unknownIds(Svar answer, CertificateModel model) {
+    if (!model.elementSpecificationExists(new ElementId(answer.getId()))) {
+      return List.of(PrefillAnswer.answerNotFound(answer.getId()));
+    }
+
+    var result = new ArrayList<PrefillAnswer>();
+    answer.getDelsvar().stream().filter(
+            subAnswer -> !model.elementSpecificationExists(new ElementId(subAnswer.getId())))
+        .forEach(subAnswer -> {
+          if (!List.of("1.1", "1.2").contains(subAnswer.getId())) {
+            result.add(PrefillAnswer.subAnswerNotFound(answer.getId(), subAnswer.getId()));
+          }
+        });
+
+    return result;
   }
 
 

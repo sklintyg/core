@@ -4,17 +4,20 @@ import static se.inera.intyg.certificateservice.infrastructure.clinicalprocessce
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Predicate;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfiguration;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextField;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 
 @Component
-public class TextFieldPrefiller implements PrefillElementData {
+public class TextFieldConverter implements PrefillConverter {
 
   @Override
   public Class<? extends ElementConfiguration> supports() {
@@ -22,8 +25,29 @@ public class TextFieldPrefiller implements PrefillElementData {
   }
 
 
+  @Override
   public PrefillAnswer prefillAnswer(Collection<Svar> answers, ElementSpecification specification) {
     return null;
+  }
+
+  @Override
+  public Collection<PrefillAnswer> unknownIds(Svar answer, CertificateModel model) {
+    if (!model.elementSpecificationExists(new ElementId(answer.getId()))) {
+      return List.of(PrefillAnswer.answerNotFound(answer.getId()));
+    }
+
+    return answer.getDelsvar().stream()
+        .filter(subAnswerIdNotInModel(new ElementId(answer.getId()), model))
+        .map(subAnswer -> PrefillAnswer.subAnswerNotFound(answer.getId(), subAnswer.getId()))
+        .toList();
+  }
+
+  private Predicate<Delsvar> subAnswerIdNotInModel(ElementId answerId, CertificateModel model) {
+    return subAnswer -> !model.elementSpecification(answerId)
+        .configuration()
+        .id()
+        .value()
+        .equals(subAnswer.getId());
   }
 
   @Override

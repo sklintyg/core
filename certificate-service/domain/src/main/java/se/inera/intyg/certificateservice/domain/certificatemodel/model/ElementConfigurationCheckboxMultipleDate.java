@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import lombok.Builder;
@@ -30,13 +29,6 @@ public class ElementConfigurationCheckboxMultipleDate implements ElementConfigur
         .dateListId(id)
         .dateList(Collections.emptyList())
         .build();
-  }
-
-  @Override
-  public Collection<FieldId> availableSubAnswerIds(ElementId elementId) {
-    return List.of(
-        new FieldId(elementId.id() + ".1"),
-        new FieldId(elementId.id() + ".2"));
   }
 
   public Code code(ElementValueDate elementValueDate) {

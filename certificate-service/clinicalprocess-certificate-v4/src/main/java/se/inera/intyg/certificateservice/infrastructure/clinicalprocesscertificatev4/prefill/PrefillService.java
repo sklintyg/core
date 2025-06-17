@@ -14,9 +14,9 @@ import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
 @Slf4j
 @RequiredArgsConstructor
-public class PrefillProcessorV4 implements PrefillProcessor {
+public class PrefillService implements PrefillProcessor {
 
-  private final ConfigurationConverterMapper configurationConverterMapper;
+  private final PrefillHandler prefillHandler;
 
   @Override
   public List<ElementData> prefill(CertificateModel certificateModel, Xml prefillXml) {
@@ -25,8 +25,8 @@ public class PrefillProcessorV4 implements PrefillProcessor {
       return List.of();
     }
 
-    final var prefillResult = PrefillResult.prepare(certificateModel, unmarshalledPrefill,
-        configurationConverterMapper);
+    final var prefillResult = PrefillResult.create(certificateModel, unmarshalledPrefill,
+        prefillHandler);
     log.info("Begin prefilling answers for certificate");
     prefillResult.prefill();
     log.info("Prefill result log: {}", prefillResult.toJsonReport());
