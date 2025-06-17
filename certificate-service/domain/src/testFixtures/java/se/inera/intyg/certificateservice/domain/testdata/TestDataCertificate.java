@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.domain.testdata;
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK3221_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK3226_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7210_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7426_CERTIFICATE_MODEL;
@@ -716,6 +717,136 @@ public class TestDataCertificate {
                             .id(new FieldId("62.4"))
                             .fromDate(LocalDate.now().minusDays(3))
                             .toDate(LocalDate.now().plusDays(10))
+                            .build()
+                    )
+                    .build()
+            )
+        )
+        .certificateMetaData(
+            CertificateMetaData.builder()
+                .issuer(AJLA_DOKTOR)
+                .creator(ALF_DOKTOR)
+                .patient(ATHENA_REACT_ANDERSSON)
+                .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
+                .careUnit(ALFA_MEDICINCENTRUM)
+                .careProvider(ALFA_REGIONEN)
+                .build()
+        );
+  }
+
+  public static final Certificate FK3221_CERTIFICATE = fk3221CertificateBuilder().build();
+
+  public static Certificate.CertificateBuilder fk3221CertificateBuilder() {
+    return Certificate.builder()
+        .id(CERTIFICATE_ID)
+        .revision(REVISION)
+        .created(LocalDateTime.now(ZoneId.systemDefault()))
+        .certificateModel(FK3221_CERTIFICATE_MODEL)
+        .xml(XML)
+        .sent(SENT)
+        .revoked(REVOKED)
+        .externalReference(EXTERNAL_REFERENCE)
+        .elementData(
+            List.of(
+                ElementData.builder()
+                    .id(new ElementId("1"))
+                    .value(
+                        ElementValueDateList.builder()
+                            .dateListId(new FieldId("1.1"))
+                            .dateList(
+                                List.of(
+                                    ElementValueDate.builder()
+                                        .dateId(new FieldId("fysisktMote"))
+                                        .date(LocalDate.now())
+                                        .build()
+                                )
+                            )
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("3"))
+                    .value(
+                        ElementValueBoolean.builder()
+                            .booleanId(new FieldId("3.1"))
+                            .value(true)
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("4"))
+                    .value(
+                        ElementValueMedicalInvestigationList.builder()
+                            .id(new FieldId("4.1"))
+                            .list(
+                                List.of(
+                                    MedicalInvestigation.builder()
+                                        .id(new FieldId("medicalInvestigation1"))
+                                        .informationSource(
+                                            ElementValueText.builder()
+                                                .textId(new FieldId(
+                                                    "medicalInvestigation1_INFORMATION_SOURCE"))
+                                                .text("Example text")
+                                                .build()
+                                        )
+                                        .investigationType(
+                                            ElementValueCode.builder()
+                                                .codeId(new FieldId(
+                                                    "medicalInvestigation1_INVESTIGATION_TYPE"))
+                                                .code("LOGOPED")
+                                                .build()
+                                        )
+                                        .date(
+                                            ElementValueDate.builder()
+                                                .dateId(new FieldId("medicalInvestigation1_DATE"))
+                                                .date(LocalDate.now())
+                                                .build())
+                                        .build()
+                                )
+                            )
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("58"))
+                    .value(
+                        ElementValueDiagnosisList.builder()
+                            .diagnoses(
+                                List.of(
+                                    ElementValueDiagnosis.builder()
+                                        .code("A013")
+                                        .description("Paratyfoidfeber C")
+                                        .terminology("ICD_10_SE")
+                                        .build()
+                                )
+                            )
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("5"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("5.1"))
+                            .text("TEXT")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("8"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("8.1"))
+                            .text("TEXT")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("39"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("39.2"))
+                            .text("TEXT")
                             .build()
                     )
                     .build()

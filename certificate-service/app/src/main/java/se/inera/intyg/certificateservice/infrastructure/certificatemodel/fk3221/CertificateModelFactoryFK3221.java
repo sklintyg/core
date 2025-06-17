@@ -40,6 +40,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
@@ -90,6 +91,9 @@ public class CertificateModelFactoryFK3221 implements CertificateModelFactory {
       .version(new CertificateVersion(VERSION))
       .build();
 
+  public static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
+      "fk3221/schematron/lu_omv_mek.v1.sch");
+
   @Override
   public CertificateModel create() {
     return CertificateModel.builder()
@@ -107,6 +111,7 @@ public class CertificateModelFactoryFK3221 implements CertificateModelFactory {
         .activeFrom(activeFrom)
         .availableForCitizen(false)
         .recipient(CertificateRecipientFactory.fkassa(fkLogicalAddress))
+        .schematronPath(SCHEMATRON_PATH)
         .messageTypes(
             List.of(
                 CertificateMessageType.builder()

@@ -148,6 +148,17 @@ class CertificateModelFactoryFK3221Test {
   }
 
   @Test
+  void shallIncludeSchematronPath() {
+    final var expectedSchematronPath = "fk3221/schematron/lu_omv_mek.v1.sch";
+    final var certificateModel = certificateModelFactoryFK3221.create();
+
+    assertAll(
+        () -> assertNotNull(certificateModel.schematronPath()),
+        () -> assertEquals(expectedSchematronPath, certificateModel.schematronPath().value())
+    );
+  }
+
+  @Test
   void shallIncludeCertificateActionSpecifications() {
     final var certificateModel = certificateModelFactoryFK3221.create();
 
