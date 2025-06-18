@@ -5,7 +5,8 @@
   queryBinding='xslt2'
   schemaVersion='ISO19757-3'>
 
-  <iso:title>Schematron file for "Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har fyllt 18" - Version
+  <iso:title>Schematron file for "Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt
+    barn som inte har fyllt 18" - Version
     1.
   </iso:title>
 
@@ -19,29 +20,36 @@
   <iso:pattern id="intyg">
     <iso:rule context="//rg:intyg">
       <iso:assert test="count(gn:svar[@id='1']) ge 1">
-        Ett 'Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har fyllt 18' måsta ha ett 'Grund för
+        Ett 'Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har
+        fyllt 18' måsta ha ett 'Grund för
         medicinskt underlag' svar
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='1']) le 5">
-        Ett 'Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har fyllt 18' får ha max 5 'Grund för
+        Ett 'Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har
+        fyllt 18' får ha max 5 'Grund för
         medicinskt underlag'
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='58']) = 1 or count(gn:svar[@id='55']) = 1">
-        Ett 'Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har fyllt 18' måste minst ha ett svar på
+        Ett 'Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har
+        fyllt 18' måste minst ha ett svar på
         någon av frågorna 'Barnets diagnos' eller 'Fyll i vilka symtom barnet har om diagnos inte är
         fastställd'
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='59']) = 1">
-        Ett 'Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har fyllt 18' måste ha ett 'Barnets hälsotillstånd'
+        Ett 'Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har
+        fyllt 18' måste ha ett 'Barnets hälsotillstånd'
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='60']) = 1">
-        Ett 'Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har fyllt 18' måste ha ett 'Grund för bedömning' svar
+        Ett 'Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har
+        fyllt 18' måste ha ett 'Grund för bedömning' svar
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='61']) = 1">
-        Ett 'Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har fyllt 18' måste ha ett 'För vilken period bedömer du att barnet är allvarligt sjukt?' svar
+        Ett 'Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har
+        fyllt 18' måste ha ett 'För vilken period bedömer du att barnet är allvarligt sjukt?' svar
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='62']) = 1">
-        Ett 'Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har fyllt 18' måste ha ett 'Sjukhusvård eller hemsjukvård' svar
+        Ett 'Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har
+        fyllt 18' måste ha ett 'Sjukhusvård eller hemsjukvård' svar
       </iso:assert>
     </iso:rule>
   </iso:pattern>
@@ -167,7 +175,8 @@
   <iso:pattern id="q62">
     <iso:rule context="//gn:svar[@id='62']">
       <iso:assert test="count(gn:delsvar[@id='62.1']) = 1">
-        Ett 'Vård eller tillsyn' svar måste ha ett delsvar av frågan 'Vårdas barnet inneliggande på sjukhus?'
+        Ett 'Vård eller tillsyn' svar måste ha ett delsvar av frågan 'Vårdas barnet inneliggande på
+        sjukhus?'
       </iso:assert>
     </iso:rule>
   </iso:pattern>
@@ -175,13 +184,14 @@
   <iso:pattern id="q62-3">
     <iso:rule context="//gn:svar[@id='62']">
       <iso:assert test="count(gn:delsvar[@id='62.3']) = 1">
-        Ett 'Vård eller tillsyn' svar måste ha ett delsvar av frågan 'Är barnet inskrivet med hemsjukvård?'
+        Ett 'Vård eller tillsyn' svar måste ha ett delsvar av frågan 'Är barnet inskrivet med
+        hemsjukvård?'
       </iso:assert>
     </iso:rule>
   </iso:pattern>
 
   <iso:pattern id="q61">
-    <iso:rule context="//gn:delsvar[@id='61']">
+    <iso:rule context="//gn:delsvar[@id='61.1']">
       <iso:extends rule="period"/>
     </iso:rule>
   </iso:pattern>
@@ -198,17 +208,39 @@
     </iso:rule>
   </iso:pattern>
 
- <iso:pattern id="period-pattern">
+  <iso:pattern id="period-pattern">
     <iso:rule id="period" abstract="true">
-      <iso:assert test="tp:datePeriod">En period måste inneslutas av ett 'datePeriod'-element</iso:assert>
-      <iso:assert test="tp:datePeriod/tp:start/count(*) = 0">'from' får inte vara inbäddat i något element.</iso:assert>
-      <iso:assert test="tp:datePeriod/tp:start castable as xs:date">'from' måste vara ett giltigt datum.</iso:assert>
-      <iso:assert test="matches(tp:datePeriod/tp:start, '^\d{4}-\d\d-\d\d')">'from' måste uttryckas som YYYY-MM-DD.</iso:assert>
-      <iso:assert test="tp:datePeriod/tp:end/count(*) = 0">'tom' får inte vara inbäddat i något element.</iso:assert>
-      <iso:assert test="tp:datePeriod/tp:end castable as xs:date">'tom' måste vara ett giltigt datum.</iso:assert>
-      <iso:assert test="matches(tp:datePeriod/tp:end, '^\d{4}-\d\d-\d\d')">'end' måste uttryckas som YYYY-MM-DD.</iso:assert>
-      <iso:assert test="normalize-space(tp:datePeriod/tp:start) le normalize-space(tp:datePeriod/tp:end)">
+      <iso:assert test="tp:datePeriod">En period måste inneslutas av ett 'datePeriod'-element
+      </iso:assert>
+      <iso:assert test="tp:datePeriod/tp:start/count(*) = 0">'from' får inte vara inbäddat i något
+        element.
+      </iso:assert>
+      <iso:assert test="tp:datePeriod/tp:start castable as xs:date">'from' måste vara ett giltigt
+        datum.
+      </iso:assert>
+      <iso:assert test="matches(tp:datePeriod/tp:start, '^\d{4}-\d\d-\d\d')">'from' måste uttryckas
+        som YYYY-MM-DD.
+      </iso:assert>
+      <iso:assert test="tp:datePeriod/tp:end/count(*) = 0">'tom' får inte vara inbäddat i något
+        element.
+      </iso:assert>
+      <iso:assert test="tp:datePeriod/tp:end castable as xs:date">'tom' måste vara ett giltigt
+        datum.
+      </iso:assert>
+      <iso:assert test="matches(tp:datePeriod/tp:end, '^\d{4}-\d\d-\d\d')">'end' måste uttryckas som
+        YYYY-MM-DD.
+      </iso:assert>
+      <iso:assert
+        test="normalize-space(tp:datePeriod/tp:start) le normalize-space(tp:datePeriod/tp:end)">
         'from' måste vara mindre än eller lika med 'to'
+      </iso:assert>
+    </iso:rule>
+  </iso:pattern>
+
+  <iso:pattern id="non-empty-string-pattern">
+    <iso:rule id="non-empty-string" abstract="true">
+      <iso:assert test="count(*) = 0">Värdet får inte vara inbäddat i något element.</iso:assert>
+      <iso:assert test="string-length(normalize-space(text())) > 0">Sträng kan inte vara tom.
       </iso:assert>
     </iso:rule>
   </iso:pattern>
