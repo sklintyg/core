@@ -310,7 +310,7 @@
 
   <iso:pattern id="q50.1-50.2">
     <iso:rule context="//gn:delsvar[@id='50.1']">
-      <iso:assert test="../../../gn:delsvar[@id='50.2']">
+      <iso:assert test="count(../gn:delsvar[@id='50.2']) = 1">
         Om 'Ange pågående och planerade medicinska behandlingar' är angiven så måste 'Ange ansvarig
         vårdenhet och om möjligt tidplan' anges.
       </iso:assert>
