@@ -88,7 +88,7 @@
         till patienten' svar.
       </iso:assert>
       <iso:assert
-        test="not(preceding-sibling::gn:svar[@id='1']/gn:delsvar[@id='1.1']/tp:cv/tp:code/normalize-space() = normalize-space(gn:delsvar[@id='1.1']/tp:cv/tp:code))">
+        test="not(some $prev in preceding-sibling::gn:svar[@id='1']/gn:delsvar[@id='1.1']/tp:cv/tp:code satisfies normalize-space($prev) = normalize-space(gn:delsvar[@id='1.1']/tp:cv/tp:code))">
         Samma 'Typ av grund för MU' kan inte användas flera gånger i samma 'LUMEK'.
       </iso:assert>
     </iso:rule>
@@ -221,7 +221,8 @@
         test="matches(normalize-space(tp:cv/tp:code), '^(NEUROPSYKIATRISKT|HABILITERING|ARBETSTERAPEUT|FYSIOTERAPEUT|LOGOPED|PSYKOLOG|SPECIALISTKLINIK|VARD_UTOMLANDS|HORSELHABILITERING|SYNHABILITERING|AUDIONOM|DIETIST|ORTOPTIST|ORTOPEDTEKNIKER|OVRIGT_UTLATANDE|)$')">
         'Utredning eller underlagstyp?' kan ha ett av värdena NEUROPSYKIATRISKT, HABILITERING,
         ARBETSTERAPEUT, FYSIOTERAPEUT, LOGOPED, PSYKOLOG, SPECIALISTKLINIK, VARD_UTOMLANDS,
-        HORSELHABILITERING, SYNHABILITERING, AUDIONOM, DIETIST, ORTOPTIST, ORTOPEDTEKNIKER, OVRIGT_UTLATANDE.
+        HORSELHABILITERING, SYNHABILITERING, AUDIONOM, DIETIST, ORTOPTIST, ORTOPEDTEKNIKER,
+        OVRIGT_UTLATANDE.
       </iso:assert>
     </iso:rule>
   </iso:pattern>

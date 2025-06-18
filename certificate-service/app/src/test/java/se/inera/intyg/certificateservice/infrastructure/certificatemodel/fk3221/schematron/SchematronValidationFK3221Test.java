@@ -149,6 +149,42 @@ class SchematronValidationFK3221Test {
     }
 
     @Test
+    void shallReturnFalseIfMoreThanOneOccurenceOfMU() {
+      final var certificate = TestDataCertificate.fk3221CertificateBuilder()
+          .certificateModel(certificateModelFactoryFK3221.create())
+          .build();
+
+      final var element = certificate.elementData().stream()
+          .filter(elementData -> elementData.id().equals(new ElementId("1")))
+          .findFirst()
+          .orElseThrow();
+
+      final var value = (ElementValueDateList) element.value();
+      final var elementData = element.withValue(value.withDateList(
+              List.of(
+                  ElementValueDate.builder()
+                      .dateId(new FieldId("fysisktMote"))
+                      .date(LocalDate.now())
+                      .build(),
+                  ElementValueDate.builder()
+                      .dateId(new FieldId("fysisktMote"))
+                      .date(LocalDate.now())
+                      .build()
+              )
+          )
+      );
+
+      final var updatedElementData = certificate.elementData().stream()
+          .map(data -> data.id().equals(new ElementId("1")) ? elementData : data)
+          .toList();
+      certificate.updateData(updatedElementData, new Revision(0), ACTION_EVALUATION);
+
+      final var xml = generator.generate(certificate, false);
+      assertFalse(schematronValidator.validate(certificate.id(), xml,
+          CertificateModelFactoryFK3221.SCHEMATRON_PATH));
+    }
+
+    @Test
     void shallReturnFalseIfMissingValues() {
       final var certificate = TestDataCertificate.fk3221CertificateBuilder()
           .certificateModel(certificateModelFactoryFK3221.create())
