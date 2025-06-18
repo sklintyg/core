@@ -13,36 +13,39 @@ import org.junit.jupiter.api.Test;
 import org.w3c.dom.Element;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCodeList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
-import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorCode;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorCodeList;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.CVType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.ObjectFactory;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 
-class PrefillRadioMultipleCodeConverterTest {
+class PrefillCheckboxMultipleCodeConverterTest {
 
   private static final ElementId ELEMENT_ID = new ElementId("1");
-  private static final FieldId CODE_FIELD_ID = new FieldId("2");
-  private static final FieldId FIELD_ID = new FieldId("F2");
+  private static final FieldId CODE_FIELD_ID = new FieldId("F1");
+  private static final FieldId FIELD_ID = new FieldId("F");
+  private static final FieldId CODE_2_FIELD_ID = new FieldId("F2");
   private static final String CODE = "code1";
+  private static final String CODE_2 = "code2";
   private static final ElementSpecification SPECIFICATION = ElementSpecification.builder()
       .id(ELEMENT_ID)
       .configuration(
-          ElementConfigurationRadioMultipleCode.builder()
+          ElementConfigurationCheckboxMultipleCode.builder()
               .id(FIELD_ID)
               .list(
                   List.of(
                       new ElementConfigurationCode(
                           CODE_FIELD_ID, "Code 1", new Code(CODE, "S1", "D1")),
-                      new ElementConfigurationCode(new FieldId("F2"), "Code 2",
-                          new Code("C2", "S1", "D2"))
+                      new ElementConfigurationCode(CODE_2_FIELD_ID, "Code 2",
+                          new Code(CODE_2, "S1", "D2"))
                   )
               )
               .build()
@@ -51,19 +54,45 @@ class PrefillRadioMultipleCodeConverterTest {
   private static final ElementData EXPECTED_ELEMENT_DATA = ElementData.builder()
       .id(ELEMENT_ID)
       .value(
-          ElementValueCode.builder()
-              .codeId(CODE_FIELD_ID)
-              .code(CODE)
+          ElementValueCodeList.builder()
+              .id(FIELD_ID)
+              .list(
+                  List.of(
+                      ElementValueCode.builder()
+                          .codeId(CODE_FIELD_ID)
+                          .code(CODE)
+                          .build(),
+                      ElementValueCode.builder()
+                          .codeId(CODE_2_FIELD_ID)
+                          .code(CODE_2)
+                          .build()
+                  )
+              )
+              .build()
+      ).build();
+  private static final ElementData EXPECTED_ELEMENT_DATA_SUB_ANSWER = ElementData.builder()
+      .id(ELEMENT_ID)
+      .value(
+          ElementValueCodeList.builder()
+              .id(FIELD_ID)
+              .list(
+                  List.of(
+                      ElementValueCode.builder()
+                          .codeId(CODE_FIELD_ID)
+                          .code(CODE)
+                          .build()
+                  )
+              )
               .build()
       ).build();
 
-  private final PrefillRadioMultipleCodeConverter prefillRadioMultipleCodeConverter = new PrefillRadioMultipleCodeConverter();
-  private final XmlGeneratorCode xmlGeneratorRadioMultipleCode = new XmlGeneratorCode();
+  private final PrefillCheckboxMultipleCodeConverter prefillCheckboxMultipleCodeConverter = new PrefillCheckboxMultipleCodeConverter();
+  private final XmlGeneratorCodeList xmlGeneratorCheckboxMultipleCode = new XmlGeneratorCodeList();
 
   @Test
-  void shouldReturnSupportsRadioMultipleCode() {
-    assertEquals(ElementConfigurationRadioMultipleCode.class,
-        prefillRadioMultipleCodeConverter.supports());
+  void shouldReturnSupportsCheckboxMultipleCode() {
+    assertEquals(ElementConfigurationCheckboxMultipleCode.class,
+        prefillCheckboxMultipleCodeConverter.supports());
   }
 
   @Nested
@@ -73,23 +102,27 @@ class PrefillRadioMultipleCodeConverterTest {
     void shouldReturnEmptyListForUnknownIds() {
       assertEquals(
           Collections.emptyList(),
-          prefillRadioMultipleCodeConverter.unknownIds(null, null)
+          prefillCheckboxMultipleCodeConverter.unknownIds(null, null)
       );
     }
 
     @Test
-    void shouldCreatPrefillAnswerForRadioMultipleCode() throws Exception {
+    void shouldCreatePrefillAnswerForCheckboxMultipleCode() throws Exception {
       final var expected = PrefillAnswer.builder()
           .elementData(EXPECTED_ELEMENT_DATA)
           .build();
 
       final var answer = new Svar();
+      final var answer2 = new Svar();
       final var subAnswer = new Delsvar();
-      subAnswer.getContent().add(createCVTypeElement());
+      final var subAnswer2 = new Delsvar();
+      subAnswer.getContent().add(createCVTypeElement(CODE));
+      subAnswer2.getContent().add(createCVTypeElement(CODE_2));
       answer.getDelsvar().add(subAnswer);
+      answer2.getDelsvar().add(subAnswer2);
 
-      final var result = prefillRadioMultipleCodeConverter.prefillAnswer(List.of(answer),
-          SPECIFICATION);
+      final var result = prefillCheckboxMultipleCodeConverter.prefillAnswer(
+          List.of(answer, answer2), SPECIFICATION);
 
       assertEquals(expected, result);
     }
@@ -101,7 +134,7 @@ class PrefillRadioMultipleCodeConverterTest {
           .configuration(ElementConfigurationCategory.builder().build())
           .build();
 
-      final var result = prefillRadioMultipleCodeConverter.prefillAnswer(
+      final var result = prefillCheckboxMultipleCodeConverter.prefillAnswer(
           List.of(new Svar()),
           wrongConfiguration
       );
@@ -113,28 +146,9 @@ class PrefillRadioMultipleCodeConverterTest {
     }
 
     @Test
-    void shouldReturnErrorIfMoreThanOneAnswer() {
-      final var answer = xmlGeneratorRadioMultipleCode.generate(
-          EXPECTED_ELEMENT_DATA,
-          SPECIFICATION
-      );
-      final var answer2 = xmlGeneratorRadioMultipleCode.generate(
-          EXPECTED_ELEMENT_DATA,
-          SPECIFICATION
-      );
-
-      final var result = prefillRadioMultipleCodeConverter.prefillAnswer(
-          List.of(answer.getFirst(), answer2.getFirst()), SPECIFICATION);
-
-      assertEquals(
-          PrefillErrorType.WRONG_NUMBER_OF_ANSWERS,
-          result.getErrors().getFirst().type()
-      );
-    }
-
-    @Test
     void shouldReturnErrorIfNoAnswers() {
-      final var result = prefillRadioMultipleCodeConverter.prefillAnswer(List.of(), SPECIFICATION);
+      final var result = prefillCheckboxMultipleCodeConverter.prefillAnswer(List.of(),
+          SPECIFICATION);
 
       assertEquals(
           PrefillErrorType.WRONG_NUMBER_OF_ANSWERS,
@@ -143,14 +157,14 @@ class PrefillRadioMultipleCodeConverterTest {
     }
 
     @Test
-    void shouldReturnErrorIfInvalidRadioMultipleCodeFormat() {
+    void shouldReturnErrorIfInvalidCheckboxMultipleCodeFormat() {
       final var answer = new Svar();
       final var subAnswer = new Delsvar();
-      final var content = List.of("invalid-radioMultipleCode-format");
+      final var content = List.of("invalid-checkboxMultipleCode-format");
       subAnswer.getContent().add(content);
       answer.getDelsvar().add(subAnswer);
 
-      final var result = prefillRadioMultipleCodeConverter.prefillAnswer(List.of(answer),
+      final var result = prefillCheckboxMultipleCodeConverter.prefillAnswer(List.of(answer),
           SPECIFICATION);
 
       assertEquals(
@@ -166,13 +180,13 @@ class PrefillRadioMultipleCodeConverterTest {
     @Test
     void shouldReturnPrefillAnswerForSubAnswer() throws Exception {
       final var expected = PrefillAnswer.builder()
-          .elementData(EXPECTED_ELEMENT_DATA)
+          .elementData(EXPECTED_ELEMENT_DATA_SUB_ANSWER)
           .build();
 
       final var subAnswer = new Delsvar();
-      subAnswer.getContent().add(createCVTypeElement());
+      subAnswer.getContent().add(createCVTypeElement(CODE));
 
-      final var result = prefillRadioMultipleCodeConverter.prefillSubAnswer(
+      final var result = prefillCheckboxMultipleCodeConverter.prefillSubAnswer(
           List.of(subAnswer),
           SPECIFICATION);
 
@@ -186,7 +200,7 @@ class PrefillRadioMultipleCodeConverterTest {
           .configuration(ElementConfigurationCategory.builder().build())
           .build();
 
-      final var result = prefillRadioMultipleCodeConverter.prefillSubAnswer(
+      final var result = prefillCheckboxMultipleCodeConverter.prefillSubAnswer(
           List.of(new Delsvar()),
           wrongConfiguration);
 
@@ -198,16 +212,16 @@ class PrefillRadioMultipleCodeConverterTest {
 
     @Test
     void shouldReturnErrorIfMoreThanOneSubAnswer() {
-      final var answer = xmlGeneratorRadioMultipleCode.generate(
+      final var answer = xmlGeneratorCheckboxMultipleCode.generate(
           EXPECTED_ELEMENT_DATA,
           SPECIFICATION
       );
-      final var answer2 = xmlGeneratorRadioMultipleCode.generate(
+      final var answer2 = xmlGeneratorCheckboxMultipleCode.generate(
           EXPECTED_ELEMENT_DATA,
           SPECIFICATION
       );
 
-      final var result = prefillRadioMultipleCodeConverter.prefillSubAnswer(
+      final var result = prefillCheckboxMultipleCodeConverter.prefillSubAnswer(
           List.of(answer.getFirst().getDelsvar().getFirst(),
               answer2.getFirst().getDelsvar().getFirst()), SPECIFICATION);
 
@@ -219,7 +233,7 @@ class PrefillRadioMultipleCodeConverterTest {
 
     @Test
     void shouldReturnErrorIfNoSubAnswers() {
-      final var result = prefillRadioMultipleCodeConverter.prefillSubAnswer(List.of(),
+      final var result = prefillCheckboxMultipleCodeConverter.prefillSubAnswer(List.of(),
           SPECIFICATION);
 
       assertEquals(
@@ -231,10 +245,10 @@ class PrefillRadioMultipleCodeConverterTest {
     @Test
     void shouldReturnErrorIfInvalidFormat() {
       final var subAnswer = new Delsvar();
-      final var content = List.of("invalid-radioMultipleCode-format");
+      final var content = List.of("invalid-checkboxMultipleCode-format");
       subAnswer.getContent().add(content);
 
-      final var result = prefillRadioMultipleCodeConverter.prefillSubAnswer(List.of(subAnswer),
+      final var result = prefillCheckboxMultipleCodeConverter.prefillSubAnswer(List.of(subAnswer),
           SPECIFICATION);
 
       assertEquals(
@@ -244,9 +258,9 @@ class PrefillRadioMultipleCodeConverterTest {
     }
   }
 
-  private static Element createCVTypeElement() throws Exception {
+  private static Element createCVTypeElement(String code) throws Exception {
     final var cvType = new CVType();
-    cvType.setCode(CODE);
+    cvType.setCode(code);
     cvType.setDisplayName("D1");
 
     final var factory = new ObjectFactory();

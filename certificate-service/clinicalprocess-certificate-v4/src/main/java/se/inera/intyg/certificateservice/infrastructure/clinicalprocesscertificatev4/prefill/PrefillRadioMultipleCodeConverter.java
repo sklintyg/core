@@ -9,6 +9,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfiguration;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 
@@ -36,6 +37,7 @@ public class PrefillRadioMultipleCodeConverter implements PrefillConverter {
     }
 
     String code;
+    FieldId id;
     try {
       final var cvType = PrefillAnswer.unmarshalCVType(subAnswers.getFirst().getContent());
 
@@ -44,6 +46,12 @@ public class PrefillRadioMultipleCodeConverter implements PrefillConverter {
       }
 
       code = cvType.get().getCode();
+      id = configurationRadioMultipleCode.list()
+          .stream()
+          .filter(c -> c.code().code().equals(code))
+          .findFirst()
+          .orElseThrow(() -> new IllegalArgumentException("Code not found: " + code))
+          .id();
     } catch (Exception e) {
       return PrefillAnswer.invalidFormat();
     }
@@ -53,7 +61,7 @@ public class PrefillRadioMultipleCodeConverter implements PrefillConverter {
             ElementData.builder()
                 .id(specification.id())
                 .value(ElementValueCode.builder()
-                    .codeId(configurationRadioMultipleCode.id())
+                    .codeId(id)
                     .code(code)
                     .build()
                 ).build()
