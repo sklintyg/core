@@ -252,83 +252,85 @@
   </iso:pattern>
 
   <iso:pattern id="q58">
-      <iso:rule context="//gn:svar[@id='58']">
-        <iso:assert test="count(gn:instans) = 1">
-          'Typ av diagnos' måste ha ett instansnummer.
-        </iso:assert>
-        <iso:assert test="count(gn:delsvar[@id='58.1']) = 1">
-          'Typ av diagnos' måste ha en 'Diagnostext'.
-        </iso:assert>
-        <iso:assert test="count(gn:delsvar[@id='58.2']) = 1">
-          'Typ av diagnos' måste ha en 'Diagnoskod ICD-10'.
-        </iso:assert>
-        <iso:let name="delsvarsIdExpr" value="'^58\.(10|[1-9])$'"/>
-        <iso:assert test="count(gn:delsvar[not(matches(@id, $delsvarsIdExpr))]) = 0">
-          Oväntat delsvars-id i delsvar till svar "<value-of select="@id"/>". Delsvars-id:n måste
-          matcha "<value-of select="$delsvarsIdExpr"/>".
-        </iso:assert>
-      </iso:rule>
-    </iso:pattern>
+    <iso:rule context="//gn:svar[@id='58']">
+      <iso:assert test="count(gn:instans) = 1">
+        'Typ av diagnos' måste ha ett instansnummer.
+      </iso:assert>
+      <iso:assert test="count(gn:delsvar[@id='58.1']) = 1">
+        'Typ av diagnos' måste ha en 'Diagnostext'.
+      </iso:assert>
+      <iso:assert test="count(gn:delsvar[@id='58.2']) = 1">
+        'Typ av diagnos' måste ha en 'Diagnoskod ICD-10'.
+      </iso:assert>
+      <iso:let name="delsvarsIdExpr" value="'^58\.(10|[1-9])$'"/>
+      <iso:assert test="count(gn:delsvar[not(matches(@id, $delsvarsIdExpr))]) = 0">
+        Oväntat delsvars-id i delsvar till svar "<value-of select="@id"/>". Delsvars-id:n måste
+        matcha "<value-of select="$delsvarsIdExpr"/>".
+      </iso:assert>
+    </iso:rule>
+  </iso:pattern>
 
-    <iso:pattern id="q58.1">
-      <iso:rule context="//gn:delsvar[@id='58.1']">
-        <iso:extends rule="non-empty-string"/>
-      </iso:rule>
-    </iso:pattern>
+  <iso:pattern id="q58.1">
+    <iso:rule context="//gn:delsvar[@id='58.1']">
+      <iso:extends rule="non-empty-string"/>
+    </iso:rule>
+  </iso:pattern>
 
-    <iso:pattern id="q58.2">
-      <iso:rule context="//gn:delsvar[@id='58.2']">
-        <iso:extends rule="cv"/>
-        <iso:assert test="matches(normalize-space(tp:cv/tp:codeSystem), '(1.2.752.116.1.1.1.1.8)')">
-          Diagnoskodsystem måste vara OID för ICD-10-SE
-        </iso:assert>
-        <iso:assert
-          test="matches(normalize-space(tp:cv/tp:code),'^([A-EG-Ya-eg-y][0-9]{2}[A-Za-z0-9-]*|[Zz][0-689][0-9][A-Za-z0-9-]*|[Zz]7[0-24-9][A-Za-z0-9-]*|[Zz]73[A-Za-z0-9-]+|[Ff][0-9]{2}[A-Za-z0-9-]+)$')">
-          Diagnoskod måste anges som bokstav följt av två siffror följt av noll eller flera bokstäver,
-          siffror eller bindestreck, d.v.s. minst tre positioner
-          måste anges. Om diagnoskoden börjar med F eller Z73 måste bokstav och två siffor följas av
-          minst en bokstav, siffra eller bindestreck, d.v.s. minst fyra
-          positioner måste anges.
-        </iso:assert>
-        <iso:assert test="string-length(normalize-space(tp:cv/tp:code)) le 5">
-          Diagnoskod får inte vara längre än 5 tecken.
-        </iso:assert>
-      </iso:rule>
-    </iso:pattern>
+  <iso:pattern id="q58.2">
+    <iso:rule context="//gn:delsvar[@id='58.2']">
+      <iso:extends rule="cv"/>
+      <iso:assert test="matches(normalize-space(tp:cv/tp:codeSystem), '(1.2.752.116.1.1.1.1.8)')">
+        Diagnoskodsystem måste vara OID för ICD-10-SE
+      </iso:assert>
+      <iso:assert
+        test="matches(normalize-space(tp:cv/tp:code),'^([A-EG-Ya-eg-y][0-9]{2}[A-Za-z0-9-]*|[Zz][0-689][0-9][A-Za-z0-9-]*|[Zz]7[0-24-9][A-Za-z0-9-]*|[Zz]73[A-Za-z0-9-]+|[Ff][0-9]{2}[A-Za-z0-9-]+)$')">
+        Diagnoskod måste anges som bokstav följt av två siffror följt av noll eller flera bokstäver,
+        siffror eller bindestreck, d.v.s. minst tre positioner
+        måste anges. Om diagnoskoden börjar med F eller Z73 måste bokstav och två siffor följas av
+        minst en bokstav, siffra eller bindestreck, d.v.s. minst fyra
+        positioner måste anges.
+      </iso:assert>
+      <iso:assert test="string-length(normalize-space(tp:cv/tp:code)) le 5">
+        Diagnoskod får inte vara längre än 5 tecken.
+      </iso:assert>
+    </iso:rule>
+  </iso:pattern>
 
 
-    <iso:pattern id="q50.1">
-      <iso:rule context="//gn:delsvar[@id='50.2']">
-        <iso:extends rule="non-empty-string"/>
-        <iso:assert
-          test="count(../gn:delsvar[@id='50.1']) = 1">
-          Om 'Ange pågående och planerade medicinska behandlingar' inte är angiven så får 'Ange ansvarig vårdenhet och om möjligt tidplan' inte anges.
-        </iso:assert>
-      </iso:rule>
-    </iso:pattern>
+  <iso:pattern id="q50.1">
+    <iso:rule context="//gn:delsvar[@id='50.2']">
+      <iso:extends rule="non-empty-string"/>
+      <iso:assert
+        test="count(../gn:delsvar[@id='50.1']) = 1">
+        Om 'Ange pågående och planerade medicinska behandlingar' inte är angiven så får 'Ange
+        ansvarig vårdenhet och om möjligt tidplan' inte anges.
+      </iso:assert>
+    </iso:rule>
+  </iso:pattern>
 
-    <iso:pattern id="q50.1-50.2">
-      <iso:rule context="//gn:delsvar[@id='50.1']">
-        <iso:assert test="../../../gn:delsvar[@id='50.2']">
-          Om 'Ange pågående och planerade medicinska behandlingar' är angiven så måste 'Ange ansvarig vårdenhet och om möjligt tidplan' anges.
-        </iso:assert>
-      </iso:rule>
-    </iso:pattern>
+  <iso:pattern id="q50.1-50.2">
+    <iso:rule context="//gn:delsvar[@id='50.1']">
+      <iso:assert test="../../../gn:delsvar[@id='50.2']">
+        Om 'Ange pågående och planerade medicinska behandlingar' är angiven så måste 'Ange ansvarig
+        vårdenhet och om möjligt tidplan' anges.
+      </iso:assert>
+    </iso:rule>
+  </iso:pattern>
 
-    <iso:pattern id="cv-pattern">
-        <iso:rule id="cv" abstract="true">
-          <iso:assert test="count(tp:cv) = 1">Ett värde av typen CV måste ha ett cv-element</iso:assert>
-          <iso:assert test="count(tp:cv/tp:codeSystem) = 1">codeSystem är obligatoriskt</iso:assert>
-          <iso:assert test="tp:cv/tp:codeSystem/count(*) = 0">'codeSystem' får inte vara inbäddat i
-            något element.
-          </iso:assert>
-          <iso:assert test="count(tp:cv/tp:code) = 1">code är obligatoriskt</iso:assert>
-          <iso:assert test="tp:cv/tp:code/count(*) = 0">'code' får inte vara inbäddat i något element.
-          </iso:assert>
-          <iso:assert test="count(tp:cv/tp:displayName) le 1">högst ett displayName kan anges
-          </iso:assert>
-        </iso:rule>
-    </iso:pattern>
+  <iso:pattern id="cv-pattern">
+    <iso:rule id="cv" abstract="true">
+      <iso:assert test="count(tp:cv) = 1">Ett värde av typen CV måste ha ett cv-element</iso:assert>
+      <iso:assert test="count(tp:cv/tp:codeSystem) = 1">codeSystem är obligatoriskt</iso:assert>
+      <iso:assert test="tp:cv/tp:codeSystem/count(*) = 0">'codeSystem' får inte vara inbäddat i
+        något element.
+      </iso:assert>
+      <iso:assert test="count(tp:cv/tp:code) = 1">code är obligatoriskt</iso:assert>
+      <iso:assert test="tp:cv/tp:code/count(*) = 0">'code' får inte vara inbäddat i något element.
+      </iso:assert>
+      <iso:assert test="count(tp:cv/tp:displayName) le 1">högst ett displayName kan anges
+      </iso:assert>
+    </iso:rule>
+  </iso:pattern>
 
   <iso:pattern id="date-pattern">
     <iso:rule id="date" abstract="true">
@@ -355,6 +357,5 @@
       </iso:assert>
     </iso:rule>
   </iso:pattern>
-
 
 </iso:schema>
