@@ -45,7 +45,7 @@ public class CodeSystemFunktionsnedsattning {
       "Synfunktion"
   );
 
-  public static final Code SINNESFUNKTION = new Code(
+  public static final Code SINNESFUNKTION_V1 = new Code(
       "Sinnesfunktion",
       CODE_SYSTEM,
       "Övriga sinnesfunktioner och smärta"
