@@ -46,6 +46,7 @@ class PdfSpecificationCopilotHelperTest {
 
   private static final String FK_7427 = "fk7427";
   private static final String FK_7426 = "fk7426";
+  private static final String FK_3221 = "fk3221";
 
   /**
    * To verify that the PDF templates that are delivered by the certificate recipient follows the
@@ -59,7 +60,7 @@ class PdfSpecificationCopilotHelperTest {
    * needs to be fixed and save a new structure file for the type
    */
   @ParameterizedTest
-  @ValueSource(strings = {FK_7427, FK_7426})
+  @ValueSource(strings = {FK_7427, FK_7426, FK_3221})
   void shouldHaveSameStructureAsOriginalDocument(String certificateType) {
     setup(certificateType);
 
@@ -79,7 +80,7 @@ class PdfSpecificationCopilotHelperTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {FK_7427, FK_7426})
+  @ValueSource(strings = {FK_7427, FK_7426, FK_3221})
   void shouldHaveSameIdsForTemplateWithAndWithoutAddress(String certificateType) {
     setup(certificateType);
 
