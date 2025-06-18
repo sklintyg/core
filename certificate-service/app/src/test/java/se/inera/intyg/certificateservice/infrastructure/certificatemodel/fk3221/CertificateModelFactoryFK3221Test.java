@@ -481,4 +481,11 @@ class CertificateModelFactoryFK3221Test {
 
     assertEquals(certificateActionFactory, certificateModel.certificateActionFactory());
   }
+
+  @Test
+  void shallIncludePdfSpecification() {
+    final var certificateModel = certificateModelFactoryFK3221.create();
+
+    assertNotNull(certificateModel.pdfSpecification());
+  }
 }

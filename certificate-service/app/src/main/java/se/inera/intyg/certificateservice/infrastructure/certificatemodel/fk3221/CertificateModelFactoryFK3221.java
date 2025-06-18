@@ -172,6 +172,7 @@ public class CertificateModelFactoryFK3221 implements CertificateModelFactory {
             )
         )
         .certificateActionFactory(certificateActionFactory)
+        .pdfSpecification(FK3221PdfSpecification.create())
         .build();
   }
 }
