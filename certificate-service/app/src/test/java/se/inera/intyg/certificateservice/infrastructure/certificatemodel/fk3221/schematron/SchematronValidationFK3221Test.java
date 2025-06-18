@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
@@ -444,6 +446,72 @@ class SchematronValidationFK3221Test {
       assertFalse(schematronValidator.validate(certificate.id(), xml,
           CertificateModelFactoryFK3221.SCHEMATRON_PATH));
     }
+
+    @Test
+    void shallReturnFalseIfDiagnosisDescriptionIsMissing() {
+      final var certificate = TestDataCertificate.fk3221CertificateBuilder()
+          .certificateModel(certificateModelFactoryFK3221.create())
+          .build();
+
+      final var element = certificate.elementData().stream()
+          .filter(elementData -> elementData.id().equals(new ElementId("58")))
+          .findFirst()
+          .orElseThrow();
+
+      final var value = (ElementValueDiagnosisList) element.value();
+      final var elementData = element.withValue(value.withDiagnoses(
+              List.of(
+                  ElementValueDiagnosis.builder()
+                      .code("A013")
+                      .description("")
+                      .terminology("ICD_10_SE")
+                      .build()
+              )
+          )
+      );
+
+      final var updatedElementData = certificate.elementData().stream()
+          .map(data -> data.id().equals(new ElementId("58")) ? elementData : data)
+          .toList();
+      certificate.updateData(updatedElementData, new Revision(0), ACTION_EVALUATION);
+
+      final var xml = generator.generate(certificate, false);
+      assertFalse(schematronValidator.validate(certificate.id(), xml,
+          CertificateModelFactoryFK3221.SCHEMATRON_PATH));
+    }
+
+    @Test
+    void shallReturnFalseIfDiagnosisCodeIsMalformed() {
+      final var certificate = TestDataCertificate.fk3221CertificateBuilder()
+          .certificateModel(certificateModelFactoryFK3221.create())
+          .build();
+
+      final var element = certificate.elementData().stream()
+          .filter(elementData -> elementData.id().equals(new ElementId("58")))
+          .findFirst()
+          .orElseThrow();
+
+      final var value = (ElementValueDiagnosisList) element.value();
+      final var elementData = element.withValue(value.withDiagnoses(
+              List.of(
+                  ElementValueDiagnosis.builder()
+                      .code("AAAAA")
+                      .description("Paratyfoidfeber C")
+                      .terminology("ICD_10_SE")
+                      .build()
+              )
+          )
+      );
+
+      final var updatedElementData = certificate.elementData().stream()
+          .map(data -> data.id().equals(new ElementId("58")) ? elementData : data)
+          .toList();
+      certificate.updateData(updatedElementData, new Revision(0), ACTION_EVALUATION);
+
+      final var xml = generator.generate(certificate, false);
+      assertFalse(schematronValidator.validate(certificate.id(), xml,
+          CertificateModelFactoryFK3221.SCHEMATRON_PATH));
+    }
   }
 
   @Nested
@@ -495,6 +563,58 @@ class SchematronValidationFK3221Test {
           .map(data -> data.id().equals(new ElementId("39")) ? elementData : data)
           .toList();
       certificate.updateData(updatedElementData, new Revision(0), ACTION_EVALUATION);
+
+      final var xml = generator.generate(certificate, false);
+      assertFalse(schematronValidator.validate(certificate.id(), xml,
+          CertificateModelFactoryFK3221.SCHEMATRON_PATH));
+    }
+  }
+
+  @Nested
+  class TestValidateMedicinskaBehandlingar {
+
+    @Test
+    void shallReturnFalseIfPlannedMedicalTreatmentIsNonEmptyAndResponsibleUnitIsEmpty() {
+      final var certificate = TestDataCertificate.fk3221CertificateBuilder()
+          .certificateModel(certificateModelFactoryFK3221.create())
+          .build();
+
+      final var elementData = new ArrayList<>(certificate.elementData());
+      elementData.add(ElementData.builder()
+          .id(new ElementId("50"))
+          .value(
+              ElementValueText.builder()
+                  .textId(new FieldId("50.1"))
+                  .text("TEXT")
+                  .build()
+          )
+          .build());
+
+      certificate.updateData(elementData, new Revision(0), ACTION_EVALUATION);
+
+      final var xml = generator.generate(certificate, false);
+      assertFalse(schematronValidator.validate(certificate.id(), xml,
+          CertificateModelFactoryFK3221.SCHEMATRON_PATH));
+    }
+
+    @Test
+    void shallReturnFalseIfPlannedMedicalTreatmentIsEmptyAndResponsibleUnitIsNotEmpty() {
+      final var certificate = TestDataCertificate.fk3221CertificateBuilder()
+          .certificateModel(certificateModelFactoryFK3221.create())
+          .build();
+
+      final var elementData = new ArrayList<>(certificate.elementData());
+      elementData.add(ElementData.builder()
+          .id(new ElementId("50.2"))
+          .value(
+              ElementValueText.builder()
+                  .textId(new FieldId("50.2"))
+                  .text("TEXT")
+                  .build()
+          )
+          .build());
+
+      certificate.updateData(elementData, new Revision(0), ACTION_EVALUATION);
 
       final var xml = generator.generate(certificate, false);
       assertFalse(schematronValidator.validate(certificate.id(), xml,
