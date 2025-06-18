@@ -59,7 +59,7 @@ public class QuestionGrundForMedicinsktUnderlag {
         CheckboxDate.builder()
             .id(new FieldId(UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID))
             .label("journaluppgifter från och med")
-            .code(CodeSystemKvFkmu0001.JOURNALUPGIFTER)
+            .code(CodeSystemKvFkmu0001.JOURNALUPPGIFTER)
             .min(null)
             .max(Period.ofDays(0))
             .build(),

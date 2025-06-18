@@ -111,7 +111,7 @@
         'KV_FKMU_0001'.
       </iso:assert>
       <iso:assert
-        test="matches(normalize-space(tp:cv/tp:code), '^(FYSISKUNDERSOKNING|DIGITALUNDERSOKNING|JOURNALUPGIFTER|ANHORIG|ANNAT)$')">
+        test="matches(normalize-space(tp:cv/tp:code), '^(FYSISKUNDERSOKNING|DIGITALUNDERSOKNING|JOURNALUPPGIFTER|ANHORIG|ANNAT)$')">
         'Typ av grund för MU' kan ha ett av värdena FYSISKUNDERSOKNING, DIGITALUNDERSOKNING,
         JOURNALUPPGIFTER, ANHORIG, ANNAT .
       </iso:assert>

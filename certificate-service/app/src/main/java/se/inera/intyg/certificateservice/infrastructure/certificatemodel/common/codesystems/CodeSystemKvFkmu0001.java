@@ -12,7 +12,7 @@ public class CodeSystemKvFkmu0001 {
       "min undersökning av patienten"
   );
 
-  public static final Code JOURNALUPGIFTER = new Code(
+  public static final Code JOURNALUPPGIFTER = new Code(
       "JOURNALUPPGIFTER",
       CODE_SYSTEM,
       "journaluppgifter från den"

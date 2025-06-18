@@ -50,8 +50,8 @@ public class QuestionUtlatandeBaseratPa {
             .build(),
         CheckboxDate.builder()
             .id(new FieldId(UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID))
-            .label(CodeSystemKvFkmu0001.JOURNALUPGIFTER.displayName())
-            .code(CodeSystemKvFkmu0001.JOURNALUPGIFTER)
+            .label(CodeSystemKvFkmu0001.JOURNALUPPGIFTER.displayName())
+            .code(CodeSystemKvFkmu0001.JOURNALUPPGIFTER)
             .min(null)
             .max(Period.ofDays(0))
             .build(),
