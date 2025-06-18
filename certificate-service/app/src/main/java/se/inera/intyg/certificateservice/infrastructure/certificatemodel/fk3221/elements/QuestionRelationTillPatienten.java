@@ -30,7 +30,7 @@ public class QuestionRelationTillPatienten {
             ElementConfigurationTextField.builder()
                 .id(QUESTION_RELATION_TILL_PATIENTEN_FIELD_ID)
                 .name(
-                    "Ange anhörig eller annans relation till patienten")
+                    "Ange anhörigs eller annans relation till patienten")
                 .build()
         )
         .rules(
@@ -59,7 +59,7 @@ public class QuestionRelationTillPatienten {
         .mapping(
             new ElementMapping(
                 QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID,
-                CodeSystemKvFkmu0001.ANHORIG
+                CodeSystemKvFkmu0001.ANHORIG_V1
             )
         )
         .shouldValidate(

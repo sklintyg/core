@@ -37,7 +37,7 @@ class QuestionRelationTillPatientenTest {
   void shallIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationTextField.builder()
         .name(
-            "Ange anhörig eller annans relation till patienten")
+            "Ange anhörigs eller annans relation till patienten")
         .id(new FieldId("1.4"))
         .build();
 

@@ -62,7 +62,7 @@ public class QuestionRelationTillPatienten {
         .mapping(
             new ElementMapping(
                 QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID,
-                CodeSystemKvFkmu0001.ANHORIG
+                CodeSystemKvFkmu0001.ANHORIG_V1
             )
         )
         .shouldValidate(

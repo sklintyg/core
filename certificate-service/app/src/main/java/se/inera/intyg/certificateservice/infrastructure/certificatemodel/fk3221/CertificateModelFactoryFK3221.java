@@ -76,7 +76,7 @@ public class CertificateModelFactoryFK3221 implements CertificateModelFactory {
   private static final String DETAILED_DESCRIPTION = """
        <b className="iu-fw-heading">Vem kan få omvårdnadsbidrag eller merkostnadsersättning för barn?</b>
       
-       Föräldrar som har barn med funktionsnedsättning kan ha rätt till omvårdnadsbidrag eller mekostnadsersättning.
+       Föräldrar som har barn med funktionsnedsättning kan ha rätt till omvårdnadsbidrag eller merkostnadsersättning.
       
        Omvårdnadsbidrag kan beviljas om barnet har behov av mer omvårdnad och tillsyn jämfört med barn i samma ålder som inte har en funktionsnedsättning. Behoven ska antas finnas i minst 6 månader. Omvårdnad och tillsyn kan till exempel vara behov av praktisk hjälp i vardagen, hjälp med struktur och kommunikation eller att föräldern behöver ha extra uppsikt över barnet.
       

@@ -24,10 +24,16 @@ public class CodeSystemKvFkmu0001 {
       "annat"
   );
 
-  public static final Code ANHORIG = new Code(
+  public static final Code ANHORIG_V1 = new Code(
       "ANHORIG",
       CODE_SYSTEM,
       "anhörig eller annans beskrivning av patienten"
+  );
+
+  public static final Code ANHORIG_V2 = new Code(
+      "ANHORIG",
+      CODE_SYSTEM,
+      "anhörigs eller annans beskrivning av patienten"
   );
 
   public static final Code FYSISKUNDERSOKNING = new Code(

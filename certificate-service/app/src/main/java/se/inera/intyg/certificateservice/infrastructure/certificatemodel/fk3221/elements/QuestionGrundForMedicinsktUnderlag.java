@@ -55,8 +55,8 @@ public class QuestionGrundForMedicinsktUnderlag {
             .build(),
         CheckboxDate.builder()
             .id(UTLATANDE_BASERAT_PA_ANHORIG_FIELD_ID)
-            .label(CodeSystemKvFkmu0001.ANHORIG.displayName())
-            .code(CodeSystemKvFkmu0001.ANHORIG)
+            .label(CodeSystemKvFkmu0001.ANHORIG_V2.displayName())
+            .code(CodeSystemKvFkmu0001.ANHORIG_V2)
             .min(null)
             .max(Period.ofDays(0))
             .build(),
