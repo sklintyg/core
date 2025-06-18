@@ -301,7 +301,7 @@
       <iso:rule context="//gn:delsvar[@id='50.2']">
         <iso:extends rule="non-empty-string"/>
         <iso:assert
-          test="count(../gn:delsvar[@id='50.1']) = 0">
+          test="count(../gn:delsvar[@id='50.1']) = 1">
           Om 'Ange pågående och planerade medicinska behandlingar' inte är angiven så får 'Ange ansvarig vårdenhet och om möjligt tidplan' inte anges.
         </iso:assert>
       </iso:rule>
