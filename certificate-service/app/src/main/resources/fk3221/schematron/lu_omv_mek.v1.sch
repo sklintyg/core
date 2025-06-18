@@ -5,7 +5,8 @@
   queryBinding='xslt2'
   schemaVersion='ISO19757-3'>
 
-  <iso:title>Schematron file for "Läkarutlåtande för merkostnadsersättning FK7809" - Version 1.
+  <iso:title>Schematron file for "Läkarutlåtande för omvårdnadsbidrag och merkostnadsersättning
+    FK3221" - Version 1.
   </iso:title>
 
   <iso:ns prefix="xs" uri="http://www.w3.org/2001/XMLSchema"/>
@@ -16,55 +17,63 @@
 
   <iso:pattern id="intyg">
     <iso:rule context="//rg:intyg">
-      <iso:assert test="count(gn:svar[@id='1']) ge 1 and count(gn:svar[@id='1']) le 4">
-        Ett 'LUMEK' måste ha mellan 1 och 4 'Grund för medicinskt underlag'
+      <iso:assert test="count(gn:svar[@id='1']) ge 1 and count(gn:svar[@id='1']) le 5">
+        Ett 'Läkarutlåtande för omvårdnadsbidrag och merkostnadsersättning' måste ha mellan 1 och 5
+        'Grund för medicinskt underlag'
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='3']) = 1">
-        Ett 'LUMEK' måste ha ett 'Är utlåtandet även baserat på andra medicinska utredningar eller
+        Ett 'Läkarutlåtande för omvårdnadsbidrag och merkostnadsersättning' måste ha ett 'Är
+        utlåtandet även baserat på andra medicinska utredningar eller
         underlag?' svar
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='4']) le 3">
-        Ett 'LUMEK' får ha högst tre 'Andra medicinska utredningar eller underlag'
+        Ett 'Läkarutlåtande för omvårdnadsbidrag och merkostnadsersättning' får ha högst tre 'Andra
+        medicinska utredningar eller underlag'
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='58']) ge 1 and count(gn:svar[@id='58']) le 5">
-        Ett 'LUNSP' måste ha minst en och högst fem 'Typ av diagnos'
+        Ett 'Läkarutlåtande för omvårdnadsbidrag och merkostnadsersättning' måste ha minst en och
+        högst fem 'Typ av diagnos'
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='5']) = 1">
-        Ett 'LUMEK' måste ha ett 'Sammanfatta historiken för diagnoserna' svar
-      </iso:assert>
-      <iso:assert test="count(gn:svar[@id='51']) = 1">
-        Ett 'LUMEK' måste ha ett 'Prognos' svar
+        Ett 'Läkarutlåtande för omvårdnadsbidrag och merkostnadsersättning' måste ha ett
+        'Sammanfatta historiken för diagnoserna' svar
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='8']) le 1">
-        Ett 'LUMEK' får ha högst ett 'Funktionsnedsättning för intellektuell funktion'
+        Ett 'Läkarutlåtande för omvårdnadsbidrag och merkostnadsersättning' får ha högst ett
+        'Funktionsnedsättning för intellektuell funktion'
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='9']) le 1">
-        Ett 'LUMEK' får ha högst ett 'Funktionsnedsättning övergripande psykosociala funktioner'
+        Ett 'Läkarutlåtande för omvårdnadsbidrag och merkostnadsersättning' får ha högst ett
+        'Funktionsnedsättning övergripande psykosociala funktioner'
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='10']) le 1">
-        Ett 'LUMEK' får ha högst ett 'Funktionsnedsättning för uppmärksamhet, koncentration och
+        Ett 'Läkarutlåtande för omvårdnadsbidrag och merkostnadsersättning' får ha högst ett
+        'Funktionsnedsättning för uppmärksamhet, koncentration och
         exekutiv funktion'
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='11']) le 1">
-        Ett 'LUMEK' får ha högst ett 'Funktionsnedsättning för annan psykisk funktion'
-      </iso:assert>
-      <iso:assert test="count(gn:svar[@id='48']) le 1">
-        Ett 'LUMEK' får ha högst ett 'Funktionsnedsättning för hörselfunktion'
-      </iso:assert>
-      <iso:assert test="count(gn:svar[@id='49']) le 1">
-        Ett 'LUMEK' får ha högst ett 'Funktionsnedsättning för synfunktion'
+        Ett 'Läkarutlåtande för omvårdnadsbidrag och merkostnadsersättning' får ha högst ett
+        'Funktionsnedsättning för annan psykisk funktion'
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='12']) le 1">
-        Ett 'LUMEK' får ha högst ett 'Funktionsnedsättning för sinnesfunktioner och smärta'
+        Ett 'Läkarutlåtande för omvårdnadsbidrag och merkostnadsersättning' får ha högst ett
+        'Funktionsnedsättning för sinnesfunktioner och smärta'
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='13']) le 1">
-        Ett 'LUMEK' får ha högst ett 'Funktionsnedsättning för balans, koordination och motorik'
+        Ett 'Läkarutlåtande för omvårdnadsbidrag och merkostnadsersättning' får ha högst ett
+        'Funktionsnedsättning för balans, koordination och motorik'
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='14']) le 1">
-        Ett 'LUMEK' får ha högst ett 'Funktionsnedsättning för annan kroppslig funktion'
+        Ett 'Läkarutlåtande för omvårdnadsbidrag och merkostnadsersättning' får ha högst ett
+        'Funktionsnedsättning för annan kroppslig funktion'
       </iso:assert>
-      <iso:assert test="count(gn:svar[matches(@id, '^(48|49|[89]|1[0-4])$')]) ge 1">
-        Ett 'LUMEK' måste ha minst ett 'Funktionsnedsättning'
+      <iso:assert test="count(gn:svar[matches(@id, '^([89]|1[0-4])$')]) ge 1">
+        Ett 'Läkarutlåtande för omvårdnadsbidrag och merkostnadsersättning' måste ha minst ett
+        'Funktionsnedsättning'
+      </iso:assert>
+      <iso:assert test="count(gn:svar[@id='39']) = 1">
+        Ett 'Läkarutlåtande för omvårdnadsbidrag och merkostnadsersättning' måste ha ett 'Prognos'
+        svar
       </iso:assert>
     </iso:rule>
   </iso:pattern>
@@ -89,7 +98,8 @@
       </iso:assert>
       <iso:assert
         test="not(some $prev in preceding-sibling::gn:svar[@id='1']/gn:delsvar[@id='1.1']/tp:cv/tp:code satisfies normalize-space($prev) = normalize-space(gn:delsvar[@id='1.1']/tp:cv/tp:code))">
-        Samma 'Typ av grund för MU' kan inte användas flera gånger i samma 'LUMEK'.
+        Samma 'Typ av grund för MU' kan inte användas flera gånger i samma 'Läkarutlåtande för
+        omvårdnadsbidrag och merkostnadsersättning'.
       </iso:assert>
     </iso:rule>
   </iso:pattern>
@@ -101,8 +111,9 @@
         'KV_FKMU_0001'.
       </iso:assert>
       <iso:assert
-        test="matches(normalize-space(tp:cv/tp:code), '^(UNDERSOKNING|JOURNALUPPGIFTER|ANNAT|ANHORIG)$')">
-        'Typ av grund för MU' kan ha ett av värdena UNDERSOKNING, JOURNALUPPGIFTER, ANNAT, ANHORIG.
+        test="matches(normalize-space(tp:cv/tp:code), '^(FYSISKUNDERSOKNING|DIGITALUNDERSOKNING|JOURNALUPPGIFTER|ANHORIG|ANNAT)$')">
+        'Typ av grund för MU' kan ha ett av värdena FYSISKUNDERSOKNING, DIGITALUNDERSOKNING,
+        JOURNALUPPGIFTER, ANHORIG, ANNAT .
       </iso:assert>
     </iso:rule>
   </iso:pattern>
@@ -218,11 +229,12 @@
         'KV_FKMU_0005'.
       </iso:assert>
       <iso:assert
-        test="matches(normalize-space(tp:cv/tp:code), '^(NEUROPSYKIATRISKT|HABILITERING|ARBETSTERAPEUT|FYSIOTERAPEUT|LOGOPED|PSYKOLOG|SPECIALISTKLINIK|VARD_UTOMLANDS|HORSELHABILITERING|SYNHABILITERING|AUDIONOM|DIETIST|ORTOPTIST|ORTOPEDTEKNIKER|OVRIGT_UTLATANDE|)$')">
-        'Utredning eller underlagstyp?' kan ha ett av värdena NEUROPSYKIATRISKT, HABILITERING,
-        ARBETSTERAPEUT, FYSIOTERAPEUT, LOGOPED, PSYKOLOG, SPECIALISTKLINIK, VARD_UTOMLANDS,
-        HORSELHABILITERING, SYNHABILITERING, AUDIONOM, DIETIST, ORTOPTIST, ORTOPEDTEKNIKER,
-        OVRIGT_UTLATANDE.
+        test="matches(normalize-space(tp:cv/tp:code), '^(NEUROPSYKIATRISKT|HABILITERING|ARBETSTERAPEUT|FYSIOTERAPEUT|LOGOPED|PSYKOLOG|VARDCENTRAL|SPECIALISTKLINIK|SKOLHALSOVARD|VARD_UTOMLANDS|HORSELHABILITERING|SYNHABILITERING|DIETIST|OVRIGT)$')">
+        )$')">
+        'Utredning eller underlagstyp?' kan ha ett av värdena 'Utredning eller underlagstyp?' kan ha
+        ett av värdena: NEUROPSYKIATRISKT, HABILITERING, ARBETSTERAPEUT, FYSIOTERAPEUT, LOGOPED,
+        PSYKOLOG, VARDCENTRAL, SPECIALISTKLINIK, SKOLHALSOVARD, VARD_UTOMLANDS, HORSELHABILITERING,
+        SYNHABILITERING, DIETIST, OVRIGT.
       </iso:assert>
     </iso:rule>
   </iso:pattern>
@@ -238,7 +250,6 @@
       <iso:extends rule="non-empty-string"/>
     </iso:rule>
   </iso:pattern>
-
 
   <iso:pattern id="q58">
     <iso:rule context="//gn:svar[@id='58']">
@@ -285,11 +296,23 @@
     </iso:rule>
   </iso:pattern>
 
-  <iso:pattern id="date-pattern">
-    <iso:rule id="date" abstract="true">
-      <iso:assert test="count(*) = 0">Datum får inte vara inbäddat i något element.</iso:assert>
-      <iso:assert test=". castable as xs:date">Värdet måste vara ett giltigt datum.</iso:assert>
-      <iso:assert test="matches(., '^\d{4}-\d\d-\d\d')">Datumet måste uttryckas som YYYY-MM-DD.
+
+  <iso:pattern id="q50.1">
+    <iso:rule context="//gn:delsvar[@id='50.2']">
+      <iso:extends rule="non-empty-string"/>
+      <iso:assert
+        test="count(../gn:delsvar[@id='50.1']) = 1">
+        Om 'Ange pågående och planerade medicinska behandlingar' inte är angiven så får 'Ange
+        ansvarig vårdenhet och om möjligt tidplan' inte anges.
+      </iso:assert>
+    </iso:rule>
+  </iso:pattern>
+
+  <iso:pattern id="q50.1-50.2">
+    <iso:rule context="//gn:delsvar[@id='50.1']">
+      <iso:assert test="count(../gn:delsvar[@id='50.2']) = 1">
+        Om 'Ange pågående och planerade medicinska behandlingar' är angiven så måste 'Ange ansvarig
+        vårdenhet och om möjligt tidplan' anges.
       </iso:assert>
     </iso:rule>
   </iso:pattern>
@@ -305,6 +328,15 @@
       <iso:assert test="tp:cv/tp:code/count(*) = 0">'code' får inte vara inbäddat i något element.
       </iso:assert>
       <iso:assert test="count(tp:cv/tp:displayName) le 1">högst ett displayName kan anges
+      </iso:assert>
+    </iso:rule>
+  </iso:pattern>
+
+  <iso:pattern id="date-pattern">
+    <iso:rule id="date" abstract="true">
+      <iso:assert test="count(*) = 0">Datum får inte vara inbäddat i något element.</iso:assert>
+      <iso:assert test=". castable as xs:date">Värdet måste vara ett giltigt datum.</iso:assert>
+      <iso:assert test="matches(., '^\d{4}-\d\d-\d\d')">Datumet måste uttryckas som YYYY-MM-DD.
       </iso:assert>
     </iso:rule>
   </iso:pattern>

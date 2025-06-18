@@ -72,12 +72,12 @@ class QuestionGrundForMedicinsktUnderlagTest {
                     .build(),
                 CheckboxDate.builder()
                     .id(new FieldId("anhorig"))
-                    .label("anhörig eller annans beskrivning av patienten")
+                    .label("anhörigs eller annans beskrivning av patienten")
                     .code(
                         new Code(
                             "ANHORIG",
                             "KV_FKMU_0001",
-                            "anhörig eller annans beskrivning av patienten"
+                            "anhörigs eller annans beskrivning av patienten"
                         )
                     )
                     .max(Period.ZERO)

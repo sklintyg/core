@@ -40,6 +40,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
@@ -75,7 +76,7 @@ public class CertificateModelFactoryFK3221 implements CertificateModelFactory {
   private static final String DETAILED_DESCRIPTION = """
        <b className="iu-fw-heading">Vem kan få omvårdnadsbidrag eller merkostnadsersättning för barn?</b>
       
-       Föräldrar som har barn med funktionsnedsättning kan ha rätt till omvårdnadsbidrag eller mekostnadsersättning.
+       Föräldrar som har barn med funktionsnedsättning kan ha rätt till omvårdnadsbidrag eller merkostnadsersättning.
       
        Omvårdnadsbidrag kan beviljas om barnet har behov av mer omvårdnad och tillsyn jämfört med barn i samma ålder som inte har en funktionsnedsättning. Behoven ska antas finnas i minst 6 månader. Omvårdnad och tillsyn kan till exempel vara behov av praktisk hjälp i vardagen, hjälp med struktur och kommunikation eller att föräldern behöver ha extra uppsikt över barnet.
       
@@ -89,6 +90,9 @@ public class CertificateModelFactoryFK3221 implements CertificateModelFactory {
       .type(new CertificateType(FK_3221))
       .version(new CertificateVersion(VERSION))
       .build();
+
+  public static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
+      "fk3221/schematron/lu_omv_mek.v1.sch");
 
   @Override
   public CertificateModel create() {
@@ -107,6 +111,7 @@ public class CertificateModelFactoryFK3221 implements CertificateModelFactory {
         .activeFrom(activeFrom)
         .availableForCitizen(false)
         .recipient(CertificateRecipientFactory.fkassa(fkLogicalAddress))
+        .schematronPath(SCHEMATRON_PATH)
         .messageTypes(
             List.of(
                 CertificateMessageType.builder()

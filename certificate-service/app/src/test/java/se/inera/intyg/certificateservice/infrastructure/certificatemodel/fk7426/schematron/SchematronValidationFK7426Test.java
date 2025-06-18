@@ -296,7 +296,7 @@ public class SchematronValidationFK7426Test {
 
       final var elementData = element.withValue(
           ElementValueDateRange.builder()
-              .id(new FieldId("61"))
+              .id(new FieldId("61.1"))
               .fromDate(LocalDate.now())
               .build()
       );
@@ -324,7 +324,7 @@ public class SchematronValidationFK7426Test {
 
       final var elementData = element.withValue(
           ElementValueDateRange.builder()
-              .id(new FieldId("61"))
+              .id(new FieldId("61.1"))
               .toDate(LocalDate.now())
               .build()
       );
@@ -352,7 +352,7 @@ public class SchematronValidationFK7426Test {
 
       final var elementData = element.withValue(
           ElementValueDateRange.builder()
-              .id(new FieldId("61"))
+              .id(new FieldId("61.1"))
               .fromDate(LocalDate.of(2023, 12, 31))
               .toDate(LocalDate.of(2023, 1, 1))
               .build()

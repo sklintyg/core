@@ -7,7 +7,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemFunktionsnedsattning.KOMMUNIKATION_SOCIAL_INTERAKTION;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemFunktionsnedsattning.KOORDINATION;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemFunktionsnedsattning.PSYKISK_FUNKTION;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemFunktionsnedsattning.SINNESFUNKTION;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemFunktionsnedsattning.SINNESFUNKTION_V1;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemFunktionsnedsattning.SYNFUNKTION;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemFunktionsnedsattning.UPPMARKSAMHET;
 
@@ -56,8 +56,8 @@ class QuestionFunktionsnedsattningTest {
                 HORSELFUNKTION),
             new ElementConfigurationCode(new FieldId("49.2"), SYNFUNKTION.displayName(),
                 SYNFUNKTION),
-            new ElementConfigurationCode(new FieldId("12.2"), SINNESFUNKTION.displayName(),
-                SINNESFUNKTION),
+            new ElementConfigurationCode(new FieldId("12.2"), SINNESFUNKTION_V1.displayName(),
+                SINNESFUNKTION_V1),
             new ElementConfigurationCode(new FieldId("13.2"), KOORDINATION.displayName(),
                 KOORDINATION),
             new ElementConfigurationCode(new FieldId("14.2"),
