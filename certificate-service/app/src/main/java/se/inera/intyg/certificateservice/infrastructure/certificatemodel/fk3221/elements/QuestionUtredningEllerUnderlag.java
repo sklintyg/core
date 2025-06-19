@@ -34,7 +34,6 @@ import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationMedicalInvestigationList;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005;
 
 public class QuestionUtredningEllerUnderlag {
 
@@ -155,7 +154,22 @@ public class QuestionUtredningEllerUnderlag {
   }
 
   private static Map<String, String> getInvestigationPdfOptions() {
-    return CodeSystemKvFkmu0005.getAllCodes().stream()
+    return Stream.of(
+            NEUROPSYKIATRISKT,
+            HABILITERING,
+            ARBETSTERAPEUT,
+            FYSIOTERAPEUT,
+            LOGOPED,
+            PSYKOLOG,
+            VARDCENTRAL,
+            SPECIALISTKLINIK,
+            SKOLHALSOVARD,
+            VARD_UTOMLANDS,
+            HORSELHABILITERING,
+            SYNHABILITERING,
+            DIETIST,
+            OVRIGT
+        )
         .collect(Collectors.toMap(
                 Code::code,
                 Code::displayName
@@ -170,23 +184,22 @@ public class QuestionUtredningEllerUnderlag {
         .investigationTypeId(getInvestigationTypeId(fieldId))
         .informationSourceId(getInformationSourceId(fieldId))
         .typeOptions(
-            Stream.of(
-                    NEUROPSYKIATRISKT,
-                    HABILITERING,
-                    ARBETSTERAPEUT,
-                    FYSIOTERAPEUT,
-                    LOGOPED,
-                    PSYKOLOG,
-                    VARDCENTRAL,
-                    SPECIALISTKLINIK,
-                    SKOLHALSOVARD,
-                    VARD_UTOMLANDS,
-                    HORSELHABILITERING,
-                    SYNHABILITERING,
-                    DIETIST,
-                    OVRIGT
-                )
-                .toList()
+            List.of(
+                NEUROPSYKIATRISKT,
+                HABILITERING,
+                ARBETSTERAPEUT,
+                FYSIOTERAPEUT,
+                LOGOPED,
+                PSYKOLOG,
+                VARDCENTRAL,
+                SPECIALISTKLINIK,
+                SKOLHALSOVARD,
+                VARD_UTOMLANDS,
+                HORSELHABILITERING,
+                SYNHABILITERING,
+                DIETIST,
+                OVRIGT
+            )
         )
         .min(null)
         .max(Period.ofDays(0))

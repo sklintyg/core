@@ -1,33 +1,10 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems;
 
-import java.util.List;
-import java.util.stream.Stream;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 
 public class CodeSystemKvFkmu0005 {
 
   public static final String CODE_SYSTEM = "KV_FKMU_0005";
-
-  public static List<Code> getAllCodes() {
-    return Stream.of(
-            NEUROPSYKIATRISKT,
-            HABILITERING,
-            ARBETSTERAPEUT,
-            FYSIOTERAPEUT,
-            LOGOPED,
-            PSYKOLOG,
-            SPECIALISTKLINIK,
-            VARD_UTOMLANDS,
-            HORSELHABILITERING,
-            SYNHABILITERING,
-            AUDIONOM,
-            DIETIST,
-            ORTOPTIST,
-            ORTOPEDTEKNIKER,
-            OVRIGT
-        )
-        .toList();
-  }
 
   public static final Code NEUROPSYKIATRISKT = new Code(
       "NEUROPSYKIATRISKT",
