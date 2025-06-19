@@ -61,7 +61,31 @@ public class FK7426CertificateActionSpecification {
             .enabled(true)
             .build(),
         CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.RECEIVE_COMPLEMENT)
+            .build(),
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.RECEIVE_QUESTION)
+            .build(),
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.RECEIVE_ANSWER)
+            .build(),
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.RECEIVE_REMINDER)
+            .build(),
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.COMPLEMENT)
+            .build(),
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.SEND_AFTER_COMPLEMENT)
+            .build(),
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.CANNOT_COMPLEMENT)
+            .build(),
+        CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.FORWARD_MESSAGE)
+            .build(),
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.HANDLE_COMPLEMENT)
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.CREATE_MESSAGE)
@@ -79,30 +103,24 @@ public class FK7426CertificateActionSpecification {
             .certificateActionType(CertificateActionType.SEND_MESSAGE)
             .build(),
         CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.SAVE_ANSWER)
+            .build(),
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.DELETE_ANSWER)
+            .build(),
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.SEND_ANSWER)
+            .build(),
+        CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.HANDLE_MESSAGE)
             .build(),
         CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.RECEIVE_COMPLEMENT)
-            .build(),
-        CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.COMPLEMENT)
-            .build(),
-        CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.SEND_AFTER_COMPLEMENT)
-            .build(),
-        CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.CANNOT_COMPLEMENT)
-            .build(),
-        CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.HANDLE_COMPLEMENT)
-            .build(),
-        CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE)
-            .allowedRoles(List.of(Role.CARE_ADMIN))
+            .allowedRoles(List.of(Role.CARE_ADMIN, Role.MIDWIFE, Role.NURSE))
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.READY_FOR_SIGN)
-            .allowedRoles(List.of(Role.CARE_ADMIN))
+            .allowedRoles(List.of(Role.CARE_ADMIN, Role.MIDWIFE, Role.NURSE))
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.LIST_CERTIFICATE_TYPE)

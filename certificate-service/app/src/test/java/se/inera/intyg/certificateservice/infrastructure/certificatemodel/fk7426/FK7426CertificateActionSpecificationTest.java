@@ -217,7 +217,7 @@ class FK7426CertificateActionSpecificationTest {
   void shallIncludeCertificateActionForwardCertificate() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE)
-        .allowedRoles(List.of(Role.CARE_ADMIN))
+        .allowedRoles(List.of(Role.CARE_ADMIN, Role.MIDWIFE, Role.NURSE))
         .build();
 
     final var actionSpecifications = FK7426CertificateActionSpecification.create();
@@ -243,7 +243,7 @@ class FK7426CertificateActionSpecificationTest {
   void shallIncludeCertificateActionReadyForSign() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.READY_FOR_SIGN)
-        .allowedRoles(List.of(Role.CARE_ADMIN))
+        .allowedRoles(List.of(Role.CARE_ADMIN, Role.MIDWIFE, Role.NURSE))
         .build();
 
     final var actionSpecifications = FK7426CertificateActionSpecification.create();
@@ -382,6 +382,78 @@ class FK7426CertificateActionSpecificationTest {
   @Test
   void shallIncludeCertificateActionQuestionsNotAvailable() {
     final var expectedType = CertificateActionType.QUESTIONS_NOT_AVAILABLE;
+
+    final var actionSpecifications = FK7426CertificateActionSpecification.create();
+
+    assertTrue(actionSpecifications.stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
+  void shallIncludeCertificateReceiveQuestion() {
+    final var expectedType = CertificateActionType.RECEIVE_QUESTION;
+
+    final var actionSpecifications = FK7426CertificateActionSpecification.create();
+
+    assertTrue(actionSpecifications.stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
+  void shallIncludeCertificateActionReceiveAnswer() {
+    final var expectedType = CertificateActionType.RECEIVE_ANSWER;
+
+    final var actionSpecifications = FK7426CertificateActionSpecification.create();
+
+    assertTrue(actionSpecifications.stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
+  void shallIncludeCertificateActionReceiveReminder() {
+    final var expectedType = CertificateActionType.RECEIVE_REMINDER;
+
+    final var actionSpecifications = FK7426CertificateActionSpecification.create();
+
+    assertTrue(actionSpecifications.stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
+  void shallIncludeCertificateActionSaveAnswer() {
+    final var expectedType = CertificateActionType.SAVE_ANSWER;
+
+    final var actionSpecifications = FK7426CertificateActionSpecification.create();
+
+    assertTrue(actionSpecifications.stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
+  void shallIncludeCertificateActionDeleteAnswer() {
+    final var expectedType = CertificateActionType.DELETE_ANSWER;
+
+    final var actionSpecifications = FK7426CertificateActionSpecification.create();
+
+    assertTrue(actionSpecifications.stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
+  void shallIncludeCertificateActionSendAnswer() {
+    final var expectedType = CertificateActionType.SEND_ANSWER;
 
     final var actionSpecifications = FK7426CertificateActionSpecification.create();
 
