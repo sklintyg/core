@@ -30,8 +30,8 @@ public class FK7427CertificateConfirmationModalProvider implements
                 .type(MessageLevel.INFO)
                 .text(
                     """
-                        <p>Du är på väg att utfärda Läkarutlåtande tillfällig föräldrapenning barn 12-16 år för</p>
-                        <b>%s - %s.</b>
+                        <p>Du är på väg att utfärda Läkarutlåtande tillfällig föräldrapenning Barn 12-16 år för</p>
+                        <b>%s - %s</b>
                         """.formatted(
                         patient.name().fullName(),
                         patient.id().idWithDash())
@@ -39,7 +39,7 @@ public class FK7427CertificateConfirmationModalProvider implements
         ).text(
             """
                 <p>Läkarutlåtande tillfällig föräldrapenning barn 12-16 år ska endast användas när ett barn på grund av sjukdom behöver vård eller tillsyn av en förälder.</p><br>
-                <p>Om barnet är allvarligt sjukt används istället Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har fyllt 18 år.</p>
+                <p>Om barnet är allvarligt sjukt används istället Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har fyllt 18 år (FK7426).</p>
                 """
         )
         .checkboxText(
