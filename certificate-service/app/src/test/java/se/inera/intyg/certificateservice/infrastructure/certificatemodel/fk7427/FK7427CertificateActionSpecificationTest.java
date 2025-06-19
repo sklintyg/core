@@ -217,7 +217,7 @@ class FK7427CertificateActionSpecificationTest {
   void shallIncludeCertificateActionForwardCertificate() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE)
-        .allowedRoles(List.of(Role.CARE_ADMIN))
+        .allowedRoles(List.of(Role.CARE_ADMIN, Role.MIDWIFE, Role.NURSE))
         .build();
 
     final var actionSpecifications = FK7427CertificateActionSpecification.create();
@@ -243,7 +243,7 @@ class FK7427CertificateActionSpecificationTest {
   void shallIncludeCertificateActionReadyForSign() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.READY_FOR_SIGN)
-        .allowedRoles(List.of(Role.CARE_ADMIN))
+        .allowedRoles(List.of(Role.CARE_ADMIN, Role.MIDWIFE, Role.NURSE))
         .build();
 
     final var actionSpecifications = FK7427CertificateActionSpecification.create();
