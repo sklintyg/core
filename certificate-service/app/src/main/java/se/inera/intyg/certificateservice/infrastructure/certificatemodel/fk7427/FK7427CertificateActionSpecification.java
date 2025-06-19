@@ -76,15 +76,16 @@ public class FK7427CertificateActionSpecification {
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE)
-            .allowedRoles(List.of(Role.CARE_ADMIN))
+            .allowedRoles(List.of(Role.CARE_ADMIN, Role.MIDWIFE, Role.NURSE))
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.READY_FOR_SIGN)
-            .allowedRoles(List.of(Role.CARE_ADMIN))
+            .allowedRoles(List.of(Role.CARE_ADMIN, Role.MIDWIFE, Role.NURSE))
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.LIST_CERTIFICATE_TYPE)
-            .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE, Role.CARE_ADMIN))
+            .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
+                Role.CARE_ADMIN))
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.QUESTIONS_NOT_AVAILABLE)
