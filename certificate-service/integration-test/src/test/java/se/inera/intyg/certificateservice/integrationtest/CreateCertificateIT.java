@@ -7,14 +7,22 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ALVA_VARDADMINISTRATOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ajlaDoktorDtoBuilder;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customCreateCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customTestabilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCreateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificate;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
+import se.inera.intyg.certificateservice.application.certificate.dto.PrefillXmlDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
+import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
+import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityFillTypeDTO;
 
 public abstract class CreateCertificateIT extends BaseIntegrationIT {
 
@@ -23,6 +31,18 @@ public abstract class CreateCertificateIT extends BaseIntegrationIT {
   protected abstract String typeVersion();
 
   protected abstract String wrongVersion();
+
+
+  private String loadResourceAsString() throws IOException {
+    try (InputStream inputStream = getClass().getClassLoader()
+        .getResourceAsStream("prefill/%s.xml".formatted(type()))) {
+      if (inputStream == null) {
+        throw new IllegalArgumentException(
+            "Resource not found: " + "prefill/%s.xml".formatted(type()));
+      }
+      return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+    }
+  }
 
   @Test
   @DisplayName("Om utkastet framgångsrikt skapats skall utkastet returneras")
@@ -35,6 +55,35 @@ public abstract class CreateCertificateIT extends BaseIntegrationIT {
         certificate(response.getBody()),
         "Should return certificate as it is active!"
     );
+  }
+
+  @Test
+  @DisplayName("Om förifyllnadsinformation finns ska utkastet som returneras innehålla svaren")
+  void shallReturnCertificateWithPrefilledAnswers() throws IOException {
+    final var xml = new Xml(loadResourceAsString());
+    final var createCertificateRequestBuilder = customCreateCertificateRequest(type(),
+        typeVersion())
+        .prefillXml(new PrefillXmlDTO(xml.base64()));
+
+    final var response = api.createCertificate(
+        createCertificateRequestBuilder.build()
+    );
+
+    final var data = response.getBody().getCertificate().getData().values().stream()
+        .map(CertificateDataElement::getValue)
+        .toList();
+
+    final var testCertificate = testabilityApi.addCertificates(
+        customTestabilityCertificateRequest(type(), typeVersion())
+            .fillType(TestabilityFillTypeDTO.MAXIMAL)
+            .build()
+    ).getFirst();
+
+    final var expected = testCertificate.getCertificate().getData().values().stream()
+        .map(CertificateDataElement::getValue)
+        .toList();
+
+    assertEquals(expected, data, "Should return certificate with prefilled answers!");
   }
 
   @Test

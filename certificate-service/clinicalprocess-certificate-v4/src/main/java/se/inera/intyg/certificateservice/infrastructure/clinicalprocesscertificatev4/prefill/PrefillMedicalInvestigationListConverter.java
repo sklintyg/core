@@ -37,7 +37,8 @@ public class PrefillMedicalInvestigationListConverter implements PrefillConverte
 
     if (subAnswers.size() != 3) {
       return PrefillAnswer.builder()
-          .errors(List.of(PrefillError.wrongNumberOfAnswers(1, subAnswers.size())))
+          .errors(List.of(
+              PrefillError.wrongNumberOfSubAnswers(specification.id().id(), 1, subAnswers.size())))
           .build();
     }
 
@@ -70,7 +71,8 @@ public class PrefillMedicalInvestigationListConverter implements PrefillConverte
 
     if (answers.isEmpty()) {
       return PrefillAnswer.builder()
-          .errors(List.of(PrefillError.wrongNumberOfAnswers(1, answers.size())))
+          .errors(List.of(
+              PrefillError.wrongNumberOfAnswers(specification.id().id(), 1, answers.size())))
           .build();
     }
 

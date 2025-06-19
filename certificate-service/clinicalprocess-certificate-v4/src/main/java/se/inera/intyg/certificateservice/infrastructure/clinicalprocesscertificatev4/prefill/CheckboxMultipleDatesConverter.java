@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill;
 
-import jakarta.xml.bind.JAXBContext;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,13 +8,13 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfiguration;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
-import se.riv.clinicalprocess.healthcond.certificate.types.v3.CVType;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 
@@ -40,28 +39,10 @@ public class CheckboxMultipleDatesConverter implements PrefillConverter {
             .dateListId(new FieldId(null))
             .dateList(answers.stream()
                 .map(s -> {
-                  //TODO: Do we want to create error for each unmarshalling failure ?
-
-                  CVType cv = unmarshalCVType(s.getDelsvar().stream()
-                      .filter(d -> d.getId().equals(specification.id().id() + ".1"))
-                      .findFirst().get().getContent());
-
-                  var date = LocalDate.parse(((String) s.getDelsvar().stream()
-                      .filter(d -> d.getId().equals(specification.id().id() + ".2"))
-                      .findFirst().get().getContent().getFirst()));
-
-                  var dateBox = ((ElementConfigurationCheckboxMultipleDate) specification.configuration()).dates()
-                      .stream()
-                      .filter(d -> d.code().matches(
-                          new Code(cv.getCode(), cv.getCodeSystem(),
-                              cv.getDisplayName())))
-                      .findFirst();
-                  if (dateBox.isEmpty()) {
-                    throw new IllegalArgumentException(
-                        "No matching date box found for code: " + cv.getCode());
-                  }
+                  var code = getCode(s.getDelsvar(), specification);
+                  var date = getDate(s, specification);
                   return ElementValueDate.builder()
-                      .dateId(dateBox.get().id())
+                      .dateId(getDateBox(specification, code).id())
                       .date(date)
                       .build();
                 })
@@ -73,6 +54,20 @@ public class CheckboxMultipleDatesConverter implements PrefillConverter {
     return PrefillAnswer.builder()
         .elementData(elementData)
         .build();
+  }
+
+  private LocalDate getDate(Svar s, ElementSpecification specification) {
+    return LocalDate.parse(((String) s.getDelsvar().stream()
+        .filter(d -> d.getId().equals(specification.id().id() + ".2"))
+        .findFirst().get().getContent().getFirst()));
+  }
+
+  private CheckboxDate getDateBox(ElementSpecification specification, Code code) {
+    return ((ElementConfigurationCheckboxMultipleDate) specification.configuration()).dates()
+        .stream()
+        .filter(d -> d.code().matches(
+            code))
+        .findFirst().orElseThrow();
   }
 
   @Override
@@ -93,24 +88,17 @@ public class CheckboxMultipleDatesConverter implements PrefillConverter {
     return result;
   }
 
+  private Code getCode(List<Delsvar> subAnswer, ElementSpecification specification) {
+    final var cvType = PrefillUnmarshaller.cvType(subAnswer.stream()
+        .filter(d -> d.getId().equals(specification.id().id() + ".1"))
+        .findFirst().get().getContent());
 
-  private CVType unmarshalCVType(List<Object> content) {
-    final var contentObj = content.stream()
-        .filter(obj -> obj instanceof org.w3c.dom.Element)
-        .map(obj -> (org.w3c.dom.Element) obj)
-        .findFirst();
-
-    if (contentObj.isPresent()) {
-      try {
-        final var context = JAXBContext.newInstance(CVType.class);
-        final var jaxbElement = context.createUnmarshaller()
-            .unmarshal(contentObj.get(), CVType.class);
-        return jaxbElement.getValue();
-      } catch (Exception e) {
-//        throw new PrefillException("Error when unmarshalling CVType", e);
-      }
+    if (cvType.isEmpty()) {
+      throw new IllegalStateException("Invalid format cvType is empty");
     }
-//    throw new PrefillException("Content does not contain a valid CVType element");
-    return null;
+
+    var cv = cvType.get();
+    return new Code(cv.getCode(), cv.getCodeSystem(),
+        cv.getDisplayName());
   }
 }

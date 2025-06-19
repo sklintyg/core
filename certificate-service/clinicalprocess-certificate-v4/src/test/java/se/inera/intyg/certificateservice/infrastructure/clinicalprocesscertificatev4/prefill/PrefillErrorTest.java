@@ -72,25 +72,6 @@ class PrefillErrorTest {
   }
 
   @Test
-  void shouldReturnTooManyAnswersFoundError() {
-    var error = PrefillError.tooManyAnswersFound("MI3", 1, 3);
-    assertAll(
-        () -> assertEquals(PrefillErrorType.WRONG_NUMBER_OF_ANSWERS, error.type()),
-        () -> assertEquals("Expected 1 answers but got 3 for Answer with id MI3 ", error.details())
-    );
-  }
-
-  @Test
-  void shouldReturnTooManySubAnswersFoundError() {
-    var error = PrefillError.tooManySubAnswersFound("MI4", 2, 5);
-    assertAll(
-        () -> assertEquals(PrefillErrorType.WRONG_NUMBER_OF_ANSWERS, error.type()),
-        () -> assertEquals("Expected 2 sub-answers but got 5 for Answer with id MI4",
-            error.details())
-    );
-  }
-
-  @Test
   void shouldReturnUnmarshallingError() {
     var error = PrefillError.unmarshallingError("MI5", "MI5.1");
     assertAll(

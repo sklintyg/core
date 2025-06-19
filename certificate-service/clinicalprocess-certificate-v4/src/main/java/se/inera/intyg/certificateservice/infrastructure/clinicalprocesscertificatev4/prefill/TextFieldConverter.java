@@ -79,7 +79,7 @@ public class TextFieldConverter implements PrefillConverter {
     final var errors = new ArrayList<PrefillError>();
     if (subAnswers.size() > 1) {
       errors.add(
-          PrefillError.tooManySubAnswersFound(specification.id().id(), 1, subAnswers.size()));
+          PrefillError.wrongNumberOfSubAnswers(specification.id().id(), 1, subAnswers.size()));
     } else if (subAnswers.isEmpty()) {
       errors.add(PrefillError.subAnswersNotFound(specification.id().id()));
     }
@@ -101,7 +101,7 @@ public class TextFieldConverter implements PrefillConverter {
       ElementSpecification specification) {
     final var errors = new ArrayList<PrefillError>();
     if (answers.size() > 1) {
-      errors.add(PrefillError.tooManyAnswersFound(specification.id().id(), 1, answers.size()));
+      errors.add(PrefillError.wrongNumberOfAnswers(specification.id().id(), 1, answers.size()));
     }
     return errors;
   }

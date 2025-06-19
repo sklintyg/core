@@ -62,6 +62,16 @@ public class PrefillHandler {
       CertificateModel model) {
     final var converter = converters.get(
         model.elementSpecification(new ElementId(answer.getId())).configuration().getClass());
+    if (converter == null) {
+      return List.of(PrefillAnswer.builder()
+          .errors(List.of(
+                  PrefillError.missingConverter(
+                      model.elementSpecification(new ElementId(answer.getId())).configuration()
+                          .getClass().toString())
+              )
+          )
+          .build());
+    }
     return converter.unknownIds(answer, model);
   }
 }

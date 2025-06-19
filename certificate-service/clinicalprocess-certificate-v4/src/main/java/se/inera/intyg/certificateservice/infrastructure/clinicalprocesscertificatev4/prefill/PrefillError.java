@@ -40,18 +40,6 @@ public record PrefillError(PrefillErrorType type, String details) {
         "Sub-answer expected in answer with id %s".formatted(answerId));
   }
 
-  public static PrefillError tooManyAnswersFound(String answerId, int expected, int actual) {
-    return new PrefillError(WRONG_NUMBER_OF_ANSWERS,
-        "Expected %d answers but got %d for Answer with id %s ".formatted(expected, actual,
-            answerId));
-  }
-
-  public static PrefillError tooManySubAnswersFound(String answerId, int expected, int actual) {
-    return new PrefillError(WRONG_NUMBER_OF_ANSWERS,
-        "Expected %d sub-answers but got %d for Answer with id %s".formatted(expected, actual,
-            answerId));
-  }
-
   public static PrefillError unmarshallingError(String answerId, String subAnswerId) {
     return new PrefillError(UNMARSHALL_ERROR,
         "Content of sub-answer with id %s in answer with id %s could not be unmarshalled".formatted(
@@ -62,5 +50,16 @@ public record PrefillError(PrefillErrorType type, String details) {
   public static PrefillError missingConverter(String converter) {
     return new PrefillError(PrefillErrorType.MISSING_CONVERTER,
         "No converter found for %s".formatted(converter));
+  }
+
+
+  public static PrefillError wrongNumberOfAnswers(String answerId, int expected, int actual) {
+    return new PrefillError(WRONG_NUMBER_OF_ANSWERS,
+        "Expected %d answers but got %d for answer %s".formatted(expected, actual, answerId));
+  }
+
+  public static PrefillError wrongNumberOfSubAnswers(String answerId, int expected, int actual) {
+    return new PrefillError(WRONG_NUMBER_OF_ANSWERS,
+        "Expected %d sub-answers but got %d for answer %s".formatted(expected, actual, answerId));
   }
 }

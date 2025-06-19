@@ -32,7 +32,8 @@ public class PrefillCheckboxMultipleCodeConverter implements PrefillConverter {
 
     if (subAnswers.size() != 1) {
       return PrefillAnswer.builder()
-          .errors(List.of(PrefillError.wrongNumberOfAnswers(1, subAnswers.size())))
+          .errors(List.of(
+              PrefillError.wrongNumberOfSubAnswers(specification.id().id(), 1, subAnswers.size())))
           .build();
     }
 

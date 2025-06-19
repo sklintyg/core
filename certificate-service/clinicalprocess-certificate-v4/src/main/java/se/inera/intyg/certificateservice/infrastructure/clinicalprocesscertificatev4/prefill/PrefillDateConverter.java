@@ -32,7 +32,8 @@ public class PrefillDateConverter implements PrefillConverter {
 
     if (subAnswers.size() != 1) {
       return PrefillAnswer.builder()
-          .errors(List.of(PrefillError.wrongNumberOfAnswers(1, subAnswers.size())))
+          .errors(List.of(
+              PrefillError.wrongNumberOfSubAnswers(specification.id().id(), 1, subAnswers.size())))
           .build();
     }
 
@@ -64,7 +65,8 @@ public class PrefillDateConverter implements PrefillConverter {
 
     if (answers.size() != 1) {
       return PrefillAnswer.builder()
-          .errors(List.of(PrefillError.wrongNumberOfAnswers(1, answers.size())))
+          .errors(List.of(
+              PrefillError.wrongNumberOfAnswers(specification.id().id(), 1, answers.size())))
           .build();
     }
 
