@@ -45,6 +45,7 @@ import se.inera.intyg.certificateservice.integrationtest.ExistsCertificateTypeIn
 import se.inera.intyg.certificateservice.integrationtest.ForwardCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateEventsIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.GetCertificatePdfIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateTypeInfoIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateXmlIT;
 import se.inera.intyg.certificateservice.integrationtest.GetPatientCertificatesIT;
@@ -793,6 +794,29 @@ public class FK3221ActiveIT {
     @Override
     protected boolean availableForCitizen() {
       return false;
+    }
+  }
+
+  @Nested
+  @DisplayName(TYPE + "Hämta intygspdf")
+  class GetCertificatePdf extends GetCertificatePdfIT {
+
+    @Override
+    protected String type() {
+      return CERTIFICATE_TYPE;
+    }
+
+    @Override
+    protected String typeVersion() {
+      return ACTIVE_VERSION;
+    }
+
+    protected static Stream<Arguments> rolesNoAccessToProtectedPerson() {
+      return Stream.of(
+          Arguments.of(ALVA_VARDADMINISTRATOR_DTO),
+          Arguments.of(BERTIL_BARNMORSKA_DTO),
+          Arguments.of(ANNA_SJUKSKOTERSKA_DTO)
+      );
     }
   }
 }
