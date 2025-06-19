@@ -39,7 +39,7 @@ public class PrefillRadioMultipleCodeConverter implements PrefillConverter {
     String code;
     FieldId id;
     try {
-      final var cvType = PrefillUnmarshaller.unmarshalCVType(subAnswers.getFirst().getContent());
+      final var cvType = PrefillUnmarshaller.cvType(subAnswers.getFirst().getContent());
 
       if (cvType.isEmpty()) {
         return PrefillAnswer.invalidFormat();

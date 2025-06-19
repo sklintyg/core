@@ -39,7 +39,7 @@ public class PrefillDateRangeConverter implements PrefillConverter {
     LocalDate start;
     LocalDate end;
     try {
-      final var datePeriod = PrefillUnmarshaller.unmarshalDatePeriodType(
+      final var datePeriod = PrefillUnmarshaller.datePeriodType(
           subAnswers.getFirst().getContent());
 
       if (datePeriod.isEmpty()) {
