@@ -7,5 +7,6 @@ public enum PrefillErrorType {
   WRONG_NUMBER_OF_ANSWERS,
   TECHNICAL_ERROR,
   INVALID_FORMAT,
+  MISSING_CONVERTER
 
 }

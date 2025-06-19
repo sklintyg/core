@@ -58,4 +58,9 @@ public record PrefillError(PrefillErrorType type, String details) {
             answerId,
             subAnswerId));
   }
+
+  public static PrefillError missingConverter(String converter) {
+    return new PrefillError(PrefillErrorType.MISSING_CONVERTER,
+        "No converter found for %s".formatted(converter));
+  }
 }

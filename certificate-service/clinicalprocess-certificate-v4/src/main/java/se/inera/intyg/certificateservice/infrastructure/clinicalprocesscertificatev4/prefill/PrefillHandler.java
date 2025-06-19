@@ -26,13 +26,34 @@ public class PrefillHandler {
   public PrefillAnswer prefillAnswer(List<Svar> answers,
       ElementSpecification elementSpecification) {
     final var converter = converters.get(elementSpecification.configuration().getClass());
+
+    if (converter == null) {
+      return PrefillAnswer.builder()
+          .errors(List.of(
+                  PrefillError.missingConverter(
+                      elementSpecification.configuration().getClass().toString())
+              )
+          )
+          .build();
+    }
+
     return converter.prefillAnswer(answers, elementSpecification);
   }
 
   public PrefillAnswer prefillSubAnswer(List<Delsvar> subAnswers,
       ElementSpecification elementSpecification) {
     final var converter = converters.get(elementSpecification.configuration().getClass());
-    //TODO: error handling for missing converter
+
+    if (converter == null) {
+      return PrefillAnswer.builder()
+          .errors(List.of(
+                  PrefillError.missingConverter(
+                      elementSpecification.configuration().getClass().toString())
+              )
+          )
+          .build();
+    }
+
     return converter.prefillSubAnswer(subAnswers, elementSpecification);
   }
 
