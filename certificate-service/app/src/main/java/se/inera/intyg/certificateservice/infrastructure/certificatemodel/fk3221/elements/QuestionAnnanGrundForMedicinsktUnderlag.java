@@ -10,6 +10,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0001;
@@ -20,6 +22,7 @@ public class QuestionAnnanGrundForMedicinsktUnderlag {
       "1.3");
   private static final FieldId QUESTION_ANNAN_GRUND_FOR_MEDICINSKT_UNDERLAG_FIELD_ID = new FieldId(
       "1.3");
+  public static final String PDF_FIELD_ID = "form1[0].#subform[0].flt_txtAngeAnnat[0]";
 
   private QuestionAnnanGrundForMedicinsktUnderlag() {
     throw new IllegalStateException("Utility class");
@@ -71,6 +74,14 @@ public class QuestionAnnanGrundForMedicinsktUnderlag {
                 .anyMatch(value -> value.dateList().stream().anyMatch(
                     valueDate -> valueDate.dateId().equals(UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID))
                 )
+        )
+        .pdfConfiguration(
+            PdfConfigurationText.builder()
+                .pdfFieldId(new PdfFieldId(PDF_FIELD_ID))
+                .maxLength(50)
+                .overflowSheetFieldId(
+                    new PdfFieldId(("form1[0].#subform[4].flt_txtFortsattningsblad[0]")))
+                .build()
         )
         .build();
   }

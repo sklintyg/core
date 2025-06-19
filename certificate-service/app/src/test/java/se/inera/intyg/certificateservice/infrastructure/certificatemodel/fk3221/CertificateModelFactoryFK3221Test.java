@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -64,7 +63,6 @@ class CertificateModelFactoryFK3221Test {
   }
 
   @Test
-  @Disabled
   void shallIncludePdfSpecifications() {
     final var certificateModel = certificateModelFactoryFK3221.create();
 

@@ -17,6 +17,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
@@ -150,5 +152,18 @@ class QuestionRelationTillPatientenTest {
 
       assertFalse(shouldValidate.test(elementData));
     }
+  }
+
+  @Test
+  void shallIncludePdfConfiguration() {
+    final var expected = PdfConfigurationText.builder()
+        .pdfFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtAnhorigAnnan[0]"))
+        .maxLength(50)
+        .overflowSheetFieldId(new PdfFieldId(("form1[0].#subform[4].flt_txtFortsattningsblad[0]")))
+        .build();
+
+    final var element = questionRelationTillPatienten();
+
+    assertEquals(expected, element.pdfConfiguration());
   }
 }

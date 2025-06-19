@@ -1,6 +1,20 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.getAllCodes;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.ARBETSTERAPEUT;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.AUDIONOM;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.DIETIST;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.FYSIOTERAPEUT;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.HABILITERING;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.HORSELHABILITERING;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.LOGOPED;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.NEUROPSYKIATRISKT;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.ORTOPEDTEKNIKER;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.ORTOPTIST;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.OVRIGT;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.PSYKOLOG;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.SPECIALISTKLINIK;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.SYNHABILITERING;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.VARD_UTOMLANDS;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionBaseratPaAnnatMedicinsktUnderlag.QUESTION_BASERAT_PA_ANNAT_UNDERLAG_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionBaseratPaAnnatMedicinsktUnderlag.QUESTION_BASERAT_PA_ANNAT_UNDERLAG_ID;
 
@@ -8,6 +22,7 @@ import java.time.Period;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationMedicalInvestigationList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
@@ -20,7 +35,6 @@ import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationMedicalInvestigationList;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005;
 
 public class QuestionUtredningEllerUnderlag {
 
@@ -139,7 +153,23 @@ public class QuestionUtredningEllerUnderlag {
   }
 
   private static Map<String, String> getInvestigationPdfOptions() {
-    return CodeSystemKvFkmu0005.getAllCodes().stream()
+    return Stream.of(
+            NEUROPSYKIATRISKT,
+            HABILITERING,
+            ARBETSTERAPEUT,
+            FYSIOTERAPEUT,
+            LOGOPED,
+            PSYKOLOG,
+            SPECIALISTKLINIK,
+            VARD_UTOMLANDS,
+            HORSELHABILITERING,
+            SYNHABILITERING,
+            AUDIONOM,
+            DIETIST,
+            ORTOPTIST,
+            ORTOPEDTEKNIKER,
+            OVRIGT
+        )
         .collect(Collectors.toMap(
                 Code::code,
                 Code::displayName
@@ -153,7 +183,25 @@ public class QuestionUtredningEllerUnderlag {
         .dateId(getDateId(fieldId))
         .investigationTypeId(getInvestigationTypeId(fieldId))
         .informationSourceId(getInformationSourceId(fieldId))
-        .typeOptions(getAllCodes())
+        .typeOptions(
+            List.of(
+                NEUROPSYKIATRISKT,
+                HABILITERING,
+                ARBETSTERAPEUT,
+                FYSIOTERAPEUT,
+                LOGOPED,
+                PSYKOLOG,
+                SPECIALISTKLINIK,
+                VARD_UTOMLANDS,
+                HORSELHABILITERING,
+                SYNHABILITERING,
+                AUDIONOM,
+                DIETIST,
+                ORTOPTIST,
+                ORTOPEDTEKNIKER,
+                OVRIGT
+            )
+        )
         .min(null)
         .max(Period.ofDays(0))
         .build();

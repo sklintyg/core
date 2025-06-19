@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.FK3221PdfSpecification.PDF_TEXT_FIELD_LENGTH;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionKoordinationMotivering.questionKoordinationMotivering;
 
 import java.util.List;
@@ -92,8 +93,8 @@ class QuestionKoordinationMotiveringTest {
   @Test
   void shallIncludePdfConfiguration() {
     final var expected = PdfConfigurationText.builder()
-        .pdfFieldId(new PdfFieldId("form1[0].#subform[2].flt_txtIntellektuellFunktion[7]"))
-        .maxLength(265)
+        .pdfFieldId(new PdfFieldId("form1[0].#subform[2].flt_txtBalans[0]"))
+        .maxLength(PDF_TEXT_FIELD_LENGTH * 4)
         .overflowSheetFieldId(new PdfFieldId(("form1[0].#subform[4].flt_txtFortsattningsblad[0]")))
         .build();
 
