@@ -32,6 +32,7 @@ import org.springframework.test.context.DynamicPropertySource;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.integrationtest.AccessLevelsDeepIntegrationIT;
 import se.inera.intyg.certificateservice.integrationtest.AccessLevelsSVODIT;
+import se.inera.intyg.certificateservice.integrationtest.AdministrativeMessagesIT;
 import se.inera.intyg.certificateservice.integrationtest.AnswerComplementIT;
 import se.inera.intyg.certificateservice.integrationtest.CertificateReadyForSignIT;
 import se.inera.intyg.certificateservice.integrationtest.CertificatesWithQAForCareIT;
@@ -817,4 +818,21 @@ public class FK7426ActiveIT {
       return false;
     }
   }
+
+
+  @Nested
+  @DisplayName(TYPE + "Administrativ ärendekommunikation")
+  class AdministrativeMessages extends AdministrativeMessagesIT {
+
+    @Override
+    protected String type() {
+      return CERTIFICATE_TYPE;
+    }
+
+    @Override
+    protected String typeVersion() {
+      return ACTIVE_VERSION;
+    }
+  }
+
 }
