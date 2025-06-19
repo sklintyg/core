@@ -110,7 +110,7 @@ public class PrefillMedicalInvestigationListConverter implements PrefillConverte
   private ElementValueCode getCode(List<Delsvar> subAnswer,
       MedicalInvestigationConfig config, ElementId elementId) {
     String code;
-    final var cvType = PrefillAnswer.unmarshalCVType(
+    final var cvType = PrefillUnmarshaller.unmarshalCVType(
         getContentFromSubAnswer(subAnswer, elementId, "%s.1")
     );
 

@@ -91,7 +91,7 @@ public class PrefillCheckboxMultipleCodeConverter implements PrefillConverter {
 
   private ElementValueCode getCode(List<Delsvar> subAnswer, ElementSpecification specification) {
     String code;
-    final var cvType = PrefillAnswer.unmarshalCVType(subAnswer.getFirst().getContent());
+    final var cvType = PrefillUnmarshaller.unmarshalCVType(subAnswer.getFirst().getContent());
 
     if (cvType.isEmpty()) {
       throw new IllegalStateException("Invalid format cvType is empty");

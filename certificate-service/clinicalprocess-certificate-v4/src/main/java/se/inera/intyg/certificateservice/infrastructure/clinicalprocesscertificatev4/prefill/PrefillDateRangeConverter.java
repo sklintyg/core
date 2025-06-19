@@ -39,15 +39,15 @@ public class PrefillDateRangeConverter implements PrefillConverter {
     LocalDate start;
     LocalDate end;
     try {
-      final var datePeriod = PrefillAnswer.unmarshalDatePeriodType(
+      final var datePeriod = PrefillUnmarshaller.unmarshalDatePeriodType(
           subAnswers.getFirst().getContent());
 
       if (datePeriod.isEmpty()) {
         return PrefillAnswer.invalidFormat();
       }
 
-      start = PrefillAnswer.toLocalDate(datePeriod.get().getStart());
-      end = PrefillAnswer.toLocalDate(datePeriod.get().getEnd());
+      start = PrefillUnmarshaller.toLocalDate(datePeriod.get().getStart());
+      end = PrefillUnmarshaller.toLocalDate(datePeriod.get().getEnd());
     } catch (Exception e) {
       return PrefillAnswer.invalidFormat();
     }
