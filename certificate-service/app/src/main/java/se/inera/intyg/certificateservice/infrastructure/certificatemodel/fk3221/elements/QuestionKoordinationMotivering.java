@@ -14,7 +14,7 @@ public class QuestionKoordinationMotivering extends AbstractFunktionsnedsattning
   private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_KOORDINATION_FIELD_ID = new FieldId(
       "13.1");
   private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
-      "form1[0].#subform[2].flt_txtIntellektuellFunktion[7]");
+      "form1[0].#subform[2].flt_txtBalans[0]");
 
   private QuestionKoordinationMotivering() {
     throw new IllegalStateException("Utility class");
