@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.FK3221PdfSpecification.PDF_TEXT_FIELD_LENGTH;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionAnnanKroppsligFunktionMotivering.questionAnnanKroppsligFunktionMotivering;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionSinnesfunktionMotivering.questionSinnesfunktionMotivering;
 
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -23,15 +23,14 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldI
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionAnnanKroppsligFunktionMotivering;
 
-class QuestionAnnanKroppsligFunktionMotiveringTest {
+class QuestionSinnesfunktionMotiveringTest {
 
-  private static final ElementId ELEMENT_ID = new ElementId("14");
+  private static final ElementId ELEMENT_ID = new ElementId("12");
 
   @Test
   void shallIncludeId() {
-    final var element = questionAnnanKroppsligFunktionMotivering();
+    final var element = questionSinnesfunktionMotivering();
 
     assertEquals(ELEMENT_ID, element.id());
   }
@@ -39,15 +38,19 @@ class QuestionAnnanKroppsligFunktionMotiveringTest {
   @Test
   void shallIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationTextArea.builder()
-        .name("Annan kroppslig funktion")
+        .name("Sinnesfunktioner och smärta")
         .label(
             "Beskriv funktionsnedsättningen, om möjligt med grad. Ange även eventuella undersökningsfynd.")
         .description(
-            "Med annan kroppslig funktion menas till exempel andningsfunktion, matsmältnings- och ämnesomsättningsfunktion samt blås- och tarmfunktion.")
-        .id(new FieldId("14.1"))
+            """
+                Med sinnesfunktioner och smärta menas exempelvis:
+                <ul>
+                <li>hörselfunktion som är förmågan att förnimma närvaro av ljud och att urskilja lokalisering, tonhöjd, ljudstyrka och ljudkvalitet.</li><li>synfunktion som är förmåga att förnimma närvaro av ljus och synintryckets form, storlek, utformning och färg.</li><li>känslighet eller upplevelse av obehag vid ljud, ljus, temperatur, beröring, smak eller lukt.</li><li>smärta kan bero på tänkbar eller faktisk skada. Den kan vara generell eller lokal i kroppsdelar, eller i dermatom (hudavsnitt). Smärta kan till exempel vara huggande, brännande eller molande.</li></ul>
+                """)
+        .id(new FieldId("12.1"))
         .build();
 
-    final var element = questionAnnanKroppsligFunktionMotivering();
+    final var element = questionSinnesfunktionMotivering();
 
     assertEquals(expectedConfiguration, element.configuration());
   }
@@ -63,16 +66,16 @@ class QuestionAnnanKroppsligFunktionMotiveringTest {
         ElementRuleExpression.builder()
             .id(ELEMENT_ID)
             .type(ElementRuleType.MANDATORY)
-            .expression(new RuleExpression("$14.1"))
+            .expression(new RuleExpression("$12.1"))
             .build(),
         ElementRuleExpression.builder()
             .id(new ElementId("funktionsnedsattning"))
             .type(ElementRuleType.SHOW)
-            .expression(new RuleExpression("$14.2"))
+            .expression(new RuleExpression("$12.2"))
             .build()
     );
 
-    final var element = questionAnnanKroppsligFunktionMotivering();
+    final var element = questionSinnesfunktionMotivering();
 
     assertEquals(expectedRules, element.rules());
   }
@@ -86,7 +89,7 @@ class QuestionAnnanKroppsligFunktionMotiveringTest {
             .build()
     );
 
-    final var element = questionAnnanKroppsligFunktionMotivering();
+    final var element = questionSinnesfunktionMotivering();
 
     assertEquals(expectedValidations, element.validations());
   }
@@ -94,12 +97,12 @@ class QuestionAnnanKroppsligFunktionMotiveringTest {
   @Test
   void shallIncludePdfConfiguration() {
     final var expected = PdfConfigurationText.builder()
-        .pdfFieldId(new PdfFieldId("form1[0].#subform[2].flt_txtIntellektuellFunktion[5]"))
+        .pdfFieldId(new PdfFieldId("form1[0].#subform[2].flt_txtIntellektuellFunktion[4]"))
         .maxLength(PDF_TEXT_FIELD_LENGTH * 4)
         .overflowSheetFieldId(new PdfFieldId(("form1[0].#subform[4].flt_txtFortsattningsblad[0]")))
         .build();
 
-    final var element = questionAnnanKroppsligFunktionMotivering();
+    final var element = questionSinnesfunktionMotivering();
 
     assertEquals(expected, element.pdfConfiguration());
   }
@@ -117,7 +120,7 @@ class QuestionAnnanKroppsligFunktionMotiveringTest {
                       .list(
                           List.of(
                               ElementValueCode.builder()
-                                  .codeId(new FieldId("14.2"))
+                                  .codeId(new FieldId("12.2"))
                                   .build()
                           )
                       )
@@ -126,7 +129,7 @@ class QuestionAnnanKroppsligFunktionMotiveringTest {
               .build()
       );
 
-      final var element = questionAnnanKroppsligFunktionMotivering();
+      final var element = questionSinnesfunktionMotivering();
 
       final var shouldValidate = element.shouldValidate();
 
@@ -152,7 +155,7 @@ class QuestionAnnanKroppsligFunktionMotiveringTest {
               .build()
       );
 
-      final var element = QuestionAnnanKroppsligFunktionMotivering.questionAnnanKroppsligFunktionMotivering();
+      final var element = questionSinnesfunktionMotivering();
 
       final var shouldValidate = element.shouldValidate();
 

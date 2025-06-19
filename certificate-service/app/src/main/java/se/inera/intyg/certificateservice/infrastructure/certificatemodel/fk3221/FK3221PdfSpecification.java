@@ -10,6 +10,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagInd
 
 public class FK3221PdfSpecification {
 
+  public static final Integer PDF_TEXT_FIELD_LENGTH = 52;
   public static final String PDF_FK_3221_PDF = "fk3221/pdf/fk3221_v1.pdf";
   public static final String PDF_NO_ADDRESS_FK_3221_PDF = "fk3221/pdf/fk3221_v1_no_address.pdf";
   public static final PdfMcid PDF_MCID = new PdfMcid(200);
