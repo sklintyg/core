@@ -59,7 +59,7 @@ class QuestionAktivitetsbegransningarTest {
   void shallIncludeValidations() {
     final var expectedValidations = List.of(
         ElementValidationText.builder()
-            .mandatory(false)
+            .mandatory(true)
             .limit(4000)
             .build()
     );

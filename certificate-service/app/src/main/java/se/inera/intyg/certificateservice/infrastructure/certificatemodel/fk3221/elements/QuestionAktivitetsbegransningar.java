@@ -44,7 +44,7 @@ public class QuestionAktivitetsbegransningar {
         .validations(
             List.of(
                 ElementValidationText.builder()
-                    .mandatory(false)
+                    .mandatory(true)
                     .limit(4000)
                     .build()
             )
