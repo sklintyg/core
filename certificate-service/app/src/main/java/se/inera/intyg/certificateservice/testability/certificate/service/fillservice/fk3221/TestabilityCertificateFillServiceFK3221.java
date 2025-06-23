@@ -170,7 +170,7 @@ public class TestabilityCertificateFillServiceFK3221 implements
     sinnes(specSinnes, elementData, fillType);
     koordination(specKoordination, elementData, fillType);
     annanKroppslig(specAnnanKroppslig, elementData, fillType);
-    aktivitetsbegransning(specAktivitetsbegransning, elementData, fillType);
+    aktivitetsbegransning(specAktivitetsbegransning, elementData);
     behandling(specBehandling, elementData, fillType);
     ansvarigVardenhet(specAnsvarigVardenhet, elementData, fillType);
     prognos(specPrognos, elementData);
@@ -352,9 +352,8 @@ public class TestabilityCertificateFillServiceFK3221 implements
     }
   }
 
-  private static void aktivitetsbegransning(ElementSpecification spec, List<ElementData> list,
-      TestabilityFillTypeDTO fillType) {
-    if (fillType == MAXIMAL && emptyValue(spec) instanceof ElementValueText elementValueText) {
+  private static void aktivitetsbegransning(ElementSpecification spec, List<ElementData> list) {
+    if (emptyValue(spec) instanceof ElementValueText elementValueText) {
       final var text = elementValueText.withText("Aktivitetsbegränsning");
       list.add(elementData(spec.id(), text));
     }
