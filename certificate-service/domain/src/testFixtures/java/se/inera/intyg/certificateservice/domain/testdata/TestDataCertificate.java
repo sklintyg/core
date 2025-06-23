@@ -842,6 +842,15 @@ public class TestDataCertificate {
                     )
                     .build(),
                 ElementData.builder()
+                    .id(new ElementId("17"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("17.1"))
+                            .text("TEXT")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
                     .id(new ElementId("39"))
                     .value(
                         ElementValueText.builder()
