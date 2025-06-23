@@ -12,6 +12,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
+import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
 @Component
 public class PrefillHandler {
@@ -58,20 +59,15 @@ public class PrefillHandler {
   }
 
 
-  public Collection<PrefillAnswer> unknownAnswerIds(Svar answer,
-      CertificateModel model) {
-    final var converter = converters.get(
-        model.elementSpecification(new ElementId(answer.getId())).configuration().getClass());
-    if (converter == null) {
-      return List.of(PrefillAnswer.builder()
-          .errors(List.of(
-                  PrefillError.missingConverter(
-                      model.elementSpecification(new ElementId(answer.getId())).configuration()
-                          .getClass().toString())
-              )
-          )
-          .build());
-    }
-    return converter.unknownIds(answer, model);
+  public Collection<PrefillAnswer> unknownAnswerIds(CertificateModel model,
+      Forifyllnad answer) {
+    return answer.getSvar().stream()
+        .filter(s -> !model.elementSpecificationExists(new ElementId(s.getId())))
+        .map(sp -> PrefillAnswer.answerNotFound(sp.getId()))
+        .toList();
+  }
+
+  public Collection<PrefillAnswer> handlePrefill(CertificateModel model, Forifyllnad prefill) {
+    return List.of();
   }
 }

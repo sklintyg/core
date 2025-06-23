@@ -34,20 +34,19 @@ public class PrefillResult {
         .prefill(unmarshalledPrefill)
         .prefilledAnswers(new ArrayList<>()).build();
   }
-  
+
   public void prefill() {
-    addErrorForUnknownAnswerIds();
-    prefillAnswers();
-    prefillSubAnswers();
+    prefilledAnswers.addAll(prefillHandler.unknownAnswerIds(certificateModel, prefill));
+    prefilledAnswers.addAll(prefillHandler.handlePrefill(certificateModel, prefill));
   }
 
-  private void addErrorForUnknownAnswerIds() {
-    prefill.getSvar().forEach(answer ->
-        prefilledAnswers.addAll(prefillHandler.unknownAnswerIds(answer,
-            certificateModel)
-        )
-    );
-  }
+//  private void addErrorForUnknownAnswerIds() {
+//    prefill.getSvar().forEach(answer ->
+//        prefilledAnswers.addAll(prefillHandler.unknownAnswerIds(answer,
+//            certificateModel)
+//        )
+//    );
+//  }
 
   private void prefillSubAnswers() {
 

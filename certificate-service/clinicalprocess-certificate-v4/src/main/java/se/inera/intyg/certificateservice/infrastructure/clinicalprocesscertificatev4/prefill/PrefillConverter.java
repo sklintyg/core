@@ -9,6 +9,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
+import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
 public interface PrefillConverter {
 
@@ -28,6 +29,11 @@ public interface PrefillConverter {
         .filter(subAnswerIdNotInModel(new ElementId(answer.getId()), model))
         .map(subAnswer -> PrefillAnswer.subAnswerNotFound(answer.getId(), subAnswer.getId()))
         .toList();
+  }
+
+  default PrefillAnswer prefillAnswer(ElementSpecification elementSpecification,
+      Forifyllnad prefill) {
+    return null;
   }
 
   private static Predicate<Delsvar> subAnswerIdNotInModel(ElementId answerId,
