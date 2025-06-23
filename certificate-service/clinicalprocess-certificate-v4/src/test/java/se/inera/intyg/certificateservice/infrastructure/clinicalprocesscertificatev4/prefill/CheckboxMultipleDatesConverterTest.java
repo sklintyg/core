@@ -23,7 +23,6 @@ class CheckboxMultipleDatesConverterTest {
 
   @Test
   void testPrefillCheckboxMultipleDates() throws JAXBException, ParserConfigurationException {
-    //create svar from file or build tooling for elements to put in content?
 
     var forifyllnad = new Forifyllnad();
     var svar = new Svar();
