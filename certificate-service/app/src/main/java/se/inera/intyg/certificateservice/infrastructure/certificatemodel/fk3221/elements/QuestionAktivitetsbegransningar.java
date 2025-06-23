@@ -38,7 +38,11 @@ public class QuestionAktivitetsbegransningar {
             List.of(
                 CertificateElementRuleFactory.limit(
                     QUESTION_AKTIVITETSBEGRANSNINGAR_ID,
-                    (short) 4000)
+                    (short) 4000),
+                CertificateElementRuleFactory.mandatory(
+                    QUESTION_AKTIVITETSBEGRANSNINGAR_ID,
+                    QUESTION_AKTIVITETSBEGRANSNINGAR_FIELD_ID
+                )
             )
         )
         .validations(
