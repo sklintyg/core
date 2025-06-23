@@ -67,7 +67,21 @@ public class PrefillHandler {
         .toList();
   }
 
-  public Collection<PrefillAnswer> handlePrefill(CertificateModel model, Forifyllnad prefill) {
-    return List.of();
+  public Collection<PrefillAnswer> handlePrefill(CertificateModel certificateModel,
+      Forifyllnad prefill) {
+    return certificateModel.elementSpecifications().stream()
+        .flatMap(ElementSpecification::flatten)
+        .map(elementSpecification -> {
+          final var prefillConverter = converters.get(
+              elementSpecification.configuration().getClass());
+          try {
+            return prefillConverter.prefillAnswer(elementSpecification, prefill);
+          } catch (Exception ex) {
+            return PrefillAnswer.builder()
+                .errors(List.of(PrefillError.technicalError(elementSpecification.id().id())))
+                .build();
+          }
+        })
+        .toList();
   }
 }

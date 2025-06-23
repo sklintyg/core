@@ -62,4 +62,9 @@ public record PrefillError(PrefillErrorType type, String details) {
     return new PrefillError(WRONG_NUMBER_OF_ANSWERS,
         "Expected %d sub-answers but got %d for answer %s".formatted(expected, actual, answerId));
   }
+
+  public static PrefillError duplicateAnswer(String answerId) {
+    return new PrefillError(WRONG_NUMBER_OF_ANSWERS,
+        "Multiple occurrences for answer %s".formatted(answerId));
+  }
 }
