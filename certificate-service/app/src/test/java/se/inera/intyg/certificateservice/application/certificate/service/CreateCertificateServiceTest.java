@@ -109,7 +109,8 @@ class CreateCertificateServiceTest {
             .version(new CertificateVersion(VERSION))
             .build(),
         actionEvaluation,
-        new ExternalReference(EXTERNAL_REF)
+        new ExternalReference(EXTERNAL_REF),
+        null
     );
 
     final var certificateAction = mock(CertificateAction.class);

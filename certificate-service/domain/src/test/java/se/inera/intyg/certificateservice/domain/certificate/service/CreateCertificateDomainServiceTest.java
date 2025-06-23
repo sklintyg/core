@@ -86,13 +86,13 @@ class CreateCertificateDomainServiceTest {
     @Test
     void shallReturnCertificate() {
       final var actualCertificate = createCertificateDomainService.create(CERTIFICATE_MODEL_ID,
-          ACTION_EVALUATION, null);
+          ACTION_EVALUATION, null, null);
       assertEquals(certificate, actualCertificate);
     }
 
     @Test
     void shallPublishCreateCertificateEvent() {
-      createCertificateDomainService.create(CERTIFICATE_MODEL_ID, ACTION_EVALUATION, null);
+      createCertificateDomainService.create(CERTIFICATE_MODEL_ID, ACTION_EVALUATION, null, null);
 
       final var certificateEventCaptor = ArgumentCaptor.forClass(CertificateEvent.class);
       verify(certificateEventDomainService).publish(certificateEventCaptor.capture());
@@ -109,27 +109,27 @@ class CreateCertificateDomainServiceTest {
 
     @Test
     void shallValidateIfAllowedToCreateCertificate() {
-      createCertificateDomainService.create(CERTIFICATE_MODEL_ID, ACTION_EVALUATION, null);
+      createCertificateDomainService.create(CERTIFICATE_MODEL_ID, ACTION_EVALUATION, null, null);
       verify(certificateModel).allowTo(CertificateActionType.CREATE,
           Optional.of(ACTION_EVALUATION));
     }
 
     @Test
     void shallUpdateCertificateMetadata() {
-      createCertificateDomainService.create(CERTIFICATE_MODEL_ID, ACTION_EVALUATION, null);
+      createCertificateDomainService.create(CERTIFICATE_MODEL_ID, ACTION_EVALUATION, null, null);
       verify(certificate).updateMetadata(ACTION_EVALUATION);
     }
 
     @Test
     void shallSetExternalReference() {
       createCertificateDomainService.create(CERTIFICATE_MODEL_ID, ACTION_EVALUATION,
-          EXTERNAL_REFERENCE);
+          EXTERNAL_REFERENCE, null);
       verify(certificate).externalReference(EXTERNAL_REFERENCE);
     }
 
     @Test
     void shallSaveNewCertificate() {
-      createCertificateDomainService.create(CERTIFICATE_MODEL_ID, ACTION_EVALUATION, null);
+      createCertificateDomainService.create(CERTIFICATE_MODEL_ID, ACTION_EVALUATION, null, null);
       verify(certificateRepository).save(certificate);
     }
   }
@@ -151,7 +151,7 @@ class CreateCertificateDomainServiceTest {
       void shallThrowExceptionIfNotAllowedToCreate() {
         assertThrows(CertificateActionForbidden.class,
             () -> createCertificateDomainService.create(CERTIFICATE_MODEL_ID, ACTION_EVALUATION,
-                null)
+                null, null)
         );
       }
 
@@ -162,7 +162,7 @@ class CreateCertificateDomainServiceTest {
             .reasonNotAllowed(CertificateActionType.CREATE, Optional.of(ACTION_EVALUATION));
         final var certificateActionForbidden = assertThrows(CertificateActionForbidden.class,
             () -> createCertificateDomainService.create(CERTIFICATE_MODEL_ID, ACTION_EVALUATION,
-                null)
+                null, null)
         );
         assertEquals(expectedReason, certificateActionForbidden.reason());
       }
@@ -199,7 +199,7 @@ class CreateCertificateDomainServiceTest {
       void shallThrowExceptionIfUnitNotAllowedToCreate() {
         assertThrows(CertificateActionForbidden.class,
             () -> createCertificateDomainService.create(CERTIFICATE_MODEL_ID, ACTION_EVALUATION,
-                null)
+                null, null)
         );
       }
     }

@@ -7,6 +7,7 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.PrefillXmlDTO;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
@@ -20,6 +21,7 @@ public class CreateCertificateRequestBuilder {
   private UnitDTO unit = ALFA_ALLERGIMOTTAGNINGEN_DTO;
   private UserDTO user = AJLA_DOCTOR_DTO;
   private PatientDTO patient = ATHENA_REACT_ANDERSSON_DTO;
+  private PrefillXmlDTO prefillXml;
 
   private CertificateModelIdDTO certificateModelId = CertificateModelIdDTO.builder()
       .version(VERSION)
@@ -55,6 +57,11 @@ public class CreateCertificateRequestBuilder {
     return this;
   }
 
+  public CreateCertificateRequestBuilder prefillXml(PrefillXmlDTO prefillXml) {
+    this.prefillXml = prefillXml;
+    return this;
+  }
+
   public CreateCertificateRequest build() {
     return CreateCertificateRequest.builder()
         .user(user)
@@ -65,6 +72,7 @@ public class CreateCertificateRequestBuilder {
         .certificateModelId(
             certificateModelId
         )
+        .prefillXml(prefillXml)
         .build();
   }
 }

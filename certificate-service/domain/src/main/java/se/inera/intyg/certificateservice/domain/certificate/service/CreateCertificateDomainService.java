@@ -9,6 +9,7 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionE
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionRuleCertificateTypeActiveForUnit;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
@@ -27,9 +28,12 @@ public class CreateCertificateDomainService {
   private final CertificateRepository certificateRepository;
   private final CertificateEventDomainService certificateEventDomainService;
   private final CertificateActionConfigurationRepository certificateActionConfigurationRepository;
+  private final PrefillProcessor prefillProcessor;
 
   public Certificate create(CertificateModelId certificateModelId,
-      ActionEvaluation actionEvaluation, ExternalReference externalReference) {
+      ActionEvaluation actionEvaluation, ExternalReference externalReference,
+      Xml prefillXml) {
+
     final var start = LocalDateTime.now(ZoneId.systemDefault());
 
     final var certificateModel = certificateModelRepository.getById(certificateModelId);
@@ -54,6 +58,7 @@ public class CreateCertificateDomainService {
     final var certificate = certificateRepository.create(certificateModel);
     certificate.updateMetadata(actionEvaluation);
     certificate.externalReference(externalReference);
+    certificate.prefill(prefillXml, prefillProcessor);
 
     final var savedCertificate = certificateRepository.save(certificate);
 

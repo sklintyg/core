@@ -49,4 +49,9 @@ public class ElementConfigurationUnitContactInformation implements ElementConfig
             .build()
     );
   }
+
+  @Override
+  public FieldId id() {
+    return null;
+  }
 }
