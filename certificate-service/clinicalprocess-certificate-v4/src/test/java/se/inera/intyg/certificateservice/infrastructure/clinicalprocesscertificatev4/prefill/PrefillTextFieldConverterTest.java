@@ -36,7 +36,8 @@ class PrefillTextFieldConverterTest {
               .textId(FIELD_ID)
               .text(VALUE)
               .build()
-      ).build();
+      )
+      .build();
 
   private final PrefillTextFieldConverter prefillTextFieldConverter = new PrefillTextFieldConverter();
 
@@ -47,7 +48,7 @@ class PrefillTextFieldConverterTest {
 
   @Nested
   class PrefillAnswerWithForifyllnad {
-    
+
     @Test
     void shouldReturnNullIfNoAnswersOrSubAnswers() {
       final var prefill = new Forifyllnad();

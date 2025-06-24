@@ -61,6 +61,25 @@ class PrefillRadioBooleanConverterTest {
     }
 
     @Test
+    void shouldReturnPrefillAnswerWithInvalidFormat() {
+      final var prefill = new Forifyllnad();
+      final var svar = new Svar();
+      svar.setId("other");
+      final var delsvar = new Delsvar();
+      delsvar.setId(SPECIFICATION.id().id());
+      delsvar.getContent().add("wrongValue");
+      svar.getDelsvar().add(delsvar);
+      prefill.getSvar().add(svar);
+
+      final var result = prefillRadioBooleanConverter.prefillAnswer(SPECIFICATION, prefill);
+
+      assertEquals(
+          PrefillErrorType.INVALID_FORMAT,
+          result.getErrors().getFirst().type()
+      );
+    }
+
+    @Test
     void shouldReturnPrefillAnswerIfSubAnswerExists() {
       final var prefill = new Forifyllnad();
       final var svar = new Svar();
