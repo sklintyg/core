@@ -12,7 +12,7 @@ public class PrefillValidator {
     throw new IllegalStateException("Utility class");
   }
 
-  public static PrefillError validateSingleAnswerAndSubAnswer(List<Svar> answers,
+  public static PrefillError validateSingleAnswerOrSubAnswer(List<Svar> answers,
       List<Delsvar> subAnswers,
       ElementSpecification specification) {
     if (answers.size() > 1) {

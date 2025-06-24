@@ -3,8 +3,10 @@ package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertific
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfiguration;
@@ -14,6 +16,7 @@ import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
+@Slf4j
 @Component
 public class PrefillHandler {
 
@@ -77,11 +80,15 @@ public class PrefillHandler {
           try {
             return prefillConverter.prefillAnswer(elementSpecification, prefill);
           } catch (Exception ex) {
+            log.error(
+                "Error while pre-filling element with id '{}': {}",
+                elementSpecification.id().id(), ex.getMessage(), ex);
             return PrefillAnswer.builder()
                 .errors(List.of(PrefillError.technicalError(elementSpecification.id().id())))
                 .build();
           }
         })
+        .filter(Objects::nonNull)
         .toList();
   }
 }

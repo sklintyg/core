@@ -41,7 +41,7 @@ public class PrefillTextAreaConverter implements PrefillConverter {
         .filter(delsvar -> delsvar.getId().equals(specification.id().id()))
         .toList();
 
-    final var prefillError = PrefillValidator.validateSingleAnswerAndSubAnswer(
+    final var prefillError = PrefillValidator.validateSingleAnswerOrSubAnswer(
         answers,
         subAnswers,
         specification

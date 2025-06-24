@@ -40,6 +40,7 @@ class PrefillTextAreaConverterTest {
   private final PrefillTextAreaConverter prefillRadioTextConverter = new PrefillTextAreaConverter();
   private final XmlGeneratorText xmlGeneratorRadioText = new XmlGeneratorText();
 
+
   @Test
   void shouldReturnSupportsRadioText() {
     assertEquals(ElementConfigurationTextArea.class, prefillRadioTextConverter.supports());

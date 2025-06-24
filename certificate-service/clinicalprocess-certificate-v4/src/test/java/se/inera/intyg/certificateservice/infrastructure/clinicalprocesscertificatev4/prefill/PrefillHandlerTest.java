@@ -2,56 +2,84 @@ package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertific
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementDataConstants.DATE_ELEMENT_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementSpecification.DATE_ELEMENT_SPECIFICATION;
 
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
+@ExtendWith(MockitoExtension.class)
 class PrefillHandlerTest {
 
   @Nested
-  class Answer {
+  class HandlePrefill {
 
-    @Test
-    void shouldReturnPrefillErrorIfMissingConverterForClass() {
-      PrefillHandler prefillHandler = new PrefillHandler(List.of(new PrefillTextAreaConverter()));
+    @Mock
+    PrefillConverter prefillConverter;
 
-      final var result = prefillHandler.prefillAnswer(
-          List.of(new Svar()),
-          ElementSpecification.builder()
-              .configuration(
-                  ElementConfigurationDate.builder().build()
-              ).build()
-      );
+    private PrefillHandler prefillHandler;
 
-      assertEquals(PrefillErrorType.MISSING_CONVERTER, result.getErrors().getFirst().type());
+    @BeforeEach
+    void setup() {
+      doReturn(ElementConfigurationDate.class).when(prefillConverter).supports();
+      prefillHandler = new PrefillHandler(List.of(prefillConverter));
     }
-  }
-
-  @Nested
-  class SubAnswer {
 
     @Test
-    void shouldReturnPrefillErrorIfMissingConverterForClass() {
-      PrefillHandler prefillHandler = new PrefillHandler(List.of(new PrefillTextAreaConverter()));
+    void shouldReturnPrefillAnswer() {
 
-      final var result = prefillHandler.prefillSubAnswer(
-          List.of(new Svar.Delsvar()),
-          ElementSpecification.builder()
-              .configuration(
-                  ElementConfigurationDate.builder().build()
-              ).build()
+      final var prefill = new Forifyllnad();
+
+      final var expected = PrefillAnswer.builder()
+          .elementData(ElementData.builder()
+              .id(new ElementId("id"))
+              .build())
+          .build();
+      when(prefillConverter.prefillAnswer(DATE_ELEMENT_SPECIFICATION, prefill)).thenReturn(
+          expected);
+
+      final var result = prefillHandler.handlePrefill(
+          CertificateModel.builder()
+              .elementSpecifications(List.of(DATE_ELEMENT_SPECIFICATION))
+              .build(),
+          prefill
       );
 
-      assertEquals(PrefillErrorType.MISSING_CONVERTER, result.getErrors().getFirst().type());
+      assertEquals(List.of(expected), result);
+    }
+
+    @Test
+    void shouldReturnResultWithErrorWhenExceptionOccurs() {
+      final var prefill = new Forifyllnad();
+
+      final var expected = PrefillAnswer.builder()
+          .errors(List.of(PrefillError.technicalError(DATE_ELEMENT_SPECIFICATION.id().id())))
+          .build();
+
+      when(prefillConverter.prefillAnswer(DATE_ELEMENT_SPECIFICATION, prefill)).thenThrow(
+          new RuntimeException("Test exception"));
+
+      final var result = prefillHandler.handlePrefill(
+          CertificateModel.builder()
+              .elementSpecifications(List.of(DATE_ELEMENT_SPECIFICATION))
+              .build(),
+          prefill
+      );
+      assertEquals(List.of(expected), result);
     }
   }
 
