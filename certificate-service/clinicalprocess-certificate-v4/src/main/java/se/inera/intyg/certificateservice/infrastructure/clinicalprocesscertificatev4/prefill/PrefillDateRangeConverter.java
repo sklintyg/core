@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill;
 
-import java.time.LocalDate;
 import java.util.List;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
@@ -10,6 +9,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.util.PrefillValidator;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
+import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
 @Component
@@ -48,41 +48,47 @@ public class PrefillDateRangeConverter implements PrefillConverter {
           .build();
     }
 
-    LocalDate start;
-    LocalDate end;
-
-    try {
-
-      if (!answers.isEmpty()) {
-        final var datePeriodAnswer = PrefillUnmarshaller.datePeriodType(
-            answers.getFirst().getDelsvar().getFirst().getContent()
-        );
-        start = PrefillUnmarshaller.toLocalDate(datePeriodAnswer.get().getStart());
-        end = PrefillUnmarshaller.toLocalDate(datePeriodAnswer.get().getEnd());
-      } else if (!subAnswers.isEmpty()) {
-        final var datePeriodSubAnswer = PrefillUnmarshaller.datePeriodType(
-            subAnswers.getFirst().getContent());
-        start = PrefillUnmarshaller.toLocalDate(datePeriodSubAnswer.get().getStart());
-        end = PrefillUnmarshaller.toLocalDate(datePeriodSubAnswer.get().getEnd());
-      } else {
-        return null;
-      }
-    } catch (Exception e) {
-
-      return PrefillAnswer.invalidFormat();
+    if (answers.isEmpty() && subAnswers.isEmpty()) {
+      return null;
     }
 
-    return PrefillAnswer.builder()
-        .elementData(
-            ElementData.builder()
-                .id(specification.id())
-                .value(ElementValueDateRange.builder()
-                    .id(configurationDateRange.id())
-                    .fromDate(start)
-                    .toDate(end)
-                    .build()
-                ).build()
-        ).build();
+    try {
+      final var content = getContent(subAnswers, answers);
+      final var datePeriodAnswer = PrefillUnmarshaller.datePeriodType(
+          List.of(content)
+      );
 
+      return PrefillAnswer.builder()
+          .elementData(
+              ElementData.builder()
+                  .id(specification.id())
+                  .value(ElementValueDateRange.builder()
+                      .id(configurationDateRange.id())
+                      .fromDate(PrefillUnmarshaller.toLocalDate(
+                          datePeriodAnswer.orElseThrow().getStart())
+                      )
+                      .toDate(
+                          PrefillUnmarshaller.toLocalDate(datePeriodAnswer.orElseThrow().getEnd())
+                      )
+                      .build()
+                  ).build()
+          )
+          .build();
+    } catch (Exception e) {
+      return PrefillAnswer.invalidFormat();
+    }
+  }
+
+  private static Object getContent(List<Delsvar> subAnswers, List<Svar> answers) {
+    if (!subAnswers.isEmpty()) {
+      return subAnswers.getFirst().getContent().getFirst();
+    }
+    return answers.stream()
+        .map(Svar::getDelsvar)
+        .toList()
+        .getFirst()
+        .getFirst()
+        .getContent()
+        .getFirst();
   }
 }
