@@ -28,4 +28,27 @@ public class PrefillValidator {
 
     return null;
   }
+
+  public static PrefillError validateNumberOfDelsvar(List<Svar> answers, Integer limit,
+      ElementSpecification specification) {
+    final var hasExceededLimitForDelsvar = answers.stream()
+        .anyMatch(answer -> answer.getDelsvar().size() > limit);
+
+    if (hasExceededLimitForDelsvar) {
+      final var numberOfSubAnswers = answers.stream()
+          .map(Svar::getDelsvar)
+          .filter(delsvar -> delsvar.size() > limit)
+          .findFirst()
+          .stream()
+          .mapToInt(List::size)
+          .sum();
+
+      return PrefillError.wrongNumberOfSubAnswers(
+          specification.id().id(),
+          limit,
+          numberOfSubAnswers
+      );
+    }
+    return null;
+  }
 }

@@ -9,17 +9,20 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDa
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueMedicalInvestigationList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalInvestigation;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfiguration;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationMedicalInvestigationList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.MedicalInvestigationConfig;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.util.PrefillValidator;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
+import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
 @Component
 public class PrefillMedicalInvestigationListConverter implements PrefillConverter {
+
+  private static final int LIMIT = 3;
 
   @Override
   public Class<? extends ElementConfiguration> supports() {
@@ -27,91 +30,77 @@ public class PrefillMedicalInvestigationListConverter implements PrefillConverte
   }
 
   @Override
-  public PrefillAnswer prefillSubAnswer(List<Delsvar> subAnswers,
-      ElementSpecification specification) {
+  public PrefillAnswer prefillAnswer(ElementSpecification specification,
+      Forifyllnad prefill) {
     if (!(specification.configuration() instanceof ElementConfigurationMedicalInvestigationList medicalInvestigationListConfig)) {
       return PrefillAnswer.builder()
           .errors(List.of(PrefillError.wrongConfigurationType()))
           .build();
     }
 
-    if (subAnswers.size() != 3) {
-      return PrefillAnswer.builder()
-          .errors(List.of(
-              PrefillError.wrongNumberOfSubAnswers(specification.id().id(), 1, subAnswers.size())))
-          .build();
-    }
-
-    List<MedicalInvestigation> items;
-    try {
-      final var config = medicalInvestigationListConfig.list().getFirst();
-      items = List.of(getMedicalInvestigation(subAnswers, config, specification.id()));
-    } catch (Exception e) {
-      return PrefillAnswer.invalidFormat();
-    }
-
-    return PrefillAnswer.builder()
-        .elementData(
-            ElementData.builder()
-                .id(specification.id())
-                .value(ElementValueMedicalInvestigationList.builder()
-                    .id(specification.configuration().id())
-                    .list(items)
-                    .build()
-                ).build()
-        ).build();
-  }
-
-  public PrefillAnswer prefillAnswer(List<Svar> answers, ElementSpecification specification) {
-    if (!(specification.configuration() instanceof ElementConfigurationMedicalInvestigationList medicalInvestigationListConfig)) {
-      return PrefillAnswer.builder()
-          .errors(List.of(PrefillError.wrongConfigurationType()))
-          .build();
-    }
+    final var answers = prefill.getSvar().stream()
+        .filter(svar -> svar.getId().equals(specification.id().id()))
+        .toList();
 
     if (answers.isEmpty()) {
+      return null;
+    }
+
+    final var prefillError = PrefillValidator.validateNumberOfDelsvar(
+        answers,
+        LIMIT,
+        specification
+    );
+
+    if (prefillError != null) {
       return PrefillAnswer.builder()
-          .errors(List.of(
-              PrefillError.wrongNumberOfAnswers(specification.id().id(), 1, answers.size())))
+          .errors(List.of(prefillError))
           .build();
     }
 
-    List<MedicalInvestigation> items;
     try {
-      items = answers.stream()
-          .map(answer -> {
-            final var config = medicalInvestigationListConfig.list().get(answer.getInstans() - 1);
-            return getMedicalInvestigation(answer.getDelsvar(), config, specification.id());
-          })
-          .toList();
+      return PrefillAnswer.builder()
+          .elementData(
+              ElementData.builder()
+                  .id(specification.id())
+                  .value(
+                      ElementValueMedicalInvestigationList.builder()
+                          .id(specification.configuration().id())
+                          .list(
+                              getMedicalInvestigations(
+                                  answers,
+                                  medicalInvestigationListConfig.list(),
+                                  specification.id()
+                              )
+                          )
+                          .build()
+                  ).build()
+          )
+          .build();
     } catch (Exception e) {
       return PrefillAnswer.invalidFormat();
     }
-
-    return PrefillAnswer.builder()
-        .elementData(
-            ElementData.builder()
-                .id(specification.id())
-                .value(ElementValueMedicalInvestigationList.builder()
-                    .id(specification.configuration().id())
-                    .list(items)
-                    .build()
-                ).build()
-        ).build();
   }
 
-  private MedicalInvestigation getMedicalInvestigation(List<Delsvar> subAnswer,
-      MedicalInvestigationConfig config, ElementId elementId) {
-    return MedicalInvestigation.builder()
-        .investigationType(getCode(subAnswer, config, elementId))
-        .date(getDate(subAnswer, config, elementId))
-        .informationSource(getText(subAnswer, config, elementId))
-        .build();
+  private List<MedicalInvestigation> getMedicalInvestigations(List<Svar> answers,
+      List<MedicalInvestigationConfig> medicalInvestigationConfigs, ElementId elementId) {
+    return answers.stream()
+        .map(answer -> {
+              final var subAnswers = answer.getDelsvar();
+              final var instance = answer.getInstans() - 1;
+              final var config = medicalInvestigationConfigs.get(instance);
+              return MedicalInvestigation.builder()
+                  .investigationType(getCode(subAnswers, config, elementId))
+                  .date(getDate(subAnswers, config, elementId))
+                  .informationSource(getText(subAnswers, config, elementId))
+                  .build();
+            }
+        )
+        .toList();
   }
 
   private ElementValueCode getCode(List<Delsvar> subAnswer,
       MedicalInvestigationConfig config, ElementId elementId) {
-    String code;
     final var cvType = PrefillUnmarshaller.cvType(
         getContentFromSubAnswer(subAnswer, elementId, "%s.1")
     );
@@ -120,11 +109,9 @@ public class PrefillMedicalInvestigationListConverter implements PrefillConverte
       throw new IllegalStateException("Invalid format cvType is empty");
     }
 
-    code = cvType.get().getCode();
-
     return ElementValueCode.builder()
-        .code(code)
         .codeId(config.investigationTypeId())
+        .code(cvType.get().getCode())
         .build();
   }
 
@@ -134,8 +121,8 @@ public class PrefillMedicalInvestigationListConverter implements PrefillConverte
         .getFirst());
 
     return ElementValueDate.builder()
-        .date(date)
         .dateId(config.dateId())
+        .date(date)
         .build();
   }
 
@@ -145,8 +132,8 @@ public class PrefillMedicalInvestigationListConverter implements PrefillConverte
         .getFirst();
 
     return ElementValueText.builder()
-        .text(text)
         .textId(config.informationSourceId())
+        .text(text)
         .build();
   }
 
@@ -155,19 +142,7 @@ public class PrefillMedicalInvestigationListConverter implements PrefillConverte
     return subAnswer.stream()
         .filter(answer -> answer.getId().equals(idFormat.formatted(id.id())))
         .findFirst()
-        .orElseThrow().getContent();
-  }
-
-  @Override
-  public List<PrefillAnswer> unknownIds(Svar answer, CertificateModel model) {
-    return List.of();
-  }
-
-  public List<String> additionalIds(ElementId id) {
-    return List.of(
-        "%s.1".formatted(id.id()),
-        "%s.2".formatted(id.id()),
-        "%s.3".formatted(id.id())
-    );
+        .orElseThrow()
+        .getContent();
   }
 }

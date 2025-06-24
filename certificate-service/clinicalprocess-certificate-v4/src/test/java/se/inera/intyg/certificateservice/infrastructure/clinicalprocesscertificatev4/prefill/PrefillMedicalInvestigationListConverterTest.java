@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import jakarta.xml.bind.JAXBContext;
 import java.io.StringReader;
@@ -24,11 +25,11 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.MedicalInvestigationConfig;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
-import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorMedicalInvestigationList;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.CVType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.ObjectFactory;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
+import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
 class PrefillMedicalInvestigationListConverterTest {
 
@@ -88,57 +89,44 @@ class PrefillMedicalInvestigationListConverterTest {
               .list(
                   List.of(
                       MedicalInvestigation.builder()
-                          .date(ElementValueDate.builder()
-                              .dateId(DATE_FIELD_ID)
-                              .date(DATE)
-                              .build())
-                          .investigationType(ElementValueCode.builder()
-                              .codeId(CODE_FIELD_ID)
-                              .code(CODE)
-                              .build())
-                          .informationSource(ElementValueText.builder()
-                              .textId(TEXT_FIELD_ID)
-                              .text(TEXT)
-                              .build())
+                          .date(
+                              ElementValueDate.builder()
+                                  .dateId(DATE_FIELD_ID)
+                                  .date(DATE)
+                                  .build()
+                          )
+                          .investigationType(
+                              ElementValueCode.builder()
+                                  .codeId(CODE_FIELD_ID)
+                                  .code(CODE)
+                                  .build()
+                          )
+                          .informationSource(
+                              ElementValueText.builder()
+                                  .textId(TEXT_FIELD_ID)
+                                  .text(TEXT)
+                                  .build()
+                          )
                           .build(),
                       MedicalInvestigation.builder()
-                          .date(ElementValueDate.builder()
-                              .dateId(DATE_2_FIELD_ID)
-                              .date(DATE_2)
-                              .build())
-                          .investigationType(ElementValueCode.builder()
-                              .codeId(CODE_2_FIELD_ID)
-                              .code(CODE_2)
-                              .build())
-                          .informationSource(ElementValueText.builder()
-                              .textId(TEXT_2_FIELD_ID)
-                              .text(TEXT_2)
-                              .build())
-                          .build()
-                  )
-              )
-              .build()
-      ).build();
-  private static final ElementData EXPECTED_ELEMENT_DATA_SUB_ANSWER = ElementData.builder()
-      .id(ELEMENT_ID)
-      .value(
-          ElementValueMedicalInvestigationList.builder()
-              .id(FIELD_ID)
-              .list(
-                  List.of(
-                      MedicalInvestigation.builder()
-                          .date(ElementValueDate.builder()
-                              .dateId(DATE_FIELD_ID)
-                              .date(DATE)
-                              .build())
-                          .investigationType(ElementValueCode.builder()
-                              .codeId(CODE_FIELD_ID)
-                              .code(CODE)
-                              .build())
-                          .informationSource(ElementValueText.builder()
-                              .textId(TEXT_FIELD_ID)
-                              .text(TEXT)
-                              .build())
+                          .date(
+                              ElementValueDate.builder()
+                                  .dateId(DATE_2_FIELD_ID)
+                                  .date(DATE_2)
+                                  .build()
+                          )
+                          .investigationType(
+                              ElementValueCode.builder()
+                                  .codeId(CODE_2_FIELD_ID)
+                                  .code(CODE_2)
+                                  .build()
+                          )
+                          .informationSource(
+                              ElementValueText.builder()
+                                  .textId(TEXT_2_FIELD_ID)
+                                  .text(TEXT_2)
+                                  .build()
+                          )
                           .build()
                   )
               )
@@ -146,7 +134,6 @@ class PrefillMedicalInvestigationListConverterTest {
       ).build();
 
   private final PrefillMedicalInvestigationListConverter prefillMedicalInvestigationListConverter = new PrefillMedicalInvestigationListConverter();
-  private final XmlGeneratorMedicalInvestigationList xmlGeneratorMedicalInvestigationList = new XmlGeneratorMedicalInvestigationList();
 
   @Test
   void shouldReturnSupportsMedicalInvestigationList() {
@@ -155,42 +142,67 @@ class PrefillMedicalInvestigationListConverterTest {
   }
 
   @Nested
-  class Answer {
+  class PrefillAnswerWithForifyllnad {
+
 
     @Test
-    void shouldReturnAdditionalIds() {
+    void shouldReturnNullIfNoAnswersOrSubAnswers() {
+      final var prefill = new Forifyllnad();
+
+      PrefillAnswer result = prefillMedicalInvestigationListConverter.prefillAnswer(SPECIFICATION,
+          prefill);
+
+      assertNull(result);
+    }
+
+    @Test
+    void shouldReturnPrefillAnswerWithInvalidFormat() {
+      final var prefill = new Forifyllnad();
+      final var svar = new Svar();
+      svar.setId(SPECIFICATION.id().id());
+      final var delsvar = new Delsvar();
+      delsvar.setId(SPECIFICATION.id().id());
+      delsvar.getContent().add("wrongValue");
+      svar.getDelsvar().add(delsvar);
+      prefill.getSvar().add(svar);
+
+      final var result = prefillMedicalInvestigationListConverter.prefillAnswer(SPECIFICATION,
+          prefill);
+
       assertEquals(
-          List.of("1.1", "1.2", "1.3"),
-          prefillMedicalInvestigationListConverter.additionalIds(ELEMENT_ID)
+          PrefillErrorType.INVALID_FORMAT,
+          result.getErrors().getFirst().type()
       );
     }
 
     @Test
-    void shouldCreatePrefillAnswerForMedicalInvestigationList() throws Exception {
+    void shouldReturnPrefillAnswerIfAnswerExists() {
+      final var prefill = new Forifyllnad();
+
+      prefill.getSvar().add(getMedicalInvestigationAnswer(CODE, TEXT, DATE, 1));
+      prefill.getSvar().add(getMedicalInvestigationAnswer(CODE_2, TEXT_2, DATE_2, 2));
+
+      final var result = prefillMedicalInvestigationListConverter.prefillAnswer(
+          SPECIFICATION,
+          prefill
+      );
+
       final var expected = PrefillAnswer.builder()
           .elementData(EXPECTED_ELEMENT_DATA)
           .build();
-
-      final var answer = getMedicalInvestigationAnswer(CODE, TEXT, DATE, 1);
-      final var answer2 = getMedicalInvestigationAnswer(CODE_2, TEXT_2, DATE_2, 2);
-
-      final var result = prefillMedicalInvestigationListConverter.prefillAnswer(
-          List.of(answer, answer2), SPECIFICATION);
 
       assertEquals(expected, result);
     }
 
     @Test
     void shouldReturnErrorIfWrongConfigurationType() {
-      final var wrongConfiguration = ElementSpecification.builder()
+      final var prefill = new Forifyllnad();
+      final var wrongSpec = ElementSpecification.builder()
           .id(ELEMENT_ID)
           .configuration(ElementConfigurationCategory.builder().build())
           .build();
 
-      final var result = prefillMedicalInvestigationListConverter.prefillAnswer(
-          List.of(new Svar()),
-          wrongConfiguration
-      );
+      final var result = prefillMedicalInvestigationListConverter.prefillAnswer(wrongSpec, prefill);
 
       assertEquals(
           PrefillErrorType.TECHNICAL_ERROR,
@@ -199,9 +211,30 @@ class PrefillMedicalInvestigationListConverterTest {
     }
 
     @Test
-    void shouldReturnErrorIfNoAnswers() {
-      final var result = prefillMedicalInvestigationListConverter.prefillAnswer(List.of(),
-          SPECIFICATION);
+    void shouldReturnErrorIfSubAnswersExceedLimit() {
+      final var prefill = new Forifyllnad();
+      final var svar1 = new Svar();
+      svar1.setId(SPECIFICATION.id().id());
+      final var delsvar1 = new Delsvar();
+      delsvar1.setId(SPECIFICATION.id().id());
+      svar1.getDelsvar().add(delsvar1);
+
+      final var delsvar2 = new Delsvar();
+      delsvar2.setId(SPECIFICATION.id().id());
+      svar1.getDelsvar().add(delsvar2);
+
+      final var delsvar3 = new Delsvar();
+      delsvar3.setId(SPECIFICATION.id().id());
+      svar1.getDelsvar().add(delsvar3);
+
+      final var delsvar4 = new Delsvar();
+      delsvar4.setId(SPECIFICATION.id().id());
+      svar1.getDelsvar().add(delsvar4);
+
+      prefill.getSvar().add(svar1);
+
+      final var result = prefillMedicalInvestigationListConverter.prefillAnswer(SPECIFICATION,
+          prefill);
 
       assertEquals(
           PrefillErrorType.WRONG_NUMBER_OF_ANSWERS,
@@ -209,142 +242,53 @@ class PrefillMedicalInvestigationListConverterTest {
       );
     }
 
-    @Test
-    void shouldReturnErrorIfInvalidMedicalInvestigationListFormat() {
+    private static Svar getMedicalInvestigationAnswer(String code, String text, LocalDate date,
+        int instance) {
       final var answer = new Svar();
-      final var subAnswer = new Delsvar();
-      final var content = List.of("invalid-medicalInvestigationList-format");
-      subAnswer.getContent().add(content);
-      answer.getDelsvar().add(subAnswer);
+      answer.setId(ELEMENT_ID.id());
+      answer.setInstans(instance);
 
-      final var result = prefillMedicalInvestigationListConverter.prefillAnswer(List.of(answer),
-          SPECIFICATION);
+      final var subAnswerCode = new Delsvar();
+      final var subAnswerDate = new Delsvar();
+      final var subAnswerText = new Delsvar();
 
-      assertEquals(
-          PrefillErrorType.INVALID_FORMAT,
-          result.getErrors().getFirst().type()
-      );
-    }
-  }
+      subAnswerCode.setId(ELEMENT_ID.id() + ".1");
+      subAnswerDate.setId(ELEMENT_ID.id() + ".2");
+      subAnswerText.setId(ELEMENT_ID.id() + ".3");
 
-  @Nested
-  class SubAnswer {
+      subAnswerCode.getContent().add(createCVTypeElement(code));
+      subAnswerDate.getContent().add(date.toString());
+      subAnswerText.getContent().add(text);
 
-    @Test
-    void shouldReturnPrefillAnswerForSubAnswer() throws Exception {
-      final var expected = PrefillAnswer.builder()
-          .elementData(EXPECTED_ELEMENT_DATA_SUB_ANSWER)
-          .build();
+      answer.getDelsvar().add(subAnswerCode);
+      answer.getDelsvar().add(subAnswerDate);
+      answer.getDelsvar().add(subAnswerText);
 
-      final var answer = getMedicalInvestigationAnswer(CODE, TEXT, DATE, 1);
-
-      final var result = prefillMedicalInvestigationListConverter.prefillSubAnswer(
-          answer.getDelsvar(),
-          SPECIFICATION
-      );
-
-      assertEquals(expected, result);
+      return answer;
     }
 
-    @Test
-    void shouldReturnErrorIfWrongConfigurationTypeForSubAnswer() throws Exception {
-      final var wrongConfiguration = ElementSpecification.builder()
-          .id(ELEMENT_ID)
-          .configuration(ElementConfigurationCategory.builder().build())
-          .build();
-      final var answer = getMedicalInvestigationAnswer(CODE, TEXT, DATE, 1);
+    private static Element createCVTypeElement(String code) {
+      final var cvType = new CVType();
+      cvType.setCode(code);
+      cvType.setDisplayName("D1");
 
-      final var result = prefillMedicalInvestigationListConverter.prefillSubAnswer(
-          answer.getDelsvar(),
-          wrongConfiguration
-      );
+      final var factory = new ObjectFactory();
+      final var jaxbElement = factory.createCv(cvType);
 
-      assertEquals(
-          PrefillErrorType.TECHNICAL_ERROR,
-          result.getErrors().getFirst().type()
-      );
+      try {
+        final var context = JAXBContext.newInstance(CVType.class);
+        final var marshaller = context.createMarshaller();
+        final var writer = new StringWriter();
+        marshaller.marshal(jaxbElement, writer);
+
+        final var docFactory = DocumentBuilderFactory.newInstance();
+        docFactory.setNamespaceAware(true);
+        final var doc = docFactory.newDocumentBuilder()
+            .parse(new org.xml.sax.InputSource(new StringReader(writer.toString())));
+        return doc.getDocumentElement();
+      } catch (Exception e) {
+        throw new IllegalStateException("Failed to create CVType", e);
+      }
     }
-
-    @Test
-    void shouldReturnErrorIfNotThreeSubAnswers() {
-      final var answer = xmlGeneratorMedicalInvestigationList.generate(
-          EXPECTED_ELEMENT_DATA,
-          SPECIFICATION
-      );
-      final var answer2 = xmlGeneratorMedicalInvestigationList.generate(
-          EXPECTED_ELEMENT_DATA,
-          SPECIFICATION
-      );
-
-      final var result = prefillMedicalInvestigationListConverter.prefillSubAnswer(
-          List.of(answer.getFirst().getDelsvar().getFirst(),
-              answer2.getFirst().getDelsvar().getFirst()), SPECIFICATION);
-
-      assertEquals(
-          PrefillErrorType.WRONG_NUMBER_OF_ANSWERS,
-          result.getErrors().getFirst().type()
-      );
-    }
-
-    @Test
-    void shouldReturnErrorIfInvalidFormat() {
-      final var subAnswer = new Delsvar();
-      final var content = List.of("invalid-medicalInvestigationList-format");
-      subAnswer.getContent().add(content);
-
-      final var result = prefillMedicalInvestigationListConverter.prefillSubAnswer(
-          List.of(subAnswer, subAnswer, subAnswer),
-          SPECIFICATION);
-
-      assertEquals(
-          PrefillErrorType.INVALID_FORMAT,
-          result.getErrors().getFirst().type()
-      );
-    }
-  }
-
-  private static Element createCVTypeElement(String code) throws Exception {
-    final var cvType = new CVType();
-    cvType.setCode(code);
-    cvType.setDisplayName("D1");
-
-    final var factory = new ObjectFactory();
-    final var jaxbElement = factory.createCv(cvType);
-
-    final var context = JAXBContext.newInstance(CVType.class);
-    final var marshaller = context.createMarshaller();
-    final var writer = new StringWriter();
-    marshaller.marshal(jaxbElement, writer);
-
-    final var docFactory = DocumentBuilderFactory.newInstance();
-    docFactory.setNamespaceAware(true);
-    final var doc = docFactory.newDocumentBuilder()
-        .parse(new org.xml.sax.InputSource(new StringReader(writer.toString())));
-    return doc.getDocumentElement();
-  }
-
-  private static Svar getMedicalInvestigationAnswer(String code, String text, LocalDate date,
-      int instance) throws Exception {
-    final var answer = new Svar();
-    answer.setId(ELEMENT_ID.id());
-    answer.setInstans(instance);
-
-    final var subAnswerCode = new Delsvar();
-    final var subAnswerDate = new Delsvar();
-    final var subAnswerText = new Delsvar();
-
-    subAnswerCode.setId(ELEMENT_ID.id() + ".1");
-    subAnswerDate.setId(ELEMENT_ID.id() + ".2");
-    subAnswerText.setId(ELEMENT_ID.id() + ".3");
-
-    subAnswerCode.getContent().add(createCVTypeElement(code));
-    subAnswerDate.getContent().add(date.toString());
-    subAnswerText.getContent().add(text);
-
-    answer.getDelsvar().add(subAnswerCode);
-    answer.getDelsvar().add(subAnswerDate);
-    answer.getDelsvar().add(subAnswerText);
-
-    return answer;
   }
 }
