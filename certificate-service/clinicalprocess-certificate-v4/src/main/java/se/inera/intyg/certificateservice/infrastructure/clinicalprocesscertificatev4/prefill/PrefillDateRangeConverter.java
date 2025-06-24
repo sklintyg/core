@@ -1,17 +1,16 @@
 package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRange;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfiguration;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDateRange;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.util.PrefillValidator;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
-import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
+import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
 @Component
 public class PrefillDateRangeConverter implements PrefillConverter {
@@ -22,34 +21,54 @@ public class PrefillDateRangeConverter implements PrefillConverter {
   }
 
   @Override
-  public PrefillAnswer prefillSubAnswer(List<Delsvar> subAnswers,
-      ElementSpecification specification) {
-    if (!(specification.configuration() instanceof ElementConfigurationDateRange)) {
+  public PrefillAnswer prefillAnswer(ElementSpecification specification,
+      Forifyllnad prefill) {
+    if (!(specification.configuration() instanceof ElementConfigurationDateRange configurationDateRange)) {
       return PrefillAnswer.builder()
           .errors(List.of(PrefillError.wrongConfigurationType()))
           .build();
     }
 
-    if (subAnswers.size() != 1) {
+    final var answers = prefill.getSvar().stream()
+        .filter(svar -> svar.getId().equals(specification.id().id()))
+        .toList();
+
+    final var subAnswers = prefill.getSvar().stream()
+        .map(Svar::getDelsvar)
+        .flatMap(List::stream)
+        .filter(delsvar -> delsvar.getId().equals(specification.id().id()))
+        .toList();
+
+    final var prefillError = PrefillValidator.validateSingleAnswerOrSubAnswer(answers, subAnswers,
+        specification);
+
+    if (prefillError != null) {
       return PrefillAnswer.builder()
-          .errors(List.of(
-              PrefillError.wrongNumberOfSubAnswers(specification.id().id(), 1, subAnswers.size())))
+          .errors(List.of(prefillError))
           .build();
     }
 
     LocalDate start;
     LocalDate end;
+
     try {
-      final var datePeriod = PrefillUnmarshaller.datePeriodType(
-          subAnswers.getFirst().getContent());
 
-      if (datePeriod.isEmpty()) {
-        return PrefillAnswer.invalidFormat();
+      if (!answers.isEmpty()) {
+        final var datePeriodAnswer = PrefillUnmarshaller.datePeriodType(
+            answers.getFirst().getDelsvar().getFirst().getContent()
+        );
+        start = PrefillUnmarshaller.toLocalDate(datePeriodAnswer.get().getStart());
+        end = PrefillUnmarshaller.toLocalDate(datePeriodAnswer.get().getEnd());
+      } else if (!subAnswers.isEmpty()) {
+        final var datePeriodSubAnswer = PrefillUnmarshaller.datePeriodType(
+            subAnswers.getFirst().getContent());
+        start = PrefillUnmarshaller.toLocalDate(datePeriodSubAnswer.get().getStart());
+        end = PrefillUnmarshaller.toLocalDate(datePeriodSubAnswer.get().getEnd());
+      } else {
+        return null;
       }
-
-      start = PrefillUnmarshaller.toLocalDate(datePeriod.get().getStart());
-      end = PrefillUnmarshaller.toLocalDate(datePeriod.get().getEnd());
     } catch (Exception e) {
+
       return PrefillAnswer.invalidFormat();
     }
 
@@ -58,33 +77,12 @@ public class PrefillDateRangeConverter implements PrefillConverter {
             ElementData.builder()
                 .id(specification.id())
                 .value(ElementValueDateRange.builder()
-                    .id(specification.configuration().id())
+                    .id(configurationDateRange.id())
                     .fromDate(start)
                     .toDate(end)
                     .build()
                 ).build()
         ).build();
-  }
 
-  public PrefillAnswer prefillAnswer(List<Svar> answers, ElementSpecification specification) {
-    if (!(specification.configuration() instanceof ElementConfigurationDateRange)) {
-      return PrefillAnswer.builder()
-          .errors(List.of(PrefillError.wrongConfigurationType()))
-          .build();
-    }
-
-    if (answers.size() != 1) {
-      return PrefillAnswer.builder()
-          .errors(List.of(
-              PrefillError.wrongNumberOfAnswers(specification.id().id(), 1, answers.size())))
-          .build();
-    }
-
-    return prefillSubAnswer(answers.getFirst().getDelsvar(), specification);
-  }
-
-  @Override
-  public List<PrefillAnswer> unknownIds(Svar answer, CertificateModel model) {
-    return Collections.emptyList();
   }
 }
