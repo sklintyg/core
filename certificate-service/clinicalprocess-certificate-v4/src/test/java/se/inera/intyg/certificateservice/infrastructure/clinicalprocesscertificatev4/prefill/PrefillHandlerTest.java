@@ -18,6 +18,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.testdata.TestDataElementSpecification;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
@@ -81,6 +82,35 @@ class PrefillHandlerTest {
       );
       assertEquals(List.of(expected), result);
     }
+
+    @Test
+    void shouldOnlyHandleQuestions() {
+
+      final var prefill = new Forifyllnad();
+
+      final var expected = PrefillAnswer.builder()
+          .elementData(ElementData.builder()
+              .id(new ElementId("id"))
+              .build())
+          .build();
+
+      when(prefillConverter.prefillAnswer(DATE_ELEMENT_SPECIFICATION, prefill)).thenReturn(
+          expected);
+
+      final var categorySpec = TestDataElementSpecification.CATEGORY_ELEMENT_SPECIFICATION;
+      final var messageSpec = TestDataElementSpecification.MESSAGE_ELEMENT_SPECIFICATION;
+      final var issuingUnitSpec = TestDataElementSpecification.ISSUING_UNIT_ELEMENT_SPECIFICATION;
+
+      final var result = prefillHandler.handlePrefill(
+          CertificateModel.builder()
+              .elementSpecifications(
+                  List.of(DATE_ELEMENT_SPECIFICATION, categorySpec, messageSpec, issuingUnitSpec))
+              .build(),
+          prefill
+      );
+
+      assertEquals(List.of(expected), result);
+    }
   }
 
   @Nested
@@ -139,5 +169,7 @@ class PrefillHandlerTest {
 
       assertTrue(result.isEmpty());
     }
+
+
   }
 }

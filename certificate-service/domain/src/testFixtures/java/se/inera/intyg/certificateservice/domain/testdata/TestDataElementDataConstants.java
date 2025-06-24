@@ -25,5 +25,9 @@ public class TestDataElementDataConstants {
   public static final String BOOLEAN_ELEMENT_FIELD_ID = "booleanElementFieldId";
   public static final Boolean BOOLEAN_ELEMENT_VALUE_DATE = false;
 
+  public static final String MESSAGE_ELEMENT_ID = "messageElementId";
+  public static final String MESSAGE_ELEMENT_NAME = "messageElementName";
+
+  public static final String ISSUING_UNIT_ELEMENT_ID = "issuingUnitElementId";
 
 }

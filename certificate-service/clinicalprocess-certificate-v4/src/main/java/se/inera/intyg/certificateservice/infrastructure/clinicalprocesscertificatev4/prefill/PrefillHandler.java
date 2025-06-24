@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -12,6 +13,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfiguration;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
@@ -19,6 +21,11 @@ import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 @Slf4j
 @Component
 public class PrefillHandler {
+
+  private static final List<ElementType> IGNORED_TYPES = List.of(
+      ElementType.CATEGORY,
+      ElementType.MESSAGE,
+      ElementType.ISSUING_UNIT);
 
   private final Map<Class<? extends ElementConfiguration>, PrefillConverter> converters;
 
@@ -73,6 +80,7 @@ public class PrefillHandler {
   public Collection<PrefillAnswer> handlePrefill(CertificateModel certificateModel,
       Forifyllnad prefill) {
     return certificateModel.elementSpecifications().stream()
+        .filter(isQuestion())
         .flatMap(ElementSpecification::flatten)
         .map(elementSpecification -> {
           final var prefillConverter = converters.get(
@@ -90,5 +98,10 @@ public class PrefillHandler {
         })
         .filter(Objects::nonNull)
         .toList();
+  }
+
+
+  private static Predicate<ElementSpecification> isQuestion() {
+    return e -> !IGNORED_TYPES.contains(e.configuration().type());
   }
 }
