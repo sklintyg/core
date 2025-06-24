@@ -10,8 +10,10 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfiguration;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.util.PrefillValidator;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
+import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
 @Component
 public class PrefillDateConverter implements PrefillConverter {
@@ -22,59 +24,67 @@ public class PrefillDateConverter implements PrefillConverter {
   }
 
   @Override
-  public PrefillAnswer prefillSubAnswer(List<Delsvar> subAnswers,
-      ElementSpecification specification) {
+  public List<PrefillAnswer> unknownIds(Svar answer, CertificateModel model) {
+    return Collections.emptyList();
+  }
+
+  @Override
+  public PrefillAnswer prefillAnswer(ElementSpecification specification,
+      Forifyllnad prefill) {
     if (!(specification.configuration() instanceof ElementConfigurationDate configurationDate)) {
       return PrefillAnswer.builder()
           .errors(List.of(PrefillError.wrongConfigurationType()))
           .build();
     }
 
-    if (subAnswers.size() != 1) {
+    final var answer = prefill.getSvar().stream()
+        .filter(svar -> svar.getId().equals(specification.id().id()))
+        .toList();
+
+    final var subAnswer = prefill.getSvar().stream()
+        .map(Svar::getDelsvar)
+        .flatMap(List::stream)
+        .filter(delsvar -> delsvar.getId().equals(specification.id().id()))
+        .toList();
+
+    final var prefillError = PrefillValidator.validateSingleAnswerOrSubAnswer(answer, subAnswer,
+        specification);
+
+    if (prefillError != null) {
       return PrefillAnswer.builder()
-          .errors(List.of(
-              PrefillError.wrongNumberOfSubAnswers(specification.id().id(), 1, subAnswers.size())))
+          .errors(List.of(prefillError))
           .build();
     }
 
-    LocalDate date;
-    try {
-      date = LocalDate.parse((String) subAnswers.getFirst().getContent().getFirst());
-    } catch (Exception e) {
-      return PrefillAnswer.invalidFormat();
-    }
+    final var noPrefill = answer.isEmpty() && subAnswer.isEmpty();
 
-    return PrefillAnswer.builder()
-        .elementData(
-            ElementData.builder()
-                .id(specification.id())
-                .value(ElementValueDate.builder()
-                    .dateId(configurationDate.id())
-                    .date(date)
+    return noPrefill
+        ? null
+        : PrefillAnswer.builder()
+            .elementData(
+                ElementData.builder()
+                    .id(specification.id())
+                    .value(
+                        ElementValueDate.builder()
+                            .dateId(configurationDate.id())
+                            .date(handleContent(subAnswer, answer))
+                            .build()
+                    )
                     .build()
-                ).build()
-        ).build();
+            )
+            .build();
   }
 
-  public PrefillAnswer prefillAnswer(List<Svar> answers, ElementSpecification specification) {
-    if (!(specification.configuration() instanceof ElementConfigurationDate)) {
-      return PrefillAnswer.builder()
-          .errors(List.of(PrefillError.wrongConfigurationType()))
-          .build();
+  private static LocalDate handleContent(List<Delsvar> subAnswers, List<Svar> answers) {
+    if (!subAnswers.isEmpty()) {
+      return (LocalDate) subAnswers.getFirst().getContent().getFirst();
     }
-
-    if (answers.size() != 1) {
-      return PrefillAnswer.builder()
-          .errors(List.of(
-              PrefillError.wrongNumberOfAnswers(specification.id().id(), 1, answers.size())))
-          .build();
-    }
-
-    return prefillSubAnswer(answers.getFirst().getDelsvar(), specification);
-  }
-
-  @Override
-  public List<PrefillAnswer> unknownIds(Svar answer, CertificateModel model) {
-    return Collections.emptyList();
+    return (LocalDate) answers.stream()
+        .map(Svar::getDelsvar)
+        .toList()
+        .getFirst()
+        .getFirst()
+        .getContent()
+        .getFirst();
   }
 }
