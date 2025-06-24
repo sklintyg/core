@@ -1,17 +1,20 @@
 package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill;
 
-import java.util.Collections;
+import static se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.PrefillUnmarshaller.unmarshalType;
+
 import java.util.List;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfiguration;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.util.PrefillValidator;
+import se.riv.clinicalprocess.healthcond.certificate.types.v3.CVType;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
+import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
 @Component
 public class PrefillRadioMultipleCodeConverter implements PrefillConverter {
@@ -22,72 +25,91 @@ public class PrefillRadioMultipleCodeConverter implements PrefillConverter {
   }
 
   @Override
-  public PrefillAnswer prefillSubAnswer(List<Delsvar> subAnswers,
-      ElementSpecification specification) {
+  public PrefillAnswer prefillAnswer(ElementSpecification specification,
+      Forifyllnad prefill) {
     if (!(specification.configuration() instanceof ElementConfigurationRadioMultipleCode configurationRadioMultipleCode)) {
       return PrefillAnswer.builder()
           .errors(List.of(PrefillError.wrongConfigurationType()))
           .build();
     }
 
-    if (subAnswers.size() != 1) {
+    final var answers = prefill.getSvar().stream()
+        .filter(svar -> svar.getId().equals(specification.id().id()))
+        .toList();
+
+    final var subAnswers = prefill.getSvar().stream()
+        .map(Svar::getDelsvar)
+        .flatMap(List::stream)
+        .filter(delsvar -> delsvar.getId().equals(specification.id().id()))
+        .toList();
+
+    final var prefillError = PrefillValidator.validateSingleAnswerOrSubAnswer(
+        answers,
+        subAnswers,
+        specification
+    );
+
+    if (prefillError != null) {
       return PrefillAnswer.builder()
-          .errors(List.of(
-              PrefillError.wrongNumberOfSubAnswers(specification.id().id(), 1, subAnswers.size())))
+          .errors(List.of(prefillError))
           .build();
     }
 
-    String code;
-    FieldId id;
+    if (subAnswers.isEmpty() && answers.isEmpty()) {
+      return null;
+    }
+
     try {
-      final var cvType = PrefillUnmarshaller.cvType(subAnswers.getFirst().getContent());
+      final var content = getContent(subAnswers, answers);
+      final var cvType = unmarshalType(List.of(content), CVType.class);
 
       if (cvType.isEmpty()) {
         return PrefillAnswer.invalidFormat();
       }
 
-      code = cvType.get().getCode();
-      id = configurationRadioMultipleCode.list()
-          .stream()
-          .filter(c -> c.code().code().equals(code))
-          .findFirst()
-          .orElseThrow(() -> new IllegalArgumentException("Code not found: " + code))
-          .id();
-    } catch (Exception e) {
+      final var code = cvType.get().getCode();
+
+      return PrefillAnswer.builder()
+          .elementData(
+              ElementData.builder()
+                  .id(specification.id())
+                  .value(ElementValueCode.builder()
+                      .codeId(getId(configurationRadioMultipleCode, code))
+                      .code(code)
+                      .build()
+                  )
+                  .build()
+          )
+          .build();
+
+    } catch (Exception exception) {
       return PrefillAnswer.invalidFormat();
     }
-
-    return PrefillAnswer.builder()
-        .elementData(
-            ElementData.builder()
-                .id(specification.id())
-                .value(ElementValueCode.builder()
-                    .codeId(id)
-                    .code(code)
-                    .build()
-                ).build()
-        ).build();
   }
 
-  public PrefillAnswer prefillAnswer(List<Svar> answers, ElementSpecification specification) {
-    if (!(specification.configuration() instanceof ElementConfigurationRadioMultipleCode)) {
-      return PrefillAnswer.builder()
-          .errors(List.of(PrefillError.wrongConfigurationType()))
-          .build();
-    }
-
-    if (answers.size() != 1) {
-      return PrefillAnswer.builder()
-          .errors(List.of(
-              PrefillError.wrongNumberOfAnswers(specification.id().id(), 1, answers.size())))
-          .build();
-    }
-
-    return prefillSubAnswer(answers.getFirst().getDelsvar(), specification);
+  private static FieldId getId(ElementConfigurationRadioMultipleCode configurationRadioMultipleCode,
+      String code) {
+    return configurationRadioMultipleCode.list()
+        .stream()
+        .filter(c -> c.code().code().equals(code))
+        .findFirst()
+        .orElseThrow(
+            () -> new IllegalArgumentException(
+                "Code not found: '%s'".formatted(code))
+        )
+        .id();
   }
 
-  @Override
-  public List<PrefillAnswer> unknownIds(Svar answer, CertificateModel model) {
-    return Collections.emptyList();
+  private static Object getContent(List<Delsvar> subAnswers, List<Svar> answers) {
+    if (!subAnswers.isEmpty()) {
+      return subAnswers.getFirst().getContent().getFirst();
+    }
+    return answers.stream()
+        .map(Svar::getDelsvar)
+        .toList()
+        .getFirst()
+        .getFirst()
+        .getContent()
+        .getFirst();
   }
 }

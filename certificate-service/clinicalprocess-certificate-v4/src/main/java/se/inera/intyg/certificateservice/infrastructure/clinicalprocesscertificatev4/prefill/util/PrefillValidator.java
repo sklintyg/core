@@ -22,7 +22,7 @@ public class PrefillValidator {
       return PrefillError.wrongNumberOfSubAnswers(specification.id().id(), 1, subAnswers.size());
 
     }
-    if (answers.size() == 1 && subAnswers.size() == 1) {
+    if (!answers.isEmpty() && !subAnswers.isEmpty()) {
       return PrefillError.duplicateAnswer(specification.id().id());
     }
 
