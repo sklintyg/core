@@ -15,10 +15,14 @@ public interface PrefillConverter {
 
   Class<? extends ElementConfiguration> supports();
 
-  PrefillAnswer prefillSubAnswer(List<Delsvar> subAnswers,
-      ElementSpecification specification);
+  default PrefillAnswer prefillSubAnswer(List<Delsvar> subAnswers,
+      ElementSpecification specification) {
+    return null;
+  }
 
-  PrefillAnswer prefillAnswer(List<Svar> answers, ElementSpecification specification);
+  default PrefillAnswer prefillAnswer(List<Svar> answers, ElementSpecification specification) {
+    return null;
+  }
 
   default Collection<PrefillAnswer> unknownIds(Svar answer, CertificateModel model) {
     if (!model.elementSpecificationExists(new ElementId(answer.getId()))) {

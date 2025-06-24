@@ -102,7 +102,7 @@ class PrefillHandlerTest {
 
       final var expected = List.of(PrefillAnswer.answerNotFound("testSvarId"));
 
-      PrefillHandler prefillHandler = new PrefillHandler(List.of(new PrefillTextAreaConverter()));
+      final var prefillHandler = new PrefillHandler(List.of(new PrefillTextAreaConverter()));
 
       final var result = prefillHandler.unknownAnswerIds(
           CertificateModel.builder()
@@ -127,7 +127,7 @@ class PrefillHandlerTest {
 
       forifyllnad.getSvar().add(svar);
 
-      PrefillHandler prefillHandler = new PrefillHandler(List.of(new PrefillTextAreaConverter()));
+      final var prefillHandler = new PrefillHandler(List.of(new PrefillTextAreaConverter()));
 
       final var result = prefillHandler.unknownAnswerIds(
           CertificateModel.builder()
