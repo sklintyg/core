@@ -51,26 +51,36 @@ public class PrefillRadioBooleanConverter implements PrefillConverter {
           .build();
     }
 
-    try {
-      final var noPrefill = subAnswers.isEmpty() && answers.isEmpty();
-      return noPrefill
-          ? null
-          : PrefillAnswer.builder()
-              .elementData(
-                  ElementData.builder()
-                      .id(specification.id())
-                      .value(
-                          ElementValueBoolean.builder()
-                              .booleanId(configurationRadioBoolean.id())
-                              .value(Boolean.parseBoolean(getContent(subAnswers, answers)))
-                              .build()
-                      )
-                      .build()
-              )
-              .build();
-    } catch (Exception e) {
+    final var noPrefill = subAnswers.isEmpty() && answers.isEmpty();
+
+    if (noPrefill) {
+      return null;
+    }
+
+    if (!isValidBoolean(getContent(subAnswers, answers))) {
       return PrefillAnswer.invalidFormat();
     }
+
+    return PrefillAnswer.builder()
+        .elementData(
+            ElementData.builder()
+                .id(specification.id())
+                .value(
+                    ElementValueBoolean.builder()
+                        .booleanId(configurationRadioBoolean.id())
+                        .value(Boolean.parseBoolean(getContent(subAnswers, answers)))
+                        .build()
+                )
+                .build()
+        )
+        .build();
+  }
+
+  private boolean isValidBoolean(String value) {
+    if (value == null) {
+      return false;
+    }
+    return "true".equalsIgnoreCase(value) || "false".equalsIgnoreCase(value);
   }
 
   private static String getContent(List<Delsvar> subAnswers, List<Svar> answers) {
