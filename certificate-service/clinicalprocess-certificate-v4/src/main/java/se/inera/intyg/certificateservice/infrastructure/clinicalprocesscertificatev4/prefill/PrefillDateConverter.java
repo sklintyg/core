@@ -70,7 +70,6 @@ public class PrefillDateConverter implements PrefillConverter {
     } catch (Exception ex) {
       return PrefillAnswer.invalidFormat();
     }
-
   }
 
   private static String getContent(List<Delsvar> subAnswers, List<Svar> answers) {
