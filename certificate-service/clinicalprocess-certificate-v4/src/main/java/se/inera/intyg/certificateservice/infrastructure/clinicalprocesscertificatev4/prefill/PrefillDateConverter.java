@@ -51,28 +51,33 @@ public class PrefillDateConverter implements PrefillConverter {
 
     final var noPrefill = answer.isEmpty() && subAnswer.isEmpty();
 
-    return noPrefill
-        ? null
-        : PrefillAnswer.builder()
-            .elementData(
-                ElementData.builder()
-                    .id(specification.id())
-                    .value(
-                        ElementValueDate.builder()
-                            .dateId(configurationDate.id())
-                            .date(handleContent(subAnswer, answer))
-                            .build()
-                    )
-                    .build()
-            )
-            .build();
+    try {
+      return noPrefill
+          ? null
+          : PrefillAnswer.builder()
+              .elementData(
+                  ElementData.builder()
+                      .id(specification.id())
+                      .value(
+                          ElementValueDate.builder()
+                              .dateId(configurationDate.id())
+                              .date(LocalDate.parse(getContent(subAnswer, answer)))
+                              .build()
+                      )
+                      .build()
+              )
+              .build();
+    } catch (Exception ex) {
+      return PrefillAnswer.invalidFormat();
+    }
+
   }
 
-  private static LocalDate handleContent(List<Delsvar> subAnswers, List<Svar> answers) {
+  private static String getContent(List<Delsvar> subAnswers, List<Svar> answers) {
     if (!subAnswers.isEmpty()) {
-      return (LocalDate) subAnswers.getFirst().getContent().getFirst();
+      return (String) subAnswers.getFirst().getContent().getFirst();
     }
-    return (LocalDate) answers.stream()
+    return (String) answers.stream()
         .map(Svar::getDelsvar)
         .toList()
         .getFirst()

@@ -13,7 +13,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorDate;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
@@ -42,7 +41,6 @@ class PrefillDateConverterTest {
       ).build();
 
   private final PrefillDateConverter prefillDateConverter = new PrefillDateConverter();
-  private final XmlGeneratorDate xmlGeneratorDate = new XmlGeneratorDate();
 
   @Test
   void shouldReturnSupportsDate() {
@@ -51,6 +49,25 @@ class PrefillDateConverterTest {
 
   @Nested
   class PrefillAnswerWithForifyllnad {
+
+    @Test
+    void shouldReturnPrefillAnswerWithInvalidFormat() {
+      final var prefill = new Forifyllnad();
+      final var svar = new Svar();
+      svar.setId("other");
+      final var delsvar = new Delsvar();
+      delsvar.setId(SPECIFICATION.id().id());
+      delsvar.getContent().add("wrongValue");
+      svar.getDelsvar().add(delsvar);
+      prefill.getSvar().add(svar);
+
+      final var result = prefillDateConverter.prefillAnswer(SPECIFICATION, prefill);
+
+      assertEquals(
+          PrefillErrorType.INVALID_FORMAT,
+          result.getErrors().getFirst().type()
+      );
+    }
 
     @Test
     void shouldReturnNullIfNoAnswersOrSubAnswers() {
@@ -68,7 +85,7 @@ class PrefillDateConverterTest {
       svar.setId("other");
       final var delsvar = new Delsvar();
       delsvar.setId(SPECIFICATION.id().id());
-      delsvar.getContent().add(DATE);
+      delsvar.getContent().add(DATE.toString());
       svar.getDelsvar().add(delsvar);
       prefill.getSvar().add(svar);
 
@@ -88,7 +105,7 @@ class PrefillDateConverterTest {
       svar.setId(SPECIFICATION.id().id());
       final var delsvar = new Delsvar();
       delsvar.setId("other");
-      delsvar.getContent().add(DATE);
+      delsvar.getContent().add(DATE.toString());
       svar.getDelsvar().add(delsvar);
       prefill.getSvar().add(svar);
 

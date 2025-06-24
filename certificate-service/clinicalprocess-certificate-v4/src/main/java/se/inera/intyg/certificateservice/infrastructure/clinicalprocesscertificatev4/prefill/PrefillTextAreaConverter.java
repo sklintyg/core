@@ -61,7 +61,7 @@ public class PrefillTextAreaConverter implements PrefillConverter {
                     .value(
                         ElementValueText.builder()
                             .textId(configurationTextArea.id())
-                            .text(handleContent(subAnswers, answers))
+                            .text(getContent(subAnswers, answers))
                             .build()
                     )
                     .build()
@@ -69,7 +69,7 @@ public class PrefillTextAreaConverter implements PrefillConverter {
             .build();
   }
 
-  private static String handleContent(List<Delsvar> subAnswers, List<Svar> answers) {
+  private static String getContent(List<Delsvar> subAnswers, List<Svar> answers) {
     if (!subAnswers.isEmpty()) {
       return (String) subAnswers.getFirst().getContent().getFirst();
     }
