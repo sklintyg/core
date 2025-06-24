@@ -54,9 +54,8 @@ class PrefillTextAreaConverterTest {
     @Test
     void shouldReturnNullIfNoAnswersOrSubAnswers() {
       Forifyllnad prefill = new Forifyllnad();
-      PrefillTextAreaConverter converter = new PrefillTextAreaConverter();
 
-      PrefillAnswer result = converter.prefillAnswer(SPECIFICATION, prefill);
+      PrefillAnswer result = prefillTextAreaConverter.prefillAnswer(SPECIFICATION, prefill);
 
       assertNull(result);
     }
@@ -72,9 +71,7 @@ class PrefillTextAreaConverterTest {
       svar.getDelsvar().add(delsvar);
       prefill.getSvar().add(svar);
 
-      final var converter = new PrefillTextAreaConverter();
-
-      final var result = converter.prefillAnswer(SPECIFICATION, prefill);
+      final var result = prefillTextAreaConverter.prefillAnswer(SPECIFICATION, prefill);
 
       final var expected = PrefillAnswer.builder()
           .elementData(EXPECTED_ELEMENT_DATA)
@@ -94,9 +91,7 @@ class PrefillTextAreaConverterTest {
       svar.getDelsvar().add(delsvar);
       prefill.getSvar().add(svar);
 
-      final var converter = new PrefillTextAreaConverter();
-
-      final var result = converter.prefillAnswer(SPECIFICATION, prefill);
+      final var result = prefillTextAreaConverter.prefillAnswer(SPECIFICATION, prefill);
 
       final var expected = PrefillAnswer.builder()
           .elementData(EXPECTED_ELEMENT_DATA)
@@ -113,9 +108,7 @@ class PrefillTextAreaConverterTest {
           .configuration(ElementConfigurationCategory.builder().build())
           .build();
 
-      final var converter = new PrefillTextAreaConverter();
-
-      final var result = converter.prefillAnswer(wrongSpec, prefill);
+      final var result = prefillTextAreaConverter.prefillAnswer(wrongSpec, prefill);
 
       assertEquals(
           PrefillErrorType.TECHNICAL_ERROR,
@@ -124,28 +117,63 @@ class PrefillTextAreaConverterTest {
     }
 
     @Test
-    void shouldReturnErrorIfMultipleAnswersOrSubAnswers() {
+    void shouldReturnErrorIfMultipleAnswers() {
       final var prefill = new Forifyllnad();
       final var svar1 = new Svar();
       svar1.setId(SPECIFICATION.id().id());
-      final var delsvar1 = new Delsvar();
-      delsvar1.setId("other");
-      delsvar1.getContent().add(TEXT);
-      svar1.getDelsvar().add(delsvar1);
 
       final var svar2 = new Svar();
       svar2.setId(SPECIFICATION.id().id());
-      final var delsvar2 = new Delsvar();
-      delsvar2.setId("other2");
-      delsvar2.getContent().add(TEXT);
-      svar2.getDelsvar().add(delsvar2);
 
       prefill.getSvar().add(svar1);
       prefill.getSvar().add(svar2);
 
-      final var converter = new PrefillTextAreaConverter();
+      final var result = prefillTextAreaConverter.prefillAnswer(SPECIFICATION, prefill);
 
-      final var result = converter.prefillAnswer(SPECIFICATION, prefill);
+      assertEquals(
+          PrefillErrorType.WRONG_NUMBER_OF_ANSWERS,
+          result.getErrors().getFirst().type()
+      );
+    }
+
+    @Test
+    void shouldReturnErrorIfMultipleSubAnswers() {
+      final var prefill = new Forifyllnad();
+      final var svar1 = new Svar();
+      svar1.setId("other");
+      final var delsvar1 = new Delsvar();
+      delsvar1.setId(SPECIFICATION.id().id());
+      delsvar1.getContent().add(TEXT);
+      svar1.getDelsvar().add(delsvar1);
+
+      final var delsvar2 = new Delsvar();
+      delsvar2.setId(SPECIFICATION.id().id());
+      delsvar2.getContent().add(TEXT);
+      svar1.getDelsvar().add(delsvar2);
+
+      prefill.getSvar().add(svar1);
+
+      final var result = prefillTextAreaConverter.prefillAnswer(SPECIFICATION, prefill);
+
+      assertEquals(
+          PrefillErrorType.WRONG_NUMBER_OF_ANSWERS,
+          result.getErrors().getFirst().type()
+      );
+    }
+
+    @Test
+    void shouldReturnErrorIfBothSubAnswerAndAnswerIsPresent() {
+      final var prefill = new Forifyllnad();
+      final var svar1 = new Svar();
+      svar1.setId(SPECIFICATION.id().id());
+      final var delsvar1 = new Delsvar();
+      delsvar1.setId(SPECIFICATION.id().id());
+      delsvar1.getContent().add(TEXT);
+      svar1.getDelsvar().add(delsvar1);
+
+      prefill.getSvar().add(svar1);
+
+      final var result = prefillTextAreaConverter.prefillAnswer(SPECIFICATION, prefill);
 
       assertEquals(
           PrefillErrorType.WRONG_NUMBER_OF_ANSWERS,

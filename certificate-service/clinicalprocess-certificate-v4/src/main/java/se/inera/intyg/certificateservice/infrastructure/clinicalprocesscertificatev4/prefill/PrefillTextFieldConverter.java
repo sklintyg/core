@@ -3,9 +3,9 @@ package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertific
 import java.util.List;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfiguration;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextField;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.util.PrefillValidator;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
@@ -13,17 +13,17 @@ import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
 @Component
-public class PrefillRadioBooleanConverter implements PrefillConverter {
+public class PrefillTextFieldConverter implements PrefillConverter {
 
   @Override
   public Class<? extends ElementConfiguration> supports() {
-    return ElementConfigurationRadioBoolean.class;
+    return ElementConfigurationTextField.class;
   }
 
   @Override
   public PrefillAnswer prefillAnswer(ElementSpecification specification,
       Forifyllnad prefill) {
-    if (!(specification.configuration() instanceof ElementConfigurationRadioBoolean configurationRadioBoolean)) {
+    if (!(specification.configuration() instanceof ElementConfigurationTextField configurationTextField)) {
       return PrefillAnswer.builder()
           .errors(List.of(PrefillError.wrongConfigurationType()))
           .build();
@@ -51,26 +51,22 @@ public class PrefillRadioBooleanConverter implements PrefillConverter {
           .build();
     }
 
-    try {
-      final var noPrefill = subAnswers.isEmpty() && answers.isEmpty();
-      return noPrefill
-          ? null
-          : PrefillAnswer.builder()
-              .elementData(
-                  ElementData.builder()
-                      .id(specification.id())
-                      .value(
-                          ElementValueBoolean.builder()
-                              .booleanId(configurationRadioBoolean.id())
-                              .value(Boolean.parseBoolean(getContent(subAnswers, answers)))
-                              .build()
-                      )
-                      .build()
-              )
-              .build();
-    } catch (Exception e) {
-      return PrefillAnswer.invalidFormat();
-    }
+    final var noPrefill = subAnswers.isEmpty() && answers.isEmpty();
+    return noPrefill
+        ? null
+        : PrefillAnswer.builder()
+            .elementData(
+                ElementData.builder()
+                    .id(specification.id())
+                    .value(
+                        ElementValueText.builder()
+                            .textId(configurationTextField.id())
+                            .text(getContent(subAnswers, answers))
+                            .build()
+                    )
+                    .build()
+            )
+            .build();
   }
 
   private static String getContent(List<Delsvar> subAnswers, List<Svar> answers) {

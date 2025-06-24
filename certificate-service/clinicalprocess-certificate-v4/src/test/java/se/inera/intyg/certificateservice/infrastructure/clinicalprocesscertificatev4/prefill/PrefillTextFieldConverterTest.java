@@ -6,9 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextField;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
@@ -16,46 +16,43 @@ import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
-class PrefillRadioBooleanConverterTest {
+class PrefillTextFieldConverterTest {
 
   private static final ElementId ELEMENT_ID = new ElementId("1");
-  private static final FieldId RADIOBOOLEAN_ID = new FieldId("2");
-  private static final Boolean BOOLEAN = true;
+  private static final FieldId FIELD_ID = new FieldId("2");
+  private static final String VALUE = "text";
   private static final ElementSpecification SPECIFICATION = ElementSpecification.builder()
       .id(ELEMENT_ID)
       .configuration(
-          ElementConfigurationRadioBoolean.builder()
-              .id(RADIOBOOLEAN_ID)
+          ElementConfigurationTextField.builder()
+              .id(FIELD_ID)
               .build()
       )
       .build();
   private static final ElementData EXPECTED_ELEMENT_DATA = ElementData.builder()
       .id(ELEMENT_ID)
       .value(
-          ElementValueBoolean.builder()
-              .booleanId(RADIOBOOLEAN_ID)
-              .value(BOOLEAN)
+          ElementValueText.builder()
+              .textId(FIELD_ID)
+              .text(VALUE)
               .build()
       ).build();
 
-  private final PrefillRadioBooleanConverter prefillRadioBooleanConverter = new PrefillRadioBooleanConverter();
+  private final PrefillTextFieldConverter prefillTextFieldConverter = new PrefillTextFieldConverter();
 
   @Test
-  void shouldReturnSupportsRadioBoolean() {
-    assertEquals(ElementConfigurationRadioBoolean.class, prefillRadioBooleanConverter.supports());
+  void shouldReturnSupportsTextFieldd() {
+    assertEquals(ElementConfigurationTextField.class, prefillTextFieldConverter.supports());
   }
-
 
   @Nested
   class PrefillAnswerWithForifyllnad {
-
-
+    
     @Test
     void shouldReturnNullIfNoAnswersOrSubAnswers() {
       final var prefill = new Forifyllnad();
-      final var converter = new PrefillRadioBooleanConverter();
 
-      PrefillAnswer result = converter.prefillAnswer(SPECIFICATION, prefill);
+      PrefillAnswer result = prefillTextFieldConverter.prefillAnswer(SPECIFICATION, prefill);
 
       assertNull(result);
     }
@@ -67,11 +64,11 @@ class PrefillRadioBooleanConverterTest {
       svar.setId("other");
       final var delsvar = new Delsvar();
       delsvar.setId(SPECIFICATION.id().id());
-      delsvar.getContent().add(BOOLEAN.toString());
+      delsvar.getContent().add(VALUE);
       svar.getDelsvar().add(delsvar);
       prefill.getSvar().add(svar);
 
-      final var result = prefillRadioBooleanConverter.prefillAnswer(SPECIFICATION, prefill);
+      final var result = prefillTextFieldConverter.prefillAnswer(SPECIFICATION, prefill);
 
       final var expected = PrefillAnswer.builder()
           .elementData(EXPECTED_ELEMENT_DATA)
@@ -87,11 +84,11 @@ class PrefillRadioBooleanConverterTest {
       svar.setId(SPECIFICATION.id().id());
       final var delsvar = new Delsvar();
       delsvar.setId("other");
-      delsvar.getContent().add(BOOLEAN.toString());
+      delsvar.getContent().add(VALUE);
       svar.getDelsvar().add(delsvar);
       prefill.getSvar().add(svar);
 
-      final var result = prefillRadioBooleanConverter.prefillAnswer(SPECIFICATION, prefill);
+      final var result = prefillTextFieldConverter.prefillAnswer(SPECIFICATION, prefill);
 
       final var expected = PrefillAnswer.builder()
           .elementData(EXPECTED_ELEMENT_DATA)
@@ -108,7 +105,7 @@ class PrefillRadioBooleanConverterTest {
           .configuration(ElementConfigurationCategory.builder().build())
           .build();
 
-      final var result = prefillRadioBooleanConverter.prefillAnswer(wrongSpec, prefill);
+      final var result = prefillTextFieldConverter.prefillAnswer(wrongSpec, prefill);
 
       assertEquals(
           PrefillErrorType.TECHNICAL_ERROR,
@@ -128,7 +125,7 @@ class PrefillRadioBooleanConverterTest {
       prefill.getSvar().add(svar1);
       prefill.getSvar().add(svar2);
 
-      final var result = prefillRadioBooleanConverter.prefillAnswer(SPECIFICATION, prefill);
+      final var result = prefillTextFieldConverter.prefillAnswer(SPECIFICATION, prefill);
 
       assertEquals(
           PrefillErrorType.WRONG_NUMBER_OF_ANSWERS,
@@ -143,17 +140,17 @@ class PrefillRadioBooleanConverterTest {
       svar1.setId("other");
       final var delsvar1 = new Delsvar();
       delsvar1.setId(SPECIFICATION.id().id());
-      delsvar1.getContent().add(BOOLEAN.toString());
+      delsvar1.getContent().add(VALUE);
       svar1.getDelsvar().add(delsvar1);
 
       final var delsvar2 = new Delsvar();
       delsvar2.setId(SPECIFICATION.id().id());
-      delsvar2.getContent().add(BOOLEAN.toString());
+      delsvar2.getContent().add(VALUE);
       svar1.getDelsvar().add(delsvar2);
 
       prefill.getSvar().add(svar1);
 
-      final var result = prefillRadioBooleanConverter.prefillAnswer(SPECIFICATION, prefill);
+      final var result = prefillTextFieldConverter.prefillAnswer(SPECIFICATION, prefill);
 
       assertEquals(
           PrefillErrorType.WRONG_NUMBER_OF_ANSWERS,
@@ -168,12 +165,12 @@ class PrefillRadioBooleanConverterTest {
       svar1.setId(SPECIFICATION.id().id());
       final var delsvar1 = new Delsvar();
       delsvar1.setId(SPECIFICATION.id().id());
-      delsvar1.getContent().add(BOOLEAN.toString());
+      delsvar1.getContent().add(VALUE);
       svar1.getDelsvar().add(delsvar1);
 
       prefill.getSvar().add(svar1);
 
-      final var result = prefillRadioBooleanConverter.prefillAnswer(SPECIFICATION, prefill);
+      final var result = prefillTextFieldConverter.prefillAnswer(SPECIFICATION, prefill);
 
       assertEquals(
           PrefillErrorType.WRONG_NUMBER_OF_ANSWERS,
