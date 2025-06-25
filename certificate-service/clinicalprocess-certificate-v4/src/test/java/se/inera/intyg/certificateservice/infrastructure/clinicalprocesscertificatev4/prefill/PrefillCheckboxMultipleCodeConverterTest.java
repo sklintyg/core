@@ -1,11 +1,11 @@
 package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import jakarta.xml.bind.JAXBContext;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.Collections;
 import java.util.List;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.junit.jupiter.api.Nested;
@@ -21,11 +21,11 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
-import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorCodeList;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.CVType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.ObjectFactory;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
+import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
 class PrefillCheckboxMultipleCodeConverterTest {
 
@@ -44,8 +44,8 @@ class PrefillCheckboxMultipleCodeConverterTest {
                   List.of(
                       new ElementConfigurationCode(
                           CODE_FIELD_ID, "Code 1", new Code(CODE, "S1", "D1")),
-                      new ElementConfigurationCode(CODE_2_FIELD_ID, "Code 2",
-                          new Code(CODE_2, "S1", "D2"))
+                      new ElementConfigurationCode(
+                          CODE_2_FIELD_ID, "Code 2", new Code(CODE_2, "S1", "D2"))
                   )
               )
               .build()
@@ -87,7 +87,6 @@ class PrefillCheckboxMultipleCodeConverterTest {
       ).build();
 
   private final PrefillCheckboxMultipleCodeConverter prefillCheckboxMultipleCodeConverter = new PrefillCheckboxMultipleCodeConverter();
-  private final XmlGeneratorCodeList xmlGeneratorCheckboxMultipleCode = new XmlGeneratorCodeList();
 
   @Test
   void shouldReturnSupportsCheckboxMultipleCode() {
@@ -96,166 +95,134 @@ class PrefillCheckboxMultipleCodeConverterTest {
   }
 
   @Nested
-  class Answer {
+  class PrefillAnswerWithForifyllnad {
 
     @Test
-    void shouldReturnEmptyListForUnknownIds() {
+    void shouldReturnErrorIfWrongConverter() {
+      Forifyllnad prefill = new Forifyllnad();
+
+      PrefillTextAreaConverter converter = new PrefillTextAreaConverter();
+
+      PrefillAnswer result = converter.prefillAnswer(SPECIFICATION, prefill);
+
       assertEquals(
-          Collections.emptyList(),
-          prefillCheckboxMultipleCodeConverter.unknownIds(null, null)
+          PrefillErrorType.TECHNICAL_ERROR,
+          result.getErrors().getFirst().type()
       );
     }
 
     @Test
-    void shouldCreatePrefillAnswerForCheckboxMultipleCode() throws Exception {
+    void shouldReturnNullIfNoAnswersOrSubAnswers() {
+      Forifyllnad prefill = new Forifyllnad();
+
+      PrefillAnswer result = prefillCheckboxMultipleCodeConverter.prefillAnswer(SPECIFICATION,
+          prefill);
+
+      assertNull(result);
+    }
+
+    @Test
+    void shouldReturnPrefillAnswerIfSubAnswerExists() throws Exception {
+      final var prefill = new Forifyllnad();
+      final var svar = new Svar();
+      svar.setId("other");
+      final var delsvar = new Delsvar();
+      delsvar.setId(SPECIFICATION.id().id());
+      delsvar.getContent().add(createCVTypeElement(CODE));
+      svar.getDelsvar().add(delsvar);
+      prefill.getSvar().add(svar);
+
+      final var result = prefillCheckboxMultipleCodeConverter.prefillAnswer(SPECIFICATION, prefill);
+
+      final var expected = PrefillAnswer.builder()
+          .elementData(EXPECTED_ELEMENT_DATA_SUB_ANSWER)
+          .build();
+
+      assertEquals(expected, result);
+    }
+
+    @Test
+    void shouldReturnPrefillAnswerIfAnswerExists() throws Exception {
+      final var prefill = new Forifyllnad();
+      final var svar = new Svar();
+      final var svar2 = new Svar();
+      svar.setId(SPECIFICATION.id().id());
+      svar2.setId(SPECIFICATION.id().id());
+      final var delsvar = new Delsvar();
+      final var delsvar2 = new Delsvar();
+      delsvar.setId("other");
+      delsvar2.setId("other2");
+      delsvar.getContent().add(createCVTypeElement(CODE));
+      delsvar2.getContent().add(createCVTypeElement(CODE_2));
+      svar.getDelsvar().add(delsvar);
+      svar2.getDelsvar().add(delsvar2);
+      prefill.getSvar().add(svar);
+      prefill.getSvar().add(svar2);
+
+      final var result = prefillCheckboxMultipleCodeConverter.prefillAnswer(SPECIFICATION, prefill);
+
       final var expected = PrefillAnswer.builder()
           .elementData(EXPECTED_ELEMENT_DATA)
           .build();
-
-      final var answer = new Svar();
-      final var answer2 = new Svar();
-      final var subAnswer = new Delsvar();
-      final var subAnswer2 = new Delsvar();
-      subAnswer.getContent().add(createCVTypeElement(CODE));
-      subAnswer2.getContent().add(createCVTypeElement(CODE_2));
-      answer.getDelsvar().add(subAnswer);
-      answer2.getDelsvar().add(subAnswer2);
-
-      final var result = prefillCheckboxMultipleCodeConverter.prefillAnswer(
-          List.of(answer, answer2), SPECIFICATION);
 
       assertEquals(expected, result);
     }
 
     @Test
     void shouldReturnErrorIfWrongConfigurationType() {
-      final var wrongConfiguration = ElementSpecification.builder()
+      final var prefill = new Forifyllnad();
+      final var wrongSpec = ElementSpecification.builder()
           .id(ELEMENT_ID)
           .configuration(ElementConfigurationCategory.builder().build())
           .build();
 
-      final var result = prefillCheckboxMultipleCodeConverter.prefillAnswer(
-          List.of(new Svar()),
-          wrongConfiguration
-      );
+      final var result = prefillCheckboxMultipleCodeConverter.prefillAnswer(wrongSpec, prefill);
 
       assertEquals(
           PrefillErrorType.TECHNICAL_ERROR,
-          result.getErrors().getFirst().type()
-      );
-    }
-
-    @Test
-    void shouldReturnErrorIfNoAnswers() {
-      final var result = prefillCheckboxMultipleCodeConverter.prefillAnswer(List.of(),
-          SPECIFICATION);
-
-      assertEquals(
-          PrefillErrorType.WRONG_NUMBER_OF_ANSWERS,
           result.getErrors().getFirst().type()
       );
     }
 
     @Test
     void shouldReturnErrorIfInvalidCheckboxMultipleCodeFormat() {
+      final var prefill = new Forifyllnad();
       final var answer = new Svar();
+      answer.setId(SPECIFICATION.id().id());
       final var subAnswer = new Delsvar();
+      subAnswer.setId("other");
       final var content = List.of("invalid-checkboxMultipleCode-format");
       subAnswer.getContent().add(content);
       answer.getDelsvar().add(subAnswer);
+      prefill.getSvar().add(answer);
 
-      final var result = prefillCheckboxMultipleCodeConverter.prefillAnswer(List.of(answer),
-          SPECIFICATION);
+      final var result = prefillCheckboxMultipleCodeConverter.prefillAnswer(
+          SPECIFICATION, prefill);
 
       assertEquals(
           PrefillErrorType.INVALID_FORMAT,
           result.getErrors().getFirst().type()
       );
     }
-  }
-
-  @Nested
-  class SubAnswer {
-
-    @Test
-    void shouldReturnPrefillAnswerForSubAnswer() throws Exception {
-      final var expected = PrefillAnswer.builder()
-          .elementData(EXPECTED_ELEMENT_DATA_SUB_ANSWER)
-          .build();
-
-      final var subAnswer = new Delsvar();
-      subAnswer.getContent().add(createCVTypeElement(CODE));
-
-      final var result = prefillCheckboxMultipleCodeConverter.prefillSubAnswer(
-          List.of(subAnswer),
-          SPECIFICATION);
-
-      assertEquals(expected, result);
-    }
 
     @Test
     void shouldReturnErrorIfWrongConfigurationTypeForSubAnswer() {
+
+      final var prefill = new Forifyllnad();
       final var wrongConfiguration = ElementSpecification.builder()
           .id(ELEMENT_ID)
           .configuration(ElementConfigurationCategory.builder().build())
           .build();
 
-      final var result = prefillCheckboxMultipleCodeConverter.prefillSubAnswer(
-          List.of(new Delsvar()),
-          wrongConfiguration);
+      final var result = prefillCheckboxMultipleCodeConverter.prefillAnswer(
+          wrongConfiguration, prefill);
 
       assertEquals(
           PrefillErrorType.TECHNICAL_ERROR,
           result.getErrors().getFirst().type()
       );
     }
-
-    @Test
-    void shouldReturnErrorIfMoreThanOneSubAnswer() {
-      final var answer = xmlGeneratorCheckboxMultipleCode.generate(
-          EXPECTED_ELEMENT_DATA,
-          SPECIFICATION
-      );
-      final var answer2 = xmlGeneratorCheckboxMultipleCode.generate(
-          EXPECTED_ELEMENT_DATA,
-          SPECIFICATION
-      );
-
-      final var result = prefillCheckboxMultipleCodeConverter.prefillSubAnswer(
-          List.of(answer.getFirst().getDelsvar().getFirst(),
-              answer2.getFirst().getDelsvar().getFirst()), SPECIFICATION);
-
-      assertEquals(
-          PrefillErrorType.WRONG_NUMBER_OF_ANSWERS,
-          result.getErrors().getFirst().type()
-      );
-    }
-
-    @Test
-    void shouldReturnErrorIfNoSubAnswers() {
-      final var result = prefillCheckboxMultipleCodeConverter.prefillSubAnswer(List.of(),
-          SPECIFICATION);
-
-      assertEquals(
-          PrefillErrorType.WRONG_NUMBER_OF_ANSWERS,
-          result.getErrors().getFirst().type()
-      );
-    }
-
-    @Test
-    void shouldReturnErrorIfInvalidFormat() {
-      final var subAnswer = new Delsvar();
-      final var content = List.of("invalid-checkboxMultipleCode-format");
-      subAnswer.getContent().add(content);
-
-      final var result = prefillCheckboxMultipleCodeConverter.prefillSubAnswer(List.of(subAnswer),
-          SPECIFICATION);
-
-      assertEquals(
-          PrefillErrorType.INVALID_FORMAT,
-          result.getErrors().getFirst().type()
-      );
-    }
+    
   }
 
   private static Element createCVTypeElement(String code) throws Exception {

@@ -1,17 +1,16 @@
 package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill;
 
-import java.util.Collections;
 import java.util.List;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCodeList;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfiguration;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
+import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
 @Component
 public class PrefillCheckboxMultipleCodeConverter implements PrefillConverter {
@@ -22,75 +21,58 @@ public class PrefillCheckboxMultipleCodeConverter implements PrefillConverter {
   }
 
   @Override
-  public PrefillAnswer prefillSubAnswer(List<Delsvar> subAnswers,
+  public PrefillAnswer prefillAnswer(ElementSpecification specification,
+      Forifyllnad prefill) {
+
+    if (!(specification.configuration() instanceof ElementConfigurationCheckboxMultipleCode configurationCheckboxMultipleCode)) {
+      return PrefillAnswer.builder()
+          .errors(List.of(PrefillError.wrongConfigurationType()))
+          .build();
+    }
+
+    final var answers = prefill.getSvar().stream()
+        .filter(svar -> svar.getId().equals(specification.id().id()))
+        .toList();
+
+    final var subAnswers = prefill.getSvar().stream()
+        .map(Svar::getDelsvar)
+        .flatMap(List::stream)
+        .filter(delsvar -> delsvar.getId().equals(specification.id().id()))
+        .toList();
+
+    if (answers.isEmpty() && subAnswers.isEmpty()) {
+      return null;
+    }
+
+    try {
+      final var codes = getContent(subAnswers, answers, specification);
+      return PrefillAnswer.builder()
+          .elementData(
+              ElementData.builder()
+                  .id(specification.id())
+                  .value(ElementValueCodeList.builder()
+                      .id(configurationCheckboxMultipleCode.id())
+                      .list(codes)
+                      .build()
+                  ).build()
+          ).build();
+    } catch (Exception e) {
+      return PrefillAnswer.invalidFormat();
+    }
+  }
+
+  private static List<ElementValueCode> getContent(List<Delsvar> subAnswers, List<Svar> answers,
       ElementSpecification specification) {
-    if (!(specification.configuration() instanceof ElementConfigurationCheckboxMultipleCode)) {
-      return PrefillAnswer.builder()
-          .errors(List.of(PrefillError.wrongConfigurationType()))
-          .build();
+    if (!subAnswers.isEmpty()) {
+      return List.of(getCode(subAnswers, specification));
     }
-
-    if (subAnswers.size() != 1) {
-      return PrefillAnswer.builder()
-          .errors(List.of(
-              PrefillError.wrongNumberOfSubAnswers(specification.id().id(), 1, subAnswers.size())))
-          .build();
-    }
-
-    List<ElementValueCode> codes;
-    try {
-      codes = List.of(getCode(subAnswers, specification));
-    } catch (Exception e) {
-      return PrefillAnswer.invalidFormat();
-    }
-
-    return PrefillAnswer.builder()
-        .elementData(
-            ElementData.builder()
-                .id(specification.id())
-                .value(ElementValueCodeList.builder()
-                    .id(specification.configuration().id())
-                    .list(codes)
-                    .build()
-                ).build()
-        ).build();
+    return answers.stream()
+        .map(svar -> getCode(svar.getDelsvar(), specification))
+        .toList();
   }
 
-  public PrefillAnswer prefillAnswer(List<Svar> answers, ElementSpecification specification) {
-    if (!(specification.configuration() instanceof ElementConfigurationCheckboxMultipleCode)) {
-      return PrefillAnswer.builder()
-          .errors(List.of(PrefillError.wrongConfigurationType()))
-          .build();
-    }
-
-    if (answers.isEmpty()) {
-      return PrefillAnswer.builder()
-          .errors(List.of(PrefillError.wrongNumberOfAnswers(1, answers.size())))
-          .build();
-    }
-
-    List<ElementValueCode> codes;
-    try {
-      codes = answers.stream()
-          .map(answer -> getCode(answer.getDelsvar(), specification))
-          .toList();
-    } catch (Exception e) {
-      return PrefillAnswer.invalidFormat();
-    }
-
-    return PrefillAnswer.builder()
-        .elementData(
-            ElementData.builder()
-                .id(specification.id())
-                .value(ElementValueCodeList.builder()
-                    .id(specification.configuration().id())
-                    .list(codes)
-                    .build()
-                ).build()
-        ).build();
-  }
-
-  private ElementValueCode getCode(List<Delsvar> subAnswer, ElementSpecification specification) {
+  private static ElementValueCode getCode(List<Delsvar> subAnswer,
+      ElementSpecification specification) {
     String code;
     final var cvType = PrefillUnmarshaller.cvType(subAnswer.getFirst().getContent());
 
@@ -111,8 +93,4 @@ public class PrefillCheckboxMultipleCodeConverter implements PrefillConverter {
         .build();
   }
 
-  @Override
-  public List<PrefillAnswer> unknownIds(Svar answer, CertificateModel model) {
-    return Collections.emptyList();
-  }
 }
