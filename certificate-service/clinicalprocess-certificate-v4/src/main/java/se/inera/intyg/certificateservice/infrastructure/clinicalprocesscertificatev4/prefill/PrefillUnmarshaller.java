@@ -53,7 +53,7 @@ public final class PrefillUnmarshaller {
       final var jaxbElement = (JAXBElement<T>) unmarshaller.unmarshal(stringReader);
       return Optional.of(jaxbElement.getValue());
     } catch (Exception ex) {
-      log.warn("Failed to unmarshal " + clazz.getSimpleName(), ex);
+      log.warn("Failed to unmarshal {}", clazz.getSimpleName(), ex);
       return Optional.empty();
     }
   }

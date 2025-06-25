@@ -166,6 +166,8 @@ class PrefillMedicalInvestigationListConverterTest {
       svar.getDelsvar().add(delsvar);
       prefill.getSvar().add(svar);
 
+      //TODO: does this querstion require all subanswers to be entered? Is this behvaiour the same for other multiplevalue components?
+
       final var result = prefillMedicalInvestigationListConverter.prefillAnswer(SPECIFICATION,
           prefill);
 
@@ -211,7 +213,7 @@ class PrefillMedicalInvestigationListConverterTest {
     }
 
     @Test
-    void shouldReturnErrorIfSubAnswersExceedLimit() {
+    void shouldReturnErrorIfTooFewSubAnswers() {
       final var prefill = new Forifyllnad();
       final var svar1 = new Svar();
       svar1.setId(SPECIFICATION.id().id());
@@ -222,14 +224,6 @@ class PrefillMedicalInvestigationListConverterTest {
       final var delsvar2 = new Delsvar();
       delsvar2.setId(SPECIFICATION.id().id());
       svar1.getDelsvar().add(delsvar2);
-
-      final var delsvar3 = new Delsvar();
-      delsvar3.setId(SPECIFICATION.id().id());
-      svar1.getDelsvar().add(delsvar3);
-
-      final var delsvar4 = new Delsvar();
-      delsvar4.setId(SPECIFICATION.id().id());
-      svar1.getDelsvar().add(delsvar4);
 
       prefill.getSvar().add(svar1);
 

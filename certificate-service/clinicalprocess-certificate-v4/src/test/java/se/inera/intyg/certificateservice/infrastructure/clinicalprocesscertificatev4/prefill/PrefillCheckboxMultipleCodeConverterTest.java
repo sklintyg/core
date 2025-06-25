@@ -166,18 +166,10 @@ class PrefillCheckboxMultipleCodeConverterTest {
     }
 
     @Test
-    void shouldReturnErrorIfSubAnswersExceedLimit() {
+    void shouldReturnErrorIfSubAnswersDoesNotExist() {
       final var prefill = new Forifyllnad();
       final var svar1 = new Svar();
       svar1.setId(SPECIFICATION.id().id());
-      final var delsvar1 = new Delsvar();
-      delsvar1.setId(SPECIFICATION.id().id());
-      svar1.getDelsvar().add(delsvar1);
-
-      final var delsvar2 = new Delsvar();
-      delsvar2.setId(SPECIFICATION.id().id());
-      svar1.getDelsvar().add(delsvar2);
-
       prefill.getSvar().add(svar1);
 
       final var result = prefillCheckboxMultipleCodeConverter.prefillAnswer(SPECIFICATION,

@@ -16,7 +16,7 @@ import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 @Component
 public class PrefillCheckboxMultipleCodeConverter implements PrefillConverter {
 
-  private static final int LIMIT = 1;
+  private static final int MINIMUM_SUB_ANSWERS = 1;
 
   @Override
   public Class<? extends ElementConfiguration> supports() {
@@ -37,17 +37,18 @@ public class PrefillCheckboxMultipleCodeConverter implements PrefillConverter {
         .filter(svar -> svar.getId().equals(specification.id().id()))
         .toList();
 
-    final var prefillError = PrefillValidator.validateNumberOfDelsvar(answers, LIMIT,
+    if (answers.isEmpty()) {
+      return null;
+    }
+
+    final var prefillError = PrefillValidator.validateMinimumNumberOfDelsvar(answers,
+        MINIMUM_SUB_ANSWERS,
         specification);
 
     if (prefillError != null) {
       return PrefillAnswer.builder()
           .errors(List.of(prefillError))
           .build();
-    }
-
-    if (answers.isEmpty()) {
-      return null;
     }
 
     try {

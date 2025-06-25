@@ -21,7 +21,7 @@ import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 @RequiredArgsConstructor
 public class PrefillDiagnosisConverter implements PrefillConverter {
 
-  private static final int LIMIT = 2;
+  private static final int MINIMUM_SUB_ANSWERS = 2;
   private static final String CV_TYPE_IDENTIFIER = "%s.2";
   private final DiagnosisCodeRepository diagnosisCodeRepository;
 
@@ -44,9 +44,9 @@ public class PrefillDiagnosisConverter implements PrefillConverter {
         .filter(svar -> svar.getId().equals(specification.id().id()))
         .toList();
 
-    final var prefillError = PrefillValidator.validateNumberOfDelsvar(
+    final var prefillError = PrefillValidator.validateMinimumNumberOfDelsvar(
         answers,
-        LIMIT,
+        MINIMUM_SUB_ANSWERS,
         specification
     );
 

@@ -28,16 +28,16 @@ public class PrefillValidator {
 
     return null;
   }
-
-  public static PrefillError validateNumberOfDelsvar(List<Svar> answers, Integer limit,
+  
+  public static PrefillError validateMinimumNumberOfDelsvar(List<Svar> answers, int minimum,
       ElementSpecification specification) {
-    final var hasExceededLimitForDelsvar = answers.stream()
-        .anyMatch(answer -> answer.getDelsvar().size() > limit);
+    final var hasTooFewDelsvar = answers.stream()
+        .anyMatch(answer -> answer.getDelsvar().size() < minimum);
 
-    if (hasExceededLimitForDelsvar) {
+    if (hasTooFewDelsvar) {
       final var numberOfSubAnswers = answers.stream()
           .map(Svar::getDelsvar)
-          .filter(delsvar -> delsvar.size() > limit)
+          .filter(delsvar -> delsvar.size() < minimum)
           .findFirst()
           .stream()
           .mapToInt(List::size)
@@ -45,7 +45,7 @@ public class PrefillValidator {
 
       return PrefillError.wrongNumberOfSubAnswers(
           specification.id().id(),
-          limit,
+          minimum,
           numberOfSubAnswers
       );
     }

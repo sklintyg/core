@@ -14,8 +14,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType;
-import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
-import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
 @Slf4j
@@ -34,41 +32,6 @@ public class PrefillHandler {
         .collect(Collectors.toMap(PrefillConverter::supports, Function.identity()));
   }
 
-  public PrefillAnswer prefillAnswer(List<Svar> answers,
-      ElementSpecification elementSpecification) {
-    final var converter = converters.get(elementSpecification.configuration().getClass());
-
-    if (converter == null) {
-      return PrefillAnswer.builder()
-          .errors(List.of(
-                  PrefillError.missingConverter(
-                      elementSpecification.configuration().getClass().toString())
-              )
-          )
-          .build();
-    }
-
-    return converter.prefillAnswer(answers, elementSpecification);
-  }
-
-  public PrefillAnswer prefillSubAnswer(List<Delsvar> subAnswers,
-      ElementSpecification elementSpecification) {
-    final var converter = converters.get(elementSpecification.configuration().getClass());
-
-    if (converter == null) {
-      return PrefillAnswer.builder()
-          .errors(List.of(
-                  PrefillError.missingConverter(
-                      elementSpecification.configuration().getClass().toString())
-              )
-          )
-          .build();
-    }
-
-    return converter.prefillSubAnswer(subAnswers, elementSpecification);
-  }
-
-
   public Collection<PrefillAnswer> unknownAnswerIds(CertificateModel model,
       Forifyllnad answer) {
     return answer.getSvar().stream()
@@ -80,8 +43,8 @@ public class PrefillHandler {
   public Collection<PrefillAnswer> handlePrefill(CertificateModel certificateModel,
       Forifyllnad prefill) {
     return certificateModel.elementSpecifications().stream()
-        .filter(isQuestion())
         .flatMap(ElementSpecification::flatten)
+        .filter(isQuestion())
         .map(elementSpecification -> {
           final var prefillConverter = converters.get(
               elementSpecification.configuration().getClass());

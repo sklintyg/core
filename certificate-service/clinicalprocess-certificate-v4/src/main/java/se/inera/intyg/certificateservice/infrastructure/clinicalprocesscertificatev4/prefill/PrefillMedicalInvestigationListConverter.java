@@ -22,7 +22,7 @@ import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 @Component
 public class PrefillMedicalInvestigationListConverter implements PrefillConverter {
 
-  private static final int LIMIT = 3;
+  private static final int MINIMUM_SUB_ANSWERS = 3;
 
   @Override
   public Class<? extends ElementConfiguration> supports() {
@@ -46,9 +46,9 @@ public class PrefillMedicalInvestigationListConverter implements PrefillConverte
       return null;
     }
 
-    final var prefillError = PrefillValidator.validateNumberOfDelsvar(
+    final var prefillError = PrefillValidator.validateMinimumNumberOfDelsvar(
         answers,
-        LIMIT,
+        MINIMUM_SUB_ANSWERS,
         specification
     );
 
