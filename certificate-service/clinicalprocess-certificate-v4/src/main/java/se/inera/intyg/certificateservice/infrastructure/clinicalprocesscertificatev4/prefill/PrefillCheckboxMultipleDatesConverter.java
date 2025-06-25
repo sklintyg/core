@@ -13,13 +13,16 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.util.PrefillValidator;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
+import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
 @Component
-public class CheckboxMultipleDatesConverter implements PrefillConverter {
+public class PrefillCheckboxMultipleDatesConverter implements PrefillConverter {
+
+  private static final int LIMIT = 2;
 
   @Override
   public Class<? extends ElementConfiguration> supports() {
@@ -27,16 +30,34 @@ public class CheckboxMultipleDatesConverter implements PrefillConverter {
   }
 
   @Override
-  public PrefillAnswer prefillSubAnswer(List<Delsvar> subAnswers,
-      ElementSpecification specification) {
-    return null;
-  }
+  public PrefillAnswer prefillAnswer(ElementSpecification specification, Forifyllnad prefill) {
+    if (!(specification.configuration() instanceof ElementConfigurationCheckboxMultipleDate configurationCheckboxMultipleDate)) {
+      return PrefillAnswer.builder()
+          .errors(List.of(PrefillError.wrongConfigurationType()))
+          .build();
+    }
 
-  public PrefillAnswer prefillAnswer(List<Svar> answers, ElementSpecification specification) {
+    final var answers = prefill.getSvar().stream()
+        .filter(svar -> svar.getId().equals(specification.id().id()))
+        .toList();
+
+    final var prefillError = PrefillValidator.validateNumberOfDelsvar(answers, LIMIT,
+        specification);
+
+    if (prefillError != null) {
+      return PrefillAnswer.builder()
+          .errors(List.of(prefillError))
+          .build();
+    }
+
+    if (answers.isEmpty()) {
+      return null;
+    }
+
     var elementData = ElementData.builder()
         .id(specification.id())
         .value(ElementValueDateList.builder()
-            .dateListId(new FieldId(null))
+            .dateListId(configurationCheckboxMultipleDate.id())
             .dateList(answers.stream()
                 .map(s -> {
                   var code = getCode(s.getDelsvar(), specification);
