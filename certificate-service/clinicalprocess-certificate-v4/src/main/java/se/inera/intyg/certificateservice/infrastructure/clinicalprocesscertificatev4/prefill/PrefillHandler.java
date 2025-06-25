@@ -33,8 +33,8 @@ public class PrefillHandler {
   }
 
   public Collection<PrefillAnswer> unknownAnswerIds(CertificateModel model,
-      Forifyllnad answer) {
-    return answer.getSvar().stream()
+      Forifyllnad prefill) {
+    return prefill.getSvar().stream()
         .filter(s -> !model.elementSpecificationExists(new ElementId(s.getId())))
         .map(sp -> PrefillAnswer.answerNotFound(sp.getId()))
         .toList();

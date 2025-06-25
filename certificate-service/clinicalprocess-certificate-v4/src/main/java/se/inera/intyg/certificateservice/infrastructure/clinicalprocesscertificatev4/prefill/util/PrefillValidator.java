@@ -28,7 +28,7 @@ public class PrefillValidator {
 
     return null;
   }
-  
+
   public static PrefillError validateMinimumNumberOfDelsvar(List<Svar> answers, int minimum,
       ElementSpecification specification) {
     final var hasTooFewDelsvar = answers.stream()

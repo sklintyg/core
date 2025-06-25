@@ -5,7 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementDataConstants.DATE_ELEMENT_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementSpecification.CATEGORY_ELEMENT_SPECIFICATION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementSpecification.DATE_ELEMENT_SPECIFICATION;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementSpecification.ISSUING_UNIT_ELEMENT_SPECIFICATION;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementSpecification.MESSAGE_ELEMENT_SPECIFICATION;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementSpecification.categoryElementSpecificationBuilder;
 
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +22,6 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.testdata.TestDataElementSpecification;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
@@ -84,7 +87,7 @@ class PrefillHandlerTest {
     }
 
     @Test
-    void shouldOnlyHandleQuestions() {
+    void shouldOnlyHandleQuestionSpecifications() {
 
       final var prefill = new Forifyllnad();
 
@@ -97,19 +100,23 @@ class PrefillHandlerTest {
       when(prefillConverter.prefillAnswer(DATE_ELEMENT_SPECIFICATION, prefill)).thenReturn(
           expected);
 
-      final var categorySpec = TestDataElementSpecification.CATEGORY_ELEMENT_SPECIFICATION;
-      final var messageSpec = TestDataElementSpecification.MESSAGE_ELEMENT_SPECIFICATION;
-      final var issuingUnitSpec = TestDataElementSpecification.ISSUING_UNIT_ELEMENT_SPECIFICATION;
+      final var messageSpec = MESSAGE_ELEMENT_SPECIFICATION;
+      final var issuingUnitSpec = ISSUING_UNIT_ELEMENT_SPECIFICATION;
+      final var categorySpec = categoryElementSpecificationBuilder()
+          .children(List.of(DATE_ELEMENT_SPECIFICATION, CATEGORY_ELEMENT_SPECIFICATION, messageSpec,
+              issuingUnitSpec))
+          .build();
 
       final var result = prefillHandler.handlePrefill(
           CertificateModel.builder()
               .elementSpecifications(
-                  List.of(DATE_ELEMENT_SPECIFICATION, categorySpec, messageSpec, issuingUnitSpec))
+                  List.of(DATE_ELEMENT_SPECIFICATION, categorySpec,
+                      messageSpec, issuingUnitSpec))
               .build(),
           prefill
       );
 
-      assertEquals(List.of(expected), result);
+      assertEquals(List.of(expected, expected), result);
     }
   }
 

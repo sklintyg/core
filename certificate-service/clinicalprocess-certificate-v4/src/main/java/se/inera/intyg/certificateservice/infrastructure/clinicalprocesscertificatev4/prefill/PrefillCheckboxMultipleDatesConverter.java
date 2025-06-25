@@ -1,7 +1,9 @@
 package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
@@ -52,31 +54,34 @@ public class PrefillCheckboxMultipleDatesConverter implements PrefillConverter {
           .build();
     }
 
-    ElementData elementData;
+    final var prefillErrors = new ArrayList<PrefillError>();
 
-    try {
-      elementData = ElementData.builder()
-          .id(specification.id())
-          .value(ElementValueDateList.builder()
-              .dateListId(configurationCheckboxMultipleDate.id())
-              .dateList(answers.stream()
-                  .map(s -> {
+    final var elementData = ElementData.builder()
+        .id(specification.id())
+        .value(ElementValueDateList.builder()
+            .dateListId(configurationCheckboxMultipleDate.id())
+            .dateList(answers.stream()
+                .map(s -> {
+                  try {
                     var code = getCode(s.getDelsvar(), specification);
                     var date = getDate(s, specification);
                     return ElementValueDate.builder()
                         .dateId(getDateBox(configurationCheckboxMultipleDate, code).id())
                         .date(date)
                         .build();
-                  })
-                  .toList())
-              .build())
-          .build();
-    } catch (Exception ex) {
-      return PrefillAnswer.invalidFormat(specification.id().id(), ex.getMessage());
-    }
+                  } catch (Exception ex) {
+                    prefillErrors.add(PrefillError.invalidFormat(s.getId(), ex.getMessage()));
+                    return null;
+                  }
+                })
+                .filter(Objects::nonNull)
+                .toList())
+            .build())
+        .build();
 
     return PrefillAnswer.builder()
         .elementData(elementData)
+        .errors(prefillErrors)
         .build();
   }
 
@@ -89,15 +94,15 @@ public class PrefillCheckboxMultipleDatesConverter implements PrefillConverter {
   }
 
   private LocalDate getDate(Svar s, ElementSpecification specification) {
-    final var dateDelsvarOpt = s.getDelsvar().stream()
+    final var subAnswer = s.getDelsvar().stream()
         .filter(d -> d.getId().equals(specification.id().id() + ".2"))
         .findFirst();
 
-    if (dateDelsvarOpt.isEmpty() || dateDelsvarOpt.get().getContent().isEmpty()) {
+    if (subAnswer.isEmpty() || subAnswer.get().getContent().isEmpty()) {
       throw new IllegalStateException("Invalid format: date is missing");
     }
 
-    return LocalDate.parse((String) dateDelsvarOpt.get().getContent().getFirst());
+    return LocalDate.parse((String) subAnswer.get().getContent().getFirst());
   }
 
   private Code getCode(List<Delsvar> subAnswer, ElementSpecification specification) {

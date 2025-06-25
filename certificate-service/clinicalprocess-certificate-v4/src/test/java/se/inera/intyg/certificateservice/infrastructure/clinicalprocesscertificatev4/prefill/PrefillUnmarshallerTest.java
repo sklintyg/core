@@ -3,23 +3,13 @@ package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertific
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.TestMarshaller.getElement;
 
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBElement;
-import jakarta.xml.bind.JAXBException;
-import java.io.IOException;
-import java.io.StringReader;
 import java.io.StringWriter;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.function.Function;
 import javax.xml.datatype.DatatypeFactory;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import org.junit.jupiter.api.Test;
-import org.w3c.dom.Element;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.CVType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.ObjectFactory;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
@@ -101,20 +91,5 @@ class PrefillUnmarshallerTest {
     );
   }
 
-  private static <T> Element getElement(T object, Function<T, JAXBElement<T>> jaxbElementCreator)
-      throws JAXBException, ParserConfigurationException, IOException, SAXException {
-    final var jaxbElement = jaxbElementCreator.apply(object);
-
-    final var context = JAXBContext.newInstance(object.getClass());
-    final var marshaller = context.createMarshaller();
-    final var writer = new StringWriter();
-    marshaller.marshal(jaxbElement, writer);
-
-    final var docFactory = DocumentBuilderFactory.newInstance();
-    docFactory.setNamespaceAware(true);
-    final var doc = docFactory.newDocumentBuilder()
-        .parse(new InputSource(new StringReader(writer.toString())));
-    return doc.getDocumentElement();
-  }
 
 }
