@@ -74,7 +74,7 @@ class PrefillRadioBooleanConverterTest {
       final var result = prefillRadioBooleanConverter.prefillAnswer(SPECIFICATION, prefill);
 
       assertEquals(
-          PrefillErrorType.INVALID_FORMAT,
+          PrefillErrorType.INVALID_BOOLEAN_VALUE,
           result.getErrors().getFirst().type()
       );
     }

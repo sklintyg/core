@@ -57,8 +57,12 @@ public class PrefillRadioBooleanConverter implements PrefillConverter {
       return null;
     }
 
-    if (!isValidBoolean(getContent(subAnswers, answers))) {
-      return PrefillAnswer.invalidFormat();
+    final var content = getContent(subAnswers, answers);
+    
+    if (!isValidBoolean(content)) {
+      return PrefillAnswer.builder()
+          .errors(List.of(PrefillError.invalidBooleanValue(specification.id().id(), content)))
+          .build();
     }
 
     return PrefillAnswer.builder()
@@ -68,7 +72,7 @@ public class PrefillRadioBooleanConverter implements PrefillConverter {
                 .value(
                     ElementValueBoolean.builder()
                         .booleanId(configurationRadioBoolean.id())
-                        .value(Boolean.parseBoolean(getContent(subAnswers, answers)))
+                        .value(Boolean.parseBoolean(content))
                         .build()
                 )
                 .build()

@@ -68,7 +68,7 @@ public class PrefillDateConverter implements PrefillConverter {
               )
               .build();
     } catch (Exception ex) {
-      return PrefillAnswer.invalidFormat();
+      return PrefillAnswer.invalidFormat(specification.id().id(), ex.getMessage());
     }
   }
 

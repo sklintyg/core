@@ -74,8 +74,8 @@ public class PrefillDateRangeConverter implements PrefillConverter {
                   ).build()
           )
           .build();
-    } catch (Exception e) {
-      return PrefillAnswer.invalidFormat();
+    } catch (Exception ex) {
+      return PrefillAnswer.invalidFormat(specification.id().id(), ex.getMessage());
     }
   }
 

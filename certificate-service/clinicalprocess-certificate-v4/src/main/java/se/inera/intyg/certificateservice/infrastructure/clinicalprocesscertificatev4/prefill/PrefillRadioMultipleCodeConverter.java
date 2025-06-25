@@ -63,11 +63,7 @@ public class PrefillRadioMultipleCodeConverter implements PrefillConverter {
       final var content = getContent(subAnswers, answers);
       final var cvType = unmarshalType(List.of(content), CVType.class);
 
-      if (cvType.isEmpty()) {
-        return PrefillAnswer.invalidFormat();
-      }
-
-      final var code = cvType.get().getCode();
+      final var code = cvType.orElseThrow().getCode();
 
       return PrefillAnswer.builder()
           .elementData(
@@ -82,8 +78,8 @@ public class PrefillRadioMultipleCodeConverter implements PrefillConverter {
           )
           .build();
 
-    } catch (Exception exception) {
-      return PrefillAnswer.invalidFormat();
+    } catch (Exception ex) {
+      return PrefillAnswer.invalidFormat(specification.id().id(), ex.getMessage());
     }
   }
 

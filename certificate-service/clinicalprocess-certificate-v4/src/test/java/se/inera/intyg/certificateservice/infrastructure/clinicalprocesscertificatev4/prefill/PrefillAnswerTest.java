@@ -32,11 +32,12 @@ class PrefillAnswerTest {
 
   @Test
   void shouldReturnInvalidFormatError() {
-    final var answer = PrefillAnswer.invalidFormat();
+    final var answer = PrefillAnswer.invalidFormat("id", "message");
     assertAll(
         () -> assertEquals(1, answer.getErrors().size()),
         () -> assertEquals(PrefillErrorType.INVALID_FORMAT, answer.getErrors().getFirst().type()),
-        () -> assertEquals("Invalid format", answer.getErrors().getFirst().details())
+        () -> assertEquals("Invalid format for answer id 'id' - reason: message",
+            answer.getErrors().getFirst().details())
     );
   }
 }

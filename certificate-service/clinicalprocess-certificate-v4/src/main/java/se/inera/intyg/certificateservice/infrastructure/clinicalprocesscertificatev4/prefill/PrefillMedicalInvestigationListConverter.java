@@ -77,8 +77,8 @@ public class PrefillMedicalInvestigationListConverter implements PrefillConverte
                   ).build()
           )
           .build();
-    } catch (Exception e) {
-      return PrefillAnswer.invalidFormat();
+    } catch (Exception ex) {
+      return PrefillAnswer.invalidFormat(specification.id().id(), ex.getMessage());
     }
   }
 
