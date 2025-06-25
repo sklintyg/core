@@ -2,7 +2,10 @@ package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertific
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.domain.diagnosiscode.model.DiagnosisCode;
+import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.PrefillError;
+import se.riv.clinicalprocess.healthcond.certificate.types.v3.CVType;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 
@@ -28,7 +31,7 @@ public class PrefillValidator {
 
     return null;
   }
-  
+
   public static PrefillError validateMinimumNumberOfDelsvar(List<Svar> answers, int minimum,
       ElementSpecification specification) {
     final var hasTooFewDelsvar = answers.stream()
@@ -50,5 +53,30 @@ public class PrefillValidator {
       );
     }
     return null;
+  }
+
+  public static PrefillError validateDiagnosisCode(List<CVType> cvTypes,
+      DiagnosisCodeRepository diagnosisCodeRepository) {
+
+    final var diagnosisCodeIsInvalid = cvTypes.stream()
+        .map(CVType::getCode)
+        .anyMatch(code -> diagnosisCodeRepository.findByCode(new DiagnosisCode(code)).isEmpty());
+
+    if (diagnosisCodeIsInvalid) {
+      return PrefillError.invalidDiagnosisCode(getCode(cvTypes, diagnosisCodeRepository));
+    }
+    return null;
+  }
+
+  private static String getCode(List<CVType> cvTypes,
+      DiagnosisCodeRepository diagnosisCodeRepository) {
+    return cvTypes.stream()
+        .map(CVType::getCode)
+        .filter(
+            code -> diagnosisCodeRepository.findByCode(new DiagnosisCode(code))
+                .isEmpty()
+        )
+        .findFirst()
+        .orElseThrow();
   }
 }

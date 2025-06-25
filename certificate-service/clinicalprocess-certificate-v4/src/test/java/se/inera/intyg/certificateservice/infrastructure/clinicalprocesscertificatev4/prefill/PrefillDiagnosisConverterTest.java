@@ -2,13 +2,17 @@ package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertific
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.doReturn;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemIcd10Se.DIAGNOS_ICD_10_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemIcd10Se.ICD_10_SE_CODE_SYSTEM;
 
 import jakarta.xml.bind.JAXBContext;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.List;
+import java.util.Optional;
 import javax.xml.parsers.DocumentBuilderFactory;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,6 +27,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDi
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.diagnosiscode.model.Diagnosis;
+import se.inera.intyg.certificateservice.domain.diagnosiscode.model.DiagnosisCode;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemIcd10Se;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.CVType;
@@ -86,10 +92,15 @@ class PrefillDiagnosisConverterTest {
 
   @Mock
   private DiagnosisCodeRepository diagnosisCodeRepository;
-  private final PrefillDiagnosisConverter prefillDiagnosisConverter = new PrefillDiagnosisConverter(
-      diagnosisCodeRepository
-  );
 
+  private PrefillDiagnosisConverter prefillDiagnosisConverter;
+
+  @BeforeEach
+  void setUp() {
+    prefillDiagnosisConverter = new PrefillDiagnosisConverter(
+        diagnosisCodeRepository
+    );
+  }
 
   @Test
   void shouldReturnSupportsDiagnosis() {
@@ -113,7 +124,7 @@ class PrefillDiagnosisConverterTest {
     }
 
     @Test
-    void shouldReturnPrefillAnswerIfAnswerExists() throws Exception {
+    void shouldReturnPrefillAnswerWithWrongNumberOfSubAnswers() {
       final var prefill = new Forifyllnad();
       final var svar = new Svar();
       final var svar2 = new Svar();
@@ -123,20 +134,113 @@ class PrefillDiagnosisConverterTest {
       svar2.setId(SPECIFICATION.id().id());
       svar.setInstans(2);
 
-      final var delsvar = new Delsvar();
-      final var delsvar2 = new Delsvar();
+      final var delsvar1Code = new Delsvar();
+      final var delsvar2Code = new Delsvar();
 
-      delsvar.setId("%s.2".formatted(SPECIFICATION.id().id()));
-      delsvar2.setId("%s.2".formatted(SPECIFICATION.id().id()));
+      delsvar1Code.setId("%s.2".formatted(SPECIFICATION.id().id()));
+      delsvar2Code.setId("%s.2".formatted(SPECIFICATION.id().id()));
 
-      delsvar.getContent().add(createCVTypeElement(DIAGNOS_CODE, DIAGNOS_DESCRIPTION));
-      delsvar2.getContent().add(createCVTypeElement(DIAGNOS_CODE_2, DIAGNOS_DESCRIPTION_2));
+      delsvar1Code.getContent().add(createCVTypeElement(DIAGNOS_CODE));
+      delsvar2Code.getContent().add(createCVTypeElement(DIAGNOS_CODE_2));
 
-      svar.getDelsvar().add(delsvar);
-      svar2.getDelsvar().add(delsvar2);
+      svar.getDelsvar().add(delsvar1Code);
+      svar2.getDelsvar().add(delsvar2Code);
 
       prefill.getSvar().add(svar);
       prefill.getSvar().add(svar2);
+
+      final var result = prefillDiagnosisConverter.prefillAnswer(SPECIFICATION, prefill);
+
+      assertEquals(
+          PrefillErrorType.WRONG_NUMBER_OF_ANSWERS,
+          result.getErrors().getLast().type()
+      );
+    }
+
+    @Test
+    void shouldReturnPrefillAnswerWithInvalidDiagnosisCode() {
+      final var prefill = new Forifyllnad();
+      final var svar = new Svar();
+      final var svar2 = new Svar();
+
+      svar.setId(SPECIFICATION.id().id());
+      svar.setInstans(1);
+      svar2.setId(SPECIFICATION.id().id());
+      svar.setInstans(2);
+
+      final var delsvar1Code = new Delsvar();
+      final var delsvar1Description = new Delsvar();
+      final var delsvar2Code = new Delsvar();
+      final var delsvar2Description = new Delsvar();
+
+      delsvar1Code.setId("%s.2".formatted(SPECIFICATION.id().id()));
+      delsvar2Code.setId("%s.2".formatted(SPECIFICATION.id().id()));
+      delsvar1Description.setId("%s.1".formatted(SPECIFICATION.id().id()));
+      delsvar2Description.setId("%s.1".formatted(SPECIFICATION.id().id()));
+
+      delsvar1Code.getContent().add(createCVTypeElement(DIAGNOS_CODE));
+      delsvar2Code.getContent().add(createCVTypeElement(DIAGNOS_CODE_2));
+      delsvar1Description.getContent().add(DIAGNOS_DESCRIPTION);
+      delsvar2Description.getContent().add(DIAGNOS_DESCRIPTION_2);
+
+      svar.getDelsvar().add(delsvar1Code);
+      svar.getDelsvar().add(delsvar1Description);
+      svar2.getDelsvar().add(delsvar2Code);
+      svar2.getDelsvar().add(delsvar2Description);
+
+      prefill.getSvar().add(svar);
+      prefill.getSvar().add(svar2);
+
+      doReturn(Optional.empty())
+          .when(diagnosisCodeRepository).findByCode(new DiagnosisCode(DIAGNOS_CODE));
+
+      final var result = prefillDiagnosisConverter.prefillAnswer(SPECIFICATION, prefill);
+
+      assertEquals(
+          PrefillErrorType.INVALID_DIAGNOSIS_CODE,
+          result.getErrors().getFirst().type()
+      );
+    }
+
+    @Test
+    void shouldReturnPrefillAnswerIfAnswerExists() {
+      final var prefill = new Forifyllnad();
+      final var svar = new Svar();
+      final var svar2 = new Svar();
+
+      svar.setId(SPECIFICATION.id().id());
+      svar.setInstans(1);
+      svar2.setId(SPECIFICATION.id().id());
+      svar2.setInstans(2);
+
+      final var delsvar1Code = new Delsvar();
+      final var delsvar1Description = new Delsvar();
+      final var delsvar2Code = new Delsvar();
+      final var delsvar2Description = new Delsvar();
+
+      delsvar1Code.setId("%s.2".formatted(SPECIFICATION.id().id()));
+      delsvar2Code.setId("%s.2".formatted(SPECIFICATION.id().id()));
+      delsvar1Description.setId("%s.1".formatted(SPECIFICATION.id().id()));
+      delsvar2Description.setId("%s.1".formatted(SPECIFICATION.id().id()));
+
+      delsvar1Code.getContent().add(createCVTypeElement(DIAGNOS_CODE));
+      delsvar2Code.getContent().add(createCVTypeElement(DIAGNOS_CODE_2));
+      delsvar1Description.getContent().add(DIAGNOS_DESCRIPTION);
+      delsvar2Description.getContent().add(DIAGNOS_DESCRIPTION_2);
+
+      svar.getDelsvar().add(delsvar1Code);
+      svar.getDelsvar().add(delsvar1Description);
+      svar2.getDelsvar().add(delsvar2Code);
+      svar2.getDelsvar().add(delsvar2Description);
+
+      prefill.getSvar().add(svar);
+      prefill.getSvar().add(svar2);
+
+      doReturn(Optional.of(Diagnosis.builder().build()))
+          .when(diagnosisCodeRepository).findByCode(new DiagnosisCode(DIAGNOS_CODE));
+
+      doReturn(Optional.of(Diagnosis.builder().build()))
+          .when(diagnosisCodeRepository).findByCode(new DiagnosisCode(DIAGNOS_CODE_2));
 
       final var result = prefillDiagnosisConverter.prefillAnswer(SPECIFICATION, prefill);
 
@@ -149,23 +253,29 @@ class PrefillDiagnosisConverterTest {
 
   }
 
-  private static Element createCVTypeElement(String code, String displayName) throws Exception {
+  private static Element createCVTypeElement(String code) {
     final var cvType = new CVType();
     cvType.setCode(code);
-    cvType.setDisplayName(displayName);
+    cvType.setDisplayName("displayName");
+    cvType.setCodeSystem(ICD_10_SE_CODE_SYSTEM);
 
     final var factory = new ObjectFactory();
     final var jaxbElement = factory.createCv(cvType);
 
-    final var context = JAXBContext.newInstance(CVType.class);
-    final var marshaller = context.createMarshaller();
-    final var writer = new StringWriter();
-    marshaller.marshal(jaxbElement, writer);
+    try {
+      final var context = JAXBContext.newInstance(CVType.class);
+      final var marshaller = context.createMarshaller();
+      final var writer = new StringWriter();
+      marshaller.marshal(jaxbElement, writer);
 
-    final var docFactory = DocumentBuilderFactory.newInstance();
-    docFactory.setNamespaceAware(true);
-    final var doc = docFactory.newDocumentBuilder()
-        .parse(new org.xml.sax.InputSource(new StringReader(writer.toString())));
-    return doc.getDocumentElement();
+      final var docFactory = DocumentBuilderFactory.newInstance();
+      docFactory.setNamespaceAware(true);
+      final var doc = docFactory.newDocumentBuilder()
+          .parse(new org.xml.sax.InputSource(new StringReader(writer.toString())));
+      return doc.getDocumentElement();
+
+    } catch (Exception exception) {
+      throw new IllegalStateException(exception);
+    }
   }
 }
