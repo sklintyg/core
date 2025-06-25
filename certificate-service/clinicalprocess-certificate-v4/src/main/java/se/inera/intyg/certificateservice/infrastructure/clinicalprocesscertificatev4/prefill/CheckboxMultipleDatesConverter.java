@@ -59,7 +59,10 @@ public class CheckboxMultipleDatesConverter implements PrefillConverter {
   private LocalDate getDate(Svar s, ElementSpecification specification) {
     return LocalDate.parse(((String) s.getDelsvar().stream()
         .filter(d -> d.getId().equals(specification.id().id() + ".2"))
-        .findFirst().get().getContent().getFirst()));
+        .findFirst()
+        .get()
+        .getContent()
+        .getFirst()));
   }
 
   private CheckboxDate getDateBox(ElementSpecification specification, Code code) {

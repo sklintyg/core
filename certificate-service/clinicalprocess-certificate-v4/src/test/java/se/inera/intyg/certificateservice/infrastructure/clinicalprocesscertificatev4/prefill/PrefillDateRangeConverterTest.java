@@ -199,20 +199,6 @@ class PrefillDateRangeConverterTest {
           result.getErrors().getFirst().type()
       );
     }
-
-    @Test
-    void shouldReturnErrorIfWrongConverter() {
-      Forifyllnad prefill = new Forifyllnad();
-
-      PrefillTextAreaConverter converter = new PrefillTextAreaConverter();
-
-      PrefillAnswer result = converter.prefillAnswer(SPECIFICATION, prefill);
-
-      assertEquals(
-          PrefillErrorType.TECHNICAL_ERROR,
-          result.getErrors().getFirst().type()
-      );
-    }
   }
 
   private static Element createDateRangeTypeElement() throws Exception {

@@ -8,12 +8,15 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfiguration;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.util.PrefillValidator;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
 @Component
 public class PrefillCheckboxMultipleCodeConverter implements PrefillConverter {
+
+  private static final int LIMIT = 1;
 
   @Override
   public Class<? extends ElementConfiguration> supports() {
@@ -34,62 +37,64 @@ public class PrefillCheckboxMultipleCodeConverter implements PrefillConverter {
         .filter(svar -> svar.getId().equals(specification.id().id()))
         .toList();
 
-    final var subAnswers = prefill.getSvar().stream()
-        .map(Svar::getDelsvar)
-        .flatMap(List::stream)
-        .filter(delsvar -> delsvar.getId().equals(specification.id().id()))
-        .toList();
+    final var prefillError = PrefillValidator.validateNumberOfDelsvar(answers, LIMIT,
+        specification);
 
-    if (answers.isEmpty() && subAnswers.isEmpty()) {
+    if (prefillError != null) {
+      return PrefillAnswer.builder()
+          .errors(List.of(prefillError))
+          .build();
+    }
+
+    if (answers.isEmpty()) {
       return null;
     }
 
     try {
-      final var codes = getContent(subAnswers, answers, specification);
+      final var codes = getContentCodes(answers, configurationCheckboxMultipleCode);
       return PrefillAnswer.builder()
           .elementData(
               ElementData.builder()
                   .id(specification.id())
-                  .value(ElementValueCodeList.builder()
-                      .id(configurationCheckboxMultipleCode.id())
-                      .list(codes)
-                      .build()
-                  ).build()
-          ).build();
+                  .value(
+                      ElementValueCodeList.builder()
+                          .id(configurationCheckboxMultipleCode.id())
+                          .list(codes)
+                          .build()
+                  )
+                  .build()
+          )
+          .build();
     } catch (Exception e) {
       return PrefillAnswer.invalidFormat();
     }
   }
 
-  private static List<ElementValueCode> getContent(List<Delsvar> subAnswers, List<Svar> answers,
-      ElementSpecification specification) {
-    if (!subAnswers.isEmpty()) {
-      return List.of(getCode(subAnswers, specification));
-    }
+  private static List<ElementValueCode> getContentCodes(List<Svar> answers,
+      ElementConfigurationCheckboxMultipleCode configuration) {
     return answers.stream()
-        .map(svar -> getCode(svar.getDelsvar(), specification))
+        .map(svar -> getCodes(svar.getDelsvar(), configuration))
         .toList();
   }
 
-  private static ElementValueCode getCode(List<Delsvar> subAnswer,
-      ElementSpecification specification) {
-    String code;
+  private static ElementValueCode getCodes(List<Delsvar> subAnswer,
+      ElementConfigurationCheckboxMultipleCode configuration) {
     final var cvType = PrefillUnmarshaller.cvType(subAnswer.getFirst().getContent());
 
     if (cvType.isEmpty()) {
       throw new IllegalStateException("Invalid format cvType is empty");
     }
 
-    code = cvType.get().getCode();
-    final var configuration = (ElementConfigurationCheckboxMultipleCode) specification.configuration();
+    final var code = cvType.get().getCode();
 
     final var listItem = configuration.list().stream()
         .filter(item -> item.code().code().equals(code))
-        .findFirst().orElseThrow();
+        .findFirst()
+        .orElseThrow();
 
     return ElementValueCode.builder()
-        .code(code)
         .codeId(listItem.id())
+        .code(code)
         .build();
   }
 

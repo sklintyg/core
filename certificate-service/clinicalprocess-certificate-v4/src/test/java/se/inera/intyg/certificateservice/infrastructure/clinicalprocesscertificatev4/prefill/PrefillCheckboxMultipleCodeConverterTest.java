@@ -70,21 +70,6 @@ class PrefillCheckboxMultipleCodeConverterTest {
               )
               .build()
       ).build();
-  private static final ElementData EXPECTED_ELEMENT_DATA_SUB_ANSWER = ElementData.builder()
-      .id(ELEMENT_ID)
-      .value(
-          ElementValueCodeList.builder()
-              .id(FIELD_ID)
-              .list(
-                  List.of(
-                      ElementValueCode.builder()
-                          .codeId(CODE_FIELD_ID)
-                          .code(CODE)
-                          .build()
-                  )
-              )
-              .build()
-      ).build();
 
   private final PrefillCheckboxMultipleCodeConverter prefillCheckboxMultipleCodeConverter = new PrefillCheckboxMultipleCodeConverter();
 
@@ -98,21 +83,7 @@ class PrefillCheckboxMultipleCodeConverterTest {
   class PrefillAnswerWithForifyllnad {
 
     @Test
-    void shouldReturnErrorIfWrongConverter() {
-      Forifyllnad prefill = new Forifyllnad();
-
-      PrefillTextAreaConverter converter = new PrefillTextAreaConverter();
-
-      PrefillAnswer result = converter.prefillAnswer(SPECIFICATION, prefill);
-
-      assertEquals(
-          PrefillErrorType.TECHNICAL_ERROR,
-          result.getErrors().getFirst().type()
-      );
-    }
-
-    @Test
-    void shouldReturnNullIfNoAnswersOrSubAnswers() {
+    void shouldReturnNullIfNoAnswerExists() {
       Forifyllnad prefill = new Forifyllnad();
 
       PrefillAnswer result = prefillCheckboxMultipleCodeConverter.prefillAnswer(SPECIFICATION,
@@ -122,40 +93,26 @@ class PrefillCheckboxMultipleCodeConverterTest {
     }
 
     @Test
-    void shouldReturnPrefillAnswerIfSubAnswerExists() throws Exception {
-      final var prefill = new Forifyllnad();
-      final var svar = new Svar();
-      svar.setId("other");
-      final var delsvar = new Delsvar();
-      delsvar.setId(SPECIFICATION.id().id());
-      delsvar.getContent().add(createCVTypeElement(CODE));
-      svar.getDelsvar().add(delsvar);
-      prefill.getSvar().add(svar);
-
-      final var result = prefillCheckboxMultipleCodeConverter.prefillAnswer(SPECIFICATION, prefill);
-
-      final var expected = PrefillAnswer.builder()
-          .elementData(EXPECTED_ELEMENT_DATA_SUB_ANSWER)
-          .build();
-
-      assertEquals(expected, result);
-    }
-
-    @Test
     void shouldReturnPrefillAnswerIfAnswerExists() throws Exception {
       final var prefill = new Forifyllnad();
       final var svar = new Svar();
       final var svar2 = new Svar();
+
       svar.setId(SPECIFICATION.id().id());
       svar2.setId(SPECIFICATION.id().id());
+
       final var delsvar = new Delsvar();
       final var delsvar2 = new Delsvar();
+
       delsvar.setId("other");
       delsvar2.setId("other2");
+
       delsvar.getContent().add(createCVTypeElement(CODE));
       delsvar2.getContent().add(createCVTypeElement(CODE_2));
+
       svar.getDelsvar().add(delsvar);
       svar2.getDelsvar().add(delsvar2);
+
       prefill.getSvar().add(svar);
       prefill.getSvar().add(svar2);
 
@@ -189,10 +146,13 @@ class PrefillCheckboxMultipleCodeConverterTest {
       final var prefill = new Forifyllnad();
       final var answer = new Svar();
       answer.setId(SPECIFICATION.id().id());
+
       final var subAnswer = new Delsvar();
       subAnswer.setId("other");
+
       final var content = List.of("invalid-checkboxMultipleCode-format");
       subAnswer.getContent().add(content);
+
       answer.getDelsvar().add(subAnswer);
       prefill.getSvar().add(answer);
 
@@ -206,23 +166,28 @@ class PrefillCheckboxMultipleCodeConverterTest {
     }
 
     @Test
-    void shouldReturnErrorIfWrongConfigurationTypeForSubAnswer() {
-
+    void shouldReturnErrorIfSubAnswersExceedLimit() {
       final var prefill = new Forifyllnad();
-      final var wrongConfiguration = ElementSpecification.builder()
-          .id(ELEMENT_ID)
-          .configuration(ElementConfigurationCategory.builder().build())
-          .build();
+      final var svar1 = new Svar();
+      svar1.setId(SPECIFICATION.id().id());
+      final var delsvar1 = new Delsvar();
+      delsvar1.setId(SPECIFICATION.id().id());
+      svar1.getDelsvar().add(delsvar1);
 
-      final var result = prefillCheckboxMultipleCodeConverter.prefillAnswer(
-          wrongConfiguration, prefill);
+      final var delsvar2 = new Delsvar();
+      delsvar2.setId(SPECIFICATION.id().id());
+      svar1.getDelsvar().add(delsvar2);
+
+      prefill.getSvar().add(svar1);
+
+      final var result = prefillCheckboxMultipleCodeConverter.prefillAnswer(SPECIFICATION,
+          prefill);
 
       assertEquals(
-          PrefillErrorType.TECHNICAL_ERROR,
+          PrefillErrorType.WRONG_NUMBER_OF_ANSWERS,
           result.getErrors().getFirst().type()
       );
     }
-    
   }
 
   private static Element createCVTypeElement(String code) throws Exception {
