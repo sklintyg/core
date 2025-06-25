@@ -64,7 +64,7 @@ public class PrefillCheckboxMultipleDatesConverter implements PrefillConverter {
                     var code = getCode(s.getDelsvar(), specification);
                     var date = getDate(s, specification);
                     return ElementValueDate.builder()
-                        .dateId(getDateBox(specification, code).id())
+                        .dateId(getDateBox(configurationCheckboxMultipleDate, code).id())
                         .date(date)
                         .build();
                   })
@@ -75,14 +75,14 @@ public class PrefillCheckboxMultipleDatesConverter implements PrefillConverter {
       return PrefillAnswer.invalidFormat(specification.id().id(), ex.getMessage());
     }
 
-    PrefillAnswer.builder().elementData(elementData);
     return PrefillAnswer.builder()
         .elementData(elementData)
         .build();
   }
 
-  private CheckboxDate getDateBox(ElementSpecification specification, Code code) {
-    return ((ElementConfigurationCheckboxMultipleDate) specification.configuration()).dates()
+  private CheckboxDate getDateBox(ElementConfigurationCheckboxMultipleDate configuration,
+      Code code) {
+    return configuration.dates()
         .stream()
         .filter(d -> d.code().matches(code))
         .findFirst().orElseThrow();

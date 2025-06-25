@@ -34,7 +34,7 @@ public class PrefillDiagnosisConverter implements PrefillConverter {
   public PrefillAnswer prefillAnswer(ElementSpecification specification,
       Forifyllnad prefill) {
 
-    if (!(specification.configuration() instanceof ElementConfigurationDiagnosis configurationDiagnosis)) {
+    if (!(specification.configuration() instanceof ElementConfigurationDiagnosis)) {
       return PrefillAnswer.builder()
           .errors(List.of(PrefillError.wrongConfigurationType()))
           .build();
