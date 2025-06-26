@@ -62,15 +62,17 @@ public class PrefillDateRangeConverter implements PrefillConverter {
           .elementData(
               ElementData.builder()
                   .id(specification.id())
-                  .value(ElementValueDateRange.builder()
-                      .id(configurationDateRange.id())
-                      .fromDate(PrefillUnmarshaller.toLocalDate(
-                          datePeriodAnswer.orElseThrow().getStart())
-                      )
-                      .toDate(
-                          PrefillUnmarshaller.toLocalDate(datePeriodAnswer.orElseThrow().getEnd())
-                      )
-                      .build()
+                  .value(
+                      ElementValueDateRange.builder()
+                          .id(configurationDateRange.id())
+                          .fromDate(PrefillUnmarshaller.toLocalDate(
+                              datePeriodAnswer.orElseThrow().getStart())
+                          )
+                          .toDate(
+                              PrefillUnmarshaller.toLocalDate(
+                                  datePeriodAnswer.orElseThrow().getEnd())
+                          )
+                          .build()
                   ).build()
           )
           .build();
