@@ -118,7 +118,7 @@ public class PrefillConfigurationCheckboxDateRangeList implements PrefillConvert
         .map(Svar::getDelsvar)
         .toList()
         .getFirst()
-        .getFirst()
+        .get(1)
         .getContent()
         .getFirst();
   }
