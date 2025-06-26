@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
@@ -34,31 +35,24 @@ public class PrefillConfigurationCheckboxDateRangeList implements PrefillConvert
         .filter(svar -> svar.getId().equals(specification.id().id()))
         .toList();
 
-    final var subAnswers = prefill.getSvar().stream()
-        .map(Svar::getDelsvar)
-        .flatMap(List::stream)
-        .filter(delsvar -> delsvar.getId().equals(specification.id().id()))
-        .toList();
-
-    if (answers.isEmpty() && subAnswers.isEmpty()) {
+    if (answers.isEmpty()) {
       return null;
     }
 
-    ElementData elementData;
+    final var prefillErrors = new ArrayList<PrefillError>();
 
-    try {
+    final var elementData = ElementData.builder()
+        .id(specification.id())
+        .value(ElementValueDateRangeList.builder()
+            .dateRangeListId(configurationCheckboxDateRangeList.id())
+            .dateRangeList(answers.stream()
+                .map(svar -> {
+                  try {
 
-      final var content = getContent(subAnswers, answers);
-      final var datePeriodAnswer = PrefillUnmarshaller.datePeriodType(
-          List.of(content)
-      );
+                    final var content = getContent(svar);
+                    final var datePeriodAnswer = PrefillUnmarshaller.datePeriodType(
+                        List.of(content));
 
-      elementData = ElementData.builder()
-          .id(specification.id())
-          .value(ElementValueDateRangeList.builder()
-              .dateRangeListId(configurationCheckboxDateRangeList.id())
-              .dateRangeList(answers.stream()
-                  .map(svar -> {
                     final var code = getCode(svar.getDelsvar(), specification);
                     final var dateBox = getDateBox(configurationCheckboxDateRangeList, code);
 
@@ -67,15 +61,13 @@ public class PrefillConfigurationCheckboxDateRangeList implements PrefillConvert
                         .from(PrefillUnmarshaller.toLocalDate(datePeriodAnswer.get().getStart()))
                         .to(PrefillUnmarshaller.toLocalDate(datePeriodAnswer.get().getEnd()))
                         .build();
-                  }).toList())
-              .build())
-          .build();
-
-    } catch (Exception ex) {
-      return PrefillAnswer.builder()
-          .errors(List.of(PrefillError.invalidFormat(specification.id().id(), ex.getMessage())))
-          .build();
-    }
+                  } catch (Exception ex) {
+                    prefillErrors.add(PrefillError.invalidFormat(svar.getId(), ex.getMessage()));
+                    return null;
+                  }
+                }).toList())
+            .build())
+        .build();
 
     return PrefillAnswer.builder()
         .elementData(elementData)
@@ -110,14 +102,8 @@ public class PrefillConfigurationCheckboxDateRangeList implements PrefillConvert
     return new Code(cv.getCode(), cv.getCodeSystem(), cv.getDisplayName());
   }
 
-  private static Object getContent(List<Delsvar> subAnswers, List<Svar> answers) {
-    if (!subAnswers.isEmpty()) {
-      return subAnswers.getFirst().getContent().getFirst();
-    }
-    return answers.stream()
-        .map(Svar::getDelsvar)
-        .toList()
-        .getFirst()
+  private static Object getContent(Svar answer) {
+    return answer.getDelsvar()
         .get(1)
         .getContent()
         .getFirst();
