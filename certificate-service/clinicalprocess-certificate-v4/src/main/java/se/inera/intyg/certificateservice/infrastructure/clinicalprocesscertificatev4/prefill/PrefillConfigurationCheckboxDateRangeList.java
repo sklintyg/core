@@ -50,17 +50,27 @@ public class PrefillConfigurationCheckboxDateRangeList implements PrefillConvert
                 .map(svar -> {
                   try {
 
-                    final var content = getContent(svar, specification);
+                    final var dateContent = getDateContent(svar, specification);
                     final var datePeriodAnswer = PrefillUnmarshaller.datePeriodType(
-                        List.of(content));
+                        List.of(dateContent)
+                    );
 
                     final var code = getCode(svar.getDelsvar(), specification);
-                    final var dateBox = getDateBox(configurationCheckboxDateRangeList, code);
+                    final var codeConfiguration = getCodeConfiguration(
+                        configurationCheckboxDateRangeList,
+                        code
+                    );
 
                     return DateRange.builder()
-                        .dateRangeId(dateBox.id())
-                        .from(PrefillUnmarshaller.toLocalDate(datePeriodAnswer.get().getStart()))
-                        .to(PrefillUnmarshaller.toLocalDate(datePeriodAnswer.get().getEnd()))
+                        .dateRangeId(codeConfiguration.id())
+                        .from(
+                            PrefillUnmarshaller.toLocalDate(
+                                datePeriodAnswer.orElseThrow().getStart())
+                        )
+                        .to(
+                            PrefillUnmarshaller.toLocalDate(
+                                datePeriodAnswer.orElseThrow().getEnd())
+                        )
                         .build();
                   } catch (Exception ex) {
                     prefillErrors.add(PrefillError.invalidFormat(svar.getId(), ex.getMessage()));
@@ -78,12 +88,12 @@ public class PrefillConfigurationCheckboxDateRangeList implements PrefillConvert
         .build();
   }
 
-  private ElementConfigurationCode getDateBox(
+  private ElementConfigurationCode getCodeConfiguration(
       ElementConfigurationCheckboxDateRangeList configuration,
       Code code) {
     return configuration.dateRanges()
         .stream()
-        .filter(d -> d.code().code().equals(code.code()))
+        .filter(d -> d.code().matches(code))
         .findFirst()
         .orElseThrow(() -> new IllegalStateException("Could not find a matching code for " + code));
   }
@@ -107,7 +117,7 @@ public class PrefillConfigurationCheckboxDateRangeList implements PrefillConvert
     return new Code(cv.getCode(), cv.getCodeSystem(), cv.getDisplayName());
   }
 
-  private static Object getContent(Svar answer, ElementSpecification specification) {
+  private static Object getDateContent(Svar answer, ElementSpecification specification) {
     return answer.getDelsvar()
         .stream()
         .filter(d -> d.getId().equals(specification.id().id() + ".2"))
