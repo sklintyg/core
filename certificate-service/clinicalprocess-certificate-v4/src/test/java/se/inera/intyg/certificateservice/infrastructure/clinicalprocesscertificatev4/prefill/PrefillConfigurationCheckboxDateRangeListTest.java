@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.TestMarshaller.getElement;
@@ -55,6 +56,14 @@ class PrefillConfigurationCheckboxDateRangeListTest {
               CODE,
               "KV_FKMU_0001",
               "TEXT")
+      ),
+      new ElementConfigurationCode(
+          new FieldId(FIELD_ID.value()),
+          "LABEL",
+          new Code(
+              CODE,
+              "KV_FKMU_0001",
+              "TEXT")
       )
   );
 
@@ -95,6 +104,27 @@ class PrefillConfigurationCheckboxDateRangeListTest {
       )
       .build();
 
+  private static final ElementData EXPECTED_MULTIPLE_ELEMENT_DATA = ElementData.builder()
+      .id(ELEMENT_ID)
+      .value(
+          ElementValueDateRangeList.builder()
+              .dateRangeListId(FIELD_ID)
+              .dateRangeList(List.of(
+                  DateRange.builder()
+                      .dateRangeId(FIELD_ID)
+                      .from(START_DATE)
+                      .to(END_DATE)
+                      .build(),
+                  DateRange.builder()
+                      .dateRangeId(FIELD_ID)
+                      .from(START_DATE)
+                      .to(END_DATE)
+                      .build()
+              ))
+              .build()
+      )
+      .build();
+
   PrefillConfigurationCheckboxDateRangeList prefillConfigurationCheckboxDateRangeList = new PrefillConfigurationCheckboxDateRangeList();
 
   @Test
@@ -107,7 +137,7 @@ class PrefillConfigurationCheckboxDateRangeListTest {
   class PrefillAnswerWithForifyllnad {
 
     @Test
-    void shouldReturnNullIfNoAnswersOrSubAnswers() {
+    void shouldReturnNullIfNoAnswers() {
       Forifyllnad prefill = new Forifyllnad();
 
       PrefillAnswer result = prefillConfigurationCheckboxDateRangeList.prefillAnswer(SPECIFICATION,
@@ -148,6 +178,55 @@ class PrefillConfigurationCheckboxDateRangeListTest {
       assertEquals(expected, result);
 
     }
+
+    @Test
+    void shouldReturnPrefillAnswersWithForifyllnad() {
+
+      var prefill = createForifyllnadWithMultipleSubAnswers();
+
+      final var result = prefillConfigurationCheckboxDateRangeList.prefillAnswer(
+          SPECIFICATION, prefill);
+
+      final var expected = PrefillAnswer.builder()
+          .elementData(EXPECTED_MULTIPLE_ELEMENT_DATA)
+          .build();
+
+      assertEquals(expected, result);
+
+    }
+
+    @Test
+    void shouldReturnElementDataIfOneAnswerHasInvalidFormat() {
+
+      final var forifyllnad = createForifyllnadWithMultipleSubAnswers();
+      forifyllnad.getSvar().getFirst().getDelsvar().getFirst().getContent().clear();
+
+      final var result = prefillConfigurationCheckboxDateRangeList.prefillAnswer(
+          SPECIFICATION, forifyllnad);
+
+      final var expectedData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueDateRangeList.builder()
+                  .dateRangeListId(FIELD_ID)
+                  .dateRangeList(List.of(
+                      DateRange.builder()
+                          .dateRangeId(FIELD_ID)
+                          .from(START_DATE)
+                          .to(END_DATE)
+                          .build()
+                  ))
+                  .build()
+          )
+          .build();
+
+      assertAll(
+          () -> assertEquals(expectedData, result.getElementData()),
+          () -> assertEquals(1, result.getErrors().size()),
+          () -> assertEquals(PrefillErrorType.INVALID_FORMAT, result.getErrors().getFirst().type())
+      );
+
+    }
   }
 
   private static Forifyllnad createForifyllnad() {
@@ -160,6 +239,31 @@ class PrefillConfigurationCheckboxDateRangeListTest {
           "TEXT"));
       svar.getDelsvar().add(createDelsvarDate());
       forifyllnad.getSvar().add(svar);
+
+      return forifyllnad;
+    } catch (Exception e) {
+      throw new RuntimeException("Error creating Forifyllnad", e);
+    }
+  }
+
+  private static Forifyllnad createForifyllnadWithMultipleSubAnswers() {
+    try {
+
+      var forifyllnad = new Forifyllnad();
+      var svar = new Svar();
+      svar.setId("1");
+      svar.getDelsvar().add(createDelsvarCode(CODE,
+          "TEXT"));
+      svar.getDelsvar().add(createDelsvarDate());
+
+      var svar2 = new Svar();
+      svar2.setId("1");
+      svar2.getDelsvar().add(createDelsvarCode(CODE,
+          "TEXT"));
+      svar2.getDelsvar().add(createDelsvarDate());
+
+      forifyllnad.getSvar().add(svar);
+      forifyllnad.getSvar().add(svar2);
 
       return forifyllnad;
     } catch (Exception e) {

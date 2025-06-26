@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertific
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
@@ -65,12 +66,15 @@ public class PrefillConfigurationCheckboxDateRangeList implements PrefillConvert
                     prefillErrors.add(PrefillError.invalidFormat(svar.getId(), ex.getMessage()));
                     return null;
                   }
-                }).toList())
+                })
+                .filter(Objects::nonNull)
+                .toList())
             .build())
         .build();
 
     return PrefillAnswer.builder()
         .elementData(elementData)
+        .errors(prefillErrors)
         .build();
   }
 
