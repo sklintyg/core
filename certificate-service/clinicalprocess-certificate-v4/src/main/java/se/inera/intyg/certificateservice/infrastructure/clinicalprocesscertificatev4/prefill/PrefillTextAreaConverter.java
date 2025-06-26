@@ -39,6 +39,10 @@ public class PrefillTextAreaConverter implements PrefillConverter {
         .filter(delsvar -> delsvar.getId().equals(specification.id().id()))
         .toList();
 
+    if (subAnswers.isEmpty() && answers.isEmpty()) {
+      return null;
+    }
+
     final var prefillError = PrefillValidator.validateSingleAnswerOrSubAnswer(
         answers,
         subAnswers,
@@ -51,22 +55,19 @@ public class PrefillTextAreaConverter implements PrefillConverter {
           .build();
     }
 
-    final var noPrefill = subAnswers.isEmpty() && answers.isEmpty();
-    return noPrefill
-        ? null
-        : PrefillAnswer.builder()
-            .elementData(
-                ElementData.builder()
-                    .id(specification.id())
-                    .value(
-                        ElementValueText.builder()
-                            .textId(configurationTextArea.id())
-                            .text(getContent(subAnswers, answers))
-                            .build()
-                    )
-                    .build()
-            )
-            .build();
+    return PrefillAnswer.builder()
+        .elementData(
+            ElementData.builder()
+                .id(specification.id())
+                .value(
+                    ElementValueText.builder()
+                        .textId(configurationTextArea.id())
+                        .text(getContent(subAnswers, answers))
+                        .build()
+                )
+                .build()
+        )
+        .build();
   }
 
   private static String getContent(List<Delsvar> subAnswers, List<Svar> answers) {

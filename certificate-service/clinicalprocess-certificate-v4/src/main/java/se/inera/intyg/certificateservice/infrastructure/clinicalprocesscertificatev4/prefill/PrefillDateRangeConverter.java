@@ -39,6 +39,10 @@ public class PrefillDateRangeConverter implements PrefillConverter {
         .filter(delsvar -> delsvar.getId().equals(specification.id().id()))
         .toList();
 
+    if (answers.isEmpty() && subAnswers.isEmpty()) {
+      return null;
+    }
+
     final var prefillError = PrefillValidator.validateSingleAnswerOrSubAnswer(answers, subAnswers,
         specification);
 
@@ -46,10 +50,6 @@ public class PrefillDateRangeConverter implements PrefillConverter {
       return PrefillAnswer.builder()
           .errors(List.of(prefillError))
           .build();
-    }
-
-    if (answers.isEmpty() && subAnswers.isEmpty()) {
-      return null;
     }
 
     try {

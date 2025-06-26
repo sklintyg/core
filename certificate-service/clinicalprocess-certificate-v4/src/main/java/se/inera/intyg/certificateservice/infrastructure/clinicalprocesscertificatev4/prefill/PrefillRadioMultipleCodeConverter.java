@@ -43,6 +43,10 @@ public class PrefillRadioMultipleCodeConverter implements PrefillConverter {
         .filter(delsvar -> delsvar.getId().equals(specification.id().id()))
         .toList();
 
+    if (subAnswers.isEmpty() && answers.isEmpty()) {
+      return null;
+    }
+
     final var prefillError = PrefillValidator.validateSingleAnswerOrSubAnswer(
         answers,
         subAnswers,
@@ -53,10 +57,6 @@ public class PrefillRadioMultipleCodeConverter implements PrefillConverter {
       return PrefillAnswer.builder()
           .errors(List.of(prefillError))
           .build();
-    }
-
-    if (subAnswers.isEmpty() && answers.isEmpty()) {
-      return null;
     }
 
     try {
