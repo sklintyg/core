@@ -79,4 +79,16 @@ public class PrefillValidator {
         .findFirst()
         .orElseThrow();
   }
+
+  public static PrefillError validateMinimumNumberOfDelsvar(Svar s, int minimumSubAnswers,
+      ElementSpecification specification) {
+    if (s.getDelsvar().size() < minimumSubAnswers) {
+      return PrefillError.wrongNumberOfSubAnswers(
+          specification.id().id(),
+          minimumSubAnswers,
+          s.getDelsvar().size()
+      );
+    }
+    return null;
+  }
 }

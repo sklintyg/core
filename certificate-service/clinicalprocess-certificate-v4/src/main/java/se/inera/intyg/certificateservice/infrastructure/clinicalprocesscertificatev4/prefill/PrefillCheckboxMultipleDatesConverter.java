@@ -44,18 +44,7 @@ public class PrefillCheckboxMultipleDatesConverter implements PrefillConverter {
       return null;
     }
 
-    final var prefillError = PrefillValidator.validateMinimumNumberOfDelsvar(answers,
-        MINIMUM_SUB_ANSWERS,
-        specification);
-
-    if (prefillError != null) {
-      return PrefillAnswer.builder()
-          .errors(List.of(prefillError))
-          .build();
-    }
-
     final var prefillErrors = new ArrayList<PrefillError>();
-
     final var elementData = ElementData.builder()
         .id(specification.id())
         .value(ElementValueDateList.builder()
@@ -63,6 +52,14 @@ public class PrefillCheckboxMultipleDatesConverter implements PrefillConverter {
             .dateList(answers.stream()
                 .map(s -> {
                   try {
+                    final var validationError = PrefillValidator.validateMinimumNumberOfDelsvar(s,
+                        MINIMUM_SUB_ANSWERS,
+                        specification);
+
+                    if (validationError != null) {
+                      prefillErrors.add(validationError);
+                      return null;
+                    }
                     var code = getCode(s.getDelsvar(), specification);
                     var date = getDate(s, specification);
                     return ElementValueDate.builder()
@@ -90,7 +87,8 @@ public class PrefillCheckboxMultipleDatesConverter implements PrefillConverter {
     return configuration.dates()
         .stream()
         .filter(d -> d.code().matches(code))
-        .findFirst().orElseThrow();
+        .findFirst()
+        .orElseThrow(() -> new IllegalStateException("Could not find a matching code for " + code));
   }
 
   private LocalDate getDate(Svar s, ElementSpecification specification) {

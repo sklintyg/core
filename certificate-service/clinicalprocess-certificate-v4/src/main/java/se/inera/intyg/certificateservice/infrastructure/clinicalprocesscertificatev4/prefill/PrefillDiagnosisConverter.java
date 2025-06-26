@@ -2,7 +2,9 @@ package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertific
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
@@ -50,72 +52,62 @@ public class PrefillDiagnosisConverter implements PrefillConverter {
       return null;
     }
 
-    try {
-      final var subAnswerValidationError = PrefillValidator.validateMinimumNumberOfDelsvar(
-          answers,
-          MINIMUM_SUB_ANSWERS,
-          specification
-      );
+    final var prefillErrors = new ArrayList<PrefillError>();
+    final var data = ElementData.builder()
+        .id(specification.id())
+        .value(
+            ElementValueDiagnosisList.builder()
+                .diagnoses(
+                    answers.stream()
+                        .map(
+                            answer -> {
+                              try {
+                                final var subAnswerValidationError = PrefillValidator.validateMinimumNumberOfDelsvar(
+                                    answer,
+                                    MINIMUM_SUB_ANSWERS,
+                                    specification);
 
-      final var diagnosisCodeValidationError = PrefillValidator.validateDiagnosisCode(
-          getCvTypes(specification, answers),
-          diagnosisCodeRepository
-      );
+                                final var diagnosisCodeValidationError = PrefillValidator.validateDiagnosisCode(
+                                    getCvTypes(specification, answer),
+                                    diagnosisCodeRepository
+                                );
 
-      if (validationFailed(subAnswerValidationError, diagnosisCodeValidationError)) {
-        return PrefillAnswer.builder()
-            .errors(getValidationErrors(subAnswerValidationError, diagnosisCodeValidationError))
-            .build();
-      }
+                                if (validationFailed(subAnswerValidationError,
+                                    diagnosisCodeValidationError)) {
+                                  prefillErrors.addAll(getValidationErrors(
+                                      subAnswerValidationError,
+                                      diagnosisCodeValidationError));
+                                  return null;
+                                }
 
-      return PrefillAnswer.builder()
-          .elementData(
-              ElementData.builder()
-                  .id(specification.id())
-                  .value(
-                      ElementValueDiagnosisList.builder()
-                          .diagnoses(
-                              buildDiagnosis(
-                                  answers,
-                                  specification,
-                                  elementConfigurationDiagnosis
-                              )
-                          )
-                          .build()
-                  )
-                  .build()
-          )
-          .build();
-    } catch (Exception ex) {
-      return PrefillAnswer.invalidFormat(specification.id().id(), ex.getMessage());
-    }
+                                final var instance = answer.getInstans() - 1;
+                                return toElementValueDiagnosis(
+                                    answer.getDelsvar(),
+                                    elementConfigurationDiagnosis,
+                                    instance,
+                                    specification
+                                );
+                              } catch (Exception e) {
+                                prefillErrors.add(
+                                    PrefillError.invalidFormat(answer.getId(), e.getMessage()));
+                                return null;
+                              }
+                            })
+                        .filter(Objects::nonNull)
+                        .toList())
+                .build())
+        .build();
+
+    return PrefillAnswer.builder()
+        .elementData(data)
+        .errors(prefillErrors)
+        .build();
   }
 
-  private List<ElementValueDiagnosis> buildDiagnosis(List<Svar> answers,
-      ElementSpecification specification,
-      ElementConfigurationDiagnosis elementConfigurationDiagnosis) {
-    return answers.stream()
-        .map(
-            answer -> {
-              final var instance = answer.getInstans() - 1;
-              return toElementValueDiagnosis(
-                  answer.getDelsvar(),
-                  elementConfigurationDiagnosis,
-                  instance,
-                  specification
-              );
-            }
-        )
-        .toList();
-  }
-
-  private static List<CVType> getCvTypes(ElementSpecification specification, List<Svar> answers) {
-    return answers.stream()
-        .map(Svar::getDelsvar)
-        .flatMap(List::stream)
+  private List<CVType> getCvTypes(ElementSpecification specification, Svar answer) {
+    return answer.getDelsvar().stream()
         .filter(subAnswer -> subAnswer.getId()
-            .equals(CV_TYPE_IDENTIFIER.formatted(specification.id().id()))
-        )
+            .equals(CV_TYPE_IDENTIFIER.formatted(specification.id().id())))
         .map(subAnswer -> PrefillUnmarshaller.cvType(subAnswer.getContent()))
         .map(Optional::orElseThrow)
         .toList();
@@ -170,15 +162,9 @@ public class PrefillDiagnosisConverter implements PrefillConverter {
 
   private List<PrefillError> getValidationErrors(PrefillError subAnswerValidationError,
       PrefillError diagnosisCodeValidationError) {
-    final var validationErrors = new ArrayList<PrefillError>();
-    if (diagnosisCodeValidationError != null) {
-      validationErrors.add(diagnosisCodeValidationError);
-    }
-
-    if (subAnswerValidationError != null) {
-      validationErrors.add(subAnswerValidationError);
-    }
-    return validationErrors;
+    return Stream.of(subAnswerValidationError, diagnosisCodeValidationError)
+        .filter(Objects::nonNull)
+        .toList();
   }
 
   private static boolean validationFailed(PrefillError subAnswerValidationError,
