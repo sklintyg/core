@@ -109,7 +109,7 @@ public class PrefillConfigurationCheckboxDateRangeList implements PrefillConvert
 
   private static Object getContent(Svar answer) {
     return answer.getDelsvar()
-        .get(1)
+        .getLast()
         .getContent()
         .getFirst();
   }
