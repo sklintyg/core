@@ -6,8 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.TestMarshaller.getElement;
 
 import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBException;
-import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.time.LocalDate;
@@ -16,11 +14,9 @@ import java.util.List;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Element;
-import org.xml.sax.SAXException;
 import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
@@ -33,6 +29,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.MessageLevel;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0008;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.CVType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.DatePeriodType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.ObjectFactory;
@@ -50,7 +47,7 @@ class PrefillConfigurationCheckboxDateRangeListTest {
   private static final ObjectFactory factory = new ObjectFactory();
   private static final List<ElementConfigurationCode> dateRanges = List.of(
       new ElementConfigurationCode(
-          new FieldId(FIELD_ID.value()),
+          new FieldId(CodeSystemKvFkmu0008.EN_ATTONDEL.code()),
           "LABEL",
           new Code(
               CODE,
@@ -58,7 +55,7 @@ class PrefillConfigurationCheckboxDateRangeListTest {
               "TEXT")
       ),
       new ElementConfigurationCode(
-          new FieldId(FIELD_ID.value()),
+          new FieldId(CodeSystemKvFkmu0008.EN_FJARDEDEL.code()),
           "LABEL",
           new Code(
               CODE,
@@ -95,7 +92,7 @@ class PrefillConfigurationCheckboxDateRangeListTest {
               .dateRangeListId(FIELD_ID)
               .dateRangeList(List.of(
                   DateRange.builder()
-                      .dateRangeId(FIELD_ID)
+                      .dateRangeId(new FieldId(CodeSystemKvFkmu0008.EN_ATTONDEL.code()))
                       .from(START_DATE)
                       .to(END_DATE)
                       .build()
@@ -111,12 +108,12 @@ class PrefillConfigurationCheckboxDateRangeListTest {
               .dateRangeListId(FIELD_ID)
               .dateRangeList(List.of(
                   DateRange.builder()
-                      .dateRangeId(FIELD_ID)
+                      .dateRangeId(new FieldId(CodeSystemKvFkmu0008.EN_ATTONDEL.code()))
                       .from(START_DATE)
                       .to(END_DATE)
                       .build(),
                   DateRange.builder()
-                      .dateRangeId(FIELD_ID)
+                      .dateRangeId(new FieldId(CodeSystemKvFkmu0008.EN_FJARDEDEL.code()))
                       .from(START_DATE)
                       .to(END_DATE)
                       .build()
@@ -234,8 +231,8 @@ class PrefillConfigurationCheckboxDateRangeListTest {
 
       var forifyllnad = new Forifyllnad();
       var svar = new Svar();
-      svar.setId("1");
-      svar.getDelsvar().add(createDelsvarCode(CODE,
+      svar.setId(ELEMENT_ID.id());
+      svar.getDelsvar().add(createDelsvarCode(CodeSystemKvFkmu0008.EN_ATTONDEL.code(),
           "TEXT"));
       svar.getDelsvar().add(createDelsvarDate());
       forifyllnad.getSvar().add(svar);
@@ -251,14 +248,14 @@ class PrefillConfigurationCheckboxDateRangeListTest {
 
       var forifyllnad = new Forifyllnad();
       var svar = new Svar();
-      svar.setId("1");
-      svar.getDelsvar().add(createDelsvarCode(CODE,
+      svar.setId(ELEMENT_ID.id());
+      svar.getDelsvar().add(createDelsvarCode(CodeSystemKvFkmu0008.EN_ATTONDEL.code(),
           "TEXT"));
       svar.getDelsvar().add(createDelsvarDate());
 
       var svar2 = new Svar();
-      svar2.setId("1");
-      svar2.getDelsvar().add(createDelsvarCode(CODE,
+      svar2.setId(ELEMENT_ID.id());
+      svar2.getDelsvar().add(createDelsvarCode(CodeSystemKvFkmu0008.EN_FJARDEDEL.code(),
           "TEXT"));
       svar2.getDelsvar().add(createDelsvarDate());
 
@@ -278,8 +275,7 @@ class PrefillConfigurationCheckboxDateRangeListTest {
     return delsvarDate;
   }
 
-  private static Delsvar createDelsvarCode(String code, String displayName)
-      throws JAXBException, ParserConfigurationException, IOException, SAXException {
+  private static Delsvar createDelsvarCode(String code, String displayName) {
     final var delsvarCode = new Delsvar();
     delsvarCode.setId("1.1");
 
