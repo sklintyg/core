@@ -27,6 +27,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.model.Diagnosis;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.model.DiagnosisCode;
+import se.inera.intyg.certificateservice.domain.diagnosiscode.model.DiagnosisDescription;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemIcd10Se;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.CVType;
@@ -125,33 +126,11 @@ class PrefillDiagnosisConverterTest {
     void shouldReturnPrefillAnswerWithWrongNumberOfSubAnswers() {
       final var prefill = new Forifyllnad();
       final var svar = new Svar();
-      final var svar2 = new Svar();
 
       svar.setId(SPECIFICATION.id().id());
       svar.setInstans(1);
-      svar2.setId(SPECIFICATION.id().id());
-      svar.setInstans(2);
-
-      final var delsvar1Code = new Delsvar();
-      final var delsvar2Code = new Delsvar();
-
-      delsvar1Code.setId("%s.2".formatted(SPECIFICATION.id().id()));
-      delsvar2Code.setId("%s.2".formatted(SPECIFICATION.id().id()));
-
-      delsvar1Code.getContent().add(createCVTypeElement(DIAGNOS_CODE));
-      delsvar2Code.getContent().add(createCVTypeElement(DIAGNOS_CODE_2));
-
-      svar.getDelsvar().add(delsvar1Code);
-      svar2.getDelsvar().add(delsvar2Code);
 
       prefill.getSvar().add(svar);
-      prefill.getSvar().add(svar2);
-
-      doReturn(Optional.of(Diagnosis.builder().build()))
-          .when(diagnosisCodeRepository).findByCode(new DiagnosisCode(DIAGNOS_CODE));
-
-      doReturn(Optional.of(Diagnosis.builder().build()))
-          .when(diagnosisCodeRepository).findByCode(new DiagnosisCode(DIAGNOS_CODE_2));
 
       final var result = prefillDiagnosisConverter.prefillAnswer(SPECIFICATION, prefill);
 
@@ -259,6 +238,42 @@ class PrefillDiagnosisConverterTest {
       assertEquals(expected, result);
     }
 
+    @Test
+    void shouldReturnPrefillAnswerWithDescriptionFromDiagnosisRepository() {
+      final var expectedDescription = "expectedDescription";
+
+      final var prefill = new Forifyllnad();
+      final var svar = new Svar();
+
+      svar.setId(SPECIFICATION.id().id());
+      svar.setInstans(1);
+
+      final var delsvar1Code = new Delsvar();
+
+      delsvar1Code.setId("%s.2".formatted(SPECIFICATION.id().id()));
+
+      delsvar1Code.getContent().add(createCVTypeElement(DIAGNOS_CODE));
+
+      svar.getDelsvar().add(delsvar1Code);
+
+      prefill.getSvar().add(svar);
+
+      doReturn(Optional.of(Diagnosis.builder().build()))
+          .when(diagnosisCodeRepository).findByCode(new DiagnosisCode(DIAGNOS_CODE));
+
+      doReturn(
+          Diagnosis.builder()
+              .description(
+                  new DiagnosisDescription(expectedDescription)
+              )
+              .build()
+      ).when(diagnosisCodeRepository).getByCode(new DiagnosisCode(DIAGNOS_CODE));
+
+      final var result = prefillDiagnosisConverter.prefillAnswer(SPECIFICATION, prefill);
+
+      final var value = (ElementValueDiagnosisList) result.getElementData().value();
+      assertEquals(expectedDescription, value.diagnoses().getFirst().description());
+    }
   }
 
   private static Forifyllnad getPrefill() {
