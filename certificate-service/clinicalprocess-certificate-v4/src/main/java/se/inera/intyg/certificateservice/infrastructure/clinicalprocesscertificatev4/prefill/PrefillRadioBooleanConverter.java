@@ -39,6 +39,10 @@ public class PrefillRadioBooleanConverter implements PrefillConverter {
         .filter(delsvar -> delsvar.getId().equals(specification.id().id()))
         .toList();
 
+    if (subAnswers.isEmpty() && answers.isEmpty()) {
+      return null;
+    }
+
     final var prefillError = PrefillValidator.validateSingleAnswerOrSubAnswer(
         answers,
         subAnswers,
@@ -51,14 +55,8 @@ public class PrefillRadioBooleanConverter implements PrefillConverter {
           .build();
     }
 
-    final var noPrefill = subAnswers.isEmpty() && answers.isEmpty();
-
-    if (noPrefill) {
-      return null;
-    }
-
     final var content = getContent(subAnswers, answers);
-    
+
     if (!isValidBoolean(content)) {
       return PrefillAnswer.builder()
           .errors(List.of(PrefillError.invalidBooleanValue(specification.id().id(), content)))

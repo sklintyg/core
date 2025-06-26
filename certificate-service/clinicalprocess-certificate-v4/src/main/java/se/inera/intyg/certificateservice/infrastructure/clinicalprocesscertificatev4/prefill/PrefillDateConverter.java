@@ -40,6 +40,10 @@ public class PrefillDateConverter implements PrefillConverter {
         .filter(delsvar -> delsvar.getId().equals(specification.id().id()))
         .toList();
 
+    if (answer.isEmpty() && subAnswer.isEmpty()) {
+      return null;
+    }
+
     final var prefillError = PrefillValidator.validateSingleAnswerOrSubAnswer(answer, subAnswer,
         specification);
 
@@ -49,24 +53,20 @@ public class PrefillDateConverter implements PrefillConverter {
           .build();
     }
 
-    final var noPrefill = answer.isEmpty() && subAnswer.isEmpty();
-
     try {
-      return noPrefill
-          ? null
-          : PrefillAnswer.builder()
-              .elementData(
-                  ElementData.builder()
-                      .id(specification.id())
-                      .value(
-                          ElementValueDate.builder()
-                              .dateId(configurationDate.id())
-                              .date(LocalDate.parse(getContent(subAnswer, answer)))
-                              .build()
-                      )
-                      .build()
-              )
-              .build();
+      return PrefillAnswer.builder()
+          .elementData(
+              ElementData.builder()
+                  .id(specification.id())
+                  .value(
+                      ElementValueDate.builder()
+                          .dateId(configurationDate.id())
+                          .date(LocalDate.parse(getContent(subAnswer, answer)))
+                          .build()
+                  )
+                  .build()
+          )
+          .build();
     } catch (Exception ex) {
       return PrefillAnswer.invalidFormat(specification.id().id(), ex.getMessage());
     }
