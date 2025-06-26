@@ -1,6 +1,8 @@
 package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
@@ -8,8 +10,8 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfiguration;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.util.PrefillValidator;
-import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
@@ -41,42 +43,44 @@ public class PrefillCheckboxMultipleCodeConverter implements PrefillConverter {
       return null;
     }
 
-    final var prefillError = PrefillValidator.validateMinimumNumberOfDelsvar(answers,
-        MINIMUM_SUB_ANSWERS,
-        specification);
+    final var prefillErrors = new ArrayList<PrefillError>();
+    final var data = ElementData.builder()
+        .id(specification.id())
+        .value(
+            ElementValueCodeList.builder()
+                .id(configurationCheckboxMultipleCode.id())
+                .list(answers.stream()
+                    .map(answer -> {
+                      try {
+                        final var validationError = PrefillValidator.validateMinimumNumberOfDelsvar(
+                            answer,
+                            MINIMUM_SUB_ANSWERS,
+                            specification);
 
-    if (prefillError != null) {
-      return PrefillAnswer.builder()
-          .errors(List.of(prefillError))
-          .build();
-    }
+                        if (validationError != null) {
+                          prefillErrors.add(validationError);
+                          return null;
+                        }
+                        return getCodes(answer.getDelsvar(),
+                            configurationCheckboxMultipleCode);
+                      } catch (Exception e) {
+                        prefillErrors.add(
+                            PrefillError.invalidFormat(answer.getId(), e.getMessage()));
+                        return null;
+                      }
+                    })
+                    .filter(Objects::nonNull)
+                    .toList())
+                .build()
+        )
+        .build();
 
-    try {
-      final var codes = getContentCodes(answers, configurationCheckboxMultipleCode);
-      return PrefillAnswer.builder()
-          .elementData(
-              ElementData.builder()
-                  .id(specification.id())
-                  .value(
-                      ElementValueCodeList.builder()
-                          .id(configurationCheckboxMultipleCode.id())
-                          .list(codes)
-                          .build()
-                  )
-                  .build()
-          )
-          .build();
-    } catch (Exception ex) {
-      return PrefillAnswer.invalidFormat(specification.id().id(), ex.getMessage());
-    }
+    return PrefillAnswer.builder()
+        .elementData(data)
+        .errors(prefillErrors)
+        .build();
   }
 
-  private static List<ElementValueCode> getContentCodes(List<Svar> answers,
-      ElementConfigurationCheckboxMultipleCode configuration) {
-    return answers.stream()
-        .map(svar -> getCodes(svar.getDelsvar(), configuration))
-        .toList();
-  }
 
   private static ElementValueCode getCodes(List<Delsvar> subAnswer,
       ElementConfigurationCheckboxMultipleCode configuration) {
@@ -86,16 +90,17 @@ public class PrefillCheckboxMultipleCodeConverter implements PrefillConverter {
       throw new IllegalStateException("Invalid format cvType is empty");
     }
 
-    final var code = cvType.get().getCode();
+    final var code = new Code(cvType.get().getCode(), cvType.get().getCodeSystem(),
+        cvType.get().getDisplayName());
 
     final var listItem = configuration.list().stream()
-        .filter(item -> item.code().code().equals(code))
+        .filter(item -> item.code().matches(code))
         .findFirst()
-        .orElseThrow();
+        .orElseThrow(() -> new IllegalStateException("Could not find a matching code for " + code));
 
     return ElementValueCode.builder()
         .codeId(listItem.id())
-        .code(code)
+        .code(code.code())
         .build();
   }
 

@@ -1,7 +1,9 @@
 package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
@@ -15,7 +17,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.MedicalInvestigationConfig;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.util.PrefillValidator;
-import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
@@ -58,45 +59,48 @@ public class PrefillMedicalInvestigationListConverter implements PrefillConverte
           .build();
     }
 
-    try {
-      return PrefillAnswer.builder()
-          .elementData(
-              ElementData.builder()
-                  .id(specification.id())
-                  .value(
-                      ElementValueMedicalInvestigationList.builder()
-                          .id(specification.configuration().id())
-                          .list(
-                              getMedicalInvestigations(
-                                  answers,
-                                  medicalInvestigationListConfig.list(),
-                                  specification.id()
-                              )
-                          )
-                          .build()
-                  ).build()
-          )
-          .build();
-    } catch (Exception ex) {
-      return PrefillAnswer.invalidFormat(specification.id().id(), ex.getMessage());
-    }
-  }
+    final var prefillErrors = new ArrayList<PrefillError>();
 
-  private List<MedicalInvestigation> getMedicalInvestigations(List<Svar> answers,
-      List<MedicalInvestigationConfig> medicalInvestigationConfigs, ElementId elementId) {
-    return answers.stream()
-        .map(answer -> {
-              final var subAnswers = answer.getDelsvar();
-              final var instance = answer.getInstans() - 1;
-              final var config = medicalInvestigationConfigs.get(instance);
-              return MedicalInvestigation.builder()
-                  .investigationType(getCode(subAnswers, config, elementId))
-                  .date(getDate(subAnswers, config, elementId))
-                  .informationSource(getText(subAnswers, config, elementId))
-                  .build();
-            }
+    final var elementData = ElementData.builder()
+        .id(specification.id())
+        .value(
+            ElementValueMedicalInvestigationList.builder()
+                .id(specification.configuration().id())
+                .list(
+                    answers.stream()
+                        .map(answer -> {
+                          try {
+                            final var subAnswers = answer.getDelsvar();
+                            final var instance = answer.getInstans() - 1;
+                            final var config = medicalInvestigationListConfig.list()
+                                .get(instance);
+                            return MedicalInvestigation.builder()
+                                .investigationType(
+                                    getCode(subAnswers, config, specification.id())
+                                )
+                                .date(getDate(subAnswers, config, specification.id())
+                                )
+                                .informationSource(
+                                    getText(subAnswers, config, specification.id())
+                                )
+                                .build();
+                          } catch (Exception ex) {
+                            prefillErrors.add(
+                                PrefillError.invalidFormat(answer.getId(), ex.getMessage()));
+                            return null;
+                          }
+                        })
+                        .filter(Objects::nonNull)
+                        .toList()
+                )
+                .build()
         )
-        .toList();
+        .build();
+
+    return PrefillAnswer.builder()
+        .elementData(elementData)
+        .errors(prefillErrors)
+        .build();
   }
 
   private ElementValueCode getCode(List<Delsvar> subAnswer,

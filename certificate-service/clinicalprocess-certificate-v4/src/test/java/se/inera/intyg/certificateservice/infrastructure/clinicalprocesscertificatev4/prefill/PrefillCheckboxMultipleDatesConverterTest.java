@@ -5,15 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.TestMarshaller.getElement;
 
-import jakarta.xml.bind.JAXBException;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
-import javax.xml.parsers.ParserConfigurationException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.xml.sax.SAXException;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
@@ -146,6 +142,45 @@ class PrefillCheckboxMultipleDatesConverterTest {
     }
 
     @Test
+    void shouldReturnElementDataAndErrorIfOneAnswerHasTooFewSubAnswers() {
+      final var validSvar = new Svar();
+      validSvar.setId("1");
+      validSvar.getDelsvar().add(createDelsvarDate());
+      validSvar.getDelsvar().add(createDelsvarCode("DIGITALUNDERSOKNING", "TEXT"));
+
+      final var invalidSvar = new Svar();
+      invalidSvar.setId("1");
+      invalidSvar.getDelsvar().add(createDelsvarDate());
+
+      final var forifyllnad = new Forifyllnad();
+      forifyllnad.getSvar().add(validSvar);
+      forifyllnad.getSvar().add(invalidSvar);
+
+      final var result = prefillCheckboxMultipleDatesConverter.prefillAnswer(SPECIFICATION,
+          forifyllnad);
+
+      final var expectedData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(ElementValueDateList.builder()
+              .dateListId(FIELD_ID)
+              .dateList(
+                  List.of(
+                      ElementValueDate.builder()
+                          .dateId(CHECKBOXDATE_FIELD_ID_2)
+                          .date(DATE_NOW)
+                          .build()))
+              .build())
+          .build();
+
+      assertAll(
+          () -> assertEquals(expectedData, result.getElementData()),
+          () -> assertEquals(1, result.getErrors().size()),
+          () -> assertEquals(PrefillErrorType.WRONG_NUMBER_OF_ANSWERS,
+              result.getErrors().getFirst().type())
+      );
+    }
+
+    @Test
     void shouldReturnErrorIfWrongConfigurationType() {
       final var prefill = new Forifyllnad();
       final var wrongSpec = ElementSpecification.builder()
@@ -191,8 +226,7 @@ class PrefillCheckboxMultipleDatesConverterTest {
     return delsvarDate;
   }
 
-  private static Delsvar createDelsvarCode(String code, String displayName)
-      throws JAXBException, ParserConfigurationException, IOException, SAXException {
+  private static Delsvar createDelsvarCode(String code, String displayName) {
     final var delsvarCode = new Delsvar();
     delsvarCode.setId("1.1");
 

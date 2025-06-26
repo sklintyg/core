@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -160,13 +161,24 @@ class PrefillMedicalInvestigationListConverterTest {
       final var prefill = new Forifyllnad();
       final var svar = new Svar();
       svar.setId(SPECIFICATION.id().id());
-      final var delsvar = new Delsvar();
-      delsvar.setId(SPECIFICATION.id().id());
-      delsvar.getContent().add("wrongValue");
-      svar.getDelsvar().add(delsvar);
-      prefill.getSvar().add(svar);
 
-      //TODO: does this querstion require all subanswers to be entered? Is this behvaiour the same for other multiplevalue components?
+      final var delsvar1 = new Delsvar();
+      delsvar1.setId(ELEMENT_ID.id() + ".1");
+      delsvar1.getContent().add("wrongValue");
+
+      final var delsvar2 = new Delsvar();
+      delsvar2.setId(ELEMENT_ID.id() + ".2");
+      delsvar2.getContent().add("wrongValue");
+
+      final var delsvar3 = new Delsvar();
+      delsvar3.setId(ELEMENT_ID.id() + ".3");
+      delsvar3.getContent().add("wrongValue");
+
+      svar.getDelsvar().add(delsvar1);
+      svar.getDelsvar().add(delsvar2);
+      svar.getDelsvar().add(delsvar3);
+
+      prefill.getSvar().add(svar);
 
       final var result = prefillMedicalInvestigationListConverter.prefillAnswer(SPECIFICATION,
           prefill);
@@ -194,6 +206,78 @@ class PrefillMedicalInvestigationListConverterTest {
           .build();
 
       assertEquals(expected, result);
+    }
+
+    @Test
+    void shouldReturnPrefillAnswerWithPartialElementDataAndErrors() {
+      final var expectedElementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueMedicalInvestigationList.builder()
+                  .id(FIELD_ID)
+                  .list(
+                      List.of(
+                          MedicalInvestigation.builder()
+                              .date(
+                                  ElementValueDate.builder()
+                                      .dateId(DATE_2_FIELD_ID)
+                                      .date(DATE)
+                                      .build()
+                              )
+                              .investigationType(
+                                  ElementValueCode.builder()
+                                      .codeId(CODE_2_FIELD_ID)
+                                      .code(CODE)
+                                      .build()
+                              )
+                              .informationSource(
+                                  ElementValueText.builder()
+                                      .textId(TEXT_2_FIELD_ID)
+                                      .text(TEXT)
+                                      .build()
+                              )
+                              .build()
+                      )
+                  )
+                  .build()
+          )
+          .build();
+      final var prefill = new Forifyllnad();
+      final var svar1 = new Svar();
+      svar1.setId(SPECIFICATION.id().id());
+
+      final var delsvar1 = new Delsvar();
+      delsvar1.setId(ELEMENT_ID.id() + ".1");
+      delsvar1.getContent().add("wrongValue");
+
+      final var delsvar2 = new Delsvar();
+      delsvar2.setId(ELEMENT_ID.id() + ".2");
+      delsvar2.getContent().add("wrongValue");
+
+      final var delsvar3 = new Delsvar();
+      delsvar3.setId(ELEMENT_ID.id() + ".3");
+      delsvar3.getContent().add("wrongValue");
+
+      svar1.getDelsvar().add(delsvar1);
+      svar1.getDelsvar().add(delsvar2);
+      svar1.getDelsvar().add(delsvar3);
+
+      final var svar2 = getMedicalInvestigationAnswer(CODE, TEXT, DATE, 2);
+
+      prefill.getSvar().add(svar1);
+      prefill.getSvar().add(svar2);
+
+      final var result = prefillMedicalInvestigationListConverter.prefillAnswer(
+          SPECIFICATION,
+          prefill);
+
+      assertAll(
+          () -> assertEquals(
+              PrefillErrorType.INVALID_FORMAT,
+              result.getErrors().getFirst().type()
+          ),
+          () -> assertEquals(expectedElementData, result.getElementData())
+      );
     }
 
     @Test

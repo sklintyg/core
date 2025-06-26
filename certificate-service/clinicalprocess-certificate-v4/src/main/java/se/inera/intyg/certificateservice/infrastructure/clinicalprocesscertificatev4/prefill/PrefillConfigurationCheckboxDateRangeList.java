@@ -84,19 +84,20 @@ public class PrefillConfigurationCheckboxDateRangeList implements PrefillConvert
     return configuration.dateRanges()
         .stream()
         .filter(d -> d.code().matches(code))
-        .findFirst().orElseThrow();
+        .findFirst()
+        .orElseThrow(() -> new IllegalStateException("Could not find a matching code for " + code));
   }
 
-  private Code getCode(List<Delsvar> subAnswer, ElementSpecification specification) {
-    final var sunAnswer = subAnswer.stream()
+  private Code getCode(List<Delsvar> subAnswers, ElementSpecification specification) {
+    final var subAnswer = subAnswers.stream()
         .filter(d -> d.getId().equals(specification.id().id() + ".1"))
         .findFirst();
 
-    if (sunAnswer.isEmpty()) {
+    if (subAnswer.isEmpty()) {
       throw new IllegalStateException("Invalid format: code value is missing");
     }
 
-    final var cvType = PrefillUnmarshaller.cvType(sunAnswer.get().getContent());
+    final var cvType = PrefillUnmarshaller.cvType(subAnswer.get().getContent());
 
     if (cvType.isEmpty()) {
       throw new IllegalStateException("Invalid format: cvType is empty");
