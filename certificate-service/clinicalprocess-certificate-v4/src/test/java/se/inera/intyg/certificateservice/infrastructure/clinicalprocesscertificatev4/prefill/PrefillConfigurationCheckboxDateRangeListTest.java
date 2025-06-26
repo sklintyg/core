@@ -43,14 +43,13 @@ class PrefillConfigurationCheckboxDateRangeListTest {
   private static final FieldId FIELD_ID = new FieldId("F2");
   private static final LocalDate START_DATE = LocalDate.of(2024, 1, 1);
   private static final LocalDate END_DATE = LocalDate.of(2024, 12, 31);
-  private static final String CODE = "TEST_CODE";
   private static final ObjectFactory factory = new ObjectFactory();
   private static final List<ElementConfigurationCode> dateRanges = List.of(
       new ElementConfigurationCode(
           new FieldId(CodeSystemKvFkmu0008.EN_ATTONDEL.code()),
           "LABEL",
           new Code(
-              CODE,
+              CodeSystemKvFkmu0008.EN_ATTONDEL.code(),
               "KV_FKMU_0001",
               "TEXT")
       ),
@@ -58,7 +57,7 @@ class PrefillConfigurationCheckboxDateRangeListTest {
           new FieldId(CodeSystemKvFkmu0008.EN_FJARDEDEL.code()),
           "LABEL",
           new Code(
-              CODE,
+              CodeSystemKvFkmu0008.EN_FJARDEDEL.code(),
               "KV_FKMU_0001",
               "TEXT")
       )
@@ -208,7 +207,7 @@ class PrefillConfigurationCheckboxDateRangeListTest {
                   .dateRangeListId(FIELD_ID)
                   .dateRangeList(List.of(
                       DateRange.builder()
-                          .dateRangeId(FIELD_ID)
+                          .dateRangeId(new FieldId(CodeSystemKvFkmu0008.EN_FJARDEDEL.code()))
                           .from(START_DATE)
                           .to(END_DATE)
                           .build()
