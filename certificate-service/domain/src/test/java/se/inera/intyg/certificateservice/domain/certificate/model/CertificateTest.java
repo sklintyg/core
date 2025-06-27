@@ -38,6 +38,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.CONTACT_INFO;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.DATE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.TEXT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.dateElementDataBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementDataConstants.DATE_ELEMENT_VALUE_DATE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.complementMessageBuilder;
@@ -74,6 +75,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -85,6 +87,7 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionE
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.certificate.service.PrefillProcessor;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
@@ -112,7 +115,8 @@ class CertificateTest {
   private Certificate.CertificateBuilder certificateBuilder;
   private CertificateModel certificateModel;
   private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
-
+  @Mock
+  private PrefillProcessor prefillProcessor;
   @Mock
   private XmlGenerator xmlGenerator = mock(XmlGenerator.class);
   @Mock
@@ -2753,6 +2757,27 @@ class CertificateTest {
 
       assertEquals(Optional.empty(),
           certificateWithoutUnitContactInformation.unitContactInformation());
+    }
+  }
+
+  @Nested
+  class PrefillTests {
+
+    @Test
+    void shallIncludeUnitContactInfo() {
+      certificate.prefill(XML, prefillProcessor, ALFA_ALLERGIMOTTAGNINGEN);
+      assertTrue(certificate.elementData().contains(CONTACT_INFO));
+    }
+
+    @Test
+    void shallPrefillCertificate() {
+      final var expectedElementData = List.of(TEXT, DATE, CONTACT_INFO);
+
+      doReturn(Set.of(TEXT, DATE)).when(prefillProcessor)
+          .prefill(certificate.certificateModel(), XML);
+
+      certificate.prefill(XML, prefillProcessor, ALFA_ALLERGIMOTTAGNINGEN);
+      assertTrue(expectedElementData.containsAll(certificate.elementData()));
     }
   }
 }
