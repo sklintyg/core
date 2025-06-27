@@ -55,7 +55,7 @@ public class PrefillDateRangeConverter implements PrefillConverter {
     try {
       final var content = getContent(subAnswers, answers);
       final var datePeriodAnswer = PrefillUnmarshaller.datePeriodType(
-          List.of(content)
+          content
       );
 
       return PrefillAnswer.builder()
@@ -81,16 +81,15 @@ public class PrefillDateRangeConverter implements PrefillConverter {
     }
   }
 
-  private static Object getContent(List<Delsvar> subAnswers, List<Svar> answers) {
+  private static List<Object> getContent(List<Delsvar> subAnswers, List<Svar> answers) {
     if (!subAnswers.isEmpty()) {
-      return subAnswers.getFirst().getContent().getFirst();
+      return subAnswers.getFirst().getContent();
     }
     return answers.stream()
         .map(Svar::getDelsvar)
         .toList()
         .getFirst()
         .getFirst()
-        .getContent()
-        .getFirst();
+        .getContent();
   }
 }
