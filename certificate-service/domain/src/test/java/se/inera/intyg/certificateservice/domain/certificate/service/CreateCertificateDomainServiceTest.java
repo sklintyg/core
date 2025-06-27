@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_VARDCENTRAL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.EXTERNAL_REFERENCE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.XML;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_HUDMOTTAGNINGEN;
 
 import java.time.LocalDateTime;
@@ -44,6 +45,8 @@ import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccess
 @ExtendWith(MockitoExtension.class)
 class CreateCertificateDomainServiceTest {
 
+  @Mock
+  private PrefillProcessor prefillProcessor;
   @Mock
   private CertificateActionConfigurationRepository certificateActionConfigurationRepository;
   @Mock
@@ -125,6 +128,13 @@ class CreateCertificateDomainServiceTest {
       createCertificateDomainService.create(CERTIFICATE_MODEL_ID, ACTION_EVALUATION,
           EXTERNAL_REFERENCE, null);
       verify(certificate).externalReference(EXTERNAL_REFERENCE);
+    }
+
+    @Test
+    void shallPrefill() {
+      createCertificateDomainService.create(CERTIFICATE_MODEL_ID, ACTION_EVALUATION,
+          EXTERNAL_REFERENCE, XML);
+      verify(certificate).prefill(XML, prefillProcessor, ACTION_EVALUATION.subUnit());
     }
 
     @Test
