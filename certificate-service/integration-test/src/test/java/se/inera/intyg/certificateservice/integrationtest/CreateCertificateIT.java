@@ -35,7 +35,7 @@ public abstract class CreateCertificateIT extends BaseIntegrationIT {
 
   private String loadResourceAsString() throws IOException {
     try (InputStream inputStream = getClass().getClassLoader()
-        .getResourceAsStream("prefill/%s.xml".formatted(type()))) {
+        .getResourceAsStream("prefill/%s.xml".formatted(type().toUpperCase()))) {
       if (inputStream == null) {
         throw new IllegalArgumentException(
             "Resource not found: " + "prefill/%s.xml".formatted(type()));
