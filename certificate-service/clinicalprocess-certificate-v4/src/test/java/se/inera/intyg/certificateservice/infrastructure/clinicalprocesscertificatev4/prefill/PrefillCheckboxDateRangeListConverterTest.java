@@ -30,6 +30,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.MessageLevel;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0008;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.converter.PrefillCheckboxDateRangeListConverter;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.CVType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.DatePeriodType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.ObjectFactory;
@@ -37,7 +38,7 @@ import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
-class PrefillConfigurationCheckboxDateRangeListTest {
+class PrefillCheckboxDateRangeListConverterTest {
 
   private static final ElementId ELEMENT_ID = new ElementId("1");
   private static final FieldId FIELD_ID = new FieldId("F2");
@@ -121,12 +122,12 @@ class PrefillConfigurationCheckboxDateRangeListTest {
       )
       .build();
 
-  PrefillConfigurationCheckboxDateRangeList prefillConfigurationCheckboxDateRangeList = new PrefillConfigurationCheckboxDateRangeList();
+  PrefillCheckboxDateRangeListConverter prefillCheckboxDateRangeListConverter = new PrefillCheckboxDateRangeListConverter();
 
   @Test
   void shouldReturnSupportsDateRange() {
     assertEquals(ElementConfigurationCheckboxDateRangeList.class,
-        prefillConfigurationCheckboxDateRangeList.supports());
+        prefillCheckboxDateRangeListConverter.supports());
   }
 
   @Nested
@@ -136,7 +137,7 @@ class PrefillConfigurationCheckboxDateRangeListTest {
     void shouldReturnNullIfNoAnswers() {
       Forifyllnad prefill = new Forifyllnad();
 
-      PrefillAnswer result = prefillConfigurationCheckboxDateRangeList.prefillAnswer(SPECIFICATION,
+      PrefillAnswer result = prefillCheckboxDateRangeListConverter.prefillAnswer(SPECIFICATION,
           prefill);
 
       assertNull(result);
@@ -150,7 +151,7 @@ class PrefillConfigurationCheckboxDateRangeListTest {
           .configuration(ElementConfigurationCategory.builder().build())
           .build();
 
-      final var result = prefillConfigurationCheckboxDateRangeList.prefillAnswer(wrongSpec,
+      final var result = prefillCheckboxDateRangeListConverter.prefillAnswer(wrongSpec,
           prefill);
 
       assertEquals(
@@ -164,7 +165,7 @@ class PrefillConfigurationCheckboxDateRangeListTest {
 
       var prefill = createForifyllnad();
 
-      final var result = prefillConfigurationCheckboxDateRangeList.prefillAnswer(
+      final var result = prefillCheckboxDateRangeListConverter.prefillAnswer(
           SPECIFICATION, prefill);
 
       final var expected = PrefillAnswer.builder()
@@ -180,7 +181,7 @@ class PrefillConfigurationCheckboxDateRangeListTest {
 
       var prefill = createForifyllnadWithMultipleSubAnswers();
 
-      final var result = prefillConfigurationCheckboxDateRangeList.prefillAnswer(
+      final var result = prefillCheckboxDateRangeListConverter.prefillAnswer(
           SPECIFICATION, prefill);
 
       final var expected = PrefillAnswer.builder()
@@ -197,7 +198,7 @@ class PrefillConfigurationCheckboxDateRangeListTest {
       final var forifyllnad = createForifyllnadWithMultipleSubAnswers();
       forifyllnad.getSvar().getFirst().getDelsvar().getFirst().getContent().clear();
 
-      final var result = prefillConfigurationCheckboxDateRangeList.prefillAnswer(
+      final var result = prefillCheckboxDateRangeListConverter.prefillAnswer(
           SPECIFICATION, forifyllnad);
 
       final var expectedData = ElementData.builder()

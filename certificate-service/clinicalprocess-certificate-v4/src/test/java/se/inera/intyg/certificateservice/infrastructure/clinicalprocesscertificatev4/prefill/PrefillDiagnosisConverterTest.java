@@ -30,6 +30,7 @@ import se.inera.intyg.certificateservice.domain.diagnosiscode.model.DiagnosisCod
 import se.inera.intyg.certificateservice.domain.diagnosiscode.model.DiagnosisDescription;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemIcd10Se;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.converter.PrefillDiagnosisConverter;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.CVType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.ObjectFactory;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;

@@ -23,12 +23,6 @@ public class PrefillAnswer {
         .build();
   }
 
-  public static PrefillAnswer subAnswerNotFound(String answerId, String sunAnswerId) {
-    return PrefillAnswer.builder()
-        .errors(List.of(PrefillError.subAnswerNotFound(answerId, sunAnswerId)))
-        .build();
-  }
-
   public static PrefillAnswer invalidFormat(String answerId, String exceptionMessage) {
     return PrefillAnswer.builder()
         .errors(List.of(PrefillError.invalidFormat(answerId, exceptionMessage)))

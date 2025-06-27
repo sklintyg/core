@@ -19,18 +19,6 @@ class PrefillAnswerTest {
   }
 
   @Test
-  void shouldReturnSubAnswerNotFoundError() {
-    final var answer = PrefillAnswer.subAnswerNotFound("MI1", "MI1.1");
-    assertAll(
-        () -> assertEquals(1, answer.getErrors().size()),
-        () -> assertEquals(PrefillErrorType.SUB_ANSWER_NOT_FOUND,
-            answer.getErrors().getFirst().type()),
-        () -> assertEquals("Sub-answer with id MI1.1 not found in answer with id MI1",
-            answer.getErrors().getFirst().details())
-    );
-  }
-
-  @Test
   void shouldReturnInvalidFormatError() {
     final var answer = PrefillAnswer.invalidFormat("id", "message");
     assertAll(

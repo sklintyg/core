@@ -46,6 +46,9 @@ public class PrefillResult {
   }
 
   public String toJsonReport() {
+    if (!containsError()) {
+      return "Success";
+    }
     try {
       return new ObjectMapper().writeValueAsString(
           this.prefilledAnswers.stream()
@@ -58,4 +61,9 @@ public class PrefillResult {
     }
   }
 
+  public boolean containsError() {
+    return prefilledAnswers.stream()
+        .flatMap(e -> e.getErrors().stream())
+        .anyMatch(Objects::nonNull);
+  }
 }
