@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertific
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
@@ -39,16 +40,16 @@ public class PrefillCheckboxMultipleCodeConverter implements PrefillConverter {
         .filter(svar -> svar.getId().equals(specification.id().id()))
         .toList();
 
-    if (answers.isEmpty()) {
-      return null;
-    }
-
     if (!specification.includeInXml()) {
       return PrefillAnswer.builder()
           .elementData(
               buildElementDataFromConfiguration(specification, configurationCheckboxMultipleCode)
           )
           .build();
+    }
+
+    if (answers.isEmpty()) {
+      return null;
     }
 
     final var prefillErrors = new ArrayList<PrefillError>();
