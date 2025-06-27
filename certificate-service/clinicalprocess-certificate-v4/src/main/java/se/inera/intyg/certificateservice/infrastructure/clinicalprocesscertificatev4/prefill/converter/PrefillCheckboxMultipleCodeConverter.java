@@ -115,7 +115,7 @@ public class PrefillCheckboxMultipleCodeConverter implements PrefillConverter {
                             configuration ->
                                 ElementValueCode.builder()
                                     .codeId(configuration.id())
-                                    .code(configuration.code().code())
+                                    .code(configuration.id().value())
                                     .build()
                         )
                         .toList()

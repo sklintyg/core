@@ -198,11 +198,11 @@ class PrefillCheckboxMultipleCodeConverterTest {
                       List.of(
                           ElementValueCode.builder()
                               .codeId(CODE_FIELD_ID)
-                              .code(CODE)
+                              .code(CODE_FIELD_ID.value())
                               .build(),
                           ElementValueCode.builder()
                               .codeId(CODE_2_FIELD_ID)
-                              .code(CODE_2)
+                              .code(CODE_2_FIELD_ID.value())
                               .build()
                       )
                   )
