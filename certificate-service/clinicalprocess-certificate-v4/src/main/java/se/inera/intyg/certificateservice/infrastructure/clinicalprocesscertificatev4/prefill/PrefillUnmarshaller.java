@@ -10,20 +10,13 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import lombok.extern.slf4j.Slf4j;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.CVType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.DatePeriodType;
+import se.riv.clinicalprocess.healthcond.certificate.types.v3.ObjectFactory;
 import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
 @Slf4j
 public final class PrefillUnmarshaller {
 
   private PrefillUnmarshaller() {
-  }
-
-  public static Optional<String> unmarshallString(List<Object> content) {
-    try {
-      return Optional.of((String) content.getFirst());
-    } catch (Exception e) {
-      return Optional.empty();
-    }
   }
 
   public static <T> Optional<T> unmarshalType(List<Object> content, Class<T> clazz) {
@@ -45,19 +38,6 @@ public final class PrefillUnmarshaller {
     return Optional.empty();
   }
 
-  public static <T> Optional<T> unmarshalXml(String xml, Class<T> clazz) {
-    try {
-      final var context = JAXBContext.newInstance(clazz);
-      final var unmarshaller = context.createUnmarshaller();
-      final var stringReader = new StringReader(xml);
-      final var jaxbElement = (JAXBElement<T>) unmarshaller.unmarshal(stringReader);
-      return Optional.of(jaxbElement.getValue());
-    } catch (Exception ex) {
-      log.warn("Failed to unmarshal {}", clazz.getSimpleName(), ex);
-      return Optional.empty();
-    }
-  }
-
   public static Optional<CVType> cvType(List<Object> content) {
     return unmarshalType(content, CVType.class);
   }
@@ -67,7 +47,16 @@ public final class PrefillUnmarshaller {
   }
 
   public static Optional<Forifyllnad> forifyllnadType(String xml) {
-    return unmarshalXml(xml, Forifyllnad.class);
+    try {
+      final var context = JAXBContext.newInstance(ObjectFactory.class, Forifyllnad.class);
+      final var unmarshaller = context.createUnmarshaller();
+      final var stringReader = new StringReader(xml);
+      final var jaxbElement = (JAXBElement<Forifyllnad>) unmarshaller.unmarshal(stringReader);
+      return Optional.of(jaxbElement.getValue());
+    } catch (Exception ex) {
+      log.warn("Failed to unmarshal Forifyllnad", ex);
+      return Optional.empty();
+    }
   }
 
   public static LocalDate toLocalDate(XMLGregorianCalendar xmlGregorianCalendar) {
