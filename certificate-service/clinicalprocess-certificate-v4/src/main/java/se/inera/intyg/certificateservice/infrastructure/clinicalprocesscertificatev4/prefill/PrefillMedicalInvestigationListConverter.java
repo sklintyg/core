@@ -75,6 +75,7 @@ public class PrefillMedicalInvestigationListConverter implements PrefillConverte
                             final var config = medicalInvestigationListConfig.list()
                                 .get(instance);
                             return MedicalInvestigation.builder()
+                                .id(config.id())
                                 .investigationType(
                                     getCode(subAnswers, config, specification.id())
                                 )

@@ -90,6 +90,7 @@ class PrefillMedicalInvestigationListConverterTest {
               .list(
                   List.of(
                       MedicalInvestigation.builder()
+                          .id(FIELD_ID)
                           .date(
                               ElementValueDate.builder()
                                   .dateId(DATE_FIELD_ID)
@@ -110,6 +111,7 @@ class PrefillMedicalInvestigationListConverterTest {
                           )
                           .build(),
                       MedicalInvestigation.builder()
+                          .id(FIELD_2_ID)
                           .date(
                               ElementValueDate.builder()
                                   .dateId(DATE_2_FIELD_ID)
@@ -218,6 +220,7 @@ class PrefillMedicalInvestigationListConverterTest {
                   .list(
                       List.of(
                           MedicalInvestigation.builder()
+                              .id(FIELD_2_ID)
                               .date(
                                   ElementValueDate.builder()
                                       .dateId(DATE_2_FIELD_ID)
