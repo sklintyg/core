@@ -36,6 +36,7 @@ import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
+import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationResult;
 
 @Slf4j
@@ -525,9 +526,23 @@ public class Certificate {
         .findFirst();
   }
 
-  public void prefill(Xml prefillXml, PrefillProcessor prefillProcessor) {
+  public void prefill(Xml prefillXml, PrefillProcessor prefillProcessor, SubUnit subUnit) {
     try {
-      this.elementData = new ArrayList<>(prefillProcessor.prefill(certificateModel, prefillXml));
+      final var prefill = new ArrayList<>(prefillProcessor.prefill(certificateModel, prefillXml));
+      prefill.add(
+          ElementData.builder()
+              .id(UNIT_CONTACT_INFORMATION)
+              .value(
+                  ElementValueUnitContactInformation.builder()
+                      .address(subUnit.address().address())
+                      .city(subUnit.address().city())
+                      .zipCode(subUnit.address().zipCode())
+                      .phoneNumber(subUnit.contactInfo().phoneNumber())
+                      .build()
+              )
+              .build()
+      );
+      this.elementData = prefill;
     } catch (Exception e) {
       log.warn("Failed to prefill certificate.", e);
     }

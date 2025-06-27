@@ -58,7 +58,7 @@ public class CreateCertificateDomainService {
     final var certificate = certificateRepository.create(certificateModel);
     certificate.updateMetadata(actionEvaluation);
     certificate.externalReference(externalReference);
-    certificate.prefill(prefillXml, prefillProcessor);
+    certificate.prefill(prefillXml, prefillProcessor, actionEvaluation.subUnit());
 
     final var savedCertificate = certificateRepository.save(certificate);
 
