@@ -32,6 +32,10 @@ public abstract class CreateCertificateIT extends BaseIntegrationIT {
 
   protected abstract String wrongVersion();
 
+  protected Integer numberOfQuestionsThatCantBePrefilled() {
+    return 0;
+  }
+
 
   private String loadResourceAsString() throws IOException {
     try (InputStream inputStream = getClass().getClassLoader()
@@ -58,7 +62,7 @@ public abstract class CreateCertificateIT extends BaseIntegrationIT {
   }
 
   @Test
-  @DisplayName("Om förifyllnadsinformation finns ska utkastet som returneras innehålla svaren")
+  @DisplayName("Om ett utkast förifylls med komplett intygsinformation ska inga valideringsfel visas")
   void shallReturnCertificateWithPrefilledAnswers() throws IOException {
     final var xml = new Xml(loadResourceAsString());
     final var createCertificateRequest =
@@ -79,7 +83,8 @@ public abstract class CreateCertificateIT extends BaseIntegrationIT {
         certificateId(response.getBody())
     );
 
-    assertEquals(0, validationErrors(validateCertificate).size(),
+    assertEquals(numberOfQuestionsThatCantBePrefilled(),
+        validationErrors(validateCertificate).size(),
         () -> "Should not return error, got '%s' errors".formatted(
             validationErrors(validateCertificate)));
   }
