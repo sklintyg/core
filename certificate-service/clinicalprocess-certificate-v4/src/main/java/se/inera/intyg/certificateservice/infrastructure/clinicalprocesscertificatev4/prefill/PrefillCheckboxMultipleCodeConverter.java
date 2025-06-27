@@ -43,6 +43,14 @@ public class PrefillCheckboxMultipleCodeConverter implements PrefillConverter {
       return null;
     }
 
+    if (!specification.includeInXml()) {
+      return PrefillAnswer.builder()
+          .elementData(
+              buildElementDataFromConfiguration(specification, configurationCheckboxMultipleCode)
+          )
+          .build();
+    }
+
     final var prefillErrors = new ArrayList<PrefillError>();
     final var data = ElementData.builder()
         .id(specification.id())
@@ -78,6 +86,40 @@ public class PrefillCheckboxMultipleCodeConverter implements PrefillConverter {
     return PrefillAnswer.builder()
         .elementData(data)
         .errors(prefillErrors)
+        .build();
+  }
+
+  /**
+   * Builds an {@link ElementData} containing all possible values from the configuration.
+   * <p>
+   * If {includeInXml} is {false}, we cannot prefill this value from the provided data. Therefore,
+   * we prefill it with all values defined in the configuration.
+   *
+   * @param specification                     The element specification.
+   * @param configurationCheckboxMultipleCode The configuration containing possible values.
+   * @return An {@link ElementData} with all values from the configuration.
+   */
+  private static ElementData buildElementDataFromConfiguration(ElementSpecification specification,
+      ElementConfigurationCheckboxMultipleCode configurationCheckboxMultipleCode) {
+    return ElementData.builder()
+        .id(specification.id())
+        .value(
+            ElementValueCodeList.builder()
+                .id(configurationCheckboxMultipleCode.id())
+                .list(
+                    configurationCheckboxMultipleCode.list().stream()
+                        .map(
+                            configuration ->
+                                ElementValueCode.builder()
+                                    .codeId(configuration.id())
+                                    .code(configuration.code().code())
+                                    .build()
+                        )
+                        .toList()
+                )
+                .build()
+        )
+
         .build();
   }
 

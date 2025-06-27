@@ -32,10 +32,6 @@ public abstract class CreateCertificateIT extends BaseIntegrationIT {
 
   protected abstract String wrongVersion();
 
-  protected Integer numberOfQuestionsThatCantBePrefilled() {
-    return 0;
-  }
-
 
   private String loadResourceAsString() throws IOException {
     try (InputStream inputStream = getClass().getClassLoader()
@@ -83,9 +79,8 @@ public abstract class CreateCertificateIT extends BaseIntegrationIT {
         certificateId(response.getBody())
     );
 
-    assertEquals(numberOfQuestionsThatCantBePrefilled(),
-        validationErrors(validateCertificate).size(),
-        () -> "Should not return error, got '%s' errors".formatted(
+    assertEquals(0, validationErrors(validateCertificate).size(),
+        () -> "Should not return validation errors, got '%s' errors".formatted(
             validationErrors(validateCertificate)));
   }
 

@@ -215,11 +215,6 @@ public class FK3221ActiveIT {
       return WRONG_VERSION;
     }
 
-    @Override
-    protected Integer numberOfQuestionsThatCantBePrefilled() {
-      return 1;
-    }
-
     protected static Stream<Arguments> rolesAccessToProtectedPerson() {
       return Stream.of(
           Arguments.of(AJLA_DOCTOR_DTO)

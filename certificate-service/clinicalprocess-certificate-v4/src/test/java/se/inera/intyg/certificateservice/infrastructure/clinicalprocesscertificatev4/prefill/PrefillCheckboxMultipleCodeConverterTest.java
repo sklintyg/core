@@ -185,6 +185,52 @@ class PrefillCheckboxMultipleCodeConverterTest {
           result.getErrors().getFirst().type()
       );
     }
+
+    @Test
+    void shouldPrefillFromConfigurationIfNotIncludedInXml() {
+      final var expectedElementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueCodeList.builder()
+                  .id(FIELD_ID)
+                  .list(
+                      List.of(
+                          ElementValueCode.builder()
+                              .codeId(CODE_FIELD_ID)
+                              .code(CODE)
+                              .build(),
+                          ElementValueCode.builder()
+                              .codeId(CODE_2_FIELD_ID)
+                              .code(CODE_2)
+                              .build()
+                      )
+                  )
+                  .build()
+          )
+          .build();
+      final var specification = ElementSpecification.builder()
+          .includeInXml(false)
+          .id(ELEMENT_ID)
+          .configuration(
+              ElementConfigurationCheckboxMultipleCode.builder()
+                  .id(FIELD_ID)
+                  .list(
+                      List.of(
+                          new ElementConfigurationCode(
+                              CODE_FIELD_ID, "Code 1", new Code(CODE, "S1", "D1")),
+                          new ElementConfigurationCode(
+                              CODE_2_FIELD_ID, "Code 2", new Code(CODE_2, "S1", "D2"))
+                      )
+                  )
+                  .build()
+          )
+          .build();
+
+      final var prefill = getPrefill();
+
+      final var result = prefillCheckboxMultipleCodeConverter.prefillAnswer(specification, prefill);
+      assertEquals(expectedElementData, result.getElementData());
+    }
   }
 
   private static Forifyllnad getPrefill() {
