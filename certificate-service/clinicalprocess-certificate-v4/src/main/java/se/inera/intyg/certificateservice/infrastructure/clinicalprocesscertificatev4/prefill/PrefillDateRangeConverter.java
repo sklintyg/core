@@ -85,10 +85,8 @@ public class PrefillDateRangeConverter implements PrefillConverter {
     if (!subAnswers.isEmpty()) {
       return subAnswers.getFirst().getContent();
     }
-    return answers.stream()
-        .map(Svar::getDelsvar)
-        .toList()
-        .getFirst()
+    return answers.getFirst()
+        .getDelsvar()
         .getFirst()
         .getContent();
   }

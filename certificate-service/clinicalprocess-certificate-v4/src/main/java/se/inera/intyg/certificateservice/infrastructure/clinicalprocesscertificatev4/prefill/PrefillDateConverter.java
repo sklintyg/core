@@ -76,10 +76,8 @@ public class PrefillDateConverter implements PrefillConverter {
     if (!subAnswers.isEmpty()) {
       return (String) subAnswers.getFirst().getContent().getFirst();
     }
-    return (String) answers.stream()
-        .map(Svar::getDelsvar)
-        .toList()
-        .getFirst()
+    return (String) answers.getFirst()
+        .getDelsvar()
         .getFirst()
         .getContent()
         .getFirst();

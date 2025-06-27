@@ -40,7 +40,7 @@ class PrefillUnmarshallerTest {
   }
 
   @Test
-  void shouldUnmarshalCvTypeCorrectly() throws Exception {
+  void shouldUnmarshalCvTypeCorrectly() {
     final var cvType = new CVType();
     cvType.setCode("CODE123");
     cvType.setDisplayName("Display Name");

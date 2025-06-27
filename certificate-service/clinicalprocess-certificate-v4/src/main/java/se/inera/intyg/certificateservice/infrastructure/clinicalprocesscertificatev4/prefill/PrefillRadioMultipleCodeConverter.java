@@ -61,7 +61,7 @@ public class PrefillRadioMultipleCodeConverter implements PrefillConverter {
 
     try {
       final var content = getContent(subAnswers, answers);
-      final var cvType = unmarshalType(List.of(content), CVType.class);
+      final var cvType = unmarshalType(content, CVType.class);
 
       final var code = cvType.orElseThrow().getCode();
 
@@ -96,16 +96,14 @@ public class PrefillRadioMultipleCodeConverter implements PrefillConverter {
         .id();
   }
 
-  private static Object getContent(List<Delsvar> subAnswers, List<Svar> answers) {
+  private static List<Object> getContent(List<Delsvar> subAnswers, List<Svar> answers) {
     if (!subAnswers.isEmpty()) {
-      return subAnswers.getFirst().getContent().getFirst();
+      return subAnswers.getFirst().getContent();
     }
-    return answers.stream()
-        .map(Svar::getDelsvar)
-        .toList()
+    return answers
         .getFirst()
+        .getDelsvar()
         .getFirst()
-        .getContent()
-        .getFirst();
+        .getContent();
   }
 }

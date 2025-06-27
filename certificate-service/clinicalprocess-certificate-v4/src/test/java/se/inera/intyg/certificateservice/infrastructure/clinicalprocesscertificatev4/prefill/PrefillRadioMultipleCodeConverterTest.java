@@ -2,12 +2,9 @@ package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertific
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.TestMarshaller.getElement;
 
-import jakarta.xml.bind.JAXBContext;
-import java.io.StringReader;
-import java.io.StringWriter;
 import java.util.List;
-import javax.xml.parsers.DocumentBuilderFactory;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Element;
@@ -219,25 +216,10 @@ class PrefillRadioMultipleCodeConverterTest {
     private static Element createCVTypeElement() {
       final var cvType = new CVType();
       cvType.setCode(CODE);
+      cvType.setCodeSystem("S1");
       cvType.setDisplayName("D1");
-
       final var factory = new ObjectFactory();
-      final var jaxbElement = factory.createCv(cvType);
-
-      try {
-        final var context = JAXBContext.newInstance(CVType.class);
-        final var marshaller = context.createMarshaller();
-        final var writer = new StringWriter();
-        marshaller.marshal(jaxbElement, writer);
-
-        final var docFactory = DocumentBuilderFactory.newInstance();
-        docFactory.setNamespaceAware(true);
-        final var doc = docFactory.newDocumentBuilder()
-            .parse(new org.xml.sax.InputSource(new StringReader(writer.toString())));
-        return doc.getDocumentElement();
-      } catch (Exception exception) {
-        throw new IllegalStateException(exception);
-      }
+      return getElement(cvType, factory::createCv);
     }
   }
 }

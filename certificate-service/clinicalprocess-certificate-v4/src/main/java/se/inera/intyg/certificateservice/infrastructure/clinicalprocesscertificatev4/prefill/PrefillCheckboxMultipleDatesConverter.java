@@ -103,16 +103,16 @@ public class PrefillCheckboxMultipleDatesConverter implements PrefillConverter {
     return LocalDate.parse((String) subAnswer.get().getContent().getFirst());
   }
 
-  private Code getCode(List<Delsvar> subAnswer, ElementSpecification specification) {
-    final var sunAnswer = subAnswer.stream()
+  private Code getCode(List<Delsvar> subAnswers, ElementSpecification specification) {
+    final var subAnswer = subAnswers.stream()
         .filter(d -> d.getId().equals(specification.id().id() + ".1"))
         .findFirst();
 
-    if (sunAnswer.isEmpty()) {
+    if (subAnswer.isEmpty()) {
       throw new IllegalStateException("Invalid format: code value is missing");
     }
 
-    final var cvType = PrefillUnmarshaller.cvType(sunAnswer.get().getContent());
+    final var cvType = PrefillUnmarshaller.cvType(subAnswer.get().getContent());
 
     if (cvType.isEmpty()) {
       throw new IllegalStateException("Invalid format: cvType is empty");
