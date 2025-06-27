@@ -23,15 +23,9 @@ public class PrefillAnswer {
         .build();
   }
 
-  public static PrefillAnswer subAnswerNotFound(String answerId, String sunAnswerId) {
+  public static PrefillAnswer invalidFormat(String answerId, String exceptionMessage) {
     return PrefillAnswer.builder()
-        .errors(List.of(PrefillError.subAnswerNotFound(answerId, sunAnswerId)))
-        .build();
-  }
-
-  public static PrefillAnswer invalidFormat() {
-    return PrefillAnswer.builder()
-        .errors(List.of(PrefillError.invalidFormat()))
+        .errors(List.of(PrefillError.invalidFormat(answerId, exceptionMessage)))
         .build();
   }
 }

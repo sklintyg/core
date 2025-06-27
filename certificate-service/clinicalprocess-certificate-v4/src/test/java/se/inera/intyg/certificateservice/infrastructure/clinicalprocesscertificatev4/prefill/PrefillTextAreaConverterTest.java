@@ -1,9 +1,8 @@
 package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import java.util.Collections;
-import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
@@ -13,18 +12,21 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorText;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.converter.PrefillTextAreaConverter;
+import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
+import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
+import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
 class PrefillTextAreaConverterTest {
 
   private static final ElementId ELEMENT_ID = new ElementId("1");
-  private static final FieldId RADIOTEXT_ID = new FieldId("2");
+  private static final FieldId TEXT_AREA_ID = new FieldId("2");
   private static final String TEXT = "Text";
   private static final ElementSpecification SPECIFICATION = ElementSpecification.builder()
       .id(ELEMENT_ID)
       .configuration(
           ElementConfigurationTextArea.builder()
-              .id(RADIOTEXT_ID)
+              .id(TEXT_AREA_ID)
               .build()
       )
       .build();
@@ -32,56 +34,82 @@ class PrefillTextAreaConverterTest {
       .id(ELEMENT_ID)
       .value(
           ElementValueText.builder()
-              .textId(RADIOTEXT_ID)
+              .textId(TEXT_AREA_ID)
               .text(TEXT)
               .build()
       ).build();
 
-  private final PrefillTextAreaConverter prefillRadioTextConverter = new PrefillTextAreaConverter();
-  private final XmlGeneratorText xmlGeneratorRadioText = new XmlGeneratorText();
+  private final PrefillTextAreaConverter prefillTextAreaConverter = new PrefillTextAreaConverter();
+
 
   @Test
-  void shouldReturnSupportsRadioText() {
-    assertEquals(ElementConfigurationTextArea.class, prefillRadioTextConverter.supports());
+  void shouldReturnSupportsTextArea() {
+    assertEquals(ElementConfigurationTextArea.class, prefillTextAreaConverter.supports());
   }
 
+
   @Nested
-  class Answer {
+  class PrefillAnswerWithForifyllnad {
+
 
     @Test
-    void shouldReturnEmptyListForUnknownIds() {
-      assertEquals(
-          Collections.emptyList(),
-          prefillRadioTextConverter.unknownIds(null, null)
-      );
+    void shouldReturnNullIfNoAnswersOrSubAnswers() {
+      Forifyllnad prefill = new Forifyllnad();
+
+      PrefillAnswer result = prefillTextAreaConverter.prefillAnswer(SPECIFICATION, prefill);
+
+      assertNull(result);
     }
 
     @Test
-    void shouldCreatPrefillAnswerForRadioText() {
+    void shouldReturnPrefillAnswerIfSubAnswerExists() {
+      final var prefill = new Forifyllnad();
+      final var svar = new Svar();
+      svar.setId("other");
+      final var delsvar = new Delsvar();
+      delsvar.setId(SPECIFICATION.id().id());
+      delsvar.getContent().add(TEXT);
+      svar.getDelsvar().add(delsvar);
+      prefill.getSvar().add(svar);
+
+      final var result = prefillTextAreaConverter.prefillAnswer(SPECIFICATION, prefill);
+
       final var expected = PrefillAnswer.builder()
           .elementData(EXPECTED_ELEMENT_DATA)
           .build();
 
-      final var answer = xmlGeneratorRadioText.generate(EXPECTED_ELEMENT_DATA, SPECIFICATION);
+      assertEquals(expected, result);
+    }
 
-      final var result = prefillRadioTextConverter.prefillAnswer(answer, SPECIFICATION);
+    @Test
+    void shouldReturnPrefillAnswerIfAnswerExists() {
+      final var prefill = new Forifyllnad();
+      final var svar = new Svar();
+      svar.setId(SPECIFICATION.id().id());
+      final var delsvar = new Delsvar();
+      delsvar.setId("other");
+      delsvar.getContent().add(TEXT);
+      svar.getDelsvar().add(delsvar);
+      prefill.getSvar().add(svar);
+
+      final var result = prefillTextAreaConverter.prefillAnswer(SPECIFICATION, prefill);
+
+      final var expected = PrefillAnswer.builder()
+          .elementData(EXPECTED_ELEMENT_DATA)
+          .build();
 
       assertEquals(expected, result);
     }
 
     @Test
     void shouldReturnErrorIfWrongConfigurationType() {
-      final var wrongConfiguration = ElementSpecification.builder()
+      final var prefill = new Forifyllnad();
+      final var wrongSpec = ElementSpecification.builder()
           .id(ELEMENT_ID)
           .configuration(ElementConfigurationCategory.builder().build())
           .build();
 
-      final var answer = xmlGeneratorRadioText.generate(
-          EXPECTED_ELEMENT_DATA,
-          wrongConfiguration
-      );
-
-      final var result = prefillRadioTextConverter.prefillAnswer(answer, wrongConfiguration);
+      final var result = prefillTextAreaConverter.prefillAnswer(wrongSpec, prefill);
 
       assertEquals(
           PrefillErrorType.TECHNICAL_ERROR,
@@ -90,90 +118,18 @@ class PrefillTextAreaConverterTest {
     }
 
     @Test
-    void shouldReturnErrorIfMoreThanOneAnswer() {
-      final var answer = xmlGeneratorRadioText.generate(
-          EXPECTED_ELEMENT_DATA,
-          SPECIFICATION
-      );
-      final var answer2 = xmlGeneratorRadioText.generate(
-          EXPECTED_ELEMENT_DATA,
-          SPECIFICATION
-      );
+    void shouldReturnErrorIfMultipleAnswers() {
+      final var prefill = new Forifyllnad();
+      final var svar1 = new Svar();
+      svar1.setId(SPECIFICATION.id().id());
 
-      final var result = prefillRadioTextConverter.prefillAnswer(
-          List.of(answer.getFirst(), answer2.getFirst()), SPECIFICATION);
+      final var svar2 = new Svar();
+      svar2.setId(SPECIFICATION.id().id());
 
-      assertEquals(
-          PrefillErrorType.WRONG_NUMBER_OF_ANSWERS,
-          result.getErrors().getFirst().type()
-      );
-    }
+      prefill.getSvar().add(svar1);
+      prefill.getSvar().add(svar2);
 
-    @Test
-    void shouldReturnErrorIfNoAnswers() {
-      final var result = prefillRadioTextConverter.prefillAnswer(List.of(), SPECIFICATION);
-
-      assertEquals(
-          PrefillErrorType.WRONG_NUMBER_OF_ANSWERS,
-          result.getErrors().getFirst().type()
-      );
-    }
-  }
-
-  @Nested
-  class SubAnswer {
-
-    @Test
-    void shouldReturnPrefillAnswerForSubAnswer() {
-      final var expected = PrefillAnswer.builder()
-          .elementData(EXPECTED_ELEMENT_DATA)
-          .build();
-
-      final var answer = xmlGeneratorRadioText.generate(EXPECTED_ELEMENT_DATA, SPECIFICATION);
-
-      final var result = prefillRadioTextConverter.prefillSubAnswer(
-          answer.getFirst().getDelsvar(),
-          SPECIFICATION);
-
-      assertEquals(expected, result);
-    }
-
-    @Test
-    void shouldReturnErrorIfWrongConfigurationTypeForSubAnswer() {
-      final var wrongConfiguration = ElementSpecification.builder()
-          .id(ELEMENT_ID)
-          .configuration(ElementConfigurationCategory.builder().build())
-          .build();
-
-      final var answer = xmlGeneratorRadioText.generate(
-          EXPECTED_ELEMENT_DATA,
-          wrongConfiguration
-      );
-
-      final var result = prefillRadioTextConverter.prefillSubAnswer(
-          answer.getFirst().getDelsvar(),
-          wrongConfiguration);
-
-      assertEquals(
-          PrefillErrorType.TECHNICAL_ERROR,
-          result.getErrors().getFirst().type()
-      );
-    }
-
-    @Test
-    void shouldReturnErrorIfMoreThanOneSubAnswer() {
-      final var answer = xmlGeneratorRadioText.generate(
-          EXPECTED_ELEMENT_DATA,
-          SPECIFICATION
-      );
-      final var answer2 = xmlGeneratorRadioText.generate(
-          EXPECTED_ELEMENT_DATA,
-          SPECIFICATION
-      );
-
-      final var result = prefillRadioTextConverter.prefillSubAnswer(
-          List.of(answer.getFirst().getDelsvar().getFirst(),
-              answer2.getFirst().getDelsvar().getFirst()), SPECIFICATION);
+      final var result = prefillTextAreaConverter.prefillAnswer(SPECIFICATION, prefill);
 
       assertEquals(
           PrefillErrorType.WRONG_NUMBER_OF_ANSWERS,
@@ -182,8 +138,43 @@ class PrefillTextAreaConverterTest {
     }
 
     @Test
-    void shouldReturnErrorIfNoSubAnswers() {
-      final var result = prefillRadioTextConverter.prefillSubAnswer(List.of(), SPECIFICATION);
+    void shouldReturnErrorIfMultipleSubAnswers() {
+      final var prefill = new Forifyllnad();
+      final var svar1 = new Svar();
+      svar1.setId("other");
+      final var delsvar1 = new Delsvar();
+      delsvar1.setId(SPECIFICATION.id().id());
+      delsvar1.getContent().add(TEXT);
+      svar1.getDelsvar().add(delsvar1);
+
+      final var delsvar2 = new Delsvar();
+      delsvar2.setId(SPECIFICATION.id().id());
+      delsvar2.getContent().add(TEXT);
+      svar1.getDelsvar().add(delsvar2);
+
+      prefill.getSvar().add(svar1);
+
+      final var result = prefillTextAreaConverter.prefillAnswer(SPECIFICATION, prefill);
+
+      assertEquals(
+          PrefillErrorType.WRONG_NUMBER_OF_ANSWERS,
+          result.getErrors().getFirst().type()
+      );
+    }
+
+    @Test
+    void shouldReturnErrorIfBothSubAnswerAndAnswerIsPresent() {
+      final var prefill = new Forifyllnad();
+      final var svar1 = new Svar();
+      svar1.setId(SPECIFICATION.id().id());
+      final var delsvar1 = new Delsvar();
+      delsvar1.setId(SPECIFICATION.id().id());
+      delsvar1.getContent().add(TEXT);
+      svar1.getDelsvar().add(delsvar1);
+
+      prefill.getSvar().add(svar1);
+
+      final var result = prefillTextAreaConverter.prefillAnswer(SPECIFICATION, prefill);
 
       assertEquals(
           PrefillErrorType.WRONG_NUMBER_OF_ANSWERS,

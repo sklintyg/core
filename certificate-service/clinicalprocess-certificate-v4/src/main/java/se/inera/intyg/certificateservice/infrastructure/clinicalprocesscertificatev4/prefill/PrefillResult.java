@@ -12,8 +12,6 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
 @Data
@@ -34,48 +32,10 @@ public class PrefillResult {
         .prefill(unmarshalledPrefill)
         .prefilledAnswers(new ArrayList<>()).build();
   }
-  
+
   public void prefill() {
-    addErrorForUnknownAnswerIds();
-    prefillAnswers();
-    prefillSubAnswers();
-  }
-
-  private void addErrorForUnknownAnswerIds() {
-    prefill.getSvar().forEach(answer ->
-        prefilledAnswers.addAll(prefillHandler.unknownAnswerIds(answer,
-            certificateModel)
-        )
-    );
-  }
-
-  private void prefillSubAnswers() {
-
-    prefill.getSvar().forEach(
-        answer -> {
-          final var subAnswers = answer.getDelsvar().stream()
-              .filter(subAnswer -> certificateModel.elementSpecificationExists(
-                  new ElementId(subAnswer.getId())))
-              .collect(Collectors.groupingBy(Svar.Delsvar::getId));
-
-          subAnswers.forEach((key, value) -> prefilledAnswers.add(
-              prefillHandler.prefillSubAnswer(value,
-                  certificateModel.elementSpecification(new ElementId(key)))
-          ));
-        });
-  }
-
-  private void prefillAnswers() {
-    prefilledAnswers.addAll(prefill.getSvar().stream()
-        .filter(
-            answer -> certificateModel.elementSpecificationExists(new ElementId(answer.getId())))
-        .collect(Collectors.groupingBy(Svar::getId))
-        .entrySet().stream()
-        .map(entry -> prefillHandler.prefillAnswer(entry.getValue(),
-            certificateModel.elementSpecification(new ElementId(entry.getKey()))))
-        .toList()
-    );
-
+    prefilledAnswers.addAll(prefillHandler.unknownAnswerIds(certificateModel, prefill));
+    prefilledAnswers.addAll(prefillHandler.handlePrefill(certificateModel, prefill));
   }
 
   public Set<ElementData> prefilledElements() {
@@ -86,6 +46,9 @@ public class PrefillResult {
   }
 
   public String toJsonReport() {
+    if (!containsError()) {
+      return "Success";
+    }
     try {
       return new ObjectMapper().writeValueAsString(
           this.prefilledAnswers.stream()
@@ -98,4 +61,9 @@ public class PrefillResult {
     }
   }
 
+  public boolean containsError() {
+    return prefilledAnswers.stream()
+        .flatMap(e -> e.getErrors().stream())
+        .anyMatch(Objects::nonNull);
+  }
 }

@@ -17,25 +17,6 @@ class PrefillErrorTest {
   }
 
   @Test
-  void shouldReturnSubAnswerNotFoundError() {
-    var error = PrefillError.subAnswerNotFound("MI1", "MI1.1");
-    assertAll(
-        () -> assertEquals(PrefillErrorType.SUB_ANSWER_NOT_FOUND, error.type()),
-        () -> assertEquals("Sub-answer with id MI1.1 not found in answer with id MI1",
-            error.details())
-    );
-  }
-
-  @Test
-  void shouldReturnWrongNumberOfAnswersError() {
-    var error = PrefillError.wrongNumberOfAnswers(1, 2);
-    assertAll(
-        () -> assertEquals(PrefillErrorType.WRONG_NUMBER_OF_ANSWERS, error.type()),
-        () -> assertEquals("Expected 1 answers but got 2", error.details())
-    );
-  }
-
-  @Test
   void shouldReturnTechnicalError() {
     var error = PrefillError.technicalError("investigation failed");
     assertAll(
@@ -55,30 +36,10 @@ class PrefillErrorTest {
 
   @Test
   void shouldReturnInvalidFormatError() {
-    var error = PrefillError.invalidFormat();
+    var error = PrefillError.invalidFormat("id", "message");
     assertAll(
         () -> assertEquals(PrefillErrorType.INVALID_FORMAT, error.type()),
-        () -> assertEquals("Invalid format", error.details())
-    );
-  }
-
-  @Test
-  void shouldReturnSubAnswersNotFoundError() {
-    var error = PrefillError.subAnswersNotFound("MI2");
-    assertAll(
-        () -> assertEquals(PrefillErrorType.SUB_ANSWER_NOT_FOUND, error.type()),
-        () -> assertEquals("Sub-answer expected in answer with id MI2", error.details())
-    );
-  }
-
-  @Test
-  void shouldReturnUnmarshallingError() {
-    var error = PrefillError.unmarshallingError("MI5", "MI5.1");
-    assertAll(
-        () -> assertEquals(PrefillErrorType.UNMARSHALL_ERROR, error.type()),
-        () -> assertEquals(
-            "Content of sub-answer with id MI5 in answer with id MI5.1 could not be unmarshalled",
-            error.details())
+        () -> assertEquals("Invalid format for answer id 'id' - reason: message", error.details())
     );
   }
 

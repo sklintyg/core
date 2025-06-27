@@ -32,7 +32,7 @@ public class PrefillService implements PrefillProcessor {
         prefillHandler
     );
 
-    log.info("Begin prefilling answers for certificate %s".formatted(certificateModel.id()));
+    log.info("Begin prefilling answers for certificate {}", certificateModel.id());
     prefillResult.prefill();
 
     log.info("Prefill result log: {}", prefillResult.toJsonReport());

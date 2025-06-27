@@ -18,14 +18,6 @@ public final class PrefillUnmarshaller {
   private PrefillUnmarshaller() {
   }
 
-  public static Optional<String> unmarshallString(List<Object> content) {
-    try {
-      return Optional.of((String) content.getFirst());
-    } catch (Exception e) {
-      return Optional.empty();
-    }
-  }
-
   public static <T> Optional<T> unmarshalType(List<Object> content, Class<T> clazz) {
     final var contentObj = content.stream()
         .filter(obj -> obj instanceof org.w3c.dom.Element)
@@ -53,7 +45,7 @@ public final class PrefillUnmarshaller {
       final var jaxbElement = (JAXBElement<T>) unmarshaller.unmarshal(stringReader);
       return Optional.of(jaxbElement.getValue());
     } catch (Exception ex) {
-      log.warn("Failed to unmarshal " + clazz.getSimpleName(), ex);
+      log.warn("Failed to unmarshal {}", clazz.getSimpleName(), ex);
       return Optional.empty();
     }
   }
