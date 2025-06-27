@@ -124,7 +124,7 @@ public class PrefillVisualAcuitiesConverter implements PrefillConverter {
             subAnswerWithCorrectionId.map(value ->
                     Correction.builder()
                         .id(new FieldId(elementVisualAcuity.withCorrectionId()))
-                        .value((Double) value)
+                        .value(Double.parseDouble(((String) value).replace(",", ".")))
                         .build()
                 )
                 .orElse(null)
@@ -133,7 +133,7 @@ public class PrefillVisualAcuitiesConverter implements PrefillConverter {
             subAnswerWithoutCorrectionId.map(value ->
                     Correction.builder()
                         .id(new FieldId(elementVisualAcuity.withoutCorrectionId()))
-                        .value((Double) value)
+                        .value(Double.parseDouble(((String) value).replace(",", ".")))
                         .build()
                 )
                 .orElse(null)

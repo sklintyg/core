@@ -203,22 +203,22 @@ class PrefillVisualAcuitiesConverterTest {
 
       final var delsvar1 = new Delsvar();
       delsvar1.setId(RIGHT_EYE_WITH_CORRECTION_ID);
-      delsvar1.getContent().add(1.1);
+      delsvar1.getContent().add("1,1");
       final var delsvar2 = new Delsvar();
       delsvar2.setId(RIGHT_EYE_WITHOUT_CORRECTION_ID);
-      delsvar2.getContent().add(1.2);
+      delsvar2.getContent().add("1,2");
       final var delsvar3 = new Delsvar();
       delsvar3.setId(LEFT_EYE_WITH_CORRECTION_ID);
-      delsvar3.getContent().add(1.3);
+      delsvar3.getContent().add("1,3");
       final var delsvar4 = new Delsvar();
       delsvar4.setId(LEFT_EYE_WITHOUT_CORRECTION_ID);
-      delsvar4.getContent().add(1.4);
+      delsvar4.getContent().add("1,4");
       final var delsvar5 = new Delsvar();
       delsvar5.setId(BINOCULAR_WITH_CORRECTION_ID);
-      delsvar5.getContent().add(1.5);
+      delsvar5.getContent().add("1,5");
       final var delsvar6 = new Delsvar();
       delsvar6.setId(BINOCULAR_WITHOUT_CORRECTION_ID);
-      delsvar6.getContent().add(1.6);
+      delsvar6.getContent().add("1,6");
 
       svar.getDelsvar().add(delsvar1);
       svar.getDelsvar().add(delsvar2);
@@ -280,13 +280,13 @@ class PrefillVisualAcuitiesConverterTest {
 
       final var delsvar1 = new Delsvar();
       delsvar1.setId(RIGHT_EYE_WITH_CORRECTION_ID);
-      delsvar1.getContent().add(1.1);
+      delsvar1.getContent().add("1,1");
       final var delsvar2 = new Delsvar();
       delsvar2.setId(RIGHT_EYE_WITHOUT_CORRECTION_ID);
-      delsvar2.getContent().add(1.2);
+      delsvar2.getContent().add("1,2");
       final var delsvar3 = new Delsvar();
       delsvar3.setId(LEFT_EYE_WITH_CORRECTION_ID);
-      delsvar3.getContent().add(1.3);
+      delsvar3.getContent().add("1,3");
 
       svar.getDelsvar().add(delsvar1);
       svar.getDelsvar().add(delsvar2);
