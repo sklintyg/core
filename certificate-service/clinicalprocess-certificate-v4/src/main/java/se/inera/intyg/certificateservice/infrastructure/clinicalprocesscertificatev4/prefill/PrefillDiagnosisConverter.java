@@ -13,6 +13,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDi
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfiguration;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.domain.diagnosiscode.model.DiagnosisCode;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.util.PrefillValidator;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.CVType;
@@ -24,7 +25,7 @@ import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 @RequiredArgsConstructor
 public class PrefillDiagnosisConverter implements PrefillConverter {
 
-  private static final int MINIMUM_SUB_ANSWERS = 2;
+  private static final int MINIMUM_SUB_ANSWERS = 1;
   private static final String CV_TYPE_IDENTIFIER = "%s.2";
   private static final String DESCRIPTION_IDENTIFIER = "%s.1";
   private final DiagnosisCodeRepository diagnosisCodeRepository;
@@ -59,40 +60,36 @@ public class PrefillDiagnosisConverter implements PrefillConverter {
             ElementValueDiagnosisList.builder()
                 .diagnoses(
                     answers.stream()
-                        .map(
-                            answer -> {
-                              try {
-                                final var subAnswerValidationError = PrefillValidator.validateMinimumNumberOfDelsvar(
-                                    answer,
-                                    MINIMUM_SUB_ANSWERS,
-                                    specification);
+                        .map(answer -> {
+                          try {
+                            final var subAnswerError = PrefillValidator.validateMinimumNumberOfDelsvar(
+                                answer,
+                                MINIMUM_SUB_ANSWERS,
+                                specification);
 
-                                final var diagnosisCodeValidationError = PrefillValidator.validateDiagnosisCode(
-                                    getCvTypes(specification, answer),
-                                    diagnosisCodeRepository
-                                );
+                            final var codeError = PrefillValidator.validateDiagnosisCode(
+                                getCvTypes(specification, answer),
+                                diagnosisCodeRepository
+                            );
 
-                                if (validationFailed(subAnswerValidationError,
-                                    diagnosisCodeValidationError)) {
-                                  prefillErrors.addAll(getValidationErrors(
-                                      subAnswerValidationError,
-                                      diagnosisCodeValidationError));
-                                  return null;
-                                }
+                            if (validationFailed(subAnswerError, codeError)) {
+                              prefillErrors.addAll(getValidationErrors(subAnswerError, codeError));
+                              return null;
+                            }
 
-                                final var instance = answer.getInstans() - 1;
-                                return toElementValueDiagnosis(
-                                    answer.getDelsvar(),
-                                    elementConfigurationDiagnosis,
-                                    instance,
-                                    specification
-                                );
-                              } catch (Exception e) {
-                                prefillErrors.add(
-                                    PrefillError.invalidFormat(answer.getId(), e.getMessage()));
-                                return null;
-                              }
-                            })
+                            final var instance = answer.getInstans() - 1;
+                            return toElementValueDiagnosis(
+                                answer.getDelsvar(),
+                                elementConfigurationDiagnosis,
+                                instance,
+                                specification
+                            );
+                          } catch (Exception e) {
+                            prefillErrors.add(
+                                PrefillError.invalidFormat(answer.getId(), e.getMessage()));
+                            return null;
+                          }
+                        })
                         .filter(Objects::nonNull)
                         .toList())
                 .build())
@@ -117,7 +114,8 @@ public class PrefillDiagnosisConverter implements PrefillConverter {
       ElementConfigurationDiagnosis elementConfigurationDiagnosis, Integer instance,
       ElementSpecification specification) {
     final var subAnswerCode = getSubAnswerCode(subAnswers, specification);
-    final var subAnswerDescription = getSubAnswerDescription(subAnswers, specification);
+    final var subAnswerDescription = getSubAnswerDescription(subAnswers, specification,
+        subAnswerCode.getCode());
 
     return ElementValueDiagnosis.builder()
         .id(elementConfigurationDiagnosis.list().get(instance).id())
@@ -138,8 +136,18 @@ public class PrefillDiagnosisConverter implements PrefillConverter {
         .orElseThrow();
   }
 
-  private static String getSubAnswerDescription(List<Delsvar> subAnswers,
-      ElementSpecification specification) {
+  /**
+   * Retrieves the description from the subAnswers list. If the description is not present in the
+   * Delsvar, it falls back to using the description associated with the diagnosis code from the
+   * repository.
+   *
+   * @param subAnswers    List of Delsvar objects to search for the description.
+   * @param specification The element specification.
+   * @param code          The diagnosis code used to fetch the description if missing.
+   * @return The description string.
+   */
+  private String getSubAnswerDescription(List<Delsvar> subAnswers,
+      ElementSpecification specification, String code) {
     return subAnswers.stream()
         .filter(subAnswer -> subAnswer.getId()
             .equals(DESCRIPTION_IDENTIFIER.formatted(specification.id().id()))
@@ -147,7 +155,8 @@ public class PrefillDiagnosisConverter implements PrefillConverter {
         .map(subAnswer -> subAnswer.getContent().getFirst())
         .findFirst()
         .map(String.class::cast)
-        .orElseThrow();
+        .orElseGet(() -> diagnosisCodeRepository.getByCode(new DiagnosisCode(code)).description()
+            .description());
   }
 
   private static String getTerminology(ElementConfigurationDiagnosis elementConfigurationDiagnosis,

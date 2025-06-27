@@ -7,23 +7,22 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ALVA_VARDADMINISTRATOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ajlaDoktorDtoBuilder;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customCreateCertificateRequest;
-import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customTestabilityCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customValidateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCreateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificate;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateId;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.validationErrors;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
 import se.inera.intyg.certificateservice.application.certificate.dto.PrefillXmlDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
-import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityFillTypeDTO;
 
 public abstract class CreateCertificateIT extends BaseIntegrationIT {
 
@@ -32,6 +31,10 @@ public abstract class CreateCertificateIT extends BaseIntegrationIT {
   protected abstract String typeVersion();
 
   protected abstract String wrongVersion();
+
+  protected Integer numberOfQuestionsThatCantBePrefilled() {
+    return 0;
+  }
 
 
   private String loadResourceAsString() throws IOException {
@@ -59,33 +62,31 @@ public abstract class CreateCertificateIT extends BaseIntegrationIT {
   }
 
   @Test
-  @Disabled
-  @DisplayName("Om förifyllnadsinformation finns ska utkastet som returneras innehålla svaren")
+  @DisplayName("Om ett utkast förifylls med komplett intygsinformation ska inga valideringsfel visas")
   void shallReturnCertificateWithPrefilledAnswers() throws IOException {
     final var xml = new Xml(loadResourceAsString());
-    final var createCertificateRequestBuilder = customCreateCertificateRequest(type(),
-        typeVersion())
-        .prefillXml(new PrefillXmlDTO(xml.base64()));
+    final var createCertificateRequest =
+        customCreateCertificateRequest(
+            type(),
+            typeVersion())
+            .prefillXml(new PrefillXmlDTO(xml.base64()))
+            .build();
 
     final var response = api.createCertificate(
-        createCertificateRequestBuilder.build()
+        createCertificateRequest
     );
 
-    final var data = response.getBody().getCertificate().getData().values().stream()
-        .map(CertificateDataElement::getValue)
-        .toList();
+    final var validateCertificate = api.validateCertificate(
+        customValidateCertificateRequest()
+            .certificate(certificate(response.getBody()))
+            .build(),
+        certificateId(response.getBody())
+    );
 
-    final var testCertificate = testabilityApi.addCertificates(
-        customTestabilityCertificateRequest(type(), typeVersion())
-            .fillType(TestabilityFillTypeDTO.MAXIMAL)
-            .build()
-    ).getFirst();
-
-    final var expected = testCertificate.getCertificate().getData().values().stream()
-        .map(CertificateDataElement::getValue)
-        .toList();
-
-    assertEquals(expected, data, "Should return certificate with prefilled answers!");
+    assertEquals(numberOfQuestionsThatCantBePrefilled(),
+        validationErrors(validateCertificate).size(),
+        () -> "Should not return error, got '%s' errors".formatted(
+            validationErrors(validateCertificate)));
   }
 
   @Test
