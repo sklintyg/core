@@ -3,7 +3,6 @@ package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertific
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
