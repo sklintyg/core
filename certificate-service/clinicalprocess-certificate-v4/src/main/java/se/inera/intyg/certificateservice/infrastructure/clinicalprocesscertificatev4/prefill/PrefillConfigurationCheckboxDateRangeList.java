@@ -52,7 +52,7 @@ public class PrefillConfigurationCheckboxDateRangeList implements PrefillConvert
 
                     final var dateContent = getDateContent(svar, specification);
                     final var datePeriodAnswer = PrefillUnmarshaller.datePeriodType(
-                        List.of(dateContent)
+                        dateContent
                     );
 
                     final var code = getCode(svar.getDelsvar(), specification);
@@ -117,13 +117,12 @@ public class PrefillConfigurationCheckboxDateRangeList implements PrefillConvert
     return new Code(cv.getCode(), cv.getCodeSystem(), cv.getDisplayName());
   }
 
-  private static Object getDateContent(Svar answer, ElementSpecification specification) {
+  private static List<Object> getDateContent(Svar answer, ElementSpecification specification) {
     return answer.getDelsvar()
         .stream()
         .filter(d -> d.getId().equals(specification.id().id() + ".2"))
         .findFirst()
         .orElseThrow()
-        .getContent()
-        .getFirst();
+        .getContent();
   }
 }
