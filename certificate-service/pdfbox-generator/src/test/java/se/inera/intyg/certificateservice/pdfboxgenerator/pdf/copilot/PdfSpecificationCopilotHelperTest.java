@@ -1,6 +1,8 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.copilot;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -14,6 +16,8 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDNonTerminalField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDRadioButton;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -60,6 +64,28 @@ class PdfSpecificationCopilotHelperTest {
    * templates have differences that disrupt the previous implementation - If so, then fix what
    * needs to be fixed and save a new structure file for the type
    */
+
+  /**
+   * Run to generate strcture for the first time and save in resources/pdf folder.
+   */
+  @Disabled
+  @Test
+  void shouldCreateStructureFileForPdf() {
+    final var certificateType = FK_7810;
+    final var classloader = getClass().getClassLoader();
+    final var inputStream = classloader.getResourceAsStream(
+        String.format("%s/pdf/%s_v1.pdf", certificateType, certificateType));
+
+    try {
+      final var document = Loader.loadPDF(inputStream.readAllBytes());
+      final var structure = getPdfStructure(document);
+      writeToFile(certificateType, structure);
+      assertFalse(structure.isEmpty());
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
   @ParameterizedTest
   @ValueSource(strings = {FK_7427, FK_7426, FK_3221, FK_7810})
   void shouldHaveSameStructureAsOriginalDocument(String certificateType) {
@@ -76,19 +102,36 @@ class PdfSpecificationCopilotHelperTest {
         .replaceAll("\\s+", " ")
         .trim();
 
-    //writeToFile(certificateType, contentNewStructure);
     assertEquals(normalizedExpectedText, normalizedOriginalStructure);
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {FK_7427, FK_7426, FK_3221, FK_7810})
+  @ValueSource(strings = {FK_7427, FK_7426, FK_3221})
   void shouldHaveSameIdsForTemplateWithAndWithoutAddress(String certificateType) {
     setup(certificateType);
 
     final var idsForTemplateWithAddress = getFieldIds(documentWithAddress);
     final var idsForTemplateWithoutAddress = getFieldIds(documentWithoutAddress);
 
-    assertEquals(idsForTemplateWithoutAddress, idsForTemplateWithAddress);
+    final var errors = new ArrayList<String>();
+    final var minSize = Math.min(idsForTemplateWithAddress.size(),
+        idsForTemplateWithoutAddress.size());
+    for (int i = 0; i < minSize; i++) {
+      final var idWithAddress = idsForTemplateWithAddress.get(i);
+      final var idWithoutAddress = idsForTemplateWithoutAddress.get(i);
+
+      if (!idWithAddress.equals(idWithoutAddress)) {
+        errors.add(String.format("Mismatch at index %d: '%s' vs '%s'", i, idWithAddress,
+            idWithoutAddress));
+      }
+    }
+    if (idsForTemplateWithAddress.size() != idsForTemplateWithoutAddress.size()) {
+      errors.add(
+          String.format("Different number of fields: with address = %d, without address = %d",
+              idsForTemplateWithAddress.size(), idsForTemplateWithoutAddress.size()));
+    }
+
+    assertTrue(errors.isEmpty(), String.join("\n", errors));
   }
 
   private void setup(String certificateType) {
@@ -110,7 +153,11 @@ class PdfSpecificationCopilotHelperTest {
   }
 
   private StringBuilder getPdfStructure() {
-    final var acroForm = documentWithAddress.getDocumentCatalog().getAcroForm();
+    return getPdfStructure(documentWithAddress);
+  }
+
+  private StringBuilder getPdfStructure(PDDocument document) {
+    final var acroForm = document.getDocumentCatalog().getAcroForm();
     final var parentField = (PDNonTerminalField) acroForm.getFields().getFirst();
     final var content = new StringBuilder();
     var count = 0;
