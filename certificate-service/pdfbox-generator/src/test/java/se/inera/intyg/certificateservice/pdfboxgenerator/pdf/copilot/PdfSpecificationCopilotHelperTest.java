@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.copilot;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.BufferedReader;
@@ -15,6 +16,8 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDNonTerminalField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDRadioButton;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -61,6 +64,28 @@ class PdfSpecificationCopilotHelperTest {
    * templates have differences that disrupt the previous implementation - If so, then fix what
    * needs to be fixed and save a new structure file for the type
    */
+
+  /**
+   * Run to generate strcture for the first time and save in resources/pdf folder.
+   */
+  @Disabled
+  @Test
+  void shouldCreateStructureFileForPdf() {
+    final var certificateType = FK_7810;
+    final var classloader = getClass().getClassLoader();
+    final var inputStream = classloader.getResourceAsStream(
+        String.format("%s/pdf/%s_v1.pdf", certificateType, certificateType));
+
+    try {
+      final var document = Loader.loadPDF(inputStream.readAllBytes());
+      final var structure = getPdfStructure(document);
+      writeToFile(certificateType, structure);
+      assertFalse(structure.isEmpty());
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
   @ParameterizedTest
   @ValueSource(strings = {FK_7427, FK_7426, FK_3221, FK_7810})
   void shouldHaveSameStructureAsOriginalDocument(String certificateType) {
@@ -77,7 +102,6 @@ class PdfSpecificationCopilotHelperTest {
         .replaceAll("\\s+", " ")
         .trim();
 
-    //writeToFile(certificateType, contentNewStructure);
     assertEquals(normalizedExpectedText, normalizedOriginalStructure);
   }
 
@@ -129,7 +153,11 @@ class PdfSpecificationCopilotHelperTest {
   }
 
   private StringBuilder getPdfStructure() {
-    final var acroForm = documentWithAddress.getDocumentCatalog().getAcroForm();
+    return getPdfStructure(documentWithAddress);
+  }
+
+  private StringBuilder getPdfStructure(PDDocument document) {
+    final var acroForm = document.getDocumentCatalog().getAcroForm();
     final var parentField = (PDNonTerminalField) acroForm.getFields().getFirst();
     final var content = new StringBuilder();
     var count = 0;
