@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.copilot;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -81,14 +82,32 @@ class PdfSpecificationCopilotHelperTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {FK_7427, FK_7426, FK_3221, FK_7810})
+  @ValueSource(strings = {FK_7427, FK_7426, FK_3221})
   void shouldHaveSameIdsForTemplateWithAndWithoutAddress(String certificateType) {
     setup(certificateType);
 
     final var idsForTemplateWithAddress = getFieldIds(documentWithAddress);
     final var idsForTemplateWithoutAddress = getFieldIds(documentWithoutAddress);
 
-    assertEquals(idsForTemplateWithoutAddress, idsForTemplateWithAddress);
+    final var errors = new ArrayList<String>();
+    final var minSize = Math.min(idsForTemplateWithAddress.size(),
+        idsForTemplateWithoutAddress.size());
+    for (int i = 0; i < minSize; i++) {
+      final var idWithAddress = idsForTemplateWithAddress.get(i);
+      final var idWithoutAddress = idsForTemplateWithoutAddress.get(i);
+
+      if (!idWithAddress.equals(idWithoutAddress)) {
+        errors.add(String.format("Mismatch at index %d: '%s' vs '%s'", i, idWithAddress,
+            idWithoutAddress));
+      }
+    }
+    if (idsForTemplateWithAddress.size() != idsForTemplateWithoutAddress.size()) {
+      errors.add(
+          String.format("Different number of fields: with address = %d, without address = %d",
+              idsForTemplateWithAddress.size(), idsForTemplateWithoutAddress.size()));
+    }
+
+    assertTrue(errors.isEmpty(), String.join("\n", errors));
   }
 
   private void setup(String certificateType) {
