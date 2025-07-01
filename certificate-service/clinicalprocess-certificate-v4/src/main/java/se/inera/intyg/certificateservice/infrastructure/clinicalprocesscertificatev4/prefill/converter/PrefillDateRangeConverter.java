@@ -46,12 +46,15 @@ public class PrefillDateRangeConverter implements PrefillConverter {
       return null;
     }
 
-    final var prefillError = PrefillValidator.validateSingleAnswerOrSubAnswer(answers, subAnswers,
-        specification);
+    final var prefillError = PrefillValidator.validateSingleAnswerOrSubAnswer(
+        answers,
+        subAnswers,
+        specification
+    );
 
-    if (prefillError != null) {
+    if (!prefillError.isEmpty()) {
       return PrefillAnswer.builder()
-          .errors(List.of(prefillError))
+          .errors(prefillError)
           .build();
     }
 

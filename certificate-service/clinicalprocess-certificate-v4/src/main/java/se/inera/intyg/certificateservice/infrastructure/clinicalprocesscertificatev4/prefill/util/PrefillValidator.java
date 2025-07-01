@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.util;
 
+import java.util.ArrayList;
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.model.DiagnosisCode;
@@ -15,25 +16,30 @@ public class PrefillValidator {
     throw new IllegalStateException("Utility class");
   }
 
-  public static PrefillError validateSingleAnswerOrSubAnswer(List<Svar> answers,
+  public static List<PrefillError> validateSingleAnswerOrSubAnswer(List<Svar> answers,
       List<Delsvar> subAnswers,
       ElementSpecification specification) {
+    final var prefillErrors = new ArrayList<PrefillError>();
     if (answers.size() > 1) {
-      return PrefillError.wrongNumberOfAnswers(specification.id().id(), 1, answers.size());
+      prefillErrors.add(
+          PrefillError.wrongNumberOfAnswers(specification.id().id(), 1, answers.size())
+      );
     }
     if (subAnswers.size() > 1) {
-      return PrefillError.wrongNumberOfSubAnswers(specification.id().id(), 1, subAnswers.size());
-
+      prefillErrors.add(
+          PrefillError.wrongNumberOfSubAnswers(specification.id().id(), 1, subAnswers.size())
+      );
     }
     if (!answers.isEmpty() && !subAnswers.isEmpty()) {
-      return PrefillError.duplicateAnswer(specification.id().id());
+      prefillErrors.add(PrefillError.duplicateAnswer(specification.id().id()));
     }
 
-    return null;
+    return prefillErrors;
   }
 
-  public static PrefillError validateMinimumNumberOfDelsvar(List<Svar> answers, int minimum,
+  public static List<PrefillError> validateMinimumNumberOfDelsvar(List<Svar> answers, int minimum,
       ElementSpecification specification) {
+    final var prefillErrors = new ArrayList<PrefillError>();
     final var hasTooFewDelsvar = answers.stream()
         .anyMatch(answer -> answer.getDelsvar().size() < minimum);
 
@@ -46,26 +52,31 @@ public class PrefillValidator {
           .mapToInt(List::size)
           .sum();
 
-      return PrefillError.wrongNumberOfSubAnswers(
-          specification.id().id(),
-          minimum,
-          numberOfSubAnswers
+      prefillErrors.add(
+          PrefillError.wrongNumberOfSubAnswers(
+              specification.id().id(),
+              minimum,
+              numberOfSubAnswers
+          )
       );
     }
-    return null;
+
+    return prefillErrors;
   }
 
-  public static PrefillError validateDiagnosisCode(List<CVType> cvTypes,
+  public static List<PrefillError> validateDiagnosisCode(List<CVType> cvTypes,
       DiagnosisCodeRepository diagnosisCodeRepository) {
-
+    final var prefillErrors = new ArrayList<PrefillError>();
     final var diagnosisCodeIsInvalid = cvTypes.stream()
         .map(CVType::getCode)
         .anyMatch(code -> diagnosisCodeRepository.findByCode(new DiagnosisCode(code)).isEmpty());
 
     if (diagnosisCodeIsInvalid) {
-      return PrefillError.invalidDiagnosisCode(getCode(cvTypes, diagnosisCodeRepository));
+      prefillErrors.add(
+          PrefillError.invalidDiagnosisCode(getCode(cvTypes, diagnosisCodeRepository))
+      );
     }
-    return null;
+    return prefillErrors;
   }
 
   private static String getCode(List<CVType> cvTypes,
@@ -80,15 +91,17 @@ public class PrefillValidator {
         .orElseThrow();
   }
 
-  public static PrefillError validateMinimumNumberOfDelsvar(Svar s, int minimumSubAnswers,
+  public static List<PrefillError> validateMinimumNumberOfDelsvar(Svar s, int minimumSubAnswers,
       ElementSpecification specification) {
+    final var prefillErrors = new ArrayList<PrefillError>();
     if (s.getDelsvar().size() < minimumSubAnswers) {
-      return PrefillError.wrongNumberOfSubAnswers(
-          specification.id().id(),
-          minimumSubAnswers,
-          s.getDelsvar().size()
+      prefillErrors.add(PrefillError.wrongNumberOfSubAnswers(
+              specification.id().id(),
+              minimumSubAnswers,
+              s.getDelsvar().size()
+          )
       );
     }
-    return null;
+    return prefillErrors;
   }
 }

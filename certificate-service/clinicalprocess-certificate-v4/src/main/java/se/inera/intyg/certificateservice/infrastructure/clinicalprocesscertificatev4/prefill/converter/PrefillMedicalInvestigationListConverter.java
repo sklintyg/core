@@ -56,9 +56,9 @@ public class PrefillMedicalInvestigationListConverter implements PrefillConverte
         specification
     );
 
-    if (prefillError != null) {
+    if (!prefillError.isEmpty()) {
       return PrefillAnswer.builder()
-          .errors(List.of(prefillError))
+          .errors(prefillError)
           .build();
     }
 
