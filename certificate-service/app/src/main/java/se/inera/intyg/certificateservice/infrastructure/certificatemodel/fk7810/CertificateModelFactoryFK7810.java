@@ -1,17 +1,20 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateMessageType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
+import se.inera.intyg.certificateservice.domain.message.model.MessageType;
+import se.inera.intyg.certificateservice.domain.message.model.Subject;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateRecipientFactory;
 
@@ -71,18 +74,14 @@ public class CertificateModelFactoryFK7810 implements CertificateModelFactory {
       .version(new CertificateVersion(VERSION))
       .build();
 
-  //FIXME: This is a placeholder for the actual Schematron path.
-  public static final SchematronPath SCHEMATRON_PATH = new SchematronPath("");
-
   @Override
   public CertificateModel create() {
     return CertificateModel.builder()
         .id(FK7810_V1_0)
         .type(
             new Code(
-                "PLACEHOLDER", // FIXME: This should be replaced with the actual code for FK7810
-                "PLACEHOLDER",
-                // FIXME: This should be replaced with the actual code system for FK7810
+                "LUAS",
+                "b64ea353-e8f6-4832-b563-fc7d46f29548",
                 NAME
             )
         )
@@ -90,10 +89,26 @@ public class CertificateModelFactoryFK7810 implements CertificateModelFactory {
         .description(DESCRIPTION)
         .detailedDescription(DETAILED_DESCRIPTION)
         .activeFrom(activeFrom)
-        .availableForCitizen(false) //FIXME: This should be set based on actual requirements
+        .availableForCitizen(true)
         .recipient(CertificateRecipientFactory.fkassa(fkLogicalAddress))
-        .schematronPath(SCHEMATRON_PATH)
-        .messageTypes(null) //FIXME: This should be set based on actual requirements
+        .messageTypes(List.of(
+            CertificateMessageType.builder()
+                .type(MessageType.MISSING)
+                .subject(new Subject(MessageType.MISSING.displayName()))
+                .build(),
+            CertificateMessageType.builder()
+                .type(MessageType.CONTACT)
+                .subject(new Subject(MessageType.CONTACT.displayName()))
+                .build(),
+            CertificateMessageType.builder()
+                .type(MessageType.OTHER)
+                .subject(new Subject(MessageType.OTHER.displayName()))
+                .build()
+        ))
+        .certificateActionSpecifications(FK7810CertificateActionSpecification.create())
+        .messageActionSpecifications(FK7810MessageActionSpecification.create())
+        .elementSpecifications(List.of())
+        .certificateActionFactory(certificateActionFactory)
         .build();
   }
 }
