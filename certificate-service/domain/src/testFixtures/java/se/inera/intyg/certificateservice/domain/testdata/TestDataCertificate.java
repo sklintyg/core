@@ -619,19 +619,19 @@ public class TestDataCertificate {
                     )
                     .build(),
                 ElementData.builder()
-                    .id(new ElementId("59.1"))
+                    .id(new ElementId("71"))
                     .value(
                         ElementValueText.builder()
-                            .textId(new FieldId("59.1"))
+                            .textId(new FieldId("71.1"))
                             .text("Example health condition")
                             .build()
                     )
                     .build(),
                 ElementData.builder()
-                    .id(new ElementId("59.2"))
+                    .id(new ElementId("72"))
                     .value(
                         ElementValueText.builder()
-                            .textId(new FieldId("59.2"))
+                            .textId(new FieldId("72.1"))
                             .text("Additional health details")
                             .build()
                     )
