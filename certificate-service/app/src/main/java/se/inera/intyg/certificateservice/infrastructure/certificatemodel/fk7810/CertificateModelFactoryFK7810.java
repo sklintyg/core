@@ -1,8 +1,11 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.CategoryDiagnos.categoryDiagnos;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.CategoryGrundForMedicinsktUnderlag.categoryGrundForMedicinsktUnderlag;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAnnanGrundForMedicinsktUnderlag.questionAnnanGrundForMedicinsktUnderlag;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionBaseratPaAnnatMedicinsktUnderlag.questionBaseratPaAnnatMedicinsktUnderlag;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionDiagnos.questionDiagnos;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionDiagnosHistorik.questionDiagnosHistorik;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionGrundForMedicinsktUnderlag.questionGrundForMedicinsktUnderlag;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionRelationTillPatienten.questionRelationTillPatienten;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionUtredningEllerUnderlag.questionUtredningEllerUnderlag;
@@ -117,6 +120,10 @@ public class CertificateModelFactoryFK7810 implements CertificateModelFactory {
                 ),
                 questionBaseratPaAnnatMedicinsktUnderlag(),
                 questionUtredningEllerUnderlag()
+            ),
+            categoryDiagnos(
+                questionDiagnos(diagnosisCodeRepository),
+                questionDiagnosHistorik()
             )
         ))
         .certificateActionFactory(certificateActionFactory)
