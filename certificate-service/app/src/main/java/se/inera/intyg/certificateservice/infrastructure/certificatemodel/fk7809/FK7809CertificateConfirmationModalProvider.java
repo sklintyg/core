@@ -36,7 +36,7 @@ public class FK7809CertificateConfirmationModalProvider implements
                         patient.id().idWithDash())
                 ).build()
         ).text(
-            "Läkarutlåtande för merkostnadsersättning är till för personer över 18 år som inte har en underhållsskyldig förälder. Om det gäller ett barn ska du istället använda läkarutlåtande för omvårdnadsbidrag och merkostnadsersättning (FK3220)."
+            "Läkarutlåtande för merkostnadsersättning är till för personer över 18 år som inte har en underhållsskyldig förälder. Om det gäller ett barn ska du istället använda Läkarutlåtande för omvårdnadsbidrag och merkostnadsersättning."
         ).checkboxText(
             "Jag är säker på att jag vill utfärda Läkarutlåtande för merkostnadsersättning.")
         .primaryAction(CertificateModalActionType.READ)
