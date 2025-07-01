@@ -71,7 +71,7 @@ class CertificateModelFactoryFK3221Test {
 
   @Test
   void shallIncludeName() {
-    final var expectedName = "Läkarutlåtande för omvårdnadsbidrag och merkostnadsersättning";
+    final var expectedName = "Läkarutlåtande för omvårdnadsbidrag eller merkostnadsersättning";
 
     final var certificateModel = certificateModelFactoryFK3221.create();
 
