@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.CategoryGrundForMedicinsktUnderlag.categoryGrundForMedicinsktUnderlag;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -107,7 +109,9 @@ public class CertificateModelFactoryFK7810 implements CertificateModelFactory {
         ))
         .certificateActionSpecifications(FK7810CertificateActionSpecification.create())
         .messageActionSpecifications(FK7810MessageActionSpecification.create())
-        .elementSpecifications(List.of())
+        .elementSpecifications(List.of(
+            categoryGrundForMedicinsktUnderlag()
+        ))
         .certificateActionFactory(certificateActionFactory)
         .build();
   }
