@@ -61,39 +61,39 @@ For radio boolean assume first option is true and second option is false. Use th
 2
 
 Field ID: form1[0].#subform[0].lbx_listVardeUtredningUnderlag[0]
-Name: Ange utredning eller underlag. Välj i listan
+Name: Ange utredning eller underlag. Välj i listan med nedåtpilen. Du kan fylla i uppgifter för fler andra medicinska utredningar eller underlag som är relevanta för fastställd diagnos. Totalt tre. Det här är andra medicinska utredningar eller underlag som är relevanta för fastställd diagnos ett. 
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDComboBox
 
 Field ID: form1[0].#subform[0].flt_datumUnderlagUtredning[0]
-Name: datum (år, månad, dag) - skriv in eller välj i kalendern
+Name: datum (år, månad, dag) - skriv in eller välj i kalendern. Det här är andra medicinska utredningar eller underlag som är relevanta för fastställd diagnos ett. 
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].flt_txtVilkenVardgivare[0]
-Name: Var kan Försäkringskassan hämta information om utredningen eller underlaget?
+Name: Var kan Försäkringskassan hämta information om utredningen eller underlaget? Du kan fylla i totalt tre. Det här är ett
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].lbx_listVardeUnderlagUtredning2[0]
-Name: Ange ytterligare utredning eller underlag, Välj i listan
+Name: Ange ytterligare utredning eller underlag. Välj i listan med nedåtpilen. Det här är andra medicinska utredningar eller underlag som är relevanta för fastställd diagnos två. 
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDComboBox
 
 Field ID: form1[0].#subform[0].flt_datumUnderlagUtredning2[0]
-Name: datum (år, månad, dag) skriv in eller välj i kalendern
+Name: datum år, månad, dag - skriv in eller välj kalendern med nedåtpilen. Det här är andra medicinska utredningar eller underlag som är relevanta för fastställd diagnos två. 
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].flt_txtVilkenVardgivare2[0]
-Name: Var kan Försäkringskassan hämta information om utredningen eller underlaget?
+Name: Var kan Försäkringskassan hämta information om utredningen eller underlaget?  Du kan fylla i totalt tre. Det här är två
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].lbx_listVardeUnderlagUtredning3[0]
-Name: Ange ytterligare utredning eller underlag. Välj i listan
+Name: Ange ytterligare utredning eller underlag. Välj i listan med nedåtpilen. Det här är andra medicinska utredningar eller underlag som är relevanta för fastställd diagnos tre. 
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDComboBox
 
 Field ID: form1[0].#subform[0].flt_datumUnderlagUtredning3[0]
-Name: datum (år, månad, dag) skriv in eller välj i kalendern
+Name: datum år, månad, dag - skriv in eller välj kalendern med nedåtpilen. Det här är andra medicinska utredningar eller underlag som är relevanta för fastställd diagnos tre. 
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].flt_txtVilkenVardgivare3[0]
-Name: Var kan Försäkringskassan hämta information om utredningen eller underlaget?
+Name: Var kan Försäkringskassan hämta information om utredningen eller underlaget?  Du kan fylla i totalt tre. Det här är tre
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 //Page index 1
@@ -267,7 +267,7 @@ Name: Punkt 6. Medicinska behandlingar. Ange pågående eller planerade behandli
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[2].flt_txtVardenhetTidplan[0]
-Name: Ange ansvarig vårdgivare och om möjligt tidplan.
+Name: Ange ansvarig vårdenhet och om möjligt tidplan.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 //Page index 3
