@@ -1,6 +1,11 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810;
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.CategoryGrundForMedicinsktUnderlag.categoryGrundForMedicinsktUnderlag;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAnnanGrundForMedicinsktUnderlag.questionAnnanGrundForMedicinsktUnderlag;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionBaseratPaAnnatMedicinsktUnderlag.questionBaseratPaAnnatMedicinsktUnderlag;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionGrundForMedicinsktUnderlag.questionGrundForMedicinsktUnderlag;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionRelationTillPatienten.questionRelationTillPatienten;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionUtredningEllerUnderlag.questionUtredningEllerUnderlag;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -46,29 +51,24 @@ public class CertificateModelFactoryFK7810 implements CertificateModelFactory {
 
   private static final String DETAILED_DESCRIPTION = """
       <b className="iu-fw-heading">Vem kan få assistansersättning?</b>
-      Assistansersättning är till för personer med omfattande funktionsnedsättning som dels tillhör personkrets enligt lagen om stöd och service till vissa funktionshindrade (LSS) dels behöver personligt utformat stöd för sina grundläggande behov i mer än 20 timmar per vecka, i genomsnitt.
-      
-      Ersättningen används till personlig assistans, för att kunna leva som andra och delta i samhällslivet. Både vuxna och barn kan få assistansersättning.
-      
-      Följande tillstånd omfattas av LSS:
+      <p>Assistansersättning är till för personer med omfattande funktionsnedsättning som dels tillhör personkrets enligt lagen om stöd och service till vissa funktionshindrade (LSS) dels behöver personligt utformat stöd för sina grundläggande behov i mer än 20 timmar per vecka, i genomsnitt.</p>
+      <p>Ersättningen används till personlig assistans, för att kunna leva som andra och delta i samhällslivet. Både vuxna och barn kan få assistansersättning.</p></br>
+      <b className="iu-fw-heading">Följande tillstånd omfattas av LSS:</b>
       <ul>
         <li>intellektuell funktionsnedsättning (utvecklingsstörning), autism eller autismliknande tillstånd</li>
         <li>betydande och bestående begåvningsmässig funktionsnedsättning efter hjärnskada i vuxen ålder, föranledd av yttre våld eller kroppslig sjukdom</li>
         <li>andra varaktiga och stora fysiska eller psykiska funktionsnedsättningar som orsakar betydande svårigheter i den dagliga livsföringen, och som gör att personen har ett omfattande behov av stöd eller service.</li>
       </ul>
-      
-      Följande räknas som grundläggande behov:
+      </p><b className="iu-fw-heading">Följande räknas som grundläggande behov:</b>
       <ul>
-        <li>andning</li>
-        <li>personlig hygien</li>
+        <li>andning</li><li>personlig hygien</li>
+        <li>måltider</li>
         <li>av- och påklädning</li>
         <li>kommunikation med andra stöd som en person behöver på grund av en psykisk funktionsnedsättning, för att förebygga att personen fysiskt skadar sig själv, någon annan eller egendom</li>
         <li>stöd som en person behöver löpande under större delen av dygnet på grund av ett medicinskt tillstånd som innebär att det finns fara för den enskildes liv, eller som innebär att det annars finns en överhängande och allvarlig risk för personens fysiska hälsa.</li>
       </ul>
-      
-      Försäkringskassan kan inte räkna in hälso- och sjukvårdsåtgärder enligt hälso- och sjukvårdslagen i en persons hjälpbehov. Men om hälso- och sjukvårdspersonal bedömer att en åtgärd kan utföras som egenvård, så kan Försäkringskassan i vissa fall bevilja ersättning för det hjälpbehovet.
-      
-      Mer information finns på <a href="http://forsakringskassan.se/">Försäkringskassans hemsida</a>. Sök på ”assistansersättning”.
+      <p>Försäkringskassan kan inte räkna in hälso- och sjukvårdsåtgärder enligt hälso- och sjukvårdslagen i en persons hjälpbehov. Men om hälso- och sjukvårdspersonal bedömer att en åtgärd kan utföras som egenvård, så kan Försäkringskassan i vissa fall bevilja ersättning för det hjälpbehovet.</p>
+      <p>Mer information finns på <a href="http://forsakringskassan.se/">Försäkringskassans hemsida</a>. Sök på ”assistansersättning”.</p>
       """;
 
   public static final CertificateModelId FK7810_V1_0 = CertificateModelId.builder()
@@ -89,7 +89,7 @@ public class CertificateModelFactoryFK7810 implements CertificateModelFactory {
         )
         .name(NAME)
         .description(DESCRIPTION)
-        .detailedDescription(DETAILED_DESCRIPTION)
+        .detailedDescription(DETAILED_DESCRIPTION.replace("\n", ""))
         .activeFrom(activeFrom)
         .availableForCitizen(true)
         .recipient(CertificateRecipientFactory.fkassa(fkLogicalAddress))
@@ -110,7 +110,14 @@ public class CertificateModelFactoryFK7810 implements CertificateModelFactory {
         .certificateActionSpecifications(FK7810CertificateActionSpecification.create())
         .messageActionSpecifications(FK7810MessageActionSpecification.create())
         .elementSpecifications(List.of(
-            categoryGrundForMedicinsktUnderlag()
+            categoryGrundForMedicinsktUnderlag(
+                questionGrundForMedicinsktUnderlag(
+                    questionRelationTillPatienten(),
+                    questionAnnanGrundForMedicinsktUnderlag()
+                ),
+                questionBaseratPaAnnatMedicinsktUnderlag(),
+                questionUtredningEllerUnderlag()
+            )
         ))
         .certificateActionFactory(certificateActionFactory)
         .build();
