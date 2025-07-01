@@ -487,7 +487,7 @@ public class TestDataCertificate {
                     .id(new ElementId("59"))
                     .value(
                         ElementValueText.builder()
-                            .textId(new FieldId("59.3"))
+                            .textId(new FieldId("59.1"))
                             .text("Barnets aktuella hälsotillstånd")
                             .build()
                     )
