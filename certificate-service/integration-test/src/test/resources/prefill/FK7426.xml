@@ -95,9 +95,11 @@
   <ns3:svar id="55">
     <ns2:delsvar id="55.1">Example text</ns2:delsvar>
   </ns3:svar>
-  <ns3:svar id="59">
-    <ns2:delsvar id="59.1">Example text</ns2:delsvar>
-    <ns2:delsvar id="59.2">Example text</ns2:delsvar>
+  <ns3:svar id="71">
+    <ns2:delsvar id="71.1">Example text</ns2:delsvar>
+  </ns3:svar>
+  <ns3:svar id="72">
+    <ns2:delsvar id="72.1">Example text</ns2:delsvar>
   </ns3:svar>
   <ns3:svar id="60">
     <ns2:delsvar id="60.1">Example text</ns2:delsvar>

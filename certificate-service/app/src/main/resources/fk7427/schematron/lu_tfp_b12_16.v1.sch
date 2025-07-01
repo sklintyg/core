@@ -134,7 +134,7 @@
 
   <iso:pattern id="q59">
     <iso:rule context="//gn:svar[@id='59']">
-      <iso:assert test="count(gn:delsvar[@id='59.3']) = 1">
+      <iso:assert test="count(gn:delsvar[@id='59.1']) = 1">
         Ett 'Beskriv barnets aktuella hälsotillstånd' svar måste ha ett delsvar
       </iso:assert>
     </iso:rule>

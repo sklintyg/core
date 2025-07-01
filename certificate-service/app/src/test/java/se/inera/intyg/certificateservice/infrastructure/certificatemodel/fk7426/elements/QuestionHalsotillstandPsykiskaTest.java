@@ -17,7 +17,7 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 
 class QuestionHalsotillstandPsykiskaTest {
 
-  private static final ElementId ELEMENT_ID = new ElementId("59.2");
+  private static final ElementId ELEMENT_ID = new ElementId("72");
 
   @Test
   void shallIncludeId() {
@@ -32,7 +32,7 @@ class QuestionHalsotillstandPsykiskaTest {
         .name("Barnets aktuella psykiska hälsotillstånd")
         .description(
             "Beskriv barnets nuvarande psykiska påverkan. Ta med aktuella undersökningsfynd, testresultat och observationer som har betydelse för din bedömning av allvarligt sjukt barn.")
-        .id(new FieldId("59.2"))
+        .id(new FieldId("72.1"))
         .build();
 
     final var element = QuestionHalsotillstandPsykiska.questionHalsotillstandPsykiska();
@@ -44,7 +44,7 @@ class QuestionHalsotillstandPsykiskaTest {
   void shallIncludeRules() {
     final var expectedRules = List.of(
         ElementRuleLimit.builder()
-            .id(new ElementId("59.2"))
+            .id(new ElementId("72"))
             .type(ElementRuleType.TEXT_LIMIT)
             .limit(new RuleLimit((short) 4000))
             .build()

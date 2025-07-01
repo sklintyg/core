@@ -35,9 +35,9 @@
         någon av frågorna 'Barnets diagnos' eller 'Fyll i vilka symtom barnet har om diagnos inte är
         fastställd'
       </iso:assert>
-      <iso:assert test="count(gn:svar[@id='59']) = 1">
+      <iso:assert test="count(gn:svar[@id='71']) = 1 or count(gn:svar[@id='72']) = 1">
         Ett 'Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har
-        fyllt 18' måste ha ett 'Barnets hälsotillstånd'
+        fyllt 18' måste ha ett 'Barnets hälsotillstånd' svar
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='60']) = 1">
         Ett 'Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har
@@ -144,7 +144,7 @@
     </iso:rule>
   </iso:pattern>
 
-  <iso:pattern id="q59">
+  <iso:pattern id="q60">
     <iso:rule context="//gn:svar[@id='60']">
       <iso:assert test="count(gn:delsvar[@id='60.1']) = 1">
         Ett 'Grund för bedömning' svar måste ha ett delsvar

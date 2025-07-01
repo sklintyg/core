@@ -96,7 +96,7 @@
     <ns2:delsvar id="55.1">Barnet har haft den här symtomen</ns2:delsvar>
   </ns3:svar>
   <ns3:svar id="59">
-    <ns2:delsvar id="59.3">Hälsotillståndet är stabilt</ns2:delsvar>
+    <ns2:delsvar id="59.1">Hälsotillståndet är stabilt</ns2:delsvar>
   </ns3:svar>
   <ns3:svar id="62">
     <ns2:delsvar id="62.5">Barnet har stort behov av vård och tillsyn</ns2:delsvar>

@@ -16,7 +16,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 public class QuestionHalsotillstand {
 
   public static final ElementId QUESTION_HALSOTILLSTAND_ID = new ElementId("59");
-  private static final FieldId QUESTION_HALSOTILLSTAND_FIELD_ID = new FieldId("59.3");
+  private static final FieldId QUESTION_HALSOTILLSTAND_FIELD_ID = new FieldId("59.1");
   private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[2].flt_txtBeskrivBarnetsHalsotillstand[1]");
 
@@ -61,4 +61,3 @@ public class QuestionHalsotillstand {
         .build();
   }
 }
-
