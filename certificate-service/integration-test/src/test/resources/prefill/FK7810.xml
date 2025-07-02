@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns3:forifyllnad
+  xmlns:ns2="urn:riv:clinicalprocess:healthcond:certificate:3"
+  xmlns:ns4="urn:riv:clinicalprocess:healthcond:certificate:types:3"
+  xmlns:ns3="urn:riv:clinicalprocess:healthcond:certificate:3.3">
+  <ns3:svar id="1">
+    <ns2:instans>1</ns2:instans>
+    <ns2:delsvar id="1.1">
+      <ns4:cv>
+        <ns4:code>FYSISKUNDERSOKNING</ns4:code>
+        <ns4:codeSystem>KV_FKMU_0001</ns4:codeSystem>
+        <ns4:displayName>min undersökning vid fysiskt vårdmöte</ns4:displayName>
+      </ns4:cv>
+    </ns2:delsvar>
+    <ns2:delsvar id="1.2">2025-07-02</ns2:delsvar>
+  </ns3:svar>
+  <ns3:svar id="1">
+    <ns2:instans>2</ns2:instans>
+    <ns2:delsvar id="1.1">
+      <ns4:cv>
+        <ns4:code>ANNAT</ns4:code>
+        <ns4:codeSystem>KV_FKMU_0001</ns4:codeSystem>
+        <ns4:displayName>annat</ns4:displayName>
+      </ns4:cv>
+    </ns2:delsvar>
+    <ns2:delsvar id="1.2">2025-07-02</ns2:delsvar>
+    <ns2:delsvar id="1.3">annat</ns2:delsvar>
+  </ns3:svar>
+  <ns3:svar id="1">
+    <ns2:instans>3</ns2:instans>
+    <ns2:delsvar id="1.1">
+      <ns4:cv>
+        <ns4:code>ANHORIG</ns4:code>
+        <ns4:codeSystem>KV_FKMU_0001</ns4:codeSystem>
+        <ns4:displayName>anhörigs eller annans beskrivning av patienten</ns4:displayName>
+      </ns4:cv>
+    </ns2:delsvar>
+    <ns2:delsvar id="1.2">2025-07-02</ns2:delsvar>
+    <ns2:delsvar id="1.4">Nagot</ns2:delsvar>
+  </ns3:svar>
+  <ns3:svar id="1">
+    <ns2:instans>4</ns2:instans>
+    <ns2:delsvar id="1.1">
+      <ns4:cv>
+        <ns4:code>DIGITALUNDERSOKNING</ns4:code>
+        <ns4:codeSystem>KV_FKMU_0001</ns4:codeSystem>
+        <ns4:displayName>min undersökning vid digitalt vårdmöte</ns4:displayName>
+      </ns4:cv>
+    </ns2:delsvar>
+    <ns2:delsvar id="1.2">2025-07-02</ns2:delsvar>
+  </ns3:svar>
+  <ns3:svar id="1">
+    <ns2:instans>5</ns2:instans>
+    <ns2:delsvar id="1.1">
+      <ns4:cv>
+        <ns4:code>JOURNALUPPGIFTER</ns4:code>
+        <ns4:codeSystem>KV_FKMU_0001</ns4:codeSystem>
+        <ns4:displayName>journaluppgifter från den</ns4:displayName>
+      </ns4:cv>
+    </ns2:delsvar>
+    <ns2:delsvar id="1.2">2025-07-02</ns2:delsvar>
+  </ns3:svar>
+  <ns3:svar id="3">
+    <ns2:delsvar id="3.1">true</ns2:delsvar>
+  </ns3:svar>
+  <ns3:svar id="4">
+    <ns2:instans>1</ns2:instans>
+    <ns2:delsvar id="4.1">
+      <ns4:cv>
+        <ns4:code>ARBETSTERAPEUT</ns4:code>
+        <ns4:codeSystem>KV_FKMU_0005</ns4:codeSystem>
+        <ns4:displayName>Underlag från arbetsterapeut</ns4:displayName>
+      </ns4:cv>
+    </ns2:delsvar>
+    <ns2:delsvar id="4.2">2025-07-02</ns2:delsvar>
+    <ns2:delsvar id="4.3">Nagot</ns2:delsvar>
+  </ns3:svar>
+  <ns3:svar id="4">
+    <ns2:instans>2</ns2:instans>
+    <ns2:delsvar id="4.1">
+      <ns4:cv>
+        <ns4:code>HABILITERING</ns4:code>
+        <ns4:codeSystem>KV_FKMU_0005</ns4:codeSystem>
+        <ns4:displayName>Underlag från habiliteringen</ns4:displayName>
+      </ns4:cv>
+    </ns2:delsvar>
+    <ns2:delsvar id="4.2">2025-07-02</ns2:delsvar>
+    <ns2:delsvar id="4.3">Nagot</ns2:delsvar>
+  </ns3:svar>
+  <ns3:svar id="4">
+    <ns2:instans>3</ns2:instans>
+    <ns2:delsvar id="4.1">
+      <ns4:cv>
+        <ns4:code>NEUROPSYKIATRISKT</ns4:code>
+        <ns4:codeSystem>KV_FKMU_0005</ns4:codeSystem>
+        <ns4:displayName>Neuropsykiatriskt utlåtande</ns4:displayName>
+      </ns4:cv>
+    </ns2:delsvar>
+    <ns2:delsvar id="4.2">2025-07-02</ns2:delsvar>
+    <ns2:delsvar id="4.3">Nagot</ns2:delsvar>
+  </ns3:svar>
+  <ns3:svar id="58">
+    <ns2:instans>1</ns2:instans>
+    <ns2:delsvar id="58.2">
+      <ns4:cv>
+        <ns4:code>F402B</ns4:code>
+        <ns4:codeSystem>1.2.752.116.1.1.1.1.8</ns4:codeSystem>
+        <ns4:displayName>Djurfobi</ns4:displayName>
+      </ns4:cv>
+    </ns2:delsvar>
+    <ns2:delsvar id="58.1">Djurfobi</ns2:delsvar>
+  </ns3:svar>
+  <ns3:svar id="58">
+    <ns2:instans>2</ns2:instans>
+    <ns2:delsvar id="58.2">
+      <ns4:cv>
+        <ns4:code>V9543</ns4:code>
+        <ns4:codeSystem>1.2.752.116.1.1.1.1.8</ns4:codeSystem>
+        <ns4:displayName>Olycka med rymdfarkost med skada på ombordvarande - annan
+          sysselsättning
+        </ns4:displayName>
+      </ns4:cv>
+    </ns2:delsvar>
+    <ns2:delsvar id="58.1">Olycka med rymdfarkost med skada på ombordvarande - annan
+      sysselsättning
+    </ns2:delsvar>
+  </ns3:svar>
+  <ns3:svar id="58">
+    <ns2:instans>3</ns2:instans>
+    <ns2:delsvar id="58.2">
+      <ns4:cv>
+        <ns4:code>A009</ns4:code>
+        <ns4:codeSystem>1.2.752.116.1.1.1.1.8</ns4:codeSystem>
+        <ns4:displayName>Kolera, ospecificerad</ns4:displayName>
+      </ns4:cv>
+    </ns2:delsvar>
+    <ns2:delsvar id="58.1">Kolera, ospecificerad</ns2:delsvar>
+  </ns3:svar>
+  <ns3:svar id="58">
+    <ns2:instans>4</ns2:instans>
+    <ns2:delsvar id="58.2">
+      <ns4:cv>
+        <ns4:code>A029</ns4:code>
+        <ns4:codeSystem>1.2.752.116.1.1.1.1.8</ns4:codeSystem>
+        <ns4:displayName>Andra salmonellainfektioner, ospecificerade</ns4:displayName>
+      </ns4:cv>
+    </ns2:delsvar>
+    <ns2:delsvar id="58.1">Andra salmonellainfektioner, ospecificerade</ns2:delsvar>
+  </ns3:svar>
+  <ns3:svar id="58">
+    <ns2:instans>5</ns2:instans>
+    <ns2:delsvar id="58.2">
+      <ns4:cv>
+        <ns4:code>A083A</ns4:code>
+        <ns4:codeSystem>1.2.752.116.1.1.1.1.8</ns4:codeSystem>
+        <ns4:displayName>Coxsackievirusenterit</ns4:displayName>
+      </ns4:cv>
+    </ns2:delsvar>
+    <ns2:delsvar id="58.1">Coxsackievirusenterit</ns2:delsvar>
+  </ns3:svar>
+  <ns3:svar id="5">
+    <ns2:delsvar id="5.1">Nagot</ns2:delsvar>
+  </ns3:svar>
+  <ns3:svar id="8">
+    <ns2:delsvar id="8.1">Nagot</ns2:delsvar>
+  </ns3:svar>
+  <ns3:svar id="9">
+    <ns2:delsvar id="9.1">Nagot</ns2:delsvar>
+  </ns3:svar>
+  <ns3:svar id="10">
+    <ns2:delsvar id="10.1">Nagot</ns2:delsvar>
+  </ns3:svar>
+  <ns3:svar id="11">
+    <ns2:delsvar id="11.1">Nagot</ns2:delsvar>
+  </ns3:svar>
+  <ns3:svar id="12">
+    <ns2:delsvar id="12.1">Nagot</ns2:delsvar>
+  </ns3:svar>
+  <ns3:svar id="13">
+    <ns2:delsvar id="13.1">Nagot</ns2:delsvar>
+  </ns3:svar>
+  <ns3:svar id="14">
+    <ns2:delsvar id="14.1">Nagot</ns2:delsvar>
+  </ns3:svar>
+  <ns3:svar id="65">
+    <ns2:delsvar id="65.1">Nagot</ns2:delsvar>
+  </ns3:svar>
+  <ns3:svar id="66">
+    <ns2:delsvar id="66.1">Nagot</ns2:delsvar>
+  </ns3:svar>
+  <ns3:svar id="67">
+    <ns2:delsvar id="67.1">Nagot</ns2:delsvar>
+  </ns3:svar>
+  <ns3:svar id="68">
+    <ns2:delsvar id="68.1">Nagot</ns2:delsvar>
+  </ns3:svar>
+  <ns3:svar id="69">
+    <ns2:delsvar id="69.1">Nagot</ns2:delsvar>
+  </ns3:svar>
+  <ns3:svar id="50">
+    <ns2:delsvar id="50.1">Nagot</ns2:delsvar>
+    <ns2:delsvar id="50.2">Nagot</ns2:delsvar>
+  </ns3:svar>
+  <ns3:svar id="39">
+    <ns2:delsvar id="39.2">Nagot</ns2:delsvar>
+  </ns3:svar>
+  <ns3:svar id="25">
+    <ns2:delsvar id="25.1">Ovrigt</ns2:delsvar>
+  </ns3:svar>
+</ns3:forifyllnad>
