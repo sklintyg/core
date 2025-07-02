@@ -84,8 +84,8 @@ public class PrefillRadioMultipleCodeConverter implements PrefillConverter {
       }
 
       final var code = new Code(cvType.get().getCode(), cvType.get().getCodeSystem(),
-
           cvType.get().getDisplayName());
+
       return PrefillAnswer.builder()
           .elementData(
               ElementData.builder()
