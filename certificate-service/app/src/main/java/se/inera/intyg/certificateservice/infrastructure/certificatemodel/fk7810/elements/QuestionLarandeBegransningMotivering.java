@@ -7,7 +7,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
 public class QuestionLarandeBegransningMotivering extends
-    AbstractFunktionsnedsattningMotivering {
+    AbstractAktivitetsbegransningMotivering {
 
   public static final ElementId AKTIVITETSBEGRANSNING_MOTIVERING_LARANDE_BEGRANSNING_ID = new ElementId(
       "65");

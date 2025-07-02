@@ -1,0 +1,32 @@
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements;
+
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAktivitetsbegransning.AKTIVITETSBAGRENSNINGAR_MOVEMENT_ID;
+
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+
+public class QuestionForflyttningBegransningMotivering extends
+    AbstractAktivitetsbegransningMotivering {
+
+  public static final ElementId AKTIVITETSBEGRANSNING_MOTIVERING_FORFLYTTNING_BEGRANSNING_ID = new ElementId(
+      "67");
+  private static final FieldId AKTIVITETSBEGRANSNING_MOTIVERING_FORFLYTTNING_BEGRANSNING_FIELD_ID = new FieldId(
+      "67.1");
+
+  private QuestionForflyttningBegransningMotivering() {
+    throw new IllegalStateException("Utility class");
+  }
+
+  public static ElementSpecification questionForflyttningBegransningMotivering() {
+    return getFunktionsnedsattningMotivering(
+        AKTIVITETSBEGRANSNING_MOTIVERING_FORFLYTTNING_BEGRANSNING_ID,
+        AKTIVITETSBEGRANSNING_MOTIVERING_FORFLYTTNING_BEGRANSNING_FIELD_ID,
+        AKTIVITETSBAGRENSNINGAR_MOVEMENT_ID,
+        "Förflyttning",
+        "Beskriv aktivitetsbegränsningen. Ange grad om det är möjligt och hur aktivitetsbegränsningen kan korrigeras med hjälpmedel.",
+        "Med förflyttning menas till exempel att röra sig genom att ändra kroppsställning, att förflytta sig och att använda handens finmotorik för att flytta föremål.",
+        null
+    );
+  }
+}
