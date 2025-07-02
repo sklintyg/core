@@ -5,7 +5,9 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.CategoryDiagnos.categoryDiagnos;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.CategoryFunktionsnedsattning.categoryFunktionsnedsattning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.CategoryGrundForMedicinsktUnderlag.categoryGrundForMedicinsktUnderlag;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.CategoryMedicinskBehandling.categoryMedicinskBehandling;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.CategoryOvrigt.categoryOvrigt;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.CategoryPrognos.categoryPrognos;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAktivitetsbegransning.questionAktivitetsbegransning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAnnanGrundForMedicinsktUnderlag.questionAnnanGrundForMedicinsktUnderlag;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAnnanKroppsligFunktionMotivering.questionAnnanKroppsligFunktionMotivering;
@@ -22,12 +24,15 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionLarandeBegransningMotivering.questionLarandeBegransningMotivering;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionOvrigaBegransningMotivering.questionOvrigaBegransningMotivering;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionOvrigt.questionOvrigt;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionPagaendeOchPlaneradeBehandlingar.questionPagaendeOchPlaneradeBehandlingar;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionPersonligVardBegransningMotivering.questionPersonligVardBegransningMotivering;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionPrognos.questionPrognos;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionPsykiskFunktionMotivering.questionPsykiskFunktionMotivering;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionRelationTillPatienten.questionRelationTillPatienten;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionSinnesfunktionMotivering.questionSinnesfunktionMotivering;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionUppmarksamhetMotivering.questionUppmarksamhetMotivering;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionUtredningEllerUnderlag.questionUtredningEllerUnderlag;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionVardenhetOchTidplan.questionVardenhetOchTidplan;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -161,6 +166,14 @@ public class CertificateModelFactoryFK7810 implements CertificateModelFactory {
                 questionForflyttningBegransningMotivering(),
                 questionPersonligVardBegransningMotivering(),
                 questionOvrigaBegransningMotivering()
+            ),
+            categoryMedicinskBehandling(
+                questionPagaendeOchPlaneradeBehandlingar(
+                    questionVardenhetOchTidplan()
+                )
+            ),
+            categoryPrognos(
+                questionPrognos()
             ),
             categoryOvrigt(
                 questionOvrigt()
