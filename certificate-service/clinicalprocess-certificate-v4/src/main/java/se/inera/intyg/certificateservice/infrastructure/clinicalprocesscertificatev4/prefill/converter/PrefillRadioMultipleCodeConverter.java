@@ -11,6 +11,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.PrefillAnswer;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.PrefillError;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.util.PrefillValidator;
@@ -78,16 +79,22 @@ public class PrefillRadioMultipleCodeConverter implements PrefillConverter {
       final var content = getContent(subAnswers, answers);
       final var cvType = unmarshalType(content, CVType.class);
 
-      final var code = cvType.orElseThrow().getCode();
+      if (cvType.isEmpty()) {
+        throw new IllegalStateException("Invalid format cvType is empty");
+      }
 
+      final var code = new Code(cvType.get().getCode(), cvType.get().getCodeSystem(),
+
+          cvType.get().getDisplayName());
       return PrefillAnswer.builder()
           .elementData(
               ElementData.builder()
                   .id(specification.id())
-                  .value(ElementValueCode.builder()
-                      .codeId(getId(configurationRadioMultipleCode, code))
-                      .code(code)
-                      .build()
+                  .value(
+                      ElementValueCode.builder()
+                          .codeId(getId(configurationRadioMultipleCode, code))
+                          .code(code.code())
+                          .build()
                   )
                   .build()
           )
@@ -99,10 +106,10 @@ public class PrefillRadioMultipleCodeConverter implements PrefillConverter {
   }
 
   private static FieldId getId(ElementConfigurationRadioMultipleCode configurationRadioMultipleCode,
-      String code) {
+      Code code) {
     return configurationRadioMultipleCode.list()
         .stream()
-        .filter(c -> c.code().code().equals(code))
+        .filter(c -> c.code().matches(code))
         .findFirst()
         .orElseThrow(
             () -> new IllegalArgumentException(
