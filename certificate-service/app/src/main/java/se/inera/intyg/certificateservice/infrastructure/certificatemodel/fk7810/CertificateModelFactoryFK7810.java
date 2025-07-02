@@ -1,8 +1,10 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.CategoryAktivitetsbegransningar.categoryAktivitetsbegransningar;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.CategoryDiagnos.categoryDiagnos;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.CategoryFunktionsnedsattning.categoryFunktionsnedsattning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.CategoryGrundForMedicinsktUnderlag.categoryGrundForMedicinsktUnderlag;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAktivitetsbegransning.questionAktivitetsbegransning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAnnanGrundForMedicinsktUnderlag.questionAnnanGrundForMedicinsktUnderlag;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAnnanKroppsligFunktionMotivering.questionAnnanKroppsligFunktionMotivering;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionBaseratPaAnnatMedicinsktUnderlag.questionBaseratPaAnnatMedicinsktUnderlag;
@@ -13,6 +15,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionIntellektuellFunktionMotivering.questionIntellektuellFunktionMotivering;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionKommunikationSocialInteraktionMotivering.questionKommunikationSocialInteraktionMotivering;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionKoordinationMotivering.questionKoordinationMotivering;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionLarandeBegransningMotivering.questionLarandeBegransningMotivering;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionPsykiskFunktionMotivering.questionPsykiskFunktionMotivering;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionRelationTillPatienten.questionRelationTillPatienten;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionSinnesfunktionMotivering.questionSinnesfunktionMotivering;
@@ -143,6 +146,10 @@ public class CertificateModelFactoryFK7810 implements CertificateModelFactory {
                 questionSinnesfunktionMotivering(),
                 questionKoordinationMotivering(),
                 questionAnnanKroppsligFunktionMotivering()
+            ),
+            categoryAktivitetsbegransningar(
+                questionAktivitetsbegransning(),
+                questionLarandeBegransningMotivering()
             )
         ))
         .certificateActionFactory(certificateActionFactory)

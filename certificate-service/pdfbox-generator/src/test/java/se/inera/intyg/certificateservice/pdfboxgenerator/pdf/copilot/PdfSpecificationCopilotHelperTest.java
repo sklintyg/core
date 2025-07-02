@@ -106,7 +106,7 @@ class PdfSpecificationCopilotHelperTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {FK_7427, FK_7426, FK_3221})
+  @ValueSource(strings = {FK_7427, FK_7426, FK_3221, FK_7810})
   void shouldHaveSameIdsForTemplateWithAndWithoutAddress(String certificateType) {
     setup(certificateType);
 
