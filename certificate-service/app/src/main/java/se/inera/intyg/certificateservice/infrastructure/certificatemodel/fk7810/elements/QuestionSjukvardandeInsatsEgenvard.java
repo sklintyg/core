@@ -8,33 +8,33 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
-public class QuestionSjukvardandeInsatsHSL {
+public class QuestionSjukvardandeInsatsEgenvard {
 
-  public static final ElementId QUESTION_SJUKVARDANDE_INSATS_HSL_ID = new ElementId(
-      "70");
-  public static final FieldId QUESTION_SJUKVARDANDE_INSATS_HSL_FIELD_ID = new FieldId("70.1");
+  public static final ElementId QUESTION_SJUKVARDANDE_INSATS_EGENVARD_ID = new ElementId(
+      "70.3");
+  public static final FieldId QUESTION_SJUKVARDANDE_INSATS_EGENVARD_FIELD_ID = new FieldId("70.3");
 
-  private QuestionSjukvardandeInsatsHSL() {
+  private QuestionSjukvardandeInsatsEgenvard() {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionSjukvardandeInsatsHSL() {
+  public static ElementSpecification questionSjukvardandeInsatsEgenvard() {
     return ElementSpecification.builder()
-        .id(QUESTION_SJUKVARDANDE_INSATS_HSL_ID)
+        .id(QUESTION_SJUKVARDANDE_INSATS_EGENVARD_ID)
         .configuration(
             ElementConfigurationRadioBoolean.builder()
-                .id(QUESTION_SJUKVARDANDE_INSATS_HSL_FIELD_ID)
+                .id(QUESTION_SJUKVARDANDE_INSATS_EGENVARD_FIELD_ID)
                 .selectedText("Ja")
                 .unselectedText("Nej")
                 .name(
-                    "Har patienten behov av hjälp som innefattar sjukvårdande insatser enligt HSL?")
+                    "Har patienten behov av hjälp som bedöms kunna utföras som egenvård?")
                 .build()
         )
         .rules(
             List.of(
                 CertificateElementRuleFactory.mandatoryExist(
-                    QUESTION_SJUKVARDANDE_INSATS_HSL_ID,
-                    QUESTION_SJUKVARDANDE_INSATS_HSL_FIELD_ID)
+                    QUESTION_SJUKVARDANDE_INSATS_EGENVARD_ID,
+                    QUESTION_SJUKVARDANDE_INSATS_EGENVARD_FIELD_ID)
             )
         )
         .validations(
