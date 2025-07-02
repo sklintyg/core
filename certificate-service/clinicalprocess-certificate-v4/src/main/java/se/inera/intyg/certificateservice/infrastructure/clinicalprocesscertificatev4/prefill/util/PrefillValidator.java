@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertific
 
 import java.util.ArrayList;
 import java.util.List;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfiguration;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.model.DiagnosisCode;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
@@ -99,6 +100,29 @@ public class PrefillValidator {
               specification.id().id(),
               minimumSubAnswers,
               s.getDelsvar().size()
+          )
+      );
+    }
+    return prefillErrors;
+  }
+
+  public static List<PrefillError> validateDelsvarId(List<Delsvar> subAnswers,
+      ElementConfiguration configuration, ElementSpecification specification) {
+    final var prefillErrors = new ArrayList<PrefillError>();
+    final var correctSubAnswer = subAnswers.stream()
+        .anyMatch(
+            subAnswer -> subAnswer.getId().equals(configuration.id().value())
+        );
+
+    if (!correctSubAnswer) {
+      prefillErrors.add(
+          PrefillError.invalidSubAnswerId(
+              configuration.id().value(),
+              subAnswers.stream()
+                  .map(Delsvar::getId)
+                  .filter(id -> !id.equals(configuration.id().value()))
+                  .toList(),
+              specification.id().id()
           )
       );
     }

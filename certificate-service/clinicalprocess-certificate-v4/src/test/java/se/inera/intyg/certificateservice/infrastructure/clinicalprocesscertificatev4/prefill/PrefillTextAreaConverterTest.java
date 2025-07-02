@@ -62,20 +62,57 @@ class PrefillTextAreaConverterTest {
     }
 
     @Test
-    void shouldReturnPrefillAnswerIfSubAnswerExists() {
+    void shouldReturnPrefillAnswerWithInvalidSubAnswerId() {
       final var prefill = new Forifyllnad();
       final var svar = new Svar();
-      svar.setId("other");
+      svar.setId(ELEMENT_ID.id());
       final var delsvar = new Delsvar();
-      delsvar.setId(SPECIFICATION.id().id());
+      delsvar.setId("wrongId");
       delsvar.getContent().add(TEXT);
       svar.getDelsvar().add(delsvar);
       prefill.getSvar().add(svar);
 
       final var result = prefillTextAreaConverter.prefillAnswer(SPECIFICATION, prefill);
 
+      assertEquals(
+          PrefillErrorType.INVALID_SUB_ANSWER_ID,
+          result.getErrors().getFirst().type()
+      );
+    }
+
+    @Test
+    void shouldReturnPrefillAnswerIfSubAnswerExists() {
+      final var prefill = new Forifyllnad();
+      final var svar = new Svar();
+      svar.setId("other");
+      final var delsvar = new Delsvar();
+      delsvar.setId(TEXT_AREA_ID.value());
+      delsvar.getContent().add(TEXT);
+      svar.getDelsvar().add(delsvar);
+      prefill.getSvar().add(svar);
+
+      final var specification = ElementSpecification.builder()
+          .id(new ElementId(TEXT_AREA_ID.value()))
+          .configuration(
+              ElementConfigurationTextArea.builder()
+                  .id(TEXT_AREA_ID)
+                  .build()
+          )
+          .build();
+
+      final var result = prefillTextAreaConverter.prefillAnswer(specification, prefill);
+
       final var expected = PrefillAnswer.builder()
-          .elementData(EXPECTED_ELEMENT_DATA)
+          .elementData(
+              ElementData.builder()
+                  .id(new ElementId(TEXT_AREA_ID.value()))
+                  .value(
+                      ElementValueText.builder()
+                          .textId(TEXT_AREA_ID)
+                          .text(TEXT)
+                          .build()
+                  ).build()
+          )
           .build();
 
       assertEquals(expected, result);
@@ -87,7 +124,7 @@ class PrefillTextAreaConverterTest {
       final var svar = new Svar();
       svar.setId(SPECIFICATION.id().id());
       final var delsvar = new Delsvar();
-      delsvar.setId("other");
+      delsvar.setId(TEXT_AREA_ID.value());
       delsvar.getContent().add(TEXT);
       svar.getDelsvar().add(delsvar);
       prefill.getSvar().add(svar);

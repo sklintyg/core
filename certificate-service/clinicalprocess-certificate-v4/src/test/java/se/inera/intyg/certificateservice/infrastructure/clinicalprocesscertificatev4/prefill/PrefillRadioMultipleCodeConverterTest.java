@@ -81,9 +81,9 @@ class PrefillRadioMultipleCodeConverterTest {
     void shouldReturnPrefillAnswerWithInvalidFormat() {
       final var prefill = new Forifyllnad();
       final var svar = new Svar();
-      svar.setId("other");
+      svar.setId(ELEMENT_ID.id());
       final var delsvar = new Delsvar();
-      delsvar.setId(SPECIFICATION.id().id());
+      delsvar.setId(FIELD_ID.value());
       delsvar.getContent().add("wrongValue");
       svar.getDelsvar().add(delsvar);
       prefill.getSvar().add(svar);
@@ -97,20 +97,65 @@ class PrefillRadioMultipleCodeConverterTest {
     }
 
     @Test
-    void shouldReturnPrefillAnswerIfSubAnswerExists() {
+    void shouldReturnPrefillAnswerWithInvalidSubAnswerId() {
       final var prefill = new Forifyllnad();
       final var svar = new Svar();
-      svar.setId("other");
+      svar.setId(ELEMENT_ID.id());
       final var delsvar = new Delsvar();
-      delsvar.setId(SPECIFICATION.id().id());
+      delsvar.setId("wrongId");
       delsvar.getContent().add(createCVTypeElement());
       svar.getDelsvar().add(delsvar);
       prefill.getSvar().add(svar);
 
       final var result = prefillRadioMultipleCodeConverter.prefillAnswer(SPECIFICATION, prefill);
 
+      assertEquals(
+          PrefillErrorType.INVALID_SUB_ANSWER_ID,
+          result.getErrors().getFirst().type()
+      );
+    }
+
+    @Test
+    void shouldReturnPrefillAnswerIfSubAnswerExists() {
+      final var prefill = new Forifyllnad();
+      final var svar = new Svar();
+      svar.setId("other");
+      final var delsvar = new Delsvar();
+      delsvar.setId(FIELD_ID.value());
+      delsvar.getContent().add(createCVTypeElement());
+      svar.getDelsvar().add(delsvar);
+      prefill.getSvar().add(svar);
+
+      final var specification = ElementSpecification.builder()
+          .id(new ElementId(FIELD_ID.value()))
+          .configuration(
+              ElementConfigurationRadioMultipleCode.builder()
+                  .id(FIELD_ID)
+                  .list(
+                      List.of(
+                          new ElementConfigurationCode(
+                              CODE_FIELD_ID, "Code 1", new Code(CODE, "S1", "D1")),
+                          new ElementConfigurationCode(new FieldId("F2"), "Code 2",
+                              new Code("C2", "S1", "D2"))
+                      )
+                  )
+                  .build()
+          )
+          .build();
+
+      final var result = prefillRadioMultipleCodeConverter.prefillAnswer(specification, prefill);
+
       final var expected = PrefillAnswer.builder()
-          .elementData(EXPECTED_ELEMENT_DATA)
+          .elementData(
+              ElementData.builder()
+                  .id(new ElementId(FIELD_ID.value()))
+                  .value(
+                      ElementValueCode.builder()
+                          .codeId(CODE_FIELD_ID)
+                          .code(CODE)
+                          .build()
+                  ).build()
+          )
           .build();
 
       assertEquals(expected, result);
@@ -122,7 +167,7 @@ class PrefillRadioMultipleCodeConverterTest {
       final var svar = new Svar();
       svar.setId(SPECIFICATION.id().id());
       final var delsvar = new Delsvar();
-      delsvar.setId("other");
+      delsvar.setId(FIELD_ID.value());
       delsvar.getContent().add(createCVTypeElement());
       svar.getDelsvar().add(delsvar);
       prefill.getSvar().add(svar);

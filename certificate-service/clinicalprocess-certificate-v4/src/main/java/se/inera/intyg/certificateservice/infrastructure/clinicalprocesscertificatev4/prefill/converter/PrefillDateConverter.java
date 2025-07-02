@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.converter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
@@ -11,6 +12,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.PrefillAnswer;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.PrefillError;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.util.PrefillValidator;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.util.SubAnswersUtil;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
@@ -32,29 +34,40 @@ public class PrefillDateConverter implements PrefillConverter {
           .build();
     }
 
-    final var answer = prefill.getSvar().stream()
+    final var answers = prefill.getSvar().stream()
         .filter(svar -> svar.getId().equals(specification.id().id()))
         .toList();
 
-    final var subAnswer = prefill.getSvar().stream()
+    final var subAnswers = prefill.getSvar().stream()
         .map(Svar::getDelsvar)
         .flatMap(List::stream)
         .filter(delsvar -> delsvar.getId().equals(specification.id().id()))
         .toList();
 
-    if (answer.isEmpty() && subAnswer.isEmpty()) {
+    if (answers.isEmpty() && subAnswers.isEmpty()) {
       return null;
     }
 
-    final var prefillError = PrefillValidator.validateSingleAnswerOrSubAnswer(
-        answer,
-        subAnswer,
-        specification
+    final var prefillErrors = new ArrayList<PrefillError>();
+    prefillErrors.addAll(
+        PrefillValidator.validateSingleAnswerOrSubAnswer(
+            answers,
+            subAnswers,
+            specification
+        )
     );
 
-    if (!prefillError.isEmpty()) {
+    prefillErrors.addAll(
+        PrefillValidator.validateDelsvarId(
+            SubAnswersUtil.get(answers, subAnswers),
+            configurationDate,
+            specification
+        )
+    );
+
+    if (!prefillErrors.isEmpty()) {
       return PrefillAnswer.builder()
-          .errors(prefillError)
+          .errors(prefillErrors)
           .build();
     }
 
@@ -66,7 +79,7 @@ public class PrefillDateConverter implements PrefillConverter {
                   .value(
                       ElementValueDate.builder()
                           .dateId(configurationDate.id())
-                          .date(LocalDate.parse(getContent(subAnswer, answer)))
+                          .date(LocalDate.parse(getContent(subAnswers, answers)))
                           .build()
                   )
                   .build()
