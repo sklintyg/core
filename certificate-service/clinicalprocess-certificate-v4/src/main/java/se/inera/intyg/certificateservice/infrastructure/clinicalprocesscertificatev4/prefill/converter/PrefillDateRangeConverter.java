@@ -72,7 +72,7 @@ public class PrefillDateRangeConverter implements PrefillConverter {
     }
 
     try {
-      final var content = getContent(subAnswers, answers);
+      final var content = getContent(subAnswers, answers, configurationDateRange);
       final var datePeriodAnswer = PrefillUnmarshaller.datePeriodType(
           content
       );
@@ -100,12 +100,20 @@ public class PrefillDateRangeConverter implements PrefillConverter {
     }
   }
 
-  private static List<Object> getContent(List<Delsvar> subAnswers, List<Svar> answers) {
+  private static List<Object> getContent(List<Delsvar> subAnswers, List<Svar> answers,
+      ElementConfigurationDateRange configurationDateRange) {
     if (!subAnswers.isEmpty()) {
-      return subAnswers.getFirst().getContent();
+      return subAnswers.stream()
+          .filter(subAnswer -> subAnswer.getId().equals(configurationDateRange.id().value()))
+          .toList().
+          getFirst()
+          .getContent();
     }
     return answers.getFirst()
         .getDelsvar()
+        .stream()
+        .filter(subAnswer -> subAnswer.getId().equals(configurationDateRange.id().value()))
+        .toList()
         .getFirst()
         .getContent();
   }

@@ -14,7 +14,6 @@ import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertifica
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.util.PrefillValidator;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.util.SubAnswersUtil;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
-import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
 @Component
@@ -79,7 +78,8 @@ public class PrefillDateConverter implements PrefillConverter {
                   .value(
                       ElementValueDate.builder()
                           .dateId(configurationDate.id())
-                          .date(LocalDate.parse(getContent(subAnswers, answers)))
+                          .date(LocalDate.parse(
+                              SubAnswersUtil.getContent(subAnswers, answers, configurationDate)))
                           .build()
                   )
                   .build()
@@ -88,16 +88,5 @@ public class PrefillDateConverter implements PrefillConverter {
     } catch (Exception ex) {
       return PrefillAnswer.invalidFormat(specification.id().id(), ex.getMessage());
     }
-  }
-
-  private static String getContent(List<Delsvar> subAnswers, List<Svar> answers) {
-    if (!subAnswers.isEmpty()) {
-      return (String) subAnswers.getFirst().getContent().getFirst();
-    }
-    return (String) answers.getFirst()
-        .getDelsvar()
-        .getFirst()
-        .getContent()
-        .getFirst();
   }
 }

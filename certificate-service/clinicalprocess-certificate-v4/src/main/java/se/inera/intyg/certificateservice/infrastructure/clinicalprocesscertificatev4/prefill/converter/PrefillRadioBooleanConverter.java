@@ -70,7 +70,7 @@ public class PrefillRadioBooleanConverter implements PrefillConverter {
           .build();
     }
 
-    final var content = getContent(subAnswers, answers);
+    final var content = SubAnswersUtil.getContent(subAnswers, answers, configurationRadioBoolean);
 
     if (!isValidBoolean(content)) {
       return PrefillAnswer.builder()

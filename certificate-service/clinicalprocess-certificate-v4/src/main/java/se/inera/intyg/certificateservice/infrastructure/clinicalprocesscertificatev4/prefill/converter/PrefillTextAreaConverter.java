@@ -13,7 +13,6 @@ import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertifica
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.util.PrefillValidator;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.util.SubAnswersUtil;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
-import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
 @Component
@@ -77,23 +76,11 @@ public class PrefillTextAreaConverter implements PrefillConverter {
                 .value(
                     ElementValueText.builder()
                         .textId(configurationTextArea.id())
-                        .text(getContent(subAnswers, answers))
+                        .text(SubAnswersUtil.getContent(subAnswers, answers, configurationTextArea))
                         .build()
                 )
                 .build()
         )
         .build();
-  }
-
-  private static String getContent(List<Delsvar> subAnswers, List<Svar> answers) {
-    if (!subAnswers.isEmpty()) {
-      return (String) subAnswers.getFirst().getContent().getFirst();
-    }
-    return (String) answers
-        .getFirst()
-        .getDelsvar()
-        .getFirst()
-        .getContent()
-        .getFirst();
   }
 }
