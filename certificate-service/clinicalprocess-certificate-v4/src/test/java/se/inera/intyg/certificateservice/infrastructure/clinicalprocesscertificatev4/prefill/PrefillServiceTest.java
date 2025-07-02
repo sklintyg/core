@@ -33,7 +33,7 @@ class PrefillServiceTest {
   void shouldReturnEmptySetIfPrefillXmlIsNull() {
     final var certificateModel = mock(CertificateModel.class);
 
-    final var result = prefillService.prefill(certificateModel, null);
+    final var result = prefillService.prefill(certificateModel, null, null);
 
     assertTrue(result.isEmpty());
   }
@@ -47,7 +47,7 @@ class PrefillServiceTest {
       mocked.when(() -> PrefillUnmarshaller.forifyllnadType("xmlstring"))
           .thenReturn(Optional.empty());
 
-      final var result = prefillService.prefill(certificateModel, xml);
+      final var result = prefillService.prefill(certificateModel, xml, null);
 
       assertTrue(result.isEmpty());
     }
@@ -72,7 +72,7 @@ class PrefillServiceTest {
         mockedResult.when(() -> PrefillResult.create(certificateModel, forifyllnad, prefillHandler))
             .thenReturn(prefillResult);
 
-        final var result = prefillService.prefill(certificateModel, xml);
+        final var result = prefillService.prefill(certificateModel, xml, null);
         verify(prefillResult, times(1)).prefill();
 
         assertEquals(elementData, result);

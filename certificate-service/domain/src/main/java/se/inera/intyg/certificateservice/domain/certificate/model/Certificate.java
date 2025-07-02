@@ -528,7 +528,9 @@ public class Certificate {
 
   public void prefill(Xml prefillXml, PrefillProcessor prefillProcessor, SubUnit subUnit) {
     try {
-      final var prefill = new ArrayList<>(prefillProcessor.prefill(certificateModel, prefillXml));
+      final var prefill = new ArrayList<>(
+          prefillProcessor.prefill(certificateModel, prefillXml, id)
+      );
       prefill.add(
           ElementData.builder()
               .id(UNIT_CONTACT_INFORMATION)
