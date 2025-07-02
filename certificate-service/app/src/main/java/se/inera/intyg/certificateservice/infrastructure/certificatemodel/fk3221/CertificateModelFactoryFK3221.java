@@ -63,7 +63,7 @@ public class CertificateModelFactoryFK3221 implements CertificateModelFactory {
 
   private static final String FK_3221 = "fk3221";
   private static final String VERSION = "1.0";
-  private static final String NAME = "Läkarutlåtande för omvårdnadsbidrag och merkostnadsersättning";
+  private static final String NAME = "Läkarutlåtande för omvårdnadsbidrag eller merkostnadsersättning";
   private static final String DESCRIPTION = """
       <b className="iu-fw-heading">Vem kan få omvårdnadsbidrag eller merkostnadsersättning för barn?</b>
       
