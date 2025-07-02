@@ -225,12 +225,12 @@ public class SchematronValidationFK7426Test {
           .build();
 
       final var elementOne = certificate.elementData().stream()
-          .filter(elementData -> elementData.id().equals(new ElementId("59.1")))
+          .filter(elementData -> elementData.id().equals(new ElementId("71")))
           .findFirst()
           .orElseThrow();
 
       final var elementTwo = certificate.elementData().stream()
-          .filter(elementData -> elementData.id().equals(new ElementId("59.2")))
+          .filter(elementData -> elementData.id().equals(new ElementId("72")))
           .findFirst()
           .orElseThrow();
 
@@ -241,8 +241,8 @@ public class SchematronValidationFK7426Test {
       final var elementDataTwo = elementTwo.withValue(valueTwo.withText(null));
 
       final var updatedElementData = certificate.elementData().stream()
-          .map(data -> data.id().equals(new ElementId("59.1")) ? elementDataOne : data)
-          .map(data -> data.id().equals(new ElementId("59.2")) ? elementDataTwo : data)
+          .map(data -> data.id().equals(new ElementId("71")) ? elementDataOne : data)
+          .map(data -> data.id().equals(new ElementId("72")) ? elementDataTwo : data)
           .toList();
       certificate.updateData(updatedElementData, new Revision(0), ACTION_EVALUATION);
 

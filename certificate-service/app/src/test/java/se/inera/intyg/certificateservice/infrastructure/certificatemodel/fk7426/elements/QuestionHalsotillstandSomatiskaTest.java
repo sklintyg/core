@@ -17,7 +17,7 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 
 class QuestionHalsotillstandSomatiskaTest {
 
-  private static final ElementId ELEMENT_ID = new ElementId("59.1");
+  private static final ElementId ELEMENT_ID = new ElementId("71");
 
   @Test
   void shallIncludeId() {
@@ -32,7 +32,7 @@ class QuestionHalsotillstandSomatiskaTest {
         .name("Barnets aktuella somatiska hälsotillstånd")
         .description(
             "Beskriv barnets nuvarande somatiska hälsotillstånd. Ta med aktuella undersökningsfynd, testresultat och observationer som har betydelse för din bedömning av allvarligt sjukt barn. Om läkarutlåtandet avser misstanke, beskriv på vilket sätt undersökningsfynden innebär en konkret misstanke om ett specifikt sjukdomstillstånd.")
-        .id(new FieldId("59.1"))
+        .id(new FieldId("71.1"))
         .build();
 
     final var element = QuestionHalsotillstandSomatiska.questionHalsotillstandSomatiska();
@@ -44,7 +44,7 @@ class QuestionHalsotillstandSomatiskaTest {
   void shallIncludeRules() {
     final var expectedRules = List.of(
         ElementRuleLimit.builder()
-            .id(new ElementId("59.1"))
+            .id(new ElementId("71"))
             .type(ElementRuleType.TEXT_LIMIT)
             .limit(new RuleLimit((short) 4000))
             .build()
@@ -83,4 +83,3 @@ class QuestionHalsotillstandSomatiskaTest {
     assertEquals(expected, element.pdfConfiguration());
   }
 }
-

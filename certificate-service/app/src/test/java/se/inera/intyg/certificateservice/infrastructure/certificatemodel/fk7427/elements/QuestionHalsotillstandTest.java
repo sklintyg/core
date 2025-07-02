@@ -11,11 +11,11 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 
 class QuestionHalsotillstandTest {
 
@@ -34,7 +34,7 @@ class QuestionHalsotillstandTest {
         .name("Beskriv barnets aktuella hälsotillstånd")
         .description(
             "Beskriv barnets nuvarande hälsotillstånd (utifrån akut sjukdom eller försämring i funktionsnedsättning).")
-        .id(new FieldId("59.3"))
+        .id(new FieldId("59.1"))
         .build();
 
     final var element = QuestionHalsotillstand.questionHalsotillstand();
@@ -48,7 +48,7 @@ class QuestionHalsotillstandTest {
         ElementRuleExpression.builder()
             .id(new ElementId("59"))
             .type(ElementRuleType.MANDATORY)
-            .expression(new RuleExpression("$59.3"))
+            .expression(new RuleExpression("$59.1"))
             .build(),
         ElementRuleLimit.builder()
             .id(new ElementId("59"))

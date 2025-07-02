@@ -7,7 +7,6 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
@@ -17,9 +16,8 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionHalsotillstandSomatiska {
 
-  public static final ElementId QUESTION_HALSOTILLSTAND_SOMATISKA_ID = new ElementId("59.1");
-  public static final ElementId QUESTION_HALSOTILLSTAND_SOMATISKA_PARENT_ID = new ElementId("59");
-  public static final FieldId QUESTION_HALSOTILLSTAND_SOMATISKA_FIELD_ID = new FieldId("59.1");
+  public static final ElementId QUESTION_HALSOTILLSTAND_SOMATISKA_ID = new ElementId("71");
+  public static final FieldId QUESTION_HALSOTILLSTAND_SOMATISKA_FIELD_ID = new FieldId("71.1");
   private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[2].flt_txtBeskrivProvsvar[0]");
 
@@ -59,8 +57,6 @@ public class QuestionHalsotillstandSomatiska {
                 .overflowSheetFieldId(FORTSATTNINGSBLAD_ID)
                 .build()
         )
-        .mapping(new ElementMapping(QUESTION_HALSOTILLSTAND_SOMATISKA_PARENT_ID, null))
         .build();
   }
 }
-
