@@ -65,7 +65,7 @@ public class TestDataCertificateModelConstants {
   public static final Code FK3221_CODE_TYPE = new Code(
       "LU_OMV_MEK",
       "b64ea353-e8f6-4832-b563-fc7d46f29548",
-      "Läkarutlåtande för omvårdnadsbidrag och merkostnadsersättning"
+      "Läkarutlåtande för omvårdnadsbidrag eller merkostnadsersättning"
   );
   public static final SchematronPath FK7210_SCHEMATRON_PATH = new SchematronPath(
       "fk7210/schematron/igrav.v1.sch");
@@ -91,7 +91,7 @@ public class TestDataCertificateModelConstants {
   public static final String FK7809_NAME = "Läkarutlåtande för merkostnadsersättning";
   public static final String FK7427_NAME = "Läkarutlåtande tillfällig föräldrapenning barn 12–16 år";
   public static final String FK7426_NAME = "Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har fyllt 18";
-  public static final String FK3221_NAME = "Läkarutlåtande för omvårdnadsbidrag och merkostnadsersättning";
+  public static final String FK3221_NAME = "Läkarutlåtande för omvårdnadsbidrag eller merkostnadsersättning";
   public static final Recipient FK_RECIPIENT = new Recipient(
       new RecipientId("FKASSA"), "Försäkringskassan", "Logisk adress"
   );

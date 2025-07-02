@@ -147,7 +147,7 @@ class FK7809CertificateConfirmationModalProviderTest {
         final var result = provider.of(certificate, actionEvaluation);
 
         assertEquals(
-            "Läkarutlåtande för merkostnadsersättning är till för personer över 18 år som inte har en underhållsskyldig förälder. Om det gäller ett barn ska du istället använda läkarutlåtande för omvårdnadsbidrag och merkostnadsersättning (FK3220).",
+            "Läkarutlåtande för merkostnadsersättning är till för personer över 18 år som inte har en underhållsskyldig förälder. Om det gäller ett barn ska du istället använda Läkarutlåtande för omvårdnadsbidrag eller merkostnadsersättning.",
             result.text()
         );
       }
@@ -413,7 +413,7 @@ class FK7809CertificateConfirmationModalProviderTest {
         final var result = provider.of(certificate, actionEvaluation);
 
         assertEquals(
-            "Läkarutlåtande för merkostnadsersättning är till för personer över 18 år som inte har en underhållsskyldig förälder. Om det gäller ett barn ska du istället använda läkarutlåtande för omvårdnadsbidrag och merkostnadsersättning (FK3220).",
+            "Läkarutlåtande för merkostnadsersättning är till för personer över 18 år som inte har en underhållsskyldig förälder. Om det gäller ett barn ska du istället använda Läkarutlåtande för omvårdnadsbidrag eller merkostnadsersättning.",
             result.text()
         );
       }
@@ -501,7 +501,7 @@ class FK7809CertificateConfirmationModalProviderTest {
         final var result = provider.of(certificate, actionEvaluation);
 
         assertEquals(
-            "Läkarutlåtande för merkostnadsersättning är till för personer över 18 år som inte har en underhållsskyldig förälder. Om det gäller ett barn ska du istället använda läkarutlåtande för omvårdnadsbidrag och merkostnadsersättning (FK3220).",
+            "Läkarutlåtande för merkostnadsersättning är till för personer över 18 år som inte har en underhållsskyldig förälder. Om det gäller ett barn ska du istället använda Läkarutlåtande för omvårdnadsbidrag eller merkostnadsersättning.",
             result.text()
         );
       }
@@ -821,7 +821,7 @@ class FK7809CertificateConfirmationModalProviderTest {
         final var result = provider.of(certificate, actionEvaluation);
 
         assertEquals(
-            "Läkarutlåtande för merkostnadsersättning är till för personer över 18 år som inte har en underhållsskyldig förälder. Om det gäller ett barn ska du istället använda läkarutlåtande för omvårdnadsbidrag och merkostnadsersättning (FK3220).",
+            "Läkarutlåtande för merkostnadsersättning är till för personer över 18 år som inte har en underhållsskyldig förälder. Om det gäller ett barn ska du istället använda Läkarutlåtande för omvårdnadsbidrag eller merkostnadsersättning.",
             result.text()
         );
       }
@@ -909,7 +909,7 @@ class FK7809CertificateConfirmationModalProviderTest {
         final var result = provider.of(certificate, actionEvaluation);
 
         assertEquals(
-            "Läkarutlåtande för merkostnadsersättning är till för personer över 18 år som inte har en underhållsskyldig förälder. Om det gäller ett barn ska du istället använda läkarutlåtande för omvårdnadsbidrag och merkostnadsersättning (FK3220).",
+            "Läkarutlåtande för merkostnadsersättning är till för personer över 18 år som inte har en underhållsskyldig förälder. Om det gäller ett barn ska du istället använda Läkarutlåtande för omvårdnadsbidrag eller merkostnadsersättning.",
             result.text()
         );
       }
