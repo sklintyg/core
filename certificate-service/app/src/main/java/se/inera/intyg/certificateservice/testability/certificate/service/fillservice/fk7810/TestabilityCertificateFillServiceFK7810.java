@@ -4,6 +4,12 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.NEUROPSYKIATRISKT;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.VARDCENTRAL;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.CertificateModelFactoryFK7810.FK7810_V1_0;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAktivitetsbegransning.AKTIVITETSBAGRENSNINGAR_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAktivitetsbegransning.AKTIVITETSBAGRENSNINGAR_KOMMUNIKATION_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAktivitetsbegransning.AKTIVITETSBAGRENSNINGAR_LARANDE_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAktivitetsbegransning.AKTIVITETSBAGRENSNINGAR_MOVEMENT_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAktivitetsbegransning.AKTIVITETSBAGRENSNINGAR_OVRIG_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAktivitetsbegransning.AKTIVITETSBAGRENSNINGAR_PERSONAL_CARE_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAnnanGrundForMedicinsktUnderlag.QUESTION_ANNAN_GRUND_FOR_MEDICINSKT_UNDERLAG_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAnnanKroppsligFunktionMotivering.FUNKTIONSNEDSATTNING_MOTIVERING_ANNAN_KROPPSILIG_FUNKTION_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionBaseratPaAnnatMedicinsktUnderlag.QUESTION_BASERAT_PA_ANNAT_UNDERLAG_ID;
@@ -14,6 +20,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionDiagnos.DIAGNOS_4;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionDiagnos.DIAGNOS_5;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionDiagnosHistorik.DIAGNOSIS_MOTIVATION_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionForflyttningBegransningMotivering.AKTIVITETSBEGRANSNING_MOTIVERING_FORFLYTTNING_BEGRANSNING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_ANNAN_KROPPSILIG_FUNKTION_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_INTELLEKTUELL_FUNKTION_ID;
@@ -29,10 +36,14 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionGrundForMedicinsktUnderlag.UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionGrundForMedicinsktUnderlag.UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionIntellektuellFunktionMotivering.FUNKTIONSNEDSATTNING_MOTIVERING_INTELLEKTUELL_FUNKTION_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionKommunikationBegransningMotivering.AKTIVITETSBEGRANSNING_MOTIVERING_KOMMUNIKATION_BEGRANSNING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionKommunikationSocialInteraktionMotivering.FUNKTIONSNEDSATTNING_MOTIVERING_KOMMUNIKATION_SOCIAL_INTERAKTION_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionKoordinationMotivering.FUNKTIONSNEDSATTNING_MOTIVERING_KOORDINATION_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionLarandeBegransningMotivering.AKTIVITETSBEGRANSNING_MOTIVERING_LARANDE_BEGRANSNING_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionOvrigaBegransningMotivering.AKTIVITETSBEGRANSNING_MOTIVERING_OVRIGT_BEGRANSNING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionOvrigt.QUESTION_OVRIGT_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionPagaendeOchPlaneradeBehandlingar.QUESTION_PAGAENDE_ELLER_PLANERAD_BEHANDLING_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionPersonligVardBegransningMotivering.AKTIVITETSBEGRANSNING_MOTIVERING_PERSONLIG_VARD_BEGRANSNING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionPrognos.QUESTION_PROGNOS_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionPsykiskFunktionMotivering.FUNKTIONSNEDSATTNING_MOTIVERING_PSYKISK_FUNKTION_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionRelationTillPatienten.QUESTION_RELATION_TILL_PATIENTEN_ID;
@@ -143,8 +154,18 @@ public class TestabilityCertificateFillServiceFK7810 implements
         spec(FUNKTIONSNEDSATTNING_MOTIVERING_KOORDINATION_ID, certificateModel);
     final var specAnnanKroppslig =
         spec(FUNKTIONSNEDSATTNING_MOTIVERING_ANNAN_KROPPSILIG_FUNKTION_ID, certificateModel);
-//    final var specAktivitetsbegransning =
-//        spec(QUESTION_AKTIVITETSBEGRANSNINGAR_ID, certificateModel);
+    final var specAktivitetsbegransning =
+        spec(AKTIVITETSBAGRENSNINGAR_ID, certificateModel);
+    final var specLarande =
+        spec(AKTIVITETSBEGRANSNING_MOTIVERING_LARANDE_BEGRANSNING_ID, certificateModel);
+    final var specKommunikation =
+        spec(AKTIVITETSBEGRANSNING_MOTIVERING_KOMMUNIKATION_BEGRANSNING_ID, certificateModel);
+    final var specForflyttning =
+        spec(AKTIVITETSBEGRANSNING_MOTIVERING_FORFLYTTNING_BEGRANSNING_ID, certificateModel);
+    final var specPersonligVard =
+        spec(AKTIVITETSBEGRANSNING_MOTIVERING_PERSONLIG_VARD_BEGRANSNING_ID, certificateModel);
+    final var specOvriga =
+        spec(AKTIVITETSBEGRANSNING_MOTIVERING_OVRIGT_BEGRANSNING_ID, certificateModel);
     final var specBehandling =
         spec(QUESTION_PAGAENDE_ELLER_PLANERAD_BEHANDLING_ID, certificateModel);
     final var specAnsvarigVardenhet =
@@ -169,7 +190,12 @@ public class TestabilityCertificateFillServiceFK7810 implements
     sinnes(specSinnes, elementData, fillType);
     koordination(specKoordination, elementData, fillType);
     annanKroppslig(specAnnanKroppslig, elementData, fillType);
-//    aktivitetsbegransning(specAktivitetsbegransning, elementData);
+    aktivitetsbegransningar(specAktivitetsbegransning, elementData, fillType);
+    larande(specLarande, elementData, fillType);
+    kommunikation(specKommunikation, elementData, fillType);
+    forflyttning(specForflyttning, elementData, fillType);
+    personligtVard(specPersonligVard, elementData, fillType);
+    ovriga(specOvriga, elementData, fillType);
     behandling(specBehandling, elementData, fillType);
     ansvarigVardenhet(specAnsvarigVardenhet, elementData, fillType);
     prognos(specPrognos, elementData);
@@ -351,9 +377,69 @@ public class TestabilityCertificateFillServiceFK7810 implements
     }
   }
 
-  private static void aktivitetsbegransning(ElementSpecification spec, List<ElementData> list) {
-    if (emptyValue(spec) instanceof ElementValueText elementValueText) {
-      final var text = elementValueText.withText("Aktivitetsbegränsning");
+  private static void aktivitetsbegransningar(ElementSpecification spec, List<ElementData> list,
+      TestabilityFillTypeDTO fillType) {
+    if (emptyValue(spec) instanceof ElementValueCodeList elementValueCodeList) {
+      final var codes = List.of(
+          valueCode(
+              AKTIVITETSBAGRENSNINGAR_LARANDE_ID,
+              AKTIVITETSBAGRENSNINGAR_LARANDE_ID.value()),
+          valueCode(
+              AKTIVITETSBAGRENSNINGAR_KOMMUNIKATION_ID,
+              AKTIVITETSBAGRENSNINGAR_KOMMUNIKATION_ID.value()),
+          valueCode(
+              AKTIVITETSBAGRENSNINGAR_MOVEMENT_ID,
+              AKTIVITETSBAGRENSNINGAR_MOVEMENT_ID.value()),
+          valueCode(
+              AKTIVITETSBAGRENSNINGAR_PERSONAL_CARE_ID,
+              AKTIVITETSBAGRENSNINGAR_PERSONAL_CARE_ID.value()),
+          valueCode(
+              AKTIVITETSBAGRENSNINGAR_OVRIG_ID,
+              AKTIVITETSBAGRENSNINGAR_OVRIG_ID.value()));
+
+      final var codeList = elementValueCodeList.withList(
+          fillType == MAXIMAL ? codes : codes.subList(0, 1));
+      list.add(elementData(spec.id(), codeList));
+    }
+  }
+
+  private static void larande(ElementSpecification spec, List<ElementData> list,
+      TestabilityFillTypeDTO fillType) {
+    if (fillType == MAXIMAL && emptyValue(spec) instanceof ElementValueText elementValueText) {
+      final var text = elementValueText.withText(
+          "Lärande, tillämpa kunskap samt allmänna uppgifter och krav");
+      list.add(elementData(spec.id(), text));
+    }
+  }
+
+  private static void kommunikation(ElementSpecification spec, List<ElementData> list,
+      TestabilityFillTypeDTO fillType) {
+    if (fillType == MAXIMAL && emptyValue(spec) instanceof ElementValueText elementValueText) {
+      final var text = elementValueText.withText("Kommunikation");
+      list.add(elementData(spec.id(), text));
+    }
+  }
+
+  private static void forflyttning(ElementSpecification spec, List<ElementData> list,
+      TestabilityFillTypeDTO fillType) {
+    if (fillType == MAXIMAL && emptyValue(spec) instanceof ElementValueText elementValueText) {
+      final var text = elementValueText.withText("Förflyttning");
+      list.add(elementData(spec.id(), text));
+    }
+  }
+
+  private static void personligtVard(ElementSpecification spec, List<ElementData> list,
+      TestabilityFillTypeDTO fillType) {
+    if (fillType == MAXIMAL && emptyValue(spec) instanceof ElementValueText elementValueText) {
+      final var text = elementValueText.withText("Personlig vård och sköta sin hälsa");
+      list.add(elementData(spec.id(), text));
+    }
+  }
+
+  private static void ovriga(ElementSpecification spec, List<ElementData> list,
+      TestabilityFillTypeDTO fillType) {
+    if (fillType == MAXIMAL && emptyValue(spec) instanceof ElementValueText elementValueText) {
+      final var text = elementValueText.withText("Övriga aktivitetsbegränsningar");
       list.add(elementData(spec.id(), text));
     }
   }

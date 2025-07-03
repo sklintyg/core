@@ -9,9 +9,9 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 public class QuestionOvrigaBegransningMotivering extends
     AbstractAktivitetsbegransningMotivering {
 
-  public static final ElementId AKTIVITETSBEGRANSNING_MOTIVERING_PERSONLIG_VARD_BEGRANSNING_ID = new ElementId(
+  public static final ElementId AKTIVITETSBEGRANSNING_MOTIVERING_OVRIGT_BEGRANSNING_ID = new ElementId(
       "69");
-  private static final FieldId AKTIVITETSBEGRANSNING_MOTIVERING_PERSONLIG_VARD_BEGRANSNING_FIELD_ID = new FieldId(
+  private static final FieldId AKTIVITETSBEGRANSNING_MOTIVERING_OVRIGT_BEGRANSNING_FIELD_ID = new FieldId(
       "69.1");
 
   private QuestionOvrigaBegransningMotivering() {
@@ -20,8 +20,8 @@ public class QuestionOvrigaBegransningMotivering extends
 
   public static ElementSpecification questionOvrigaBegransningMotivering() {
     return getFunktionsnedsattningMotivering(
-        AKTIVITETSBEGRANSNING_MOTIVERING_PERSONLIG_VARD_BEGRANSNING_ID,
-        AKTIVITETSBEGRANSNING_MOTIVERING_PERSONLIG_VARD_BEGRANSNING_FIELD_ID,
+        AKTIVITETSBEGRANSNING_MOTIVERING_OVRIGT_BEGRANSNING_ID,
+        AKTIVITETSBEGRANSNING_MOTIVERING_OVRIGT_BEGRANSNING_FIELD_ID,
         AKTIVITETSBAGRENSNINGAR_OVRIG_ID,
         "Övriga aktivitetsbegränsningar",
         "Beskriv aktivitetsbegränsningen. Ange grad om det är möjligt och hur aktivitetsbegränsningen kan korrigeras med hjälpmedel.",

@@ -103,49 +103,56 @@
     <ns2:instans>1</ns2:instans>
     <ns2:delsvar id="58.2">
       <ns4:cv>
-        <ns4:code>F402B</ns4:code>
+        <ns4:code>A78</ns4:code>
         <ns4:codeSystem>1.2.752.116.1.1.1.1.8</ns4:codeSystem>
-        <ns4:displayName>Djurfobi</ns4:displayName>
+        <ns4:displayName>Q-feber</ns4:displayName>
       </ns4:cv>
     </ns2:delsvar>
-    <ns2:delsvar id="58.1">Djurfobi</ns2:delsvar>
+    <ns2:delsvar id="58.1">Q-feber</ns2:delsvar>
   </ns3:svar>
   <ns3:svar id="58">
     <ns2:instans>2</ns2:instans>
     <ns2:delsvar id="58.2">
       <ns4:cv>
-        <ns4:code>V9543</ns4:code>
+        <ns4:code>A25</ns4:code>
         <ns4:codeSystem>1.2.752.116.1.1.1.1.8</ns4:codeSystem>
-        <ns4:displayName>Olycka med rymdfarkost med skada på ombordvarande - annan
-          sysselsättning
-        </ns4:displayName>
+        <ns4:displayName>Råttbettsfeber</ns4:displayName>
       </ns4:cv>
     </ns2:delsvar>
-    <ns2:delsvar id="58.1">Olycka med rymdfarkost med skada på ombordvarande - annan
-      sysselsättning
-    </ns2:delsvar>
+    <ns2:delsvar id="58.1">Råttbettsfeber</ns2:delsvar>
   </ns3:svar>
   <ns3:svar id="58">
     <ns2:instans>3</ns2:instans>
     <ns2:delsvar id="58.2">
       <ns4:cv>
-        <ns4:code>A009</ns4:code>
+        <ns4:code>A23</ns4:code>
         <ns4:codeSystem>1.2.752.116.1.1.1.1.8</ns4:codeSystem>
-        <ns4:displayName>Kolera, ospecificerad</ns4:displayName>
+        <ns4:displayName>Undulantfeber</ns4:displayName>
       </ns4:cv>
     </ns2:delsvar>
-    <ns2:delsvar id="58.1">Kolera, ospecificerad</ns2:delsvar>
+    <ns2:delsvar id="58.1">Undulantfeber</ns2:delsvar>
   </ns3:svar>
   <ns3:svar id="58">
     <ns2:instans>4</ns2:instans>
     <ns2:delsvar id="58.2">
       <ns4:cv>
-        <ns4:code>A029</ns4:code>
+        <ns4:code>A984</ns4:code>
         <ns4:codeSystem>1.2.752.116.1.1.1.1.8</ns4:codeSystem>
-        <ns4:displayName>Andra salmonellainfektioner, ospecificerade</ns4:displayName>
+        <ns4:displayName>Ebolafeber</ns4:displayName>
       </ns4:cv>
     </ns2:delsvar>
-    <ns2:delsvar id="58.1">Andra salmonellainfektioner, ospecificerade</ns2:delsvar>
+    <ns2:delsvar id="58.1">Ebolafeber</ns2:delsvar>
+  </ns3:svar>
+  <ns3:svar id="58">
+    <ns2:instans>5</ns2:instans>
+    <ns2:delsvar id="58.2">
+      <ns4:cv>
+        <ns4:code>A010</ns4:code>
+        <ns4:codeSystem>1.2.752.116.1.1.1.1.8</ns4:codeSystem>
+        <ns4:displayName>Tyfoidfeber</ns4:displayName>
+      </ns4:cv>
+    </ns2:delsvar>
+    <ns2:delsvar id="58.1">Tyfoidfeber</ns2:delsvar>
   </ns3:svar>
   <ns3:svar id="58">
     <ns2:instans>5</ns2:instans>
