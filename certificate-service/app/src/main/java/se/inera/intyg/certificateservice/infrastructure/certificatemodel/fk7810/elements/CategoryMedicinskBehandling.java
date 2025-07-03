@@ -19,7 +19,7 @@ public class CategoryMedicinskBehandling {
         .id(MEDICINSK_BEHANDLING_CATEGORY_ID)
         .configuration(
             ElementConfigurationCategory.builder()
-                .name("Medicinsk behandling")
+                .name("Medicinska behandlingar")
                 .description(
                     "Ange pågående och planerade medicinska behandlingar eller åtgärder som är relevanta utifrån funktionsnedsättningen. Det kan vara ordinerade läkemedel, hjälpmedel (inklusive medicinteknisk utrustning), träningsinsatser eller särskild kost. Ange den medicinska indikationen och syftet med behandlingen eller åtgärden. Du kan även beskriva andra behandlingar och åtgärder som prövats utifrån funktionsnedsättningen.")
                 .build()
