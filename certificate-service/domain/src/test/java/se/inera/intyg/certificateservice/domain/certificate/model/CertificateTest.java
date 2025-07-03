@@ -2774,7 +2774,7 @@ class CertificateTest {
       final var expectedElementData = List.of(TEXT, DATE, CONTACT_INFO);
 
       doReturn(Set.of(TEXT, DATE)).when(prefillProcessor)
-          .prefill(certificate.certificateModel(), XML);
+          .prefill(certificate.certificateModel(), XML, CERTIFICATE_ID);
 
       certificate.prefill(XML, prefillProcessor, ALFA_ALLERGIMOTTAGNINGEN);
       assertTrue(expectedElementData.containsAll(certificate.elementData()));

@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificate.service.PrefillProcessor;
@@ -16,7 +17,8 @@ public class PrefillService implements PrefillProcessor {
   private final PrefillHandler prefillHandler;
 
   @Override
-  public Set<ElementData> prefill(CertificateModel certificateModel, Xml prefillXml) {
+  public Set<ElementData> prefill(CertificateModel certificateModel, Xml prefillXml,
+      CertificateId id) {
     if (prefillXml == null) {
       return Collections.emptySet();
     }
@@ -32,7 +34,7 @@ public class PrefillService implements PrefillProcessor {
         prefillHandler
     );
 
-    log.info("Begin prefilling answers for certificate {}", certificateModel.id());
+    log.info("Begin prefilling answers for certificate {}", id.id());
     prefillResult.prefill();
 
     log.info("Prefill result log: {}", prefillResult.toJsonReport());

@@ -66,10 +66,11 @@ public class PrefillCheckboxMultipleCodeConverter implements PrefillConverter {
                         final var validationError = PrefillValidator.validateMinimumNumberOfDelsvar(
                             answer,
                             MINIMUM_SUB_ANSWERS,
-                            specification);
+                            specification
+                        );
 
-                        if (validationError != null) {
-                          prefillErrors.add(validationError);
+                        if (!validationError.isEmpty()) {
+                          prefillErrors.addAll(validationError);
                           return null;
                         }
                         return getCodes(answer.getDelsvar(),

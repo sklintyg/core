@@ -16,6 +16,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.MedicalInvestigationConfig;
+import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.PrefillAnswer;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.PrefillError;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.PrefillUnmarshaller;
@@ -56,9 +57,9 @@ public class PrefillMedicalInvestigationListConverter implements PrefillConverte
         specification
     );
 
-    if (prefillError != null) {
+    if (!prefillError.isEmpty()) {
       return PrefillAnswer.builder()
-          .errors(List.of(prefillError))
+          .errors(prefillError)
           .build();
     }
 
@@ -117,9 +118,20 @@ public class PrefillMedicalInvestigationListConverter implements PrefillConverte
       throw new IllegalStateException("Invalid format cvType is empty");
     }
 
+    final var code = new Code(cvType.get().getCode(), cvType.get().getCodeSystem(),
+        cvType.get().getDisplayName());
+
+    final var validCode = config.typeOptions().stream()
+        .filter(c -> c.matches(code))
+        .findFirst()
+        .orElseThrow(
+            () -> new IllegalArgumentException(
+                "Code not found: '%s'".formatted(code))
+        );
+
     return ElementValueCode.builder()
         .codeId(config.investigationTypeId())
-        .code(cvType.get().getCode())
+        .code(validCode.code())
         .build();
   }
 

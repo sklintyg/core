@@ -352,6 +352,7 @@ class PrefillMedicalInvestigationListConverterTest {
     private static Element createCVTypeElement(String code) {
       final var cvType = new CVType();
       cvType.setCode(code);
+      cvType.setCodeSystem("S1");
       cvType.setDisplayName("D1");
 
       final var factory = new ObjectFactory();

@@ -7,6 +7,7 @@ import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
 
 import java.util.Optional;
 import java.util.Set;
@@ -33,7 +34,7 @@ class PrefillServiceTest {
   void shouldReturnEmptySetIfPrefillXmlIsNull() {
     final var certificateModel = mock(CertificateModel.class);
 
-    final var result = prefillService.prefill(certificateModel, null);
+    final var result = prefillService.prefill(certificateModel, null, CERTIFICATE_ID);
 
     assertTrue(result.isEmpty());
   }
@@ -47,7 +48,7 @@ class PrefillServiceTest {
       mocked.when(() -> PrefillUnmarshaller.forifyllnadType("xmlstring"))
           .thenReturn(Optional.empty());
 
-      final var result = prefillService.prefill(certificateModel, xml);
+      final var result = prefillService.prefill(certificateModel, xml, CERTIFICATE_ID);
 
       assertTrue(result.isEmpty());
     }
@@ -72,7 +73,7 @@ class PrefillServiceTest {
         mockedResult.when(() -> PrefillResult.create(certificateModel, forifyllnad, prefillHandler))
             .thenReturn(prefillResult);
 
-        final var result = prefillService.prefill(certificateModel, xml);
+        final var result = prefillService.prefill(certificateModel, xml, CERTIFICATE_ID);
         verify(prefillResult, times(1)).prefill();
 
         assertEquals(elementData, result);

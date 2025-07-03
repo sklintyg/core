@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
@@ -65,18 +64,24 @@ public class PrefillDiagnosisConverter implements PrefillConverter {
                     answers.stream()
                         .map(answer -> {
                           try {
-                            final var subAnswerError = PrefillValidator.validateMinimumNumberOfDelsvar(
-                                answer,
-                                MINIMUM_SUB_ANSWERS,
-                                specification);
 
-                            final var codeError = PrefillValidator.validateDiagnosisCode(
-                                getCvTypes(specification, answer),
-                                diagnosisCodeRepository
+                            final var validationErrors = new ArrayList<PrefillError>();
+                            validationErrors.addAll(
+                                PrefillValidator.validateMinimumNumberOfDelsvar(
+                                    answer,
+                                    MINIMUM_SUB_ANSWERS,
+                                    specification)
                             );
 
-                            if (validationFailed(subAnswerError, codeError)) {
-                              prefillErrors.addAll(getValidationErrors(subAnswerError, codeError));
+                            validationErrors.addAll(
+                                PrefillValidator.validateDiagnosisCode(
+                                    getCvTypes(specification, answer),
+                                    diagnosisCodeRepository
+                                )
+                            );
+
+                            if (!validationErrors.isEmpty()) {
+                              prefillErrors.addAll(validationErrors);
                               return null;
                             }
 
@@ -170,17 +175,5 @@ public class PrefillDiagnosisConverter implements PrefillConverter {
         .findFirst()
         .orElseThrow()
         .id();
-  }
-
-  private List<PrefillError> getValidationErrors(PrefillError subAnswerValidationError,
-      PrefillError diagnosisCodeValidationError) {
-    return Stream.of(subAnswerValidationError, diagnosisCodeValidationError)
-        .filter(Objects::nonNull)
-        .toList();
-  }
-
-  private static boolean validationFailed(PrefillError subAnswerValidationError,
-      PrefillError diagnosisCodeValidationError) {
-    return subAnswerValidationError != null || diagnosisCodeValidationError != null;
   }
 }

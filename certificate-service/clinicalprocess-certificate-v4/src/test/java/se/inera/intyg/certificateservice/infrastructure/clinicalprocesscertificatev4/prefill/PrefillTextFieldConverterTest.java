@@ -60,20 +60,58 @@ class PrefillTextFieldConverterTest {
     }
 
     @Test
-    void shouldReturnPrefillAnswerIfSubAnswerExists() {
+    void shouldReturnPrefillAnswerWithInvalidSubAnswerId() {
       final var prefill = new Forifyllnad();
       final var svar = new Svar();
-      svar.setId("other");
+      svar.setId(ELEMENT_ID.id());
       final var delsvar = new Delsvar();
-      delsvar.setId(SPECIFICATION.id().id());
+      delsvar.setId("wrongId");
       delsvar.getContent().add(VALUE);
       svar.getDelsvar().add(delsvar);
       prefill.getSvar().add(svar);
 
       final var result = prefillTextFieldConverter.prefillAnswer(SPECIFICATION, prefill);
 
+      assertEquals(
+          PrefillErrorType.INVALID_SUB_ANSWER_ID,
+          result.getErrors().getFirst().type()
+      );
+    }
+
+    @Test
+    void shouldReturnPrefillAnswerIfSubAnswerExists() {
+      final var expectedElementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueText.builder()
+                  .textId(new FieldId(ELEMENT_ID.id()))
+                  .text(VALUE)
+                  .build()
+          )
+          .build();
+
+      final var prefill = new Forifyllnad();
+      final var svar = new Svar();
+      svar.setId("other");
+      final var delsvar = new Delsvar();
+      delsvar.setId(ELEMENT_ID.id());
+      delsvar.getContent().add(VALUE);
+      svar.getDelsvar().add(delsvar);
+      prefill.getSvar().add(svar);
+
+      final var specification = ElementSpecification.builder()
+          .id(ELEMENT_ID)
+          .configuration(
+              ElementConfigurationTextField.builder()
+                  .id(new FieldId(ELEMENT_ID.id()))
+                  .build()
+          )
+          .build();
+
+      final var result = prefillTextFieldConverter.prefillAnswer(specification, prefill);
+
       final var expected = PrefillAnswer.builder()
-          .elementData(EXPECTED_ELEMENT_DATA)
+          .elementData(expectedElementData)
           .build();
 
       assertEquals(expected, result);
@@ -85,7 +123,7 @@ class PrefillTextFieldConverterTest {
       final var svar = new Svar();
       svar.setId(SPECIFICATION.id().id());
       final var delsvar = new Delsvar();
-      delsvar.setId("other");
+      delsvar.setId(FIELD_ID.value());
       delsvar.getContent().add(VALUE);
       svar.getDelsvar().add(delsvar);
       prefill.getSvar().add(svar);
