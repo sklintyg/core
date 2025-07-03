@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertific
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class PrefillErrorTest {
@@ -49,6 +50,25 @@ class PrefillErrorTest {
     assertAll(
         () -> assertEquals(PrefillErrorType.MISSING_CONVERTER, error.type()),
         () -> assertEquals("No converter found for MedicalInvestigationConverter", error.details())
+    );
+  }
+
+  @Test
+  void shouldReturnInvalidSubAnswerId() {
+    final var expectedId = "expectedId";
+    final var actualIds = List.of("actualId1", "actualId2");
+    final var answerId = "answerId";
+    var error = PrefillError.invalidSubAnswerId(
+        expectedId,
+        actualIds,
+        answerId
+    );
+
+    assertAll(
+        () -> assertEquals(PrefillErrorType.INVALID_SUB_ANSWER_ID, error.type()),
+        () -> assertEquals(
+            "Invalid sub answer id. Expected '%s' but got '%s' for answer id %s".formatted(
+                expectedId, actualIds, answerId), error.details())
     );
   }
 }

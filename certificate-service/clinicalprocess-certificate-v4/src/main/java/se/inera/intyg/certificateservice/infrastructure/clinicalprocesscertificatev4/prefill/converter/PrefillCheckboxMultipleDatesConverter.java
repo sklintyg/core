@@ -55,12 +55,14 @@ public class PrefillCheckboxMultipleDatesConverter implements PrefillConverter {
             .dateList(answers.stream()
                 .map(s -> {
                   try {
-                    final var validationError = PrefillValidator.validateMinimumNumberOfDelsvar(s,
+                    final var validationError = PrefillValidator.validateMinimumNumberOfDelsvar(
+                        s,
                         MINIMUM_SUB_ANSWERS,
-                        specification);
+                        specification
+                    );
 
-                    if (validationError != null) {
-                      prefillErrors.add(validationError);
+                    if (!validationError.isEmpty()) {
+                      prefillErrors.addAll(validationError);
                       return null;
                     }
                     var code = getCode(s.getDelsvar(), specification);

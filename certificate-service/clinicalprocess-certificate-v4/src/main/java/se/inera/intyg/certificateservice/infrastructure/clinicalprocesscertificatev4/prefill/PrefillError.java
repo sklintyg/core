@@ -2,7 +2,10 @@ package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertific
 
 import static se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.PrefillErrorType.ANSWER_NOT_FOUND;
 import static se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.PrefillErrorType.INVALID_DIAGNOSIS_CODE;
+import static se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.PrefillErrorType.INVALID_SUB_ANSWER_ID;
 import static se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.PrefillErrorType.WRONG_NUMBER_OF_ANSWERS;
+
+import java.util.List;
 
 public record PrefillError(PrefillErrorType type, String details) {
 
@@ -18,6 +21,18 @@ public record PrefillError(PrefillErrorType type, String details) {
 
   public static PrefillError wrongConfigurationType() {
     return technicalError("Wrong configuration type");
+  }
+
+  public static PrefillError invalidSubAnswerId(String expectedId, List<String> actualIds,
+      String answerId) {
+    return new PrefillError(
+        INVALID_SUB_ANSWER_ID,
+        "Invalid sub answer id. Expected '%s' but got '%s' for answer id %s".formatted(
+            expectedId,
+            actualIds,
+            answerId
+        )
+    );
   }
 
   public static PrefillError invalidBooleanValue(String answerId, String value) {

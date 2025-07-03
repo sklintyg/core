@@ -65,9 +65,9 @@ class PrefillRadioBooleanConverterTest {
     void shouldReturnPrefillAnswerWithInvalidFormat() {
       final var prefill = new Forifyllnad();
       final var svar = new Svar();
-      svar.setId("other");
+      svar.setId(ELEMENT_ID.id());
       final var delsvar = new Delsvar();
-      delsvar.setId(SPECIFICATION.id().id());
+      delsvar.setId(RADIOBOOLEAN_ID.value());
       delsvar.getContent().add("wrongValue");
       svar.getDelsvar().add(delsvar);
       prefill.getSvar().add(svar);
@@ -81,20 +81,57 @@ class PrefillRadioBooleanConverterTest {
     }
 
     @Test
-    void shouldReturnPrefillAnswerIfSubAnswerExists() {
+    void shouldReturnPrefillAnswerWithInvalidSubAnswerId() {
       final var prefill = new Forifyllnad();
       final var svar = new Svar();
-      svar.setId("other");
+      svar.setId(ELEMENT_ID.id());
       final var delsvar = new Delsvar();
-      delsvar.setId(SPECIFICATION.id().id());
-      delsvar.getContent().add(BOOLEAN.toString());
+      delsvar.setId("wrongId");
+      delsvar.getContent().add(BOOLEAN);
       svar.getDelsvar().add(delsvar);
       prefill.getSvar().add(svar);
 
       final var result = prefillRadioBooleanConverter.prefillAnswer(SPECIFICATION, prefill);
 
+      assertEquals(
+          PrefillErrorType.INVALID_SUB_ANSWER_ID,
+          result.getErrors().getFirst().type()
+      );
+    }
+
+    @Test
+    void shouldReturnPrefillAnswerIfSubAnswerExists() {
+      final var prefill = new Forifyllnad();
+      final var svar = new Svar();
+      svar.setId("other");
+      final var delsvar = new Delsvar();
+      delsvar.setId(RADIOBOOLEAN_ID.value());
+      delsvar.getContent().add(BOOLEAN.toString());
+      svar.getDelsvar().add(delsvar);
+      prefill.getSvar().add(svar);
+
+      final var specification = ElementSpecification.builder()
+          .id(new ElementId(RADIOBOOLEAN_ID.value()))
+          .configuration(
+              ElementConfigurationRadioBoolean.builder()
+                  .id(RADIOBOOLEAN_ID)
+                  .build()
+          )
+          .build();
+
+      final var result = prefillRadioBooleanConverter.prefillAnswer(specification, prefill);
+
       final var expected = PrefillAnswer.builder()
-          .elementData(EXPECTED_ELEMENT_DATA)
+          .elementData(
+              ElementData.builder()
+                  .id(new ElementId(RADIOBOOLEAN_ID.value()))
+                  .value(
+                      ElementValueBoolean.builder()
+                          .booleanId(RADIOBOOLEAN_ID)
+                          .value(BOOLEAN)
+                          .build()
+                  ).build()
+          )
           .build();
 
       assertEquals(expected, result);
@@ -104,9 +141,9 @@ class PrefillRadioBooleanConverterTest {
     void shouldReturnPrefillAnswerIfAnswerExists() {
       final var prefill = new Forifyllnad();
       final var svar = new Svar();
-      svar.setId(SPECIFICATION.id().id());
+      svar.setId(ELEMENT_ID.id());
       final var delsvar = new Delsvar();
-      delsvar.setId("other");
+      delsvar.setId(RADIOBOOLEAN_ID.value());
       delsvar.getContent().add(BOOLEAN.toString());
       svar.getDelsvar().add(delsvar);
       prefill.getSvar().add(svar);

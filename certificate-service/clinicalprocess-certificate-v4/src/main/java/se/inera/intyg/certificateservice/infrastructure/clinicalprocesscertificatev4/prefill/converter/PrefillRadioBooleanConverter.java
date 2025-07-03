@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.converter;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
@@ -10,6 +11,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.PrefillAnswer;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.PrefillError;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.util.PrefillValidator;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.util.SubAnswersUtil;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
@@ -45,19 +47,30 @@ public class PrefillRadioBooleanConverter implements PrefillConverter {
       return null;
     }
 
-    final var prefillError = PrefillValidator.validateSingleAnswerOrSubAnswer(
-        answers,
-        subAnswers,
-        specification
+    final var prefillErrors = new ArrayList<PrefillError>();
+    prefillErrors.addAll(
+        PrefillValidator.validateSingleAnswerOrSubAnswer(
+            answers,
+            subAnswers,
+            specification
+        )
     );
 
-    if (prefillError != null) {
+    prefillErrors.addAll(
+        PrefillValidator.validateDelsvarId(
+            SubAnswersUtil.get(answers, subAnswers),
+            configurationRadioBoolean,
+            specification
+        )
+    );
+
+    if (!prefillErrors.isEmpty()) {
       return PrefillAnswer.builder()
-          .errors(List.of(prefillError))
+          .errors(prefillErrors)
           .build();
     }
 
-    final var content = getContent(subAnswers, answers);
+    final var content = SubAnswersUtil.getContent(subAnswers, answers, configurationRadioBoolean);
 
     if (!isValidBoolean(content)) {
       return PrefillAnswer.builder()

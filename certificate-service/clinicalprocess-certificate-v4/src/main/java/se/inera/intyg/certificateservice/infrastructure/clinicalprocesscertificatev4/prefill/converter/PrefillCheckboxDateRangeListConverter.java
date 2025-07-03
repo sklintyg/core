@@ -15,12 +15,15 @@ import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.PrefillAnswer;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.PrefillError;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.PrefillUnmarshaller;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.util.PrefillValidator;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
 @Component
 public class PrefillCheckboxDateRangeListConverter implements PrefillConverter {
+
+  private static final int MINIMUM = 2;
 
   @Override
   public Class<? extends ElementConfiguration> supports() {
@@ -52,6 +55,17 @@ public class PrefillCheckboxDateRangeListConverter implements PrefillConverter {
             .dateRangeList(answers.stream()
                 .map(svar -> {
                   try {
+
+                    final var minimumNumberOfDelsvarError = PrefillValidator.validateMinimumNumberOfDelsvar(
+                        answers,
+                        MINIMUM,
+                        specification
+                    );
+
+                    if (!minimumNumberOfDelsvarError.isEmpty()) {
+                      prefillErrors.addAll(minimumNumberOfDelsvarError);
+                      return null;
+                    }
 
                     final var dateContent = getDateContent(svar, specification);
                     final var datePeriodAnswer = PrefillUnmarshaller.datePeriodType(

@@ -38,7 +38,6 @@ class PrefillDateRangeConverterTest {
       .configuration(
           ElementConfigurationDateRange.builder()
               .id(FIELD_ID)
-              .id(FIELD_ID)
               .build()
       )
       .build();
@@ -50,7 +49,8 @@ class PrefillDateRangeConverterTest {
               .fromDate(START_DATE)
               .toDate(END_DATE)
               .build()
-      ).build();
+      )
+      .build();
 
   private final PrefillDateRangeConverter prefillDateRangeConverter = new PrefillDateRangeConverter();
 
@@ -73,20 +73,59 @@ class PrefillDateRangeConverterTest {
     }
 
     @Test
-    void shouldReturnPrefillAnswerIfSubAnswerExists() throws Exception {
+    void shouldReturnPrefillAnswerWithInvalidSubAnswerId() throws Exception {
       final var prefill = new Forifyllnad();
       final var svar = new Svar();
-      svar.setId("other");
+      svar.setId(ELEMENT_ID.id());
       final var delsvar = new Delsvar();
-      delsvar.setId(SPECIFICATION.id().id());
+      delsvar.setId("wrongId");
       delsvar.getContent().add(createDateRangeTypeElement());
       svar.getDelsvar().add(delsvar);
       prefill.getSvar().add(svar);
 
       final var result = prefillDateRangeConverter.prefillAnswer(SPECIFICATION, prefill);
 
+      assertEquals(
+          PrefillErrorType.INVALID_SUB_ANSWER_ID,
+          result.getErrors().getFirst().type()
+      );
+    }
+
+    @Test
+    void shouldReturnPrefillAnswerIfSubAnswerExists() throws Exception {
+      final var prefill = new Forifyllnad();
+      final var svar = new Svar();
+      svar.setId("other");
+      final var delsvar = new Delsvar();
+      delsvar.setId(FIELD_ID.value());
+      delsvar.getContent().add(createDateRangeTypeElement());
+      svar.getDelsvar().add(delsvar);
+      prefill.getSvar().add(svar);
+
+      final var specification = ElementSpecification.builder()
+          .id(new ElementId(FIELD_ID.value()))
+          .configuration(
+              ElementConfigurationDateRange.builder()
+                  .id(FIELD_ID)
+                  .build()
+          )
+          .build();
+
+      final var result = prefillDateRangeConverter.prefillAnswer(specification, prefill);
+
       final var expected = PrefillAnswer.builder()
-          .elementData(EXPECTED_ELEMENT_DATA)
+          .elementData(
+              ElementData.builder()
+                  .id(new ElementId(FIELD_ID.value()))
+                  .value(
+                      ElementValueDateRange.builder()
+                          .id(FIELD_ID)
+                          .fromDate(START_DATE)
+                          .toDate(END_DATE)
+                          .build()
+                  )
+                  .build()
+          )
           .build();
 
       assertEquals(expected, result);
@@ -96,9 +135,9 @@ class PrefillDateRangeConverterTest {
     void shouldReturnPrefillAnswerIfAnswerExists() throws Exception {
       final var prefill = new Forifyllnad();
       final var svar = new Svar();
-      svar.setId(SPECIFICATION.id().id());
+      svar.setId(ELEMENT_ID.id());
       final var delsvar = new Delsvar();
-      delsvar.setId("other");
+      delsvar.setId(FIELD_ID.value());
       delsvar.getContent().add(createDateRangeTypeElement());
       svar.getDelsvar().add(delsvar);
       prefill.getSvar().add(svar);

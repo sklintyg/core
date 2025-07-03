@@ -50,9 +50,9 @@ public class PrefillVisualAcuitiesConverter implements PrefillConverter {
         specification
     );
 
-    if (prefillError != null) {
+    if (!prefillError.isEmpty()) {
       return PrefillAnswer.builder()
-          .errors(List.of(prefillError))
+          .errors(prefillError)
           .build();
     }
 

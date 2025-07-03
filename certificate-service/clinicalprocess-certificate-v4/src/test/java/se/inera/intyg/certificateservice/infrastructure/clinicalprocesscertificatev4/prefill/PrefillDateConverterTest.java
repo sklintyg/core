@@ -56,9 +56,9 @@ class PrefillDateConverterTest {
     void shouldReturnPrefillAnswerWithInvalidFormat() {
       final var prefill = new Forifyllnad();
       final var svar = new Svar();
-      svar.setId("other");
+      svar.setId(ELEMENT_ID.id());
       final var delsvar = new Delsvar();
-      delsvar.setId(SPECIFICATION.id().id());
+      delsvar.setId(DATE_ID.value());
       delsvar.getContent().add("wrongValue");
       svar.getDelsvar().add(delsvar);
       prefill.getSvar().add(svar);
@@ -67,6 +67,25 @@ class PrefillDateConverterTest {
 
       assertEquals(
           PrefillErrorType.INVALID_FORMAT,
+          result.getErrors().getFirst().type()
+      );
+    }
+
+    @Test
+    void shouldReturnPrefillAnswerWithInvalidSubAnswerId() {
+      final var prefill = new Forifyllnad();
+      final var svar = new Svar();
+      svar.setId(ELEMENT_ID.id());
+      final var delsvar = new Delsvar();
+      delsvar.setId("wrongId");
+      delsvar.getContent().add(DATE);
+      svar.getDelsvar().add(delsvar);
+      prefill.getSvar().add(svar);
+
+      final var result = prefillDateConverter.prefillAnswer(SPECIFICATION, prefill);
+
+      assertEquals(
+          PrefillErrorType.INVALID_SUB_ANSWER_ID,
           result.getErrors().getFirst().type()
       );
     }
@@ -86,15 +105,33 @@ class PrefillDateConverterTest {
       final var svar = new Svar();
       svar.setId("other");
       final var delsvar = new Delsvar();
-      delsvar.setId(SPECIFICATION.id().id());
+      delsvar.setId(DATE_ID.value());
       delsvar.getContent().add(DATE.toString());
       svar.getDelsvar().add(delsvar);
       prefill.getSvar().add(svar);
 
-      final var result = prefillDateConverter.prefillAnswer(SPECIFICATION, prefill);
+      final var specification = ElementSpecification.builder()
+          .id(new ElementId(DATE_ID.value()))
+          .configuration(
+              ElementConfigurationDate.builder()
+                  .id(DATE_ID)
+                  .build()
+          )
+          .build();
+
+      final var result = prefillDateConverter.prefillAnswer(specification, prefill);
 
       final var expected = PrefillAnswer.builder()
-          .elementData(EXPECTED_ELEMENT_DATA)
+          .elementData(
+              ElementData.builder()
+                  .id(new ElementId(DATE_ID.value()))
+                  .value(
+                      ElementValueDate.builder()
+                          .dateId(DATE_ID)
+                          .date(DATE)
+                          .build()
+                  ).build()
+          )
           .build();
 
       assertEquals(expected, result);
@@ -104,9 +141,9 @@ class PrefillDateConverterTest {
     void shouldReturnPrefillAnswerIfAnswerExists() {
       final var prefill = new Forifyllnad();
       final var svar = new Svar();
-      svar.setId(SPECIFICATION.id().id());
+      svar.setId(ELEMENT_ID.id());
       final var delsvar = new Delsvar();
-      delsvar.setId("other");
+      delsvar.setId(DATE_ID.value());
       delsvar.getContent().add(DATE.toString());
       svar.getDelsvar().add(delsvar);
       prefill.getSvar().add(svar);
