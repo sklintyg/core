@@ -48,6 +48,10 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionPsykiskFunktionMotivering.FUNKTIONSNEDSATTNING_MOTIVERING_PSYKISK_FUNKTION_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionRelationTillPatienten.QUESTION_RELATION_TILL_PATIENTEN_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionSinnesfunktionMotivering.FUNKTIONSNEDSATTNING_MOTIVERING_SINNESFUNKTION_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionSjukvardandeInsatsEgenvard.QUESTION_SJUKVARDANDE_INSATS_EGENVARD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionSjukvardandeInsatsEgenvardInsatser.QUESTION_SJUKVARDANDE_INSATS_EGENVARD_INSATSER_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionSjukvardandeInsatsHSL.QUESTION_SJUKVARDANDE_INSATS_HSL_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionSjukvardandeInsatsHSLInsatser.QUESTION_SJUKVARDANDE_INSATS_HSL_INSATSER_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionUppmarksamhetMotivering.FUNKTIONSNEDSATTNING_MOTIVERING_UPPMAKRMSAHET_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionUtredningEllerUnderlag.MEDICAL_INVESTIGATION_FIELD_ID_1;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionUtredningEllerUnderlag.MEDICAL_INVESTIGATION_FIELD_ID_2;
@@ -172,6 +176,14 @@ public class TestabilityCertificateFillServiceFK7810 implements
         spec(QUESTION_VARDENHET_OCH_TIDPLAN_ID, certificateModel);
     final var specPrognos =
         spec(QUESTION_PROGNOS_ID, certificateModel);
+    final var specSjukvardandeInsatserHSL =
+        spec(QUESTION_SJUKVARDANDE_INSATS_HSL_ID, certificateModel);
+    final var specSjukvardandeInsatserHSLInsatser =
+        spec(QUESTION_SJUKVARDANDE_INSATS_HSL_INSATSER_ID, certificateModel);
+    final var specSjukvardandeInsatserEgenvard =
+        spec(QUESTION_SJUKVARDANDE_INSATS_EGENVARD_ID, certificateModel);
+    final var specSjukvardandeInsatserEgenvardInsatser =
+        spec(QUESTION_SJUKVARDANDE_INSATS_EGENVARD_INSATSER_ID, certificateModel);
     final var specOvrigt =
         spec(QUESTION_OVRIGT_ID, certificateModel);
 
@@ -191,7 +203,7 @@ public class TestabilityCertificateFillServiceFK7810 implements
     koordination(specKoordination, elementData, fillType);
     annanKroppslig(specAnnanKroppslig, elementData, fillType);
     aktivitetsbegransningar(specAktivitetsbegransning, elementData, fillType);
-    larande(specLarande, elementData, fillType);
+    larande(specLarande, elementData);
     kommunikation(specKommunikation, elementData, fillType);
     forflyttning(specForflyttning, elementData, fillType);
     personligtVard(specPersonligVard, elementData, fillType);
@@ -199,6 +211,11 @@ public class TestabilityCertificateFillServiceFK7810 implements
     behandling(specBehandling, elementData, fillType);
     ansvarigVardenhet(specAnsvarigVardenhet, elementData, fillType);
     prognos(specPrognos, elementData);
+    sjukvardandeInsatsHSL(specSjukvardandeInsatserHSL, elementData, fillType);
+    sjukvardandeInsatsHSLInsatser(specSjukvardandeInsatserHSLInsatser, elementData, fillType);
+    sjukvardandeInsatsEgenvard(specSjukvardandeInsatserEgenvard, elementData, fillType);
+    sjukvardandeInsatsEgenvardInsatser(specSjukvardandeInsatserEgenvardInsatser, elementData,
+        fillType);
     ovrigt(specOvrigt, elementData, fillType);
 
     return elementData;
@@ -403,9 +420,8 @@ public class TestabilityCertificateFillServiceFK7810 implements
     }
   }
 
-  private static void larande(ElementSpecification spec, List<ElementData> list,
-      TestabilityFillTypeDTO fillType) {
-    if (fillType == MAXIMAL && emptyValue(spec) instanceof ElementValueText elementValueText) {
+  private static void larande(ElementSpecification spec, List<ElementData> list) {
+    if (emptyValue(spec) instanceof ElementValueText elementValueText) {
       final var text = elementValueText.withText(
           "Lärande, tillämpa kunskap samt allmänna uppgifter och krav");
       list.add(elementData(spec.id(), text));
@@ -463,6 +479,47 @@ public class TestabilityCertificateFillServiceFK7810 implements
   private static void prognos(ElementSpecification spec, List<ElementData> list) {
     if (emptyValue(spec) instanceof ElementValueText elementValueText) {
       final var text = elementValueText.withText("Prognos");
+      list.add(elementData(spec.id(), text));
+    }
+  }
+
+  private static void sjukvardandeInsatsHSL(ElementSpecification spec, List<ElementData> list,
+      TestabilityFillTypeDTO fillType) {
+
+    var value = fillType == MAXIMAL
+        ? ElementValueBoolean.builder().booleanId(spec.configuration().id()).value(true).build()
+        : ElementValueBoolean.builder().booleanId(spec.configuration().id()).value(false).build();
+
+    list.add(elementData(spec.id(), value));
+
+  }
+
+  private static void sjukvardandeInsatsHSLInsatser(ElementSpecification spec,
+      List<ElementData> list,
+      TestabilityFillTypeDTO fillType) {
+    if (fillType == MAXIMAL && emptyValue(spec) instanceof ElementValueText elementValueText) {
+      final var text = elementValueText.withText(
+          "Ange vilka insatser och i vilken omfattning");
+      list.add(elementData(spec.id(), text));
+    }
+  }
+
+  private static void sjukvardandeInsatsEgenvard(ElementSpecification spec, List<ElementData> list,
+      TestabilityFillTypeDTO fillType) {
+
+    var value = fillType == MAXIMAL
+        ? ElementValueBoolean.builder().booleanId(spec.configuration().id()).value(true).build()
+        : ElementValueBoolean.builder().booleanId(spec.configuration().id()).value(false).build();
+
+    list.add(elementData(spec.id(), value));
+  }
+
+  private static void sjukvardandeInsatsEgenvardInsatser(ElementSpecification spec,
+      List<ElementData> list,
+      TestabilityFillTypeDTO fillType) {
+    if (fillType == MAXIMAL && emptyValue(spec) instanceof ElementValueText elementValueText) {
+      final var text = elementValueText.withText(
+          "Ange vilka insatser och i vilken omfattning");
       list.add(elementData(spec.id(), text));
     }
   }

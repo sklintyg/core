@@ -154,17 +154,6 @@
     </ns2:delsvar>
     <ns2:delsvar id="58.1">Tyfoidfeber</ns2:delsvar>
   </ns3:svar>
-  <ns3:svar id="58">
-    <ns2:instans>5</ns2:instans>
-    <ns2:delsvar id="58.2">
-      <ns4:cv>
-        <ns4:code>A083A</ns4:code>
-        <ns4:codeSystem>1.2.752.116.1.1.1.1.8</ns4:codeSystem>
-        <ns4:displayName>Coxsackievirusenterit</ns4:displayName>
-      </ns4:cv>
-    </ns2:delsvar>
-    <ns2:delsvar id="58.1">Coxsackievirusenterit</ns2:delsvar>
-  </ns3:svar>
   <ns3:svar id="5">
     <ns2:delsvar id="5.1">Nagot</ns2:delsvar>
   </ns3:svar>
