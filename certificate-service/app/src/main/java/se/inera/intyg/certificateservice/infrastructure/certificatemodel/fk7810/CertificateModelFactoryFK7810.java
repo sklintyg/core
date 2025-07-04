@@ -10,6 +10,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.CategoryPrognos.categoryPrognos;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.CategorySjukvardandeInsats.categorySjukvardandeInsats;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAktivitetsbegransning.questionAktivitetsbegransning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAndningsFunktionMotivering.questionAndningsFunktionMotivering;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAnnanGrundForMedicinsktUnderlag.questionAnnanGrundForMedicinsktUnderlag;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAnnanKroppsligFunktionMotivering.questionAnnanKroppsligFunktionMotivering;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionBaseratPaAnnatMedicinsktUnderlag.questionBaseratPaAnnatMedicinsktUnderlag;
@@ -179,6 +180,7 @@ public class CertificateModelFactoryFK7810 implements CertificateModelFactory {
                 questionPsykiskFunktionMotivering(),
                 questionSinnesfunktionMotivering(),
                 questionKoordinationMotivering(),
+                questionAndningsFunktionMotivering(),
                 questionAnnanKroppsligFunktionMotivering()
             ),
             categoryAktivitetsbegransningar(
@@ -194,14 +196,14 @@ public class CertificateModelFactoryFK7810 implements CertificateModelFactory {
                     questionVardenhetOchTidplan()
                 )
             ),
+            categoryPrognos(
+                questionPrognos()
+            ),
             categorySjukvardandeInsats(
                 questionSjukvardandeInsatsHSL(),
                 questionSjukvardandeInsatsHSLInsatser(),
                 questionSjukvardandeInsatsEgenvard(),
                 questionSjukvardandeInsatsEgenvardInsatser()
-            ),
-            categoryPrognos(
-                questionPrognos()
             ),
             categoryOvrigt(
                 questionOvrigt()

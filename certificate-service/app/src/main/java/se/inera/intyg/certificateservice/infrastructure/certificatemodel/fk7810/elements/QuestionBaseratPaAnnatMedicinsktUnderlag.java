@@ -25,7 +25,7 @@ public class QuestionBaseratPaAnnatMedicinsktUnderlag {
                 .id(QUESTION_BASERAT_PA_ANNAT_UNDERLAG_FIELD_ID)
                 .selectedText("Ja")
                 .unselectedText("Nej")
-                .name("Är utlåtandet även baserat på andra medicinska utredningar eller underlag?")
+                .name("Är utlåtandet även baserat på andra utredningar eller underlag?")
                 .build()
         )
         .rules(

@@ -452,6 +452,16 @@ class CertificateModelFactoryFK7810Test {
     }
 
     @Test
+    void shallIncludeQuestionAndningsFunktionMotivering() {
+      final var certificateModel = certificateModelFactoryFK7810.create();
+      final var elementId = new ElementId("64");
+      assertTrue(certificateModel.elementSpecificationExists(elementId),
+          "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+              elementId, certificateModel.elementSpecifications())
+      );
+    }
+
+    @Test
     void shallIncludeQuestionKommunikationSocialInteraktionMotivering() {
       final var certificateModel = certificateModelFactoryFK7810.create();
       final var elementId = new ElementId("9");

@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemFunktionsnedsattning.ANDNINGS_FUNKTION;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemFunktionsnedsattning.ANNAN_KROPPSILIG_FUNKTION;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemFunktionsnedsattning.INTELLEKTUELL_FUNKTION;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemFunktionsnedsattning.KOMMUNIKATION_SOCIAL_INTERAKTION;
@@ -33,6 +34,7 @@ public class QuestionFunktionsnedsattning {
   public static final FieldId FUNKTIONSNEDSATTNING_KOORDINATION_ID = new FieldId("13.2");
   public static final FieldId FUNKTIONSNEDSATTNING_ANNAN_KROPPSILIG_FUNKTION_ID = new FieldId(
       "14.2");
+  public static final FieldId FUNKTIONSNEDSATTNING_ANDNINGS_ID = new FieldId("64.2");
 
   private QuestionFunktionsnedsattning() {
     throw new IllegalStateException("Utility class");
@@ -47,6 +49,7 @@ public class QuestionFunktionsnedsattning {
         getCodeConfig(FUNKTIONSNEDSATTNING_PSYKISK_FUNKTION_ID, PSYKISK_FUNKTION),
         getCodeConfig(FUNKTIONSNEDSATTNING_SINNESFUNKTION_ID, SINNESFUNKTION_V2),
         getCodeConfig(FUNKTIONSNEDSATTNING_KOORDINATION_ID, KOORDINATION),
+        getCodeConfig(FUNKTIONSNEDSATTNING_ANDNINGS_ID, ANDNINGS_FUNKTION),
         getCodeConfig(FUNKTIONSNEDSATTNING_ANNAN_KROPPSILIG_FUNKTION_ID, ANNAN_KROPPSILIG_FUNKTION)
     );
 
@@ -73,6 +76,7 @@ public class QuestionFunktionsnedsattning {
                         FUNKTIONSNEDSATTNING_PSYKISK_FUNKTION_ID,
                         FUNKTIONSNEDSATTNING_SINNESFUNKTION_ID,
                         FUNKTIONSNEDSATTNING_KOORDINATION_ID,
+                        FUNKTIONSNEDSATTNING_ANDNINGS_ID,
                         FUNKTIONSNEDSATTNING_ANNAN_KROPPSILIG_FUNKTION_ID
                     )
                 )
