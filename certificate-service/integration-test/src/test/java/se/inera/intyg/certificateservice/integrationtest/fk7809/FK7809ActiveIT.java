@@ -1,16 +1,31 @@
 package se.inera.intyg.certificateservice.integrationtest.fk7809;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO.SIGNED;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ALVA_VARDADMINISTRATOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ANNA_SJUKSKOTERSKA_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.BERTIL_BARNMORSKA_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.incomingComplementDTOBuilder;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.incomingComplementMessageBuilder;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionPrognos.QUESTION_PROGNOS_ID;
 import static se.inera.intyg.certificateservice.integrationtest.fk7809.FK7809Constants.CODE;
 import static se.inera.intyg.certificateservice.integrationtest.fk7809.FK7809Constants.CODE_SYSTEM;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetCertificateMessageRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultRenewCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultSendCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultSignCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultTestablilityCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificate;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateId;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.questions;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.provider.Arguments;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -173,7 +188,49 @@ public class FK7809ActiveIT {
       return ELEMENT_ID.id();
     }
 
-    //TODO Add test for "Kompletteringsbegäran skall sättas som hanterad när förnyade intyget signeras" - see FK7472ActiveIT
+    @Test
+    @DisplayName("Kompletteringsbegäran skall sättas som hanterad när förnyade intyget signeras")
+    void shallSetComplementAsHandledWhenRenewingCertificateIsSigned() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(certificateId(testCertificates))
+              .complements(List.of(incomingComplementDTOBuilder()
+                  .questionId(questionId())
+                  .build()))
+              .build()
+      );
+
+      final var renewResponse = api.renewCertificate(
+          defaultRenewCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      final var renewingCertificate = certificate(renewResponse.getBody());
+
+      api.signCertificate(
+          defaultSignCertificateRequest(),
+          certificateId(renewResponse.getBody()),
+          Objects.requireNonNull(renewingCertificate).getMetadata().getVersion()
+      );
+
+      final var messagesForCertificate = api.getMessagesForCertificate(
+          defaultGetCertificateMessageRequest(),
+          certificateId(testCertificates)
+      );
+
+      assertTrue(questions(messagesForCertificate.getBody()).getFirst().isHandled(),
+          "Expected that complement message was handled, but it was not!"
+      );
+    }
   }
 
   @Nested

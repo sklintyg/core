@@ -40,6 +40,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionVardenhetOchTidplan.questionVardenhetOchTidplan;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -50,6 +51,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
+import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
@@ -103,6 +106,10 @@ public class CertificateModelFactoryFK7810 implements CertificateModelFactory {
       <p>Mer information finns på <a href="http://forsakringskassan.se/">Försäkringskassans hemsida</a>. Sök på ”assistansersättning”.</p>
       """;
 
+  private static final String PREAMBLE_TEXT =
+      "Det här är ditt intyg. Intyget innehåller all information som vården fyllt i. Du kan inte ändra något i ditt intyg. "
+          + "Har du frågor kontaktar du den som skrivit ditt intyg.";
+
   public static final CertificateModelId FK7810_V1_0 = CertificateModelId.builder()
       .type(new CertificateType(FK_7810))
       .version(new CertificateVersion(VERSION))
@@ -124,6 +131,16 @@ public class CertificateModelFactoryFK7810 implements CertificateModelFactory {
         .detailedDescription(DETAILED_DESCRIPTION.replace("\n", ""))
         .activeFrom(activeFrom)
         .availableForCitizen(true)
+        .summaryProvider(new FK7810CertificateSummaryProvider())
+        .texts(
+            List.of(
+                CertificateText.builder()
+                    .text(PREAMBLE_TEXT)
+                    .type(CertificateTextType.PREAMBLE_TEXT)
+                    .links(Collections.emptyList())
+                    .build()
+            )
+        )
         .recipient(CertificateRecipientFactory.fkassa(fkLogicalAddress))
         .messageTypes(List.of(
             CertificateMessageType.builder()
