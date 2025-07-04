@@ -68,4 +68,10 @@ public class CodeSystemFunktionsnedsattning {
       CODE_SYSTEM,
       "Annan kroppslig funktion"
   );
+
+  public static final Code ANDNINGS_FUNKTION = new Code(
+      "ANDNINGS_FUNKTION",
+      CODE_SYSTEM,
+      "Andningsfunktion"
+  );
 }

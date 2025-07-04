@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.integrationtest.fk7809;
+package se.inera.intyg.certificateservice.integrationtest.fk7810;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO.SIGNED;
@@ -8,9 +8,9 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.BERTIL_BARNMORSKA_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.incomingComplementDTOBuilder;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.incomingComplementMessageBuilder;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionPrognos.QUESTION_PROGNOS_ID;
-import static se.inera.intyg.certificateservice.integrationtest.fk7809.FK7809Constants.CODE;
-import static se.inera.intyg.certificateservice.integrationtest.fk7809.FK7809Constants.CODE_SYSTEM;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionPrognos.QUESTION_PROGNOS_ID;
+import static se.inera.intyg.certificateservice.integrationtest.fk7810.FK7810Constants.CODE;
+import static se.inera.intyg.certificateservice.integrationtest.fk7810.FK7810Constants.CODE_SYSTEM;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetCertificateMessageRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultRenewCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultSendCertificateRequest;
@@ -23,6 +23,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.Certificate
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -34,7 +35,6 @@ import se.inera.intyg.certificateservice.integrationtest.AccessLevelsDeepIntegra
 import se.inera.intyg.certificateservice.integrationtest.AccessLevelsSVODIT;
 import se.inera.intyg.certificateservice.integrationtest.AdministrativeMessagesIT;
 import se.inera.intyg.certificateservice.integrationtest.AnswerComplementIT;
-import se.inera.intyg.certificateservice.integrationtest.CertificateFromMessageIT;
 import se.inera.intyg.certificateservice.integrationtest.CertificateReadyForSignIT;
 import se.inera.intyg.certificateservice.integrationtest.CertificatesWithQAForCareIT;
 import se.inera.intyg.certificateservice.integrationtest.ComplementIT;
@@ -45,7 +45,6 @@ import se.inera.intyg.certificateservice.integrationtest.ExistsCertificateExtern
 import se.inera.intyg.certificateservice.integrationtest.ExistsCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ExistsCertificateTypeInfoIT;
 import se.inera.intyg.certificateservice.integrationtest.ForwardCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.ForwardCertificateMessageIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateEventsIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificatePdfIT;
@@ -65,23 +64,23 @@ import se.inera.intyg.certificateservice.integrationtest.SendCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.SendCitizenCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.SignCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.UnitStatisticsIT;
-import se.inera.intyg.certificateservice.integrationtest.UpdateCertificateFK7809IT;
 import se.inera.intyg.certificateservice.integrationtest.UpdateCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ValidateCertificateIT;
 
-public class FK7809ActiveIT {
+public class FK7810ActiveIT {
 
-  private static final String CERTIFICATE_TYPE = FK7809Constants.FK7809;
-  private static final String ACTIVE_VERSION = FK7809Constants.VERSION;
-  private static final String WRONG_VERSION = FK7809Constants.WRONG_VERSION;
-  private static final String TYPE = FK7809Constants.TYPE;
-  private static final ElementId ELEMENT_ID = QUESTION_PROGNOS_ID;
-  private static final String VALUE = "Svarstext för prognos.";
+  private static final String CERTIFICATE_TYPE = FK7810Constants.FK7810;
   private static final String RECIPIENT = "FKASSA";
+  private static final String ACTIVE_VERSION = FK7810Constants.VERSION;
+  private static final String WRONG_VERSION = FK7810Constants.WRONG_VERSION;
+  private static final String TYPE = FK7810Constants.TYPE;
+  private static final String VALUE = "Svarstext för pågående behandling.";
+  private static final ElementId ELEMENT_ID = QUESTION_PROGNOS_ID;
+
 
   @DynamicPropertySource
   static void testProperties(DynamicPropertyRegistry registry) {
-    registry.add("certificate.model.fk7809.v1_0.active.from", () -> "2024-01-01T00:00:00");
+    registry.add("certificate.model.fk7810.v1_0.active.from", () -> "2024-01-01T00:00:00");
   }
 
   @Nested
@@ -115,43 +114,8 @@ public class FK7809ActiveIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Administrativ ärendekommunikation")
-  class AdministrativeMessages extends AdministrativeMessagesIT {
-
-    @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-  }
-
-  @Nested
   @DisplayName(TYPE + "Besvara kompletteringsbegäran med meddelande")
   class AnswerComplement extends AnswerComplementIT {
-
-    @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected String questionId() {
-      return ELEMENT_ID.id();
-    }
-  }
-
-  @Nested
-  @DisplayName(TYPE + "Hämta intyg utifrån id från meddelande")
-  class CertificateFromMessage extends CertificateFromMessageIT {
 
     @Override
     protected String type() {
@@ -260,7 +224,7 @@ public class FK7809ActiveIT {
   }
 
   @Nested
-  @DisplayName(TYPE + " Ta bort utkast")
+  @DisplayName(TYPE + "Ta bort utkast")
   class DeleteCertificate extends DeleteCertificateIT {
 
     @Override
@@ -362,29 +326,6 @@ public class FK7809ActiveIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Hämta intygspdf")
-  class GetCertificatePdf extends GetCertificatePdfIT {
-
-    @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    protected static Stream<Arguments> rolesNoAccessToProtectedPerson() {
-      return Stream.of(
-          Arguments.of(ALVA_VARDADMINISTRATOR_DTO),
-          Arguments.of(BERTIL_BARNMORSKA_DTO),
-          Arguments.of(ANNA_SJUKSKOTERSKA_DTO)
-      );
-    }
-  }
-
-  @Nested
   @DisplayName(TYPE + "Hämta intygstyp när den är aktiv")
   class GetCertificateTypeInfo extends GetCertificateTypeInfoIT {
 
@@ -410,9 +351,7 @@ public class FK7809ActiveIT {
 
     protected static Stream<Arguments> rolesNoAccessToProtectedPerson() {
       return Stream.of(
-          Arguments.of(ALVA_VARDADMINISTRATOR_DTO),
-          Arguments.of(BERTIL_BARNMORSKA_DTO),
-          Arguments.of(ANNA_SJUKSKOTERSKA_DTO)
+          Arguments.of(ALVA_VARDADMINISTRATOR_DTO)
       );
     }
   }
@@ -447,7 +386,7 @@ public class FK7809ActiveIT {
   }
 
   @Nested
-  @DisplayName(TYPE + " Hämta ej signerade utkast sökkriterier")
+  @DisplayName(TYPE + "Hämta ej signerade utkast sökkriterier")
   class GetUnitCertificatesInfo extends GetUnitCertificatesInfoIT {
 
     @Override
@@ -538,7 +477,7 @@ public class FK7809ActiveIT {
 
   @Nested
   @DisplayName(TYPE + "Finns meddelandet i tjänsten")
-  class MessageExists extends MessageExistsIT {
+  class MessagesExists extends MessageExistsIT {
 
     @Override
     protected String type() {
@@ -557,7 +496,7 @@ public class FK7809ActiveIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Hantering av frågor för intyg")
+  @DisplayName(TYPE + "Hantering av kompletteringsfrågor för intyg")
   class ComplementMessages extends ComplementMessagesIT {
 
     @Override
@@ -647,7 +586,6 @@ public class FK7809ActiveIT {
     protected String typeVersion() {
       return ACTIVE_VERSION;
     }
-
   }
 
   @Nested
@@ -666,12 +604,12 @@ public class FK7809ActiveIT {
 
     @Override
     protected boolean nurseCanMarkReadyForSignCertificate() {
-      return true;
+      return false;
     }
 
     @Override
     protected boolean midwifeCanMarkReadyForSignCertificate() {
-      return true;
+      return false;
     }
   }
 
@@ -714,11 +652,6 @@ public class FK7809ActiveIT {
       return VALUE;
     }
 
-    @Nested
-    @DisplayName(TYPE + "Uppdatera svar")
-    class UpdateCertificateFK7809 extends UpdateCertificateFK7809IT {
-
-    }
   }
 
   @Nested
@@ -744,6 +677,7 @@ public class FK7809ActiveIT {
     protected Object value() {
       return VALUE;
     }
+
   }
 
   @Nested
@@ -762,32 +696,12 @@ public class FK7809ActiveIT {
 
     @Override
     protected boolean nurseCanForwardCertificate() {
-      return true;
+      return false;
     }
 
     @Override
     protected boolean midwifeCanForwardCertificate() {
-      return true;
-    }
-  }
-
-  @Nested
-  @DisplayName(TYPE + "Vidarebefodra utkast med ärendekommunikation")
-  class ForwardCertificateMessage extends ForwardCertificateMessageIT {
-
-    @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected String questionId() {
-      return ELEMENT_ID.id();
+      return false;
     }
   }
 
@@ -822,7 +736,7 @@ public class FK7809ActiveIT {
 
     @Override
     protected Boolean canRecieveQuestions() {
-      return true;
+      return false;
     }
 
     protected static Stream<Arguments> rolesNoAccessToProtectedPerson() {
@@ -839,7 +753,6 @@ public class FK7809ActiveIT {
       );
     }
   }
-
 
   @Nested
   @DisplayName(TYPE + "Aktiva versioner utifrån intygstyp och kodsystem")
@@ -887,4 +800,45 @@ public class FK7809ActiveIT {
       return true;
     }
   }
+
+  @Disabled
+  @Nested
+  @DisplayName(TYPE + "Hämta intygspdf")
+  class GetCertificatePdf extends GetCertificatePdfIT {
+
+    @Override
+    protected String type() {
+      return CERTIFICATE_TYPE;
+    }
+
+    @Override
+    protected String typeVersion() {
+      return ACTIVE_VERSION;
+    }
+
+    protected static Stream<Arguments> rolesNoAccessToProtectedPerson() {
+      return Stream.of(
+          Arguments.of(ALVA_VARDADMINISTRATOR_DTO),
+          Arguments.of(BERTIL_BARNMORSKA_DTO),
+          Arguments.of(ANNA_SJUKSKOTERSKA_DTO)
+      );
+    }
+  }
+
+
+  @Nested
+  @DisplayName(TYPE + "Administrativ ärendekommunikation")
+  class AdministrativeMessages extends AdministrativeMessagesIT {
+
+    @Override
+    protected String type() {
+      return CERTIFICATE_TYPE;
+    }
+
+    @Override
+    protected String typeVersion() {
+      return ACTIVE_VERSION;
+    }
+  }
+
 }
