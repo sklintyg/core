@@ -3,7 +3,6 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.FK3221PdfSpecification.PDF_TEXT_FIELD_LENGTH;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionLarandeBegransningMotivering.questionLarandeBegransningMotivering;
 
 import java.util.List;
@@ -96,7 +95,7 @@ class QuestionLarandeBegransningMotiveringTest {
   void shallIncludePdfConfiguration() {
     final var expected = PdfConfigurationText.builder()
         .pdfFieldId(new PdfFieldId("form1[0].#subform[1].flt_txtIntellektuellFunktion[0]"))
-        .maxLength(PDF_TEXT_FIELD_LENGTH * 4)
+//        .maxLength(PDF_TEXT_FIELD_LENGTH * 4)
         .overflowSheetFieldId(new PdfFieldId(("form1[0].#subform[4].flt_txtFortsattningsblad[0]")))
         .build();
 

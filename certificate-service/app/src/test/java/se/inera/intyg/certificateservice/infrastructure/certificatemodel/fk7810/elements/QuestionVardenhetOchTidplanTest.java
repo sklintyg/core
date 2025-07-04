@@ -1,7 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.FK3221PdfSpecification.PDF_TEXT_FIELD_LENGTH;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionVardenhetOchTidplan.questionVardenhetOchTidplan;
 
 import java.util.List;
@@ -91,12 +90,12 @@ class QuestionVardenhetOchTidplanTest {
     assertEquals(expectedMapping, element.mapping());
   }
 
-  @Disabled
   @Test
+  @Disabled
   void shallIncludePdfConfiguration() {
     final var expected = PdfConfigurationText.builder()
         .pdfFieldId(new PdfFieldId("form1[0].#subform[2].flt_txtVardenhetTidplan[0]"))
-        .maxLength(PDF_TEXT_FIELD_LENGTH)
+//        .maxLength(PDF_TEXT_FIELD_LENGTH)
         .overflowSheetFieldId(new PdfFieldId(("form1[0].#subform[4].flt_txtFortsattningsblad[0]")))
         .build();
 
