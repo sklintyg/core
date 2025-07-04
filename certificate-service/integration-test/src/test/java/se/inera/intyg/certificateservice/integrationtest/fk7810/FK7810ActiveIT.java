@@ -303,7 +303,7 @@ public class FK7810ActiveIT {
 
     @Override
     protected boolean isAvailableForPatient() {
-      return false;
+      return true;
     }
 
     @Override
@@ -795,7 +795,7 @@ public class FK7810ActiveIT {
 
     @Override
     protected boolean availableForCitizen() {
-      return false;
+      return true;
     }
   }
 

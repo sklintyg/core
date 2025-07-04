@@ -1,8 +1,11 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionSjukvardandeInsatsHSL.QUESTION_SJUKVARDANDE_INSATS_HSL_ID;
+
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
@@ -37,6 +40,7 @@ public class QuestionSjukvardandeInsatsEgenvard {
                     QUESTION_SJUKVARDANDE_INSATS_EGENVARD_FIELD_ID)
             )
         )
+        .mapping(new ElementMapping(QUESTION_SJUKVARDANDE_INSATS_HSL_ID, null))
         .validations(
             List.of(
                 ElementValidationBoolean.builder()
