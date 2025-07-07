@@ -40,7 +40,7 @@ class QuestionAnnanKroppsligFunktionMotiveringTest {
     final var expectedConfiguration = ElementConfigurationTextArea.builder()
         .name("Annan kroppslig funktion")
         .label(
-            "Beskriv funktionsnedsättningen, om möjligt med grad. Ange även eventuella undersökningsfynd.")
+            "Beskriv funktionsnedsättningen, om möjligt med grad. Ange även undersökningsfynd.")
         .description(
             "Med annan kroppslig funktion menas till exempel andningsfunktion, matsmältnings- och ämnesomsättningsfunktion samt blås- och tarmfunktion.")
         .id(new FieldId("14.1"))

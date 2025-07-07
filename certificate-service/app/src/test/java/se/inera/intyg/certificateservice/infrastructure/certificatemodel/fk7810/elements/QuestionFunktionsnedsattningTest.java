@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemFunktionsnedsattning.ANDNINGS_FUNKTION;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemFunktionsnedsattning.ANNAN_KROPPSILIG_FUNKTION;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemFunktionsnedsattning.INTELLEKTUELL_FUNKTION;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemFunktionsnedsattning.KOMMUNIKATION_SOCIAL_INTERAKTION;
@@ -55,6 +56,8 @@ class QuestionFunktionsnedsattningTest {
                 SINNESFUNKTION_V2),
             new ElementConfigurationCode(new FieldId("13.2"), KOORDINATION.displayName(),
                 KOORDINATION),
+            new ElementConfigurationCode(new FieldId("64.2"),
+                ANDNINGS_FUNKTION.displayName(), ANDNINGS_FUNKTION),
             new ElementConfigurationCode(new FieldId("14.2"),
                 ANNAN_KROPPSILIG_FUNKTION.displayName(), ANNAN_KROPPSILIG_FUNKTION)
         ))
@@ -73,7 +76,7 @@ class QuestionFunktionsnedsattningTest {
             .type(ElementRuleType.MANDATORY)
             .expression(
                 new RuleExpression(
-                    "$8.2 || $9.2 || $10.2 || $11.2 || $12.2 || $13.2 || $14.2"))
+                    "$8.2 || $9.2 || $10.2 || $11.2 || $12.2 || $13.2 || $64.2 || $14.2"))
             .build()
     );
 

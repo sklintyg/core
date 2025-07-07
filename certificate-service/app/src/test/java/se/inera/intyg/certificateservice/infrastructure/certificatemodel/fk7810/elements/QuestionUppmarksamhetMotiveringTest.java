@@ -40,7 +40,7 @@ class QuestionUppmarksamhetMotiveringTest {
     final var expectedConfiguration = ElementConfigurationTextArea.builder()
         .name("Uppmärksamhet, koncentration och exekutiv funktion")
         .label(
-            "Beskriv funktionsnedsättningen, om möjligt med grad. Ange även eventuella undersökningsfynd.")
+            "Beskriv funktionsnedsättningen, om möjligt med grad. Ange även undersökningsfynd.")
         .description(
             """
                 Uppmärksamhet handlar om förmågan att rikta fokus på rätt sak vid rätt tillfälle samt att skifta, fördela och vidmakthålla uppmärksamheten. En person behöver även viljemässigt kunna rikta sin uppmärksamhet under en längre tid. 

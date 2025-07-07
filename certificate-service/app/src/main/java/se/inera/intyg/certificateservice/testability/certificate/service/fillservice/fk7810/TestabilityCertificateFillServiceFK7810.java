@@ -10,6 +10,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAktivitetsbegransning.AKTIVITETSBAGRENSNINGAR_MOVEMENT_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAktivitetsbegransning.AKTIVITETSBAGRENSNINGAR_OVRIG_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAktivitetsbegransning.AKTIVITETSBAGRENSNINGAR_PERSONAL_CARE_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAndningsFunktionMotivering.FUNKTIONSNEDSATTNING_MOTIVERING_ANDNINGS_FUNKTION_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAnnanGrundForMedicinsktUnderlag.QUESTION_ANNAN_GRUND_FOR_MEDICINSKT_UNDERLAG_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAnnanKroppsligFunktionMotivering.FUNKTIONSNEDSATTNING_MOTIVERING_ANNAN_KROPPSILIG_FUNKTION_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionBaseratPaAnnatMedicinsktUnderlag.QUESTION_BASERAT_PA_ANNAT_UNDERLAG_ID;
@@ -21,6 +22,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionDiagnos.DIAGNOS_5;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionDiagnosHistorik.DIAGNOSIS_MOTIVATION_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionForflyttningBegransningMotivering.AKTIVITETSBEGRANSNING_MOTIVERING_FORFLYTTNING_BEGRANSNING_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_ANDNINGS_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_ANNAN_KROPPSILIG_FUNKTION_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_INTELLEKTUELL_FUNKTION_ID;
@@ -156,6 +158,8 @@ public class TestabilityCertificateFillServiceFK7810 implements
         spec(FUNKTIONSNEDSATTNING_MOTIVERING_SINNESFUNKTION_ID, certificateModel);
     final var specKoordination =
         spec(FUNKTIONSNEDSATTNING_MOTIVERING_KOORDINATION_ID, certificateModel);
+    final var specAndning =
+        spec(FUNKTIONSNEDSATTNING_MOTIVERING_ANDNINGS_FUNKTION_ID, certificateModel);
     final var specAnnanKroppslig =
         spec(FUNKTIONSNEDSATTNING_MOTIVERING_ANNAN_KROPPSILIG_FUNKTION_ID, certificateModel);
     final var specAktivitetsbegransning =
@@ -201,6 +205,7 @@ public class TestabilityCertificateFillServiceFK7810 implements
     psykisk(specPsykisk, elementData, fillType);
     sinnes(specSinnes, elementData, fillType);
     koordination(specKoordination, elementData, fillType);
+    andning(specAndning, elementData, fillType);
     annanKroppslig(specAnnanKroppslig, elementData, fillType);
     aktivitetsbegransningar(specAktivitetsbegransning, elementData, fillType);
     larande(specLarande, elementData);
@@ -330,6 +335,9 @@ public class TestabilityCertificateFillServiceFK7810 implements
               FUNKTIONSNEDSATTNING_KOORDINATION_ID,
               FUNKTIONSNEDSATTNING_KOORDINATION_ID.value()),
           valueCode(
+              FUNKTIONSNEDSATTNING_ANDNINGS_ID,
+              FUNKTIONSNEDSATTNING_ANDNINGS_ID.value()),
+          valueCode(
               FUNKTIONSNEDSATTNING_ANNAN_KROPPSILIG_FUNKTION_ID,
               FUNKTIONSNEDSATTNING_ANNAN_KROPPSILIG_FUNKTION_ID.value()));
 
@@ -382,6 +390,14 @@ public class TestabilityCertificateFillServiceFK7810 implements
       TestabilityFillTypeDTO fillType) {
     if (fillType == MAXIMAL && emptyValue(spec) instanceof ElementValueText elementValueText) {
       final var text = elementValueText.withText("Koordinationsproblem");
+      list.add(elementData(spec.id(), text));
+    }
+  }
+
+  private static void andning(ElementSpecification spec, List<ElementData> list,
+      TestabilityFillTypeDTO fillType) {
+    if (fillType == MAXIMAL && emptyValue(spec) instanceof ElementValueText elementValueText) {
+      final var text = elementValueText.withText("Andningsproblem");
       list.add(elementData(spec.id(), text));
     }
   }

@@ -40,7 +40,7 @@ class QuestionSinnesfunktionMotiveringTest {
     final var expectedConfiguration = ElementConfigurationTextArea.builder()
         .name("Sinnesfunktioner och smärta")
         .label(
-            "Beskriv funktionsnedsättningen, om möjligt med grad. Ange även eventuella undersökningsfynd.")
+            "Beskriv funktionsnedsättningen, om möjligt med grad. Ange även undersökningsfynd.")
         .description(
             """
                 Med sinnesfunktioner och smärta menas exempelvis:

@@ -31,7 +31,7 @@ class QuestionBaseratPaAnnatMedicinsktUnderlagTest {
   void shallIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationRadioBoolean.builder()
         .name(
-            "Är utlåtandet även baserat på andra medicinska utredningar eller underlag?")
+            "Är utlåtandet även baserat på andra utredningar eller underlag?")
         .id(new FieldId("3.1"))
         .selectedText("Ja")
         .unselectedText("Nej")

@@ -175,6 +175,9 @@
   <ns3:svar id="13">
     <ns2:delsvar id="13.1">Koordinationsproblem</ns2:delsvar>
   </ns3:svar>
+  <ns3:svar id="64">
+    <ns2:delsvar id="64.1">Andningsproblem</ns2:delsvar>
+  </ns3:svar>
   <ns3:svar id="14">
     <ns2:delsvar id="14.1">Annan kroppslig funktion</ns2:delsvar>
   </ns3:svar>
@@ -197,14 +200,14 @@
     <ns2:delsvar id="50.1">Medicinsk behandling</ns2:delsvar>
     <ns2:delsvar id="50.2">Ansvarig vårdenhet</ns2:delsvar>
   </ns3:svar>
+  <ns3:svar id="39">
+    <ns2:delsvar id="39.2">Prognos</ns2:delsvar>
+  </ns3:svar>
   <ns3:svar id="70">
     <ns2:delsvar id="70.1">true</ns2:delsvar>
     <ns2:delsvar id="70.2">Ange vilka insatser och i vilken omfattning</ns2:delsvar>
     <ns2:delsvar id="70.3">true</ns2:delsvar>
     <ns2:delsvar id="70.4">Ange vilka insatser och i vilken omfattning</ns2:delsvar>
-  </ns3:svar>
-  <ns3:svar id="39">
-    <ns2:delsvar id="39.2">Prognos</ns2:delsvar>
   </ns3:svar>
   <ns3:svar id="25">
     <ns2:delsvar id="25.1">Övrigt</ns2:delsvar>
