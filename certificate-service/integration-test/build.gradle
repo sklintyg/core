@@ -44,6 +44,8 @@ testing {
             targets.all {
                 testTask.configure {
                     shouldRunAfter(test)
+                    minHeapSize = "512m"
+                    maxHeapSize = "2g"
                 }
             }
         }
