@@ -6,7 +6,7 @@ Name: Personnumret fylls i automatiskt när du fyller i fältet med personnummer
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].ksr_UndersokningPatienten[0]
-Name: Punkt 1. Utlåtandet är baserat på. Du kan ange ett eller flera alternativ. Min undersökning av patienten. Kryssruta - markera med mellanslag på tangentbordet eller klicka med musen
+Name: Punkt 1. Utlåtandet är baserat på. Du kan ange ett eller flera alternativ. Min undersökning vid fysiskt vårdmöte.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDCheckBox
 
 Field ID: form1[0].#subform[0].flt_datumUndersokningPatient[0]
@@ -14,15 +14,15 @@ Name: Datum (år, månad, dag) - skriv in eller välj kalendern med nedåtpilen
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].ksr_Kontaktsatt[0]
-Name: Kryssruta - markera med mellanslag på tangentbordet eller klicka med musen
+Name: Min undersökning vid digitalt vårdmöte.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDCheckBox
 
-Field ID: form1[0].#subform[0].flt_txtKontaktsattFysisktMote[0]
+Field ID: form1[0].#subform[0].flt_txtdatumDigitaltVardmote[0]
 Name: Min undersökning vid digitalt vårdmöte
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].ksr_Journaluppgifter[0]
-Name: Kryssruta - markera med mellanslag på tangentbordet eller klicka med musen
+Name: Journaluppgifter från och med
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDCheckBox
 
 Field ID: form1[0].#subform[0].flt_datumJournaluppgfiter[0]
@@ -30,27 +30,27 @@ Name: Datum (år, månad, dag) - skriv in eller välj kalendern med nedåtpilen
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].ksr_Anhorig[0]
-Name: Anhörigs eller någon annans beskrivning av patienten.
+Name: Anhörigs eller annans beskrivning av patienten
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDCheckBox
 
 Field ID: form1[0].#subform[0].flt_datumAnhorig[0]
-Name: datum (år, månad, dag) - skriv in eller välj kalendern med nedåtpilen
+Name: Datum (år, månad, dag) - skriv in eller välj kalendern med nedåtpilen
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].flt_txtAnhorigAnnanReleation[0]
-Name: Ange anhörigs eller annans relation till patienten 
+Name: Ange anhörigs eller annans relation till patienten
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].ksr_Annat[0]
-Name: Annat. Fyll i nedan.
+Name: Annat
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDCheckBox
 
 Field ID: form1[0].#subform[0].flt_datumAnnat[0]
-Name: datum (år, månad, dag) - skriv in eller välj kalendern med nedåtpilen
+Name: Datum (år, månad, dag) - skriv in eller välj kalendern med nedåtpilen
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].flt_txtAnnatUnderlagUtlatande[0]
-Name: Annat underlag för utlåtandet:
+Name: Ange vad annat är
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].lbx_listVardeUtredningUnderlag1[0]
@@ -65,11 +65,11 @@ For radio boolean assume first option is true and second option is false. Use th
 2
 
 Field ID: form1[0].#subform[0].lbx_listVardeUtredningUnderlag_1[0]
-Name: Ange utredning eller underlag. Välj i listan med nedåtpilen. Du kan fylla i uppgifter för fler andra medicinska utredningar eller underlag som är relevanta för fastställd diagnos. Totalt tre. Det här är andra medicinska utredningar eller underlag som är relevanta för fastställd diagnos ett. 
+Name: Ange utredning eller underlag. Välj i listan med nedåtpilen. Du kan fylla i uppgifter för fler andra medicinska utredningar eller underlag som är relevanta för fastställd diagnos. Totalt tre. Det här är andra medicinska utredningar eller underlag som är relevanta för fastställd diagnos ett.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDComboBox
 
 Field ID: form1[0].#subform[0].flt_datUtredningUnderlag_2[0]
-Name: Datum år, månad, dag - skriv in eller välj kalendern med nedåtpilen. Det här är andra medicinska utredningar eller underlag som är relevanta för fastställd diagnos ett. 
+Name: Datum år, månad, dag - skriv in eller välj kalendern med nedåtpilen. Det här är andra medicinska utredningar eller underlag som är relevanta för fastställd diagnos ett.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].flt_txtUtredning_1[0]
@@ -77,11 +77,11 @@ Name: Var kan Försäkringskassan hämta information om utredningen eller underl
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].lbx_listVardeUtredningUnderlag_2[0]
-Name: Ange ytterligare utredning eller underlag. Välj i listan med nedåtpilen. Det här är andra medicinska utredningar eller underlag som är relevanta för fastställd diagnos två. 
+Name: Ange ytterligare utredning eller underlag. Välj i listan med nedåtpilen. Det här är andra medicinska utredningar eller underlag som är relevanta för fastställd diagnos två.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDComboBox
 
 Field ID: form1[0].#subform[0].flt_datUtredningUnderlag_3[0]
-Name: datum år, månad, dag - skriv in eller välj kalendern med nedåtpilen. Det här är andra medicinska utredningar eller underlag som är relevanta för fastställd diagnos två. 
+Name: datum år, månad, dag - skriv in eller välj kalendern med nedåtpilen. Det här är andra medicinska utredningar eller underlag som är relevanta för fastställd diagnos två.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].flt_txtUtredning_2[0]
@@ -89,11 +89,11 @@ Name: Var kan Försäkringskassan hämta information om utredningen eller underl
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].lbx_listVardeUtredningUnderlag_3[0]
-Name: Ange ytterligare utredning eller underlag. Välj i listan med nedåtpilen. Det här är andra medicinska utredningar eller underlag som är relevanta för fastställd diagnos tre. 
+Name: Ange ytterligare utredning eller underlag. Välj i listan med nedåtpilen. Det här är andra medicinska utredningar eller underlag som är relevanta för fastställd diagnos tre.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDComboBox
 
 Field ID: form1[0].#subform[0].flt_datUtredningUnderlag_4[0]
-Name: datum år, månad, dag - skriv in eller välj kalendern med nedåtpilen. Det här är andra medicinska utredningar eller underlag som är relevanta för fastställd diagnos tre. 
+Name: datum år, månad, dag - skriv in eller välj kalendern med nedåtpilen. Det här är andra medicinska utredningar eller underlag som är relevanta för fastställd diagnos tre.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].flt_txtUtredning_3[0]
@@ -106,23 +106,23 @@ Name: Personnumret har kopierats från personnummerfältet du tidigare har fyllt
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida2[0].flt_txtDiagnos[0]
-Name: Punkt 3. Diagnos. Ange den diagnos som är primär orsak till patientens funktionsnedsättning först. Du kan fylla i uppgifter för fler diagnoser. Totalt fem. Det här är diagnos ett. 
+Name: Punkt 3. Diagnos. Ange den diagnos som är primär orsak till patientens funktionsnedsättning först. Du kan fylla i uppgifter för fler diagnoser. Totalt fem. Det här är diagnos ett.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida2[0].flt_txtDiaKod1[0]
-Name: Diagnoskod enligt ICD-10 SE.  Diagnos ett. Siffra ett. 
+Name: Diagnoskod enligt ICD-10 SE.  Diagnos ett. Siffra ett.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida2[0].flt_txtDiaKod2[0]
-Name: Diagnos ett. Siffra två. 
+Name: Diagnos ett. Siffra två.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida2[0].flt_txtDiaKod3[0]
-Name: Diagnos ett. Siffra tre. 
+Name: Diagnos ett. Siffra tre.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida2[0].flt_txtDiaKod4[0]
-Name: Diagnos ett. Siffra fyra. 
+Name: Diagnos ett. Siffra fyra.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida2[0].flt_txtDiaKod5[0]
@@ -130,103 +130,103 @@ Name: Diagnos ett. Siffra fem.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida2[0].flt_txtDiagnos2[0]
-Name: Det här är diagnos två. 
+Name: Det här är diagnos två.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida2[0].flt_txtDiaKod6[0]
-Name: Diagnoskod enligt ICD-10 SE.  Diagnos ett. Siffra ett. 
+Name: Diagnoskod enligt ICD-10 SE.  Diagnos två. Siffra ett.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida2[0].flt_txtDiaKod7[0]
-Name: Diagnos ett. Siffra två. 
+Name: Diagnos två. Siffra två.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida2[0].flt_txtDiaKod8[0]
-Name: Diagnos ett. Siffra tre. 
+Name: Diagnos två. Siffra tre.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida2[0].flt_txtDiaKod9[0]
-Name: Diagnos ett. Siffra fyra. 
+Name: Diagnos två. Siffra fyra.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida2[0].flt_txtDiaKod10[0]
-Name: Diagnos ett. Siffra fem. 
+Name: Diagnos två. Siffra fem.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida2[0].flt_txtDiagnos3[0]
-Name: Det här är diagnos tre. 
+Name: Det här är diagnos tre.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida2[0].flt_txtDiaKod11[0]
-Name: Diagnoskod enligt ICD-10 SE.  Diagnos tre. Siffra ett. 
+Name: Diagnoskod enligt ICD-10 SE.  Diagnos tre. Siffra ett.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida2[0].flt_txtDiaKod12[0]
-Name: Diagnos tre. Siffra två. 
+Name: Diagnos tre. Siffra två.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida2[0].flt_txtDiaKod13[0]
-Name: Diagnos tre. Siffra tre. 
+Name: Diagnos tre. Siffra tre.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida2[0].flt_txtDiaKod14[0]
-Name: Diagnos tre. Siffra fyra. 
+Name: Diagnos tre. Siffra fyra.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida2[0].flt_txtDiaKod15[0]
-Name: Diagnos tre. Siffra fem. 
+Name: Diagnos tre. Siffra fem.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida2[0].flt_txtDiagnos4[0]
-Name: Det här är diagnos fyra. 
+Name: Det här är diagnos fyra.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida2[0].flt_txtDiaKod16[0]
-Name: Diagnoskod enligt ICD-10 SE. Diagnos fyra. Siffra ett. 
+Name: Diagnoskod enligt ICD-10 SE. Diagnos fyra. Siffra ett.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida2[0].flt_txtDiaKod17[0]
-Name: Diagnos fyra. Siffra två. 
+Name: Diagnos fyra. Siffra två.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida2[0].flt_txtDiaKod18[0]
-Name: Diagnos fyra. Siffra tre. 
+Name: Diagnos fyra. Siffra tre.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida2[0].flt_txtDiaKod19[0]
-Name: Diagnos fyra. Siffra fyra. 
+Name: Diagnos fyra. Siffra fyra.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida2[0].flt_txtDiaKod20[0]
-Name: Diagnos fyra. Siffra fem. 
+Name: Diagnos fyra. Siffra fem.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida2[0].flt_txtDiagnos5[0]
-Name: Det här är diagnos fem. 
+Name: Det här är diagnos fem.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida2[0].flt_txtDiaKod21[0]
-Name: Diagnoskod enligt ICD-10 SE. Diagnos fem. Siffra ett. 
+Name: Diagnoskod enligt ICD-10 SE. Diagnos fem. Siffra ett.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida2[0].flt_txtDiaKod22[0]
-Name: Diagnos fem. Siffra två. 
+Name: Diagnos fem. Siffra två.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida2[0].flt_txtDiaKod23[0]
-Name: Diagnos fem. Siffra tre. 
+Name: Diagnos fem. Siffra tre.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida2[0].flt_txtDiaKod24[0]
-Name: Diagnos fem. Siffra fyra. 
+Name: Diagnos fem. Siffra fyra.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida2[0].flt_txtDiaKod25[0]
-Name: Diagnos fem. Siffra fem. 
+Name: Diagnos fem. Siffra fem.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida2[0].flt_txtBeskrivRelevantHistorikDiagnos[0]
-Name: Beskriv kortfattat historiken för diagnoserna ovan 
+Name: Beskriv kortfattat historiken för diagnoserna ovan
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida2[0].flt_txttModul_4A[0]
@@ -251,7 +251,7 @@ Name: Annan psykisk funktion
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida3[0].flt_txtSinnesfunktioner[0]
-Name: Sinnesfunktioner och smärta 
+Name: Sinnesfunktioner och smärta
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida3[0].flt_txtBalans[0]
@@ -272,15 +272,15 @@ Name: Personnumret har kopierats från personnummerfältet du tidigare har fyllt
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida4[0].flt_txtLarandeKunskap[0]
-Name: Lärande, tillämpa kunskap samt allmänna uppgifter och krav 
+Name: Lärande, tillämpa kunskap samt allmänna uppgifter och krav
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida4[0].flt_txtKommunikation[0]
-Name: Kommunikation  
+Name: Kommunikation
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida4[0].flt_txtForflyttning[0]
-Name: Förflyttning  
+Name: Förflyttning
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida4[0].flt_txtPersonligVard[0]
@@ -291,7 +291,7 @@ Field ID: form1[0].Sida4[0].flt_txtOvrigaAktivitetsbegränsningar[0]
 Name: Övriga aktivitetsbegränsningar
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
-Field ID: form1[0].Sida4[0].flt_txtPlaneradMedicinskBehandling[0]
+Field ID: form1[0].Sida4[0].flt_txtMedicinskBehandling[0]
 Name: Punkt 6. Medicinska behandlingar. Exempelvis ordinerade läkemedel, hjälpmedel (inklusive medicinteknisk utrustning) eller träningsinsatser.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
