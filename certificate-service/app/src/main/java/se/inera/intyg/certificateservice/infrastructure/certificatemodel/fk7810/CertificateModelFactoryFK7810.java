@@ -52,6 +52,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
@@ -111,6 +112,9 @@ public class CertificateModelFactoryFK7810 implements CertificateModelFactory {
       "Det här är ditt intyg. Intyget innehåller all information som vården fyllt i. Du kan inte ändra något i ditt intyg. "
           + "Har du frågor kontaktar du den som skrivit ditt intyg.";
 
+  public static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
+      "fk7810/schematron/luas.v1.sch");
+
   public static final CertificateModelId FK7810_V1_0 = CertificateModelId.builder()
       .type(new CertificateType(FK_7810))
       .version(new CertificateVersion(VERSION))
@@ -143,6 +147,7 @@ public class CertificateModelFactoryFK7810 implements CertificateModelFactory {
             )
         )
         .recipient(CertificateRecipientFactory.fkassa(fkLogicalAddress))
+        .schematronPath(SCHEMATRON_PATH)
         .messageTypes(List.of(
             CertificateMessageType.builder()
                 .type(MessageType.MISSING)

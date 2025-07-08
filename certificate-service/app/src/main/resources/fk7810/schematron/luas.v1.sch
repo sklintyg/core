@@ -19,8 +19,7 @@
     <iso:rule context="//rg:intyg">
       <iso:assert test="count(gn:svar[@id='1']) ge 1 and count(gn:svar[@id='1']) le 5">
         Ett 'Läkarutlåtande för assistansersättning' måste ha mellan 1 och
-        5
-        'Grund för medicinskt underlag'
+        5 'Grund för medicinskt underlag' svar
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='3']) = 1">
         Ett 'Läkarutlåtande för assistansersättning' måste ha ett 'Är
@@ -29,73 +28,83 @@
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='4']) le 3">
         Ett 'Läkarutlåtande för assistansersättning' får ha högst tre
-        'Andra
-        medicinska utredningar eller underlag'
+        'Andra medicinska utredningar eller underlag' svar
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='58']) ge 1 and count(gn:svar[@id='58']) le 5">
         Ett 'Läkarutlåtande för assistansersättning' måste ha minst en och
-        högst fem 'Typ av diagnos'
+        högst fem 'Typ av diagnos' svar
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='5']) = 1">
         Ett 'Läkarutlåtande för assistansersättning' måste ha ett
-        'Sammanfatta historiken för diagnoserna' svar
+        'Beskriv kortfattat historiken för diagnoserna ovan' svar
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='8']) le 1">
         Ett 'Läkarutlåtande för assistansersättning' får ha högst ett
-        'Funktionsnedsättning för intellektuell funktion'
+        'Funktionsnedsättning för intellektuell funktion' svar
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='9']) le 1">
         Ett 'Läkarutlåtande för assistansersättning' får ha högst ett
-        'Funktionsnedsättning övergripande psykosociala funktioner'
+        'Funktionsnedsättning övergripande psykosociala funktioner' svar
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='10']) le 1">
         Ett 'Läkarutlåtande för assistansersättning' får ha högst ett
         'Funktionsnedsättning för uppmärksamhet, koncentration och
-        exekutiv funktion'
+        exekutiv funktion' svar
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='11']) le 1">
         Ett 'Läkarutlåtande för assistansersättning' får ha högst ett
-        'Funktionsnedsättning för annan psykisk funktion'
+        'Funktionsnedsättning för annan psykisk funktion' svar
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='12']) le 1">
         Ett 'Läkarutlåtande för assistansersättning' får ha högst ett
-        'Funktionsnedsättning för sinnesfunktioner och smärta'
+        'Funktionsnedsättning för sinnesfunktioner och smärta' svar
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='13']) le 1">
         Ett 'Läkarutlåtande för assistansersättning' får ha högst ett
-        'Funktionsnedsättning för balans, koordination och motorik'
+        'Funktionsnedsättning för balans, koordination och motorik' svar
+      </iso:assert>
+      <iso:assert test="count(gn:svar[@id='64']) le 1">
+        Ett 'Läkarutlåtande för assistansersättning' får ha högst ett
+        'Funktionsnedsättning för andningsfunktion' svar
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='14']) le 1">
         Ett 'Läkarutlåtande för assistansersättning' får ha högst ett
-        'Funktionsnedsättning för annan kroppslig funktion'
+        'Funktionsnedsättning för annan kroppslig funktion' svar
       </iso:assert>
-      <iso:assert test="count(gn:svar[matches(@id, '^([89]|1[0-4])$')]) ge 1">
+      <iso:assert test="count(gn:svar[matches(@id, '^([89]|1[0-4]|64)$')]) ge 1">
         Ett 'Läkarutlåtande för assistansersättning' måste ha minst ett
-        'Funktionsnedsättning'
+        'Funktionsnedsättning' svar
       </iso:assert>
-      <iso:assert test="count(gn:svar[@id='65']) = 1">
+      <iso:assert test="count(gn:svar[@id='65']) le 1">
         Ett 'Läkarutlåtande för assistansersättning' måste ha ett
         'Lärande, tillämpa kunskap samt allmänna uppgifter och krav' svar
       </iso:assert>
-      <iso:assert test="count(gn:svar[@id='66']) = 1">
+      <iso:assert test="count(gn:svar[@id='66']) le 1">
         Ett 'Läkarutlåtande för assistansersättning' måste ha ett
         'Kommunikation' svar
       </iso:assert>
-      <iso:assert test="count(gn:svar[@id='67']) = 1">
+      <iso:assert test="count(gn:svar[@id='67']) le 1">
         Ett 'Läkarutlåtande för assistansersättning' måste ha ett
         'Förflyttning' svar
       </iso:assert>
-      <iso:assert test="count(gn:svar[@id='68']) = 1">
+      <iso:assert test="count(gn:svar[@id='68']) le 1">
         Ett 'Läkarutlåtande för assistansersättning' måste ha ett
         'Personlig vård och sköta sin hälsa' svar
       </iso:assert>
-      <iso:assert test="count(gn:svar[@id='69']) = 1">
+      <iso:assert test="count(gn:svar[@id='69']) le 1">
         Ett 'Läkarutlåtande för assistansersättning' måste ha ett
         'Övriga aktivitetsbegränsningar' svar
       </iso:assert>
+      <iso:assert test="count(gn:svar[matches(@id, '^6[5-9]$')]) ge 1">
+        Ett 'Läkarutlåtande för assistansersättning' måste ha minst ett
+        'Aktivitetsbegränsningar' svar
+      </iso:assert>
       <iso:assert test="count(gn:svar[@id='39']) = 1">
-        Ett 'Läkarutlåtande för assistansersättning' måste ha ett 'Prognos'
-        svar
+        Ett 'Läkarutlåtande för assistansersättning' måste ha ett 'Prognos' svar
+      </iso:assert>
+      <iso:assert test="count(gn:svar[@id='70']) = 1">
+        Ett 'Läkarutlåtande för assistansersättning' måste ha ett 'Sjukvårdande insatser inom
+        personlig assistans' svar
       </iso:assert>
     </iso:rule>
   </iso:pattern>
@@ -221,6 +230,69 @@
     </iso:rule>
   </iso:pattern>
 
+  <iso:pattern id="q70">
+    <iso:rule context="//gn:svar[@id='70']">
+      <iso:assert test="count(gn:delsvar[@id='70.1']) = 1">
+        'Har patienten behov av hjälp som innefattar sjukvårdande insatser enligt HSL?' måste
+        besvaras.
+      </iso:assert>
+      <iso:assert test="count(gn:delsvar[@id='70.3']) = 1">
+        'Har patienten behov av hjälp som bedöms kunna utföras som egenvård?' måste besvaras.
+      </iso:assert>
+      <iso:let name="delsvarsIdExpr" value="'^70\.[1-4]$'"/>
+      <iso:assert test="count(gn:delsvar[not(matches(@id, $delsvarsIdExpr))]) = 0">
+        Oväntat delsvars-id i delsvar till svar "<value-of select="@id"/>". Delsvars-id:n måste
+        matcha "<value-of select="$delsvarsIdExpr"/>".
+      </iso:assert>
+    </iso:rule>
+  </iso:pattern>
+
+  <iso:pattern id="q70.1">
+    <iso:rule context="//gn:delsvar[@id='70.1']">
+      <iso:extends rule="boolean"/>
+    </iso:rule>
+  </iso:pattern>
+
+  <iso:pattern id="q70.3">
+    <iso:rule context="//gn:delsvar[@id='70.3']">
+      <iso:extends rule="boolean"/>
+    </iso:rule>
+  </iso:pattern>
+
+  <iso:pattern id="q70.1-70.2">
+    <iso:rule
+      context="//gn:delsvar[@id='70.1' and (normalize-space(.)='1' or normalize-space(.)='true')]">
+      <iso:assert test="../gn:delsvar[@id='70.2']">
+        Om 'Har patienten behov av hjälp som innefattar sjukvårdande insatser enligt HSL?' besvarats
+        med sant måste minst en 'Ange vilka insatser och i vilken omfattning' anges.
+      </iso:assert>
+    </iso:rule>
+    <iso:rule
+      context="//gn:delsvar[@id='70.1' and (normalize-space(.)='0' or normalize-space(.)='false')]">
+      <iso:assert test="count(../gn:delsvar[@id='70.2']) = 0">
+        Om 'Har patienten behov av hjälp som innefattar sjukvårdande insatser enligt HSL?' besvarats
+        med falskt får 'Ange vilka insatser och i vilken omfattning' inte anges.
+      </iso:assert>
+    </iso:rule>
+  </iso:pattern>
+
+  <iso:pattern id="q70.3-70.4">
+    <iso:rule
+      context="//gn:delsvar[@id='70.3' and (normalize-space(.)='1' or normalize-space(.)='true')]">
+      <iso:assert test="../gn:delsvar[@id='70.4']">
+        Om 'Har patienten behov av hjälp som bedöms kunna utföras som egenvård?' besvarats
+        med sant måste minst en 'Ange vilka insatser och i vilken omfattning' anges.
+      </iso:assert>
+    </iso:rule>
+    <iso:rule
+      context="//gn:delsvar[@id='70.3' and (normalize-space(.)='0' or normalize-space(.)='false')]">
+      <iso:assert test="count(../gn:delsvar[@id='70.4']) = 0">
+        Om 'Har patienten behov av hjälp som bedöms kunna utföras som egenvård?' besvarats
+        med falskt får 'Ange vilka insatser och i vilken omfattning' inte anges.
+      </iso:assert>
+    </iso:rule>
+  </iso:pattern>
+
   <iso:pattern id="q4">
     <iso:rule context="//gn:svar[@id='4']">
       <iso:assert test="count(gn:instans) = 1">
@@ -251,10 +323,10 @@
         'KV_FKMU_0005'.
       </iso:assert>
       <iso:assert
-        test="matches(normalize-space(tp:cv/tp:code), '^(NEUROPSYKIATRISKT|HABILITERING|ARBETSTERAPEUT|FYSIOTERAPEUT|LOGOPED|PSYKOLOG|VARDCENTRAL|SPECIALISTKLINIK|SKOLHALSOVARD|VARD_UTOMLANDS|HORSELHABILITERING|SYNHABILITERING|DIETIST|OVRIGT_UTLATANDE)$')">
+        test="matches(normalize-space(tp:cv/tp:code), '^(NEUROPSYKIATRISKT|HABILITERING|ARBETSTERAPEUT|FYSIOTERAPEUT|LOGOPED|PSYKOLOG|VARDCENTRAL|SPECIALISTKLINIK|VARD_UTOMLANDS|HORSELHABILITERING|SYNHABILITERING|DIETIST|OVRIGT_UTLATANDE)$')">
         'Utredning eller underlagstyp?' kan ha ett av värdena 'Utredning eller underlagstyp?' kan ha
         ett av värdena: NEUROPSYKIATRISKT, HABILITERING, ARBETSTERAPEUT, FYSIOTERAPEUT, LOGOPED,
-        PSYKOLOG, VARDCENTRAL, SPECIALISTKLINIK, SKOLHALSOVARD, VARD_UTOMLANDS, HORSELHABILITERING,
+        PSYKOLOG, VARDCENTRAL, SPECIALISTKLINIK, VARD_UTOMLANDS, HORSELHABILITERING,
         SYNHABILITERING, DIETIST, OVRIGT_UTLATANDE.
       </iso:assert>
     </iso:rule>
