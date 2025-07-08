@@ -10,6 +10,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7427_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7472_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7809_CERTIFICATE_MODEL;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7810_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.SUBJECT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
@@ -855,6 +856,181 @@ public class TestDataCertificate {
                     .value(
                         ElementValueText.builder()
                             .textId(new FieldId("39.2"))
+                            .text("TEXT")
+                            .build()
+                    )
+                    .build()
+            )
+        )
+        .certificateMetaData(
+            CertificateMetaData.builder()
+                .issuer(AJLA_DOKTOR)
+                .creator(ALF_DOKTOR)
+                .patient(ATHENA_REACT_ANDERSSON)
+                .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
+                .careUnit(ALFA_MEDICINCENTRUM)
+                .careProvider(ALFA_REGIONEN)
+                .build()
+        );
+  }
+
+  public static final Certificate FK7810_CERTIFICATE = fk7810CertificateBuilder().build();
+
+  public static Certificate.CertificateBuilder fk7810CertificateBuilder() {
+    return Certificate.builder()
+        .id(CERTIFICATE_ID)
+        .revision(REVISION)
+        .created(LocalDateTime.now(ZoneId.systemDefault()))
+        .certificateModel(FK7810_CERTIFICATE_MODEL)
+        .xml(XML)
+        .sent(SENT)
+        .revoked(REVOKED)
+        .externalReference(EXTERNAL_REFERENCE)
+        .elementData(
+            List.of(
+                ElementData.builder()
+                    .id(new ElementId("1"))
+                    .value(
+                        ElementValueDateList.builder()
+                            .dateListId(new FieldId("1.1"))
+                            .dateList(
+                                List.of(
+                                    ElementValueDate.builder()
+                                        .dateId(new FieldId("fysisktMote"))
+                                        .date(LocalDate.now())
+                                        .build()
+                                )
+                            )
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("3"))
+                    .value(
+                        ElementValueBoolean.builder()
+                            .booleanId(new FieldId("3.1"))
+                            .value(true)
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("4"))
+                    .value(
+                        ElementValueMedicalInvestigationList.builder()
+                            .id(new FieldId("4.1"))
+                            .list(
+                                List.of(
+                                    MedicalInvestigation.builder()
+                                        .id(new FieldId("medicalInvestigation1"))
+                                        .informationSource(
+                                            ElementValueText.builder()
+                                                .textId(new FieldId(
+                                                    "medicalInvestigation1_INFORMATION_SOURCE"))
+                                                .text("Example text")
+                                                .build()
+                                        )
+                                        .investigationType(
+                                            ElementValueCode.builder()
+                                                .codeId(new FieldId(
+                                                    "medicalInvestigation1_INVESTIGATION_TYPE"))
+                                                .code("LOGOPED")
+                                                .build()
+                                        )
+                                        .date(
+                                            ElementValueDate.builder()
+                                                .dateId(new FieldId("medicalInvestigation1_DATE"))
+                                                .date(LocalDate.now())
+                                                .build())
+                                        .build()
+                                )
+                            )
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("58"))
+                    .value(
+                        ElementValueDiagnosisList.builder()
+                            .diagnoses(
+                                List.of(
+                                    ElementValueDiagnosis.builder()
+                                        .code("A013")
+                                        .description("Paratyfoidfeber C")
+                                        .terminology("ICD_10_SE")
+                                        .build()
+                                )
+                            )
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("5"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("5.1"))
+                            .text("TEXT")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("8"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("8.1"))
+                            .text("TEXT")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("65"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("65.1"))
+                            .text("TEXT")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("39"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("39.2"))
+                            .text("TEXT")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("70"))
+                    .value(
+                        ElementValueBoolean.builder()
+                            .booleanId(new FieldId("70.1"))
+                            .value(true)
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("70.2"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("70.2"))
+                            .text("TEXT")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("70.3"))
+                    .value(
+                        ElementValueBoolean.builder()
+                            .booleanId(new FieldId("70.3"))
+                            .value(true)
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("70.4"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("70.4"))
                             .text("TEXT")
                             .build()
                     )

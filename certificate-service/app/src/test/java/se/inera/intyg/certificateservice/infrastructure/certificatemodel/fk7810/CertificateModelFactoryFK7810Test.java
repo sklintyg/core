@@ -141,6 +141,17 @@ class CertificateModelFactoryFK7810Test {
   }
 
   @Test
+  void shallIncludeSchematronPath() {
+    final var expectedSchematronPath = "fk7810/schematron/luas.v1.sch";
+    final var certificateModel = certificateModelFactoryFK7810.create();
+
+    assertAll(
+        () -> assertNotNull(certificateModel.schematronPath()),
+        () -> assertEquals(expectedSchematronPath, certificateModel.schematronPath().value())
+    );
+  }
+
+  @Test
   void shallIncludeCertificateActionSpecifications() {
     final var certificateModel = certificateModelFactoryFK7810.create();
 
