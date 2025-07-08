@@ -12,7 +12,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfig
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCode;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0010;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0009;
 
 public class QuestionPatientensBehandlingOchVardsituation {
 
@@ -40,18 +40,18 @@ public class QuestionPatientensBehandlingOchVardsituation {
     final var radioMultipleCodes = List.of(
         new ElementConfigurationCode(
             ENDAST_PALLIATIV_FIELD_ID,
-            CodeSystemKvFkmu0010.ENDAST_PALLIATIV.displayName(),
-            CodeSystemKvFkmu0010.ENDAST_PALLIATIV
+            CodeSystemKvFkmu0009.ENDAST_PALLIATIV.displayName(),
+            CodeSystemKvFkmu0009.ENDAST_PALLIATIV
         ),
         new ElementConfigurationCode(
             AKUT_LIVSHOTANDE_FIELD_ID,
-            CodeSystemKvFkmu0010.AKUT_LIVSHOTANDE.displayName(),
-            CodeSystemKvFkmu0010.AKUT_LIVSHOTANDE
+            CodeSystemKvFkmu0009.AKUT_LIVSHOTANDE.displayName(),
+            CodeSystemKvFkmu0009.AKUT_LIVSHOTANDE
         ),
         new ElementConfigurationCode(
             ANNAT_FIELD_ID,
-            CodeSystemKvFkmu0010.ANNAT.displayName(),
-            CodeSystemKvFkmu0010.ANNAT
+            CodeSystemKvFkmu0009.ANNAT.displayName(),
+            CodeSystemKvFkmu0009.ANNAT
         )
     );
 

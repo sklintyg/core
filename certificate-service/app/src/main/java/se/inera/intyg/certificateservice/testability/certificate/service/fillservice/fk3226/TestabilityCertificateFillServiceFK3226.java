@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.testability.certificate.service.fillservice.fk3226;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0010.AKUT_LIVSHOTANDE;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0010.ENDAST_PALLIATIV;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0009.AKUT_LIVSHOTANDE;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0009.ENDAST_PALLIATIV;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.CertificateModelFactoryFK3226.FK3226_V1_0;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.elements.QuestionDiagnos.DIAGNOSIS_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.elements.QuestionDiagnos.DIAGNOS_1;
