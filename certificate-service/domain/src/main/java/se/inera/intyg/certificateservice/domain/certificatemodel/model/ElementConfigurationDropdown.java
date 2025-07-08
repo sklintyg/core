@@ -15,12 +15,12 @@ import se.inera.intyg.certificateservice.domain.common.model.Code;
 
 @Value
 @Builder
-public class ElementConfigurationCheckboxMultipleCode implements ElementConfiguration {
+public class ElementConfigurationDropdown implements ElementConfiguration {
 
   @Getter(onMethod = @__(@Override))
   String name;
   @Getter(onMethod = @__(@Override))
-  ElementType type = ElementType.CHECKBOX_MULTIPLE_CODE;
+  ElementType type = ElementType.DROPDOWN;
   @Getter(onMethod = @__(@Override))
   ElementMessage message;
   FieldId id;
