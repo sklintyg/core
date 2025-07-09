@@ -24,7 +24,6 @@ public class ElementConfigurationDropdown implements ElementConfiguration {
   FieldId id;
   List<ElementConfigurationCode> list;
   ElementLayout elementLayout;
-  String unselectedText;
 
   @Override
   public ElementValue emptyValue() {
