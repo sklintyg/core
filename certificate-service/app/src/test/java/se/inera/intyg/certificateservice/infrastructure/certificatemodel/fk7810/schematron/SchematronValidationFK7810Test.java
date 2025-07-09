@@ -373,6 +373,23 @@ class SchematronValidationFK7810Test {
           SCHEMATRON_PATH));
     }
 
+    @Test
+    void shallReturnFalseIfKannedomNotAnswered() {
+      final var certificate = TestDataCertificate.fk7810CertificateBuilder()
+          .certificateModel(CertificateModelFactoryFK7810.create())
+          .build();
+
+      final var updatedElementData = certificate.elementData().stream()
+          .filter(elementData -> !elementData.id().equals(new ElementId("2")))
+          .toList();
+
+      certificate.updateData(updatedElementData, new Revision(0), ACTION_EVALUATION);
+
+      final var xml = generator.generate(certificate, false);
+      assertFalse(schematronValidator.validate(certificate.id(), xml,
+          SCHEMATRON_PATH));
+
+    }
   }
 
   @Nested

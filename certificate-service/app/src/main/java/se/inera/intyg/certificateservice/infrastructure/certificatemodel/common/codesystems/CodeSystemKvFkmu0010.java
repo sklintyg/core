@@ -15,7 +15,7 @@ public class CodeSystemKvFkmu0010 {
   public static final Code MINDRE_AN_ETT_AR = new Code(
       "MINDRE_AN_ETT_AR",
       CODE_SYSTEM,
-      "Kännedom i mindre än ett år)"
+      "Kännedom i mindre än ett år"
   );
 
   public static final Code MER_AN_ETT_AR = new Code(

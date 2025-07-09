@@ -12,7 +12,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionKannedomOmPatienten {
 
-  private static final ElementId QUESTION_GRUND_FOR_KANNEDOM_OM_PATIENTEN_ID = new ElementId("2");
+  public static final ElementId QUESTION_GRUND_FOR_KANNEDOM_OM_PATIENTEN_ID = new ElementId("2");
   private static final FieldId QUESTION_GRUND_FOR_KANNEDOM_OM_PATIENTEN_FIELD_ID = new FieldId(
       "2.2");
 
