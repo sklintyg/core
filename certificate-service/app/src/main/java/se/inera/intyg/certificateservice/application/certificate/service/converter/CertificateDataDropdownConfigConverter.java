@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.application.certificate.service.converter;
 
+import java.util.stream.Stream;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfig;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigDropdown;
@@ -26,17 +27,26 @@ public class CertificateDataDropdownConfigConverter implements CertificateDataCo
               elementSpecification.configuration().type())
       );
     }
+
     return CertificateDataConfigDropdown.builder()
-        .label(configuration.name())
+        .text(configuration.name())
         .list(
-            configuration.list().stream()
-                .map(elementConfigurationCode ->
+            Stream.concat(
+                Stream.of(
                     DropdownItem.builder()
-                        .id(elementConfigurationCode.id().value())
-                        .label(elementConfigurationCode.label())
-                        .build()
-                )
-                .toList())
+                        .id(null)
+                        .label(configuration.unselectedText())
+                        .build()),
+                configuration.list().stream()
+                    .map(elementConfigurationCode ->
+                        DropdownItem.builder()
+                            .id(elementConfigurationCode.id().value())
+                            .label(elementConfigurationCode.label())
+                            .build()
+                    )
+            ).toList()
+        )
         .build();
+
   }
 }

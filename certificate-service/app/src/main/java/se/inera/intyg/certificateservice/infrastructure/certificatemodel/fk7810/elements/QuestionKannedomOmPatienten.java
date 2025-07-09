@@ -6,7 +6,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCodeList;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCode;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0010;
 
@@ -24,11 +24,6 @@ public class QuestionKannedomOmPatienten {
   public static ElementSpecification questionKannedomOmPatienten(
       ElementSpecification... children) {
     final var dropdownItems = List.of(
-        new ElementConfigurationCode(
-            new FieldId(""),
-            "Välj i listan",
-            null
-        ),
         new ElementConfigurationCode(
             new FieldId(CodeSystemKvFkmu0010.INGEN_TIDIGARE.code()),
             CodeSystemKvFkmu0010.INGEN_TIDIGARE.displayName(),
@@ -52,20 +47,21 @@ public class QuestionKannedomOmPatienten {
             ElementConfigurationDropdown.builder()
                 .id(QUESTION_GRUND_FOR_KANNEDOM_OM_PATIENTEN_FIELD_ID)
                 .name("Jag har kännedom om patienten sedan")
+                .unselectedText("Välj i listan")
                 .list(dropdownItems)
                 .build()
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatory(
+                CertificateElementRuleFactory.mandatoryOrExist(
                     QUESTION_GRUND_FOR_KANNEDOM_OM_PATIENTEN_ID,
-                    QUESTION_GRUND_FOR_KANNEDOM_OM_PATIENTEN_FIELD_ID
+                    dropdownItems.stream().map(ElementConfigurationCode::id).toList()
                 )
             )
         )
         .validations(
             List.of(
-                ElementValidationCodeList.builder()
+                ElementValidationCode.builder()
                     .mandatory(true)
                     .build()
             )
