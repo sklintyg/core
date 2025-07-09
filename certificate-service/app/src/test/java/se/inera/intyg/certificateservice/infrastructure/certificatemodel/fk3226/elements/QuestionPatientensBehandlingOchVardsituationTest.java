@@ -16,7 +16,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfig
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCode;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0010;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0009;
 
 class QuestionPatientensBehandlingOchVardsituationTest {
 
@@ -40,17 +40,17 @@ class QuestionPatientensBehandlingOchVardsituationTest {
                 new ElementConfigurationCode(
                     new FieldId("ENDAST_PALLIATIV"),
                     "Endast palliativ vård ges och all aktiv behandling mot sjukdomstillståndet har avslutats",
-                    CodeSystemKvFkmu0010.ENDAST_PALLIATIV
+                    CodeSystemKvFkmu0009.ENDAST_PALLIATIV
                 ),
                 new ElementConfigurationCode(
                     new FieldId("AKUT_LIVSHOTANDE"),
                     "Akut livshotande tillstånd (till exempel vård på intensivvårdsavdelning)",
-                    CodeSystemKvFkmu0010.AKUT_LIVSHOTANDE
+                    CodeSystemKvFkmu0009.AKUT_LIVSHOTANDE
                 ),
                 new ElementConfigurationCode(
                     new FieldId("ANNAT"),
                     "Annat",
-                    CodeSystemKvFkmu0010.ANNAT
+                    CodeSystemKvFkmu0009.ANNAT
                 )
             )
         )

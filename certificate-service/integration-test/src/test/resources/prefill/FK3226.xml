@@ -96,7 +96,7 @@
     <ns2:delsvar id="52.1">
       <ns4:cv>
         <ns4:code>AKUT_LIVSHOTANDE</ns4:code>
-        <ns4:codeSystem>KV_FKMU_0010</ns4:codeSystem>
+        <ns4:codeSystem>KV_FKMU_0009</ns4:codeSystem>
         <ns4:displayName>Akut livshotande tillstånd (till exempel vård på intensivvårdsavdelning)
         </ns4:displayName>
       </ns4:cv>
