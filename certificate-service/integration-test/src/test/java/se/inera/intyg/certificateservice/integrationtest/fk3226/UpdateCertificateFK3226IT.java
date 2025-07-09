@@ -34,7 +34,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.value.Certi
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDateList;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDiagnosis;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDiagnosisList;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0010;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0009;
 import se.inera.intyg.certificateservice.integrationtest.BaseIntegrationIT;
 
 public abstract class UpdateCertificateFK3226IT extends BaseIntegrationIT {
@@ -128,7 +128,7 @@ public abstract class UpdateCertificateFK3226IT extends BaseIntegrationIT {
     final var expectedData =
         CertificateDataValueCode.builder()
             .id(QUESTION_PATIENTENS_BEHANDLING_OCH_VARDSITUATION_FIELD_ID.value())
-            .code(CodeSystemKvFkmu0010.ENDAST_PALLIATIV.code())
+            .code(CodeSystemKvFkmu0009.ENDAST_PALLIATIV.code())
             .build();
     final var certificate = certificate(testCertificates);
 

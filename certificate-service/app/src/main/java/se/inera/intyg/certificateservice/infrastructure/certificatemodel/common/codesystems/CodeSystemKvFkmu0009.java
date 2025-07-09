@@ -2,9 +2,9 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.common
 
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 
-public class CodeSystemKvFkmu0010 {
+public class CodeSystemKvFkmu0009 {
 
-  public static final String CODE_SYSTEM = "KV_FKMU_0010";
+  public static final String CODE_SYSTEM = "KV_FKMU_0009";
 
   public static final Code ENDAST_PALLIATIV = new Code(
       "ENDAST_PALLIATIV",
@@ -24,7 +24,7 @@ public class CodeSystemKvFkmu0010 {
       "Annat"
   );
 
-  private CodeSystemKvFkmu0010() {
+  private CodeSystemKvFkmu0009() {
     throw new IllegalStateException("Utility class");
   }
 }
