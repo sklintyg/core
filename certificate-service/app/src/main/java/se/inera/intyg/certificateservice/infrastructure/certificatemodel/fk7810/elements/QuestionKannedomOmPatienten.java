@@ -25,6 +25,11 @@ public class QuestionKannedomOmPatienten {
       ElementSpecification... children) {
     final var dropdownItems = List.of(
         new ElementConfigurationCode(
+            new FieldId(""),
+            "Välj i listan",
+            null
+        ),
+        new ElementConfigurationCode(
             new FieldId(CodeSystemKvFkmu0010.INGEN_TIDIGARE.code()),
             CodeSystemKvFkmu0010.INGEN_TIDIGARE.displayName(),
             CodeSystemKvFkmu0010.INGEN_TIDIGARE
@@ -54,7 +59,7 @@ public class QuestionKannedomOmPatienten {
             List.of(
                 CertificateElementRuleFactory.mandatory(
                     QUESTION_GRUND_FOR_KANNEDOM_OM_PATIENTEN_ID,
-                    dropdownItems.stream().map(ElementConfigurationCode::id).toList()
+                    QUESTION_GRUND_FOR_KANNEDOM_OM_PATIENTEN_FIELD_ID
                 )
             )
         )

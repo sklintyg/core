@@ -27,7 +27,7 @@ public class CertificateDataDropdownConfigConverter implements CertificateDataCo
       );
     }
     return CertificateDataConfigDropdown.builder()
-        .header(configuration.header())
+        .label(configuration.name())
         .list(
             configuration.list().stream()
                 .map(elementConfigurationCode ->
@@ -36,8 +36,7 @@ public class CertificateDataDropdownConfigConverter implements CertificateDataCo
                         .label(elementConfigurationCode.label())
                         .build()
                 )
-                .toList()
-        )
+                .toList())
         .build();
   }
 }
