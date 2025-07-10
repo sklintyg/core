@@ -218,6 +218,7 @@ public class CertificateModelFactoryFK7810 implements CertificateModelFactory {
             issuingUnitContactInfo()
         ))
         .certificateActionFactory(certificateActionFactory)
+        .pdfSpecification(FK7810PdfSpecification.create())
         .build();
   }
 }
