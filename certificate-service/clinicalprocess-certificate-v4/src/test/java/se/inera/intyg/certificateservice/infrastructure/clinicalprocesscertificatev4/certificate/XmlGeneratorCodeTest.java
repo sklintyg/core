@@ -17,7 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
@@ -97,10 +96,6 @@ class XmlGeneratorCodeTest {
   @MethodSource("provideElementSpecifications")
   void shouldMapEmptyIfNoValue(ElementSpecification elementSpecification) {
     final var data = ElementData.builder()
-        .value(ElementValueDate.builder()
-            .dateId(new FieldId(ANSWER_ID))
-            .build()
-        )
         .id(new ElementId(QUESTION_ID))
         .build();
 
@@ -111,7 +106,25 @@ class XmlGeneratorCodeTest {
 
   @ParameterizedTest
   @MethodSource("provideElementSpecifications")
-  void shouldMapEmptyIfValueIsNotDate(ElementSpecification elementSpecification) {
+  void shouldMapEmptyIfValueIEmpty(ElementSpecification elementSpecification) {
+    final var data = ElementData.builder()
+        .id(new ElementId(QUESTION_ID))
+        .value(
+            ElementValueCode.builder()
+                .codeId(new FieldId("2"))
+                .code("")
+                .build()
+        )
+        .build();
+
+    final var response = xmlGeneratorCode.generate(data, elementSpecification);
+
+    assertTrue(response.isEmpty());
+  }
+
+  @ParameterizedTest
+  @MethodSource("provideElementSpecifications")
+  void shouldMapEmptyIfValueIsEmpty(ElementSpecification elementSpecification) {
     final var data = ElementData.builder()
         .value(ElementValueUnitContactInformation.builder()
             .build()

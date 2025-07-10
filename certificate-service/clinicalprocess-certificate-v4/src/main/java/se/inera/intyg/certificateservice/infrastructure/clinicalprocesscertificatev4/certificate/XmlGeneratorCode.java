@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertific
 import java.util.Collections;
 import java.util.List;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
@@ -29,7 +30,7 @@ public class XmlGeneratorCode implements XmlGeneratorElementData {
       return Collections.emptyList();
     }
 
-    if (elementValueCode.code() == null) {
+    if (!StringUtils.hasLength(elementValueCode.code())) {
       return Collections.emptyList();
     }
 
