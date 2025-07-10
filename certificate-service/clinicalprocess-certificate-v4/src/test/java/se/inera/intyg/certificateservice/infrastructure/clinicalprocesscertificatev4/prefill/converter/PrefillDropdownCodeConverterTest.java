@@ -12,7 +12,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDropdown;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDropdownCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
@@ -34,7 +34,7 @@ class PrefillDropdownCodeConverterTest {
   private static final ElementSpecification SPECIFICATION = ElementSpecification.builder()
       .id(ELEMENT_ID)
       .configuration(
-          ElementConfigurationDropdown.builder()
+          ElementConfigurationDropdownCode.builder()
               .id(FIELD_ID)
               .list(
                   List.of(
@@ -62,7 +62,7 @@ class PrefillDropdownCodeConverterTest {
 
   @Test
   void shouldReturnSupportsDropdownCode() {
-    assertEquals(ElementConfigurationDropdown.class,
+    assertEquals(ElementConfigurationDropdownCode.class,
         prefillDropdownCodeConverter.supports());
   }
 
@@ -132,7 +132,7 @@ class PrefillDropdownCodeConverterTest {
       final var specification = ElementSpecification.builder()
           .id(new ElementId(FIELD_ID.value()))
           .configuration(
-              ElementConfigurationDropdown.builder()
+              ElementConfigurationDropdownCode.builder()
                   .id(FIELD_ID)
                   .list(
                       List.of(

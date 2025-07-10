@@ -2,7 +2,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDropdown;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDropdownCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
@@ -49,7 +49,7 @@ public class QuestionKannedomOmPatienten {
     return ElementSpecification.builder()
         .id(QUESTION_GRUND_FOR_KANNEDOM_OM_PATIENTEN_ID)
         .configuration(
-            ElementConfigurationDropdown.builder()
+            ElementConfigurationDropdownCode.builder()
                 .id(QUESTION_GRUND_FOR_KANNEDOM_OM_PATIENTEN_FIELD_ID)
                 .name("Jag har kännedom om patienten sedan")
                 .list(dropdownItems)

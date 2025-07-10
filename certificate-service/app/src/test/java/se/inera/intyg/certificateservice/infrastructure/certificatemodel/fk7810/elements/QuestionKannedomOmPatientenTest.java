@@ -6,7 +6,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDropdown;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDropdownCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
@@ -50,7 +50,7 @@ class QuestionKannedomOmPatientenTest {
             CodeSystemKvFkmu0010.MER_AN_ETT_AR
         )
     );
-    final var expectedConfiguration = ElementConfigurationDropdown.builder()
+    final var expectedConfiguration = ElementConfigurationDropdownCode.builder()
         .id(new FieldId("2.2"))
         .name("Jag har kännedom om patienten sedan")
         .list(dropdownItems)

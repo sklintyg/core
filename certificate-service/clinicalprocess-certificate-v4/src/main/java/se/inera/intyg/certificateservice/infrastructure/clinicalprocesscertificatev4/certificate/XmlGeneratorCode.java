@@ -8,7 +8,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfiguration;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDropdown;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDropdownCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
@@ -58,7 +58,7 @@ public class XmlGeneratorCode implements XmlGeneratorElementData {
   private Code getCode(ElementConfiguration configuration, ElementValueCode elementValueCode) {
     return switch (configuration) {
       case ElementConfigurationRadioMultipleCode radioConfig -> radioConfig.code(elementValueCode);
-      case ElementConfigurationDropdown dropdownConfig -> dropdownConfig.code(elementValueCode);
+      case ElementConfigurationDropdownCode dropdownConfig -> dropdownConfig.code(elementValueCode);
       case null, default -> throw new IllegalArgumentException(
           "Cannot generate xml for configuration of type '%s'"
               .formatted(configuration.getClass())

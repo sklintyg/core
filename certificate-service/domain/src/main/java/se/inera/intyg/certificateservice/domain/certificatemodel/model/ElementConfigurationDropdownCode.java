@@ -13,7 +13,7 @@ import se.inera.intyg.certificateservice.domain.common.model.Code;
 
 @Value
 @Builder
-public class ElementConfigurationDropdown implements ElementConfiguration {
+public class ElementConfigurationDropdownCode implements ElementConfiguration {
 
   @Getter(onMethod = @__(@Override))
   String name;

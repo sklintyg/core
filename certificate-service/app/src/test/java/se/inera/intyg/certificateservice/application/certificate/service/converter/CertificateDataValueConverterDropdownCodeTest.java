@@ -11,27 +11,27 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDa
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
-class CertificateDataValueConverterDropdownTest {
+class CertificateDataValueConverterDropdownCodeTest {
 
   private static final String CODE_ID = "codeId";
   private static final String CODE = "code";
-  private CertificateDataValueConverterDropdown certificateDataValueConverterDropdown;
+  private CertificateDataValueConverterDropdownCode certificateDataValueConverterDropdownCode;
 
   @BeforeEach
   void setUp() {
-    certificateDataValueConverterDropdown = new CertificateDataValueConverterDropdown();
+    certificateDataValueConverterDropdownCode = new CertificateDataValueConverterDropdownCode();
   }
 
   @Test
   void shallReturnCorrectType() {
-    assertEquals(ElementType.DROPDOWN, certificateDataValueConverterDropdown.getType());
+    assertEquals(ElementType.DROPDOWN, certificateDataValueConverterDropdownCode.getType());
   }
 
   @Test
   void shallThrowIfWrongType() {
     final var elementValue = ElementValueDate.builder().build();
     assertThrows(IllegalStateException.class,
-        () -> certificateDataValueConverterDropdown.convert(null, elementValue));
+        () -> certificateDataValueConverterDropdownCode.convert(null, elementValue));
   }
 
   @Test
@@ -41,7 +41,7 @@ class CertificateDataValueConverterDropdownTest {
         .code(CODE)
         .build();
 
-    final var certificateDataValue = (CertificateDataValueCode) certificateDataValueConverterDropdown.convert(
+    final var certificateDataValue = (CertificateDataValueCode) certificateDataValueConverterDropdownCode.convert(
         null,
         elementValueCode);
 
@@ -55,7 +55,7 @@ class CertificateDataValueConverterDropdownTest {
         .code(CODE)
         .build();
 
-    final var certificateDataValue = (CertificateDataValueCode) certificateDataValueConverterDropdown.convert(
+    final var certificateDataValue = (CertificateDataValueCode) certificateDataValueConverterDropdownCode.convert(
         null,
         elementValueCode);
 

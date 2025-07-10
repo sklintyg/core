@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfiguration;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDropdown;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDropdownCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
@@ -26,13 +26,13 @@ public class PrefillDropdownCodeConverter implements PrefillConverter {
 
   @Override
   public Class<? extends ElementConfiguration> supports() {
-    return ElementConfigurationDropdown.class;
+    return ElementConfigurationDropdownCode.class;
   }
 
   @Override
   public PrefillAnswer prefillAnswer(ElementSpecification specification,
       Forifyllnad prefill) {
-    if (!(specification.configuration() instanceof ElementConfigurationDropdown elementConfigurationDropdown)) {
+    if (!(specification.configuration() instanceof ElementConfigurationDropdownCode elementConfigurationDropdownCode)) {
       return PrefillAnswer.builder()
           .errors(List.of(PrefillError.wrongConfigurationType()))
           .build();
@@ -64,7 +64,7 @@ public class PrefillDropdownCodeConverter implements PrefillConverter {
     prefillErrors.addAll(
         PrefillValidator.validateDelsvarId(
             SubAnswersUtil.get(answers, subAnswers),
-            elementConfigurationDropdown,
+            elementConfigurationDropdownCode,
             specification
         )
     );
@@ -92,7 +92,7 @@ public class PrefillDropdownCodeConverter implements PrefillConverter {
                   .id(specification.id())
                   .value(
                       ElementValueCode.builder()
-                          .codeId(getId(elementConfigurationDropdown, code))
+                          .codeId(getId(elementConfigurationDropdownCode, code))
                           .code(code.code())
                           .build()
                   )
@@ -105,9 +105,9 @@ public class PrefillDropdownCodeConverter implements PrefillConverter {
     }
   }
 
-  private static FieldId getId(ElementConfigurationDropdown elementConfigurationDropdown,
+  private static FieldId getId(ElementConfigurationDropdownCode elementConfigurationDropdownCode,
       Code code) {
-    return elementConfigurationDropdown.list()
+    return elementConfigurationDropdownCode.list()
         .stream()
         .filter(c -> c.code() != null && code.matches(c.code()))
         .findFirst()

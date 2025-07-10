@@ -9,7 +9,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType;
 
 @Component
-public class CertificateDataValueConverterDropdown implements
+public class CertificateDataValueConverterDropdownCode implements
     CertificateDataValueConverter {
 
   @Override

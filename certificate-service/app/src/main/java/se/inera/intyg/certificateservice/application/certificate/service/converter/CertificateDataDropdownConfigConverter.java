@@ -5,7 +5,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.config.Cert
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigDropdown;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.DropdownItem;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDropdown;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDropdownCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType;
 
@@ -20,7 +20,7 @@ public class CertificateDataDropdownConfigConverter implements CertificateDataCo
 
   public CertificateDataConfig convert(ElementSpecification elementSpecification,
       Certificate certificate) {
-    if (!(elementSpecification.configuration() instanceof ElementConfigurationDropdown configuration)) {
+    if (!(elementSpecification.configuration() instanceof ElementConfigurationDropdownCode configuration)) {
       throw new IllegalStateException(
           "Invalid config type. Type was '%s'".formatted(
               elementSpecification.configuration().type())

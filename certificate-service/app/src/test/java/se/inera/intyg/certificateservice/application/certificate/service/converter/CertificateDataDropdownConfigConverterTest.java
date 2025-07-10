@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigDropdown;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDropdown;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDropdownCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
@@ -23,7 +23,7 @@ class CertificateDataDropdownConfigConverterTest {
 
   private static final ElementSpecification ELEMENT_SPECIFICATION = ElementSpecification.builder()
       .configuration(
-          ElementConfigurationDropdown.builder()
+          ElementConfigurationDropdownCode.builder()
               .name("NAME")
               .list(List.of(
                   new ElementConfigurationCode(
