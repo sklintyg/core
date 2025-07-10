@@ -14,7 +14,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 public class CertificateActionPrint implements CertificateAction {
 
   private static final String NAME = "Skriv ut";
-  private static final String DESCRIPTION = "Öppnar ett fönster där du kan välja att skriva ut eller spara intygsutkastet som PDF.";
+  private static final String DESCRIPTION = "Öppnar ett fönster där du kan välja att skriva ut eller spara intyget som PDF.";
   private final CertificateActionSpecification certificateActionSpecification;
   private final List<ActionRule> actionRules;
   private static final String PRINT_PROTECTED_PERSON_BODY =
