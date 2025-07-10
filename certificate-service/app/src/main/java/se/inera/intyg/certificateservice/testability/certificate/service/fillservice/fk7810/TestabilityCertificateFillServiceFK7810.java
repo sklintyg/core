@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.testability.certificate.service.fillse
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.FYSIOTERAPEUT;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.NEUROPSYKIATRISKT;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.VARDCENTRAL;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0010.MINDRE_AN_ETT_AR;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.CertificateModelFactoryFK7810.FK7810_V1_0;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAktivitetsbegransning.AKTIVITETSBAGRENSNINGAR_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAktivitetsbegransning.AKTIVITETSBAGRENSNINGAR_KOMMUNIKATION_ID;
@@ -38,6 +39,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionGrundForMedicinsktUnderlag.UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionGrundForMedicinsktUnderlag.UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionIntellektuellFunktionMotivering.FUNKTIONSNEDSATTNING_MOTIVERING_INTELLEKTUELL_FUNKTION_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionKannedomOmPatienten.QUESTION_GRUND_FOR_KANNEDOM_OM_PATIENTEN_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionKommunikationBegransningMotivering.AKTIVITETSBEGRANSNING_MOTIVERING_KOMMUNIKATION_BEGRANSNING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionKommunikationSocialInteraktionMotivering.FUNKTIONSNEDSATTNING_MOTIVERING_KOMMUNIKATION_SOCIAL_INTERAKTION_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionKoordinationMotivering.FUNKTIONSNEDSATTNING_MOTIVERING_KOORDINATION_ID;
@@ -80,6 +82,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCodeList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
@@ -134,6 +137,8 @@ public class TestabilityCertificateFillServiceFK7810 implements
         spec(QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID, certificateModel);
     final var specBaseratPaAnhorig =
         spec(QUESTION_RELATION_TILL_PATIENTEN_ID, certificateModel);
+    final var specKannedomOmPatienten =
+        spec(QUESTION_GRUND_FOR_KANNEDOM_OM_PATIENTEN_ID, certificateModel);
     final var specBaseratPaAnnat =
         spec(QUESTION_ANNAN_GRUND_FOR_MEDICINSKT_UNDERLAG_ID, certificateModel);
     final var specAnnanUtredning =
@@ -194,6 +199,7 @@ public class TestabilityCertificateFillServiceFK7810 implements
     baseratPa(specBaseratPa, elementData, fillType);
     baseratPaAnhorig(specBaseratPaAnhorig, elementData, fillType);
     baseratPaAnnat(specBaseratPaAnnat, elementData, fillType);
+    kannedomOmPatienten(specKannedomOmPatienten, elementData);
     annanUtredning(specAnnanUtredning, elementData, fillType);
     medicinskaUtredningar(specMedicinskaUtredningar, elementData, fillType);
     diagnos(specDiagnos, elementData, fillType);
@@ -224,6 +230,14 @@ public class TestabilityCertificateFillServiceFK7810 implements
     ovrigt(specOvrigt, elementData, fillType);
 
     return elementData;
+  }
+
+  private static void kannedomOmPatienten(ElementSpecification spec,
+      ArrayList<ElementData> elementData) {
+    if (emptyValue(spec) instanceof ElementValueCode) {
+      elementData.add(elementData(spec.id(),
+          valueCode(new FieldId(MINDRE_AN_ETT_AR.code()), MINDRE_AN_ETT_AR.code())));
+    }
   }
 
   private static void baseratPa(ElementSpecification spec, List<ElementData> list,

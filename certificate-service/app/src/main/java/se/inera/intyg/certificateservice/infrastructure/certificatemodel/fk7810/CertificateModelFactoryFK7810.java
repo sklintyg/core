@@ -20,6 +20,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionFunktionsnedsattning.questionFunktionsnedsattning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionGrundForMedicinsktUnderlag.questionGrundForMedicinsktUnderlag;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionIntellektuellFunktionMotivering.questionIntellektuellFunktionMotivering;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionKannedomOmPatienten.questionKannedomOmPatienten;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionKommunikationBegransningMotivering.questionKommunikationBegransningMotivering;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionKommunikationSocialInteraktionMotivering.questionKommunikationSocialInteraktionMotivering;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionKoordinationMotivering.questionKoordinationMotivering;
@@ -170,6 +171,7 @@ public class CertificateModelFactoryFK7810 implements CertificateModelFactory {
                     questionRelationTillPatienten(),
                     questionAnnanGrundForMedicinsktUnderlag()
                 ),
+                questionKannedomOmPatienten(),
                 questionBaseratPaAnnatMedicinsktUnderlag(),
                 questionUtredningEllerUnderlag()
             ),

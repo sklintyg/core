@@ -905,6 +905,15 @@ public class TestDataCertificate {
                     )
                     .build(),
                 ElementData.builder()
+                    .id(new ElementId("2"))
+                    .value(
+                        ElementValueCode.builder()
+                            .codeId(new FieldId("MINDRE_AN_ETT_AR"))
+                            .code("MINDRE_AN_ETT_AR")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
                     .id(new ElementId("3"))
                     .value(
                         ElementValueBoolean.builder()

@@ -3,11 +3,15 @@ package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertific
 import java.util.Collections;
 import java.util.List;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfiguration;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDropdownCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.CVType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.ObjectFactory;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
@@ -26,15 +30,8 @@ public class XmlGeneratorCode implements XmlGeneratorElementData {
       return Collections.emptyList();
     }
 
-    if (elementValueCode.code() == null) {
+    if (!StringUtils.hasLength(elementValueCode.code())) {
       return Collections.emptyList();
-    }
-
-    if (!(specification.configuration() instanceof ElementConfigurationRadioMultipleCode configuration)) {
-      throw new IllegalArgumentException(
-          "Cannot generate xml for configuration of type '%s'"
-              .formatted(specification.configuration().getClass())
-      );
     }
 
     final var codeAnswer = new Svar();
@@ -43,8 +40,8 @@ public class XmlGeneratorCode implements XmlGeneratorElementData {
     final var subAnswerCode = new Delsvar();
     final var cvType = new CVType();
 
-    final var code = configuration.code(elementValueCode);
-    subAnswerCode.setId(configuration.id().value());
+    final var code = getCode(specification.configuration(), elementValueCode);
+    subAnswerCode.setId(specification.configuration().id().value());
     cvType.setCode(code.code());
     cvType.setCodeSystem(code.codeSystem());
     cvType.setDisplayName(code.displayName());
@@ -56,5 +53,16 @@ public class XmlGeneratorCode implements XmlGeneratorElementData {
     codeAnswer.getDelsvar().add(subAnswerCode);
 
     return List.of(codeAnswer);
+  }
+
+  private Code getCode(ElementConfiguration configuration, ElementValueCode elementValueCode) {
+    return switch (configuration) {
+      case ElementConfigurationRadioMultipleCode radioConfig -> radioConfig.code(elementValueCode);
+      case ElementConfigurationDropdownCode dropdownConfig -> dropdownConfig.code(elementValueCode);
+      case null, default -> throw new IllegalArgumentException(
+          "Cannot generate xml for configuration of type '%s'"
+              .formatted(configuration.getClass())
+      );
+    };
   }
 }

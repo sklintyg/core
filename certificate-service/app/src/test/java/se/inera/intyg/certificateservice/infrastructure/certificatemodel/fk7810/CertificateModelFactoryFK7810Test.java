@@ -214,6 +214,7 @@ class CertificateModelFactoryFK7810Test {
       );
     }
 
+
     @Test
     void shallIncludeQuestionAnnanGrundForMedicinsktUnderlag() {
       final var certificateModel = certificateModelFactoryFK7810.create();
@@ -224,6 +225,18 @@ class CertificateModelFactoryFK7810Test {
               certificateModel.elementSpecifications())
       );
     }
+
+    @Test
+    void shallIncludeQuestionKannedomOmPatienten() {
+      final var certificateModel = certificateModelFactoryFK7810.create();
+
+      assertTrue(certificateModel.elementSpecificationExists(new ElementId("2")),
+          "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+              new ElementId("2"),
+              certificateModel.elementSpecifications())
+      );
+    }
+
 
     @Test
     void shallIncludeQuestionBaseratPaAnnatMedicinsktUnderlag() {

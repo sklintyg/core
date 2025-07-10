@@ -21,6 +21,10 @@
         Ett 'Läkarutlåtande för assistansersättning' måste ha mellan 1 och
         5 'Grund för medicinskt underlag' svar
       </iso:assert>
+      <iso:assert test="count(gn:svar[@id='2']) = 1">
+        Ett 'Läkarutlåtande för assistansersättning' måste ha ett 'Jag har kännedom om patienten
+        sedan' svar
+      </iso:assert>
       <iso:assert test="count(gn:svar[@id='3']) = 1">
         Ett 'Läkarutlåtande för assistansersättning' måste ha ett 'Är
         utlåtandet även baserat på andra medicinska utredningar eller
@@ -189,6 +193,21 @@
       <iso:assert test="../../../gn:delsvar[@id='1.4']">
         Om 'Typ av grund för MU' är 'Anhorig' så måste 'Ange anhörig eller annas relation till
         patienten' anges.
+      </iso:assert>
+    </iso:rule>
+  </iso:pattern>
+
+  <iso:pattern id="q2">
+    <iso:rule context="//gn:svar[@id='2']">
+      <iso:assert test="count(gn:delsvar[@id='2.2']) = 1">
+        'Jag har kännedom om patienten sedan' måste ha ett svar.
+      </iso:assert>
+    </iso:rule>
+    <iso:rule context="//gn:delsvar[@id='2.2']">
+      <iso:assert
+        test="matches(normalize-space(tp:cv/tp:code), '^(INGEN_TIDIGARE|MINDRE_AN_ETT_AR|MER_AN_ETT_AR)$')">
+        'Jag har kännedom om patienten sedan' kan ha ett av värdena INGEN_TIDIGARE,
+        MINDRE_AN_ETT_AR, MER_AN_ETT_AR.
       </iso:assert>
     </iso:rule>
   </iso:pattern>
