@@ -10,6 +10,9 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagInd
 
 public class FK7810PdfSpecification {
 
+  public static final Integer PDF_TEXT_FIELD_LENGTH = 52;
+  public static final PdfFieldId OVERFLOW_SHEET_FIELD_ID = new PdfFieldId(
+      ("form1[0].#subform[6].flt_txtFortsattningsblad[0]"));
   public static final String PDF_FK_7810_PDF = "fk7810/pdf/fk7810_v1.pdf";
   public static final String PDF_NO_ADDRESS_FK7810_PDF = "fk7810/pdf/fk7810_v1_no_address.pdf";
   public static final PdfMcid PDF_MCID = new PdfMcid(200);

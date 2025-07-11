@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements;
 
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.FK7810PdfSpecification.PDF_TEXT_FIELD_LENGTH;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_ID;
 
 import java.util.List;
@@ -69,9 +70,9 @@ public abstract class AbstractFunktionsnedsattningMotivering {
         .pdfConfiguration(
             PdfConfigurationText.builder()
                 .pdfFieldId(pdfFieldId)
-//                .maxLength(PDF_TEXT_FIELD_LENGTH * 4)
+                .maxLength(PDF_TEXT_FIELD_LENGTH * 5)
                 .overflowSheetFieldId(
-                    new PdfFieldId(("form1[0].#subform[4].flt_txtFortsattningsblad[0]")))
+                    new PdfFieldId(("form1[0].#subform[6].flt_txtFortsattningsblad[0]")))
                 .build()
         )
         .build();

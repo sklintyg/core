@@ -5,6 +5,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 
 public class QuestionLarandeBegransningMotivering extends
     AbstractAktivitetsbegransningMotivering {
@@ -13,6 +14,9 @@ public class QuestionLarandeBegransningMotivering extends
       "65");
   private static final FieldId AKTIVITETSBEGRANSNING_MOTIVERING_LARANDE_BEGRANSNING_FIELD_ID = new FieldId(
       "65.1");
+
+  private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
+      "form1[0].Sida4[0].flt_txtLarandeKunskap[0]");
 
   private QuestionLarandeBegransningMotivering() {
     throw new IllegalStateException("Utility class");
@@ -26,7 +30,7 @@ public class QuestionLarandeBegransningMotivering extends
         "Lärande, tillämpa kunskap samt allmänna uppgifter och krav",
         "Beskriv aktivitetsbegränsningen. Ange grad om det är möjligt och hur aktivitetsbegränsningen kan korrigeras med hjälpmedel.",
         "Med lärande och tillämpa kunskap menas att till exempel att förvärva färdigheter, att lösa problem och att fatta beslut. Med allmänna uppgifter och krav menas till exempel att genomföra daglig rutin, eller att hantera stress och andra psykologiska krav.",
-        null
+        PDF_FIELD_ID
     );
   }
 }

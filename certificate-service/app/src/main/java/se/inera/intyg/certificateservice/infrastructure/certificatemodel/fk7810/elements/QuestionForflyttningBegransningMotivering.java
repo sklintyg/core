@@ -5,6 +5,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 
 public class QuestionForflyttningBegransningMotivering extends
     AbstractAktivitetsbegransningMotivering {
@@ -13,6 +14,8 @@ public class QuestionForflyttningBegransningMotivering extends
       "67");
   private static final FieldId AKTIVITETSBEGRANSNING_MOTIVERING_FORFLYTTNING_BEGRANSNING_FIELD_ID = new FieldId(
       "67.1");
+  private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
+      "form1[0].Sida4[0].flt_txtForflyttning[0]");
 
   private QuestionForflyttningBegransningMotivering() {
     throw new IllegalStateException("Utility class");
@@ -26,7 +29,7 @@ public class QuestionForflyttningBegransningMotivering extends
         "Förflyttning",
         "Beskriv aktivitetsbegränsningen. Ange grad om det är möjligt och hur aktivitetsbegränsningen kan korrigeras med hjälpmedel.",
         "Med förflyttning menas till exempel att röra sig genom att ändra kroppsställning, att förflytta sig och att använda handens finmotorik för att flytta föremål.",
-        null
+        PDF_FIELD_ID
     );
   }
 }

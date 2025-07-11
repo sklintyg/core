@@ -5,6 +5,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 
 public class QuestionKoordinationMotivering extends AbstractFunktionsnedsattningMotivering {
 
@@ -12,6 +13,9 @@ public class QuestionKoordinationMotivering extends AbstractFunktionsnedsattning
       "13");
   private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_KOORDINATION_FIELD_ID = new FieldId(
       "13.1");
+
+  private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
+      "form1[0].Sida3[0].flt_txtBalans[0]");
 
   private QuestionKoordinationMotivering() {
     throw new IllegalStateException("Utility class");
@@ -25,7 +29,7 @@ public class QuestionKoordinationMotivering extends AbstractFunktionsnedsattning
         "Balans, koordination och motorik",
         GENERAL_LABEL_FUNKTIONSNEDSATTNING,
         "Med balans menas kroppens balansfunktion och förnimmelse av kroppsställning (positionsuppfattning). Med koordination menas till exempel ögahandkoordination, gångkoordination och att samordna rörelser av armar och ben. Med motorik menas fin- och grovmotorik eller till exempel munmotorik.",
-        null
+        PDF_FIELD_ID
     );
   }
 }
