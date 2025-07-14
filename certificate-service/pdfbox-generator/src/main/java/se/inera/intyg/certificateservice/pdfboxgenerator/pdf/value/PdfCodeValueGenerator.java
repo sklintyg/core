@@ -5,9 +5,11 @@ import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants
 import java.util.Collections;
 import java.util.List;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationCode;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDropdownCode;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 
 @Component
@@ -21,8 +23,34 @@ public class PdfCodeValueGenerator implements PdfElementValue<ElementValueCode> 
   @Override
   public List<PdfField> generate(ElementSpecification elementSpecification,
       ElementValueCode elementValueCode) {
-    final var pdfConfiguration = (PdfConfigurationCode) elementSpecification.pdfConfiguration();
-    return getField(elementValueCode, pdfConfiguration);
+    final var pdfConfiguration = elementSpecification.pdfConfiguration();
+
+    return switch (pdfConfiguration) {
+      case PdfConfigurationCode codeConfig -> getField(elementValueCode, codeConfig);
+      case PdfConfigurationDropdownCode dropdownConfig ->
+          getDropdownField(elementValueCode, dropdownConfig);
+      default -> throw new IllegalArgumentException(
+          "Unsupported PDF configuration: " + pdfConfiguration.getClass());
+    };
+  }
+
+  private List<PdfField> getDropdownField(ElementValueCode code,
+      PdfConfigurationDropdownCode dropdownConfig) {
+    if (codeIsInvalid(code) || !StringUtils.hasLength(code.code())) {
+      return Collections.emptyList();
+    }
+
+    final var label = dropdownConfig.codes().get(code.codeId());
+    if (label == null) {
+      throw new IllegalArgumentException("Code " + code.codeId() + " not found");
+    }
+
+    return List.of(
+        PdfField.builder()
+            .id(dropdownConfig.fieldId().id())
+            .value(label)
+            .build()
+    );
   }
 
   private List<PdfField> getField(ElementValueCode code, PdfConfigurationCode configuration) {
