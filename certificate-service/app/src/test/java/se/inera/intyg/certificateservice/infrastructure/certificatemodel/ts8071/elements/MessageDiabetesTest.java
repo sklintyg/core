@@ -43,7 +43,7 @@ class MessageDiabetesTest {
         .message(
             ElementMessage.builder()
                 .content(
-                    "Har personen läkemedelsbehandlad diabetes krävs normalt ett särskilt läkarintyg om detta. Om personen redan har ett villkor om att skicka in ett nytt diabetesintyg till Transportstyrelsen i framtiden är det dock inte alltid som ett sådant intyg krävs vid prövningen av ansökan. Diabetesintyg går att skicka in digitalt via Webcert. Intygsblanketten finns också på <a href=\"https://www.transportstyrelsen.se/\">Transportstyrelsen</a>.")
+                    "Har personen läkemedelsbehandlad diabetes krävs normalt ett särskilt läkarintyg om detta. Om personen redan har ett villkor om att skicka in ett nytt diabetesintyg till Transportstyrelsen i framtiden är det dock inte alltid som ett sådant intyg krävs vid prövningen av ansökan. Diabetesintyg går att skicka in digitalt via Webcert. Intygsblanketten finns också på <LINK:transportstyrelsenLink>.")
                 .level(MessageLevel.OBSERVE)
                 .build()
         )
