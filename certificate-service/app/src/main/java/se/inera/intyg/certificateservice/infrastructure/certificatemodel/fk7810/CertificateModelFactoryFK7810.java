@@ -102,11 +102,12 @@ public class CertificateModelFactoryFK7810 implements CertificateModelFactory {
         <li>andning</li><li>personlig hygien</li>
         <li>måltider</li>
         <li>av- och påklädning</li>
-        <li>kommunikation med andra stöd som en person behöver på grund av en psykisk funktionsnedsättning, för att förebygga att personen fysiskt skadar sig själv, någon annan eller egendom</li>
+        <li>kommunikation med andra</li>
+        <li>stöd som en person behöver på grund av en psykisk funktionsnedsättning, för att förebygga att personen fysiskt skadar sig själv, någon annan eller egendom</li>
         <li>stöd som en person behöver löpande under större delen av dygnet på grund av ett medicinskt tillstånd som innebär att det finns fara för den enskildes liv, eller som innebär att det annars finns en överhängande och allvarlig risk för personens fysiska hälsa.</li>
       </ul>
       <p>Försäkringskassan kan inte räkna in hälso- och sjukvårdsåtgärder enligt hälso- och sjukvårdslagen i en persons hjälpbehov. Men om hälso- och sjukvårdspersonal bedömer att en åtgärd kan utföras som egenvård, så kan Försäkringskassan i vissa fall bevilja ersättning för det hjälpbehovet.</p>
-      <p>Mer information finns på <a href="http://forsakringskassan.se/">Försäkringskassans hemsida</a>. Sök på ”assistansersättning”.</p>
+      <p>Mer information finns på <LINK:forsakringskassanLink>. Sök på ”assistansersättning”.</p>
       """;
 
   private static final String PREAMBLE_TEXT =
@@ -207,10 +208,9 @@ public class CertificateModelFactoryFK7810 implements CertificateModelFactory {
                 questionPrognos()
             ),
             categorySjukvardandeInsats(
-                questionSjukvardandeInsatsHSL(),
-                questionSjukvardandeInsatsHSLInsatser(),
-                questionSjukvardandeInsatsEgenvard(),
-                questionSjukvardandeInsatsEgenvardInsatser()
+                questionSjukvardandeInsatsHSL(questionSjukvardandeInsatsHSLInsatser()),
+                questionSjukvardandeInsatsEgenvard(questionSjukvardandeInsatsEgenvardInsatser())
+
             ),
             categoryOvrigt(
                 questionOvrigt()

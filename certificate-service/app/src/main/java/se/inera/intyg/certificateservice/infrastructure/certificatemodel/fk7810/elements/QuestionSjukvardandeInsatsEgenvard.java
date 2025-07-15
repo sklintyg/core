@@ -27,7 +27,8 @@ public class QuestionSjukvardandeInsatsEgenvard {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionSjukvardandeInsatsEgenvard() {
+  public static ElementSpecification questionSjukvardandeInsatsEgenvard(
+      ElementSpecification... children) {
     return ElementSpecification.builder()
         .id(QUESTION_SJUKVARDANDE_INSATS_EGENVARD_ID)
         .configuration(
@@ -61,6 +62,7 @@ public class QuestionSjukvardandeInsatsEgenvard {
                 .optionFalse(PDF_OPTION_FALSE)
                 .build()
         )
+        .children(List.of(children))
         .build();
   }
 }
