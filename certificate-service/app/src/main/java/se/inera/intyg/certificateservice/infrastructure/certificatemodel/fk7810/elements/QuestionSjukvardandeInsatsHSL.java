@@ -18,7 +18,8 @@ public class QuestionSjukvardandeInsatsHSL {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionSjukvardandeInsatsHSL() {
+  public static ElementSpecification questionSjukvardandeInsatsHSL(
+      ElementSpecification... children) {
     return ElementSpecification.builder()
         .id(QUESTION_SJUKVARDANDE_INSATS_HSL_ID)
         .configuration(
@@ -44,6 +45,7 @@ public class QuestionSjukvardandeInsatsHSL {
                     .build()
             )
         )
+        .children(List.of(children))
         .build();
   }
 }
