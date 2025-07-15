@@ -9,7 +9,6 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAktivitetsbegransning.questionAktivitetsbegransning;
 
 import java.util.List;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
@@ -92,7 +91,7 @@ class QuestionAktivitetsbegransningTest {
     assertEquals(expectedValidations, element.validations());
   }
 
-  @Disabled
+
   @Test
   void shallIncludePdfConfiguration() {
     final var expected = PdfConfigurationHidden.builder()

@@ -22,7 +22,6 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import java.time.Period;
 import java.util.List;
 import java.util.Map;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationMedicalInvestigationList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -162,7 +161,6 @@ class QuestionUtredningEllerUnderlagTest {
   }
 
   @Test
-  @Disabled
   void shallIncludePdfConfiguration() {
     final var expectedOptions = Map.ofEntries(
         entry(NEUROPSYKIATRISKT.code(),
@@ -177,8 +175,6 @@ class QuestionUtredningEllerUnderlagTest {
             "Underlag från logoped"),
         entry(PSYKOLOG.code(),
             "Underlag från psykolog"),
-        entry(VARDCENTRAL.code(),
-            "Underlag från vårdcentral"),
         entry(SPECIALISTKLINIK.code(),
             "Utredning av annan specialistklinik"),
         entry(SKOLHALSOVARD.code(),
@@ -202,39 +198,39 @@ class QuestionUtredningEllerUnderlagTest {
     assertAll(
         () -> assertEquals(3, configuration.list().size()),
         () -> assertEquals(
-            new PdfFieldId("form1[0].#subform[0].flt_datumUnderlagUtredning[0]"),
+            new PdfFieldId("form1[0].#subform[0].flt_datUtredningUnderlag_2[0]"),
             configuration.list().get(new FieldId("medicalInvestigation1")).datePdfFieldId()
         ),
         () -> assertEquals(
-            new PdfFieldId("form1[0].#subform[0].lbx_listVardeUtredningUnderlag[0]"),
+            new PdfFieldId("form1[0].#subform[0].lbx_listVardeUtredningUnderlag_1[0]"),
             configuration.list().get(new FieldId("medicalInvestigation1")).investigationPdfFieldId()
         ),
         () -> assertEquals(
-            new PdfFieldId("form1[0].#subform[0].flt_txtVilkenVardgivare[0]"),
+            new PdfFieldId("form1[0].#subform[0].flt_txtUtredning_1[0]"),
             configuration.list().get(new FieldId("medicalInvestigation1")).sourceTypePdfFieldId()
         ),
         () -> assertEquals(
-            new PdfFieldId("form1[0].#subform[0].flt_datumUnderlagUtredning2[0]"),
+            new PdfFieldId("form1[0].#subform[0].flt_datUtredningUnderlag_3[0]"),
             configuration.list().get(new FieldId("medicalInvestigation2")).datePdfFieldId()
         ),
         () -> assertEquals(
-            new PdfFieldId("form1[0].#subform[0].lbx_listVardeUnderlagUtredning2[0]"),
+            new PdfFieldId("form1[0].#subform[0].lbx_listVardeUtredningUnderlag_2[0]"),
             configuration.list().get(new FieldId("medicalInvestigation2")).investigationPdfFieldId()
         ),
         () -> assertEquals(
-            new PdfFieldId("form1[0].#subform[0].flt_txtVilkenVardgivare2[0]"),
+            new PdfFieldId("form1[0].#subform[0].flt_txtUtredning_2[0]"),
             configuration.list().get(new FieldId("medicalInvestigation2")).sourceTypePdfFieldId()
         ),
         () -> assertEquals(
-            new PdfFieldId("form1[0].#subform[0].flt_datumUnderlagUtredning3[0]"),
+            new PdfFieldId("form1[0].#subform[0].flt_datUtredningUnderlag_4[0]"),
             configuration.list().get(new FieldId("medicalInvestigation3")).datePdfFieldId()
         ),
         () -> assertEquals(
-            new PdfFieldId("form1[0].#subform[0].lbx_listVardeUnderlagUtredning3[0]"),
+            new PdfFieldId("form1[0].#subform[0].lbx_listVardeUtredningUnderlag_3[0]"),
             configuration.list().get(new FieldId("medicalInvestigation3")).investigationPdfFieldId()
         ),
         () -> assertEquals(
-            new PdfFieldId("form1[0].#subform[0].flt_txtVilkenVardgivare3[0]"),
+            new PdfFieldId("form1[0].#subform[0].flt_txtUtredning_3[0]"),
             configuration.list().get(new FieldId("medicalInvestigation3")).sourceTypePdfFieldId()
         ),
         () -> assertEquals(

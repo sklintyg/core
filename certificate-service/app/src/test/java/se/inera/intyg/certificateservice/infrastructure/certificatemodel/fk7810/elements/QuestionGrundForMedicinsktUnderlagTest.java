@@ -6,7 +6,6 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import java.time.Period;
 import java.util.List;
 import java.util.Map;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleDate;
@@ -141,8 +140,7 @@ class QuestionGrundForMedicinsktUnderlagTest {
     assertEquals(expectedValidations, element.validations());
   }
 
-  
-  @Disabled
+
   @Test
   void shallIncludePdfConfiguration() {
     final var expected = PdfConfigurationDateList.builder()
@@ -151,18 +149,18 @@ class QuestionGrundForMedicinsktUnderlagTest {
                 new FieldId("fysisktMote"),
                 PdfConfigurationDateCheckbox.builder()
                     .checkboxFieldId(
-                        new PdfFieldId("form1[0].#subform[0].ksr_FysisktVardmote[0]")
+                        new PdfFieldId("form1[0].#subform[0].ksr_UndersokningPatienten[0]")
                     )
                     .dateFieldId(
-                        new PdfFieldId("form1[0].#subform[0].flt_datumFysisktVardmote[0]"))
+                        new PdfFieldId("form1[0].#subform[0].flt_datumUndersokningPatient[0]"))
                     .build(),
                 new FieldId("digitaltMote"),
                 PdfConfigurationDateCheckbox.builder()
                     .checkboxFieldId(
-                        new PdfFieldId("form1[0].#subform[0].ksr_DigitaltVardmote[0]")
+                        new PdfFieldId("form1[0].#subform[0].ksr_Kontaktsatt[0]")
                     )
                     .dateFieldId(
-                        new PdfFieldId("form1[0].#subform[0].flt_datumDigitaltVardmote[0]"))
+                        new PdfFieldId("form1[0].#subform[0].flt_txtdatumDigitaltVardmote[0]"))
                     .build(),
                 new FieldId("journaluppgifter"),
                 PdfConfigurationDateCheckbox.builder()
@@ -170,11 +168,11 @@ class QuestionGrundForMedicinsktUnderlagTest {
                         new PdfFieldId("form1[0].#subform[0].ksr_Journaluppgifter[0]")
                     )
                     .dateFieldId(
-                        new PdfFieldId("form1[0].#subform[0].flt_datumJournaluppgifter[0]"))
+                        new PdfFieldId("form1[0].#subform[0].flt_datumJournaluppgfiter[0]"))
                     .build(),
                 new FieldId("anhorig"),
                 PdfConfigurationDateCheckbox.builder()
-                    .checkboxFieldId(new PdfFieldId("form1[0].#subform[0].ksr_AnhorigAnnan[0]"))
+                    .checkboxFieldId(new PdfFieldId("form1[0].#subform[0].ksr_Anhorig[0]"))
                     .dateFieldId(new PdfFieldId("form1[0].#subform[0].flt_datumAnhorig[0]"))
                     .build(),
                 new FieldId("annat"),

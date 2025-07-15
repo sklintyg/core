@@ -135,7 +135,7 @@ public class CertificateModelFactoryFK7810 implements CertificateModelFactory {
         )
         .name(NAME)
         .description(DESCRIPTION)
-        .detailedDescription(DETAILED_DESCRIPTION.replace("\n", ""))
+        .detailedDescription(DETAILED_DESCRIPTION.replaceAll("\\R", ""))
         .activeFrom(activeFrom)
         .availableForCitizen(true)
         .summaryProvider(new FK7810CertificateSummaryProvider())

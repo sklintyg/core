@@ -26,10 +26,6 @@ public class QuestionDiagnos {
   public static final FieldId DIAGNOS_5 = new FieldId("diagnos5");
   private static final short DIAGNOSIS_CODE_LIMIT = (short) 81;
 
-
-  private static final PdfFieldId PDF_DIAGNOSIS_FIELD_ID_PREFIX = new PdfFieldId(
-      "form1[0].Sida2[0].flt_txt"); //what does this do?
-
   private static final PdfFieldId PDF_DIAGNOSIS_ID_1 = new PdfFieldId(
       "form1[0].Sida2[0].flt_txtDiagnos[0]");
   private static final PdfFieldId PDF_CODE_ID_1_1 = new PdfFieldId(
@@ -146,7 +142,6 @@ public class QuestionDiagnos {
         )
         .pdfConfiguration(
             PdfConfigurationDiagnoses.builder()
-                .prefix(PDF_DIAGNOSIS_FIELD_ID_PREFIX)
                 .maxLength(82)
                 .appearance("/ArialMT 9.00 Tf 0 g")
                 .diagnoses(

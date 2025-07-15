@@ -4,15 +4,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionBaseratPaAnnatMedicinsktUnderlag.questionBaseratPaAnnatMedicinsktUnderlag;
 
 import java.util.List;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationBoolean;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfRadioOption;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 
@@ -75,11 +75,11 @@ class QuestionBaseratPaAnnatMedicinsktUnderlagTest {
   }
 
   @Test
-  @Disabled
   void shallIncludePdfConfiguration() {
-    final var expected = PdfConfigurationBoolean.builder()
-        .checkboxTrue(new PdfFieldId("form1[0].#subform[0].ksr_JaFyll[0]"))
-        .checkboxFalse(new PdfFieldId("form1[0].#subform[0].ksr_2_1[0]"))
+    final var expected = PdfConfigurationRadioBoolean.builder()
+        .pdfFieldId(new PdfFieldId("form1[0].#subform[0].RadioButtonList2[0]"))
+        .optionTrue(new PdfRadioOption("2"))
+        .optionFalse(new PdfRadioOption("1"))
         .build();
 
     final var element = questionBaseratPaAnnatMedicinsktUnderlag();

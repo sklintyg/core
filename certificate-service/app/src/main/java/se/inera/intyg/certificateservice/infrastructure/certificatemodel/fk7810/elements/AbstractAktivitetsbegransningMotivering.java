@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.FK7810PdfSpecification.OVERFLOW_SHEET_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.FK7810PdfSpecification.PDF_TEXT_FIELD_LENGTH;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAktivitetsbegransning.AKTIVITETSBAGRENSNINGAR_ID;
 
@@ -70,8 +71,7 @@ public abstract class AbstractAktivitetsbegransningMotivering {
             PdfConfigurationText.builder()
                 .pdfFieldId(pdfFieldId)
                 .maxLength(PDF_TEXT_FIELD_LENGTH * 4)
-                .overflowSheetFieldId(
-                    new PdfFieldId(("form1[0].#subform[6].flt_txtFortsattningsblad[0]")))
+                .overflowSheetFieldId(OVERFLOW_SHEET_FIELD_ID)
                 .build()
         )
         .build();
