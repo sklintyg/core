@@ -1,10 +1,11 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.FK7810PdfSpecification.OVERFLOW_SHEET_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.FK7810PdfSpecification.PDF_TEXT_FIELD_LENGTH;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionOvrigt.questionOvrigt;
 
 import java.util.List;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -69,12 +70,11 @@ class QuestionOvrigtTest {
   }
 
   @Test
-  @Disabled
   void shallIncludePdfConfiguration() {
     final var expected = PdfConfigurationText.builder()
-        .pdfFieldId(new PdfFieldId("form1[0].#subform[3].flt_txtUpplysningar[0]"))
-//        .maxLength(PDF_TEXT_FIELD_LENGTH * 4)
-        .overflowSheetFieldId(new PdfFieldId(("form1[0].#subform[4].flt_txtFortsattningsblad[0]")))
+        .pdfFieldId(new PdfFieldId("form1[0].#subform[5].flt_txtOvrigaUpplysningar[0]"))
+        .maxLength(PDF_TEXT_FIELD_LENGTH * 4)
+        .overflowSheetFieldId(OVERFLOW_SHEET_FIELD_ID)
         .build();
 
     final var element = questionOvrigt();

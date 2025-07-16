@@ -5,6 +5,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 
 public class QuestionAndningsFunktionMotivering extends
     AbstractFunktionsnedsattningMotivering {
@@ -13,6 +14,8 @@ public class QuestionAndningsFunktionMotivering extends
       "64");
   private static final FieldId FUNKTIONSNEDSATTNING_MOTIVERING_ANDNINGS_FUNKTION_FIELD_ID = new FieldId(
       "64.1");
+  private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
+      "form1[0].Sida3[0].flt_txtAndningsfunktioner[0]");
 
   private QuestionAndningsFunktionMotivering() {
     throw new IllegalStateException("Utility class");
@@ -27,9 +30,13 @@ public class QuestionAndningsFunktionMotivering extends
         "Beskriv funktionsnedsättningen, om möjligt med grad. Ange även eventuella undersökningsfynd och funktionstester.",
         """
             Med andningsfunktioner menas exempelvis:
-            <ul><li>funktioner att andas in luft i lungorna, gasutbyte mellan luft och blod samt utandning</li><li>funktioner i muskler som är involverade i andning</br>Inklusive eventuella åtgärder av annan person, så som slemsugning och hjälp att hantera respirator</li>
-            </ul>Beskriv funktionsnedsättningen, om möjligt med grad. Ange även eventuella undersökningsfynd och funktionstester.""",
-        null
+            <ul>
+            <li>funktioner att andas in luft i lungorna, gasutbyte mellan luft och blod samt utandning</li>
+            <li>funktioner i muskler som är involverade i andning</li>
+            </ul>
+            Inklusive eventuella åtgärder av annan person, så som slemsugning och hjälp att hantera respirator
+            """.replaceAll("\\R", ""),
+        PDF_FIELD_ID
     );
   }
 }

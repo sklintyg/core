@@ -3,10 +3,11 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.FK3221PdfSpecification.PDF_TEXT_FIELD_LENGTH;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.FK7810PdfSpecification.OVERFLOW_SHEET_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionSjukvardandeInsatsEgenvardInsatser.questionSjukvardandeInsatsEgenvardInsatser;
 
 import java.util.List;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
@@ -144,11 +145,11 @@ class QuestionSjukvardandeInsatsEgenvardInsatserTest {
   }
 
   @Test
-  @Disabled
   void shallIncludePdfConfiguration() {
     final var expected = PdfConfigurationText.builder()
-        .pdfFieldId(new PdfFieldId("form1[0].#subform[1].flt_.....[0]"))
-        .maxLength(265)
+        .pdfFieldId(new PdfFieldId("form1[0].#subform[5].flt_txtVilkaInsatserOmfattning2[0]"))
+        .maxLength(PDF_TEXT_FIELD_LENGTH * 3)
+        .overflowSheetFieldId(OVERFLOW_SHEET_FIELD_ID)
         .build();
 
     final var element = questionSjukvardandeInsatsEgenvardInsatser();

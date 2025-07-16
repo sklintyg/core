@@ -3,10 +3,11 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.FK7810PdfSpecification.OVERFLOW_SHEET_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.FK7810PdfSpecification.PDF_TEXT_FIELD_LENGTH;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAndningsFunktionMotivering.questionAndningsFunktionMotivering;
 
 import java.util.List;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
@@ -42,9 +43,7 @@ class QuestionAndningsFunktionMotiveringTest {
         .label(
             "Beskriv funktionsnedsättningen, om möjligt med grad. Ange även eventuella undersökningsfynd och funktionstester.")
         .description(
-            "Med andningsfunktioner menas exempelvis:\n"
-                + "<ul><li>funktioner att andas in luft i lungorna, gasutbyte mellan luft och blod samt utandning</li><li>funktioner i muskler som är involverade i andning</br>Inklusive eventuella åtgärder av annan person, så som slemsugning och hjälp att hantera respirator</li>\n"
-                + "</ul>Beskriv funktionsnedsättningen, om möjligt med grad. Ange även eventuella undersökningsfynd och funktionstester.")
+            "Med andningsfunktioner menas exempelvis:<ul><li>funktioner att andas in luft i lungorna, gasutbyte mellan luft och blod samt utandning</li><li>funktioner i muskler som är involverade i andning</li></ul>Inklusive eventuella åtgärder av annan person, så som slemsugning och hjälp att hantera respirator")
         .id(new FieldId("64.1"))
         .build();
 
@@ -92,13 +91,13 @@ class QuestionAndningsFunktionMotiveringTest {
     assertEquals(expectedValidations, element.validations());
   }
 
-  @Disabled
+
   @Test
   void shallIncludePdfConfiguration() {
     final var expected = PdfConfigurationText.builder()
-        .pdfFieldId(new PdfFieldId("form1[0].#subform[1].flt_txtIntellektuellFunktion[0]"))
-//        .maxLength(PDF_TEXT_FIELD_LENGTH * 4)
-        .overflowSheetFieldId(new PdfFieldId(("form1[0].#subform[4].flt_txtFortsattningsblad[0]")))
+        .pdfFieldId(new PdfFieldId("form1[0].Sida3[0].flt_txtAndningsfunktioner[0]"))
+        .maxLength(PDF_TEXT_FIELD_LENGTH * 5)
+        .overflowSheetFieldId(OVERFLOW_SHEET_FIELD_ID)
         .build();
 
     final var element = questionAndningsFunktionMotivering();

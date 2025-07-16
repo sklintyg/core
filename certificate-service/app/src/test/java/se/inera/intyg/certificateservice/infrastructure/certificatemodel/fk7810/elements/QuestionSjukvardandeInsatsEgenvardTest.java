@@ -5,14 +5,14 @@ import static se.inera.intyg.certificateservice.domain.certificatemodel.model.El
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionSjukvardandeInsatsEgenvard.questionSjukvardandeInsatsEgenvard;
 
 import java.util.List;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfRadioOption;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 
@@ -76,12 +76,11 @@ class QuestionSjukvardandeInsatsEgenvardTest {
   }
 
   @Test
-  @Disabled
   void shallIncludePdfConfiguration() {
-    final var expected = PdfConfigurationText.builder()
-        .pdfFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtAngeAnnat[0]"))
-        .maxLength(50)
-        .overflowSheetFieldId(new PdfFieldId(("form1[0].#subform[4].flt_txtFortsattningsblad[0]")))
+    final var expected = PdfConfigurationRadioBoolean.builder()
+        .pdfFieldId(new PdfFieldId("form1[0].#subform[5].RadioButtonListModul8_2[0]"))
+        .optionTrue(new PdfRadioOption("2"))
+        .optionFalse(new PdfRadioOption("1"))
         .build();
 
     final var element = questionSjukvardandeInsatsEgenvard();

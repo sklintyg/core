@@ -6,6 +6,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDropdownCode;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCode;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0010;
@@ -16,6 +18,16 @@ public class QuestionKannedomOmPatienten {
   private static final FieldId QUESTION_GRUND_FOR_KANNEDOM_OM_PATIENTEN_FIELD_ID = new FieldId(
       "2.2");
 
+  public static final FieldId INGEN_TIDIGARE = new FieldId(
+      CodeSystemKvFkmu0010.INGEN_TIDIGARE.code());
+  public static final FieldId MINDRE_AN_ETT_AR = new FieldId(
+      CodeSystemKvFkmu0010.MINDRE_AN_ETT_AR.code());
+  public static final FieldId MER_AN_ETT_AT_FIELD_ID = new FieldId(
+      CodeSystemKvFkmu0010.MER_AN_ETT_AR.code());
+  public static final FieldId VALJ_I_LISTAN = new FieldId("");
+
+  public static final PdfFieldId QUESTION_GRUND_FOR_KANNEDOM_OM_PATIENTEN_PDF_FIELD_ID = new PdfFieldId(
+      "form1[0].#subform[0].lbx_listVardeUtredningUnderlag1[0]");
 
   private QuestionKannedomOmPatienten() {
     throw new IllegalStateException("Utility class");
@@ -23,28 +35,7 @@ public class QuestionKannedomOmPatienten {
 
   public static ElementSpecification questionKannedomOmPatienten(
       ElementSpecification... children) {
-    final var dropdownItems = List.of(
-        new ElementConfigurationCode(
-            new FieldId(""),
-            "Välj i listan",
-            null
-        ),
-        new ElementConfigurationCode(
-            new FieldId(CodeSystemKvFkmu0010.INGEN_TIDIGARE.code()),
-            CodeSystemKvFkmu0010.INGEN_TIDIGARE.displayName(),
-            CodeSystemKvFkmu0010.INGEN_TIDIGARE
-        ),
-        new ElementConfigurationCode(
-            new FieldId(CodeSystemKvFkmu0010.MINDRE_AN_ETT_AR.code()),
-            CodeSystemKvFkmu0010.MINDRE_AN_ETT_AR.displayName(),
-            CodeSystemKvFkmu0010.MINDRE_AN_ETT_AR
-        ),
-        new ElementConfigurationCode(
-            new FieldId(CodeSystemKvFkmu0010.MER_AN_ETT_AR.code()),
-            CodeSystemKvFkmu0010.MER_AN_ETT_AR.displayName(),
-            CodeSystemKvFkmu0010.MER_AN_ETT_AR
-        )
-    );
+    final var dropdownItems = getDropdownOptions();
 
     return ElementSpecification.builder()
         .id(QUESTION_GRUND_FOR_KANNEDOM_OM_PATIENTEN_ID)
@@ -70,7 +61,36 @@ public class QuestionKannedomOmPatienten {
                     .build()
             )
         )
+        .pdfConfiguration(PdfConfigurationDropdownCode.builder()
+            .fieldId(QUESTION_GRUND_FOR_KANNEDOM_OM_PATIENTEN_PDF_FIELD_ID)
+            .codes(PdfConfigurationDropdownCode.fromCodeConfig(dropdownItems))
+            .build())
         .children(List.of(children))
         .build();
+  }
+
+  private static List<ElementConfigurationCode> getDropdownOptions() {
+    return List.of(
+        new ElementConfigurationCode(
+            VALJ_I_LISTAN,
+            "Välj i listan",
+            null
+        ),
+        new ElementConfigurationCode(
+            INGEN_TIDIGARE,
+            CodeSystemKvFkmu0010.INGEN_TIDIGARE.displayName(),
+            CodeSystemKvFkmu0010.INGEN_TIDIGARE
+        ),
+        new ElementConfigurationCode(
+            MINDRE_AN_ETT_AR,
+            CodeSystemKvFkmu0010.MINDRE_AN_ETT_AR.displayName(),
+            CodeSystemKvFkmu0010.MINDRE_AN_ETT_AR
+        ),
+        new ElementConfigurationCode(
+            MER_AN_ETT_AT_FIELD_ID,
+            CodeSystemKvFkmu0010.MER_AN_ETT_AR.displayName(),
+            CodeSystemKvFkmu0010.MER_AN_ETT_AR
+        )
+    );
   }
 }
