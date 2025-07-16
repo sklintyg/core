@@ -138,7 +138,7 @@ class CertificateActionPrintTest {
   @Test
   void shallReturnDescription() {
     assertEquals(
-        "Öppnar ett fönster där du kan välja att skriva ut eller spara intygsutkastet som PDF.",
+        "Öppnar ett fönster där du kan välja att skriva ut eller spara intyget som PDF.",
         certificateActionPrint.getDescription(Optional.empty()));
   }
 
