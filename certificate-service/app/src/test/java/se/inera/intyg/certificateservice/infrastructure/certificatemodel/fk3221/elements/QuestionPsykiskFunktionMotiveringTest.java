@@ -40,7 +40,7 @@ class QuestionPsykiskFunktionMotiveringTest {
     final var expectedConfiguration = ElementConfigurationTextArea.builder()
         .name("Annan psykisk funktion")
         .label(
-            "Beskriv funktionsnedsättningen, om möjligt med grad. Ange även eventuella undersökningsfynd.")
+            "Beskriv funktionsnedsättningen, om möjligt med grad. Ange även undersökningsfynd.")
         .description(
             """
                 Med annan psykisk funktion menas exempelvis:
