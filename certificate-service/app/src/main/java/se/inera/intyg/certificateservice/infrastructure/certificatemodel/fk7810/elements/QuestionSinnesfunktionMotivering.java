@@ -30,8 +30,12 @@ public class QuestionSinnesfunktionMotivering extends AbstractFunktionsnedsattni
         """
             Med sinnesfunktioner och smärta menas exempelvis:
             <ul>
-            <li>hörselfunktion som är förmågan att förnimma närvaro av ljud och att urskilja lokalisering, tonhöjd, ljudstyrka och ljudkvalitet.</li><li>synfunktion som är förmåga att förnimma närvaro av ljus och synintryckets form, storlek, utformning och färg.</li><li>känslighet eller upplevelse av obehag vid ljud, ljus, temperatur, beröring, smak eller lukt.</li><li>smärta kan bero på tänkbar eller faktisk skada. Den kan vara generell eller lokal i kroppsdelar, eller i dermatom (hudavsnitt). Smärta kan till exempel vara huggande, brännande eller molande.</li></ul>
-            """,
+            <li>hörselfunktion som är förmågan att förnimma närvaro av ljud och att urskilja lokalisering, tonhöjd, ljudstyrka och ljudkvalitet.</li>
+            <li>synfunktion som är förmåga att förnimma närvaro av ljus och synintryckets form, storlek, utformning och färg.</li>
+            <li>känslighet eller upplevelse av obehag vid ljud, ljus, temperatur, beröring, smak eller lukt.</li>
+            <li>smärta kan bero på tänkbar eller faktisk skada. Den kan vara generell eller lokal i kroppsdelar, eller i dermatom (hudavsnitt). Smärta kan till exempel vara huggande, brännande eller molande.</li>
+            </ul>
+            """.replaceAll("\\R", ""),
         PDF_FIELD_ID
     );
   }

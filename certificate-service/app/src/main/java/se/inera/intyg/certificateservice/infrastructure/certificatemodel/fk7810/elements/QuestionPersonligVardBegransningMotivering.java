@@ -27,7 +27,7 @@ public class QuestionPersonligVardBegransningMotivering extends
         AKTIVITETSBEGRANSNING_MOTIVERING_PERSONLIG_VARD_BEGRANSNING_FIELD_ID,
         AKTIVITETSBAGRENSNINGAR_PERSONAL_CARE_ID,
         "Personlig vård och sköta sin hälsa",
-        "Beskriv aktivitetsbegränsningen. Ange grad om det är möjligt och hur aktivitetsbegränsningen kan korrigeras med hjälpmedel.",
+        GENERAL_LABEL_AKTIVITETSBEGRANSNING,
         "Med personlig vård menas till exempel att tvätta och torka sig själv, att ta hand om sin kropp och sina kroppsdelar, att klä sig, att äta och dricka samt att sköta sin egen hälsa.",
         PDF_FIELD_ID
     );

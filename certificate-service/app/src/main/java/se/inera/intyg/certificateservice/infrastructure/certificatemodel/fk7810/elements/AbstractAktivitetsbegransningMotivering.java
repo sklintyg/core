@@ -17,7 +17,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public abstract class AbstractAktivitetsbegransningMotivering {
 
-  protected static final String GENERAL_LABEL_FUNKTIONSNEDSATTNING = "Beskriv funktionsnedsättningen, om möjligt med grad. Ange även eventuella undersökningsfynd.";
+  protected static final String GENERAL_LABEL_AKTIVITETSBEGRANSNING = "Beskriv aktivitetsbegränsningen. Ange grad om det är möjligt och hur aktivitetsbegränsningen kan korrigeras med hjälpmedel.";
 
   AbstractAktivitetsbegransningMotivering() {
     throw new IllegalStateException("Utility class");

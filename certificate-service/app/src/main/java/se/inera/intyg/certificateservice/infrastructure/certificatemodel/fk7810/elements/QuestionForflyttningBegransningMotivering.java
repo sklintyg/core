@@ -27,7 +27,7 @@ public class QuestionForflyttningBegransningMotivering extends
         AKTIVITETSBEGRANSNING_MOTIVERING_FORFLYTTNING_BEGRANSNING_FIELD_ID,
         AKTIVITETSBAGRENSNINGAR_MOVEMENT_ID,
         "Förflyttning",
-        "Beskriv aktivitetsbegränsningen. Ange grad om det är möjligt och hur aktivitetsbegränsningen kan korrigeras med hjälpmedel.",
+        GENERAL_LABEL_AKTIVITETSBEGRANSNING,
         "Med förflyttning menas till exempel att röra sig genom att ändra kroppsställning, att förflytta sig och att använda handens finmotorik för att flytta föremål.",
         PDF_FIELD_ID
     );
