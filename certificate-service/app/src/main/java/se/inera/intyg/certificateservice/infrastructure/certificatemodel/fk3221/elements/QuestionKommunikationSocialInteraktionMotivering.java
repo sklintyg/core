@@ -27,7 +27,7 @@ public class QuestionKommunikationSocialInteraktionMotivering extends
         FUNKTIONSNEDSATTNING_MOTIVERING_KOMMUNIKATION_SOCIAL_INTERAKTION_FIELD_ID,
         FUNKTIONSNEDSATTNING_KOMMUNIKATION_SOCIAL_INTERAKTION_ID,
         "Övergripande psykosociala funktioner",
-        GENERAL_LABEL_FUNKTIONSNEDSATTNING,
+        "Beskriv funktionsnedsättningen, om möjligt med grad. Ange även eventuella undersökningsfynd.",
         """
             Med psykosociala funktioner menas
             <ul>
