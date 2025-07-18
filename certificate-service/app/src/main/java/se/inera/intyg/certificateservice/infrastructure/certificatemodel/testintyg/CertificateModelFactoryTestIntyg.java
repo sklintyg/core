@@ -1,6 +1,21 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.testintyg;
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.elements.ElementUnitContactInformation.issuingUnitContactInfo;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.testintyg.elements.CategoryTestQuestions.categoryTestQuestions;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.testintyg.elements.QuestionCheckboxDateRangeList.questionCheckboxDateRangeList;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.testintyg.elements.QuestionCheckboxMultipleCodeColumns.questionCheckboxMultipleCodeColumns;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.testintyg.elements.QuestionCheckboxMultipleCodeRows.questionCheckboxMultipleCodeRows;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.testintyg.elements.QuestionCheckboxMultipleDate.questionCheckboxMultipleDate;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.testintyg.elements.QuestionDateRange.questionDateRange;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.testintyg.elements.QuestionDiagnosis.questionDiagnosis;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.testintyg.elements.QuestionDropdown.questionDropdown;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.testintyg.elements.QuestionMedicalInvestigationList.questionMedicalInvestigationList;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.testintyg.elements.QuestionMessage.questionMessage;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.testintyg.elements.QuestionRadioBoolean.questionRadioBoolean;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.testintyg.elements.QuestionRadioMultipleCode.questionRadioMultipleCode;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.testintyg.elements.QuestionTextArea.questionTextArea;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.testintyg.elements.QuestionTextField.questionTextField;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.testintyg.elements.QuestionVisualAcuities.questionVisualAcuities;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -18,7 +33,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Schematro
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
-import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.model.Subject;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
@@ -32,61 +46,53 @@ public class CertificateModelFactoryTestIntyg implements CertificateModelFactory
   @Value("${certificate.model.testintyg.v1_0.active.from}")
   private LocalDateTime activeFrom;
 
-  @Value("${sendmessagetofk.logicaladdress}")
-  private String fkLogicalAddress;
+  @Value("${sendmessagetofake.logicaladdress:FAKE}")
+  private String fakeLogicalAddress;
 
-  private final DiagnosisCodeRepository diagnosisCodeRepository;
-
-  private static final String FK_7810 = "testintyg";
+  private static final String TESTINTYG = "testintyg";
   private static final String VERSION = "1.0";
-  private static final String NAME = "Läkarutlåtande för assistansersättning";
+  private static final String NAME = "Demo Intyg för Certificate Service";
   private static final String DESCRIPTION = """
-      Vem kan få assistansersättning?
+      Testintyg för att demonstrera vilka komponenter vi har i Certificate Service
       
-      Assistansersättning är till för personer med omfattande funktionsnedsättning som dels tillhör personkrets enligt lagen om stöd och service till vissa funktionshindrade (LSS) dels behöver personligt utformat stöd för sina grundläggande behov i mer än 20 timmar per vecka, i genomsnitt.\s
+      Uppdaterad 2025-07-17
       
-      Ersättningen används till personlig assistans, för att kunna leva som andra och delta i samhällslivet. Både vuxna och barn kan få assistansersättning.
+      Bör uppdateras med varje ny komponent som läggs till i Certificate Service.
       """;
 
   private static final String DETAILED_DESCRIPTION = """
-      <b className="iu-fw-heading">Vem kan få assistansersättning?</b>
-      <p>Assistansersättning är till för personer med omfattande funktionsnedsättning som dels tillhör personkrets enligt lagen om stöd och service till vissa funktionshindrade (LSS) dels behöver personligt utformat stöd för sina grundläggande behov i mer än 20 timmar per vecka, i genomsnitt.</p>
-      <p>Ersättningen används till personlig assistans, för att kunna leva som andra och delta i samhällslivet. Både vuxna och barn kan få assistansersättning.</p></br>
-      <b className="iu-fw-heading">Följande tillstånd omfattas av LSS:</b>
+      <b className="iu-fw-heading">Demo Intyg för Certificate Service</b>
+      <br>
+      </p><b className="iu-fw-heading">Följande komponenter finns här:</b>
       <ul>
-        <li>intellektuell funktionsnedsättning (utvecklingsstörning), autism eller autismliknande tillstånd</li>
-        <li>betydande och bestående begåvningsmässig funktionsnedsättning efter hjärnskada i vuxen ålder, föranledd av yttre våld eller kroppslig sjukdom</li>
-        <li>andra varaktiga och stora fysiska eller psykiska funktionsnedsättningar som orsakar betydande svårigheter i den dagliga livsföringen, och som gör att personen har ett omfattande behov av stöd eller service.</li>
+        <li>CATEGORY</li>
+        <li>DATE</li>
+        <li>ISSUING_UNIT</li>
+        <li>TEXT_AREA</li>
+        <li>CHECKBOX_DATE_RANGE_LIST</li>
+        <li>CHECKBOX_MULTIPLE_DATE</li>
+        <li>RADIO_MULTIPLE_CODE</li>
+        <li>RADIO_BOOLEAN</li>
+        <li>MESSAGE</li>
+        <li>DIAGNOSIS</li>
+        <li>TEXT_FIELD</li>
+        <li>MEDICAL_INVESTIGATION_LIST</li>
+        <li>CHECKBOX_MULTIPLE_CODE</li>
+        <li>VISUAL_ACUITIES</li>
+        <li>DROPDOWN</li>
+        <li>DATE_RANGE</li>
       </ul>
-      </p><b className="iu-fw-heading">Följande räknas som grundläggande behov:</b>
-      <ul>
-        <li>andning</li><li>personlig hygien</li>
-        <li>måltider</li>
-        <li>av- och påklädning</li>
-        <li>kommunikation med andra</li>
-        <li>stöd som en person behöver på grund av en psykisk funktionsnedsättning, för att förebygga att personen fysiskt skadar sig själv, någon annan eller egendom</li>
-        <li>stöd som en person behöver löpande under större delen av dygnet på grund av ett medicinskt tillstånd som innebär att det finns fara för den enskildes liv, eller som innebär att det annars finns en överhängande och allvarlig risk för personens fysiska hälsa.</li>
-      </ul>
-      <p>Försäkringskassan kan inte räkna in hälso- och sjukvårdsåtgärder enligt hälso- och sjukvårdslagen i en persons hjälpbehov. Men om hälso- och sjukvårdspersonal bedömer att en åtgärd kan utföras som egenvård, så kan Försäkringskassan i vissa fall bevilja ersättning för det hjälpbehovet.</p>
-      <p>Mer information finns på <LINK:forsakringskassanLink>. Sök på ”assistansersättning”.</p>
       """;
 
-  private enum ElementType {
-    CATEGORY, DATE, ISSUING_UNIT, TEXT_AREA, CHECKBOX_DATE_RANGE_LIST, CHECKBOX_MULTIPLE_DATE,
-    RADIO_MULTIPLE_CODE, RADIO_BOOLEAN, MESSAGE, DIAGNOSIS, TEXT_FIELD, MEDICAL_INVESTIGATION_LIST,
-    CHECKBOX_MULTIPLE_CODE, VISUAL_ACUITIES, DROPDOWN, DATE_RANGE
-  }
-
-
   private static final String PREAMBLE_TEXT =
-      "Det här är ditt intyg. Intyget innehåller all information som vården fyllt i. Du kan inte ändra något i ditt intyg. "
-          + "Har du frågor kontaktar du den som skrivit ditt intyg.";
+      "Det här är ditt intyg. Intyget innehåller all information som någon fyllt i. Du kan inte ändra något i ditt intyg. "
+          + "Har du frågor kontaktar du INGEN för detta är ett demointyg.";
 
   public static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
       "testintyg/schematron/luas.v1.sch");
 
   public static final CertificateModelId TestIntyg_V1_0 = CertificateModelId.builder()
-      .type(new CertificateType(FK_7810))
+      .type(new CertificateType(TESTINTYG))
       .version(new CertificateVersion(VERSION))
       .build();
 
@@ -96,8 +102,8 @@ public class CertificateModelFactoryTestIntyg implements CertificateModelFactory
         .id(TestIntyg_V1_0)
         .type(
             new Code(
-                "LUAS",
-                "b64ea353-e8f6-4832-b563-fc7d46f29548",
+                "Testintyg",
+                "test",
                 NAME
             )
         )
@@ -115,8 +121,6 @@ public class CertificateModelFactoryTestIntyg implements CertificateModelFactory
                     .build()
             )
         )
-        .recipient(CertificateRecipientFactory.fkassa(fkLogicalAddress))
-        .schematronPath(SCHEMATRON_PATH)
         .messageTypes(List.of(
             CertificateMessageType.builder()
                 .type(MessageType.MISSING)
@@ -134,8 +138,26 @@ public class CertificateModelFactoryTestIntyg implements CertificateModelFactory
         .certificateActionSpecifications(TestIntygCertificateActionSpecification.create())
         .messageActionSpecifications(TestIntygMessageActionSpecification.create())
         .elementSpecifications(List.of(
+            categoryTestQuestions(
+                questionCheckboxDateRangeList(),
+                questionCheckboxMultipleCodeRows(),
+                questionCheckboxMultipleCodeColumns(),
+                questionCheckboxMultipleDate(),
+                questionDateRange(),
+                questionDiagnosis(),
+                questionDropdown(),
+                questionMedicalInvestigationList(),
+                questionMessage(),
+                questionRadioBoolean(),
+                questionRadioMultipleCode(),
+                questionTextArea(),
+                questionTextField(),
+                questionVisualAcuities()
+            ),
+
             issuingUnitContactInfo()
         ))
+        .recipient(CertificateRecipientFactory.transp(fakeLogicalAddress))
         .certificateActionFactory(certificateActionFactory)
         .build();
   }

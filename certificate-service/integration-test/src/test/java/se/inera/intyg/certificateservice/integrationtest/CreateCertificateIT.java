@@ -16,7 +16,7 @@ import static se.inera.intyg.certificateservice.integrationtest.util.Certificate
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import org.junit.jupiter.api.Disabled;
+import java.time.LocalDate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -59,10 +59,11 @@ public abstract class CreateCertificateIT extends BaseIntegrationIT {
   }
 
   @Test
-  @Disabled
   @DisplayName("Om ett utkast förifylls med komplett intygsinformation ska inga valideringsfel visas")
   void shallReturnCertificateWithPrefilledAnswers() throws IOException {
-    final var xml = new Xml(loadResourceAsString());
+    final var today = LocalDate.now().toString(); // e.g., "2025-07-17"
+    final var xmlString = loadResourceAsString().replace("TODAY", today);
+    final var xml = new Xml(xmlString);
     final var createCertificateRequest =
         customCreateCertificateRequest(
             type(),
