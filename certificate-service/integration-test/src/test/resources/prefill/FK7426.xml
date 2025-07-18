@@ -12,7 +12,7 @@
         <ns4:displayName>min undersökning vid fysiskt vårdmöte</ns4:displayName>
       </ns4:cv>
     </ns2:delsvar>
-    <ns2:delsvar id="1.2">2025-06-27</ns2:delsvar>
+    <ns2:delsvar id="1.2">TODAY</ns2:delsvar>
   </ns3:svar>
   <ns3:svar id="1">
     <ns2:instans>2</ns2:instans>
@@ -23,7 +23,7 @@
         <ns4:displayName>min undersökning vid digitalt vårdmöte</ns4:displayName>
       </ns4:cv>
     </ns2:delsvar>
-    <ns2:delsvar id="1.2">2025-06-27</ns2:delsvar>
+    <ns2:delsvar id="1.2">TODAY</ns2:delsvar>
   </ns3:svar>
   <ns3:svar id="1">
     <ns2:instans>3</ns2:instans>
@@ -34,7 +34,7 @@
         <ns4:displayName>journaluppgifter från den</ns4:displayName>
       </ns4:cv>
     </ns2:delsvar>
-    <ns2:delsvar id="1.2">2025-06-27</ns2:delsvar>
+    <ns2:delsvar id="1.2">TODAY</ns2:delsvar>
   </ns3:svar>
   <ns3:svar id="1">
     <ns2:instans>4</ns2:instans>
@@ -45,7 +45,7 @@
         <ns4:displayName>förälders beskrivning av barnet</ns4:displayName>
       </ns4:cv>
     </ns2:delsvar>
-    <ns2:delsvar id="1.2">2025-06-27</ns2:delsvar>
+    <ns2:delsvar id="1.2">TODAY</ns2:delsvar>
   </ns3:svar>
   <ns3:svar id="1">
     <ns2:instans>5</ns2:instans>
@@ -56,7 +56,7 @@
         <ns4:displayName>annat</ns4:displayName>
       </ns4:cv>
     </ns2:delsvar>
-    <ns2:delsvar id="1.2">2025-06-27</ns2:delsvar>
+    <ns2:delsvar id="1.2">TODAY</ns2:delsvar>
     <ns2:delsvar id="1.3">Example text</ns2:delsvar>
   </ns3:svar>
   <ns3:svar id="58">
@@ -113,8 +113,8 @@
   <ns3:svar id="61">
     <ns2:delsvar id="61.1">
       <ns4:datePeriod>
-        <ns4:start>2025-06-20</ns4:start>
-        <ns4:end>2025-06-27</ns4:end>
+        <ns4:start>TODAY_MINUS_DAYS_7</ns4:start>
+        <ns4:end>TODAY</ns4:end>
       </ns4:datePeriod>
     </ns2:delsvar>
     <ns2:delsvar id="61.2">Example text</ns2:delsvar>
@@ -123,15 +123,15 @@
     <ns2:delsvar id="62.1">true</ns2:delsvar>
     <ns2:delsvar id="62.2">
       <ns4:datePeriod>
-        <ns4:start>2025-06-20</ns4:start>
-        <ns4:end>2025-06-27</ns4:end>
+        <ns4:start>TODAY_MINUS_DAYS_7</ns4:start>
+        <ns4:end>TODAY</ns4:end>
       </ns4:datePeriod>
     </ns2:delsvar>
     <ns2:delsvar id="62.3">true</ns2:delsvar>
     <ns2:delsvar id="62.4">
       <ns4:datePeriod>
-        <ns4:start>2025-06-20</ns4:start>
-        <ns4:end>2025-06-27</ns4:end>
+        <ns4:start>TODAY_MINUS_DAYS_7</ns4:start>
+        <ns4:end>TODAY</ns4:end>
       </ns4:datePeriod>
     </ns2:delsvar>
   </ns3:svar>
