@@ -23,7 +23,6 @@ import static se.inera.intyg.certificateservice.integrationtest.util.Certificate
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -801,7 +800,6 @@ public class FK7810ActiveIT {
     }
   }
 
-  @Disabled
   @Nested
   @DisplayName(TYPE + "Hämta intygspdf")
   class GetCertificatePdf extends GetCertificatePdfIT {

@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateservice.integrationtest.fk7810;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -52,7 +51,6 @@ class FK7810CitizenIT {
   }
 
   @Nested
-  @Disabled
   @DisplayName(TYPE + "Skriv ut intyg för invånare")
   class PrintCitizenCertificate extends PrintCitizenCertificateIT {
 
