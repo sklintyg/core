@@ -45,7 +45,13 @@ class QuestionOvrigaBegransningMotiveringTest {
         .description(
             """
                 Övriga aktivitetsbegränsningar kan vara begränsningar i exempelvis att genomföra
-                <ul><li>husliga och dagliga sysslor och uppgifter</li><li>handlingar och uppgifter som behövs för grundläggande och sammansatta interaktioner med människor på ett i sammanhanget lämpligt och socialt passande sätt</li><li>handlingar och uppgifter som krävs för att engagera sig i organiserat socialt liv utanför familjen - i samhällsgemenskap, socialt och medborgerligt liv</li><li>uppgifter och handlingar som krävs vid utbildning, arbete, anställning och ekonomiska transaktioner</li></ul>""")
+                <ul>
+                <li>husliga och dagliga sysslor och uppgifter</li>
+                <li>handlingar och uppgifter som behövs för grundläggande och sammansatta interaktioner med människor på ett i sammanhanget lämpligt och socialt passande sätt</li>
+                <li>handlingar och uppgifter som krävs för att engagera sig i organiserat socialt liv utanför familjen - i samhällsgemenskap, socialt och medborgerligt liv</li>
+                <li>uppgifter och handlingar som krävs vid utbildning, arbete, anställning och ekonomiska transaktioner</li>
+                </ul>
+                """.replaceAll("\\R", ""))
         .id(new FieldId("69.1"))
         .build();
 

@@ -28,7 +28,7 @@ public class QuestionLarandeBegransningMotivering extends
         AKTIVITETSBEGRANSNING_MOTIVERING_LARANDE_BEGRANSNING_FIELD_ID,
         AKTIVITETSBAGRENSNINGAR_LARANDE_ID,
         "Lärande, tillämpa kunskap samt allmänna uppgifter och krav",
-        "Beskriv aktivitetsbegränsningen. Ange grad om det är möjligt och hur aktivitetsbegränsningen kan korrigeras med hjälpmedel.",
+        GENERAL_LABEL_AKTIVITETSBEGRANSNING,
         "Med lärande och tillämpa kunskap menas att till exempel att förvärva färdigheter, att lösa problem och att fatta beslut. Med allmänna uppgifter och krav menas till exempel att genomföra daglig rutin, eller att hantera stress och andra psykologiska krav.",
         PDF_FIELD_ID
     );

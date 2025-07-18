@@ -27,7 +27,7 @@ public class QuestionKommunikationBegransningMotivering extends
         AKTIVITETSBEGRANSNING_MOTIVERING_KOMMUNIKATION_BEGRANSNING_FIELD_ID,
         AKTIVITETSBAGRENSNINGAR_KOMMUNIKATION_ID,
         "Kommunikation",
-        "Beskriv aktivitetsbegränsningen. Ange grad om det är möjligt och hur aktivitetsbegränsningen kan korrigeras med hjälpmedel.",
+        GENERAL_LABEL_AKTIVITETSBEGRANSNING,
         "Med kommunikation menas till exempel att kommunicera genom språk, tecken och symboler. Det innefattar att ta emot och att förmedla budskap, att genomföra samtal samt att använda olika metoder och hjälpmedel för detta.",
         PDF_FIELD_ID
     );
