@@ -15,7 +15,6 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionBaseratPa.QUESTION_BASERAT_PA_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionBaseratPaDatum.QUESTION_BASERAT_PA_DATUM_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionBedomning.QUESTION_BEDOMNING_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionBedomningOkand.QUESTION_BEDOMNING_OKAND_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionBedomningRisk.QUESTION_BEDOMNING_RISK_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionDemens.QUESTION_DEMENS_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionDemensBeskrivning.QUESTION_DEMENS_BESKRIVNING_ID;
@@ -156,7 +155,7 @@ public class TestabilityCertificateFillServiceTS8071 implements
       QUESTION_NEUROPSYKIATRISK_LAKEMEDEL_ID, QUESTION_NEUROPSYKIATRISK_LAKEMEDEL_BESKRIVNING_ID,
       QUESTION_PSYKISK_UTVECKLINGSSTORNING_ID, QUESTION_PSYKISK_UTVECKLINGSSTORNING_ALLVARLIG_ID,
       QUESTION_MEDICINERING_ID, QUESTION_MEDICINERING_BESKRIVNING_ID, QUESTION_OVRIG_BESKRIVNING_ID,
-      QUESTION_BEDOMNING_ID, QUESTION_BEDOMNING_RISK_ID, QUESTION_BEDOMNING_OKAND_ID
+      QUESTION_BEDOMNING_ID, QUESTION_BEDOMNING_RISK_ID
   );
 
   private static final List<ElementId> MINIMAL_IDS = List.of(

@@ -13,16 +13,6 @@
       </ns4:cv>
     </ns2:delsvar>
   </ns3:svar>
-  <ns3:svar id="1">
-    <ns2:instans>2</ns2:instans>
-    <ns2:delsvar id="1.1">
-      <ns4:cv>
-        <ns4:code>forlang_gr_II</ns4:code>
-        <ns4:codeSystem>1.2.752.129.5.1.66</ns4:codeSystem>
-        <ns4:displayName>Förlängning av högre behörighet II (C1, C1E, C, CE)</ns4:displayName>
-      </ns4:cv>
-    </ns2:delsvar>
-  </ns3:svar>
   <ns3:svar id="2">
     <ns2:delsvar id="2.1">
       <ns4:cv>
@@ -31,7 +21,7 @@
         <ns4:displayName>Distanskontakt</ns4:displayName>
       </ns4:cv>
     </ns2:delsvar>
-    <ns2:delsvar id="2.2">2025-06-27</ns2:delsvar>
+    <ns2:delsvar id="2.2">TODAY</ns2:delsvar>
   </ns3:svar>
   <ns3:svar id="3">
     <ns2:delsvar id="3.1">
@@ -72,6 +62,7 @@
     </ns2:delsvar>
     <ns2:delsvar id="6.5">true</ns2:delsvar>
     <ns2:delsvar id="6.2">true</ns2:delsvar>
+    <ns2:delsvar id="6.4">true</ns2:delsvar>
     <ns2:delsvar id="6.6">true</ns2:delsvar>
   </ns3:svar>
   <ns3:svar id="7">
@@ -106,9 +97,9 @@
     <ns2:delsvar id="11.3">true</ns2:delsvar>
     <ns2:delsvar id="11.4">Ett exempel på text för frågan Ange nä</ns2:delsvar>
     <ns2:delsvar id="11.5">true</ns2:delsvar>
-    <ns2:delsvar id="11.6">Ett exempel</ns2:delsvar>
+    <ns2:delsvar id="11.6">Ett exempel </ns2:delsvar>
     <ns2:delsvar id="11.7">true</ns2:delsvar>
-    <ns2:delsvar id="11.8">Ett exempel</ns2:delsvar>
+    <ns2:delsvar id="11.8">Ett exempel </ns2:delsvar>
     <ns2:delsvar id="11.9">true</ns2:delsvar>
     <ns2:delsvar id="11.10">
       <ns4:cv>
@@ -131,10 +122,10 @@
     <ns2:delsvar id="14.3">true</ns2:delsvar>
     <ns2:delsvar id="14.4">Ett exempel på text för frågan Ange tidpunk</ns2:delsvar>
     <ns2:delsvar id="14.5">true</ns2:delsvar>
-    <ns2:delsvar id="14.6">Ett exempel på text</ns2:delsvar>
+    <ns2:delsvar id="14.6">Ett exempel på text </ns2:delsvar>
     <ns2:delsvar id="14.7">Ett exempel på text för frågan Om läkemedelsbeh</ns2:delsvar>
     <ns2:delsvar id="14.8">true</ns2:delsvar>
-    <ns2:delsvar id="14.9">Ett exempel</ns2:delsvar>
+    <ns2:delsvar id="14.9">Ett exempel </ns2:delsvar>
   </ns3:svar>
   <ns3:svar id="15">
     <ns2:delsvar id="15.1">true</ns2:delsvar>
@@ -148,7 +139,7 @@
   </ns3:svar>
   <ns3:svar id="17">
     <ns2:delsvar id="17.1">true</ns2:delsvar>
-    <ns2:delsvar id="17.2">Ett exempel på text för frågan</ns2:delsvar>
+    <ns2:delsvar id="17.2">Ett exempel på text för frågan </ns2:delsvar>
     <ns2:delsvar id="17.3">true</ns2:delsvar>
   </ns3:svar>
   <ns3:svar id="18">
@@ -160,17 +151,17 @@
     <ns2:delsvar id="18.6">true</ns2:delsvar>
     <ns2:delsvar id="18.7">Ett exempel på text för frågan Ange vilken form a</ns2:delsvar>
     <ns2:delsvar id="18.8">true</ns2:delsvar>
-    <ns2:delsvar id="18.9">Ett exempel på text för frågan</ns2:delsvar>
+    <ns2:delsvar id="18.9">Ett exempel på text för frågan </ns2:delsvar>
   </ns3:svar>
   <ns3:svar id="19">
     <ns2:delsvar id="19.1">true</ns2:delsvar>
     <ns2:delsvar id="19.2">Ett exempel på text för frågan An</ns2:delsvar>
-    <ns2:delsvar id="19.3">Ett exempel på text för frågan När hade personen</ns2:delsvar>
+    <ns2:delsvar id="19.3">Ett exempel på text för frågan När hade personen </ns2:delsvar>
   </ns3:svar>
   <ns3:svar id="20">
     <ns2:delsvar id="20.1">true</ns2:delsvar>
     <ns2:delsvar id="20.2">true</ns2:delsvar>
-    <ns2:delsvar id="20.3">Ett exempel på text för frågan När hade personen</ns2:delsvar>
+    <ns2:delsvar id="20.3">Ett exempel på text för frågan När hade personen </ns2:delsvar>
     <ns2:delsvar id="20.4">true</ns2:delsvar>
     <ns2:delsvar id="20.5">Ett exempel på text för fr</ns2:delsvar>
     <ns2:delsvar id="20.6">true</ns2:delsvar>
