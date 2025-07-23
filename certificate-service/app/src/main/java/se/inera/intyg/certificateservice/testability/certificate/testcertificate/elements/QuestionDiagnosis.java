@@ -1,22 +1,19 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.testintyg.elements;
+package se.inera.intyg.certificateservice.testability.certificate.testcertificate.elements;
 
 import java.util.List;
-import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDiagnosisListItem;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMessage;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.MessageLevel;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDiagnosis;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemIcd10Se;
 
 public class QuestionDiagnosis {
 
   public static final ElementId DIAGNOSIS_ID = new ElementId("7");
-  private static final FieldId DIAGNOSIS_FIELD_ID = new FieldId("7");
+  private static final FieldId DIAGNOSIS_FIELD_ID = new FieldId("7.1");
+
   public static final FieldId DIAGNOS_1 = new FieldId("huvuddiagnos");
   public static final FieldId DIAGNOS_2 = new FieldId("diagnos2");
   public static final FieldId DIAGNOS_3 = new FieldId("diagnos3");
@@ -34,16 +31,7 @@ public class QuestionDiagnosis {
         .configuration(
             ElementConfigurationDiagnosis.builder()
                 .id(DIAGNOSIS_FIELD_ID)
-                .name(
-                    "Test av \"DIAGNOSIS\"")
-                .message(
-                    ElementMessage.builder()
-                        .content(
-                            "Ange alla diagnoser som sammantaget medför ett påtagligt hot mot patientens liv.")
-                        .level(MessageLevel.OBSERVE)
-                        .includedForStatuses(List.of(Status.DRAFT))
-                        .build()
-                )
+                .name("DIAGNOSIS")
                 .terminology(
                     List.of(
                         CodeSystemIcd10Se.terminology()
@@ -60,20 +48,9 @@ public class QuestionDiagnosis {
                 )
                 .build()
         )
-        .rules(
-            List.of(
-                CertificateElementRuleFactory.mandatoryExist(DIAGNOSIS_ID,
-                    DIAGNOS_1),
-                CertificateElementRuleFactory.limit(DIAGNOSIS_ID, DIAGNOSIS_CODE_LIMIT)
-            )
-        )
         .validations(
             List.of(
                 ElementValidationDiagnosis.builder()
-                    .mandatoryField(DIAGNOS_1)
-                    .order(
-                        List.of(DIAGNOS_1, DIAGNOS_2, DIAGNOS_3, DIAGNOS_4, DIAGNOS_5)
-                    )
                     .build()
             )
         )

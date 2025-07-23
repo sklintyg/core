@@ -1,7 +1,6 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.testintyg.elements;
+package se.inera.intyg.certificateservice.testability.certificate.testcertificate.elements;
 
 import java.util.List;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementLayout;
@@ -9,13 +8,12 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCode;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeFactory;
 
 public class QuestionRadioMultipleCode {
 
   public static final ElementId QUESTION_RADIO_MULTIPLE_CODE_ID = new ElementId("11");
-  public static final FieldId QUESTION_RADIO_MULTIPLE_CODE_FIELD_ID = new FieldId("11");
+  public static final FieldId QUESTION_RADIO_MULTIPLE_CODE_FIELD_ID = new FieldId("11.1");
 
   private QuestionRadioMultipleCode() {
     throw new IllegalStateException("Utility class");
@@ -35,23 +33,15 @@ public class QuestionRadioMultipleCode {
         .configuration(
             ElementConfigurationRadioMultipleCode.builder()
                 .id(QUESTION_RADIO_MULTIPLE_CODE_FIELD_ID)
-                .name("Test av \"RADIO_MULTIPLE_CODE\" i rows layout")
+                .name("RADIO_MULTIPLE_CODE")
                 .elementLayout(ElementLayout.ROWS)
                 .list(radioMultipleCodes)
                 .build()
         )
-        .rules(
-            List.of(
-                CertificateElementRuleFactory.mandatoryOrExist(
-                    QUESTION_RADIO_MULTIPLE_CODE_ID,
-                    radioMultipleCodes.stream().map(ElementConfigurationCode::id).toList()
-                )
-            )
-        )
         .validations(
             List.of(
                 ElementValidationCode.builder()
-                    .mandatory(true)
+                    .mandatory(false)
                     .build()
             )
         )

@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.testability.certificate.service;
 
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
+import static se.inera.intyg.certificateservice.testability.certificate.testcertificate.CertificateModelFactoryTestCertificate.TEST_CERTIFICATE_V1;
 import static se.inera.intyg.certificateservice.testability.common.TestabilityConstants.TESTABILITY_PROFILE;
 
 import jakarta.transaction.Transactional;
@@ -163,6 +164,7 @@ public class TestabilityCertificateService {
   public List<SupportedCertificateTypesResponse> supportedTypes() {
     final var supportedCertificateTypesResponseMap = testabilityCertificateModelRepository.all()
         .stream()
+        .filter(certificateModel -> !certificateModel.id().equals(TEST_CERTIFICATE_V1))
         .collect(Collectors.toMap(
             CertificateModel::name,
             certificateModel ->

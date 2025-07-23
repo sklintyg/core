@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.testintyg.elements;
+package se.inera.intyg.certificateservice.testability.certificate.testcertificate.elements;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
@@ -8,13 +8,11 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCode;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
 public class QuestionDropdown {
 
   public static final ElementId QUESTION_DROPDOWN_ID = new ElementId("8");
-  private static final FieldId QUESTION_DROPDOWN_FIELD_ID = new FieldId(
-      "8");
+  private static final FieldId QUESTION_DROPDOWN_FIELD_ID = new FieldId("8.1");
 
 
   private QuestionDropdown() {
@@ -56,22 +54,14 @@ public class QuestionDropdown {
         .configuration(
             ElementConfigurationDropdownCode.builder()
                 .id(QUESTION_DROPDOWN_FIELD_ID)
-                .name("Test av \"DROPDOWN_CODE\"")
+                .name("DROPDOWN")
                 .list(dropdownItems)
                 .build()
-        )
-        .rules(
-            List.of(
-                CertificateElementRuleFactory.mandatoryOrExist(
-                    QUESTION_DROPDOWN_ID,
-                    dropdownItems.stream().skip(1).map(ElementConfigurationCode::id).toList()
-                )
-            )
         )
         .validations(
             List.of(
                 ElementValidationCode.builder()
-                    .mandatory(true)
+                    .mandatory(false)
                     .build()
             )
         )

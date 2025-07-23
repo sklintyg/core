@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.testintyg.elements;
+package se.inera.intyg.certificateservice.testability.certificate.testcertificate.elements;
 
 import java.time.Period;
 import java.util.List;
@@ -9,12 +9,11 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateList;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
 public class QuestionCheckboxMultipleDate {
 
   public static final ElementId QUESTION_CHECKBOX_MULTIPLE_DATE_ID = new ElementId("4");
-  public static final FieldId QUESTION_CHECKBOX_MULTIPLE_DATE_FIELD_ID = new FieldId("4");
+  public static final FieldId QUESTION_CHECKBOX_MULTIPLE_DATE_FIELD_ID = new FieldId("4.1");
 
 
   private QuestionCheckboxMultipleDate() {
@@ -59,22 +58,14 @@ public class QuestionCheckboxMultipleDate {
         .configuration(
             ElementConfigurationCheckboxMultipleDate.builder()
                 .id(QUESTION_CHECKBOX_MULTIPLE_DATE_FIELD_ID)
-                .name("Test av \"CheckboxMultipleDate\"")
+                .name("CHECKBOX_MULTIPLE_DATE")
                 .dates(checkboxDates)
                 .build()
-        )
-        .rules(
-            List.of(
-                CertificateElementRuleFactory.mandatory(
-                    QUESTION_CHECKBOX_MULTIPLE_DATE_ID,
-                    checkboxDates.stream().map(CheckboxDate::id).toList()
-                )
-            )
         )
         .validations(
             List.of(
                 ElementValidationDateList.builder()
-                    .mandatory(true)
+                    .mandatory(false)
                     .max(Period.ofDays(0))
                     .build()
             )

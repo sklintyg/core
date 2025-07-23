@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.testintyg.elements;
+package se.inera.intyg.certificateservice.testability.certificate.testcertificate.elements;
 
 import java.time.Period;
 import java.util.List;
@@ -9,12 +9,11 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.MedicalInvestigationConfig;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationMedicalInvestigationList;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
 public class QuestionMedicalInvestigationList {
 
   public static final ElementId QUESTION_MEDICAL_INVESTIGATION_LIST_ID = new ElementId("9");
-  private static final FieldId QUESTION_MEDICAL_INVESTIGATION_LIST_FIELD_ID = new FieldId("9");
+  private static final FieldId QUESTION_MEDICAL_INVESTIGATION_LIST_FIELD_ID = new FieldId("9.1");
 
   public static final FieldId MEDICAL_INVESTIGATION_FIELD_ID_1 = new FieldId(
       "medicalInvestigation1");
@@ -43,35 +42,18 @@ public class QuestionMedicalInvestigationList {
         .configuration(
             ElementConfigurationMedicalInvestigationList.builder()
                 .id(QUESTION_MEDICAL_INVESTIGATION_LIST_FIELD_ID)
-                .name("Test av \"MEDICAL_INVESTIGATION_LIST\"")
-                .informationSourceDescription(
-                    "Skriv exempelvis test.")
+                .name("MEDICAL_INVESTIGATION_LIST")
+                .informationSourceDescription("")
                 .dateText("Datum")
-                .typeText("Test eller demo")
-                .informationSourceText("Från vilken test")
+                .typeText("Typ")
+                .informationSourceText("Från")
                 .list(medicalInvestigations)
                 .build()
-        )
-        .rules(
-            List.of(
-                CertificateElementRuleFactory.mandatoryNotEmpty(
-                    QUESTION_MEDICAL_INVESTIGATION_LIST_ID,
-                    List.of(
-                        getDateId(MEDICAL_INVESTIGATION_FIELD_ID_1),
-                        getInvestigationTypeId(MEDICAL_INVESTIGATION_FIELD_ID_1),
-                        getInformationSourceId(MEDICAL_INVESTIGATION_FIELD_ID_1)
-                    )
-                ),
-                CertificateElementRuleFactory.limit(
-                    QUESTION_MEDICAL_INVESTIGATION_LIST_ID,
-                    (short) LIMIT
-                )
-            )
         )
         .validations(
             List.of(
                 ElementValidationMedicalInvestigationList.builder()
-                    .mandatory(true)
+                    .mandatory(false)
                     .max(Period.ofDays(0))
                     .limit(LIMIT)
                     .build()

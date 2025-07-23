@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.testintyg.elements;
+package se.inera.intyg.certificateservice.testability.certificate.testcertificate.elements;
 
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationMessage;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -20,9 +20,7 @@ public class QuestionMessage {
             ElementConfigurationMessage.builder()
                 .message(
                     ElementMessage.builder()
-                        .content(
-                            "Test av \"MESSAGE\" element. " +
-                                "Detta är ett testmeddelande som ska visas i certifikatet.")
+                        .content("MESSAGE")
                         .level(MessageLevel.OBSERVE)
                         .build()
                 )
@@ -31,4 +29,3 @@ public class QuestionMessage {
         .build();
   }
 }
-

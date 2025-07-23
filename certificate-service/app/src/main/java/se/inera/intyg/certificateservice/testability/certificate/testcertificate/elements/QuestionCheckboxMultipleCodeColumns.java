@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.testintyg.elements;
+package se.inera.intyg.certificateservice.testability.certificate.testcertificate.elements;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleCode;
@@ -8,13 +8,12 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCodeList;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeFactory;
 
 public class QuestionCheckboxMultipleCodeColumns {
 
   public static final ElementId QUESTION_CHECKBOX_MULTIPLE_CODE_ID = new ElementId("3");
-  public static final FieldId QUESTION_CHECKBOX_MULTIPLE_CODE_FIELD_ID = new FieldId("3");
+  public static final FieldId QUESTION_CHECKBOX_MULTIPLE_CODE_FIELD_ID = new FieldId("3.1");
 
   private QuestionCheckboxMultipleCodeColumns() {
     throw new IllegalStateException("Utility class");
@@ -33,27 +32,15 @@ public class QuestionCheckboxMultipleCodeColumns {
         .configuration(
             ElementConfigurationCheckboxMultipleCode.builder()
                 .id(QUESTION_CHECKBOX_MULTIPLE_CODE_FIELD_ID)
-                .name("Test av \"CheckboxMultipleCode Rows Layout\"")
+                .name("CHECKBOX_MULTIPLE_CODE")
                 .elementLayout(ElementLayout.ROWS)
                 .list(checkboxes)
                 .build()
         )
-        .rules(
-            List.of(
-                CertificateElementRuleFactory.mandatoryOrExist(
-                    QUESTION_CHECKBOX_MULTIPLE_CODE_ID,
-                    List.of(
-                        new FieldId("1"),
-                        new FieldId("2"),
-                        new FieldId("3")
-                    )
-                )
-            )
-        )
         .validations(
             List.of(
                 ElementValidationCodeList.builder()
-                    .mandatory(true)
+                    .mandatory(false)
                     .build()
             )
         )

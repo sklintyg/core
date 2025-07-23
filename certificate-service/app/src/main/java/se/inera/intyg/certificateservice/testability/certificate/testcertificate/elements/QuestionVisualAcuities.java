@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.testintyg.elements;
+package se.inera.intyg.certificateservice.testability.certificate.testcertificate.elements;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationVisualAcuities;
@@ -7,7 +7,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementVisualAcuity;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationVisualAcuities;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
 public class QuestionVisualAcuities {
 
@@ -16,7 +15,7 @@ public class QuestionVisualAcuities {
   }
 
   public static final ElementId QUESTION_VISUAL_ACUITIES_ID = new ElementId("14");
-  public static final FieldId QUESTION_VISUAL_ACUITIES_FIELD_ID = new FieldId("14");
+  public static final FieldId QUESTION_VISUAL_ACUITIES_FIELD_ID = new FieldId("14.1");
   public static final String TEST1_ID = "14.1";
   public static final String TEST2_ID = "14.2";
   public static final String TEST3_ID = "14.3";
@@ -30,28 +29,28 @@ public class QuestionVisualAcuities {
         .configuration(
             ElementConfigurationVisualAcuities.builder()
                 .id(QUESTION_VISUAL_ACUITIES_FIELD_ID)
-                .name("Test av \"VISUAL_ACUITIES\"")
-                .withCorrectionLabel("Med \"correction label\"")
-                .withoutCorrectionLabel("Utan \"correction label\"")
+                .name("VISUAL_ACUITIES")
+                .withCorrectionLabel("Med korrektion")
+                .withoutCorrectionLabel("Utan korrektion")
                 .min(0.0)
                 .max(2.0)
                 .rightEye(
                     ElementVisualAcuity.builder()
-                        .label("Höger test")
+                        .label("Höger öga")
                         .withoutCorrectionId(TEST1_ID)
                         .withCorrectionId(TEST2_ID)
                         .build()
                 )
                 .leftEye(
                     ElementVisualAcuity.builder()
-                        .label("Vänster test")
+                        .label("Vänster öga")
                         .withoutCorrectionId(TEST3_ID)
                         .withCorrectionId(TEST4_ID)
                         .build()
                 )
                 .binocular(
                     ElementVisualAcuity.builder()
-                        .label("Båda test")
+                        .label("Binokulärt")
                         .withoutCorrectionId(TEST5_ID)
                         .withCorrectionId(TEST6_ID)
                         .build()
@@ -61,26 +60,10 @@ public class QuestionVisualAcuities {
         .validations(
             List.of(
                 ElementValidationVisualAcuities.builder()
-                    .mandatory(true)
-                    .min(0.0)
-                    .max(2.0)
-                    .minAllowedSightOneEye(0.1)
-                    .minAllowedSightOtherEye(0.8)
+                    .mandatory(false)
                     .build()
             )
 
-        )
-        .rules(
-            List.of(
-                CertificateElementRuleFactory.mandatoryAndExist(
-                    QUESTION_VISUAL_ACUITIES_ID,
-                    List.of(
-                        new FieldId(TEST1_ID),
-                        new FieldId(TEST3_ID),
-                        new FieldId(TEST5_ID)
-                    )
-                )
-            )
         )
         .build();
   }
