@@ -1,6 +1,9 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.athenaReactAnderssonBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_FIRST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_LAST_NAME;
@@ -15,6 +18,7 @@ import se.inera.intyg.certificateservice.domain.patient.model.Name;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 import se.inera.intyg.certificateservice.domain.patient.model.ProtectedPerson;
 import se.inera.intyg.certificateservice.domain.patient.model.TestIndicated;
+import se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientIdTypeEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PersonEntityIdType;
@@ -132,6 +136,91 @@ class PatientEntityMapperTest {
     void shouldMapDeceased() {
       final var response = PatientEntityMapper.toDomain(PATIENT_ENTITY_TEST);
       assertEquals(PATIENT_ENTITY_PROTECTED.isDeceased(), response.deceased().value());
+    }
+  }
+
+  @Nested
+  class UpdateTests {
+
+    @Test
+    void shouldUpdateFirstName() {
+      final var expectedName = "expectedName";
+      final var patient = athenaReactAnderssonBuilder()
+          .name(
+              Name.builder()
+                  .firstName(expectedName)
+                  .middleName(ATHENA_REACT_ANDERSSON_MIDDLE_NAME)
+                  .lastName(ATHENA_REACT_ANDERSSON_LAST_NAME)
+                  .build()
+          )
+          .build();
+      final var result = PatientEntityMapper.updateEntity(PATIENT_ENTITY_TEST, patient);
+      assertEquals(expectedName, result.getFirstName());
+    }
+
+    @Test
+    void shouldUpdateMiddleName() {
+      final var expectedName = "expectedMiddleName";
+      final var patient = athenaReactAnderssonBuilder()
+          .name(
+              Name.builder()
+                  .firstName(TestDataPatientConstants.ATHENA_REACT_ANDERSSON_FIRST_NAME)
+                  .middleName(expectedName)
+                  .lastName(ATHENA_REACT_ANDERSSON_LAST_NAME)
+                  .build()
+          )
+          .build();
+      final var result = PatientEntityMapper.updateEntity(PATIENT_ENTITY_TEST, patient);
+      assertEquals(expectedName, result.getMiddleName());
+    }
+
+    @Test
+    void shouldUpdateLastName() {
+      final var expectedName = "expectedLastName";
+      final var patient = athenaReactAnderssonBuilder()
+          .name(
+              Name.builder()
+                  .firstName(TestDataPatientConstants.ATHENA_REACT_ANDERSSON_FIRST_NAME)
+                  .middleName(TestDataPatientConstants.ATHENA_REACT_ANDERSSON_MIDDLE_NAME)
+                  .lastName(expectedName)
+                  .build()
+          )
+          .build();
+      final var result = PatientEntityMapper.updateEntity(PATIENT_ENTITY_TEST, patient);
+      assertEquals(expectedName, result.getLastName());
+    }
+
+    @Test
+    void shouldUpdateTestIndicated() {
+      final var patient = athenaReactAnderssonBuilder()
+          .testIndicated(
+              new TestIndicated(false)
+          )
+          .build();
+      final var result = PatientEntityMapper.updateEntity(PATIENT_ENTITY_TEST, patient);
+      assertFalse(result.isTestIndicated());
+    }
+
+    @Test
+    void shouldUpdateProtectedPerson() {
+      final var patient = athenaReactAnderssonBuilder()
+          .protectedPerson(
+              new ProtectedPerson(true)
+          )
+          .build();
+      final var result = PatientEntityMapper.updateEntity(PATIENT_ENTITY_TEST, patient);
+      assertTrue(result.isProtectedPerson());
+    }
+
+    @Test
+    void shouldUpdateDeceased() {
+      final var patient = athenaReactAnderssonBuilder()
+          .deceased(
+              new Deceased(true)
+          )
+          .build();
+      final var result = PatientEntityMapper.updateEntity(PATIENT_ENTITY_TEST, patient);
+      assertTrue(result.isDeceased());
     }
   }
 
