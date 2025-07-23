@@ -12,7 +12,7 @@
         <ns4:displayName>min undersökning vid fysiskt vårdmöte</ns4:displayName>
       </ns4:cv>
     </ns2:delsvar>
-    <ns2:delsvar id="1.2">2025-06-18</ns2:delsvar>
+    <ns2:delsvar id="1.2">TODAY</ns2:delsvar>
   </ns3:svar>
   <ns3:svar id="1">
     <ns2:instans>2</ns2:instans>
@@ -23,7 +23,7 @@
         <ns4:displayName>min undersökning vid digitalt vårdmöte</ns4:displayName>
       </ns4:cv>
     </ns2:delsvar>
-    <ns2:delsvar id="1.2">2025-06-18</ns2:delsvar>
+    <ns2:delsvar id="1.2">TODAY</ns2:delsvar>
   </ns3:svar>
   <ns3:svar id="1">
     <ns2:instans>3</ns2:instans>
@@ -34,7 +34,7 @@
         <ns4:displayName>journaluppgifter från den</ns4:displayName>
       </ns4:cv>
     </ns2:delsvar>
-    <ns2:delsvar id="1.2">2025-06-18</ns2:delsvar>
+    <ns2:delsvar id="1.2">TODAY</ns2:delsvar>
   </ns3:svar>
   <ns3:svar id="1">
     <ns2:instans>4</ns2:instans>
@@ -45,7 +45,7 @@
         <ns4:displayName>förälders beskrivning av barnet</ns4:displayName>
       </ns4:cv>
     </ns2:delsvar>
-    <ns2:delsvar id="1.2">2025-06-18</ns2:delsvar>
+    <ns2:delsvar id="1.2">TODAY</ns2:delsvar>
   </ns3:svar>
   <ns3:svar id="1">
     <ns2:instans>5</ns2:instans>
@@ -56,7 +56,7 @@
         <ns4:displayName>annat</ns4:displayName>
       </ns4:cv>
     </ns2:delsvar>
-    <ns2:delsvar id="1.2">2025-06-18</ns2:delsvar>
+    <ns2:delsvar id="1.2">TODAY</ns2:delsvar>
     <ns2:delsvar id="1.3">Anger vad annat är</ns2:delsvar>
   </ns3:svar>
   <ns3:svar id="58">
@@ -102,15 +102,15 @@
     <ns2:delsvar id="62.5">Barnet har stort behov av vård och tillsyn</ns2:delsvar>
     <ns2:delsvar id="62.6">
       <ns4:datePeriod>
-        <ns4:start>2025-06-18</ns4:start>
-        <ns4:end>2025-06-25</ns4:end>
+        <ns4:start>TODAY</ns4:start>
+        <ns4:end>TODAY_PLUS_DAYS_7</ns4:end>
       </ns4:datePeriod>
     </ns2:delsvar>
     <ns2:delsvar id="62.1">true</ns2:delsvar>
     <ns2:delsvar id="62.2">
       <ns4:datePeriod>
-        <ns4:start>2025-06-18</ns4:start>
-        <ns4:end>2025-06-23</ns4:end>
+        <ns4:start>TODAY</ns4:start>
+        <ns4:end>TODAY_PLUS_DAYS_5</ns4:end>
       </ns4:datePeriod>
     </ns2:delsvar>
   </ns3:svar>
