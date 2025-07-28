@@ -15,6 +15,7 @@ public class CertificateActionPrint implements CertificateAction {
 
   private static final String NAME = "Skriv ut";
   private static final String DESCRIPTION = "Öppnar ett fönster där du kan välja att skriva ut eller spara intyget som PDF.";
+  private static final String DRAFT_DESCRIPTION = "Öppnar ett fönster där du kan välja att skriva ut eller spara intygsutkastet som PDF.";
   private final CertificateActionSpecification certificateActionSpecification;
   private final List<ActionRule> actionRules;
   private static final String PRINT_PROTECTED_PERSON_BODY =
@@ -50,6 +51,10 @@ public class CertificateActionPrint implements CertificateAction {
 
   @Override
   public String getDescription(Optional<Certificate> certificate) {
+    if (certificate.map(Certificate::isDraft).orElse(false)) {
+      return DRAFT_DESCRIPTION;
+    }
+
     return DESCRIPTION;
   }
 

@@ -136,10 +136,25 @@ class CertificateActionPrintTest {
   }
 
   @Test
-  void shallReturnDescription() {
+  void shallReturnDescriptionForDraft() {
+    final var certificate = certificateBuilder
+        .status(Status.DRAFT)
+        .build();
+
+    assertEquals(
+        "Öppnar ett fönster där du kan välja att skriva ut eller spara intygsutkastet som PDF.",
+        certificateActionPrint.getDescription(Optional.of(certificate)));
+  }
+
+  @Test
+  void shallReturnDescriptionForSignedCertificate() {
+    final var certificate = certificateBuilder
+        .status(Status.SIGNED)
+        .build();
+
     assertEquals(
         "Öppnar ett fönster där du kan välja att skriva ut eller spara intyget som PDF.",
-        certificateActionPrint.getDescription(Optional.empty()));
+        certificateActionPrint.getDescription(Optional.of(certificate)));
   }
 
   @Test
