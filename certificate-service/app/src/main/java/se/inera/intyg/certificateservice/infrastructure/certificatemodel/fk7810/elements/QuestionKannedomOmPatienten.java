@@ -39,6 +39,7 @@ public class QuestionKannedomOmPatienten {
 
     return ElementSpecification.builder()
         .id(QUESTION_GRUND_FOR_KANNEDOM_OM_PATIENTEN_ID)
+        .includeWhenRenewing(false)
         .configuration(
             ElementConfigurationDropdownCode.builder()
                 .id(QUESTION_GRUND_FOR_KANNEDOM_OM_PATIENTEN_FIELD_ID)

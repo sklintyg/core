@@ -107,7 +107,8 @@ public class CertificateModelFactoryFK7810 implements CertificateModelFactory {
         <li>stöd som en person behöver löpande under större delen av dygnet på grund av ett medicinskt tillstånd som innebär att det finns fara för den enskildes liv, eller som innebär att det annars finns en överhängande och allvarlig risk för personens fysiska hälsa.</li>
       </ul>
       <p>Försäkringskassan kan inte räkna in hälso- och sjukvårdsåtgärder enligt hälso- och sjukvårdslagen i en persons hjälpbehov. Men om hälso- och sjukvårdspersonal bedömer att en åtgärd kan utföras som egenvård, så kan Försäkringskassan i vissa fall bevilja ersättning för det hjälpbehovet.</p>
-      <p>Mer information finns på <LINK:forsakringskassanLink>. Sök på ”assistansersättning”.</p>
+      <br>
+      Mer information finns på <LINK:forsakringskassanLink>. Sök på ”assistansersättning”.
       """;
 
   private static final String PREAMBLE_TEXT =

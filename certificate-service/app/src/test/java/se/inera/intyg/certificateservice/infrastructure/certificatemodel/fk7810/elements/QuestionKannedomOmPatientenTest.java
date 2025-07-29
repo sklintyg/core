@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionKannedomOmPatienten.questionKannedomOmPatienten;
 
 import java.util.List;
@@ -93,5 +94,10 @@ class QuestionKannedomOmPatientenTest {
     final var element = questionKannedomOmPatienten();
 
     assertEquals(expectedValidations, element.validations());
+  }
+
+  @Test
+  void shallNotBeIncludedWhenRenewing() {
+    assertFalse(questionKannedomOmPatienten().includeWhenRenewing());
   }
 }
