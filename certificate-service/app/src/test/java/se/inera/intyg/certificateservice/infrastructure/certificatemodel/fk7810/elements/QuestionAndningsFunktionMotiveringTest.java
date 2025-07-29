@@ -43,7 +43,13 @@ class QuestionAndningsFunktionMotiveringTest {
         .label(
             "Beskriv funktionsnedsättningen, om möjligt med grad. Ange även eventuella undersökningsfynd och funktionstester.")
         .description(
-            "Med andningsfunktioner menas exempelvis:<ul><li>funktioner att andas in luft i lungorna, gasutbyte mellan luft och blod samt utandning</li><li>funktioner i muskler som är involverade i andning</li></ul>Inklusive eventuella åtgärder av annan person, så som slemsugning och hjälp att hantera respirator")
+            """
+                Med andningsfunktioner menas exempelvis:
+                <ul>
+                <li>funktioner att andas in luft i lungorna, gasutbyte mellan luft och blod samt utandning</li><li>funktioner i muskler som är involverade i andning</li></ul>
+                Inklusive eventuella åtgärder av annan person, så som slemsugning och hjälp att hantera respirator
+                """
+        )
         .id(new FieldId("64.1"))
         .build();
 

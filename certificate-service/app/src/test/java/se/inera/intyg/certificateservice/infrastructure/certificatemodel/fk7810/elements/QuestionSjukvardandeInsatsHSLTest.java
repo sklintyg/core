@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType.MANDATORY;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionSjukvardandeInsatsHSL.questionSjukvardandeInsatsHSL;
 
@@ -86,5 +87,10 @@ class QuestionSjukvardandeInsatsHSLTest {
     final var element = questionSjukvardandeInsatsHSL();
 
     assertEquals(expected, element.pdfConfiguration());
+  }
+
+  @Test
+  void shallNotIncludeWhenRenewing() {
+    assertFalse(questionSjukvardandeInsatsHSL().includeWhenRenewing());
   }
 }

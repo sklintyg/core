@@ -46,16 +46,8 @@ class QuestionPsykiskFunktionMotiveringTest {
             """
                 Med annan psykisk funktion menas exempelvis:
                 <ul>
-                <li>stämningsläge, depressivitet, ångest och reglering av affekter</li>
-                <li>motivation, energinivå, impulskontroll och initiativförmåga</li>
-                <li>kognitiv flexibilitet, omdöme och insikt</li>
-                <li>minnesfunktioner</li>
-                <li>sömnfunktioner</li>
-                <li>vanföreställningar och tvångstankar</li>
-                <li>språklig funktion</li>
-                <li>orientering i tid samt till plats, situation och person.</li>
-                </ul>
-                """.replaceAll("\\R", "")
+                <li>stämningsläge, depressivitet, ångest och reglering av affekter</li><li>motivation, energinivå, impulskontroll och initiativförmåga</li><li>kognitiv flexibilitet, omdöme och insikt</li><li>minnesfunktioner</li><li>sömnfunktioner</li><li>vanföreställningar och tvångstankar</li><li>språklig funktion</li><li>orientering i tid samt till plats, situation och person.</li></ul>
+                """
         )
         .id(new FieldId("11.1"))
         .build();

@@ -46,12 +46,8 @@ class QuestionKommunikationSocialInteraktionMotiveringTest {
             """
                 Med psykosociala funktioner menas
                 <ul>
-                <li>förmågan till emotionell kontakt</li>
-                <li>social ömsesidighet</li>
-                <li>samspel</li>
-                <li>förmågan att på ett teoretiskt plan kunna sätta sig in i hur andra människor tänker och känner, även om man inte har varit med om samma sak själv.</li>
-                </ul>
-                """.replaceAll("\\R", "")
+                <li>förmågan till emotionell kontakt</li><li>social ömsesidighet</li><li>samspel</li><li>förmågan att på ett teoretiskt plan kunna sätta sig in i hur andra människor tänker och känner, även om man inte har varit med om samma sak själv.</li></ul>
+                """
         )
         .id(new FieldId("9.1"))
         .build();
