@@ -7,6 +7,7 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ALVA_VARDADMINISTRATOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ajlaDoktorDtoBuilder;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customCreateCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customTestabilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customValidateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCreateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificate;
@@ -16,14 +17,19 @@ import static se.inera.intyg.certificateservice.integrationtest.util.Certificate
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import org.junit.jupiter.api.Disabled;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.regex.MatchResult;
+import java.util.regex.Pattern;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
 import se.inera.intyg.certificateservice.application.certificate.dto.PrefillXmlDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
+import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityFillTypeDTO;
 
 public abstract class CreateCertificateIT extends BaseIntegrationIT {
 
@@ -59,7 +65,6 @@ public abstract class CreateCertificateIT extends BaseIntegrationIT {
   }
 
   @Test
-  @Disabled
   @DisplayName("Om ett utkast förifylls med komplett intygsinformation ska inga valideringsfel visas")
   void shallReturnCertificateWithPrefilledAnswers() throws IOException {
     final var xml = new Xml(loadResourceAsString());
@@ -67,23 +72,53 @@ public abstract class CreateCertificateIT extends BaseIntegrationIT {
         customCreateCertificateRequest(
             type(),
             typeVersion())
-            .prefillXml(new PrefillXmlDTO(xml.base64()))
+            .prefillXml(replaceDates(xml))
             .build();
 
-    final var response = api.createCertificate(
-        createCertificateRequest
-    );
+    final var response = api.createCertificate(createCertificateRequest);
+
+    final var data = response.getBody().getCertificate().getData().values().stream()
+        .map(CertificateDataElement::getValue)
+        .toList();
+
+    final var testCertificate = testabilityApi.addCertificates(
+            customTestabilityCertificateRequest(type(), typeVersion())
+                .fillType(TestabilityFillTypeDTO.MAXIMAL)
+                .build())
+        .getFirst();
+
+    final var expected = testCertificate.getCertificate().getData().values().stream()
+        .map(CertificateDataElement::getValue)
+        .toList();
+
+    assertEquals(expected, data, "Should return certificate with prefilled answers!");
 
     final var validateCertificate = api.validateCertificate(
         customValidateCertificateRequest()
             .certificate(certificate(response.getBody()))
             .build(),
-        certificateId(response.getBody())
-    );
+        certificateId(response.getBody()));
 
     assertEquals(0, validationErrors(validateCertificate).size(),
         () -> "Should not return validation errors, got '%s' errors".formatted(
             validationErrors(validateCertificate)));
+  }
+
+  private PrefillXmlDTO replaceDates(Xml xml) {
+    final var pattern = Pattern.compile("TODAY(?:_(PLUS|MINUS)_DAYS_(\\d+))?");
+    final var replaced = pattern.matcher(xml.xml()).replaceAll((MatchResult mr) -> {
+      final var op = mr.group(1);
+      final var daysStr = mr.group(2);
+      final int days = daysStr != null ? Integer.parseInt(daysStr) : 0;
+      var date = LocalDate.now();
+      if ("PLUS".equals(op)) {
+        date = date.plusDays(days);
+      } else if ("MINUS".equals(op)) {
+        date = date.minusDays(days);
+      }
+      return date.format(DateTimeFormatter.ISO_LOCAL_DATE);
+    });
+    return new PrefillXmlDTO(new Xml(replaced).base64());
   }
 
   @Test

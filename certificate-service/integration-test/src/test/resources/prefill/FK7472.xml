@@ -17,8 +17,8 @@
     </ns2:delsvar>
     <ns2:delsvar id="56.2">
       <ns4:datePeriod>
-        <ns4:start>2025-06-27</ns4:start>
-        <ns4:end>2025-07-03</ns4:end>
+        <ns4:start>TODAY</ns4:start>
+        <ns4:end>TODAY_PLUS_DAYS_6</ns4:end>
       </ns4:datePeriod>
     </ns2:delsvar>
   </ns3:svar>
@@ -33,8 +33,8 @@
     </ns2:delsvar>
     <ns2:delsvar id="56.2">
       <ns4:datePeriod>
-        <ns4:start>2025-07-04</ns4:start>
-        <ns4:end>2025-07-10</ns4:end>
+        <ns4:start>TODAY_PLUS_DAYS_7</ns4:start>
+        <ns4:end>TODAY_PLUS_DAYS_13</ns4:end>
       </ns4:datePeriod>
     </ns2:delsvar>
   </ns3:svar>
@@ -49,8 +49,8 @@
     </ns2:delsvar>
     <ns2:delsvar id="56.2">
       <ns4:datePeriod>
-        <ns4:start>2025-07-11</ns4:start>
-        <ns4:end>2025-07-17</ns4:end>
+        <ns4:start>TODAY_PLUS_DAYS_14</ns4:start>
+        <ns4:end>TODAY_PLUS_DAYS_20</ns4:end>
       </ns4:datePeriod>
     </ns2:delsvar>
   </ns3:svar>
@@ -65,8 +65,8 @@
     </ns2:delsvar>
     <ns2:delsvar id="56.2">
       <ns4:datePeriod>
-        <ns4:start>2025-07-18</ns4:start>
-        <ns4:end>2025-07-24</ns4:end>
+        <ns4:start>TODAY_PLUS_DAYS_21</ns4:start>
+        <ns4:end>TODAY_PLUS_DAYS_27</ns4:end>
       </ns4:datePeriod>
     </ns2:delsvar>
   </ns3:svar>
@@ -81,8 +81,8 @@
     </ns2:delsvar>
     <ns2:delsvar id="56.2">
       <ns4:datePeriod>
-        <ns4:start>2025-07-25</ns4:start>
-        <ns4:end>2025-07-31</ns4:end>
+        <ns4:start>TODAY_PLUS_DAYS_28</ns4:start>
+        <ns4:end>TODAY_PLUS_DAYS_34</ns4:end>
       </ns4:datePeriod>
     </ns2:delsvar>
   </ns3:svar>
