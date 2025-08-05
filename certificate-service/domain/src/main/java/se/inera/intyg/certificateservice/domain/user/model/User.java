@@ -29,4 +29,5 @@ public class User {
   AccessScope accessScope;
   List<HealthCareProfessionalLicence> healthCareProfessionalLicence;
   ResponsibleIssuer responsibleIssuer;
+  SrsActive srsActive;
 }

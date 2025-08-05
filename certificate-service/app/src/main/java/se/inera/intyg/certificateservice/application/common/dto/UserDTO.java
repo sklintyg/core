@@ -12,23 +12,24 @@ import se.inera.intyg.certificateservice.application.common.dto.UserDTO.UserDTOB
 @Builder
 public class UserDTO {
 
-  String id;
-  String firstName;
-  String middleName;
-  String lastName;
-  String fullName;
-  RoleTypeDTO role;
-  List<PaTitleDTO> paTitles;
-  List<String> specialities;
-  Boolean blocked;
-  Boolean agreement;
-  Boolean allowCopy;
-  AccessScopeTypeDTO accessScope;
-  List<String> healthCareProfessionalLicence;
-  String responsibleHospName;
+    String id;
+    String firstName;
+    String middleName;
+    String lastName;
+    String fullName;
+    RoleTypeDTO role;
+    List<PaTitleDTO> paTitles;
+    List<String> specialities;
+    Boolean blocked;
+    Boolean agreement;
+    Boolean allowCopy;
+    AccessScopeTypeDTO accessScope;
+    List<String> healthCareProfessionalLicence;
+    String responsibleHospName;
+    Boolean srsActive;
 
-  @JsonPOJOBuilder(withPrefix = "")
-  public static class UserDTOBuilder {
+    @JsonPOJOBuilder(withPrefix = "")
+    public static class UserDTOBuilder {
 
-  }
+    }
 }

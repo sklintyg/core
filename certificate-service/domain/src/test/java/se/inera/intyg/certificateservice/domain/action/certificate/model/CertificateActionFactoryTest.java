@@ -27,7 +27,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionCreate.class);
+    assertEquals(CertificateActionCreate.class, certificateAction.getClass());
   }
 
   @Test
@@ -39,7 +39,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionRead.class);
+    assertEquals(CertificateActionRead.class, certificateAction.getClass());
   }
 
   @Test
@@ -51,7 +51,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionUpdate.class);
+    assertEquals(CertificateActionUpdate.class, certificateAction.getClass());
   }
 
   @Test
@@ -63,7 +63,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionDelete.class);
+    assertEquals(CertificateActionDelete.class, certificateAction.getClass());
   }
 
   @Test
@@ -75,7 +75,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionSign.class);
+    assertEquals(CertificateActionSign.class, certificateAction.getClass());
   }
 
   @Test
@@ -87,7 +87,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionPrint.class);
+    assertEquals(CertificateActionPrint.class, certificateAction.getClass());
   }
 
   @Test
@@ -99,7 +99,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionSend.class);
+    assertEquals(CertificateActionSend.class, certificateAction.getClass());
   }
 
   @Test
@@ -111,7 +111,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionRevoke.class);
+    assertEquals(CertificateActionRevoke.class, certificateAction.getClass());
   }
 
   @Test
@@ -123,7 +123,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionSendAfterSign.class);
+    assertEquals(CertificateActionSendAfterSign.class, certificateAction.getClass());
   }
 
   @Test
@@ -135,7 +135,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionSendAfterComplement.class);
+    assertEquals(CertificateActionSendAfterComplement.class, certificateAction.getClass());
   }
 
   @Test
@@ -147,7 +147,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionComplement.class);
+    assertEquals(CertificateActionComplement.class, certificateAction.getClass());
   }
 
   @Test
@@ -159,7 +159,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionReplace.class);
+    assertEquals(CertificateActionReplace.class, certificateAction.getClass());
   }
 
   @Test
@@ -171,7 +171,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionReplaceContinue.class);
+    assertEquals(CertificateActionReplaceContinue.class, certificateAction.getClass());
   }
 
   @Test
@@ -183,7 +183,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionRenew.class);
+    assertEquals(CertificateActionRenew.class, certificateAction.getClass());
   }
 
   @Test
@@ -195,7 +195,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionReceiveComplement.class);
+    assertEquals(CertificateActionReceiveComplement.class, certificateAction.getClass());
   }
 
   @Test
@@ -207,7 +207,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionReceiveQuestion.class);
+    assertEquals(CertificateActionReceiveQuestion.class, certificateAction.getClass());
   }
 
   @Test
@@ -219,7 +219,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionCannotComplement.class);
+    assertEquals(CertificateActionCannotComplement.class, certificateAction.getClass());
   }
 
   @Test
@@ -231,7 +231,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionMessages.class);
+    assertEquals(CertificateActionMessages.class, certificateAction.getClass());
   }
 
   @Test
@@ -243,7 +243,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionMessagesAdministrative.class);
+    assertEquals(CertificateActionMessagesAdministrative.class, certificateAction.getClass());
   }
 
   @Test
@@ -255,7 +255,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionForwardMessage.class);
+    assertEquals(CertificateActionForwardMessage.class, certificateAction.getClass());
   }
 
   @Test
@@ -267,7 +267,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionForwardCertificate.class);
+    assertEquals(CertificateActionForwardCertificate.class, certificateAction.getClass());
   }
 
   @Test
@@ -279,7 +279,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionHandleComplement.class);
+    assertEquals(CertificateActionHandleComplement.class, certificateAction.getClass());
   }
 
   @Test
@@ -291,7 +291,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionReceiveAnswer.class);
+    assertEquals(CertificateActionReceiveAnswer.class, certificateAction.getClass());
   }
 
   @Test
@@ -303,7 +303,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionReceiveReminder.class);
+    assertEquals(CertificateActionReceiveReminder.class, certificateAction.getClass());
   }
 
   @Test
@@ -315,7 +315,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionCreateMessage.class);
+    assertEquals(CertificateActionCreateMessage.class, certificateAction.getClass());
   }
 
   @Test
@@ -327,7 +327,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionAnswerMessage.class);
+    assertEquals(CertificateActionAnswerMessage.class, certificateAction.getClass());
   }
 
   @Test
@@ -339,7 +339,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionSaveMessage.class);
+    assertEquals(CertificateActionSaveMessage.class, certificateAction.getClass());
   }
 
   @Test
@@ -351,7 +351,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionDeleteMessage.class);
+    assertEquals(CertificateActionDeleteMessage.class, certificateAction.getClass());
   }
 
   @Test
@@ -363,7 +363,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionSendMessage.class);
+    assertEquals(CertificateActionSendMessage.class, certificateAction.getClass());
   }
 
   @Test
@@ -375,7 +375,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionHandleMessage.class);
+    assertEquals(CertificateActionHandleMessage.class, certificateAction.getClass());
   }
 
   @Test
@@ -387,7 +387,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionSaveAnswer.class);
+    assertEquals(CertificateActionSaveAnswer.class, certificateAction.getClass());
   }
 
   @Test
@@ -399,7 +399,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionDeleteAnswer.class);
+    assertEquals(CertificateActionDeleteAnswer.class, certificateAction.getClass());
   }
 
   @Test
@@ -411,7 +411,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionSendAnswer.class);
+    assertEquals(CertificateActionSendAnswer.class, certificateAction.getClass());
   }
 
   @Test
@@ -423,7 +423,7 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionListCertificateType.class);
+    assertEquals(CertificateActionListCertificateType.class, certificateAction.getClass());
   }
 
   @Test
@@ -435,6 +435,42 @@ class CertificateActionFactoryTest {
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(certificateAction.getClass(), CertificateActionForwardCertificateFromList.class);
+    assertEquals(CertificateActionForwardCertificateFromList.class, certificateAction.getClass());
+  }
+
+  @Test
+  void shallReturnCertificateActionFMBFromListIfExistInSpecification() {
+    final var certificateActionSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.FMB)
+        .build();
+
+    final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
+
+    assert certificateAction != null;
+    assertEquals(CertificateActionFMB.class, certificateAction.getClass());
+  }
+
+  @Test
+  void shallReturnCertificateActionSrsDraftFromListIfExistInSpecification() {
+    final var certificateActionSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.SRS_DRAFT)
+        .build();
+
+    final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
+
+    assert certificateAction != null;
+    assertEquals(CertificateActionSrsDraft.class, certificateAction.getClass());
+  }
+
+  @Test
+  void shallReturnCertificateActionSrsSignedFromListIfExistInSpecification() {
+    final var certificateActionSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.SRS_SIGNED)
+        .build();
+
+    final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
+
+    assert certificateAction != null;
+    assertEquals(CertificateActionSrsSigned.class, certificateAction.getClass());
   }
 }
