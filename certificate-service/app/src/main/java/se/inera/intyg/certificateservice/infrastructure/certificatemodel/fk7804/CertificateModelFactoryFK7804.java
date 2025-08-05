@@ -16,9 +16,10 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionAnnanGrundForMedicinsktUnderlag.questionAnnanGrundForMedicinsktUnderlag;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionAtgarderSomKanFramjaAtergang.questionAtgarderSomKanFramjaAtergang;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionGrundForMedicinsktUnderlag.questionGrundForMedicinsktUnderlag;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionMedicinskBehandling.questionMedicinskBehandling;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionOvrigt.questionOvrigt;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSysselsattning.questionSysselsattning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionYrkeOchArbetsuppgifter.questionYrkeOchArbetsuppgifter;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionOvrigt.questionOvrigt;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -158,7 +159,9 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
             categoryDiagnos(),
             categoryFunktionsnedsattning(),
             categoryAktivitetsbegransning(),
-            categoryMedicinskBehandling(),
+            categoryMedicinskBehandling(
+                questionMedicinskBehandling()
+            ),
             categoryBedomning(),
             categoryPrognos(),
             categoryAtgarderSomKanFramjaAttergang(
