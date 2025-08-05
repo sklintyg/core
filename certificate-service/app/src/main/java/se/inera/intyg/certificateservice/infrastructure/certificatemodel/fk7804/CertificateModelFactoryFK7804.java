@@ -1,6 +1,18 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804;
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.elements.ElementUnitContactInformation.issuingUnitContactInfo;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.CategoryAktivitetsbegransning.categoryAktivitetsbegransning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.CategoryAtgarderSomKanFramjaAttergang.categoryAtgarderSomKanFramjaAttergang;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.CategoryBedomning.categoryBedomning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.CategoryDiagnos.categoryDiagnos;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.CategoryFunktionsnedsattning.categoryFunktionsnedsattning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.CategoryGrundForMedicinsktUnderlag.categoryGrundForMedicinsktUnderlag;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.CategoryKontakt.categoryKontakt;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.CategoryMedicinskBehandling.categoryMedicinskBehandling;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.CategoryOvrigt.categoryOvrigt;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.CategoryPrognos.categoryPrognos;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.CategorySmittbararpenning.categorySmittbararpenning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.CategorySysselsattning.categorySysselsattning;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -128,6 +140,18 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
         .certificateActionSpecifications(FK7804CertificateActionSpecification.create())
         .messageActionSpecifications(FK7804MessageActionSpecification.create())
         .elementSpecifications(List.of(
+            categorySmittbararpenning(),
+            categoryGrundForMedicinsktUnderlag(),
+            categorySysselsattning(),
+            categoryDiagnos(),
+            categoryFunktionsnedsattning(),
+            categoryAktivitetsbegransning(),
+            categoryMedicinskBehandling(),
+            categoryBedomning(),
+            categoryPrognos(),
+            categoryAtgarderSomKanFramjaAttergang(),
+            categoryOvrigt(),
+            categoryKontakt(),
             issuingUnitContactInfo()
         ))
         .certificateActionFactory(certificateActionFactory)
