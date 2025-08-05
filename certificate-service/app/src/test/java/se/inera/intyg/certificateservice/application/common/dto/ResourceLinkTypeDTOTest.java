@@ -292,5 +292,11 @@ class ResourceLinkTypeDTOTest {
           ResourceLinkTypeDTO.toResourceLinkType(
               CertificateActionType.FORWARD_CERTIFICATE_FROM_LIST));
     }
+
+    @Test
+    void shallReturnCertificateActionTypeFMB() {
+      assertEquals(ResourceLinkTypeDTO.FMB,
+          ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.FMB));
+    }
   }
 }
