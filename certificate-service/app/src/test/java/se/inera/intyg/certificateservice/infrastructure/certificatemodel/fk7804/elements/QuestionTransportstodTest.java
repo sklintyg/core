@@ -6,7 +6,10 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 
 class QuestionTransportstodTest {
@@ -39,6 +42,21 @@ class QuestionTransportstodTest {
     );
     final var element = QuestionTransportstod.questionTransportstod();
     assertEquals(expected, element.validations());
+  }
+
+  @Test
+  void shouldIncludeRules() {
+    final var expectedRules = List.of(
+        ElementRuleExpression.builder()
+            .type(ElementRuleType.HIDE)
+            .id(new ElementId("27"))
+            .expression(new RuleExpression("$27.1"))
+            .build()
+    );
+
+    final var element = QuestionTransportstod.questionTransportstod();
+
+    assertEquals(expectedRules, element.rules());
   }
 }
 
