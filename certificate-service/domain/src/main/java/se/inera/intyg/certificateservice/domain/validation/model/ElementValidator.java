@@ -14,6 +14,10 @@ public class ElementValidator {
     return limit != null && value != null && value.length() > limit;
   }
 
+  public static boolean isIntegerWithinLimit(Integer value, Integer min, Integer max) {
+    return value != null && value >= min && value <= max;
+  }
+
   public static boolean isDateAfterMax(LocalDate value, TemporalAmount max) {
     return value != null
         && max != null
