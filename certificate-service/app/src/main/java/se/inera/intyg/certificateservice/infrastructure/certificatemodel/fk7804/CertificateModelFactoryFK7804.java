@@ -98,9 +98,6 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
       För arbetslösa bedöms arbetsförmågan i förhållande till arbeten som normalt förekommer på arbetsmarknaden redan från första dagen i sjukperioden.
       """;
 
-  private static final String PREAMBLE_TEXT =
-      "";
-
   public static final CertificateModelId FK7804_V2_0 = CertificateModelId.builder()
       .type(new CertificateType(FK_7804))
       .version(new CertificateVersion(VERSION))
