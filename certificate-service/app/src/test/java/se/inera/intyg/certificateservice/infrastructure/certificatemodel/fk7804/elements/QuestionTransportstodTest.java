@@ -9,23 +9,24 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 
-class QuestionSmittbararpenningTest {
+class QuestionTransportstodTest {
 
   @Test
   void shouldIncludeId() {
-    final var element = QuestionSmittbararpenning.questionSmittbararpenning();
-    assertEquals(new ElementId("27"), element.id());
+    final var element = QuestionTransportstod.questionTransportstod();
+    assertEquals(new ElementId("34"), element.id());
   }
 
   @Test
   void shouldIncludeConfiguration() {
     final var expected = ElementConfigurationCheckboxBoolean.builder()
-        .id(new FieldId("27.1"))
-        .label("Förhållningsregler enligt smittskyddslagen på grund av smitta")
+        .id(new FieldId("34.1"))
+        .label(
+            "Patienten skulle kunna arbeta helt eller delvis vid hjälp med transport till och från arbetsplatsen")
         .selectedText("Ja")
         .unselectedText("Ej angivet")
         .build();
-    final var element = QuestionSmittbararpenning.questionSmittbararpenning();
+    final var element = QuestionTransportstod.questionTransportstod();
     assertEquals(expected, element.configuration());
   }
 
@@ -36,7 +37,7 @@ class QuestionSmittbararpenningTest {
             .mandatory(false)
             .build()
     );
-    final var element = QuestionSmittbararpenning.questionSmittbararpenning();
+    final var element = QuestionTransportstod.questionTransportstod();
     assertEquals(expected, element.validations());
   }
 }
