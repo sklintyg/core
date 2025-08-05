@@ -30,6 +30,7 @@ public class CertificateDataCheckboxBooleanConfigConverter implements
         .id(configurationCheckboxBoolean.id().value())
         .description(configurationCheckboxBoolean.description())
         .text(elementSpecification.configuration().name())
+        .label(configurationCheckboxBoolean.label())
         .selectedText(configurationCheckboxBoolean.selectedText())
         .unselectedText(configurationCheckboxBoolean.unselectedText())
         .build();

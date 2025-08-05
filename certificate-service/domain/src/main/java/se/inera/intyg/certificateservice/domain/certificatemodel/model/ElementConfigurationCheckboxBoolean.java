@@ -21,6 +21,8 @@ public class ElementConfigurationCheckboxBoolean implements ElementConfiguration
   ElementType type = ElementType.CHECKBOX_BOOLEAN;
   @Getter(onMethod = @__(@Override))
   ElementMessage message;
+  @Getter(onMethod = @__(@Override))
+  String label;
   FieldId id;
   String selectedText;
   String unselectedText;
