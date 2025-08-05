@@ -4,6 +4,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionGrundForMedicinsktUnderlag.UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID;
 
 import java.util.List;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextField;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
@@ -52,6 +53,7 @@ public class QuestionAnnanGrundForMedicinsktUnderlag {
             List.of(
                 ElementValidationText.builder()
                     .limit(50)
+                    .mandatory(true)
                     .build()
             )
         )
@@ -60,6 +62,14 @@ public class QuestionAnnanGrundForMedicinsktUnderlag {
                 QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID,
                 CodeSystemKvFkmu0001.ANNAT
             )
+        )
+        .shouldValidate(
+            elementData -> elementData.stream()
+                .filter(data -> data.id().equals(QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID))
+                .map(element -> (ElementValueDateList) element.value())
+                .anyMatch(value -> value.dateList().stream().anyMatch(
+                    valueDate -> valueDate.dateId().equals(UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID))
+                )
         )
         .build();
   }

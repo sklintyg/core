@@ -3,8 +3,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.FK7810PdfSpecification.OVERFLOW_SHEET_FIELD_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAnnanGrundForMedicinsktUnderlag.questionAnnanGrundForMedicinsktUnderlag;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionAnnanGrundForMedicinsktUnderlag.questionAnnanGrundForMedicinsktUnderlag;
 
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -18,8 +17,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
@@ -63,7 +60,7 @@ class QuestionAnnanGrundForMedicinsktUnderlagTest {
         ElementRuleLimit.builder()
             .id(ELEMENT_ID)
             .type(ElementRuleType.TEXT_LIMIT)
-            .limit(new RuleLimit((short) 4000))
+            .limit(new RuleLimit((short) 50))
             .build(),
         ElementRuleExpression.builder()
             .id(new ElementId("1"))
@@ -87,7 +84,7 @@ class QuestionAnnanGrundForMedicinsktUnderlagTest {
     final var expectedValidations = List.of(
         ElementValidationText.builder()
             .mandatory(true)
-            .limit(4000)
+            .limit(50)
             .build()
     );
 
@@ -152,18 +149,5 @@ class QuestionAnnanGrundForMedicinsktUnderlagTest {
 
       assertFalse(shouldValidate.test(elementData));
     }
-  }
-
-  @Test
-  void shallIncludePdfConfiguration() {
-    final var expected = PdfConfigurationText.builder()
-        .pdfFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtAnnatUnderlagUtlatande[0]"))
-        .maxLength(27)
-        .overflowSheetFieldId(OVERFLOW_SHEET_FIELD_ID)
-        .build();
-
-    final var element = questionAnnanGrundForMedicinsktUnderlag();
-
-    assertEquals(expected, element.pdfConfiguration());
   }
 }

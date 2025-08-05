@@ -19,14 +19,14 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionSysselsattning {
 
-  public static final ElementId SYSSELSATTNING_ID = new ElementId("28.1");
+  public static final ElementId SYSSELSATTNING_ID = new ElementId("28");
   public static final FieldId SYSSELSATTNING_FIELD_ID = new FieldId("28.1");
 
   private QuestionSysselsattning() {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionSysselsattning() {
+  public static ElementSpecification questionSysselsattning(ElementSpecification... children) {
     final var checkboxes = List.of(
         CodeFactory.elementConfigurationCode(NUVARANDE_ARBETE),
         CodeFactory.elementConfigurationCode(ARBETSSOKANDE),
@@ -69,7 +69,9 @@ public class QuestionSysselsattning {
                     .build()
             )
         )
+        .children(
+            List.of(children)
+        )
         .build();
   }
 }
-
