@@ -12,9 +12,11 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.Certifi
 import se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.CertificateModelFactoryFK7210;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorCertificateV4;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorCodeListToBoolean;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorDate;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorDateRangeList;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorText;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorUnifiedDiagnosisList;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorValue;
 
 @ExtendWith(MockitoExtension.class)
@@ -39,7 +41,9 @@ class SchemaValidatorV4Test {
 
     final var generator = new XmlGeneratorCertificateV4(
         new XmlGeneratorValue(
-            List.of(new XmlGeneratorDate(), new XmlGeneratorDateRangeList(), new XmlGeneratorText())
+            List.of(new XmlGeneratorDate(), new XmlGeneratorDateRangeList(),
+                new XmlGeneratorText()),
+            List.of(new XmlGeneratorCodeListToBoolean(), new XmlGeneratorUnifiedDiagnosisList())
         ),
         new XmlValidationService(
             new SchematronValidator(),

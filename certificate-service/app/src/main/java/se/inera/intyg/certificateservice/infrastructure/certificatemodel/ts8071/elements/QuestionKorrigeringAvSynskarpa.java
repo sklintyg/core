@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements;
 
+import static se.inera.intyg.certificateservice.domain.certificate.model.CustomMapperId.CODE_LIST_TO_BOOLEAN;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.lessThan;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.multipleAndExpressions;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.multipleOrExpression;
@@ -12,8 +13,6 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynskarpa.RIGHT_EYE_WITHOUT_CORRECTION_ID;
 
 import java.util.List;
-import java.util.Optional;
-import se.inera.intyg.certificateservice.domain.certificate.model.CodeListToBoolean;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueVisualAcuities;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -174,13 +173,7 @@ public class QuestionKorrigeringAvSynskarpa {
                             )
                 )
         )
-        .mapping(
-            new ElementMapping(
-                null,
-                null,
-                Optional.of(CodeListToBoolean.class)
-            )
-        )
+        .mapping(new ElementMapping(CODE_LIST_TO_BOOLEAN))
         .build();
   }
 }

@@ -56,7 +56,8 @@ class SchematronValidationFK3226Test {
               new XmlGeneratorBoolean(),
               new XmlGeneratorCode(),
               new XmlGeneratorDiagnosisList()
-          )
+          ),
+          Collections.emptyList()
       ),
       new XmlValidationService(
           new SchematronValidator(),

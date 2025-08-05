@@ -16,7 +16,7 @@ import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 
 @Component
-public class XmlGeneratorDateRange implements XmlGeneratorElementData {
+public class XmlGeneratorDateRange implements XmlGeneratorElementValue {
 
   @Override
   public Class<? extends ElementValue> supports() {

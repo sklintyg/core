@@ -10,6 +10,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static se.inera.intyg.certificateservice.domain.certificate.model.CustomMapperId.CODE_LIST_TO_BOOLEAN;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,7 +22,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
-import se.inera.intyg.certificateservice.domain.certificate.model.CodeListToBoolean;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCodeList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
@@ -53,9 +53,11 @@ class XmlGeneratorValueTest {
   @Mock
   private CertificateModel certificateModel;
   @Mock
-  private XmlGeneratorElementData xmlGeneratorElementDataOne;
+  private XmlGeneratorElementValue xmlGeneratorElementValueOne;
   @Mock
-  private XmlGeneratorElementData xmlGeneratorElementDataTwo;
+  private XmlGeneratorCustomMapper xmlGeneratorCustomMapper;
+  @Mock
+  private XmlGeneratorElementValue xmlGeneratorElementValueTwo;
 
   private XmlGeneratorValue xmlGeneratorValue;
 
@@ -71,7 +73,8 @@ class XmlGeneratorValueTest {
     doReturn(List.of(data)).when(certificate).elementData();
 
     xmlGeneratorValue = new XmlGeneratorValue(
-        List.of(xmlGeneratorElementDataOne)
+        List.of(xmlGeneratorElementValueOne),
+        List.of(xmlGeneratorCustomMapper)
     );
 
     final var response = xmlGeneratorValue.generate(certificate);
@@ -97,6 +100,7 @@ class XmlGeneratorValueTest {
     doReturn(List.of(data)).when(certificate).elementData();
 
     xmlGeneratorValue = new XmlGeneratorValue(
+        Collections.emptyList(),
         Collections.emptyList()
     );
 
@@ -107,7 +111,7 @@ class XmlGeneratorValueTest {
 
   @Test
   void shouldNotMapValueIfNotIncludedInXml() {
-    doReturn(ElementValueText.class).when(xmlGeneratorElementDataOne).supports();
+    doReturn(ElementValueText.class).when(xmlGeneratorElementValueOne).supports();
 
     doReturn(certificateModel).when(certificate).certificateModel();
     final var elementSpecificationOne = mock(ElementSpecification.class);
@@ -116,7 +120,8 @@ class XmlGeneratorValueTest {
         .elementSpecification(new ElementId(QUESTION_ID_ONE));
 
     xmlGeneratorValue = new XmlGeneratorValue(
-        List.of(xmlGeneratorElementDataOne)
+        List.of(xmlGeneratorElementValueOne),
+        Collections.emptyList()
     );
 
     final var data = ElementData.builder()
@@ -131,7 +136,7 @@ class XmlGeneratorValueTest {
 
     doReturn(List.of(data)).when(certificate).elementData();
 
-    verify(xmlGeneratorElementDataOne, times(0)).generate(eq(data), any());
+    verify(xmlGeneratorElementValueOne, times(0)).generate(eq(data), any());
     final var response = xmlGeneratorValue.generate(certificate);
     assertEquals(Collections.emptyList(), response);
   }
@@ -141,7 +146,7 @@ class XmlGeneratorValueTest {
 
     @BeforeEach
     void setUp() {
-      doReturn(ElementValueText.class).when(xmlGeneratorElementDataOne).supports();
+      doReturn(ElementValueText.class).when(xmlGeneratorElementValueOne).supports();
 
       doReturn(certificateModel).when(certificate).certificateModel();
       final var elementSpecificationOne = mock(ElementSpecification.class);
@@ -150,7 +155,8 @@ class XmlGeneratorValueTest {
           .elementSpecification(new ElementId(QUESTION_ID_ONE));
 
       xmlGeneratorValue = new XmlGeneratorValue(
-          List.of(xmlGeneratorElementDataOne)
+          List.of(xmlGeneratorElementValueOne),
+          Collections.emptyList()
       );
 
     }
@@ -176,7 +182,7 @@ class XmlGeneratorValueTest {
       subAnswer.setId(ANSWER_ID_ONE);
       expectedData.getDelsvar().add(subAnswer);
 
-      doReturn(List.of(expectedData)).when(xmlGeneratorElementDataOne).generate(eq(data), any());
+      doReturn(List.of(expectedData)).when(xmlGeneratorElementValueOne).generate(eq(data), any());
 
       final var response = xmlGeneratorValue.generate(certificate).get(0);
 
@@ -195,11 +201,12 @@ class XmlGeneratorValueTest {
 
     @BeforeEach
     void setUp() {
-      doReturn(ElementValueText.class).when(xmlGeneratorElementDataOne).supports();
-      doReturn(ElementValueDateList.class).when(xmlGeneratorElementDataTwo).supports();
+      doReturn(ElementValueText.class).when(xmlGeneratorElementValueOne).supports();
+      doReturn(ElementValueDateList.class).when(xmlGeneratorElementValueTwo).supports();
 
       xmlGeneratorValue = new XmlGeneratorValue(
-          List.of(xmlGeneratorElementDataOne, xmlGeneratorElementDataTwo)
+          List.of(xmlGeneratorElementValueOne, xmlGeneratorElementValueTwo),
+          List.of(xmlGeneratorCustomMapper)
       );
     }
 
@@ -280,8 +287,8 @@ class XmlGeneratorValueTest {
       answerTwo.setId(QUESTION_ID_TWO);
       answerTwo.getDelsvar().add(subAnswerTwo);
 
-      doReturn(List.of(answerOne)).when(xmlGeneratorElementDataOne).generate(eq(dataOne), any());
-      doReturn(List.of(answerTwo)).when(xmlGeneratorElementDataTwo).generate(eq(dataTwo), any());
+      doReturn(List.of(answerOne)).when(xmlGeneratorElementValueOne).generate(eq(dataOne), any());
+      doReturn(List.of(answerTwo)).when(xmlGeneratorElementValueTwo).generate(eq(dataTwo), any());
 
       final var response = xmlGeneratorValue.generate(certificate);
 
@@ -351,8 +358,8 @@ class XmlGeneratorValueTest {
       answerTwo.setId(QUESTION_ID_TWO);
       answerTwo.getDelsvar().add(subAnswerTwo);
 
-      doReturn(List.of(answerOne)).when(xmlGeneratorElementDataOne).generate(eq(dataOne), any());
-      doReturn(List.of(answerTwo)).when(xmlGeneratorElementDataTwo).generate(eq(dataTwo), any());
+      doReturn(List.of(answerOne)).when(xmlGeneratorElementValueOne).generate(eq(dataOne), any());
+      doReturn(List.of(answerTwo)).when(xmlGeneratorElementValueTwo).generate(eq(dataTwo), any());
 
       final var response = xmlGeneratorValue.generate(certificate);
 
@@ -450,9 +457,9 @@ class XmlGeneratorValueTest {
       answerTwo.getDelsvar().add(answerTwoSubAnswerTwo);
 
       doReturn(List.of(answerOneInstanceOne, answerOneInstanceTwo))
-          .when(xmlGeneratorElementDataOne)
+          .when(xmlGeneratorElementValueOne)
           .generate(eq(dataOne), any());
-      doReturn(List.of(answerTwo)).when(xmlGeneratorElementDataTwo).generate(eq(dataTwo), any());
+      doReturn(List.of(answerTwo)).when(xmlGeneratorElementValueTwo).generate(eq(dataTwo), any());
       final var response = xmlGeneratorValue.generate(certificate);
 
       assertAll(
@@ -506,7 +513,7 @@ class XmlGeneratorValueTest {
       answerOne.setId(QUESTION_ID_ONE);
       answerOne.getDelsvar().add(subAnswerOne);
 
-      doReturn(List.of(answerOne)).when(xmlGeneratorElementDataOne).generate(eq(dataOne), any());
+      doReturn(List.of(answerOne)).when(xmlGeneratorElementValueOne).generate(eq(dataOne), any());
 
       final var response = xmlGeneratorValue.generate(certificate);
 
@@ -525,9 +532,10 @@ class XmlGeneratorValueTest {
 
     @BeforeEach
     void setUp() {
-      doReturn(CodeListToBoolean.class).when(xmlGeneratorElementDataOne).supports();
+      doReturn(CODE_LIST_TO_BOOLEAN).when(xmlGeneratorCustomMapper).id();
       xmlGeneratorValue = new XmlGeneratorValue(
-          List.of(xmlGeneratorElementDataOne)
+          List.of(xmlGeneratorElementValueOne),
+          List.of(xmlGeneratorCustomMapper)
       );
     }
 
@@ -548,8 +556,7 @@ class XmlGeneratorValueTest {
       when(elementSpecificationOne.includeInXml()).thenReturn(true);
       doReturn(elementSpecificationOne).when(certificateModel)
           .elementSpecification(new ElementId(QUESTION_ID_ONE));
-      final var elementMapping = new ElementMapping(null, null,
-          Optional.of(CodeListToBoolean.class));
+      final var elementMapping = new ElementMapping(CODE_LIST_TO_BOOLEAN);
       doReturn(Optional.of(elementMapping)).when(elementSpecificationOne).getMapping();
 
       final var expectedData = new Svar();
@@ -563,7 +570,7 @@ class XmlGeneratorValueTest {
       answerOne.setId(QUESTION_ID_ONE);
       answerOne.getDelsvar().add(subAnswerOne);
 
-      doReturn(List.of(answerOne)).when(xmlGeneratorElementDataOne).generate(eq(dataOne), any());
+      doReturn(List.of(answerOne)).when(xmlGeneratorCustomMapper).generate(eq(dataOne), any());
 
       final var response = xmlGeneratorValue.generate(certificate);
 
