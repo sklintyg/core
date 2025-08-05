@@ -81,7 +81,7 @@ public class ActionEvaluationFactory {
                         .toList()
                 )
                 .responsibleIssuer(new ResponsibleIssuer(user.getResponsibleHospName()))
-                .srs(new SrsActive(user.getSrsActive()))
+                .srsActive(new SrsActive(user.getSrsActive()))
                 .build()
         )
         .subUnit(

@@ -7,6 +7,8 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.DAN
 
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.domain.user.model.SrsActive;
+import se.inera.intyg.certificateservice.domain.user.model.User;
 
 class ActionRuleSrsTest {
 
@@ -28,6 +30,21 @@ class ActionRuleSrsTest {
     actionRuleSrs = new ActionRuleSrs();
     final var actionEvaluation = ActionEvaluation.builder()
         .user(DAN_DENTIST)
+        .build();
+
+    final var result = actionRuleSrs.evaluate(Optional.empty(), Optional.of(actionEvaluation));
+    assertFalse(result);
+  }
+
+  @Test
+  void shallReturnFalseIfSrsActiveIsSetToNullForUser() {
+    actionRuleSrs = new ActionRuleSrs();
+    final var actionEvaluation = ActionEvaluation.builder()
+        .user(
+            User.builder()
+                .srsActive(new SrsActive(null))
+                .build()
+        )
         .build();
 
     final var result = actionRuleSrs.evaluate(Optional.empty(), Optional.of(actionEvaluation));

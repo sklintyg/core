@@ -107,7 +107,7 @@ public class TestDataUser {
         .role(ANNA_SJUKSKOTERSKA_ROLE)
         .accessScope(AccessScope.WITHIN_CARE_UNIT)
         .healthCareProfessionalLicence(ANNA_SJUKSKOTERSKA_HEALTH_CARE_PROFESSIONAL_LICENCES)
-        .srs(ANNA_SJUKSKOTERSKA_SRS_ACTIVE);
+        .srsActive(ANNA_SJUKSKOTERSKA_SRS_ACTIVE);
   }
 
   public static UserBuilder ajlaDoctorBuilder() {
@@ -128,7 +128,7 @@ public class TestDataUser {
         .role(AJLA_DOCTOR_ROLE)
         .accessScope(AJLA_DOCTOR_ACCESS_SCOPE)
         .healthCareProfessionalLicence(AJLA_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES)
-        .srs(AJLA_DOCTOR_SRS_ACTIVE);
+        .srsActive(AJLA_DOCTOR_SRS_ACTIVE);
   }
 
   public static UserBuilder alfDoktorBuilder() {
@@ -148,7 +148,7 @@ public class TestDataUser {
         .specialities(ALF_DOKTOR_SPECIALITIES)
         .role(ALF_DOKTOR_ROLE)
         .healthCareProfessionalLicence(ALF_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES)
-        .srs(ALF_DOKTOR_SRS_ACTIVE);
+        .srsActive(ALF_DOKTOR_SRS_ACTIVE);
   }
 
   public static UserBuilder alvaVardadministratorBuilder() {
@@ -169,7 +169,7 @@ public class TestDataUser {
         .role(ALVA_VARDADMINISTRATOR_ROLE)
         .accessScope(AccessScope.WITHIN_CARE_UNIT)
         .healthCareProfessionalLicence(Collections.emptyList())
-        .srs(ALVA_VARDADMINISTRATOR_SRS_ACTIVE);
+        .srsActive(ALVA_VARDADMINISTRATOR_SRS_ACTIVE);
   }
 
   public static UserBuilder bertilBarnmorskaBuilder() {
@@ -190,7 +190,7 @@ public class TestDataUser {
         .role(BERTIL_BARNMORSKA_ROLE)
         .accessScope(AccessScope.WITHIN_CARE_UNIT)
         .healthCareProfessionalLicence(BERTIL_BARNMORSKA_HEALTH_CARE_PROFESSIONAL_LICENCES)
-        .srs(BERTIL_BARNMORSKA_SRS_ACTIVE);
+        .srsActive(BERTIL_BARNMORSKA_SRS_ACTIVE);
   }
 
   public static UserBuilder danDentistBuilder() {
@@ -211,6 +211,6 @@ public class TestDataUser {
         .role(DAN_DENTIST_ROLE)
         .accessScope(AccessScope.WITHIN_CARE_UNIT)
         .healthCareProfessionalLicence(DAN_DENTIST_HEALTH_CARE_PROFESSIONAL_LICENCES)
-        .srs(DAN_DENTIST_SRS_ACTIVE);
+        .srsActive(DAN_DENTIST_SRS_ACTIVE);
   }
 }

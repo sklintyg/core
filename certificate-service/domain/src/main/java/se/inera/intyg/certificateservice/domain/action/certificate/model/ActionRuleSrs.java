@@ -8,7 +8,7 @@ public class ActionRuleSrs implements ActionRule {
   @Override
   public boolean evaluate(Optional<Certificate> certificate,
       Optional<ActionEvaluation> actionEvaluation) {
-    return actionEvaluation.filter(value -> value.user().srs().value())
+    return actionEvaluation.filter(value -> value.user().srsActive().value())
         .isPresent();
   }
 }
