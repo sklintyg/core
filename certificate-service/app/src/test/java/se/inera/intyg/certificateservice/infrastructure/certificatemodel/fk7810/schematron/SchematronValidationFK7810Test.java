@@ -69,7 +69,8 @@ class SchematronValidationFK7810Test {
               new XmlGeneratorDiagnosisList(),
               new XmlGeneratorDateRange(),
               new XmlGeneratorMedicalInvestigationList()
-          )
+          ),
+          Collections.emptyList()
       ),
       new XmlValidationService(
           new SchematronValidator(),

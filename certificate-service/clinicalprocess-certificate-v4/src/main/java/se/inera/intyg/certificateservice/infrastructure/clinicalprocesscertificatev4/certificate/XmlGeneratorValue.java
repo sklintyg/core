@@ -8,6 +8,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.CustomMapperId;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
@@ -20,11 +21,15 @@ import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 @Component
 public class XmlGeneratorValue {
 
-  private final Map<Class<? extends ElementValue>, XmlGeneratorElementData> converters;
+  private final Map<Class<? extends ElementValue>, XmlGenerator> xmlGeneratorElementDataMap;
+  private final Map<CustomMapperId, XmlGenerator> xmlGeneratorCustomMap;
 
-  public XmlGeneratorValue(List<XmlGeneratorElementData> converters) {
-    this.converters = converters.stream()
-        .collect(Collectors.toMap(XmlGeneratorElementData::supports, Function.identity()));
+  public XmlGeneratorValue(List<XmlGeneratorElementValue> xmlGeneratorElementValueMap,
+      List<XmlGeneratorCustomMapper> xmlGeneratorCustomMappers) {
+    this.xmlGeneratorElementDataMap = xmlGeneratorElementValueMap.stream()
+        .collect(Collectors.toMap(XmlGeneratorElementValue::supports, Function.identity()));
+    this.xmlGeneratorCustomMap = xmlGeneratorCustomMappers.stream()
+        .collect(Collectors.toMap(XmlGeneratorCustomMapper::id, Function.identity()));
   }
 
   public List<Svar> generate(Certificate certificate) {
@@ -61,13 +66,13 @@ public class XmlGeneratorValue {
         .filter(data -> certificateModel.elementSpecification(data.id()).includeInXml())
         .sorted((o1, o2) -> certificateModel.compare(o1.id(), o2.id()))
         .map(data -> {
-              final var valueMapper = certificateModel.elementSpecification(data.id())
+              final var customMapperId = certificateModel.elementSpecification(data.id())
                   .getMapping()
-                  .flatMap(ElementMapping::elementValueMapper);
+                  .flatMap(ElementMapping::customMapperId);
 
-              final var converter = valueMapper
-                  .map(converters::get)
-                  .orElseGet(() -> converters.get(data.value().getClass()));
+              final var converter = customMapperId
+                  .map(xmlGeneratorCustomMap::get)
+                  .orElseGet(() -> xmlGeneratorElementDataMap.get(data.value().getClass()));
 
               if (converter == null) {
                 throw new IllegalStateException(

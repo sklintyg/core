@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -35,7 +36,8 @@ class SchematronValidationFK7210Test {
   private SchematronValidator schematronValidator;
   private final XmlGeneratorCertificateV4 generator = new XmlGeneratorCertificateV4(
       new XmlGeneratorValue(
-          List.of(new XmlGeneratorDate(), new XmlGeneratorDateRangeList(), new XmlGeneratorText())
+          List.of(new XmlGeneratorDate(), new XmlGeneratorDateRangeList(), new XmlGeneratorText()),
+          Collections.emptyList()
       ),
       new XmlValidationService(
           new SchematronValidator(),

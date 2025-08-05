@@ -18,7 +18,7 @@ import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 
 @Component
-public class XmlGeneratorCode implements XmlGeneratorElementData {
+public class XmlGeneratorCode implements XmlGeneratorElementValue {
 
   @Override
   public Class<? extends ElementValue> supports() {

@@ -1,13 +1,14 @@
 package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate;
 
+import static se.inera.intyg.certificateservice.domain.certificate.model.CustomMapperId.UNIFIED_DIAGNOSIS_LIST;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.springframework.stereotype.Component;
+import se.inera.intyg.certificateservice.domain.certificate.model.CustomMapperId;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
-import se.inera.intyg.certificateservice.domain.certificate.model.UnifiedDiagnosisList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.CVType;
@@ -16,11 +17,11 @@ import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 
 @Component
-public class XmlGeneratorUnifiedDiagnosisList implements XmlGeneratorElementData {
+public class XmlGeneratorUnifiedDiagnosisList implements XmlGeneratorCustomMapper {
 
   @Override
-  public Class<? extends ElementValue> supports() {
-    return UnifiedDiagnosisList.class;
+  public CustomMapperId id() {
+    return UNIFIED_DIAGNOSIS_LIST;
   }
 
   public List<Svar> generate(ElementData data, ElementSpecification specification) {

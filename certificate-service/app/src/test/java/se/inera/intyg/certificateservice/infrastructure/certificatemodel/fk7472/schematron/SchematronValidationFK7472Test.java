@@ -38,7 +38,8 @@ class SchematronValidationFK7472Test {
   private SchematronValidator schematronValidator;
   private final XmlGeneratorCertificateV4 generator = new XmlGeneratorCertificateV4(
       new XmlGeneratorValue(
-          List.of(new XmlGeneratorDate(), new XmlGeneratorDateRangeList(), new XmlGeneratorText())
+          List.of(new XmlGeneratorDate(), new XmlGeneratorDateRangeList(), new XmlGeneratorText()),
+          Collections.emptyList()
       ),
       new XmlValidationService(
           new SchematronValidator(),
@@ -386,4 +387,3 @@ class SchematronValidationFK7472Test {
     }
   }
 }
-

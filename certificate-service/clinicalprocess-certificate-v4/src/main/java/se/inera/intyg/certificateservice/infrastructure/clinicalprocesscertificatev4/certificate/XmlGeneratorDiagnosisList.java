@@ -15,7 +15,7 @@ import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 
 @Component
-public class XmlGeneratorDiagnosisList implements XmlGeneratorElementData {
+public class XmlGeneratorDiagnosisList implements XmlGeneratorElementValue {
 
   @Override
   public Class<? extends ElementValue> supports() {
@@ -52,7 +52,7 @@ public class XmlGeneratorDiagnosisList implements XmlGeneratorElementData {
 
               final var subAnswerDiagnosisCode = new Delsvar();
               subAnswerDiagnosisCode.setId(getIdCode(data));
-              
+
               final var cvType = new CVType();
               cvType.setCode(diagnosis.code());
               cvType.setDisplayName(diagnosis.description());

@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.domain.certificate.model.CustomMapperId.UNIFIED_DIAGNOSIS_LIST;
 
 import jakarta.xml.bind.JAXBElement;
 import java.util.Collections;
@@ -15,7 +16,6 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
-import se.inera.intyg.certificateservice.domain.certificate.model.UnifiedDiagnosisList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDiagnosisTerminology;
@@ -45,8 +45,8 @@ class XmlGeneratorUnifiedDiagnosisListTest {
   }
 
   @Test
-  void shallSupportUnifiedDiagnosisList() {
-    assertEquals(UnifiedDiagnosisList.class, xmlGenerator.supports());
+  void shallReturnIdUnifiedDiagnosisList() {
+    assertEquals(UNIFIED_DIAGNOSIS_LIST, xmlGenerator.id());
   }
 
   @Nested
