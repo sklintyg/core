@@ -178,7 +178,8 @@ class CertificateModelFactoryFK7804Test {
     @ParameterizedTest
     @ValueSource(strings = {
         "KAT_1", "KAT_2", "KAT_3", "KAT_4", "KAT_5", "KAT_6", "KAT_7", "KAT_8", "KAT_9", "KAT_10",
-        "KAT_11", "KAT_12", "UNIT_CONTACT_INFORMATION", "1", "1.3", "28", "29", "19", "32", "37"
+        "KAT_11", "KAT_12", "UNIT_CONTACT_INFORMATION", "1", "1.3", "28", "29", "19", "32", "37",
+        "33.2"
     })
     void shallIncludeCategories(String id) {
       final var elementId = new ElementId(id);
