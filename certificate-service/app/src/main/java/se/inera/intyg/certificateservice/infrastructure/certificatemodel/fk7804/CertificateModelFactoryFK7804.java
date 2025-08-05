@@ -14,6 +14,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.CategorySmittbararpenning.categorySmittbararpenning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.CategorySysselsattning.categorySysselsattning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionAnnanGrundForMedicinsktUnderlag.questionAnnanGrundForMedicinsktUnderlag;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionAtgarderSomKanFramjaAtergang.questionAtgarderSomKanFramjaAtergang;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionGrundForMedicinsktUnderlag.questionGrundForMedicinsktUnderlag;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionOvrigt.questionOvrigt;
 
@@ -154,7 +155,9 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
             categoryMedicinskBehandling(),
             categoryBedomning(),
             categoryPrognos(),
-            categoryAtgarderSomKanFramjaAttergang(),
+            categoryAtgarderSomKanFramjaAttergang(
+                questionAtgarderSomKanFramjaAtergang()
+            ),
             categoryOvrigt(
                 questionOvrigt()
             ),
