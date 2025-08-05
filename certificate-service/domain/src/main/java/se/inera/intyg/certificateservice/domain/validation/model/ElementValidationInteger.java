@@ -37,7 +37,7 @@ public class ElementValidationInteger implements ElementValidation {
       );
     }
 
-    if (value.value() != null && ElementValidator.isIntegerWithinLimit(value.value(), min, max)) {
+    if (value.value() != null && !ElementValidator.isIntegerWithinLimit(value.value(), min, max)) {
       return List.of(
           errorMessage(data, value.integerId(), categoryId,
               ErrorMessageFactory.integerInterval(min, max)

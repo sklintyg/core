@@ -15,6 +15,18 @@ public class ElementValidator {
   }
 
   public static boolean isIntegerWithinLimit(Integer value, Integer min, Integer max) {
+    if (min == null && max == null) {
+      return true;
+    }
+
+    if (min == null) {
+      return value != null && value <= max;
+    }
+
+    if (max == null) {
+      return value != null && value >= min;
+    }
+
     return value != null && value >= min && value <= max;
   }
 
