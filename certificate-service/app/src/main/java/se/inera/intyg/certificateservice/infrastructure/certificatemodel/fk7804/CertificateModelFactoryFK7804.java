@@ -3,7 +3,6 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.elements.ElementUnitContactInformation.issuingUnitContactInfo;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,17 +13,12 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
-import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
-import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.model.Subject;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateRecipientFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.FK7810CertificateActionSpecification;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.FK7810CertificateSummaryProvider;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.FK7810MessageActionSpecification;
 
 @Component
 @RequiredArgsConstructor
@@ -95,7 +89,7 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
   private static final String PREAMBLE_TEXT =
       "";
 
-  public static final CertificateModelId FK7804_V1_0 = CertificateModelId.builder()
+  public static final CertificateModelId FK7804_V2_0 = CertificateModelId.builder()
       .type(new CertificateType(FK_7804))
       .version(new CertificateVersion(VERSION))
       .build();
@@ -103,7 +97,7 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
   @Override
   public CertificateModel create() {
     return CertificateModel.builder()
-        .id(FK7804_V1_0)
+        .id(FK7804_V2_0)
         .type(
             new Code(
                 "LISJP",
@@ -116,16 +110,6 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
         .detailedDescription(DETAILED_DESCRIPTION.replaceAll("\\R", ""))
         .activeFrom(activeFrom)
         .availableForCitizen(true)
-        .summaryProvider(new FK7810CertificateSummaryProvider())
-        .texts(
-            List.of(
-                CertificateText.builder()
-                    .text(PREAMBLE_TEXT)
-                    .type(CertificateTextType.PREAMBLE_TEXT)
-                    .links(Collections.emptyList())
-                    .build()
-            )
-        )
         .recipient(CertificateRecipientFactory.fkassa(fkLogicalAddress))
         .messageTypes(List.of(
             CertificateMessageType.builder()
@@ -141,8 +125,8 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
                 .subject(new Subject(MessageType.OTHER.displayName()))
                 .build()
         ))
-        .certificateActionSpecifications(FK7810CertificateActionSpecification.create())
-        .messageActionSpecifications(FK7810MessageActionSpecification.create())
+        .certificateActionSpecifications(FK7804CertificateActionSpecification.create())
+        .messageActionSpecifications(FK7804MessageActionSpecification.create())
         .elementSpecifications(List.of(
             issuingUnitContactInfo()
         ))
