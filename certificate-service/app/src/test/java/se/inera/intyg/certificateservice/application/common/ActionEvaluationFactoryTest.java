@@ -831,5 +831,19 @@ class ActionEvaluationFactoryTest {
       assertEquals(AJLA_DOCTOR_RESPONSIBLE_ISSUER,
           actionEvaluation.user().responsibleIssuer());
     }
+
+    @Test
+    void shallIncludeSrs() {
+      final var actionEvaluation = actionEvaluationFactory.create(
+          ATHENA_REACT_ANDERSSON_DTO,
+          AJLA_DOCTOR_DTO,
+          ALFA_ALLERGIMOTTAGNINGEN_DTO,
+          ALFA_MEDICINCENTRUM_DTO,
+          ALFA_REGIONEN_DTO
+      );
+
+      assertEquals(AJLA_DOCTOR_RESPONSIBLE_ISSUER,
+          actionEvaluation.user().responsibleIssuer());
+    }
   }
 }

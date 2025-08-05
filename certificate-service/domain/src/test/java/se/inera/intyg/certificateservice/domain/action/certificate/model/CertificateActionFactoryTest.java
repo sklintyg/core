@@ -449,4 +449,28 @@ class CertificateActionFactoryTest {
     assert certificateAction != null;
     assertEquals(CertificateActionFMB.class, certificateAction.getClass());
   }
+
+  @Test
+  void shallReturnCertificateActionSrsDraftFromListIfExistInSpecification() {
+    final var certificateActionSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.SRS_DRAFT)
+        .build();
+
+    final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
+
+    assert certificateAction != null;
+    assertEquals(CertificateActionSrsDraft.class, certificateAction.getClass());
+  }
+
+  @Test
+  void shallReturnCertificateActionSrsSignedFromListIfExistInSpecification() {
+    final var certificateActionSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.SRS_SIGNED)
+        .build();
+
+    final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
+
+    assert certificateAction != null;
+    assertEquals(CertificateActionSrsSigned.class, certificateAction.getClass());
+  }
 }

@@ -30,6 +30,7 @@ import se.inera.intyg.certificateservice.domain.unit.model.UnitContactInfo;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitName;
 import se.inera.intyg.certificateservice.domain.unit.model.WorkplaceCode;
 import se.inera.intyg.certificateservice.domain.user.model.ResponsibleIssuer;
+import se.inera.intyg.certificateservice.domain.user.model.SrsActive;
 import se.inera.intyg.certificateservice.domain.user.model.User;
 
 @Component
@@ -80,6 +81,7 @@ public class ActionEvaluationFactory {
                         .toList()
                 )
                 .responsibleIssuer(new ResponsibleIssuer(user.getResponsibleHospName()))
+                .srs(new SrsActive(user.getSrsActive()))
                 .build()
         )
         .subUnit(

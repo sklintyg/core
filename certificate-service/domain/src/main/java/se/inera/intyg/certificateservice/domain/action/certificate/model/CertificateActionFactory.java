@@ -573,6 +573,24 @@ public class CertificateActionFactory {
               )
           )
           .build();
+      case SRS_DRAFT -> CertificateActionSrsDraft.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleSrs(),
+                  new ActionRuleStatus(List.of(Status.DRAFT))
+              )
+          )
+          .build();
+      case SRS_SIGNED -> CertificateActionSrsSigned.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleSrs(),
+                  new ActionRuleStatus(List.of(Status.SIGNED))
+              )
+          )
+          .build();
     };
   }
 }

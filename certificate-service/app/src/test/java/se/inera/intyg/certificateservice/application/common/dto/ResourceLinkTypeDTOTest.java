@@ -185,118 +185,130 @@ class ResourceLinkTypeDTOTest {
     }
 
     @Test
-    void shallReturnCertificateActionTypeSendAfterSign() {
+    void shallReturnResourceLinkTypeDTOSendAfterSign() {
       assertEquals(ResourceLinkTypeDTO.SEND_AFTER_SIGN_CERTIFICATE,
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.SEND_AFTER_SIGN));
     }
 
     @Test
-    void shallReturnCertificateActionTypeSendAfterComplement() {
+    void shallReturnResourceLinkTypeDTOSendAfterComplement() {
       assertEquals(ResourceLinkTypeDTO.SEND_AFTER_SIGN_CERTIFICATE,
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.SEND_AFTER_COMPLEMENT));
     }
 
     @Test
-    void shallReturnCertificateActionTypeCannotComplementCertificate() {
+    void shallReturnResourceLinkTypeDTOCannotComplementCertificate() {
       assertEquals(ResourceLinkTypeDTO.CANNOT_COMPLEMENT_CERTIFICATE_ONLY_MESSAGE,
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.CANNOT_COMPLEMENT));
     }
 
     @Test
-    void shallReturnCertificateActionTypeForwardQuestion() {
+    void shallReturnResourceLinkTypeDTOForwardQuestion() {
       assertEquals(ResourceLinkTypeDTO.FORWARD_QUESTION,
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.FORWARD_MESSAGE));
     }
 
     @Test
-    void shallReturnCertificateActionTypeHandleQuestion() {
+    void shallReturnResourceLinkTypeDTOHandleQuestion() {
       assertEquals(ResourceLinkTypeDTO.HANDLE_QUESTION,
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.HANDLE_COMPLEMENT));
     }
 
     @Test
-    void shallReturnCertificateActionTypeComplement() {
+    void shallReturnResourceLinkTypeDTOComplement() {
       assertEquals(ResourceLinkTypeDTO.COMPLEMENT_CERTIFICATE,
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.COMPLEMENT));
     }
 
     @Test
-    void shallReturnCertificateActionTypeCreateQuestions() {
+    void shallReturnResourceLinkTypeDTOCreateQuestions() {
       assertEquals(ResourceLinkTypeDTO.CREATE_QUESTIONS,
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.CREATE_MESSAGE));
     }
 
     @Test
-    void shallReturnCertificateActionTypeAnswerQuestions() {
+    void shallReturnResourceLinkTypeDTOAnswerQuestions() {
       assertEquals(ResourceLinkTypeDTO.ANSWER_QUESTION,
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.ANSWER_MESSAGE));
     }
 
     @Test
-    void shallThrowIfCertificateActionTypeSaveMessage() {
+    void shallThrowIfResourceLinkTypeDTOSaveMessage() {
       assertThrows(IllegalArgumentException.class, () ->
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.SAVE_MESSAGE));
     }
 
     @Test
-    void shallThrowIfCertificateActionTypeDeleteMessage() {
+    void shallThrowIfResourceLinkTypeDTODeleteMessage() {
       assertThrows(IllegalArgumentException.class, () ->
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.DELETE_MESSAGE));
     }
 
     @Test
-    void shallThrowIfCertificateActionTypeSendMessage() {
+    void shallThrowIfResourceLinkTypeDTOSendMessage() {
       assertThrows(IllegalArgumentException.class, () ->
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.SEND_MESSAGE));
     }
 
     @Test
-    void shallThrowIfCertificateActionTypeAccessForRoles() {
+    void shallThrowIfResourceLinkTypeDTOAccessForRoles() {
       assertThrows(IllegalArgumentException.class, () ->
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.LIST_CERTIFICATE_TYPE));
     }
 
     @Test
-    void shallThrowIfCertificateActionTypeSaveAnswer() {
+    void shallThrowIfResourceLinkTypeDTOSaveAnswer() {
       assertThrows(IllegalArgumentException.class, () ->
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.SAVE_ANSWER));
     }
 
     @Test
-    void shallThrowIfCertificateActionTypeDeleteAnswer() {
+    void shallThrowIfResourceLinkTypeDTODeleteAnswer() {
       assertThrows(IllegalArgumentException.class, () ->
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.DELETE_ANSWER));
     }
 
     @Test
-    void shallThrowIfCertificateActionTypeSendAnswer() {
+    void shallThrowIfResourceLinkTypeDTOSendAnswer() {
       assertThrows(IllegalArgumentException.class, () ->
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.SEND_ANSWER));
     }
 
     @Test
-    void shallReturnCertificateActionTypeForwardCertificate() {
+    void shallReturnResourceLinkTypeDTOForwardCertificate() {
       assertEquals(ResourceLinkTypeDTO.FORWARD_CERTIFICATE,
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.FORWARD_CERTIFICATE));
     }
 
     @Test
-    void shallReturnCertificateActionTypeReadyForSign() {
+    void shallReturnResourceLinkTypeDTOReadyForSign() {
       assertEquals(ResourceLinkTypeDTO.READY_FOR_SIGN,
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.READY_FOR_SIGN));
     }
 
     @Test
-    void shallReturnCertificateActionTypeForwardCertificateFromList() {
+    void shallReturnResourceLinkTypeDTOForwardCertificateFromList() {
       assertEquals(ResourceLinkTypeDTO.FORWARD_CERTIFICATE_FROM_LIST,
           ResourceLinkTypeDTO.toResourceLinkType(
               CertificateActionType.FORWARD_CERTIFICATE_FROM_LIST));
     }
 
     @Test
-    void shallReturnCertificateActionTypeFMB() {
+    void shallReturnResourceLinkTypeDTOFMB() {
       assertEquals(ResourceLinkTypeDTO.FMB,
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.FMB));
+    }
+
+    @Test
+    void shallReturnResourceLinkTypeDTOSrsFullView() {
+      assertEquals(ResourceLinkTypeDTO.SRS_FULL_VIEW,
+          ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.SRS_DRAFT));
+    }
+
+    @Test
+    void shallReturnResourceLinkTypeDTOSrsMinimizedView() {
+      assertEquals(ResourceLinkTypeDTO.SRS_MINIMIZED_VIEW,
+          ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.SRS_SIGNED));
     }
   }
 }

@@ -11,6 +11,7 @@ import se.inera.intyg.certificateservice.domain.common.model.PaTitle;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.common.model.Speciality;
 import se.inera.intyg.certificateservice.domain.user.model.ResponsibleIssuer;
+import se.inera.intyg.certificateservice.domain.user.model.SrsActive;
 
 public class TestDataUserConstants {
 
@@ -42,8 +43,9 @@ public class TestDataUserConstants {
       new HealthCareProfessionalLicence("Läkare"));
   public static final List<HealthCareProfessionalLicence> ALF_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES = List.of(
       new HealthCareProfessionalLicence("Läkare"));
-  public static ResponsibleIssuer AJLA_DOCTOR_RESPONSIBLE_ISSUER = new ResponsibleIssuer(
+  public static final ResponsibleIssuer AJLA_DOCTOR_RESPONSIBLE_ISSUER = new ResponsibleIssuer(
       "Ajla Doktor");
+  public static final SrsActive AJLA_DOCTOR_SRS_ACTIVE = new SrsActive(true);
 
   public static final String ALF_DOKTOR_HSA_ID = "TSTNMT2321000156-DRAF";
   public static final String ALF_DOKTOR_FIRST_NAME = "Alf";
@@ -60,6 +62,8 @@ public class TestDataUserConstants {
   public static final Blocked ALF_DOKTOR_BLOCKED = BLOCKED_FALSE;
   public static final Agreement ALF_DOKTOR_AGREEMENT = AGREEMENT_TRUE;
   public static final AllowCopy ALF_DOKTOR_ALLOW_COPY = ALLOW_COPY_TRUE;
+  public static final SrsActive ALF_DOKTOR_SRS_ACTIVE = new SrsActive(false);
+
 
   public static final String ALVA_VARDADMINISTRATOR_HSA_ID = "TSTNMT2321000156-VAAA";
   public static final String ALVA_VARDADMINISTRATOR_FIRST_NAME = "Alva";
@@ -72,6 +76,7 @@ public class TestDataUserConstants {
   public static final Blocked ALVA_VARDADMINISTRATOR_BLOCKED = BLOCKED_FALSE;
   public static final Agreement ALVA_VARDADMINISTRATOR_AGREEMENT = AGREEMENT_TRUE;
   public static final AllowCopy ALVA_VARDADMINISTRATOR_ALLOW_COPY = ALLOW_COPY_TRUE;
+  public static final SrsActive ALVA_VARDADMINISTRATOR_SRS_ACTIVE = new SrsActive(false);
 
   public static final String ANNA_SJUKSKOTERSKA_HSA_ID = "TSTNMT2321000156-SKAA";
   public static final String ANNA_SJUKSKOTERSKA_FIRST_NAME = "Anna";
@@ -87,6 +92,8 @@ public class TestDataUserConstants {
   public static final Blocked ANNA_SJUKSKOTERSKA_BLOCKED = BLOCKED_FALSE;
   public static final Agreement ANNA_SJUKSKOTERSKA_AGREEMENT = AGREEMENT_TRUE;
   public static final AllowCopy ANNA_SJUKSKOTERSKA_ALLOW_COPY = ALLOW_COPY_TRUE;
+  public static final SrsActive ANNA_SJUKSKOTERSKA_SRS_ACTIVE = new SrsActive(false);
+
 
   public static final String BERTIL_BARNMORSKA_HSA_ID = "TSTNMT2321000156-BMBL";
   public static final String BERTIL_BARNMORSKA_FIRST_NAME = "Bertil";
@@ -103,6 +110,8 @@ public class TestDataUserConstants {
       new HealthCareProfessionalLicence("Sjuksköterska"),
       new HealthCareProfessionalLicence("Barnmorska")
   );
+  public static final SrsActive BERTIL_BARNMORSKA_SRS_ACTIVE = new SrsActive(false);
+
 
   public static final String DAN_DENTIST_HSA_ID = "TSTNMT2321000156-BMBL";
   public static final String DAN_DENTIST_FIRST_NAME = "Dan";
@@ -118,4 +127,6 @@ public class TestDataUserConstants {
   public static final List<HealthCareProfessionalLicence> DAN_DENTIST_HEALTH_CARE_PROFESSIONAL_LICENCES = List.of(
       new HealthCareProfessionalLicence("Tandläkare")
   );
+  public static final SrsActive DAN_DENTIST_SRS_ACTIVE = new SrsActive(false);
+
 }

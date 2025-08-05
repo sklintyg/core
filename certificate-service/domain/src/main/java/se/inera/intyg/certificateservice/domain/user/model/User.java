@@ -18,15 +18,16 @@ import se.inera.intyg.certificateservice.domain.patient.model.Name;
 @Builder
 public class User {
 
-  HsaId hsaId;
-  Name name;
-  Role role;
-  List<PaTitle> paTitles;
-  List<Speciality> specialities;
-  Blocked blocked;
-  Agreement agreement;
-  AllowCopy allowCopy;
-  AccessScope accessScope;
-  List<HealthCareProfessionalLicence> healthCareProfessionalLicence;
-  ResponsibleIssuer responsibleIssuer;
+    HsaId hsaId;
+    Name name;
+    Role role;
+    List<PaTitle> paTitles;
+    List<Speciality> specialities;
+    Blocked blocked;
+    Agreement agreement;
+    AllowCopy allowCopy;
+    AccessScope accessScope;
+    List<HealthCareProfessionalLicence> healthCareProfessionalLicence;
+    ResponsibleIssuer responsibleIssuer;
+    SrsActive srs;
 }
