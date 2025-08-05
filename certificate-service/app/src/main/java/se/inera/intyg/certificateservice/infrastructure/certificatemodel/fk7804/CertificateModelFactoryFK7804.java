@@ -13,6 +13,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.CategoryPrognos.categoryPrognos;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.CategorySmittbararpenning.categorySmittbararpenning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.CategorySysselsattning.categorySysselsattning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionGrundForMedicinsktUnderlag.questionGrundForMedicinsktUnderlag;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -140,8 +141,11 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
         .certificateActionSpecifications(FK7804CertificateActionSpecification.create())
         .messageActionSpecifications(FK7804MessageActionSpecification.create())
         .elementSpecifications(List.of(
-            categorySmittbararpenning(),
-            categoryGrundForMedicinsktUnderlag(),
+            categorySmittbararpenning(
+            ),
+            categoryGrundForMedicinsktUnderlag(
+                questionGrundForMedicinsktUnderlag()
+            ),
             categorySysselsattning(),
             categoryDiagnos(),
             categoryFunktionsnedsattning(),
