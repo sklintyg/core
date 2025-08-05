@@ -7,7 +7,7 @@ import lombok.Value;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueInteger;
 
 @Value
 @Builder
@@ -32,14 +32,14 @@ public class ElementConfigurationInteger implements ElementConfiguration {
 
   @Override
   public ElementValue emptyValue() {
-    return ElementValueText.builder()
-        .textId(id)
+    return ElementValueInteger.builder()
+        .integerId(id)
         .build();
   }
 
   @Override
   public Optional<ElementSimplifiedValue> simplified(ElementValue value) {
-    if (!(value instanceof ElementValueText elementValue)) {
+    if (!(value instanceof ElementValueInteger elementValue)) {
       throw new IllegalStateException("Wrong value type");
     }
 
@@ -48,7 +48,7 @@ public class ElementConfigurationInteger implements ElementConfiguration {
     }
 
     return Optional.of(ElementSimplifiedValueText.builder()
-        .text(elementValue.text())
+        .text(elementValue.value().toString())
         .build());
   }
 }

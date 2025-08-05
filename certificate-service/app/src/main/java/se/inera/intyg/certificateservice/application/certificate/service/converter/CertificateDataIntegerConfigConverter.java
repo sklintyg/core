@@ -14,7 +14,7 @@ public class CertificateDataIntegerConfigConverter implements
 
   @Override
   public ElementType getType() {
-    return ElementType.CHECKBOX_BOOLEAN;
+    return ElementType.INTEGER;
   }
 
   public CertificateDataConfig convert(ElementSpecification elementSpecification,
