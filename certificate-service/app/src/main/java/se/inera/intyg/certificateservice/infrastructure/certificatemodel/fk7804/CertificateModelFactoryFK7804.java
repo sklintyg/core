@@ -15,6 +15,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.CategorySysselsattning.categorySysselsattning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionAnnanGrundForMedicinsktUnderlag.questionAnnanGrundForMedicinsktUnderlag;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionGrundForMedicinsktUnderlag.questionGrundForMedicinsktUnderlag;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionOvrigt.questionOvrigt;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -154,7 +155,9 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
             categoryBedomning(),
             categoryPrognos(),
             categoryAtgarderSomKanFramjaAttergang(),
-            categoryOvrigt(),
+            categoryOvrigt(
+                questionOvrigt()
+            ),
             categoryKontakt(),
             issuingUnitContactInfo()
         ))

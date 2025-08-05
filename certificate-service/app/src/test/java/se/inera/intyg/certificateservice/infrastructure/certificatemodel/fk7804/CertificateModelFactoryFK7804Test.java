@@ -187,5 +187,16 @@ class CertificateModelFactoryFK7804Test {
       assertTrue(certificateModel.elementSpecificationExists(elementId),
           "Expected elementId: '%s' to exist in elementSpecifications".formatted(elementId));
     }
+
+    @Test
+    void shallIncludeQuestionOvrigt() {
+      final var certificateModel = certificateModelFactoryFK7804.create();
+
+      assertTrue(certificateModel.elementSpecificationExists(new ElementId("25")),
+          "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
+              new ElementId("25"),
+              certificateModel.elementSpecifications())
+      );
+    }
   }
 }
