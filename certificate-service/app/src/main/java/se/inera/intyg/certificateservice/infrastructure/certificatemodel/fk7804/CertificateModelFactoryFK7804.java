@@ -13,14 +13,19 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.CategoryPrognos.categoryPrognos;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.CategorySmittbararpenning.categorySmittbararpenning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.CategorySysselsattning.categorySysselsattning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionAngeVarforDuVillHaKontakt.questionAngeVarforDuVillHaKontakt;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionAnnanGrundForMedicinsktUnderlag.questionAnnanGrundForMedicinsktUnderlag;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionAntalManader.questionAntalManader;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionArbetsformagaLangreAnBeslutsstod.questionArbetsformagaLangreAnBeslutsstod;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionAtgarderSomKanFramjaAtergang.questionAtgarderSomKanFramjaAtergang;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionGrundForBedomning.questionGrundForBedomning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionGrundForMedicinsktUnderlag.questionGrundForMedicinsktUnderlag;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionKontakt.questionKontakt;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionMedicinskBehandling.questionMedicinskBehandling;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionMedicinskaSkalForSvarareAtergang.questionMedicinskaSkalForSvarareAtergang;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionNedsattningArbetsformaga.questionNedsattningArbetsformaga;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionOvrigt.questionOvrigt;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionPrognos.questionPrognos;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSmittbararpenning.questionSmittbararpenning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSvarareAtergangVidOjamnArbetstid.questionSvarareAtergangVidOjamnArbetstid;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSysselsattning.questionSysselsattning;
@@ -179,14 +184,23 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
                     questionMedicinskaSkalForSvarareAtergang()
                 )
             ),
-            categoryPrognos(),
+            categoryPrognos(
+                questionPrognos(
+                    questionAntalManader(),
+                    questionGrundForBedomning()
+                )
+            ),
             categoryAtgarderSomKanFramjaAttergang(
                 questionAtgarderSomKanFramjaAtergang()
             ),
             categoryOvrigt(
                 questionOvrigt()
             ),
-            categoryKontakt(),
+            categoryKontakt(
+                questionKontakt(
+                    questionAngeVarforDuVillHaKontakt()
+                )
+            ),
             issuingUnitContactInfo()
         ))
         .certificateActionFactory(certificateActionFactory)
