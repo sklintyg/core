@@ -28,3 +28,4 @@ class CategorySmittbararpenningTest {
     assertEquals(expectedConfiguration, element.elementSpecification(ELEMENT_ID).configuration());
   }
 }
+
