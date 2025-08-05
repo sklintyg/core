@@ -21,7 +21,10 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionMedicinskaSkalForSvarareAtergang.questionMedicinskaSkalForSvarareAtergang;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionNedsattningArbetsformaga.questionNedsattningArbetsformaga;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionOvrigt.questionOvrigt;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSmittbararpenning.questionSmittbararpenning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSvarareAtergangVidOjamnArbetstid.questionSvarareAtergangVidOjamnArbetstid;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSysselsattning.questionSysselsattning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionTransportstod.questionTransportstod;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionYrkeOchArbetsuppgifter.questionYrkeOchArbetsuppgifter;
 
 import java.time.LocalDateTime;
@@ -148,6 +151,7 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
         .messageActionSpecifications(FK7804MessageActionSpecification.create())
         .elementSpecifications(List.of(
             categorySmittbararpenning(
+                questionSmittbararpenning()
             ),
             categoryGrundForMedicinsktUnderlag(
                 questionGrundForMedicinsktUnderlag(
@@ -163,12 +167,17 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
             categoryFunktionsnedsattning(),
             categoryAktivitetsbegransning(),
             categoryMedicinskBehandling(
-                questionMedicinskBehandling(),
-                questionArbetsformagaLangreAnBeslutsstod(),
-                questionMedicinskaSkalForSvarareAtergang()
+                questionMedicinskBehandling(
+                )
             ),
             categoryBedomning(
-                questionNedsattningArbetsformaga()
+                questionNedsattningArbetsformaga(
+                    questionArbetsformagaLangreAnBeslutsstod()
+                ),
+                questionTransportstod(),
+                questionSvarareAtergangVidOjamnArbetstid(
+                    questionMedicinskaSkalForSvarareAtergang()
+                )
             ),
             categoryPrognos(),
             categoryAtgarderSomKanFramjaAttergang(

@@ -29,6 +29,7 @@ public class CertificateDataRadioMultipleCodeConfigConverter implements
     }
     return CertificateDataConfigRadioMultipleCode.builder()
         .text(configuration.name())
+        .description(configuration.description())
         .layout(Layout.toLayout(configuration.elementLayout()))
         .list(
             configuration.list().stream()

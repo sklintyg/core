@@ -22,7 +22,8 @@ public class QuestionSvarareAtergangVidOjamnArbetstid {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionSvarareAtergangVidOjamnArbetstid() {
+  public static ElementSpecification questionSvarareAtergangVidOjamnArbetstid(
+      ElementSpecification... children) {
     return ElementSpecification.builder()
         .id(QUESTION_SVARARE_ATERGANG_VID_OJAMN_ARBETSTID_ID)
         .configuration(
@@ -30,6 +31,13 @@ public class QuestionSvarareAtergangVidOjamnArbetstid {
                 .id(QUESTION_SVARARE_ATERGANG_VID_OJAMN_ARBETSTID_FIELD_ID)
                 .name(
                     "Kommer möjligheterna till återgång i arbete försämras om arbetstiden förläggs ojämnt vid deltidssjukskrivning?")
+                .description(
+                    """
+                        När du besvarar frågan ska du utgå från de uppgifter som du har om arbetstidens förläggning vid sjukskrivningstillfället, det vill säga den arbetstidsförläggning som du diskuterat med patienten.
+                        
+                        Att förläggningen försämrar patientens möjligheter till återgång i arbete kan exempelvis vara att hälsotillståndet påverkas negativt eller att sjukdomen innebär att en annan förläggning av arbetstiden än jämn minskning varje dag skulle motverka rehabiliteringen.
+                        """
+                )
                 .selectedText("Ja")
                 .unselectedText("Nej")
                 .build()
@@ -58,6 +66,7 @@ public class QuestionSvarareAtergangVidOjamnArbetstid {
                     .build()
             )
         )
+        .children(List.of(children))
         .build();
   }
 }

@@ -40,6 +40,8 @@ public class QuestionSysselsattning {
             ElementConfigurationCheckboxMultipleCode.builder()
                 .id(SYSSELSATTNING_FIELD_ID)
                 .name("I relation till vilken sysselsättning bedömer du arbetsförmågan?")
+                .description(
+                    "Om du kryssar i flera val är det viktigt att du tydliggör under \"Övriga upplysningar\" om sjukskrivningens omfattning eller period skiljer sig åt mellan olika sysselsättningar.")
                 .elementLayout(ElementLayout.ROWS)
                 .list(checkboxes)
                 .build()

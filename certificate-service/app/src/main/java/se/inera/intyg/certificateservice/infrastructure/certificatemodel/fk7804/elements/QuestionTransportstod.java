@@ -26,6 +26,9 @@ public class QuestionTransportstod {
         .configuration(
             ElementConfigurationCheckboxBoolean.builder()
                 .id(QUESTION_TRANSPORTSTOD_FIELD_ID)
+                .name("Transport till och från arbetsplatsen")
+                .description(
+                    "Om patienten kan arbeta men inte kan ta sig till arbetet som vanligt kan Försäkringskassan ersätta kostnader för arbetsresor. Det innebär att patienten i stället för sjukpenning kan få ersättning för de merutgifter som uppstår för resor till och från arbetet.")
                 .label(
                     "Patienten skulle kunna arbeta helt eller delvis vid hjälp med transport till och från arbetsplatsen")
                 .selectedText("Ja")

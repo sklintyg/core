@@ -20,7 +20,7 @@ public class QuestionMedicinskBehandling {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionMedicinskBehandling() {
+  public static ElementSpecification questionMedicinskBehandling(ElementSpecification... children) {
     return ElementSpecification.builder()
         .id(QUESTION_MEDICINSK_BEHANDLING_ID)
         .configuration(
@@ -51,6 +51,7 @@ public class QuestionMedicinskBehandling {
                     .build()
             )
         )
+        .children(List.of(children))
         .build();
   }
 }

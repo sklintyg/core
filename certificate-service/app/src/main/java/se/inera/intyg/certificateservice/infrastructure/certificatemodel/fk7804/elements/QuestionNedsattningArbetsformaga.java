@@ -19,7 +19,8 @@ public class QuestionNedsattningArbetsformaga {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionNedsattningArbetsformaga() {
+  public static ElementSpecification questionNedsattningArbetsformaga(
+      ElementSpecification... children) {
     final var dateRanges = List.of(
         new ElementConfigurationCode(
             new FieldId(CodeSystemKvFkmu0003.EN_FJARDEDEL.code()),
@@ -49,6 +50,8 @@ public class QuestionNedsattningArbetsformaga {
         .configuration(
             ElementConfigurationCheckboxDateRangeList.builder()
                 .name("Min bedömning av patientens nedsättning av arbetsförmågan")
+                .description(
+                    "Utgångspunkten är att patientens arbetsförmåga ska bedömas i förhållande till patientens normala arbetstid.")
                 .id(new FieldId(QUESTION_NEDSATTNING_ARBETSFORMAGA_FIELD_ID))
                 .dateRanges(dateRanges)
                 .hideWorkingHours(true)
@@ -69,6 +72,7 @@ public class QuestionNedsattningArbetsformaga {
                     .build()
             )
         )
+        .children(List.of(children))
         .build();
   }
 }
