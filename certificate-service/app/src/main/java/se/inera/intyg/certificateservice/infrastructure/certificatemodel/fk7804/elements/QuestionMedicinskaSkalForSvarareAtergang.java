@@ -1,5 +1,8 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSvarareAtergangVidOjamnArbetstid.QUESTION_SVARARE_ATERGANG_VID_OJAMN_ARBETSTID_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSvarareAtergangVidOjamnArbetstid.QUESTION_SVARARE_ATERGANG_VID_OJAMN_ARBETSTID_ID;
+
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -36,7 +39,11 @@ public class QuestionMedicinskaSkalForSvarareAtergang {
                 CertificateElementRuleFactory.limit(
                     QUESTION_MEDICINSKA_SKAL_ID,
                     (short) 4000
-                ) // TODO: Add show
+                ),
+                CertificateElementRuleFactory.show(
+                    QUESTION_SVARARE_ATERGANG_VID_OJAMN_ARBETSTID_ID,
+                    QUESTION_SVARARE_ATERGANG_VID_OJAMN_ARBETSTID_FIELD_ID
+                )
             )
         )
         .validations(

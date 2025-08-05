@@ -6,9 +6,11 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 
@@ -37,11 +39,27 @@ class QuestionMedicinskaSkalForSvarareAtergangTest {
 
   @Test
   void shouldIncludeRules() {
+    final var expectedRules = List.of(
+        ElementRuleExpression.builder()
+            .type(ElementRuleType.MANDATORY)
+            .id(ELEMENT_ID)
+            .expression(new RuleExpression("$33.2"))
+            .build(),
+        ElementRuleLimit.builder()
+            .id(ELEMENT_ID)
+            .type(ElementRuleType.TEXT_LIMIT)
+            .limit(new RuleLimit((short) 4000))
+            .build(),
+        ElementRuleExpression.builder()
+            .id(new ElementId("33"))
+            .type(ElementRuleType.SHOW)
+            .expression(new RuleExpression("$33.1"))
+            .build()
+    );
+
     final var element = QuestionMedicinskaSkalForSvarareAtergang.questionMedicinskaSkalForSvarareAtergang();
 
-    assertEquals(ElementRuleType.MANDATORY, element.rules().get(0).type());
-    assertEquals(ElementRuleType.TEXT_LIMIT, element.rules().get(1).type());
-    assertEquals(new RuleLimit((short) 4000), ((ElementRuleLimit) element.rules().get(1)).limit());
+    assertEquals(expectedRules, element.rules());
   }
 
   @Test
