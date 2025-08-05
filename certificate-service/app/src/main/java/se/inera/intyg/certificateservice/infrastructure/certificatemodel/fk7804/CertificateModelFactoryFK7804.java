@@ -15,6 +15,8 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.CategorySysselsattning.categorySysselsattning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionAnnanGrundForMedicinsktUnderlag.questionAnnanGrundForMedicinsktUnderlag;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionGrundForMedicinsktUnderlag.questionGrundForMedicinsktUnderlag;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSysselsattning.questionSysselsattning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionYrkeOchArbetsuppgifter.questionYrkeOchArbetsuppgifter;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionOvrigt.questionOvrigt;
 
 import java.time.LocalDateTime;
@@ -147,7 +149,11 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
                     questionAnnanGrundForMedicinsktUnderlag()
                 )
             ),
-            categorySysselsattning(),
+            categorySysselsattning(
+                questionSysselsattning(
+                    questionYrkeOchArbetsuppgifter()
+                )
+            ),
             categoryDiagnos(),
             categoryFunktionsnedsattning(),
             categoryAktivitetsbegransning(),
