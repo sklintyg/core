@@ -1,13 +1,10 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements;
 
-import static se.inera.intyg.certificateservice.domain.certificate.model.CustomMapperId.UNIFIED_DIAGNOSIS_LIST;
-
 import java.util.List;
 import java.util.Map;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDiagnosisListItem;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDiagnoses;
@@ -202,9 +199,6 @@ public class QuestionDiagnos {
                     )
                 )
                 .build()
-        )
-        .mapping(
-            new ElementMapping(UNIFIED_DIAGNOSIS_LIST)
         )
         .build();
   }
