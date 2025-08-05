@@ -53,6 +53,8 @@ class QuestionNedsattningArbetsformagaTest {
                 )
             )
         )
+        .description(
+            "Utgångspunkten är att patientens arbetsförmåga ska bedömas i förhållande till patientens normala arbetstid.")
         .build();
 
     final var element = QuestionNedsattningArbetsformaga.questionNedsattningArbetsformaga();

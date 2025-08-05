@@ -24,7 +24,7 @@ public class QuestionSmittbararpenning {
                 .id(QUESTION_SMITTBARARPENNING_FIELD_ID)
                 .label("Förhållningsregler enligt smittskyddslagen på grund av smitta")
                 .selectedText("Ja")
-                .unselectedText("Nej")
+                .unselectedText("Ej angivet")
                 .build()
         )
         .validations(

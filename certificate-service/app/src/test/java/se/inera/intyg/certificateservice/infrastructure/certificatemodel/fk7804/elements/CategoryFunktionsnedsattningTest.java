@@ -21,6 +21,17 @@ class CategoryFunktionsnedsattningTest {
   void shallIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationCategory.builder()
         .name("Funktionsnedsättning")
+        .description(
+            """
+                Funktionsnedsättning definieras enligt Internationell klassifikation av funktionstillstånd, funktionshinder och hälsa (ICF) som en betydande avvikelse eller förlust i kroppsfunktion och kan vara fysisk, psykisk eller kognitiv. Se även Socialstyrelsens försäkringsmedicinska kunskapsstöd.
+                
+                Försäkringskassan efterfrågar utöver din bedömning av vilka funktionsnedsättningar sjukdomen eller sjukdomarna leder till, även de medicinska uppgifter som du baserar bedömningen på.
+                
+                Om din bedömning baseras på annat än dina egna observationer och undersökningsfynd, exempelvis testresultat och anamnesuppgifter, beskriv hur du bedömer uppgifterna.
+                
+                Om uppgifterna är hämtade från någon annan inom hälso- och sjukvården, beskriv från vem och när de noterats.
+                """
+        )
         .build();
 
     final var element = categoryFunktionsnedsattning();

@@ -46,6 +46,8 @@ class QuestionSysselsattningTest {
                     STUDIER)
             )
         )
+        .description(
+            "Om du kryssar i flera val är det viktigt att du tydliggör under \"Övriga upplysningar\" om sjukskrivningens omfattning eller period skiljer sig åt mellan olika sysselsättningar.")
         .build();
 
     final var element = QuestionSysselsattning.questionSysselsattning();

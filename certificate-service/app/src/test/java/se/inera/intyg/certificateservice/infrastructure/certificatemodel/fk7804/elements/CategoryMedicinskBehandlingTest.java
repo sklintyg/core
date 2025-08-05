@@ -21,6 +21,13 @@ class CategoryMedicinskBehandlingTest {
   void shallIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationCategory.builder()
         .name("Medicinsk behandling")
+        .description(
+            """
+                Här beskriver du de medicinska behandlingar/åtgärder som kan påverka arbetsförmågan, vad de förväntas leda till, och en (preliminär) tidplan för åtgärderna.
+                
+                Om olika åtgärder behöver ske i viss ordning är det bra om du beskriver detta.
+                """
+        )
         .build();
 
     final var element = categoryMedicinskBehandling();

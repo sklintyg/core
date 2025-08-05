@@ -30,6 +30,13 @@ class QuestionSvarareAtergangVidOjamnArbetstidTest {
             "Kommer möjligheterna till återgång i arbete försämras om arbetstiden förläggs ojämnt vid deltidssjukskrivning?")
         .selectedText("Ja")
         .unselectedText("Nej")
+        .description(
+            """
+                När du besvarar frågan ska du utgå från de uppgifter som du har om arbetstidens förläggning vid sjukskrivningstillfället, det vill säga den arbetstidsförläggning som du diskuterat med patienten.
+                
+                Att förläggningen försämrar patientens möjligheter till återgång i arbete kan exempelvis vara att hälsotillståndet påverkas negativt eller att sjukdomen innebär att en annan förläggning av arbetstiden än jämn minskning varje dag skulle motverka rehabiliteringen.
+                """
+        )
         .build();
 
     final var element = QuestionSvarareAtergangVidOjamnArbetstid.questionSvarareAtergangVidOjamnArbetstid();
