@@ -43,7 +43,7 @@ public class FK7804CertificateSendContentProvider implements CertificateSendCont
           "Invalid value type. Type was '%s'".formatted(questionBedomning.value().getClass()));
     }
 
-    var dateRanges = elementValueDateList.dateRangeList();
+    final var dateRanges = elementValueDateList.dateRangeList();
     if (dateRanges == null || dateRanges.isEmpty()) {
       throw new IllegalStateException("Inconsistent date range list provided.");
     }
