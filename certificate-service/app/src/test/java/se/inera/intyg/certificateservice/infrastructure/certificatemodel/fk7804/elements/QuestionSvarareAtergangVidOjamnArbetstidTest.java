@@ -5,11 +5,18 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSvarareAtergangVidOjamnArbetstid.QUESTION_SVARARE_ATERGANG_VID_OJAMN_ARBETSTID_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSvarareAtergangVidOjamnArbetstid.QUESTION_SVARARE_ATERGANG_VID_OJAMN_ARBETSTID_ID;
 
+import java.time.LocalDate;
 import java.util.List;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0003;
@@ -85,5 +92,132 @@ class QuestionSvarareAtergangVidOjamnArbetstidTest {
     );
 
     assertEquals(expectedValidations, element.validations());
+  }
+
+  @Nested
+  class ShouldValidate {
+
+    @Test
+    void shouldReturnTrueIfAnyDateRangeMatchesFieldIdHalften() {
+      final var matchingFieldId = new FieldId(CodeSystemKvFkmu0003.HALFTEN.code());
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(QUESTION_NEDSATTNING_ARBETSFORMAGA_ID)
+              .value(ElementValueDateRangeList.builder()
+                  .dateRangeList(List.of(
+                      DateRange.builder()
+                          .dateRangeId(matchingFieldId)
+                          .from(LocalDate.now())
+                          .to(LocalDate.now().plusDays(1))
+                          .build()
+                  ))
+                  .build())
+              .build()
+      );
+      final var element = QuestionSvarareAtergangVidOjamnArbetstid.questionSvarareAtergangVidOjamnArbetstid();
+      final var shouldValidate = element.shouldValidate();
+      org.junit.jupiter.api.Assertions.assertTrue(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shouldReturnTrueIfAnyDateRangeMatchesFieldIdEnFjardedel() {
+      final var matchingFieldId = new FieldId(CodeSystemKvFkmu0003.EN_FJARDEDEL.code());
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(QUESTION_NEDSATTNING_ARBETSFORMAGA_ID)
+              .value(ElementValueDateRangeList.builder()
+                  .dateRangeList(List.of(
+                      DateRange.builder()
+                          .dateRangeId(matchingFieldId)
+                          .from(LocalDate.now())
+                          .to(LocalDate.now().plusDays(1))
+                          .build()
+                  ))
+                  .build())
+              .build()
+      );
+      final var element = QuestionSvarareAtergangVidOjamnArbetstid.questionSvarareAtergangVidOjamnArbetstid();
+      final var shouldValidate = element.shouldValidate();
+      org.junit.jupiter.api.Assertions.assertTrue(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shouldReturnTrueIfAnyDateRangeMatchesFieldIdTreFjardedel() {
+      final var matchingFieldId = new FieldId(CodeSystemKvFkmu0003.TRE_FJARDEDEL.code());
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(QUESTION_NEDSATTNING_ARBETSFORMAGA_ID)
+              .value(ElementValueDateRangeList.builder()
+                  .dateRangeList(List.of(
+                      DateRange.builder()
+                          .dateRangeId(matchingFieldId)
+                          .from(LocalDate.now())
+                          .to(LocalDate.now().plusDays(1))
+                          .build()
+                  ))
+                  .build())
+              .build()
+      );
+      final var element = QuestionSvarareAtergangVidOjamnArbetstid.questionSvarareAtergangVidOjamnArbetstid();
+      final var shouldValidate = element.shouldValidate();
+      org.junit.jupiter.api.Assertions.assertTrue(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shouldReturnFalseIfNoDateRangeMatchesFieldId() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(QUESTION_NEDSATTNING_ARBETSFORMAGA_ID)
+              .value(ElementValueDateRangeList.builder()
+                  .dateRangeList(List.of(
+                      DateRange.builder()
+                          .dateRangeId(new FieldId(CodeSystemKvFkmu0003.HELT_NEDSATT.code()))
+                          .from(LocalDate.now())
+                          .to(LocalDate.now().plusDays(1))
+                          .build()
+                  ))
+                  .build())
+              .build()
+      );
+      final var element = QuestionSvarareAtergangVidOjamnArbetstid.questionSvarareAtergangVidOjamnArbetstid();
+      final var shouldValidate = element.shouldValidate();
+      org.junit.jupiter.api.Assertions.assertFalse(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shouldReturnFalseIfElementMissing() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId("SOME_OTHER_ID"))
+              .value(ElementValueDateRangeList.builder()
+                  .dateRangeList(List.of(
+                      DateRange.builder()
+                          .dateRangeId(new FieldId("NON_MATCHING"))
+                          .from(LocalDate.now())
+                          .to(LocalDate.now().plusDays(1))
+                          .build()
+                  ))
+                  .build())
+              .build()
+      );
+      final var element = QuestionSvarareAtergangVidOjamnArbetstid.questionSvarareAtergangVidOjamnArbetstid();
+      final var shouldValidate = element.shouldValidate();
+      org.junit.jupiter.api.Assertions.assertFalse(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shouldReturnFalseIfDateRangeListIsEmpty() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(QUESTION_NEDSATTNING_ARBETSFORMAGA_ID)
+              .value(ElementValueDateRangeList.builder()
+                  .dateRangeList(List.of())
+                  .build())
+              .build()
+      );
+      final var element = QuestionSvarareAtergangVidOjamnArbetstid.questionSvarareAtergangVidOjamnArbetstid();
+      final var shouldValidate = element.shouldValidate();
+      org.junit.jupiter.api.Assertions.assertFalse(shouldValidate.test(elementData));
+    }
   }
 }

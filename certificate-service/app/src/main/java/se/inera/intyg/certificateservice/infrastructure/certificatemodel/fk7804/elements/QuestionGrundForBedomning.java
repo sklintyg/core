@@ -1,12 +1,17 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionPrognos.QUESTION_PROGNOS_ID;
+
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0006;
 
 public class QuestionGrundForBedomning {
 
@@ -30,9 +35,16 @@ public class QuestionGrundForBedomning {
         )
         .rules(
             List.of(
+                CertificateElementRuleFactory.mandatory(
+                    QUESTION_GRUND_FOR_BEDOMNING_ID,
+                    QUESTION_GRUND_FOR_BEDOMNING_FIELD_ID
+                ),
                 CertificateElementRuleFactory.limit(
                     QUESTION_GRUND_FOR_BEDOMNING_ID,
-                    (short) 4000)
+                    (short) 4000),
+                CertificateElementRuleFactory.show(
+                    QUESTION_PROGNOS_ID, new FieldId(CodeSystemKvFkmu0006.PROGNOS_OKLAR.code())
+                )
             )
         )
         .validations(
@@ -43,6 +55,9 @@ public class QuestionGrundForBedomning {
                     .build()
             )
         )
+        .shouldValidate(ShouldValidateFactory.codes(QUESTION_PROGNOS_ID,
+            List.of(new FieldId(CodeSystemKvFkmu0006.PROGNOS_OKLAR.code()))))
+        .mapping(new ElementMapping(QUESTION_PROGNOS_ID, CodeSystemKvFkmu0006.PROGNOS_OKLAR))
         .build();
   }
 

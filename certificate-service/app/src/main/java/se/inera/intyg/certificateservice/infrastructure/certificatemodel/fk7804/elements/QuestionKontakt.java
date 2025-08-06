@@ -10,6 +10,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
 
 public class QuestionKontakt {
 
@@ -41,10 +42,11 @@ public class QuestionKontakt {
         .validations(
             List.of(
                 ElementValidationBoolean.builder()
-                    .mandatory(true)
+                    .mandatory(false)
                     .build()
             )
         )
+        .shouldValidate(ShouldValidateFactory.checkboxBoolean(QUESTION_SMITTBARARPENNING_ID, false))
         .children(List.of(children))
         .build();
   }

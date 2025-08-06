@@ -34,6 +34,8 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCodeList;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueInteger;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
@@ -118,6 +120,19 @@ public class TestabilityCertificateFillServiceFK7804 implements TestabilityCerti
           .build();
     }
 
+    if (value instanceof ElementValueCode) {
+      final var code = getCode(elementSpecification.id(), fillType).code();
+      return ElementData.builder()
+          .id(elementSpecification.id())
+          .value(
+              ElementValueCode.builder()
+                  .code(code)
+                  .codeId(new FieldId(code))
+                  .build()
+          )
+          .build();
+    }
+
     if (value instanceof ElementValueText elementValueText) {
       final var questionName = elementSpecification.configuration().name();
       return ElementData.builder()
@@ -127,6 +142,22 @@ public class TestabilityCertificateFillServiceFK7804 implements TestabilityCerti
                   "Ett exempel på text för frågan %s",
                   elementSpecification.configuration().name()
               ).substring(0, questionName.length() < 50 ? questionName.length() - 1 : 49)))
+          .build();
+    }
+
+    if (value instanceof ElementValueDateList elementValueDateList) {
+      return ElementData.builder()
+          .id(elementSpecification.id())
+          .value(
+              elementValueDateList.withDateList(
+                  List.of(
+                      ElementValueDate.builder()
+                          .dateId(new FieldId(getCode(elementSpecification.id(), fillType).code()))
+                          .date(LocalDate.now())
+                          .build()
+                  )
+              )
+          )
           .build();
     }
 
@@ -170,7 +201,7 @@ public class TestabilityCertificateFillServiceFK7804 implements TestabilityCerti
           .build();
     }
 
-    return null;
+    throw new IllegalStateException("No matching fill for element: " + elementSpecification.id());
   }
 
   private static Code getCode(ElementId elementId, TestabilityFillTypeDTO fillType) {
@@ -191,7 +222,7 @@ public class TestabilityCertificateFillServiceFK7804 implements TestabilityCerti
 
     if (elementId.equals(QUESTION_PROGNOS_ID)) {
       if (fillType == MINIMAL) {
-        return CodeSystemKvFkmu0006.PROGNOS_OKLAR;
+        return CodeSystemKvFkmu0006.STOR_SANNOLIKHET;
       }
       return CodeSystemKvFkmu0006.ATER_X_ANTAL_MANADER;
     }
@@ -200,8 +231,8 @@ public class TestabilityCertificateFillServiceFK7804 implements TestabilityCerti
   }
 
   private static boolean getBoolean(ElementId elementId, TestabilityFillTypeDTO fillType) {
-    if (fillType == MAXIMAL && elementId == QUESTION_SMITTBARARPENNING_ID) {
-      return false;
+    if (elementId == QUESTION_SMITTBARARPENNING_ID) {
+      return fillType == MINIMAL;
     }
 
     return fillType == MAXIMAL;

@@ -6,6 +6,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCodeList;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
@@ -70,6 +71,16 @@ public class ShouldValidateFactory {
         .map(ElementValueCodeList::list)
         .flatMap(List::stream)
         .anyMatch(value -> fieldIds.contains(value.codeId()));
+  }
+
+  public static Predicate<List<ElementData>> dateRangeList(ElementId elementId,
+      List<FieldId> fieldIds) {
+    return elementData -> elementData.stream()
+        .filter(data -> data.id().equals(elementId))
+        .map(element -> (ElementValueDateRangeList) element.value())
+        .anyMatch(value -> value.dateRangeList().stream().anyMatch(
+            valueDate -> fieldIds.contains(valueDate.dateRangeId()))
+        );
   }
 
 }

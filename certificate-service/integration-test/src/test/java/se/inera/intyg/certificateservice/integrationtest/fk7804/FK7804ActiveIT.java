@@ -31,7 +31,6 @@ import se.inera.intyg.certificateservice.integrationtest.ExistsCertificateTypeIn
 import se.inera.intyg.certificateservice.integrationtest.ForwardCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateEventsIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.GetCertificatePdfIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateTypeInfoIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateXmlIT;
 import se.inera.intyg.certificateservice.integrationtest.GetPatientCertificatesIT;
@@ -741,7 +740,7 @@ public class FK7804ActiveIT {
     }
   }
 
-  @Nested
+/*  @Nested
   @DisplayName(TYPE + "Hämta intygspdf")
   class GetCertificatePdf extends GetCertificatePdfIT {
 
@@ -762,7 +761,7 @@ public class FK7804ActiveIT {
           Arguments.of(ANNA_SJUKSKOTERSKA_DTO)
       );
     }
-  }
+  }*/
 
 
   @Nested

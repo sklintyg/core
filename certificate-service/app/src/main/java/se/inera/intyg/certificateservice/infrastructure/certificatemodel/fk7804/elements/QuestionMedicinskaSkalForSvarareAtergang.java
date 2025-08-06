@@ -11,6 +11,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
 
 public class QuestionMedicinskaSkalForSvarareAtergang {
 
@@ -55,6 +56,9 @@ public class QuestionMedicinskaSkalForSvarareAtergang {
                     .build()
             )
         )
+        .shouldValidate(
+            ShouldValidateFactory.valueBoolean(QUESTION_SVARARE_ATERGANG_VID_OJAMN_ARBETSTID_ID,
+                true))
         .mapping(new ElementMapping(QUESTION_SVARARE_ATERGANG_VID_OJAMN_ARBETSTID_ID, null))
         .build();
   }

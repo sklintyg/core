@@ -6,6 +6,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
@@ -51,6 +52,7 @@ public class QuestionAngeVarforDuVillHaKontakt {
         .shouldValidate(
             ShouldValidateFactory.checkboxBoolean(QUESTION_KONTAKT_ID, true)
         )
+        .mapping(new ElementMapping(QUESTION_KONTAKT_ID, null))
         .build();
   }
 

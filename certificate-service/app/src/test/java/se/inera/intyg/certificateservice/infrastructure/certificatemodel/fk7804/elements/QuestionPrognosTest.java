@@ -1,6 +1,8 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionPrognos.ATER_X_ANTAL_MANADER_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionPrognos.PROGNOS_OKLAR_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionPrognos.QUESTION_PROGNOS_FIELD_ID;
@@ -9,9 +11,13 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionPrognos.STOR_SANNOLIKHET_FIELD_ID;
 
 import java.util.List;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioMultipleCode;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementLayout;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
@@ -75,6 +81,11 @@ class QuestionPrognosTest {
                     "exists($STOR_SANNOLIKHET) || exists($ATER_X_ANTAL_MANADER) || exists($SANNOLIKT_INTE) || exists($PROGNOS_OKLAR)"
                 )
             )
+            .build(),
+        ElementRuleExpression.builder()
+            .id(new ElementId("27"))
+            .type(ElementRuleType.HIDE)
+            .expression(new RuleExpression("$27.1"))
             .build()
     );
     assertEquals(expectedRules, element.rules());
@@ -89,6 +100,49 @@ class QuestionPrognosTest {
             .build()
     );
     assertEquals(expectedValidations, element.validations());
+  }
+
+  @Nested
+  class ShouldValidate {
+
+    @Test
+    void shouldReturnTrueIfBooleanIsFalse() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId("27"))
+              .value(ElementValueBoolean.builder().value(false).build())
+              .build()
+      );
+      final var element = QuestionPrognos.questionPrognos();
+      final var shouldValidate = element.shouldValidate();
+      assertTrue(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shouldReturnTrueIfElementMissing() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId("7"))
+              .value(ElementValueBoolean.builder().value(true).build())
+              .build()
+      );
+      final var element = QuestionPrognos.questionPrognos();
+      final var shouldValidate = element.shouldValidate();
+      assertTrue(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shouldReturnFalseIfBooleanIsTrue() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId("27"))
+              .value(ElementValueBoolean.builder().value(true).build())
+              .build()
+      );
+      final var element = QuestionPrognos.questionPrognos();
+      final var shouldValidate = element.shouldValidate();
+      assertFalse(shouldValidate.test(elementData));
+    }
   }
 
 }

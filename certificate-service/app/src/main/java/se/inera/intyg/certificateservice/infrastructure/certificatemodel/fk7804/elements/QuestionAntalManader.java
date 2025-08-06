@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionPrognos.QUESTION_PROGNOS_ID;
+
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationInteger;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -8,6 +10,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationInteger;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0006;
 
 public class QuestionAntalManader {
 
@@ -34,6 +38,10 @@ public class QuestionAntalManader {
                 CertificateElementRuleFactory.mandatory(
                     QUESTION_ANTAL_MANADER_ID,
                     QUESTION_ANTAL_MANADER_FIELD_ID
+                ),
+                CertificateElementRuleFactory.show(
+                    QUESTION_PROGNOS_ID,
+                    new FieldId(CodeSystemKvFkmu0006.ATER_X_ANTAL_MANADER.code())
                 )
             )
         )
@@ -46,8 +54,16 @@ public class QuestionAntalManader {
                     .build()
             )
         )
+        .shouldValidate(
+            ShouldValidateFactory.codes(
+                QUESTION_PROGNOS_ID,
+                List.of(
+                    new FieldId(CodeSystemKvFkmu0006.ATER_X_ANTAL_MANADER.code())
+                )
+            )
+        )
         .mapping(
-            new ElementMapping(QUESTION_ANTAL_MANADER_ID, null) // FIXME
+            new ElementMapping(QUESTION_PROGNOS_ID, CodeSystemKvFkmu0006.ATER_X_ANTAL_MANADER)
         )
         .build();
   }

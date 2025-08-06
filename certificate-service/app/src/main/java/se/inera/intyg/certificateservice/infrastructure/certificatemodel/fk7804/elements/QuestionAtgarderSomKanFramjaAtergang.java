@@ -6,11 +6,11 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMessage;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
 
 public class QuestionAtgarderSomKanFramjaAtergang {
 
@@ -32,16 +32,14 @@ public class QuestionAtgarderSomKanFramjaAtergang {
                     "Här kan du beskriva andra åtgärder än åtgärder inom hälso- och sjukvården som kan främja återgången i arbete")
                 .label(
                     "Beskriv gärna hur åtgärderna kan främja återgången i arbete eller annan aktuell sysselsättning.")
-                .message(ElementMessage.builder()
-                    .content("""
-                        Åtgärderna kan exempelvis handla om att patienten har en regelbunden kontakt med arbetsplatsen. Det kan också vara arbetsanpassning, som anpassning av arbetstider, arbetsuppgifter eller arbetsplatsen.
-                        
-                        Du kan även föreslå att patienten får arbetsträna vilket innebär att vara på en arbetsplats och delta
-                        i verksamheten utan krav på produktivitet.\s
-                        
-                        Tänk på att det är Försäkringskassan eller Arbetsförmedlingen som beslutar om arbetsträning. De föreslagna åtgärderna är exempel på möjliga åtgärder och det kan finnas flera åtgärder som är lämpliga.
-                        """)
-                    .build())
+                .description("""
+                    Åtgärderna kan exempelvis handla om att patienten har en regelbunden kontakt med arbetsplatsen. Det kan också vara arbetsanpassning, som anpassning av arbetstider, arbetsuppgifter eller arbetsplatsen.
+                    
+                    Du kan även föreslå att patienten får arbetsträna vilket innebär att vara på en arbetsplats och delta
+                    i verksamheten utan krav på produktivitet.\s
+                    
+                    Tänk på att det är Försäkringskassan eller Arbetsförmedlingen som beslutar om arbetsträning. De föreslagna åtgärderna är exempel på möjliga åtgärder och det kan finnas flera åtgärder som är lämpliga.
+                    """)
                 .build()
         )
         .rules(
@@ -63,6 +61,7 @@ public class QuestionAtgarderSomKanFramjaAtergang {
                     .build()
             )
         )
+        .shouldValidate(ShouldValidateFactory.checkboxBoolean(QUESTION_SMITTBARARPENNING_ID, false))
         .build();
   }
 
