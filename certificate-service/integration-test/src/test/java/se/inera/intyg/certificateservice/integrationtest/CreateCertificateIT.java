@@ -7,14 +7,22 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ALVA_VARDADMINISTRATOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ajlaDoktorDtoBuilder;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customCreateCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customValidateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCreateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificate;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateId;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.validationErrors;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import se.inera.intyg.certificateservice.application.certificate.dto.PrefillXmlDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
+import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 
 public abstract class CreateCertificateIT extends BaseIntegrationIT {
 
@@ -23,6 +31,18 @@ public abstract class CreateCertificateIT extends BaseIntegrationIT {
   protected abstract String typeVersion();
 
   protected abstract String wrongVersion();
+
+
+  private String loadResourceAsString() throws IOException {
+    try (InputStream inputStream = getClass().getClassLoader()
+        .getResourceAsStream("prefill/%s.xml".formatted(type().toUpperCase()))) {
+      if (inputStream == null) {
+        throw new IllegalArgumentException(
+            "Resource not found: " + "prefill/%s.xml".formatted(type()));
+      }
+      return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+    }
+  }
 
   @Test
   @DisplayName("Om utkastet framgångsrikt skapats skall utkastet returneras")
@@ -37,7 +57,7 @@ public abstract class CreateCertificateIT extends BaseIntegrationIT {
     );
   }
 
-  /*@Test
+  @Test
   @DisplayName("Om ett utkast förifylls med komplett intygsinformation ska inga valideringsfel visas")
   void shallReturnCertificateWithPrefilledAnswers() throws IOException {
     final var xml = new Xml(loadResourceAsString());
@@ -62,7 +82,7 @@ public abstract class CreateCertificateIT extends BaseIntegrationIT {
     assertEquals(0, validationErrors(validateCertificate).size(),
         () -> "Should not return validation errors, got '%s' errors".formatted(
             validationErrors(validateCertificate)));
-  }*/
+  }
 
   @Test
   @DisplayName("Om patienten är avliden skall felkod 403 (FORBIDDEN) returneras")
