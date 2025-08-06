@@ -1,9 +1,14 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
@@ -61,5 +66,68 @@ class QuestionTransportstodTest {
 
     assertEquals(expectedRules, element.rules());
   }
-}
 
+  @Nested
+  class ShouldValidate {
+
+    @Test
+    void shallReturnTrueIfBooleanIsFalse() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId("27"))
+              .value(
+                  ElementValueBoolean.builder()
+                      .value(false)
+                      .build()
+              )
+              .build()
+      );
+
+      final var element = QuestionTransportstod.questionTransportstod();
+
+      final var shouldValidate = element.elementSpecification(new ElementId("34")).shouldValidate();
+
+      assertTrue(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shallReturnTrueIfElementMissing() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId("8.1"))
+              .value(
+                  ElementValueBoolean.builder()
+                      .value(true)
+                      .build()
+              )
+              .build()
+      );
+
+      final var element = QuestionTransportstod.questionTransportstod();
+
+      final var shouldValidate = element.elementSpecification(new ElementId("34")).shouldValidate();
+
+      assertTrue(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shallReturnFalseIfElementTrue() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId("27"))
+              .value(
+                  ElementValueBoolean.builder()
+                      .value(true)
+                      .build()
+              )
+              .build()
+      );
+
+      final var element = QuestionTransportstod.questionTransportstod();
+
+      final var shouldValidate = element.elementSpecification(new ElementId("34")).shouldValidate();
+
+      assertFalse(shouldValidate.test(elementData));
+    }
+  }
+}

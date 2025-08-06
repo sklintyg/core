@@ -50,7 +50,7 @@ public class QuestionNeuropsykiatriskTrafikrisk {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.radioBoolean(QUESTION_NEUROPSYKIATRISK_ID)
+            ShouldValidateFactory.valueBoolean(QUESTION_NEUROPSYKIATRISK_ID)
         )
         .mapping(
             new ElementMapping(QUESTION_NEUROPSYKIATRISK_ID, null)

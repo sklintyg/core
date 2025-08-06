@@ -57,7 +57,7 @@ public class QuestionPeriodVardasBarnInneliggandePaSjukhus {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.radioBoolean(QUESTION_VARDAS_BARNET_INNELIGGANDE_PA_SJUKHUS_ID)
+            ShouldValidateFactory.valueBoolean(QUESTION_VARDAS_BARNET_INNELIGGANDE_PA_SJUKHUS_ID)
         )
         .mapping(new ElementMapping(QUESTION_VARDAS_BARNET_INNELIGGANDE_PA_SJUKHUS_ID, null))
         .pdfConfiguration(

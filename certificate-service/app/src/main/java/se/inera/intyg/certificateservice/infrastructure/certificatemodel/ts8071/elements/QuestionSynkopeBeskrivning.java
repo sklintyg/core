@@ -50,7 +50,7 @@ public class QuestionSynkopeBeskrivning {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.radioBoolean(QUESTION_SYNKOPE_ID)
+            ShouldValidateFactory.valueBoolean(QUESTION_SYNKOPE_ID)
         )
         .mapping(new ElementMapping(QUESTION_HJARTSJUKDOM_ID, null))
         .validations(

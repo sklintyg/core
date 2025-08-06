@@ -50,7 +50,7 @@ public class QuestionMedvetandestorningTidpunkt {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.radioBoolean(QUESTION_MEDVETANDESTORNING_ID)
+            ShouldValidateFactory.valueBoolean(QUESTION_MEDVETANDESTORNING_ID)
         )
         .mapping(
             new ElementMapping(QUESTION_EPILEPSI_ID, null)

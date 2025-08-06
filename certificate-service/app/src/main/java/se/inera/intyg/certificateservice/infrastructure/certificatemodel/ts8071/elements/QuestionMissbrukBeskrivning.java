@@ -50,7 +50,7 @@ public class QuestionMissbrukBeskrivning {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.radioBoolean(QUESTION_MISSBRUK_ID)
+            ShouldValidateFactory.valueBoolean(QUESTION_MISSBRUK_ID)
         )
         .mapping(
             new ElementMapping(QUESTION_MISSBRUK_ID, null)

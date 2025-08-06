@@ -56,7 +56,7 @@ public class QuestionSynkope {
             )
         )
         .mapping(new ElementMapping(QUESTION_HJARTSJUKDOM_ID, null))
-        .shouldValidate(ShouldValidateFactory.radioBoolean(QUESTION_HJARTSJUKDOM_ID))
+        .shouldValidate(ShouldValidateFactory.valueBoolean(QUESTION_HJARTSJUKDOM_ID))
         .children(List.of(children))
         .build();
   }

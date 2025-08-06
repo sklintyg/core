@@ -5,9 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0002.NUVARANDE_ARBETE;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0002.STUDIER;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSysselsattning.SYSSELSATTNING_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionYrkeOchArbetsuppgifter.YRKE_ARBETSUPPGIFTER_FIELD_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionYrkeOchArbetsuppgifter.YRKE_ARBETSUPPGIFTER_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSysselsattning.QUESTION_SYSSELSATTNING_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionYrkeOchArbetsuppgifter.QUESTION_YRKE_ARBETSUPPGIFTER_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionYrkeOchArbetsuppgifter.QUESTION_YRKE_ARBETSUPPGIFTER_ID;
 
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -29,13 +29,13 @@ class QuestionYrkeOchArbetsuppgifterTest {
   @Test
   void shouldIncludeId() {
     final var element = QuestionYrkeOchArbetsuppgifter.questionYrkeOchArbetsuppgifter();
-    assertEquals(YRKE_ARBETSUPPGIFTER_ID, element.id());
+    assertEquals(QUESTION_YRKE_ARBETSUPPGIFTER_ID, element.id());
   }
 
   @Test
   void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationTextField.builder()
-        .id(YRKE_ARBETSUPPGIFTER_FIELD_ID)
+        .id(QUESTION_YRKE_ARBETSUPPGIFTER_FIELD_ID)
         .name("Ange yrke och arbetsuppgifter")
         .build();
 
@@ -58,7 +58,7 @@ class QuestionYrkeOchArbetsuppgifterTest {
   @Test
   void shouldIncludeMapping() {
     final var element = QuestionYrkeOchArbetsuppgifter.questionYrkeOchArbetsuppgifter();
-    final var expectedMapping = new ElementMapping(SYSSELSATTNING_ID, NUVARANDE_ARBETE);
+    final var expectedMapping = new ElementMapping(QUESTION_SYSSELSATTNING_ID, NUVARANDE_ARBETE);
     assertEquals(expectedMapping, element.mapping());
   }
 
@@ -68,12 +68,12 @@ class QuestionYrkeOchArbetsuppgifterTest {
         ElementRuleExpression.builder()
             .type(ElementRuleType.SHOW)
             .expression(new RuleExpression("$NUVARANDE_ARBETE"))
-            .id(SYSSELSATTNING_ID)
+            .id(QUESTION_SYSSELSATTNING_ID)
             .build(),
         ElementRuleExpression.builder()
             .type(ElementRuleType.MANDATORY)
-            .id(YRKE_ARBETSUPPGIFTER_ID)
-            .expression(new RuleExpression("$" + YRKE_ARBETSUPPGIFTER_FIELD_ID.value()))
+            .id(QUESTION_YRKE_ARBETSUPPGIFTER_ID)
+            .expression(new RuleExpression("$" + QUESTION_YRKE_ARBETSUPPGIFTER_FIELD_ID.value()))
             .build()
     );
 

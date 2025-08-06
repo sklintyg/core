@@ -60,7 +60,7 @@ public class QuestionPeriodVardasBarnetInskrivetMedHemsjukvard {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.radioBoolean(QUESTION_VARDAS_BARN_INSKRIVET_MED_HEMSJUKVARD_ID)
+            ShouldValidateFactory.valueBoolean(QUESTION_VARDAS_BARN_INSKRIVET_MED_HEMSJUKVARD_ID)
         )
         .pdfConfiguration(
             PdfConfigurationDateRange.builder()

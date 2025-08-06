@@ -60,7 +60,7 @@ public class QuestionStrokePavarkan {
                 )
             )
         )
-        .shouldValidate(ShouldValidateFactory.radioBoolean(QUESTION_STROKE_ID))
+        .shouldValidate(ShouldValidateFactory.valueBoolean(QUESTION_STROKE_ID))
         .mapping(new ElementMapping(QUESTION_HJARTSJUKDOM_ID, null))
         .validations(
             List.of(

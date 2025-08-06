@@ -49,7 +49,7 @@ public class QuestionRorlighetBeskrivning {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.radioBoolean(QUESTION_RORLIGHET_ID)
+            ShouldValidateFactory.valueBoolean(QUESTION_RORLIGHET_ID)
         )
         .mapping(new ElementMapping(QUESTION_RORLIGHET_ID, null))
         .validations(

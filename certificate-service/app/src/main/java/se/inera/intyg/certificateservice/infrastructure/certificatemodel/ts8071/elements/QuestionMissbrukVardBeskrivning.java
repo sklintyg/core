@@ -52,7 +52,7 @@ public class QuestionMissbrukVardBeskrivning {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.radioBoolean(QUESTION_MISSBRUK_VARD_ID)
+            ShouldValidateFactory.valueBoolean(QUESTION_MISSBRUK_VARD_ID)
         )
         .mapping(
             new ElementMapping(QUESTION_MISSBRUK_ID, null)

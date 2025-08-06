@@ -55,7 +55,7 @@ public class QuestionSjukdomEllerSynnedsattning {
                 )
             )
         )
-        .shouldValidate(ShouldValidateFactory.radioBoolean(QUESTION_SYNFUNKTIONER_ID, false))
+        .shouldValidate(ShouldValidateFactory.valueBoolean(QUESTION_SYNFUNKTIONER_ID, false))
         .children(List.of(children))
         .build();
   }
