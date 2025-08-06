@@ -1,9 +1,12 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionKontakt.QUESTION_KONTAKT_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionKontakt.QUESTION_KONTAKT_ID;
+
 import java.util.List;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
@@ -31,13 +34,12 @@ public class QuestionAngeVarforDuVillHaKontakt {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatory(
-                    QUESTION_VARFOR_KONTAKT_ID,
-                    QUESTION_VARFOR_KONTAKT_FIELD_ID
+                CertificateElementRuleFactory.show(
+                    QUESTION_KONTAKT_ID,
+                    QUESTION_KONTAKT_FIELD_ID
                 )
             )
         )
-        .mapping(new ElementMapping(QUESTION_VARFOR_KONTAKT_ID, null))
         .validations(
             List.of(
                 ElementValidationText.builder()
@@ -45,6 +47,14 @@ public class QuestionAngeVarforDuVillHaKontakt {
                     .limit(4000)
                     .build()
             )
+        )
+        .shouldValidate(
+            elementData -> elementData.stream()
+                .filter(data -> data.id().equals(QUESTION_KONTAKT_ID))
+                .map(element -> (ElementValueDateList) element.value())
+                .anyMatch(value -> value.dateList().stream().anyMatch(
+                    valueDate -> valueDate.dateId().equals(QUESTION_KONTAKT_FIELD_ID))
+                )
         )
         .build();
   }

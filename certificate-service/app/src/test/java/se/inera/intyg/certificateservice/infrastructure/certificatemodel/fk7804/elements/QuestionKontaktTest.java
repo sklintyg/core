@@ -7,9 +7,6 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxBoolean;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 
 class QuestionKontaktTest {
@@ -42,20 +39,4 @@ class QuestionKontaktTest {
     );
     assertEquals(expectedValidations, element.validations());
   }
-
-  @Test
-  void shouldIncludeRules() {
-    final var expectedRules = List.of(
-        ElementRuleExpression.builder()
-            .type(ElementRuleType.MANDATORY)
-            .id(QUESTION_KONTAKT_ID)
-            .expression(new RuleExpression("$" + QUESTION_KONTAKT_FIELD_ID.value()))
-            .build()
-    );
-
-    final var element = QuestionKontakt.questionKontakt();
-
-    assertEquals(expectedRules, element.rules());
-  }
-
 }

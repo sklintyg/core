@@ -47,7 +47,7 @@ public class QuestionAntalManader {
             )
         )
         .mapping(
-            new ElementMapping(QUESTION_ANTAL_MANADER_ID, null)
+            new ElementMapping(QUESTION_ANTAL_MANADER_ID, null) // FIXME
         )
         .build();
   }

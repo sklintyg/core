@@ -6,7 +6,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
 public class QuestionKontakt {
 
@@ -27,14 +26,6 @@ public class QuestionKontakt {
                 .id(QUESTION_KONTAKT_FIELD_ID)
                 .name("Jag önskar att Försäkringskassan kontaktar mig")
                 .build()
-        )
-        .rules(
-            List.of(
-                CertificateElementRuleFactory.mandatory(
-                    QUESTION_KONTAKT_ID,
-                    QUESTION_KONTAKT_FIELD_ID
-                )
-            )
         )
         .validations(
             List.of(

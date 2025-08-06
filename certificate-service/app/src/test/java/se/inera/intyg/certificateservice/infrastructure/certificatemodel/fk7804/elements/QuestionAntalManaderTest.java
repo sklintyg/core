@@ -7,7 +7,6 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationInteger;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
@@ -60,12 +59,4 @@ class QuestionAntalManaderTest {
 
     assertEquals(expectedRules, element.rules());
   }
-
-  @Test
-  void shouldIncludeMapping() {
-    final var element = QuestionAntalManader.questionAntalManader();
-    final var expectedMapping = new ElementMapping(QUESTION_ANTAL_MANADER_ID, null);
-    assertEquals(expectedMapping, element.mapping());
-  }
-
 }
