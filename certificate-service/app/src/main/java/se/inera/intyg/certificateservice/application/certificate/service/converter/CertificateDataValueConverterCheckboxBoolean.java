@@ -5,16 +5,16 @@ import se.inera.intyg.certificateservice.application.certificate.dto.value.Certi
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType;
 
 @Component
-public class CertificateDataValueConverterBoolean implements CertificateDataValueConverter {
+public class CertificateDataValueConverterCheckboxBoolean implements CertificateDataValueConverter {
 
   @Override
   public ElementType getType() {
-    return ElementType.RADIO_BOOLEAN;
+    return ElementType.CHECKBOX_BOOLEAN;
   }
 
   @Override
@@ -26,7 +26,7 @@ public class CertificateDataValueConverterBoolean implements CertificateDataValu
       );
     }
 
-    if (!(elementSpecification.configuration() instanceof ElementConfigurationRadioBoolean elementConfigurationRadioBoolean)) {
+    if (!(elementSpecification.configuration() instanceof ElementConfigurationCheckboxBoolean elementConfigurationBoolean)) {
       throw new IllegalStateException(
           "Invalid configuration type. Type was '%s'".formatted(
               elementSpecification.configuration().type())
@@ -34,7 +34,7 @@ public class CertificateDataValueConverterBoolean implements CertificateDataValu
     }
 
     return CertificateDataValueBoolean.builder()
-        .id(elementConfigurationRadioBoolean.id().value())
+        .id(elementConfigurationBoolean.id().value())
         .selected(elementValue != null ? ((ElementValueBoolean) elementValue).value() : null)
         .build();
   }
