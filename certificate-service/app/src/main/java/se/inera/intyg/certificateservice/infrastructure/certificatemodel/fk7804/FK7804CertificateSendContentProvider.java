@@ -48,7 +48,7 @@ public class FK7804CertificateSendContentProvider implements CertificateSendCont
       throw new IllegalStateException("Inconsistent date range list provided.");
     }
 
-    long totalDays = dateRanges.stream()
+    final var totalDays = dateRanges.stream()
         .mapToLong(range -> ChronoUnit.DAYS.between(range.from(), range.to()) + 1)
         .sum();
 
