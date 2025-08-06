@@ -42,12 +42,12 @@ class FK7804CertificateSendContentProviderTest {
 
   @Test
   void shouldThrowIfValueIsNotElementValueDateRangeList() {
-    var data = ElementData.builder()
+    final var data = ElementData.builder()
         .id(QUESTION_NEDSATTNING_ARBETSFORMAGA_ID)
         .value(ElementValueText.builder().build())
         .build();
 
-    var cert = Certificate.builder()
+    final var cert = Certificate.builder()
         .elementData(List.of(data))
         .build();
 
@@ -59,13 +59,13 @@ class FK7804CertificateSendContentProviderTest {
 
   @Test
   void shouldThrowIfDateRangeListIsEmpty() {
-    var cert = certificateWithDateRanges(List.of());
+    final var cert = certificateWithDateRanges(List.of());
     assertThrows(IllegalStateException.class, () -> provider.body(cert));
   }
 
   @Test
   void shouldReturnAlertBodyIfTotalDaysLessThan15() {
-    var cert = certificateWithDateRanges(
+    final var cert = certificateWithDateRanges(
         List.of(
             DateRange.builder()
                 .from(LocalDate.of(2023, 1, 1))
@@ -74,13 +74,13 @@ class FK7804CertificateSendContentProviderTest {
         )
     );
 
-    var result = provider.body(cert);
+    final var result = provider.body(cert);
     assertEquals(ALERT_BODY, result);
   }
 
   @Test
   void shouldReturnShortBodyIfTotalDaysEquals15() {
-    var cert = certificateWithDateRanges(
+    final var cert = certificateWithDateRanges(
         List.of(
             DateRange.builder()
                 .from(LocalDate.of(2023, 1, 1))
@@ -88,13 +88,13 @@ class FK7804CertificateSendContentProviderTest {
                 .build()
         )
     );
-    var result = provider.body(cert);
+    final var result = provider.body(cert);
     assertEquals(SHORT_BODY, result);
   }
 
   @Test
   void shouldReturnShortBodyIfTotalDaysMoreThan15() {
-    var cert = certificateWithDateRanges(
+    final var cert = certificateWithDateRanges(
         List.of(
             DateRange.builder()
                 .from(LocalDate.of(2023, 1, 1))
@@ -102,15 +102,15 @@ class FK7804CertificateSendContentProviderTest {
                 .build()
         )
     );
-    var result = provider.body(cert);
+    final var result = provider.body(cert);
     assertEquals(SHORT_BODY, result);
   }
 
   private static Certificate certificateWithDateRanges(List<DateRange> ranges) {
-    var value = ElementValueDateRangeList.builder()
+    final var value = ElementValueDateRangeList.builder()
         .dateRangeList(ranges)
         .build();
-    var data = ElementData.builder()
+    final var data = ElementData.builder()
         .id(QUESTION_NEDSATTNING_ARBETSFORMAGA_ID)
         .value(value)
         .build();
