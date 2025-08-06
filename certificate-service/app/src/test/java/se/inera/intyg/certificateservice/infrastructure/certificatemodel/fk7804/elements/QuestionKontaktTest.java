@@ -27,7 +27,10 @@ class QuestionKontaktTest {
   void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationCheckboxBoolean.builder()
         .id(QUESTION_KONTAKT_FIELD_ID)
-        .name("Jag önskar att Försäkringskassan kontaktar mig")
+        .name("Kontakt med Försäkringskassan")
+        .description(
+            "Försäkringskassans handläggare tar kontakt med dig när underlagen har kommit in och handläggningen kan påbörjas.")
+        .label("Jag önskar att Försäkringskassan kontaktar mig")
         .build();
 
     final var element = QuestionKontakt.questionKontakt();
