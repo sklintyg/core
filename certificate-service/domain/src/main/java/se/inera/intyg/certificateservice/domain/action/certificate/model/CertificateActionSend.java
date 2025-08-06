@@ -68,10 +68,8 @@ public class CertificateActionSend implements CertificateAction {
   @Override
   public String getBody(Optional<Certificate> certificate,
       Optional<ActionEvaluation> actionEvaluation) {
-    return certificate
-        .map(Certificate::certificateModel)
-        .map(CertificateModel::sendContentProvider)
-        .map(provider -> provider.body(certificate.get()))
+    return Optional.ofNullable(certificateActionSpecification.contentProvider())
+        .map(provider -> provider.body(certificate.orElseThrow()))
         .orElseGet(
             () -> getRecipient(certificate)
                 .map(CertificateActionSend::recipientBody)

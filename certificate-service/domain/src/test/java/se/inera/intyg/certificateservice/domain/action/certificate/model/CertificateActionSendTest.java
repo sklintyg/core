@@ -3,7 +3,6 @@ package se.inera.intyg.certificateservice.domain.action.certificate.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.BETA_REGIONEN;
@@ -32,10 +31,9 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.CertificateBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionContentProvider;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateSendContentProvider;
-import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
@@ -47,6 +45,9 @@ import se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate;
 @ExtendWith(MockitoExtension.class)
 class CertificateActionSendTest {
 
+
+  @Mock
+  private CertificateActionContentProvider certificateActionContentProvider;
   private CertificateActionSend certificateActionSend;
   private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
   private CertificateBuilder certificateBuilder;
@@ -56,15 +57,14 @@ class CertificateActionSendTest {
           .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
           .build();
 
-  @Mock
-  CertificateActionConfigurationRepository certificateActionConfigurationRepository;
   @InjectMocks
   CertificateActionFactory certificateActionFactory;
 
   @BeforeEach
   void setUp() {
     certificateActionSend = (CertificateActionSend) certificateActionFactory.create(
-        CERTIFICATE_ACTION_SPECIFICATION);
+        CERTIFICATE_ACTION_SPECIFICATION
+    );
 
     certificateBuilder = Certificate.builder()
         .status(Status.SIGNED)
@@ -650,10 +650,20 @@ class CertificateActionSendTest {
   @Nested
   class SentContentProviderTests {
 
+    @BeforeEach
+    void setUp() {
+      certificateActionSend = (CertificateActionSend) certificateActionFactory.create(
+          CertificateActionSpecification.builder()
+              .certificateActionType(CertificateActionType.SEND)
+              .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
+              .contentProvider(certificateActionContentProvider)
+              .build()
+      );
+    }
+
     @Test
     void shallReturnBodyFromProvider() {
       final var expectedBody = "expectedBody";
-      final var sendContentProvider = mock(CertificateSendContentProvider.class);
       final var actionEvaluation = actionEvaluationBuilder.build();
       final var certificate = certificateBuilder
           .certificateModel(
@@ -665,13 +675,12 @@ class CertificateActionSendTest {
                           "logicalAddress"
                       )
                   )
-                  .sendContentProvider(sendContentProvider)
                   .build()
           )
           .build();
 
-      when(sendContentProvider.body(certificate)).thenReturn(expectedBody);
-      
+      when(certificateActionContentProvider.body(certificate)).thenReturn(expectedBody);
+
       assertEquals(
           expectedBody,
           certificateActionSend.getBody(Optional.of(certificate),

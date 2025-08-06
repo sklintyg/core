@@ -3,10 +3,10 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804
 import java.time.temporal.ChronoUnit;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateSendContentProvider;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionContentProvider;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 
-public class FK7804CertificateSendContentProvider implements CertificateSendContentProvider {
+public class FK7804CertificateSendContentProvider implements CertificateActionContentProvider {
 
   private static final ElementId QUESTION_NEDSATTNING_ARBETSFORMAGA_ID = new ElementId("32");
 
