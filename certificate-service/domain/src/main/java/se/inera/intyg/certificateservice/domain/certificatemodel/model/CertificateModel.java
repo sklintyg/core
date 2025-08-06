@@ -41,6 +41,7 @@ public class CertificateModel implements Comparator<ElementId> {
   SchematronPath schematronPath;
   List<CertificateText> texts;
   CertificateSummaryProvider summaryProvider;
+  CertificateSendContentProvider sendContentProvider;
   List<CertificateMessageType> messageTypes;
   PdfSpecification pdfSpecification;
   CertificateConfirmationModalProvider confirmationModalProvider;

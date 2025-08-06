@@ -3,6 +3,8 @@ package se.inera.intyg.certificateservice.domain.action.certificate.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.BETA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
@@ -32,6 +34,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMet
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateSendContentProvider;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
@@ -641,6 +644,39 @@ class CertificateActionSendTest {
                 Optional.of(actionEvaluation))
         );
       }
+    }
+  }
+
+  @Nested
+  class SentContentProviderTests {
+
+    @Test
+    void shallReturnBodyFromProvider() {
+      final var expectedBody = "expectedBody";
+      final var sendContentProvider = mock(CertificateSendContentProvider.class);
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var certificate = certificateBuilder
+          .certificateModel(
+              CertificateModel.builder()
+                  .recipient(
+                      new Recipient(
+                          new RecipientId("id"),
+                          "Transportstyrelsen",
+                          "logicalAddress"
+                      )
+                  )
+                  .sendContentProvider(sendContentProvider)
+                  .build()
+          )
+          .build();
+
+      when(sendContentProvider.body(certificate)).thenReturn(expectedBody);
+      
+      assertEquals(
+          expectedBody,
+          certificateActionSend.getBody(Optional.of(certificate),
+              Optional.of(actionEvaluation))
+      );
     }
   }
 }

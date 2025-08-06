@@ -68,10 +68,17 @@ public class CertificateActionSend implements CertificateAction {
   @Override
   public String getBody(Optional<Certificate> certificate,
       Optional<ActionEvaluation> actionEvaluation) {
-    return getRecipient(certificate)
-        .map(CertificateActionSend::recipientBody)
-        .orElseThrow(
-            () -> new IllegalStateException(UNABLE_TO_RETRIEVE_RECIPIENT_FOR_CERTIFICATE));
+    return certificate
+        .map(Certificate::certificateModel)
+        .map(CertificateModel::sendContentProvider)
+        .map(provider -> provider.body(certificate.get()))
+        .orElseGet(
+            () -> getRecipient(certificate)
+                .map(CertificateActionSend::recipientBody)
+                .orElseThrow(
+                    () -> new IllegalStateException(UNABLE_TO_RETRIEVE_RECIPIENT_FOR_CERTIFICATE)
+                )
+        );
   }
 
   private static String recipientName(Recipient recipient) {
