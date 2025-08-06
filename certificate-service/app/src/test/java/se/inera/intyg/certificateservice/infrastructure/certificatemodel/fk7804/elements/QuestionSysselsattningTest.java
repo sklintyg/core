@@ -139,7 +139,7 @@ class QuestionSysselsattningTest {
       final var shouldValidate = element.elementSpecification(QUESTION_SYSSELSATTNING_ID)
           .shouldValidate();
 
-      assertFalse(shouldValidate.test(elementData));
+      assertTrue(shouldValidate.test(elementData));
     }
 
     @Test

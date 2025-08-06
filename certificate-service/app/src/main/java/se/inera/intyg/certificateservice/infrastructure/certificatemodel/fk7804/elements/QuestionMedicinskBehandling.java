@@ -53,7 +53,7 @@ public class QuestionMedicinskBehandling {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.valueBoolean(QUESTION_SMITTBARARPENNING_ID, false)
+            ShouldValidateFactory.checkboxBoolean(QUESTION_SMITTBARARPENNING_ID, false)
         )
         .children(List.of(children))
         .build();

@@ -28,22 +28,32 @@ public class ShouldValidateFactory {
     return radioBooleans(List.of(elementId), expectedValue);
   }
 
-  public static Predicate<List<ElementData>> radioBooleans(final List<ElementId> elementIds,
+  public static Predicate<List<ElementData>> checkboxBoolean(ElementId elementId,
       final boolean expectedValue) {
     return elementData -> {
       final var matches = elementData.stream()
-          .filter(data -> elementIds.contains(data.id()))
+          .filter(data -> elementId.equals(data.id()))
           .map(element -> (ElementValueBoolean) element.value())
           .toList();
 
-      if (expectedValue) {
-        return matches.stream()
-            .anyMatch(value -> value != null && Boolean.TRUE.equals(value.value()));
-      } else {
-        return matches.stream()
-            .noneMatch(value -> value != null && Boolean.TRUE.equals(value.value()));
+      if (!expectedValue && matches.isEmpty()) {
+        return true;
       }
+
+      return matches.stream().anyMatch(
+          value -> value != null && value.value() != null && value.value() == expectedValue
+      );
     };
+  }
+
+  public static Predicate<List<ElementData>> radioBooleans(final List<ElementId> elementIds,
+      final boolean expectedValue) {
+    return elementData -> elementData.stream()
+        .filter(data -> elementIds.contains(data.id()))
+        .map(element -> (ElementValueBoolean) element.value())
+        .anyMatch(
+            value -> value != null && value.value() != null && value.value() == expectedValue
+        );
   }
 
   public static Predicate<List<ElementData>> codes(ElementId elementId, List<FieldId> fieldIds) {

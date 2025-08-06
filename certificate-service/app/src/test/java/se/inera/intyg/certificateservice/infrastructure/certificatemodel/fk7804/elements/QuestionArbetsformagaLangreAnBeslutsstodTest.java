@@ -121,7 +121,7 @@ class QuestionArbetsformagaLangreAnBeslutsstodTest {
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
-      assertFalse(shouldValidate.test(elementData));
+      assertTrue(shouldValidate.test(elementData));
     }
 
     @Test
