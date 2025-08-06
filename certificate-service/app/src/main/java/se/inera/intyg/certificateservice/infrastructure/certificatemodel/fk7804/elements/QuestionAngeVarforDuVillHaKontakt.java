@@ -4,13 +4,13 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionKontakt.QUESTION_KONTAKT_ID;
 
 import java.util.List;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
 
 public class QuestionAngeVarforDuVillHaKontakt {
 
@@ -49,12 +49,7 @@ public class QuestionAngeVarforDuVillHaKontakt {
             )
         )
         .shouldValidate(
-            elementData -> elementData.stream()
-                .filter(data -> data.id().equals(QUESTION_KONTAKT_ID))
-                .map(element -> (ElementValueDateList) element.value())
-                .anyMatch(value -> value.dateList().stream().anyMatch(
-                    valueDate -> valueDate.dateId().equals(QUESTION_KONTAKT_FIELD_ID))
-                )
+            ShouldValidateFactory.checkboxBoolean(QUESTION_KONTAKT_ID, true)
         )
         .build();
   }

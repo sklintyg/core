@@ -1,14 +1,20 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionAngeVarforDuVillHaKontakt.QUESTION_VARFOR_KONTAKT_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionAngeVarforDuVillHaKontakt.QUESTION_VARFOR_KONTAKT_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionKontakt.QUESTION_KONTAKT_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionKontakt.QUESTION_KONTAKT_ID;
 
 import java.util.List;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
@@ -59,5 +65,72 @@ class QuestionAngeVarforDuVillHaKontaktTest {
     final var element = QuestionAngeVarforDuVillHaKontakt.questionAngeVarforDuVillHaKontakt();
 
     assertEquals(expectedRules, element.rules());
+  }
+
+  @Nested
+  class ShouldValidate {
+
+    @Test
+    void shallReturnTrueIfBooleanIsTrue() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId("26"))
+              .value(
+                  ElementValueBoolean.builder()
+                      .value(true)
+                      .build()
+              )
+              .build()
+      );
+
+      final var element = QuestionAngeVarforDuVillHaKontakt.questionAngeVarforDuVillHaKontakt();
+
+      final var shouldValidate = element.elementSpecification(new ElementId("26.2"))
+          .shouldValidate();
+
+      assertTrue(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shallReturnFalseIfElementMissing() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId("8.1"))
+              .value(
+                  ElementValueBoolean.builder()
+                      .value(true)
+                      .build()
+              )
+              .build()
+      );
+
+      final var element = QuestionAngeVarforDuVillHaKontakt.questionAngeVarforDuVillHaKontakt();
+
+      final var shouldValidate = element.elementSpecification(new ElementId("26.2"))
+          .shouldValidate();
+
+      assertFalse(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shallReturnFalseIfElementFalse() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId("26"))
+              .value(
+                  ElementValueBoolean.builder()
+                      .value(false)
+                      .build()
+              )
+              .build()
+      );
+
+      final var element = QuestionAngeVarforDuVillHaKontakt.questionAngeVarforDuVillHaKontakt();
+
+      final var shouldValidate = element.elementSpecification(new ElementId("26.2"))
+          .shouldValidate();
+
+      assertFalse(shouldValidate.test(elementData));
+    }
   }
 }
