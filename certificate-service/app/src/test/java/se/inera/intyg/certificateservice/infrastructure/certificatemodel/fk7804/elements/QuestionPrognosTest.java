@@ -16,7 +16,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementLa
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
-import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCodeList;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCode;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0006;
 
 class QuestionPrognosTest {
@@ -84,7 +84,7 @@ class QuestionPrognosTest {
   void shouldIncludeValidation() {
     final var element = QuestionPrognos.questionPrognos();
     final var expectedValidations = List.of(
-        ElementValidationCodeList.builder()
+        ElementValidationCode.builder()
             .mandatory(true)
             .build()
     );
