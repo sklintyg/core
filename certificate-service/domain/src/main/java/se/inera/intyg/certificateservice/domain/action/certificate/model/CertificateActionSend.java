@@ -69,7 +69,7 @@ public class CertificateActionSend implements CertificateAction {
   public String getBody(Optional<Certificate> certificate,
       Optional<ActionEvaluation> actionEvaluation) {
     return Optional.ofNullable(certificateActionSpecification.contentProvider())
-        .map(provider -> provider.body(certificate.orElseThrow()))
+        .map(contentProvider -> contentProvider.body(certificate.orElseThrow()))
         .orElseGet(
             () -> getRecipient(certificate)
                 .map(CertificateActionSend::recipientBody)
