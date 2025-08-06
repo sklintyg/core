@@ -68,7 +68,7 @@ public class QuestionHorselhjalpmedelPosition {
                     .build()
             )
         )
-        .shouldValidate(ShouldValidateFactory.radioBoolean(QUESTION_HORSELHJALPMEDEL_ID))
+        .shouldValidate(ShouldValidateFactory.valueBoolean(QUESTION_HORSELHJALPMEDEL_ID))
         .mapping(new ElementMapping(QUESTION_HORSEL_ID, null))
         .children(List.of(children))
         .build();

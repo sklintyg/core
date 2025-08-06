@@ -15,21 +15,39 @@ public class ShouldValidateFactory {
     throw new IllegalStateException("Utility class");
   }
 
-  public static Predicate<List<ElementData>> radioBoolean(ElementId elementId) {
-    return radioBoolean(elementId, true);
+  public static Predicate<List<ElementData>> valueBoolean(ElementId elementId) {
+    return valueBoolean(elementId, true);
   }
 
   public static Predicate<List<ElementData>> radioBooleans(List<ElementId> elementIds) {
     return radioBooleans(elementIds, true);
   }
 
-  public static Predicate<List<ElementData>> radioBoolean(ElementId elementId,
+  public static Predicate<List<ElementData>> valueBoolean(ElementId elementId,
       boolean expectedValue) {
     return radioBooleans(List.of(elementId), expectedValue);
   }
 
-  public static Predicate<List<ElementData>> radioBooleans(List<ElementId> elementIds,
-      boolean expectedValue) {
+  public static Predicate<List<ElementData>> checkboxBoolean(ElementId elementId,
+      final boolean expectedValue) {
+    return elementData -> {
+      final var matches = elementData.stream()
+          .filter(data -> elementId.equals(data.id()))
+          .map(element -> (ElementValueBoolean) element.value())
+          .toList();
+
+      if (!expectedValue && matches.isEmpty()) {
+        return true;
+      }
+
+      return matches.stream().anyMatch(
+          value -> value != null && value.value() != null && value.value() == expectedValue
+      );
+    };
+  }
+
+  public static Predicate<List<ElementData>> radioBooleans(final List<ElementId> elementIds,
+      final boolean expectedValue) {
     return elementData -> elementData.stream()
         .filter(data -> elementIds.contains(data.id()))
         .map(element -> (ElementValueBoolean) element.value())

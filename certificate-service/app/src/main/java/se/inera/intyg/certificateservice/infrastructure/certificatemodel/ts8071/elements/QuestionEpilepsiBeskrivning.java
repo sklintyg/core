@@ -49,7 +49,7 @@ public class QuestionEpilepsiBeskrivning {
                 )
             )
         )
-        .shouldValidate(ShouldValidateFactory.radioBoolean(QUESTION_EPILEPSI_ID))
+        .shouldValidate(ShouldValidateFactory.valueBoolean(QUESTION_EPILEPSI_ID))
         .mapping(
             new ElementMapping(QUESTION_EPILEPSI_ID, null)
         )

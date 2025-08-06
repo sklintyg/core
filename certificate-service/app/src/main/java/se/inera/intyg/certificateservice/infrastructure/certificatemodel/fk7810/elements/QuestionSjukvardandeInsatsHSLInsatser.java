@@ -62,7 +62,7 @@ public class QuestionSjukvardandeInsatsHSLInsatser {
                     .build()
             )
         )
-        .shouldValidate(ShouldValidateFactory.radioBoolean(QUESTION_SJUKVARDANDE_INSATS_HSL_ID))
+        .shouldValidate(ShouldValidateFactory.valueBoolean(QUESTION_SJUKVARDANDE_INSATS_HSL_ID))
         .pdfConfiguration(
             PdfConfigurationText.builder()
                 .pdfFieldId(PDF_FIELD_ID)

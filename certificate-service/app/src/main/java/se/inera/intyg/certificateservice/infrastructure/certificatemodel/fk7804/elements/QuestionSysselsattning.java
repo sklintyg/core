@@ -15,12 +15,13 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCodeList;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeFactory;
 
 public class QuestionSysselsattning {
 
-  public static final ElementId SYSSELSATTNING_ID = new ElementId("28");
-  public static final FieldId SYSSELSATTNING_FIELD_ID = new FieldId("28.1");
+  public static final ElementId QUESTION_SYSSELSATTNING_ID = new ElementId("28");
+  public static final FieldId QUESTION_SYSSELSATTNING_FIELD_ID = new FieldId("28.1");
 
   private QuestionSysselsattning() {
     throw new IllegalStateException("Utility class");
@@ -35,10 +36,10 @@ public class QuestionSysselsattning {
     );
 
     return ElementSpecification.builder()
-        .id(SYSSELSATTNING_ID)
+        .id(QUESTION_SYSSELSATTNING_ID)
         .configuration(
             ElementConfigurationCheckboxMultipleCode.builder()
-                .id(SYSSELSATTNING_FIELD_ID)
+                .id(QUESTION_SYSSELSATTNING_FIELD_ID)
                 .name("I relation till vilken sysselsättning bedömer du arbetsförmågan?")
                 .description(
                     "Om du kryssar i flera val är det viktigt att du tydliggör under \"Övriga upplysningar\" om sjukskrivningens omfattning eller period skiljer sig åt mellan olika sysselsättningar.")
@@ -49,7 +50,7 @@ public class QuestionSysselsattning {
         .rules(
             List.of(
                 CertificateElementRuleFactory.mandatoryOrExist(
-                    SYSSELSATTNING_ID,
+                    QUESTION_SYSSELSATTNING_ID,
                     List.of(
                         new FieldId(ARBETSSOKANDE.code()),
                         new FieldId(FORALDRALEDIG.code()),
@@ -70,6 +71,9 @@ public class QuestionSysselsattning {
                     .mandatory(true)
                     .build()
             )
+        )
+        .shouldValidate(
+            ShouldValidateFactory.checkboxBoolean(QUESTION_SMITTBARARPENNING_ID, false)
         )
         .children(
             List.of(children)

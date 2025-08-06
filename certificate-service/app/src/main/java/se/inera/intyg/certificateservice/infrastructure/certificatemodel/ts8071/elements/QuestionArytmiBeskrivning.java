@@ -50,7 +50,7 @@ public class QuestionArytmiBeskrivning {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.radioBoolean(QUESTION_ARYTMI_ID)
+            ShouldValidateFactory.valueBoolean(QUESTION_ARYTMI_ID)
         )
         .mapping(new ElementMapping(QUESTION_HJARTSJUKDOM_ID, null))
         .validations(

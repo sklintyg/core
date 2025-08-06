@@ -12,6 +12,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateList;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0001;
 
 public class QuestionGrundForMedicinsktUnderlag {
@@ -87,8 +88,10 @@ public class QuestionGrundForMedicinsktUnderlag {
                     .build()
             )
         )
+        .shouldValidate(
+            ShouldValidateFactory.checkboxBoolean(QUESTION_SMITTBARARPENNING_ID, false)
+        )
         .children(List.of(children))
         .build();
   }
 }
-

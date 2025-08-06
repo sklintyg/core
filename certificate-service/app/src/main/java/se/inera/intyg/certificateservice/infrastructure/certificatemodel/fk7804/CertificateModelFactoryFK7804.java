@@ -172,8 +172,7 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
             categoryFunktionsnedsattning(),
             categoryAktivitetsbegransning(),
             categoryMedicinskBehandling(
-                questionMedicinskBehandling(
-                )
+                questionMedicinskBehandling()
             ),
             categoryBedomning(
                 questionNedsattningArbetsformaga(

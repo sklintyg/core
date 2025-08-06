@@ -49,7 +49,7 @@ public class QuestionSomnBeskrivning {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.radioBoolean(QUESTION_SOMN_ID)
+            ShouldValidateFactory.valueBoolean(QUESTION_SOMN_ID)
         )
         .mapping(
             new ElementMapping(QUESTION_SOMN_ID, null)

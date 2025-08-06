@@ -118,7 +118,7 @@ public class QuestionUtredningEllerUnderlag {
                     .build()
             )
         )
-        .shouldValidate(ShouldValidateFactory.radioBoolean(QUESTION_BASERAT_PA_ANNAT_UNDERLAG_ID))
+        .shouldValidate(ShouldValidateFactory.valueBoolean(QUESTION_BASERAT_PA_ANNAT_UNDERLAG_ID))
         .pdfConfiguration(
             PdfConfigurationMedicalInvestigationList.builder()
                 .list(

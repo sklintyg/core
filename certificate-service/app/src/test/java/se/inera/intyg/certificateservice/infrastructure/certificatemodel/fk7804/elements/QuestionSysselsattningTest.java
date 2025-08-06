@@ -1,18 +1,24 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0002.ARBETSSOKANDE;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0002.FORALDRALEDIG;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0002.NUVARANDE_ARBETE;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0002.STUDIER;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSmittbararpenning.QUESTION_SMITTBARARPENNING_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSysselsattning.SYSSELSATTNING_FIELD_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSysselsattning.SYSSELSATTNING_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSysselsattning.QUESTION_SYSSELSATTNING_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSysselsattning.QUESTION_SYSSELSATTNING_ID;
 
 import java.util.List;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementLayout;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
@@ -25,13 +31,13 @@ class QuestionSysselsattningTest {
   @Test
   void shouldHaveCorrectId() {
     final var element = QuestionSysselsattning.questionSysselsattning();
-    assertEquals(SYSSELSATTNING_ID, element.id());
+    assertEquals(QUESTION_SYSSELSATTNING_ID, element.id());
   }
 
   @Test
   void shouldHaveCorrectConfiguration() {
     final var expectedConfiguration = ElementConfigurationCheckboxMultipleCode.builder()
-        .id(SYSSELSATTNING_FIELD_ID)
+        .id(QUESTION_SYSSELSATTNING_FIELD_ID)
         .name("I relation till vilken sysselsättning bedömer du arbetsförmågan?")
         .elementLayout(ElementLayout.ROWS)
         .list(
@@ -59,7 +65,7 @@ class QuestionSysselsattningTest {
     final var element = QuestionSysselsattning.questionSysselsattning();
     final var expectedRules = List.of(
         ElementRuleExpression.builder()
-            .id(SYSSELSATTNING_ID)
+            .id(QUESTION_SYSSELSATTNING_ID)
             .type(ElementRuleType.MANDATORY)
             .expression(
                 new RuleExpression(
@@ -89,5 +95,72 @@ class QuestionSysselsattningTest {
             .build()
     );
     assertEquals(expectedValidations, element.validations());
+  }
+
+  @Nested
+  class ShouldValidate {
+
+    @Test
+    void shallReturnTrueIfBooleanIsFalse() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId("27"))
+              .value(
+                  ElementValueBoolean.builder()
+                      .value(false)
+                      .build()
+              )
+              .build()
+      );
+
+      final var element = QuestionSysselsattning.questionSysselsattning();
+
+      final var shouldValidate = element.elementSpecification(QUESTION_SYSSELSATTNING_ID)
+          .shouldValidate();
+
+      assertTrue(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shallReturnTrueIfElementMissing() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId("8.1"))
+              .value(
+                  ElementValueBoolean.builder()
+                      .value(true)
+                      .build()
+              )
+              .build()
+      );
+
+      final var element = QuestionSysselsattning.questionSysselsattning();
+
+      final var shouldValidate = element.elementSpecification(QUESTION_SYSSELSATTNING_ID)
+          .shouldValidate();
+
+      assertTrue(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shallReturnFalseIfElementTrue() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId("27"))
+              .value(
+                  ElementValueBoolean.builder()
+                      .value(true)
+                      .build()
+              )
+              .build()
+      );
+
+      final var element = QuestionSysselsattning.questionSysselsattning();
+
+      final var shouldValidate = element.elementSpecification(QUESTION_SYSSELSATTNING_ID)
+          .shouldValidate();
+
+      assertFalse(shouldValidate.test(elementData));
+    }
   }
 }

@@ -50,7 +50,7 @@ public class QuestionNeuropsykiatriskLakemedelBeskrivning {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.radioBoolean(QUESTION_NEUROPSYKIATRISK_LAKEMEDEL_ID)
+            ShouldValidateFactory.valueBoolean(QUESTION_NEUROPSYKIATRISK_LAKEMEDEL_ID)
         )
         .mapping(
             new ElementMapping(QUESTION_NEUROPSYKIATRISK_ID, null)

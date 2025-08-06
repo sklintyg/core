@@ -49,7 +49,7 @@ public class QuestionNeurologiskSjukdomBeskrivning {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.radioBoolean(QUESTION_NEUROLOGISK_SJUKDOM_ID)
+            ShouldValidateFactory.valueBoolean(QUESTION_NEUROLOGISK_SJUKDOM_ID)
         )
         .mapping(
             new ElementMapping(QUESTION_NEUROLOGISK_SJUKDOM_ID, null)

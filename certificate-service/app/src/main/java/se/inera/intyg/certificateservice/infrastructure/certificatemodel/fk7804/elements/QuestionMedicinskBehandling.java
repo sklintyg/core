@@ -10,6 +10,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
 
 public class QuestionMedicinskBehandling {
 
@@ -51,8 +52,10 @@ public class QuestionMedicinskBehandling {
                     .build()
             )
         )
+        .shouldValidate(
+            ShouldValidateFactory.checkboxBoolean(QUESTION_SMITTBARARPENNING_ID, false)
+        )
         .children(List.of(children))
         .build();
   }
 }
-

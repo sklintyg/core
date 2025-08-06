@@ -51,7 +51,7 @@ public class QuestionPsykiskUtvecklingsstorningAllvarlig {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.radioBoolean(QUESTION_PSYKISK_UTVECKLINGSSTORNING_ID)
+            ShouldValidateFactory.valueBoolean(QUESTION_PSYKISK_UTVECKLINGSSTORNING_ID)
         )
         .mapping(
             new ElementMapping(QUESTION_NEUROPSYKIATRISK_ID, null)

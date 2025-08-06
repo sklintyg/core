@@ -49,7 +49,7 @@ public class QuestionMedicineringBeskrivning {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.radioBoolean(QUESTION_MEDICINERING_ID)
+            ShouldValidateFactory.valueBoolean(QUESTION_MEDICINERING_ID)
         )
         .mapping(
             new ElementMapping(QUESTION_MEDICINERING_ID, null)

@@ -51,7 +51,7 @@ public class QuestionDemensBeskrivning {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.radioBoolean(QUESTION_DEMENS_ID)
+            ShouldValidateFactory.valueBoolean(QUESTION_DEMENS_ID)
         )
         .mapping(
             new ElementMapping(QUESTION_KOGNITIV_STORNING_ID, null)

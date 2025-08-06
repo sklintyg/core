@@ -50,7 +50,7 @@ public class QuestionNjurtransplatationTidpunkt {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.radioBoolean(QUESTION_NJURTRANSPLATATION_ID)
+            ShouldValidateFactory.valueBoolean(QUESTION_NJURTRANSPLATATION_ID)
         )
         .mapping(
             new ElementMapping(QUESTION_NJURFUNKTION_ID, null)

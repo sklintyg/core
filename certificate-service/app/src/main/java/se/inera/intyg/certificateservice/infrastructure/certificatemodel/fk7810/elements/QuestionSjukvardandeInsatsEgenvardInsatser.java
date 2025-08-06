@@ -65,7 +65,7 @@ public class QuestionSjukvardandeInsatsEgenvardInsatser {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.radioBoolean(QUESTION_SJUKVARDANDE_INSATS_EGENVARD_ID)
+            ShouldValidateFactory.valueBoolean(QUESTION_SJUKVARDANDE_INSATS_EGENVARD_ID)
         )
         .pdfConfiguration(
             PdfConfigurationText.builder()

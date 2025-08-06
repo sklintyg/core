@@ -50,7 +50,7 @@ public class QuestionLakemedelBeskrivning {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.radioBoolean(QUESTION_LAKEMEDEL_ID)
+            ShouldValidateFactory.valueBoolean(QUESTION_LAKEMEDEL_ID)
         )
         .mapping(
             new ElementMapping(QUESTION_MISSBRUK_ID, null)
