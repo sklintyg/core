@@ -1,14 +1,18 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804;
 
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionContentProvider;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 
 public class FK7804CertificateSendContentProvider implements CertificateActionContentProvider {
 
-  private static final ElementId QUESTION_NEDSATTNING_ARBETSFORMAGA_ID = new ElementId("32");
+  private static final ElementId QUESTION_NEDSATTNING_ARBETSFORMAGA_ID = new ElementId("56");
 
   private static final String LONG_SICK_LEAVE_PERIOD_BODY =
       "<p>Om du går vidare kommer intyget skickas direkt till "
@@ -43,17 +47,49 @@ public class FK7804CertificateSendContentProvider implements CertificateActionCo
           "Invalid value type. Type was '%s'".formatted(questionBedomning.value().getClass()));
     }
 
-    final var dateRanges = elementValueDateList.dateRangeList();
-    if (dateRanges == null || dateRanges.isEmpty()) {
-      throw new IllegalStateException("Inconsistent date range list provided.");
-    }
+    final var ranges = getDateRanges(elementValueDateList);
 
-    final var totalDays = dateRanges.stream()
-        .mapToLong(range -> ChronoUnit.DAYS.between(range.from(), range.to()) + 1)
+    var totalDays = ranges.stream()
+        .mapToLong(range -> ChronoUnit.DAYS.between(range.from(), range.to()))
         .sum();
 
     return totalDays < 15
         ? SHORT_SICK_LEAVE_PERIOD_BODY
         : LONG_SICK_LEAVE_PERIOD_BODY;
+  }
+
+  private static ArrayList<DateRange> getDateRanges(
+      ElementValueDateRangeList elementValueDateList) {
+    final var dateRanges = elementValueDateList.dateRangeList();
+    if (dateRanges == null || dateRanges.isEmpty()) {
+      throw new IllegalStateException("Inconsistent date range list provided.");
+    }
+
+    return new ArrayList<>(mergeConnectedDates(dateRanges));
+  }
+
+  private static ArrayList<DateRange> mergeConnectedDates(List<DateRange> dateRanges) {
+    final var sortedRanges = new ArrayList<>(dateRanges);
+    sortedRanges.sort(Comparator.comparing(DateRange::to));
+
+    final var ranges = new ArrayList<DateRange>();
+    sortedRanges.forEach(date -> {
+          final var dateRange = ranges.isEmpty() ? null : ranges.getLast();
+
+          if (dateRange != null && hasOverlappingDates(date, dateRange)) {
+            final var dateRangeWithAddedDays = dateRange.withTo(date.to());
+            ranges.remove(dateRange);
+            ranges.add(dateRangeWithAddedDays);
+          } else {
+            ranges.add(date);
+          }
+        }
+    );
+
+    return ranges;
+  }
+
+  private static boolean hasOverlappingDates(DateRange date, DateRange dateRange) {
+    return dateRange.to().plusDays(1).equals(date.from());
   }
 }

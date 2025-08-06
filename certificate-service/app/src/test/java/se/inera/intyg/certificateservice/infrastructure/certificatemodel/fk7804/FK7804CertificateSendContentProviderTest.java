@@ -5,7 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
@@ -15,7 +19,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 
 class FK7804CertificateSendContentProviderTest {
 
-  private static final ElementId QUESTION_NEDSATTNING_ARBETSFORMAGA_ID = new ElementId("32");
+  private static final ElementId QUESTION_NEDSATTNING_ARBETSFORMAGA_ID = new ElementId("56");
 
   private static final String SHORT_BODY =
       "<p>Om du går vidare kommer intyget skickas direkt till "
@@ -63,42 +67,149 @@ class FK7804CertificateSendContentProviderTest {
     assertThrows(IllegalStateException.class, () -> provider.body(cert));
   }
 
-  @Test
-  void shouldReturnAlertBodyIfTotalDaysLessThan15() {
-    final var cert = certificateWithDateRanges(
-        List.of(
-            DateRange.builder()
-                .from(LocalDate.of(2023, 1, 1))
-                .to(LocalDate.of(2023, 1, 14))
-                .build()
+  static Stream<Arguments> sickLeavePeriodsUnder15Days() {
+    return Stream.of(
+        Arguments.of(
+            List.of(
+                DateRange.builder()
+                    .from(LocalDate.of(2023, 1, 1))
+                    .to(LocalDate.of(2023, 1, 15))
+                    .build()
+            )
+        ),
+        Arguments.of(
+            List.of(
+                DateRange.builder()
+                    .from(LocalDate.of(2023, 1, 1))
+                    .to(LocalDate.of(2023, 1, 5))
+                    .build(),
+                DateRange.builder()
+                    .from(LocalDate.of(2023, 1, 6))
+                    .to(LocalDate.of(2023, 1, 10))
+                    .build(),
+                DateRange.builder()
+                    .from(LocalDate.of(2023, 1, 11))
+                    .to(LocalDate.of(2023, 1, 15))
+                    .build()
+            )
+        ),
+        Arguments.of(
+            List.of(
+                DateRange.builder()
+                    .from(LocalDate.of(2023, 1, 1))
+                    .to(LocalDate.of(2023, 1, 5))
+                    .build(),
+                DateRange.builder()
+                    .from(LocalDate.of(2023, 1, 10))
+                    .to(LocalDate.of(2023, 1, 11))
+                    .build(),
+                DateRange.builder()
+                    .from(LocalDate.of(2023, 1, 13))
+                    .to(LocalDate.of(2023, 1, 15))
+                    .build()
+            )
+        ),
+        Arguments.of(
+            List.of(
+                DateRange.builder()
+                    .from(LocalDate.of(2023, 1, 1))
+                    .to(LocalDate.of(2023, 1, 5))
+                    .build(),
+                DateRange.builder()
+                    .from(LocalDate.of(2023, 1, 6))
+                    .to(LocalDate.of(2023, 1, 11))
+                    .build(),
+                DateRange.builder()
+                    .from(LocalDate.of(2023, 1, 12))
+                    .to(LocalDate.of(2023, 1, 14))
+                    .build(),
+                DateRange.builder()
+                    .from(LocalDate.of(2023, 1, 20))
+                    .to(LocalDate.of(2023, 1, 21))
+                    .build()
+            )
+        ),
+        Arguments.of(
+            List.of(
+                DateRange.builder()
+                    .from(LocalDate.of(2023, 1, 6))
+                    .to(LocalDate.of(2023, 1, 10))
+                    .build(),
+                DateRange.builder()
+                    .from(LocalDate.of(2023, 1, 11))
+                    .to(LocalDate.of(2023, 1, 15))
+                    .build(),
+                DateRange.builder()
+                    .from(LocalDate.of(2023, 1, 1))
+                    .to(LocalDate.of(2023, 1, 5))
+                    .build()
+            )
         )
     );
+  }
+
+  @ParameterizedTest
+  @MethodSource("sickLeavePeriodsUnder15Days")
+  void shouldReturnAlertBodyIfSickLeavePeriodIsLessThan15(List<DateRange> ranges) {
+    final var cert = certificateWithDateRanges(ranges);
 
     final var result = provider.body(cert);
     assertEquals(ALERT_BODY, result);
   }
 
-  @Test
-  void shouldReturnShortBodyIfTotalDaysEquals15() {
-    final var cert = certificateWithDateRanges(
-        List.of(
-            DateRange.builder()
-                .from(LocalDate.of(2023, 1, 1))
-                .to(LocalDate.of(2023, 1, 15))
-                .build()
+  static Stream<Arguments> sickLeavePeriodsGreaterThan15Days() {
+    return Stream.of(
+        Arguments.of(
+            List.of(
+                DateRange.builder()
+                    .from(LocalDate.of(2023, 1, 1))
+                    .to(LocalDate.of(2023, 1, 16))
+                    .build()
+            )
+        ),
+        Arguments.of(
+            List.of(
+                DateRange.builder()
+                    .from(LocalDate.of(2023, 1, 1))
+                    .to(LocalDate.of(2023, 1, 5))
+                    .build(),
+                DateRange.builder()
+                    .from(LocalDate.of(2023, 1, 6))
+                    .to(LocalDate.of(2023, 1, 10))
+                    .build(),
+                DateRange.builder()
+                    .from(LocalDate.of(2023, 1, 11))
+                    .to(LocalDate.of(2023, 1, 16))
+                    .build()
+            )
+        ),
+        Arguments.of(
+            List.of(
+                DateRange.builder()
+                    .from(LocalDate.of(2023, 1, 1))
+                    .to(LocalDate.of(2023, 1, 5))
+                    .build(),
+                DateRange.builder()
+                    .from(LocalDate.of(2023, 1, 10))
+                    .to(LocalDate.of(2023, 1, 11))
+                    .build(),
+                DateRange.builder()
+                    .from(LocalDate.of(2023, 1, 12))
+                    .to(LocalDate.of(2023, 1, 19))
+                    .build()
+            )
         )
     );
-    final var result = provider.body(cert);
-    assertEquals(SHORT_BODY, result);
   }
 
-  @Test
-  void shouldReturnShortBodyIfTotalDaysMoreThan15() {
+  @ParameterizedTest
+  @MethodSource("sickLeavePeriodsGreaterThan15Days")
+  void shouldReturnShortBodyIfSickLeavePeriodIsGreaterThan14() {
     final var cert = certificateWithDateRanges(
         List.of(
             DateRange.builder()
                 .from(LocalDate.of(2023, 1, 1))
-                .to(LocalDate.of(2023, 1, 20))
+                .to(LocalDate.of(2023, 1, 16))
                 .build()
         )
     );
