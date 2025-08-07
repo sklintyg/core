@@ -31,6 +31,9 @@ public class QuestionAntalManader {
             ElementConfigurationInteger.builder()
                 .id(QUESTION_ANTAL_MANADER_FIELD_ID)
                 .name("Ange antal månader")
+                .min(1)
+                .max(99)
+                .unitOfMeasurement("månader")
                 .build()
         )
         .rules(

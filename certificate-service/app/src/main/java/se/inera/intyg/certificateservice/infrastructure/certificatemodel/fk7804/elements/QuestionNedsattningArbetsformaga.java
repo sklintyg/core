@@ -54,7 +54,7 @@ public class QuestionNedsattningArbetsformaga {
                     "Utgångspunkten är att patientens arbetsförmåga ska bedömas i förhållande till patientens normala arbetstid.")
                 .id(new FieldId(QUESTION_NEDSATTNING_ARBETSFORMAGA_FIELD_ID))
                 .dateRanges(dateRanges)
-                .hideWorkingHours(true)
+                .hideWorkingHours(false)
                 .build()
         )
         .rules(

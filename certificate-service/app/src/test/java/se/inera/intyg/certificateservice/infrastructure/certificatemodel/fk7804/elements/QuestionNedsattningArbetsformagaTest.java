@@ -28,7 +28,7 @@ class QuestionNedsattningArbetsformagaTest {
     final var expectedConfiguration = ElementConfigurationCheckboxDateRangeList.builder()
         .name("Min bedömning av patientens nedsättning av arbetsförmågan")
         .id(new FieldId("32.1"))
-        .hideWorkingHours(true)
+        .hideWorkingHours(false)
         .dateRanges(
             List.of(
                 new ElementConfigurationCode(

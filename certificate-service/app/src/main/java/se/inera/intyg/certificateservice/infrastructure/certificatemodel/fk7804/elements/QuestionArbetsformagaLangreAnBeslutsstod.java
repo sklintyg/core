@@ -29,9 +29,7 @@ public class QuestionArbetsformagaLangreAnBeslutsstod {
                 .name(
                     "Patientens arbetsförmåga bedöms nedsatt längre tid än den som Socialstyrelsens försäkringsmedicinska beslutsstöd anger, därför att")
                 .description("""
-                    <ul><li>Om sjukdomen inte följer förväntat förlopp ska det framgå på vilket sätt.</li>
-                    <li>Om det inträffar komplikationer som gör att det tar längre tid att återfå arbetsförmågan ska du beskriva detta.</li>
-                    <li>Om sjukskrivningslängden påverkas av flera sjukdomar, så kallad samsjuklighet, ska du beskriva detta.</li></ul>
+                    <ul><li>Om sjukdomen inte följer förväntat förlopp ska det framgå på vilket sätt.</li><li>Om det inträffar komplikationer som gör att det tar längre tid att återfå arbetsförmågan ska du beskriva detta.</li><li>Om sjukskrivningslängden påverkas av flera sjukdomar, så kallad samsjuklighet, ska du beskriva detta.</li></ul>
                     """)
                 .id(QUESTION_ARBETFORMAGA_LANGRE_FIELD_ID)
                 .build()

@@ -32,6 +32,7 @@ public class CertificateDataCheckboxMultipleCodeConfigConverter implements
     return CertificateDataConfigCheckboxMultipleCode.builder()
         .text(configuration.name())
         .label(configuration.label())
+        .description(configuration.description())
         .message(
             shouldIncludeMessage(certificate, configuration) ?
                 Message.builder()

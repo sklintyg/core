@@ -61,7 +61,7 @@ public class QuestionPrognos {
             ElementConfigurationRadioMultipleCode.builder()
                 .id(QUESTION_PROGNOS_FIELD_ID)
                 .name("Prognos för arbetsförmåga utifrån aktuellt undersökningstillfälle")
-                .elementLayout(ElementLayout.COLUMNS)
+                .elementLayout(ElementLayout.ROWS)
                 .list(radioMultipleCodes)
                 .build()
         )

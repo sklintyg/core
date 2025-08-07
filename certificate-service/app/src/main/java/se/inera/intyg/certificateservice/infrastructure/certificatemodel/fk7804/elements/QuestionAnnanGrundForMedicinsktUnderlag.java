@@ -45,7 +45,7 @@ public class QuestionAnnanGrundForMedicinsktUnderlag {
                     (short) 50),
                 CertificateElementRuleFactory.show(
                     QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID,
-                    UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID
+                    new FieldId("ANNAT")
                 )
             )
         )
