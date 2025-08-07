@@ -61,7 +61,8 @@ public class SchematronValidationFK7426Test {
               new XmlGeneratorCode(),
               new XmlGeneratorDiagnosisList(),
               new XmlGeneratorDateRange()
-          )
+          ),
+          Collections.emptyList()
       ),
       new XmlValidationService(
           new SchematronValidator(),

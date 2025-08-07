@@ -65,7 +65,8 @@ class SchematronValidationFK3221Test {
               new XmlGeneratorDiagnosisList(),
               new XmlGeneratorDateRange(),
               new XmlGeneratorMedicalInvestigationList()
-          )
+          ),
+          Collections.emptyList()
       ),
       new XmlValidationService(
           new SchematronValidator(),

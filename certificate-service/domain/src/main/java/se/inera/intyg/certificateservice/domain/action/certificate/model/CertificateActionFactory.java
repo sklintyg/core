@@ -276,7 +276,8 @@ public class CertificateActionFactory {
               List.of(
                   new ActionRuleUserNotBlocked(),
                   new ActionRuleRole(
-                      List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE, Role.CARE_ADMIN)
+                      List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
+                          Role.CARE_ADMIN)
                   ),
                   new ActionRuleSent(true),
                   new ActionRuleStatus(List.of(Status.SIGNED)),
@@ -561,6 +562,32 @@ public class CertificateActionFactory {
                       List.of(AccessScope.WITHIN_CARE_UNIT)
                   ),
                   new ActionRuleUserAgreement()
+              )
+          )
+          .build();
+      case FMB -> CertificateActionFMB.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleStatus(List.of(Status.DRAFT))
+              )
+          )
+          .build();
+      case SRS_DRAFT -> CertificateActionSrsDraft.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleSrs(),
+                  new ActionRuleStatus(List.of(Status.DRAFT))
+              )
+          )
+          .build();
+      case SRS_SIGNED -> CertificateActionSrsSigned.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleSrs(),
+                  new ActionRuleStatus(List.of(Status.SIGNED))
               )
           )
           .build();

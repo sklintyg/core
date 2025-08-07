@@ -61,7 +61,8 @@ class SchematronValidationFK7809Test {
               new XmlGeneratorCode(),
               new XmlGeneratorDiagnosisList(),
               new XmlGeneratorMedicalInvestigationList()
-          )
+          ),
+          Collections.emptyList()
       ),
       new XmlValidationService(
           new SchematronValidator(),

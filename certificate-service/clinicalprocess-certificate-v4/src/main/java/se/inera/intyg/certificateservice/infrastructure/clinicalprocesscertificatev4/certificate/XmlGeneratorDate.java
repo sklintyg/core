@@ -10,7 +10,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 
 @Component
-public class XmlGeneratorDate implements XmlGeneratorElementData {
+public class XmlGeneratorDate implements XmlGeneratorElementValue {
 
   @Override
   public Class<? extends ElementValue> supports() {

@@ -13,6 +13,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_RESPONSIBLE_ISSUER;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_ROLE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_SPECIALITIES;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_SRS_ACTIVE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_AGREEMENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_ALLOW_COPY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_BLOCKED;
@@ -22,6 +23,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_LAST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_MIDDLE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_ROLE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALVA_VARDADMINISTRATOR_SRS_ACTIVE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_AGREEMENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_ALLOW_COPY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_BLOCKED;
@@ -32,6 +34,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_LAST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_MIDDLE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_ROLE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ANNA_SJUKSKOTERSKA_SRS_ACTIVE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_AGREEMENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_ALLOW_COPY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_BLOCKED;
@@ -42,6 +45,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_LAST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_MIDDLE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_ROLE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BERTIL_BARNMORSKA_SRS_ACTIVE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.DAN_DENTIST_AGREEMENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.DAN_DENTIST_ALLOW_COPY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.DAN_DENTIST_BLOCKED;
@@ -52,6 +56,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.DAN_DENTIST_LAST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.DAN_DENTIST_MIDDLE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.DAN_DENTIST_ROLE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.DAN_DENTIST_SRS_ACTIVE;
 
 import java.util.Collections;
 import se.inera.intyg.certificateservice.application.common.dto.AccessScopeTypeDTO;
@@ -106,7 +111,8 @@ public class TestDataCommonUserDTO {
                 .map(HealthCareProfessionalLicence::value)
                 .toList()
         )
-        .responsibleHospName(AJLA_DOCTOR_RESPONSIBLE_ISSUER.value());
+        .responsibleHospName(AJLA_DOCTOR_RESPONSIBLE_ISSUER.value())
+        .srsActive(AJLA_DOCTOR_SRS_ACTIVE.value());
   }
 
   public static UserDTOBuilder alvaVardadministratorDtoBuilder() {
@@ -123,7 +129,8 @@ public class TestDataCommonUserDTO {
         .agreement(ALVA_VARDADMINISTRATOR_AGREEMENT.value())
         .allowCopy(ALVA_VARDADMINISTRATOR_ALLOW_COPY.value())
         .accessScope(AccessScopeTypeDTO.WITHIN_CARE_UNIT)
-        .healthCareProfessionalLicence(Collections.emptyList());
+        .healthCareProfessionalLicence(Collections.emptyList())
+        .srsActive(ALVA_VARDADMINISTRATOR_SRS_ACTIVE.value());
   }
 
   public static UserDTOBuilder annaSjukskoterskaDtoBuilder() {
@@ -144,7 +151,8 @@ public class TestDataCommonUserDTO {
             ANNA_SJUKSKOTERSKA_HEALTH_CARE_PROFESSIONAL_LICENCES.stream()
                 .map(HealthCareProfessionalLicence::value)
                 .toList()
-        );
+        )
+        .srsActive(ANNA_SJUKSKOTERSKA_SRS_ACTIVE.value());
   }
 
   public static UserDTOBuilder bertilBarnmorskaDtoBuilder() {
@@ -165,7 +173,8 @@ public class TestDataCommonUserDTO {
             BERTIL_BARNMORSKA_HEALTH_CARE_PROFESSIONAL_LICENCES.stream()
                 .map(HealthCareProfessionalLicence::value)
                 .toList()
-        );
+        )
+        .srsActive(BERTIL_BARNMORSKA_SRS_ACTIVE.value());
   }
 
   public static UserDTOBuilder danDentistDtoBuilder() {
@@ -186,6 +195,7 @@ public class TestDataCommonUserDTO {
             DAN_DENTIST_HEALTH_CARE_PROFESSIONAL_LICENCES.stream()
                 .map(HealthCareProfessionalLicence::value)
                 .toList()
-        );
+        )
+        .srsActive(DAN_DENTIST_SRS_ACTIVE.value());
   }
 }
