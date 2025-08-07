@@ -27,6 +27,7 @@ import static se.inera.intyg.certificateservice.testability.certificate.dto.Test
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
@@ -82,6 +83,25 @@ public class TestabilityCertificateFillServiceFK7804 implements TestabilityCerti
       QUESTION_NEDSATTNING_ARBETSFORMAGA_ID
   );
 
+  private static final Map<ElementId, String> TEXT_QUESTION_MOCKS = Map.ofEntries(
+      Map.entry(QUESTION_ANNAN_GRUND_FOR_MEDICINSKT_UNDERLAG_ID,
+          "Patienten har fått rådgivning via e-post."),
+      Map.entry(QUESTION_YRKE_ARBETSUPPGIFTER_ID,
+          "Butikssäljare, ansvarar för kassa och varuplock."),
+      Map.entry(QUESTION_MEDICINSK_BEHANDLING_ID, "Rehabövningar under 10 dagar hemifrån."),
+      Map.entry(QUESTION_ARBETFORMAGA_LANGRE_ID, "Fysiskt krävande arbete."),
+      Map.entry(QUESTION_MEDICINSKA_SKAL_ID,
+          "Behöver regelbundna vilopauser och kan inte arbeta heltid."),
+      Map.entry(QUESTION_GRUND_FOR_BEDOMNING_ID,
+          "Patienten har långvariga besvär och tidigare behandlingar har haft begränsad effekt."),
+      Map.entry(QUESTION_ATGARDER_ID,
+          "Arbetsanpassning med höj- och sänkbart skrivbord och flexibla arbetstider."),
+      Map.entry(QUESTION_OVRIGT_ID,
+          "Patienten har svårt att ta sig till arbetsplatsen med kollektivtrafik."),
+      Map.entry(QUESTION_VARFOR_KONTAKT_ID,
+          "Behöver diskutera kompletterande intyg med handläggare.")
+  );
+
   @Override
   public List<CertificateModelId> certificateModelIds() {
     return List.of(
@@ -134,14 +154,9 @@ public class TestabilityCertificateFillServiceFK7804 implements TestabilityCerti
     }
 
     if (value instanceof ElementValueText elementValueText) {
-      final var questionName = elementSpecification.configuration().name();
       return ElementData.builder()
           .id(elementSpecification.id())
-          .value(elementValueText.withText(
-              String.format(
-                  "Ett exempel på text för frågan %s",
-                  elementSpecification.configuration().name()
-              ).substring(0, questionName.length() < 50 ? questionName.length() - 1 : 49)))
+          .value(elementValueText.withText(TEXT_QUESTION_MOCKS.get(elementSpecification.id())))
           .build();
     }
 
@@ -254,4 +269,3 @@ public class TestabilityCertificateFillServiceFK7804 implements TestabilityCerti
         .build();
   }
 }
-
