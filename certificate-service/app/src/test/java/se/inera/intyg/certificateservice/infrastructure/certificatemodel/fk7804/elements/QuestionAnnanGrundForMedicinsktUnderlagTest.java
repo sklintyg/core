@@ -67,7 +67,7 @@ class QuestionAnnanGrundForMedicinsktUnderlagTest {
             .type(ElementRuleType.SHOW)
             .expression(
                 new RuleExpression(
-                    "$annat"
+                    "$ANNAT"
                 )
             )
             .build()

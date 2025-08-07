@@ -32,7 +32,7 @@ class QuestionAngeVarforDuVillHaKontaktTest {
   void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationTextArea.builder()
         .id(QUESTION_VARFOR_KONTAKT_FIELD_ID)
-        .name("Jag önskar att Försäkringskassan kontaktar mig")
+        .name("Ange gärna varför du vill ha kontakt")
         .build();
 
     final var element = QuestionAngeVarforDuVillHaKontakt.questionAngeVarforDuVillHaKontakt();
