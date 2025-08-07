@@ -19,6 +19,7 @@ public class ElementValueMapperIcf implements ElementValueMapper {
     if (mappedValue instanceof MappedElementValueIcfValue valueIcf) {
       return ElementValueIcfValue.builder()
           .id(new FieldId(valueIcf.getId()))
+          .text(valueIcf.getText())
           .icfCodes(valueIcf.getIcfCodes())
           .build();
 
@@ -31,6 +32,7 @@ public class ElementValueMapperIcf implements ElementValueMapper {
     if (value instanceof ElementValueIcfValue elementValueIcfValue) {
       return MappedElementValueIcfValue.builder()
           .id(elementValueIcfValue.id().value())
+          .text(elementValueIcfValue.text())
           .icfCodes(elementValueIcfValue.icfCodes())
           .build();
     }

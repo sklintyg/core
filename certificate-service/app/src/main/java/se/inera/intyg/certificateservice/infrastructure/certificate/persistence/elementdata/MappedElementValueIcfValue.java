@@ -13,5 +13,6 @@ import lombok.NoArgsConstructor;
 public class MappedElementValueIcfValue implements MappedElementValue {
 
   private String id;
+  private String text;
   private List<String> icfCodes;
 }
