@@ -58,7 +58,7 @@ public class QuestionSjukdomshistorik {
             )
         )
         .mapping(new ElementMapping(QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_ID, null))
-        .shouldValidate(ShouldValidateFactory.radioBoolean(QUESTION_SYNFUNKTIONER_ID, false))
+        .shouldValidate(ShouldValidateFactory.valueBoolean(QUESTION_SYNFUNKTIONER_ID, false))
         .children(List.of(children))
         .build();
   }

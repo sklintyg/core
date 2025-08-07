@@ -221,4 +221,36 @@ class CertificateElementRuleFactoryTest {
     final var response = CertificateElementRuleFactory.wrapWithNotEmpty("1");
     assertEquals(expectedResult, response);
   }
+
+  @Test
+  void shouldReturnHideRule() {
+    final var expected = ElementRuleExpression.builder()
+        .id(new ElementId("ID"))
+        .type(ElementRuleType.HIDE)
+        .expression(new RuleExpression("$FIELD"))
+        .build();
+
+    final var response = CertificateElementRuleFactory.hide(
+        new ElementId("ID"),
+        new FieldId("FIELD")
+    );
+
+    assertEquals(expected, response);
+  }
+
+  @Test
+  void shouldReturnHideRuleWithExpression() {
+    final var expected = ElementRuleExpression.builder()
+        .id(new ElementId("ID"))
+        .type(ElementRuleType.HIDE)
+        .expression(new RuleExpression("someExpression"))
+        .build();
+
+    final var response = CertificateElementRuleFactory.hide(
+        new ElementId("ID"),
+        new RuleExpression("someExpression")
+    );
+
+    assertEquals(expected, response);
+  }
 }

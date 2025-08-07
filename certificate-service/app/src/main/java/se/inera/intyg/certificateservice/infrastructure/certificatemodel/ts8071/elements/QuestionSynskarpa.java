@@ -90,7 +90,7 @@ public class QuestionSynskarpa {
                 )
             )
         )
-        .shouldValidate(ShouldValidateFactory.radioBoolean(QUESTION_SYNFUNKTIONER_ID, false))
+        .shouldValidate(ShouldValidateFactory.valueBoolean(QUESTION_SYNFUNKTIONER_ID, false))
         .build();
   }
 }

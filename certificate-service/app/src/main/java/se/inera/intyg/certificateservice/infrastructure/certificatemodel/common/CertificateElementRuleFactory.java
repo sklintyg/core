@@ -34,9 +34,26 @@ public class CertificateElementRuleFactory {
     );
   }
 
+  public static ElementRule hide(ElementId id, FieldId fieldId) {
+    return hide(
+        id,
+        new RuleExpression(
+            singleExpression(fieldId.value())
+        )
+    );
+  }
+
   public static ElementRule show(ElementId id, RuleExpression ruleExpression) {
     return ElementRuleExpression.builder()
         .type(ElementRuleType.SHOW)
+        .id(id)
+        .expression(ruleExpression)
+        .build();
+  }
+
+  public static ElementRule hide(ElementId id, RuleExpression ruleExpression) {
+    return ElementRuleExpression.builder()
+        .type(ElementRuleType.HIDE)
         .id(id)
         .expression(ruleExpression)
         .build();

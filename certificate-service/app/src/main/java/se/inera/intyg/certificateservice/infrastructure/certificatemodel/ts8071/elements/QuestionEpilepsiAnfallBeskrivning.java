@@ -50,7 +50,7 @@ public class QuestionEpilepsiAnfallBeskrivning {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.radioBoolean(QUESTION_EPILEPSI_ANFALL_ID)
+            ShouldValidateFactory.valueBoolean(QUESTION_EPILEPSI_ANFALL_ID)
         )
         .mapping(
             new ElementMapping(QUESTION_EPILEPSI_ID, null)

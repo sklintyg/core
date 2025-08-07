@@ -36,6 +36,57 @@ class ElementValidatorTest {
   }
 
   @Nested
+  class IntegerLimit {
+
+    @Test
+    void shouldReturnTrueIfIntegerIsWithinLimit() {
+      assertTrue(ElementValidator.isIntegerWithinLimit(5, 1, 10));
+    }
+
+    @Test
+    void shouldReturnFalseIfIntegerIsNull() {
+      assertFalse(ElementValidator.isIntegerWithinLimit(null, 1, 10));
+    }
+
+    @Test
+    void shouldReturnFalseIfIntegerIsBelowMin() {
+      assertFalse(ElementValidator.isIntegerWithinLimit(0, 1, 10));
+    }
+
+    @Test
+    void shouldReturnFalseIfIntegerIsAboveMax() {
+      assertFalse(ElementValidator.isIntegerWithinLimit(11, 1, 10));
+    }
+
+    @Test
+    void shouldReturnTrueIfMinAndMaxAreNull() {
+      assertTrue(ElementValidator.isIntegerWithinLimit(5, null, null));
+    }
+
+    @Test
+    void shouldReturnTrueIfOnlyMinIsNullAndValueIsBelowMax() {
+      assertTrue(ElementValidator.isIntegerWithinLimit(5, null, 10));
+    }
+
+    @Test
+    void shouldReturnFalseIfOnlyMinIsNullAndValueIsAboveMax() {
+      assertFalse(ElementValidator.isIntegerWithinLimit(15, null, 10));
+    }
+
+    @Test
+    void shouldReturnTrueIfOnlyMaxIsNullAndValueIsAboveMin() {
+      assertTrue(ElementValidator.isIntegerWithinLimit(15, 10, null));
+    }
+
+    @Test
+    void shouldReturnFalseIfOnlyMaxIsNullAndValueIsBelowMin() {
+      assertFalse(ElementValidator.isIntegerWithinLimit(5, 10, null));
+    }
+
+
+  }
+
+  @Nested
   class TextDefined {
 
     @Test

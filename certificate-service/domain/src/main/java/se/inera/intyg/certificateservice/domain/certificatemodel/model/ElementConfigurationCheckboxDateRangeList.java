@@ -19,6 +19,8 @@ public class ElementConfigurationCheckboxDateRangeList implements ElementConfigu
   @Getter(onMethod = @__(@Override))
   String name;
   @Getter(onMethod = @__(@Override))
+  String description;
+  @Getter(onMethod = @__(@Override))
   String label;
   @Getter(onMethod = @__(@Override))
   ElementType type = ElementType.CHECKBOX_DATE_RANGE_LIST;

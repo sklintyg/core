@@ -49,7 +49,7 @@ public class QuestionPsykiskBeskrivning {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.radioBoolean(QUESTION_PSYKISK_ID)
+            ShouldValidateFactory.valueBoolean(QUESTION_PSYKISK_ID)
         )
         .mapping(
             new ElementMapping(QUESTION_PSYKISK_ID, null)

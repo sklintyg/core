@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = MappedElementValueVisualAcuity.class, name = "VISUAL_ACUITY"),
         @JsonSubTypes.Type(value = MappedElementValueDouble.class, name = "DOUBLE"),
         @JsonSubTypes.Type(value = MappedElementValueDateRange.class, name = "DATE_RANGE"),
+        @JsonSubTypes.Type(value = MappedElementValueInteger.class, name = "INTEGER"),
     }
 )
 public interface MappedElementValue {

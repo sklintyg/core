@@ -22,6 +22,10 @@ public class ErrorMessageFactory {
     return new ErrorMessage("Ange en text som inte är längre än %s.".formatted(limit));
   }
 
+  public static ErrorMessage integerInterval(Integer min, Integer max) {
+    return new ErrorMessage("Ange ett värde mellan %s-%s.".formatted(min, max));
+  }
+
   public static ErrorMessage missingDate() {
     return new ErrorMessage("Ange ett datum.");
   }

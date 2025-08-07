@@ -19,6 +19,8 @@ public class ElementConfigurationCheckboxMultipleCode implements ElementConfigur
 
   @Getter(onMethod = @__(@Override))
   String name;
+  @Getter(onMethod_ = @__(@Override))
+  String description;
   @Getter(onMethod = @__(@Override))
   ElementType type = ElementType.CHECKBOX_MULTIPLE_CODE;
   @Getter(onMethod = @__(@Override))

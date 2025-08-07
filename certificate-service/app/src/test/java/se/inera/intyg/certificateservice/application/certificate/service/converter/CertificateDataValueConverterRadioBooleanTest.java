@@ -19,11 +19,11 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
-class CertificateDataValueConverterBooleanTest {
+class CertificateDataValueConverterRadioBooleanTest {
 
   private static final String ELEMENT_ID = "elementId";
   private static final FieldId FIELD_ID = new FieldId("fieldId");
-  private final CertificateDataValueConverterBoolean converter = new CertificateDataValueConverterBoolean();
+  private final CertificateDataValueConverterRadioBoolean converter = new CertificateDataValueConverterRadioBoolean();
   private ElementConfigurationRadioBoolean elementConfigurationRadioBoolean;
 
   @BeforeEach

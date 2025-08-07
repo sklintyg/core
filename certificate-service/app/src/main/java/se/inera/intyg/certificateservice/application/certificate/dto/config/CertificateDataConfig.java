@@ -22,7 +22,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     @Type(value = CertificateDataConfigCheckboxMultipleCode.class, name = "UE_CHECKBOX_MULTIPLE_CODE"),
     @Type(value = CertificateDataConfigVisualAcuity.class, name = "UE_VISUAL_ACUITY"),
     @Type(value = CertificateDataConfigDateRange.class, name = "UE_DATE_RANGE"),
-    @Type(value = CertificateDataConfigDropdown.class, name = "UE_DROPDOWN")
+    @Type(value = CertificateDataConfigDropdown.class, name = "UE_DROPDOWN"),
+    @Type(value = CertificateDataConfigInteger.class, name = "UE_INTEGER"),
+    @Type(value = CertificateDataConfigCheckboxBoolean.class, name = "UE_CHECKBOX_BOOLEAN"),
 })
 
 public interface CertificateDataConfig {

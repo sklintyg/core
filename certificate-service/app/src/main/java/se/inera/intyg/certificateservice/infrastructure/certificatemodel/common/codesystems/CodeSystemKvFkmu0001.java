@@ -48,6 +48,12 @@ public class CodeSystemKvFkmu0001 {
       "min undersökning vid digitalt vårdmöte"
   );
 
+  public static final Code TELEFONKONTAKT = new Code(
+      "TELEFONKONTAKT",
+      CODE_SYSTEM,
+      "min telefonkontakt med patienten"
+  );
+
   public static final Code FORALDER = new Code(
       "FORALDER",
       CODE_SYSTEM,

@@ -50,7 +50,7 @@ public class QuestionSjukdomshistorikBeskrivning {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.radioBoolean(QUESTION_SJUKDOMSHISTORIK_ID)
+            ShouldValidateFactory.valueBoolean(QUESTION_SJUKDOMSHISTORIK_ID)
         )
         .mapping(
             new ElementMapping(QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_ID, null)
