@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     @Type(value = CertificateDataValueVisualAcuity.class, name = "VISUAL_ACUITY"),
     @Type(value = CertificateDataValueDouble.class, name = "DOUBLE"),
     @Type(value = CertificateDataValueInteger.class, name = "INTEGER"),
+    @Type(value = CertificateDataIcfValue.class, name = "ICF"),
 })
 public interface CertificateDataValue {
 
