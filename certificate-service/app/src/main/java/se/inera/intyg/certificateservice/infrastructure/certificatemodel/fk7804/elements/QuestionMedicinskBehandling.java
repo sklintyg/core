@@ -34,8 +34,6 @@ public class QuestionMedicinskBehandling {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatory(QUESTION_MEDICINSK_BEHANDLING_ID,
-                    QUESTION_MEDICINSK_BEHANDLING_FIELD_ID),
                 CertificateElementRuleFactory.limit(QUESTION_MEDICINSK_BEHANDLING_ID,
                     (short) 4000),
                 CertificateElementRuleFactory.hide(
@@ -47,7 +45,7 @@ public class QuestionMedicinskBehandling {
         .validations(
             List.of(
                 ElementValidationText.builder()
-                    .mandatory(true)
+                    .mandatory(false)
                     .limit(4000)
                     .build()
             )

@@ -46,11 +46,6 @@ class QuestionMedicinskBehandlingTest {
   @Test
   void shouldIncludeRules() {
     final var expectedRules = List.of(
-        ElementRuleExpression.builder()
-            .id(new ElementId("19"))
-            .type(ElementRuleType.MANDATORY)
-            .expression(new RuleExpression("$19.1"))
-            .build(),
         ElementRuleLimit.builder()
             .id(new ElementId("19"))
             .type(ElementRuleType.TEXT_LIMIT)
@@ -72,7 +67,7 @@ class QuestionMedicinskBehandlingTest {
   void shouldIncludeValidations() {
     final var expectedValidations = List.of(
         ElementValidationText.builder()
-            .mandatory(true)
+            .mandatory(false)
             .limit(4000)
             .build()
     );
