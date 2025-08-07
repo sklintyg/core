@@ -21,7 +21,8 @@ public class QuestionFunktionsnedsattningar {
         .configuration(
             ElementConfigurationIcf.builder()
                 .id(QUESTION_FUNKTIONSNEDSATTNINGAR_FIELD_ID)
-                .name("Ska ha ICF-stöd")
+                .name(
+                    "Ange vilken/vilka funktionsnedsättningar patienten har till följd av sjukdom och om möjligt svårighetsgrad. Ange även vad din bedömning av funktionsnedsättningar baseras på. Beskriv relevanta undersökningsfynd, testresultat, utredningssvar eller andra uppgifter (exempelvis anamnesuppgifter) och hur du bedömer dem.")
                 .build()
         )
         .build();
