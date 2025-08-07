@@ -19,7 +19,7 @@ import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
 @Component
-public class PrefillVisualAcuitiesConverter implements PrefillConverter {
+public class PrefillVisualAcuitiesConverter implements PrefillStandardConverter {
 
 
   @Override

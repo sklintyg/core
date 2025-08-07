@@ -22,7 +22,7 @@ import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
 @Component
-public class PrefillDropdownCodeConverter implements PrefillConverter {
+public class PrefillDropdownCodeConverter implements PrefillStandardConverter {
 
   @Override
   public Class<? extends ElementConfiguration> supports() {

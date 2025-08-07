@@ -9,12 +9,16 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import se.inera.intyg.certificateservice.domain.certificate.model.CustomMapperId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfiguration;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.converter.PrefillConverter;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.converter.PrefillCustomConverter;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.converter.PrefillStandardConverter;
 import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
 @Slf4j
@@ -27,10 +31,15 @@ public class PrefillHandler {
       ElementType.ISSUING_UNIT);
 
   private final Map<Class<? extends ElementConfiguration>, PrefillConverter> converters;
+  private final Map<CustomMapperId, PrefillConverter> customConverters;
 
-  public PrefillHandler(List<PrefillConverter> converters) {
+
+  public PrefillHandler(List<PrefillStandardConverter> converters,
+      List<PrefillCustomConverter> customConverters) {
     this.converters = converters.stream()
-        .collect(Collectors.toMap(PrefillConverter::supports, Function.identity()));
+        .collect(Collectors.toMap(PrefillStandardConverter::supports, Function.identity()));
+    this.customConverters = customConverters.stream()
+        .collect(Collectors.toMap(PrefillCustomConverter::id, Function.identity()));
   }
 
   public Collection<PrefillAnswer> unknownAnswerIds(CertificateModel model,
@@ -47,10 +56,22 @@ public class PrefillHandler {
         .flatMap(ElementSpecification::flatten)
         .filter(isQuestion())
         .map(elementSpecification -> {
-          final var prefillConverter = converters.get(
-              elementSpecification.configuration().getClass());
+          final var customMapperId = elementSpecification
+              .getMapping()
+              .flatMap(ElementMapping::customMapperId);
+
+          final var converter = customMapperId
+              .map(customConverters::get)
+              .orElseGet(() -> converters.get(elementSpecification.configuration().getClass()));
+
+          if (converter == null) {
+            throw new IllegalStateException(
+                "Converter for '%s' not found".formatted(
+                    elementSpecification.configuration().getClass())
+            );
+          }
           try {
-            return prefillConverter.prefillAnswer(elementSpecification, prefill);
+            return converter.prefillAnswer(elementSpecification, prefill);
           } catch (Exception ex) {
             log.error(
                 "Error while pre-filling element with id '{}': {}",
@@ -63,8 +84,7 @@ public class PrefillHandler {
         .filter(Objects::nonNull)
         .toList();
   }
-
-
+  
   private static Predicate<ElementSpecification> isQuestion() {
     return e -> !IGNORED_TYPES.contains(e.configuration().type());
   }

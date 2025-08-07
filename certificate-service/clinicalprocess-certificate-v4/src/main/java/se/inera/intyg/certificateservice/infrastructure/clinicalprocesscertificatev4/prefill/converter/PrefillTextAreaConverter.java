@@ -16,7 +16,7 @@ import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
 @Component
-public class PrefillTextAreaConverter implements PrefillConverter {
+public class PrefillTextAreaConverter implements PrefillStandardConverter {
 
   @Override
   public Class<? extends ElementConfiguration> supports() {

@@ -18,7 +18,7 @@ import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
 @Component
-public class PrefillDateRangeConverter implements PrefillConverter {
+public class PrefillDateRangeConverter implements PrefillStandardConverter {
 
   @Override
   public Class<? extends ElementConfiguration> supports() {
