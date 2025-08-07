@@ -18,6 +18,8 @@ public class ElementConfigurationRadioMultipleCode implements ElementConfigurati
   @Getter(onMethod = @__(@Override))
   String name;
   @Getter(onMethod = @__(@Override))
+  String description;
+  @Getter(onMethod = @__(@Override))
   ElementType type = ElementType.RADIO_MULTIPLE_CODE;
   @Getter(onMethod = @__(@Override))
   ElementMessage message;
