@@ -22,6 +22,7 @@ public class CategorySmittbararpenning {
                 .description(
                     """
                         Fylls i om patienten kan arbeta men inte får göra det på grund av något av följande:
+                        
                         <ul><li>Att patienten har en allmänfarlig sjukdom och en läkare har beslutat om förhållningsregler enligt smittskyddslagen.</li><li>Att patienten genomgår en läkarundersökning eller hälsokontroll i syfte att klarlägga om hen är smittad av en allmänfarlig sjukdom.</li><li>Att patienten har en sjukdom, en smitta, eller ett sår som gör att hen inte får hantera livsmedel.</li></ul>
                         Ange vilken allmänfarlig sjukdom som patienten har eller kan antas ha i fältet för diagnos. Ange sedan för vilken period som förhållningsreglerna gäller i fältet för nedsättning av arbetsförmåga.
                         """
