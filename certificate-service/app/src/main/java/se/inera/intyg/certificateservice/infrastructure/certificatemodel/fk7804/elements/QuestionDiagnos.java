@@ -20,9 +20,6 @@ public class QuestionDiagnos {
   public static final FieldId DIAGNOS_1 = new FieldId("huvuddiagnos");
   public static final FieldId DIAGNOS_2 = new FieldId("diagnos2");
   public static final FieldId DIAGNOS_3 = new FieldId("diagnos3");
-  public static final FieldId DIAGNOS_4 = new FieldId("diagnos4");
-  public static final FieldId DIAGNOS_5 = new FieldId("diagnos5");
-  private static final short DIAGNOSIS_CODE_LIMIT = (short) 81;
 
   private QuestionDiagnos() {
     throw new IllegalStateException("Utility class");
@@ -35,27 +32,24 @@ public class QuestionDiagnos {
         .configuration(
             ElementConfigurationDiagnosis.builder()
                 .id(DIAGNOSIS_FIELD_ID)
-                .name("Diagnos eller diagnoser")
+                .name("Diagnos/diagnoser för sjukdom som orsakar nedsatt arbetsförmåga")
                 .description(
-                    "Ange diagnoskod med så många positioner som möjligt. Använd inga andra tecken än bokstäver och siffror.")
+                    "Ange vilken eller vilka sjukdomar som orsakar nedsatt arbetsförmåga. Den sjukdom som påverkar arbetsförmågan mest anges först. Diagnoskoden anges alltid med så många positioner som möjligt.")
                 .terminology(List.of(CodeSystemIcd10Se.terminology()))
                 .list(List.of(
                     new ElementDiagnosisListItem(DIAGNOS_1),
                     new ElementDiagnosisListItem(DIAGNOS_2),
-                    new ElementDiagnosisListItem(DIAGNOS_3),
-                    new ElementDiagnosisListItem(DIAGNOS_4),
-                    new ElementDiagnosisListItem(DIAGNOS_5)
+                    new ElementDiagnosisListItem(DIAGNOS_3)
                 ))
                 .build()
         )
         .rules(List.of(
-            CertificateElementRuleFactory.mandatoryExist(DIAGNOSIS_ID, DIAGNOS_1),
-            CertificateElementRuleFactory.limit(DIAGNOSIS_ID, DIAGNOSIS_CODE_LIMIT)
+            CertificateElementRuleFactory.mandatoryExist(DIAGNOSIS_ID, DIAGNOS_1)
         ))
         .validations(List.of(
             ElementValidationDiagnosis.builder()
                 .mandatoryField(DIAGNOS_1)
-                .order(List.of(DIAGNOS_1, DIAGNOS_2, DIAGNOS_3, DIAGNOS_4, DIAGNOS_5))
+                .order(List.of(DIAGNOS_1, DIAGNOS_2, DIAGNOS_3))
                 .diagnosisCodeRepository(diagnosisCodeRepository)
                 .build()
         ))

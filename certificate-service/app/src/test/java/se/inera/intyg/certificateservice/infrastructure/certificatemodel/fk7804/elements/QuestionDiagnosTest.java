@@ -11,11 +11,9 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDi
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDiagnosisTerminology;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDiagnosis;
 
@@ -38,10 +36,9 @@ class QuestionDiagnosTest {
   void shallIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationDiagnosis.builder()
         .id(new FieldId("6.1"))
-        .name(
-            "Diagnos eller diagnoser")
+        .name("Diagnos/diagnoser för sjukdom som orsakar nedsatt arbetsförmåga")
         .description(
-            "Ange diagnoskod med så många positioner som möjligt. Använd inga andra tecken än bokstäver och siffror.")
+            "Ange vilken eller vilka sjukdomar som orsakar nedsatt arbetsförmåga. Den sjukdom som påverkar arbetsförmågan mest anges först. Diagnoskoden anges alltid med så många positioner som möjligt.")
         .terminology(
             List.of(
                 new ElementDiagnosisTerminology("ICD_10_SE", "ICD-10-SE",
@@ -52,9 +49,7 @@ class QuestionDiagnosTest {
             List.of(
                 new ElementDiagnosisListItem(new FieldId("huvuddiagnos")),
                 new ElementDiagnosisListItem(new FieldId("diagnos2")),
-                new ElementDiagnosisListItem(new FieldId("diagnos3")),
-                new ElementDiagnosisListItem(new FieldId("diagnos4")),
-                new ElementDiagnosisListItem(new FieldId("diagnos5"))
+                new ElementDiagnosisListItem(new FieldId("diagnos3"))
             )
         )
         .build();
@@ -76,13 +71,6 @@ class QuestionDiagnosTest {
                     "exists($huvuddiagnos)"
                 )
             )
-            .build(),
-        ElementRuleLimit.builder()
-            .id(ELEMENT_ID)
-            .type(ElementRuleType.TEXT_LIMIT)
-            .limit(
-                new RuleLimit((short) 81)
-            )
             .build()
     );
 
@@ -101,9 +89,7 @@ class QuestionDiagnosTest {
                 List.of(
                     new FieldId("huvuddiagnos"),
                     new FieldId("diagnos2"),
-                    new FieldId("diagnos3"),
-                    new FieldId("diagnos4"),
-                    new FieldId("diagnos5")
+                    new FieldId("diagnos3")
                 )
             )
             .diagnosisCodeRepository(diagnosisCodeRepository)
