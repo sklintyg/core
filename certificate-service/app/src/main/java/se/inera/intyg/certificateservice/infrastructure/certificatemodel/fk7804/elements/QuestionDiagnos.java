@@ -15,7 +15,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionDiagnos {
 
-  public static final ElementId DIAGNOSIS_ID = new ElementId("6");
+  public static final ElementId QUESTION_DIAGNOS_ID = new ElementId("6");
   private static final FieldId DIAGNOSIS_FIELD_ID = new FieldId("6.1");
   public static final FieldId DIAGNOS_1 = new FieldId("huvuddiagnos");
   public static final FieldId DIAGNOS_2 = new FieldId("diagnos2");
@@ -28,7 +28,7 @@ public class QuestionDiagnos {
   public static ElementSpecification questionDiagnos(
       DiagnosisCodeRepository diagnosisCodeRepository) {
     return ElementSpecification.builder()
-        .id(DIAGNOSIS_ID)
+        .id(QUESTION_DIAGNOS_ID)
         .configuration(
             ElementConfigurationDiagnosis.builder()
                 .id(DIAGNOSIS_FIELD_ID)
@@ -44,7 +44,7 @@ public class QuestionDiagnos {
                 .build()
         )
         .rules(List.of(
-            CertificateElementRuleFactory.mandatoryExist(DIAGNOSIS_ID, DIAGNOS_1)
+            CertificateElementRuleFactory.mandatoryExist(QUESTION_DIAGNOS_ID, DIAGNOS_1)
         ))
         .validations(List.of(
             ElementValidationDiagnosis.builder()
