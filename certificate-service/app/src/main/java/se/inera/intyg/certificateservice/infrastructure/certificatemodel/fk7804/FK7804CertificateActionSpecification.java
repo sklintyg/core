@@ -14,6 +14,15 @@ public class FK7804CertificateActionSpecification {
   public static List<CertificateActionSpecification> create() {
     return List.of(
         CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.FMB)
+            .build(),
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.SRS_DRAFT)
+            .build(),
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.SRS_SIGNED)
+            .build(),
+        CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.CREATE)
             .build(),
         CertificateActionSpecification.builder()
