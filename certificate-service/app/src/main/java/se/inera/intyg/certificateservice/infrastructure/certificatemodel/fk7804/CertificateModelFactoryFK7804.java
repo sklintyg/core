@@ -13,11 +13,13 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.CategoryPrognos.categoryPrognos;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.CategorySmittbararpenning.categorySmittbararpenning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.CategorySysselsattning.categorySysselsattning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionAktivitetsbegransningar.questionAktivitetsbegransningar;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionAngeVarforDuVillHaKontakt.questionAngeVarforDuVillHaKontakt;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionAnnanGrundForMedicinsktUnderlag.questionAnnanGrundForMedicinsktUnderlag;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionAntalManader.questionAntalManader;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionArbetsformagaLangreAnBeslutsstod.questionArbetsformagaLangreAnBeslutsstod;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionAtgarderSomKanFramjaAtergang.questionAtgarderSomKanFramjaAtergang;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionDiagnos.questionDiagnos;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionFunktionsnedsattningar.questionFunktionsnedsattningar;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionDiagnos.questionDiagnos;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionGrundForBedomning.questionGrundForBedomning;
@@ -163,7 +165,9 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
             categoryFunktionsnedsattning(
                 questionFunktionsnedsattningar()
             ),
-            categoryAktivitetsbegransning(),
+            categoryAktivitetsbegransning(
+                questionAktivitetsbegransningar()
+            ),
             categoryMedicinskBehandling(
                 questionMedicinskBehandling()
             ),
