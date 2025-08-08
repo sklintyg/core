@@ -21,7 +21,7 @@ public class CertificateDataValueConverterIcf implements CertificateDataValueCon
   @Override
   public CertificateDataValue convert(ElementSpecification elementSpecification,
       ElementValue elementValue) {
-    if (elementValue != null && !(elementValue instanceof ElementValueIcf)) {
+    if (elementValue != null && !(elementValue instanceof ElementValueIcfValue)) {
       throw new IllegalStateException(
           "Invalid value type. Type was '%s'".formatted(elementValue.getClass())
       );
