@@ -18,6 +18,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionAntalManader.questionAntalManader;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionArbetsformagaLangreAnBeslutsstod.questionArbetsformagaLangreAnBeslutsstod;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionAtgarderSomKanFramjaAtergang.questionAtgarderSomKanFramjaAtergang;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionDiagnos.questionDiagnos;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionGrundForBedomning.questionGrundForBedomning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionGrundForMedicinsktUnderlag.questionGrundForMedicinsktUnderlag;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionKontakt.questionKontakt;
@@ -43,6 +44,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
@@ -54,6 +56,8 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 @RequiredArgsConstructor
 public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
 
+  public static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
+      "fk7804/schematron/lisjp_v2_0.sch");
   private final CertificateActionFactory certificateActionFactory;
 
   @Value("${certificate.model.fk7804.v2_0.active.from}")
@@ -119,6 +123,7 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
         .activeFrom(activeFrom)
         .availableForCitizen(true)
         .recipient(CertificateRecipientFactory.fkassa(fkLogicalAddress))
+        .schematronPath(SCHEMATRON_PATH)
         .messageTypes(List.of(
             CertificateMessageType.builder()
                 .type(MessageType.MISSING)
@@ -149,7 +154,11 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
                     questionYrkeOchArbetsuppgifter()
                 )
             ),
-            categoryDiagnos(),
+            categoryDiagnos(
+                questionDiagnos(
+                    diagnosisCodeRepository
+                )
+            ),
             categoryFunktionsnedsattning(),
             categoryAktivitetsbegransning(),
             categoryMedicinskBehandling(

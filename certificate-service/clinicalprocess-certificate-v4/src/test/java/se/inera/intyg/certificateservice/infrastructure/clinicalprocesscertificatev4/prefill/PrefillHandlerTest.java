@@ -22,7 +22,8 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.converter.PrefillConverter;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.converter.PrefillCustomConverter;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.converter.PrefillStandardConverter;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.converter.PrefillTextAreaConverter;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
@@ -35,14 +36,16 @@ class PrefillHandlerTest {
   class HandlePrefill {
 
     @Mock
-    PrefillConverter prefillConverter;
+    PrefillStandardConverter prefillConverter;
+    @Mock
+    PrefillCustomConverter customConverter;
 
     private PrefillHandler prefillHandler;
 
     @BeforeEach
     void setup() {
       doReturn(ElementConfigurationDate.class).when(prefillConverter).supports();
-      prefillHandler = new PrefillHandler(List.of(prefillConverter));
+      prefillHandler = new PrefillHandler(List.of(prefillConverter), List.of(customConverter));
     }
 
     @Test
@@ -141,7 +144,8 @@ class PrefillHandlerTest {
 
       final var expected = List.of(PrefillAnswer.answerNotFound("testSvarId"));
 
-      final var prefillHandler = new PrefillHandler(List.of(new PrefillTextAreaConverter()));
+      final var prefillHandler = new PrefillHandler(
+          List.of(new PrefillTextAreaConverter()), List.of());
 
       final var result = prefillHandler.unknownAnswerIds(
           CertificateModel.builder()
@@ -166,7 +170,8 @@ class PrefillHandlerTest {
 
       forifyllnad.getSvar().add(svar);
 
-      final var prefillHandler = new PrefillHandler(List.of(new PrefillTextAreaConverter()));
+      final var prefillHandler = new PrefillHandler(
+          List.of(new PrefillTextAreaConverter()), List.of());
 
       final var result = prefillHandler.unknownAnswerIds(
           CertificateModel.builder()

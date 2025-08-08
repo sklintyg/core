@@ -22,6 +22,7 @@ public class TestDataCertificateModelConstants {
   public static final CertificateType FK7426_TYPE = new CertificateType("fk7426");
   public static final CertificateType FK3221_TYPE = new CertificateType("fk3221");
   public static final CertificateType FK7810_TYPE = new CertificateType("fk7810");
+  public static final CertificateType FK7804_TYPE = new CertificateType("fk7804");
   public static final CertificateVersion FK7210_VERSION = new CertificateVersion("1.0");
   public static final CertificateVersion FK3226_VERSION = new CertificateVersion("1.0");
   public static final CertificateVersion FK7472_VERSION = new CertificateVersion("1.0");
@@ -30,9 +31,14 @@ public class TestDataCertificateModelConstants {
   public static final CertificateVersion FK7426_VERSION = new CertificateVersion("1.0");
   public static final CertificateVersion FK3221_VERSION = new CertificateVersion("1.0");
   public static final CertificateVersion FK7810_VERSION = new CertificateVersion("1.0");
+  public static final CertificateVersion FK7804_VERSION = new CertificateVersion("2.0");
   public static final CertificateModelId FK7210_ID = CertificateModelId.builder()
       .type(FK7210_TYPE)
       .version(FK7210_VERSION)
+      .build();
+  public static final CertificateModelId FK7804_ID = CertificateModelId.builder()
+      .type(FK7804_TYPE)
+      .version(FK7804_VERSION)
       .build();
   public static final Code FK7210_CODE_TYPE = new Code(
       "IGRAV",
@@ -74,6 +80,12 @@ public class TestDataCertificateModelConstants {
       "b64ea353-e8f6-4832-b563-fc7d46f29548",
       "Läkarutlåtande för assistansersättning"
   );
+  public static final Code FK7804_CODE_TYPE = new Code(
+      "LISJP",
+      "b64ea353-e8f6-4832-b563-fc7d46f29548",
+      "Läkarintyg för sjukpenning"
+  );
+
   public static final SchematronPath FK7210_SCHEMATRON_PATH = new SchematronPath(
       "fk7210/schematron/igrav.v1.sch");
   public static final SchematronPath FK3226_SCHEMATRON_PATH = new SchematronPath(
@@ -91,6 +103,10 @@ public class TestDataCertificateModelConstants {
   public static final SchematronPath FK7810_SCHEMATRON_PATH = new SchematronPath(
       "fk7810/schematron/luas.v1.sch"
   );
+  public static final SchematronPath FK7804_SCHEMATRON_PATH = new SchematronPath(
+      "fk7804/schematron/lisjp.v2.sch"
+  );
+
   public static final String FK7210_PDF_PATH = "fk7210/pdf/fk7210_v1.pdf";
   public static final String FK3226_PDF_PATH = "fk3226/pdf/fk3226_v1.pdf";
   public static final String FK7210_PDF_PATH_NO_ADDRESS = "fk7210/pdf/fk7210_v1_no_address.pdf";
@@ -103,6 +119,7 @@ public class TestDataCertificateModelConstants {
   public static final String FK7426_NAME = "Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har fyllt 18";
   public static final String FK3221_NAME = "Läkarutlåtande för omvårdnadsbidrag eller merkostnadsersättning";
   public static final String FK7810_NAME = "Läkarutlåtande för assistansersättning";
+  public static final String FK7804_NAME = "Läkarintyg för sjukpenning";
   public static final Recipient FK_RECIPIENT = new Recipient(
       new RecipientId("FKASSA"), "Försäkringskassan", "Logisk adress"
   );

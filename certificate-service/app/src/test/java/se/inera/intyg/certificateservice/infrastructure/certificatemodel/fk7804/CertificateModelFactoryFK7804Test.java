@@ -179,7 +179,7 @@ class CertificateModelFactoryFK7804Test {
     @ValueSource(strings = {
         "KAT_1", "KAT_2", "KAT_3", "KAT_4", "KAT_5", "KAT_6", "KAT_7", "KAT_8", "KAT_9", "KAT_10",
         "KAT_11", "KAT_12", "UNIT_CONTACT_INFORMATION", "27", "1", "1.3", "28", "29", "19", "32",
-        "37", "34", "33", "33.2"
+        "37", "34", "33", "33.2", "6", "44", "25", "39", "39.2", "39.4", "26", "26.2"
     })
     void shallIncludeCategories(String id) {
       final var elementId = new ElementId(id);
@@ -187,39 +187,6 @@ class CertificateModelFactoryFK7804Test {
 
       assertTrue(certificateModel.elementSpecificationExists(elementId),
           "Expected elementId: '%s' to exist in elementSpecifications".formatted(elementId));
-    }
-
-    @Test
-    void shallIncludeQuestionOvrigt() {
-      final var certificateModel = certificateModelFactoryFK7804.create();
-
-      assertTrue(certificateModel.elementSpecificationExists(new ElementId("25")),
-          "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
-              new ElementId("25"),
-              certificateModel.elementSpecifications())
-      );
-    }
-
-    @Test
-    void shallIncludeQuestionAktivitetsbegransning() {
-      final var certificateModel = certificateModelFactoryFK7804.create();
-
-      assertTrue(certificateModel.elementSpecificationExists(new ElementId("44")),
-          "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
-              new ElementId("44"),
-              certificateModel.elementSpecifications())
-      );
-    }
-
-    @Test
-    void shallIncludeQuestionPrognos() {
-      final var certificateModel = certificateModelFactoryFK7804.create();
-
-      assertTrue(certificateModel.elementSpecificationExists(new ElementId("39")),
-          "Expected elementId: '%s' to exists in elementSpecifications '%s'".formatted(
-              new ElementId("39"),
-              certificateModel.elementSpecifications())
-      );
     }
   }
 }

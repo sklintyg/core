@@ -25,7 +25,7 @@ import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
 @Component
 @RequiredArgsConstructor
-public class PrefillDiagnosisConverter implements PrefillConverter {
+public class PrefillDiagnosisConverter implements PrefillStandardConverter {
 
   private static final int MINIMUM_SUB_ANSWERS = 1;
   private static final String CV_TYPE_IDENTIFIER = "%s.2";

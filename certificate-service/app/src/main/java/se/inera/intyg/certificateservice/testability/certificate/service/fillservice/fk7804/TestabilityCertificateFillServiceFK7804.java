@@ -7,6 +7,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionAntalManader.QUESTION_ANTAL_MANADER_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionArbetsformagaLangreAnBeslutsstod.QUESTION_ARBETFORMAGA_LANGRE_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionAtgarderSomKanFramjaAtergang.QUESTION_ATGARDER_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionDiagnos.QUESTION_DIAGNOS_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionGrundForBedomning.QUESTION_GRUND_FOR_BEDOMNING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionGrundForMedicinsktUnderlag.QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionKontakt.QUESTION_KONTAKT_ID;
@@ -38,6 +39,8 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCo
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosis;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueInteger;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
@@ -46,6 +49,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemIcd10Se;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0001;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0002;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0003;
@@ -61,6 +65,7 @@ public class TestabilityCertificateFillServiceFK7804 implements TestabilityCerti
       QUESTION_ANNAN_GRUND_FOR_MEDICINSKT_UNDERLAG_ID,
       QUESTION_SYSSELSATTNING_ID,
       QUESTION_YRKE_ARBETSUPPGIFTER_ID,
+      QUESTION_DIAGNOS_ID,
       QUESTION_MEDICINSK_BEHANDLING_ID,
       QUESTION_NEDSATTNING_ARBETSFORMAGA_ID,
       QUESTION_ARBETFORMAGA_LANGRE_ID,
@@ -73,14 +78,16 @@ public class TestabilityCertificateFillServiceFK7804 implements TestabilityCerti
       QUESTION_ATGARDER_ID,
       QUESTION_OVRIGT_ID,
       QUESTION_KONTAKT_ID,
-      QUESTION_VARFOR_KONTAKT_ID
+      QUESTION_VARFOR_KONTAKT_ID,
+      QUESTION_DIAGNOS_ID
 
   );
 
   private static final List<ElementId> MINIMAL_IDS = List.of(
       QUESTION_SMITTBARARPENNING_ID,
       QUESTION_MEDICINSK_BEHANDLING_ID,
-      QUESTION_NEDSATTNING_ARBETSFORMAGA_ID
+      QUESTION_NEDSATTNING_ARBETSFORMAGA_ID,
+      QUESTION_DIAGNOS_ID
   );
 
   private static final Map<ElementId, String> TEXT_QUESTION_MOCKS = Map.ofEntries(
@@ -169,6 +176,23 @@ public class TestabilityCertificateFillServiceFK7804 implements TestabilityCerti
                       ElementValueDate.builder()
                           .dateId(new FieldId(getCode(elementSpecification.id(), fillType).code()))
                           .date(LocalDate.now())
+                          .build()
+                  )
+              )
+          )
+          .build();
+    }
+
+    if (value instanceof ElementValueDiagnosisList elementValueDiagnosisList) {
+      return ElementData.builder()
+          .id(elementSpecification.id())
+          .value(
+              elementValueDiagnosisList.withDiagnoses(List.of(
+                      ElementValueDiagnosis.builder()
+                          .code("A78")
+                          .description("Q-feber")
+                          .terminology(CodeSystemIcd10Se.terminology().id())
+                          .id(new FieldId("huvuddiagnos"))
                           .build()
                   )
               )

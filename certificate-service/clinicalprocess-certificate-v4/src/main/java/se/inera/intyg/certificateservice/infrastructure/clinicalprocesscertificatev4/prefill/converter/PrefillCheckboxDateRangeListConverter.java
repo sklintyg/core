@@ -21,7 +21,7 @@ import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
 @Component
-public class PrefillCheckboxDateRangeListConverter implements PrefillConverter {
+public class PrefillCheckboxDateRangeListConverter implements PrefillStandardConverter {
 
   private static final int MINIMUM = 2;
 

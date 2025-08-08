@@ -13,11 +13,10 @@ import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertifica
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.util.PrefillValidator;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.util.SubAnswersUtil;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
-import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
 @Component
-public class PrefillRadioBooleanConverter implements PrefillConverter {
+public class PrefillRadioBooleanConverter implements PrefillStandardConverter {
 
   @Override
   public Class<? extends ElementConfiguration> supports() {
@@ -98,17 +97,5 @@ public class PrefillRadioBooleanConverter implements PrefillConverter {
       return false;
     }
     return "true".equalsIgnoreCase(value) || "false".equalsIgnoreCase(value);
-  }
-
-  private static String getContent(List<Delsvar> subAnswers, List<Svar> answers) {
-    if (!subAnswers.isEmpty()) {
-      return (String) subAnswers.getFirst().getContent().getFirst();
-    }
-    return (String) answers
-        .getFirst()
-        .getDelsvar()
-        .getFirst()
-        .getContent()
-        .getFirst();
   }
 }
