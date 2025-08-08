@@ -13,6 +13,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDi
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.model.DiagnosisCode;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.PrefillAnswer;
@@ -27,7 +28,7 @@ import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 @RequiredArgsConstructor
 public class PrefillCustomDiagnosisListConverter implements PrefillCustomConverter {
 
-  private static final int MINIMUM_SUB_ANSWERS = 2;
+  private static final int MINIMUM_SUB_ANSWERS = 1;
   private final DiagnosisCodeRepository diagnosisCodeRepository;
 
   @Override
@@ -44,15 +45,15 @@ public class PrefillCustomDiagnosisListConverter implements PrefillCustomConvert
           .build();
     }
 
-    final var answerOpt = prefill.getSvar().stream()
+    final var answerOptional = prefill.getSvar().stream()
         .filter(svar -> svar.getId().equals(specification.id().id()))
         .findFirst();
 
-    if (answerOpt.isEmpty()) {
+    if (answerOptional.isEmpty()) {
       return null;
     }
 
-    final var answer = answerOpt.get();
+    final var answer = answerOptional.get();
     final var prefillErrors = new ArrayList<>(
         PrefillValidator.validateMinimumNumberOfDelsvar(
             answer,
@@ -102,21 +103,22 @@ public class PrefillCustomDiagnosisListConverter implements PrefillCustomConvert
     final var codeDelsvar = getCodeDelsvar(specification, delsvarList, diagnosisIndex);
 
     final var optionalCvType = PrefillUnmarshaller.cvType(codeDelsvar.getContent());
-    final var validationErrors = new ArrayList<>(PrefillValidator.validateDiagnosisCode(
-        optionalCvType.map(List::of).orElse(Collections.emptyList()),
-        diagnosisCodeRepository
-    ));
+    final var validationErrors = new ArrayList<>(
+        PrefillValidator.validateDiagnosisCode(
+            optionalCvType.map(List::of).orElse(Collections.emptyList()),
+            diagnosisCodeRepository
+        ));
+
     if (!validationErrors.isEmpty()) {
       prefillErrors.addAll(validationErrors);
       return null;
     }
+
     try {
       final var cvType = optionalCvType.orElseThrow();
       final var code = cvType.getCode();
       final var terminology = getTerminology(elementConfigurationDiagnosis, cvType);
-      final var diagnosisId = elementConfigurationDiagnosis.list().size() > diagnosisIndex
-          ? elementConfigurationDiagnosis.list().get(diagnosisIndex).id()
-          : null;
+      final var diagnosisId = getDiagnosisId(diagnosisIndex, elementConfigurationDiagnosis);
       final var description = getDescription(descriptionDelsvar, code);
       return ElementValueDiagnosis.builder()
           .id(diagnosisId)
@@ -130,6 +132,14 @@ public class PrefillCustomDiagnosisListConverter implements PrefillCustomConvert
     }
   }
 
+  private static FieldId getDiagnosisId(int diagnosisIndex,
+      ElementConfigurationDiagnosis elementConfigurationDiagnosis) {
+    if (elementConfigurationDiagnosis.list().size() <= diagnosisIndex) {
+      throw new IllegalStateException("Too many diagnoses in prefill answer");
+    }
+    return elementConfigurationDiagnosis.list().get(diagnosisIndex).id();
+  }
+
   private String getDescription(Delsvar descriptionDelsvar, String code) {
     return descriptionDelsvar.getContent().isEmpty()
         ? diagnosisCodeRepository.getByCode(new DiagnosisCode(code)).description().description()
@@ -139,7 +149,7 @@ public class PrefillCustomDiagnosisListConverter implements PrefillCustomConvert
   private static String getTerminology(ElementConfigurationDiagnosis elementConfigurationDiagnosis,
       CVType cvType) {
     return elementConfigurationDiagnosis.terminology().stream()
-        .filter(t -> t.codeSystem().equals(cvType.getCodeSystem()))
+        .filter(terminology -> terminology.codeSystem().equals(cvType.getCodeSystem()))
         .findFirst()
         .orElseThrow()
         .id();

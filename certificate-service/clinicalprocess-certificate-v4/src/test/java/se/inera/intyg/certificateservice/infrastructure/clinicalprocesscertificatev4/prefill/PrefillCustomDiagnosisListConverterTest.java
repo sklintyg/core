@@ -126,7 +126,7 @@ class PrefillCustomDiagnosisListConverterTest {
     prefill.getSvar().add(svar);
     final var expectedErrors = List.of(
         PrefillError.wrongNumberOfSubAnswers(
-            SPECIFICATION.id().id(), 2, 0)
+            SPECIFICATION.id().id(), 1, 0)
     );
 
     final var result = converter.prefillAnswer(SPECIFICATION, prefill);
