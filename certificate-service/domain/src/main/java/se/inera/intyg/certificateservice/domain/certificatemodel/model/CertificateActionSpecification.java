@@ -22,4 +22,5 @@ public class CertificateActionSpecification {
       Role.PRIVATE_DOCTOR,
       Role.DENTIST
   );
+  CertificateActionContentProvider contentProvider;
 }
