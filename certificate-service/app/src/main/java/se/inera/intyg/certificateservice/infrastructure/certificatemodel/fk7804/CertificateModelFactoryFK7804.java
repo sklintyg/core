@@ -18,6 +18,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionAntalManader.questionAntalManader;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionArbetsformagaLangreAnBeslutsstod.questionArbetsformagaLangreAnBeslutsstod;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionAtgarderSomKanFramjaAtergang.questionAtgarderSomKanFramjaAtergang;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionDiagnos.questionDiagnos;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionGrundForBedomning.questionGrundForBedomning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionGrundForMedicinsktUnderlag.questionGrundForMedicinsktUnderlag;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionKontakt.questionKontakt;
@@ -149,7 +150,11 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
                     questionYrkeOchArbetsuppgifter()
                 )
             ),
-            categoryDiagnos(),
+            categoryDiagnos(
+                questionDiagnos(
+                    diagnosisCodeRepository
+                )
+            ),
             categoryFunktionsnedsattning(),
             categoryAktivitetsbegransning(),
             categoryMedicinskBehandling(
