@@ -37,6 +37,16 @@ public class PatientEntityMapper {
         .build();
   }
 
+  public static PatientEntity updateEntity(PatientEntity entity, Patient patient) {
+    entity.setFirstName(patient.name().firstName());
+    entity.setLastName(patient.name().lastName());
+    entity.setMiddleName(patient.name().middleName());
+    entity.setTestIndicated(patient.testIndicated().value());
+    entity.setProtectedPerson(patient.protectedPerson().value());
+    entity.setDeceased(patient.deceased().value());
+    return entity;
+  }
+
   public static Patient toDomain(PatientEntity patientEntity) {
 
     return Patient.builder()
