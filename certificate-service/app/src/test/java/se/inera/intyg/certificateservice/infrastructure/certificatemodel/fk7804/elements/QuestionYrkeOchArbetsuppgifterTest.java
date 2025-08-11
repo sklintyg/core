@@ -52,7 +52,7 @@ class QuestionYrkeOchArbetsuppgifterTest {
     final var expectedPdfConfiguration = PdfConfigurationText.builder()
         .pdfFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtYrkeArbetsuppgifter[0]"))
         .overflowSheetFieldId(new PdfFieldId("form1[0].#subform[4].flt_txtFortsattningsblad[0]"))
-        .maxLength(PDF_TEXT_FIELD_ROW_LENGTH)
+        .maxLength(3 * PDF_TEXT_FIELD_ROW_LENGTH)
         .build();
 
     final var element = QuestionYrkeOchArbetsuppgifter.questionYrkeOchArbetsuppgifter();
