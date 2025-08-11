@@ -130,8 +130,8 @@ public abstract class RenewCertificateIT extends BaseIntegrationIT {
   }
 
   @Test
-  @DisplayName("Vårdadministratör - Felkod 403 (FORBIDDEN) returneras")
-  void shallReturn403UserIsCareAdmin() {
+  @DisplayName("Vårdadministratör - Skall kunna förnya intyg utfärdat på patient utan skyddade personuppgifter")
+  void shallSuccessufullyRenewIfCareAdminAndPatientNotProtectedPerson() {
     final var testCertificates = testabilityApi.addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
@@ -143,7 +143,13 @@ public abstract class RenewCertificateIT extends BaseIntegrationIT {
         certificateId(testCertificates)
     );
 
-    assertEquals(403, response.getStatusCode().value());
+    assertAll(
+        () -> assertNotNull(
+            relation(renewCertificateResponse(response)).getParent()
+            , "Should add parent to renewed certificate"),
+        () -> assertEquals(certificateId(testCertificates),
+            relation(renewCertificateResponse(response)).getParent().getCertificateId())
+    );
   }
 
   @Test
