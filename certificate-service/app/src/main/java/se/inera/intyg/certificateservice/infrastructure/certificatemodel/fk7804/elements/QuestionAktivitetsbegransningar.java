@@ -8,6 +8,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationIcfValue;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
 public class QuestionAktivitetsbegransningar {
@@ -44,6 +45,12 @@ public class QuestionAktivitetsbegransningar {
                 QUESTION_SMITTBARARPENNING_ID,
                 QUESTION_SMITTBARARPENNING_FIELD_ID
             )
+        ))
+        .validations(List.of(
+            ElementValidationIcfValue.builder()
+                .mandatory(true)
+                .limit(4000)
+                .build()
         ))
         .build();
   }
