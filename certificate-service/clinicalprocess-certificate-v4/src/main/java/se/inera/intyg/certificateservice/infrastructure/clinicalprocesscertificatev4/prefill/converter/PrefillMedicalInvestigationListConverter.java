@@ -25,7 +25,7 @@ import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 
 @Component
-public class PrefillMedicalInvestigationListConverter implements PrefillConverter {
+public class PrefillMedicalInvestigationListConverter implements PrefillStandardConverter {
 
   private static final int MINIMUM_SUB_ANSWERS = 3;
 
