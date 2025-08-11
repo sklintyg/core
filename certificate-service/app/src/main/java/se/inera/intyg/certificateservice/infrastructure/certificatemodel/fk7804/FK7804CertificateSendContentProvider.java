@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionNedsattningArbetsformaga.QUESTION_NEDSATTNING_ARBETSFORMAGA_ID;
+
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -8,11 +10,8 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionContentProvider;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 
 public class FK7804CertificateSendContentProvider implements CertificateActionContentProvider {
-
-  private static final ElementId QUESTION_NEDSATTNING_ARBETSFORMAGA_ID = new ElementId("56");
 
   private static final String LONG_SICK_LEAVE_PERIOD_BODY =
       "<p>Om du går vidare kommer intyget skickas direkt till "

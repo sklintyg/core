@@ -33,6 +33,7 @@ public class FK7804CertificateActionSpecification {
             .certificateActionType(CertificateActionType.SEND)
             .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.CARE_ADMIN, Role.NURSE,
                 Role.MIDWIFE))
+            .contentProvider(new FK7804CertificateSendContentProvider())
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.PRINT)
@@ -129,6 +130,15 @@ public class FK7804CertificateActionSpecification {
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE_FROM_LIST)
+            .build(),
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.FMB)
+            .build(),
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.SRS_DRAFT)
+            .build(),
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.SRS_SIGNED)
             .build()
     );
   }

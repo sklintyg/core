@@ -19,7 +19,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 
 class FK7804CertificateSendContentProviderTest {
 
-  private static final ElementId QUESTION_NEDSATTNING_ARBETSFORMAGA_ID = new ElementId("56");
+  private static final ElementId QUESTION_NEDSATTNING_ARBETSFORMAGA_ID = new ElementId("32");
 
   private static final String SHORT_BODY =
       "<p>Om du går vidare kommer intyget skickas direkt till "
