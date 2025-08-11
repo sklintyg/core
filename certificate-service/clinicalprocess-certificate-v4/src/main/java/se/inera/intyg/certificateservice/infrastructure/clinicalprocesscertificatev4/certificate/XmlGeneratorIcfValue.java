@@ -32,15 +32,14 @@ public class XmlGeneratorIcfValue implements XmlGeneratorElementValue {
       return Collections.emptyList();
     }
 
-    var result = XmlAnswerFactory.createAnswerFromString(
+    return XmlAnswerFactory.createAnswerFromString(
         data.id(),
         icfValue.id(),
         icfConfiguration.collectionsLabel()
             + " "
-            + String.join(", ", icfValue.icfCodes())
+            + String.join(" - ", icfValue.icfCodes())
             + "\n\n"
             + icfValue.text()
     );
-    return result;
   }
 }

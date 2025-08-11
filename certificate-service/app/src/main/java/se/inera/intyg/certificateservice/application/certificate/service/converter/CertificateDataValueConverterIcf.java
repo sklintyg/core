@@ -34,7 +34,6 @@ public class CertificateDataValueConverterIcf implements CertificateDataValueCon
       );
     }
 
-    // FIXME: icfCodes
     return CertificateDataIcfValue.builder()
         .id(elementConfiguration.id().value())
         .text(elementValue != null ? ((ElementValueIcf) elementValue).text() : null)
