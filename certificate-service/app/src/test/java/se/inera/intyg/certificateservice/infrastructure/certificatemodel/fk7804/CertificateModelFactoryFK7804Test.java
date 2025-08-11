@@ -21,7 +21,10 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
@@ -170,6 +173,29 @@ class CertificateModelFactoryFK7804Test {
     final var certificateModel = certificateModelFactoryFK7804.create();
 
     assertEquals(certificateActionFactory, certificateModel.certificateActionFactory());
+  }
+
+  @Test
+  void shouldIncludePdfSpecification() {
+    final var model = certificateModelFactoryFK7804.create();
+    assertNotNull(model.pdfSpecification(), "PdfSpecification in FK7804 model should not be null");
+  }
+
+  @Test
+  void allElementSpecificationsShouldHavePdfConfiguration() {
+    final var model = certificateModelFactoryFK7804.create();
+    model.elementSpecifications().forEach(this::checkPdfConfigRecursive);
+  }
+
+  private void checkPdfConfigRecursive(ElementSpecification element) {
+    if (!(element.configuration() instanceof ElementConfigurationCategory)
+        && !(element.configuration() instanceof ElementConfigurationUnitContactInformation)) {
+      assertNotNull(
+          element.pdfConfiguration(),
+          () -> "Missing pdfConfiguration for element: " + element.id()
+      );
+    }
+    element.children().forEach(this::checkPdfConfigRecursive);
   }
 
   @Nested

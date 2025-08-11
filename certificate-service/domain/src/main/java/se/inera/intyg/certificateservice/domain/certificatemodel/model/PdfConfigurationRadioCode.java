@@ -6,7 +6,8 @@ import lombok.Value;
 
 @Value
 @Builder
-public class PdfConfigurationDateRangeList implements PdfConfiguration {
+public class PdfConfigurationRadioCode implements PdfConfiguration {
 
-  Map<FieldId, PdfConfigurationDateRangeCheckbox> dateRanges;
+  PdfFieldId radioGroupFieldId;
+  Map<FieldId, PdfFieldId> codes;
 }

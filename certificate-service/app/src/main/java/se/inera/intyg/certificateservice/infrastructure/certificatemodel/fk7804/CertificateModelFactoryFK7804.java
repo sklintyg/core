@@ -192,6 +192,7 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
             ),
             issuingUnitContactInfo()
         ))
+        .pdfSpecification(FK7804PdfSpecification.create())
         .certificateActionFactory(certificateActionFactory)
         .build();
   }

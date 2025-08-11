@@ -7,6 +7,9 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationRadioBoolean;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfRadioOption;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
@@ -74,6 +77,13 @@ public class QuestionSvarareAtergangVidOjamnArbetstid {
                     new FieldId(CodeSystemKvFkmu0003.TRE_FJARDEDEL.code()),
                     new FieldId(CodeSystemKvFkmu0003.EN_FJARDEDEL.code())
                 )))
+        .pdfConfiguration(
+            PdfConfigurationRadioBoolean.builder()
+                .pdfFieldId(new PdfFieldId("form1[0].Sida3[0].RadioButtonList4[0]"))
+                .optionFalse(new PdfRadioOption("0"))
+                .optionTrue(new PdfRadioOption("1"))
+                .build()
+        )
         .children(List.of(children))
         .build();
   }

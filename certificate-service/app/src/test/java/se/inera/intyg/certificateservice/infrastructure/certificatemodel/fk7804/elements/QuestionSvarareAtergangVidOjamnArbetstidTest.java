@@ -17,6 +17,9 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationRadioBoolean;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfRadioOption;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0003;
@@ -92,6 +95,17 @@ class QuestionSvarareAtergangVidOjamnArbetstidTest {
     );
 
     assertEquals(expectedValidations, element.validations());
+  }
+
+  @Test
+  void shouldHaveCorrectPdfConfiguration() {
+    final var element = QuestionSvarareAtergangVidOjamnArbetstid.questionSvarareAtergangVidOjamnArbetstid();
+    final var expected = PdfConfigurationRadioBoolean.builder()
+        .pdfFieldId(new PdfFieldId("form1[0].Sida3[0].RadioButtonList4[0]"))
+        .optionFalse(new PdfRadioOption("0"))
+        .optionTrue(new PdfRadioOption("1"))
+        .build();
+    assertEquals(expected, element.pdfConfiguration());
   }
 
   @Nested

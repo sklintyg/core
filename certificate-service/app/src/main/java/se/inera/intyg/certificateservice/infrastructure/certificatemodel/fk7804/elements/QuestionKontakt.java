@@ -8,6 +8,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationBoolean;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
@@ -48,6 +50,11 @@ public class QuestionKontakt {
                     .mandatory(false)
                     .build()
             )
+        )
+        .pdfConfiguration(
+            PdfConfigurationBoolean.builder()
+                .checkboxTrue(new PdfFieldId("form1[0].Sida4[0].ksr_ForsakringskassanKontakar[0]"))
+                .build()
         )
         .shouldValidate(ShouldValidateFactory.checkboxBoolean(QUESTION_SMITTBARARPENNING_ID, false))
         .children(List.of(children))

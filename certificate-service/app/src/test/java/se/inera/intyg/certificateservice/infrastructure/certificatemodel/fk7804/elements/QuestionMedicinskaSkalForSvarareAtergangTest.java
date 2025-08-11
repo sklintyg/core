@@ -13,6 +13,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
@@ -77,6 +79,16 @@ class QuestionMedicinskaSkalForSvarareAtergangTest {
     final var element = QuestionMedicinskaSkalForSvarareAtergang.questionMedicinskaSkalForSvarareAtergang();
 
     assertEquals(expectedValidations, element.validations());
+  }
+
+  @Test
+  void shouldHaveCorrectPdfConfiguration() {
+    final var element = QuestionMedicinskaSkalForSvarareAtergang.questionMedicinskaSkalForSvarareAtergang();
+    final var expected = PdfConfigurationText.builder()
+        .pdfFieldId(new PdfFieldId("form1[0].Sida3[0].flt_txtBeskrivMedicinskaSkal[0]"))
+        .overflowSheetFieldId(new PdfFieldId("form1[0].#subform[4].flt_txtFortsattningsblad[0]"))
+        .build();
+    assertEquals(expected, element.pdfConfiguration());
   }
 
   @Nested

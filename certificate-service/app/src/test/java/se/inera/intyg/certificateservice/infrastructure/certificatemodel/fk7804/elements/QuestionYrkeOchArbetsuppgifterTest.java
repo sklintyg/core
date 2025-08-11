@@ -21,6 +21,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMa
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 
@@ -42,6 +44,18 @@ class QuestionYrkeOchArbetsuppgifterTest {
     final var element = QuestionYrkeOchArbetsuppgifter.questionYrkeOchArbetsuppgifter();
 
     assertEquals(expectedConfiguration, element.configuration());
+  }
+
+  @Test
+  void shouldIncludePdfConfiguration() {
+    final var expectedPdfConfiguration = PdfConfigurationText.builder()
+        .pdfFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtYrkeArbetsuppgifter[0]"))
+        .overflowSheetFieldId(new PdfFieldId("form1[0].#subform[4].flt_txtFortsattningsblad[0]"))
+        .build();
+
+    final var element = QuestionYrkeOchArbetsuppgifter.questionYrkeOchArbetsuppgifter();
+
+    assertEquals(expectedPdfConfiguration, element.pdfConfiguration());
   }
 
   @Test
