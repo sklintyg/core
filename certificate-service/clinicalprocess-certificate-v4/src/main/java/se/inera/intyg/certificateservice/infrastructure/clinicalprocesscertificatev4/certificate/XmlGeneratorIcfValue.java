@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueIcf;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationIcf;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 
@@ -23,14 +24,23 @@ public class XmlGeneratorIcfValue implements XmlGeneratorElementValue {
       return Collections.emptyList();
     }
 
+    if (!(specification.configuration() instanceof ElementConfigurationIcf icfConfiguration)) {
+      return Collections.emptyList();
+    }
+
     if (icfValue.text() == null || icfValue.text().isEmpty()) {
       return Collections.emptyList();
     }
 
-    return XmlAnswerFactory.createAnswerFromString(
+    var result = XmlAnswerFactory.createAnswerFromString(
         data.id(),
         icfValue.id(),
-        icfValue.text()
+        icfConfiguration.collectionsLabel()
+            + " "
+            + String.join(", ", icfValue.icfCodes())
+            + "\n\n"
+            + icfValue.text()
     );
+    return result;
   }
 }
