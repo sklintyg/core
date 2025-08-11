@@ -15,7 +15,7 @@ public class QuestionFunktionsnedsattningar {
 
   public static final ElementId QUESTION_FUNKTIONSNEDSATTNINGAR_ID = new ElementId(
       "35");
-  private static final FieldId QUESTION_FUNKTIONSNEDSATTNINGAR_FIELD_ID = new FieldId("35.1");
+  public static final FieldId QUESTION_FUNKTIONSNEDSATTNINGAR_FIELD_ID = new FieldId("35.1");
 
   private QuestionFunktionsnedsattningar() {
     throw new IllegalStateException("Utility class");

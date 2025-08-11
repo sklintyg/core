@@ -15,7 +15,7 @@ public class QuestionAktivitetsbegransningar {
 
   public static final ElementId QUESTION_AKTIVITETSBEGRANSNING_ID = new ElementId(
       "17");
-  private static final FieldId QUESTION_AKTIVITETSBEGRANSNING_FIELD_ID = new FieldId("17.1");
+  public static final FieldId QUESTION_AKTIVITETSBEGRANSNING_FIELD_ID = new FieldId("17.1");
 
   private QuestionAktivitetsbegransningar() {
     throw new IllegalStateException("Utility class");
