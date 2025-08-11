@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
-import java.util.List;
 import java.util.Optional;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,10 +29,6 @@ public class ElementConfigurationIcf implements ElementConfiguration {
   @Override
   public ElementValue emptyValue() {
     return ElementValueIcf.builder()
-        .icfId(id)
-        .modalLabel(modalLabel)
-        .collectionsLabel(collectionsLabel)
-        .placeholder(placeholder)
         .build();
   }
 
@@ -49,13 +44,6 @@ public class ElementConfigurationIcf implements ElementConfiguration {
 
     return Optional.of(
         ElementSimplifiedValueList.builder()
-            .list(
-                List.of(
-                    elementValue.modalLabel(),
-                    elementValue.collectionsLabel(),
-                    elementValue.placeholder()
-                )
-            )
             .build());
   }
 }

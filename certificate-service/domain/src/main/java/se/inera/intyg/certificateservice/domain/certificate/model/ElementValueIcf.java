@@ -1,7 +1,10 @@
 package se.inera.intyg.certificateservice.domain.certificate.model;
 
+import java.util.Collections;
+import java.util.List;
 import lombok.Builder;
 import lombok.Value;
+import lombok.With;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidator;
 
@@ -9,15 +12,14 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidato
 @Builder
 public class ElementValueIcf implements ElementValue {
 
-  FieldId icfId;
-  String modalLabel;
-  String collectionsLabel;
-  String placeholder;
+  FieldId id;
+  String text;
+  @With
+  @Builder.Default
+  List<String> icfCodes = Collections.emptyList();
 
   @Override
   public boolean isEmpty() {
-    return !ElementValidator.isTextDefined(modalLabel) ||
-        !ElementValidator.isTextDefined(collectionsLabel) ||
-        !ElementValidator.isTextDefined(placeholder);
+    return !ElementValidator.isTextDefined(text);
   }
 }
