@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.FK7804PdfSpecification.PDF_TEXT_FIELD_ROW_LENGTH;
 
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -87,6 +88,7 @@ class QuestionGrundForBedomningTest {
     final var expected = PdfConfigurationText.builder()
         .pdfFieldId(new PdfFieldId("form1[0].Sida3[0].flt_txtAlternativFyra[0]"))
         .overflowSheetFieldId(new PdfFieldId("form1[0].#subform[4].flt_txtFortsattningsblad[0]"))
+        .maxLength(7 * PDF_TEXT_FIELD_ROW_LENGTH)
         .build();
     assertEquals(expected, element.pdfConfiguration());
   }

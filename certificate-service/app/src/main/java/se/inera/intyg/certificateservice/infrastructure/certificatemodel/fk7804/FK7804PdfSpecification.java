@@ -9,6 +9,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagInd
 
 public class FK7804PdfSpecification {
 
+  public static final Integer PDF_TEXT_FIELD_ROW_LENGTH = 52;
   public static final String PDF_FK_7804_PDF = "fk7804/pdf/fk7804_v2.pdf";
   public static final String PDF_NO_ADDRESS_FK_7804_PDF = "fk7804/pdf/fk7804_v2_no_address.pdf";
   public static final PdfMcid PDF_MCID = new PdfMcid(100); // Example value, update as needed

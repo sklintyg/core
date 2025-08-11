@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.FK7804PdfSpecification.PDF_TEXT_FIELD_ROW_LENGTH;
+
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -35,6 +37,7 @@ public class QuestionOvrigt {
                 .pdfFieldId(new PdfFieldId("form1[0].Sida3[0].flt_txtOvrigaUpplysningarl[0]"))
                 .overflowSheetFieldId(
                     new PdfFieldId("form1[0].#subform[4].flt_txtFortsattningsblad[0]"))
+                .maxLength(8 * PDF_TEXT_FIELD_ROW_LENGTH)
                 .build()
         )
         .rules(

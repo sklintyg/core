@@ -21,17 +21,19 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldI
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.FK7804PdfSpecification;
 
 class QuestionArbetsformagaLangreAnBeslutsstodTest {
 
   private static final ElementId ELEMENT_ID = new ElementId("37");
-  
+
   @Test
   void shouldContainCorrectPdfConfiguration() {
     final var elementSpecification = QuestionArbetsformagaLangreAnBeslutsstod.questionArbetsformagaLangreAnBeslutsstod();
     final var expected = PdfConfigurationText.builder()
         .pdfFieldId(new PdfFieldId("form1[0].Sida3[0].flt_txtArbetsförmaga[0]"))
         .overflowSheetFieldId(new PdfFieldId("form1[0].#subform[4].flt_txtFortsattningsblad[0]"))
+        .maxLength(3 * FK7804PdfSpecification.PDF_TEXT_FIELD_ROW_LENGTH)
         .build();
     assertThat(elementSpecification.pdfConfiguration()).isEqualTo(expected);
   }
@@ -156,4 +158,3 @@ class QuestionArbetsformagaLangreAnBeslutsstodTest {
     }
   }
 }
-

@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.FK7804PdfSpecification.PDF_TEXT_FIELD_ROW_LENGTH;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionPrognos.QUESTION_PROGNOS_ID;
 
 import java.util.List;
@@ -65,6 +66,7 @@ public class QuestionGrundForBedomning {
                 .pdfFieldId(new PdfFieldId("form1[0].Sida3[0].flt_txtAlternativFyra[0]"))
                 .overflowSheetFieldId(
                     new PdfFieldId("form1[0].#subform[4].flt_txtFortsattningsblad[0]"))
+                .maxLength(PDF_TEXT_FIELD_ROW_LENGTH)
                 .build()
         )
         .build();
