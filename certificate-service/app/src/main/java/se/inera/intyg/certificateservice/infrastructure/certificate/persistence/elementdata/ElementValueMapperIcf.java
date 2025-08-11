@@ -2,7 +2,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueIcfValue;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueIcf;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
 @Component
@@ -11,13 +11,13 @@ public class ElementValueMapperIcf implements ElementValueMapper {
   @Override
   public boolean supports(Class<?> c) {
     return c.equals(MappedElementValueIcfValue.class)
-        || c.equals(ElementValueIcfValue.class);
+        || c.equals(ElementValueIcf.class);
   }
 
   @Override
   public ElementValue toDomain(MappedElementValue mappedValue) {
     if (mappedValue instanceof MappedElementValueIcfValue valueIcf) {
-      return ElementValueIcfValue.builder()
+      return ElementValueIcf.builder()
           .id(new FieldId(valueIcf.getId()))
           .text(valueIcf.getText())
           .icfCodes(valueIcf.getIcfCodes())
@@ -29,11 +29,11 @@ public class ElementValueMapperIcf implements ElementValueMapper {
 
   @Override
   public MappedElementValue toMapped(ElementValue value) {
-    if (value instanceof ElementValueIcfValue elementValueIcfValue) {
+    if (value instanceof ElementValueIcf elementValueIcf) {
       return MappedElementValueIcfValue.builder()
-          .id(elementValueIcfValue.id().value())
-          .text(elementValueIcfValue.text())
-          .icfCodes(elementValueIcfValue.icfCodes())
+          .id(elementValueIcf.id().value())
+          .text(elementValueIcf.text())
+          .icfCodes(elementValueIcf.icfCodes())
           .build();
     }
     throw new IllegalStateException("ElementValue not supported '%s'".formatted(value));

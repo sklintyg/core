@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.Value;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueIcfValue;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueIcf;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
@@ -36,7 +36,7 @@ public class ElementValidationIcfValue implements ElementValidation {
       );
     }
 
-    if (value.text() != null && ElementValidator.isTextOverLimit(value.text(), limit)) {
+    if (ElementValidator.isTextOverLimit(value.text(), limit)) {
       return List.of(
           errorMessage(data, value.id(), categoryId,
               ErrorMessageFactory.textLimit(limit)
@@ -60,12 +60,12 @@ public class ElementValidationIcfValue implements ElementValidation {
         .build();
   }
 
-  private ElementValueIcfValue getValue(ElementValue value) {
+  private ElementValueIcf getValue(ElementValue value) {
     if (value == null) {
       throw new IllegalArgumentException("Element data value is null");
     }
 
-    if (value instanceof ElementValueIcfValue dateValue) {
+    if (value instanceof ElementValueIcf dateValue) {
       return dateValue;
     }
 
