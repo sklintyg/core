@@ -5,7 +5,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.value.Certi
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValue;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueType;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueIcfValue;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueIcf;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
 @Component
@@ -23,7 +23,7 @@ public class ElementValueConverterIcf implements ElementValueConverter {
           "Invalid value type. Type was '%s'".formatted(value.getType())
       );
     }
-    return ElementValueIcfValue.builder()
+    return ElementValueIcf.builder()
         .id(new FieldId(valueIcf.getId()))
         .text(valueIcf.getText())
         .icfCodes(valueIcf.getIcfCodes())

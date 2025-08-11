@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataIcfValue;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueIcfValue;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueIcf;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationIcf;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType;
@@ -21,7 +21,7 @@ public class CertificateDataValueConverterIcf implements CertificateDataValueCon
   @Override
   public CertificateDataValue convert(ElementSpecification elementSpecification,
       ElementValue elementValue) {
-    if (elementValue != null && !(elementValue instanceof ElementValueIcfValue)) {
+    if (elementValue != null && !(elementValue instanceof ElementValueIcf)) {
       throw new IllegalStateException(
           "Invalid value type. Type was '%s'".formatted(elementValue.getClass())
       );
@@ -37,8 +37,8 @@ public class CertificateDataValueConverterIcf implements CertificateDataValueCon
     // FIXME: icfCodes
     return CertificateDataIcfValue.builder()
         .id(elementConfiguration.id().value())
-        .text(elementValue != null ? ((ElementValueIcfValue) elementValue).text() : null)
-        .icfCodes(elementValue != null ? ((ElementValueIcfValue) elementValue).icfCodes()
+        .text(elementValue != null ? ((ElementValueIcf) elementValue).text() : null)
+        .icfCodes(elementValue != null ? ((ElementValueIcf) elementValue).icfCodes()
             : Collections.emptyList())
         .build();
   }

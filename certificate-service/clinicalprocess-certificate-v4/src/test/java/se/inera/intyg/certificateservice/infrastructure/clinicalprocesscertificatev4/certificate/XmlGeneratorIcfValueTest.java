@@ -9,7 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueIcfValue;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueIcf;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
@@ -32,7 +32,7 @@ class XmlGeneratorIcfValueTest {
   void shouldMapText() {
     final var data = ElementData.builder()
         .id(new ElementId(QUESTION_ID))
-        .value(ElementValueIcfValue.builder()
+        .value(ElementValueIcf.builder()
             .id(new FieldId(ANSWER_ID))
             .text(TEXT)
             .build())
@@ -58,7 +58,7 @@ class XmlGeneratorIcfValueTest {
   @Test
   void shouldMapEmptyIfNullValue() {
     final var data = ElementData.builder()
-        .value(ElementValueIcfValue.builder()
+        .value(ElementValueIcf.builder()
             .id(new FieldId(ANSWER_ID))
             .build()
         )
