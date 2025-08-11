@@ -32,7 +32,7 @@ public class XmlGeneratorIcfValue implements XmlGeneratorElementValue {
       return Collections.emptyList();
     }
 
-    return XmlAnswerFactory.createAnswerFromString(
+    var result = XmlAnswerFactory.createAnswerFromString(
         data.id(),
         icfValue.id(),
         icfConfiguration.collectionsLabel()
@@ -41,5 +41,6 @@ public class XmlGeneratorIcfValue implements XmlGeneratorElementValue {
             + "\n\n"
             + icfValue.text()
     );
+    return result;
   }
 }
