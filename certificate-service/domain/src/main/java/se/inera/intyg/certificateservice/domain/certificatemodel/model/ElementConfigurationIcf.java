@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValue;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueList;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueIcf;
 
@@ -44,7 +44,15 @@ public class ElementConfigurationIcf implements ElementConfiguration {
     }
 
     return Optional.of(
-        ElementSimplifiedValueList.builder()
+        ElementSimplifiedValueText.builder()
+            .text(
+                """
+                    %s
+                    
+                    %s
+                    """.formatted(
+                    String.join(" - ", elementValue.icfCodes()),
+                    elementValue.text()))
             .build());
   }
 }
