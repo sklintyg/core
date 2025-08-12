@@ -49,7 +49,7 @@ public class FK7804CertificateSendContentProvider implements CertificateActionCo
     final var ranges = getDateRanges(elementValueDateList);
 
     var totalDays = ranges.stream()
-        .mapToLong(range -> ChronoUnit.DAYS.between(range.from(), range.to()))
+        .mapToLong(range -> ChronoUnit.DAYS.between(range.from(), range.to()) + 1)
         .sum();
 
     return totalDays < 15
