@@ -25,7 +25,7 @@ public class ElementConfigurationIcf implements ElementConfiguration {
   String modalLabel;
   String collectionsLabel;
   String placeholder;
-  String icfCodesPropertyName;
+  IcfCodesPropertyType icfCodesPropertyName;
 
   @Override
   public ElementValue emptyValue() {

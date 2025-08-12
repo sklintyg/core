@@ -1,9 +1,10 @@
 package se.inera.intyg.certificateservice.application.certificate.service.converter;
 
+import static se.inera.intyg.certificateservice.application.certificate.dto.config.IcfCodesPropertyTypeDTO.toIcfCodesPropertyType;
+
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfig;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigIcf;
-import se.inera.intyg.certificateservice.application.certificate.dto.config.IcfCodesPropertyEnum;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationIcf;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
@@ -29,8 +30,7 @@ public class CertificateDataIcfConfigConverter implements CertificateDataConfigC
 
     return CertificateDataConfigIcf.builder()
         .id(configurationIcf.id().value())
-        .icfCodesPropertyName(
-            IcfCodesPropertyEnum.fromValue(configurationIcf.icfCodesPropertyName()))
+        .icfCodesPropertyName(toIcfCodesPropertyType(configurationIcf.icfCodesPropertyName()))
         .description(configurationIcf.description())
         .text(configurationIcf.name())
         .header(configurationIcf.header())

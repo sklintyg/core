@@ -4,11 +4,11 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSmittbararpenning.QUESTION_SMITTBARARPENNING_ID;
 
 import java.util.List;
-import se.inera.intyg.certificateservice.application.certificate.dto.config.IcfCodesPropertyEnum;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationIcf;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.IcfCodesPropertyType;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationIcfValue;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
@@ -29,7 +29,7 @@ public class QuestionAktivitetsbegransningar {
             ElementConfigurationIcf.builder()
                 .id(QUESTION_AKTIVITETSBEGRANSNING_FIELD_ID)
                 .icfCodesPropertyName(
-                    IcfCodesPropertyEnum.AKTIVITETSBEGRANSNINGAR.getIcfCodePropertyName())
+                    IcfCodesPropertyType.AKTIVITETSBEGRANSNINGAR)
                 .name(
                     "Ange vilken/vilka funktionsnedsättningar patienten har till följd av sjukdom och om möjligt svårighetsgrad. Ange även vad din bedömning av funktionsnedsättningar baseras på. Beskriv relevanta undersökningsfynd, testresultat, utredningssvar eller andra uppgifter (exempelvis anamnesuppgifter) och hur du bedömer dem.")
                 .modalLabel("Välj enbart de svårigheter som påverkar patientens sysselsättning.")
