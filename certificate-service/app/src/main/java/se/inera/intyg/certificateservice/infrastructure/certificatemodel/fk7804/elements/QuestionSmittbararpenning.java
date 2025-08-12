@@ -5,6 +5,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationBoolean;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 
 public class QuestionSmittbararpenning {
@@ -33,6 +35,12 @@ public class QuestionSmittbararpenning {
                     .mandatory(false)
                     .build()
             )
+        )
+        .pdfConfiguration(
+            PdfConfigurationBoolean.builder()
+                .checkboxTrue(
+                    new PdfFieldId("form1[0].#subform[0].ksr_AvstangningSmittskyddslagen[0]"))
+                .build()
         )
         .children(List.of(children))
         .build();

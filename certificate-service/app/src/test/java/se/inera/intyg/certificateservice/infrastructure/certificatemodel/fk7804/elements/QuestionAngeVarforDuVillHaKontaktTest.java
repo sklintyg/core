@@ -17,6 +17,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 
@@ -133,4 +135,18 @@ class QuestionAngeVarforDuVillHaKontaktTest {
       assertFalse(shouldValidate.test(elementData));
     }
   }
+
+  @Test
+  void shouldContainCorrectPdfConfiguration() {
+    final var expected = PdfConfigurationText.builder()
+        .pdfFieldId(new PdfFieldId("form1[0].Sida4[0].flt_txtForsakringskassanKontaktar[0]"))
+        .overflowSheetFieldId(new PdfFieldId("form1[0].#subform[4].flt_txtFortsattningsblad[0]"))
+        .maxLength(52)
+        .build();
+
+    final var elementSpecification = QuestionAngeVarforDuVillHaKontakt.questionAngeVarforDuVillHaKontakt();
+
+    assertEquals(expected, elementSpecification.pdfConfiguration());
+  }
 }
+

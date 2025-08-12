@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
@@ -52,6 +53,17 @@ class PdfSpecificationCopilotHelperTest {
   private static final String FK_7426 = "fk7426";
   private static final String FK_3221 = "fk3221";
   private static final String FK_7810 = "fk7810";
+  private static final String FK_7804 = "fk7804";
+  private static final String FK_7472 = "fk7472";
+
+  private static final Map<String, String> TYPE_TO_VERSION = Map.of(
+      FK_7427, "v1",
+      FK_7426, "v1",
+      FK_3221, "v1",
+      FK_7810, "v1",
+      FK_7804, "v2",
+      FK_7472, "v1"
+  );
 
   /**
    * To verify that the PDF templates that are delivered by the certificate recipient follows the
@@ -66,15 +78,16 @@ class PdfSpecificationCopilotHelperTest {
    */
 
   /**
-   * Run to generate strcture for the first time and save in resources/pdf folder.
+   * Run to generate structure for the first time and save in resources/pdf folder.
    */
   @Disabled
   @Test
   void shouldCreateStructureFileForPdf() {
-    final var certificateType = FK_7810;
+    final var certificateType = FK_7472;
     final var classloader = getClass().getClassLoader();
     final var inputStream = classloader.getResourceAsStream(
-        String.format("%s/pdf/%s_v1.pdf", certificateType, certificateType));
+        String.format("%s/pdf/%s_%s.pdf", certificateType, certificateType,
+            TYPE_TO_VERSION.get(certificateType)));
 
     try {
       final var document = Loader.loadPDF(inputStream.readAllBytes());
@@ -87,7 +100,7 @@ class PdfSpecificationCopilotHelperTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {FK_7427, FK_7426, FK_3221, FK_7810})
+  @ValueSource(strings = {FK_7427, FK_7426, FK_3221, FK_7810, FK_7804, FK_7472})
   void shouldHaveSameStructureAsOriginalDocument(String certificateType) {
     setup(certificateType);
 
@@ -106,7 +119,7 @@ class PdfSpecificationCopilotHelperTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {FK_7427, FK_7426, FK_3221, FK_7810})
+  @ValueSource(strings = {FK_7427, FK_7426, FK_3221, FK_7810, FK_7804, FK_7472})
   void shouldHaveSameIdsForTemplateWithAndWithoutAddress(String certificateType) {
     setup(certificateType);
 
@@ -137,9 +150,11 @@ class PdfSpecificationCopilotHelperTest {
   private void setup(String certificateType) {
     final var classloader = getClass().getClassLoader();
     final var inputStream = classloader.getResourceAsStream(
-        String.format("%s/pdf/%s_v1.pdf", certificateType, certificateType));
+        String.format("%s/pdf/%s_%s.pdf", certificateType, certificateType,
+            TYPE_TO_VERSION.get(certificateType)));
     final var inputStreamWithoutAddress = classloader.getResourceAsStream(
-        String.format("%s/pdf/%s_v1_no_address.pdf", certificateType, certificateType));
+        String.format("%s/pdf/%s_%s_no_address.pdf", certificateType, certificateType,
+            TYPE_TO_VERSION.get(certificateType)));
 
     try {
       documentWithAddress = Loader.loadPDF(inputStream.readAllBytes());

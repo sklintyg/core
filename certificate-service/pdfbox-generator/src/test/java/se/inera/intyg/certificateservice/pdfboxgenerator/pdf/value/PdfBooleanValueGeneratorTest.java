@@ -107,6 +107,26 @@ class PdfBooleanValueGeneratorTest {
 
       assertEquals(Collections.emptyList(), result);
     }
+
+    @Test
+    void shouldHandleValueFalseAndCheckboxFalseNull() {
+      final var elementSpecification = ElementSpecification.builder()
+          .pdfConfiguration(
+              PdfConfigurationBoolean.builder()
+                  .checkboxTrue(new PdfFieldId(YES_PDF_FIELD_ID))
+                  .build()
+          )
+          .build();
+
+      final var elementValue = ElementValueBoolean.builder()
+          .booleanId(FIELD_ID)
+          .value(false)
+          .build();
+
+      final var result = pdfBooleanValueGenerator.generate(elementSpecification, elementValue);
+
+      assertEquals(Collections.emptyList(), result);
+    }
   }
 
   @Nested

@@ -10,6 +10,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateRangeList;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateRangeList;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0003;
 
@@ -93,5 +95,38 @@ class QuestionNedsattningArbetsformagaTest {
 
     assertEquals(expectedValidations, element.validations());
   }
-}
 
+  @Test
+  void shouldHaveCorrectPdfConfiguration() {
+    final var element = QuestionNedsattningArbetsformaga.questionNedsattningArbetsformaga();
+    final var expected = PdfConfigurationDateRangeList.builder()
+        .dateRanges(java.util.Map.of(
+            new FieldId(CodeSystemKvFkmu0003.HELT_NEDSATT.code()),
+            se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateRangeCheckbox.builder()
+                .checkbox(new PdfFieldId("form1[0].Sida2[0].ksr_100procent[0]"))
+                .from(new PdfFieldId("form1[0].Sida2[0].flt_datumFranMed[0]"))
+                .to(new PdfFieldId("form1[0].Sida2[0].flt_datumtTillMed[0]"))
+                .build(),
+            new FieldId(CodeSystemKvFkmu0003.TRE_FJARDEDEL.code()),
+            se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateRangeCheckbox.builder()
+                .checkbox(new PdfFieldId("form1[0].Sida2[0].ksr_75procent[0]"))
+                .from(new PdfFieldId("form1[0].Sida2[0].flt_datumFranMed75Procent[0]"))
+                .to(new PdfFieldId("form1[0].Sida2[0].flt_datumTillMed75Procent[0]"))
+                .build(),
+            new FieldId(CodeSystemKvFkmu0003.HALFTEN.code()),
+            se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateRangeCheckbox.builder()
+                .checkbox(new PdfFieldId("form1[0].Sida2[0].ksr_50procent[0]"))
+                .from(new PdfFieldId("form1[0].Sida2[0].flt_datumFranMed50Procent[0]"))
+                .to(new PdfFieldId("form1[0].Sida2[0].flt_datumTillMed50Procent[0]"))
+                .build(),
+            new FieldId(CodeSystemKvFkmu0003.EN_FJARDEDEL.code()),
+            se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateRangeCheckbox.builder()
+                .checkbox(new PdfFieldId("form1[0].Sida2[0].ksr_25procent[0]"))
+                .from(new PdfFieldId("form1[0].Sida2[0].flt_datumFranMed25Procent[0]"))
+                .to(new PdfFieldId("form1[0].Sida2[0].flt_datumTillMed25Procent[0]"))
+                .build()
+        ))
+        .build();
+    assertEquals(expected, element.pdfConfiguration());
+  }
+}

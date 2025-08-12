@@ -14,6 +14,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationBoolean;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 
@@ -65,6 +67,15 @@ class QuestionTransportstodTest {
     final var element = QuestionTransportstod.questionTransportstod();
 
     assertEquals(expectedRules, element.rules());
+  }
+
+  @Test
+  void shouldHaveCorrectPdfConfiguration() {
+    final var element = QuestionTransportstod.questionTransportstod();
+    final var expected = PdfConfigurationBoolean.builder()
+        .checkboxTrue(new PdfFieldId("form1[0].Sida3[0].ksr_Resor[0]"))
+        .build();
+    assertEquals(expected, element.pdfConfiguration());
   }
 
   @Nested

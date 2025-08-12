@@ -113,13 +113,42 @@ class QuestionPeriodTest {
   }
 
   @Test
-  void shallIncludePdfConfiguration() {
-    final var expected = PdfConfigurationDateRangeList.builder()
-        .pdfFieldId(new PdfFieldId("form1[0].#subform[0]"))
-        .build();
-
+  void shouldHaveCorrectPdfConfiguration() {
     final var element = QuestionPeriod.questionPeriod();
-
+    final var expected = PdfConfigurationDateRangeList.builder()
+        .dateRanges(java.util.Map.of(
+            new FieldId(CodeSystemKvFkmu0008.HELA.code()),
+            se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateRangeCheckbox.builder()
+                .checkbox(new PdfFieldId("form1[0].#subform[0].ksr_Hela[0]"))
+                .from(new PdfFieldId("form1[0].#subform[0].flt_datFranMed[0]"))
+                .to(new PdfFieldId("form1[0].#subform[0].flt_datLangstTillMed[0]"))
+                .build(),
+            new FieldId(CodeSystemKvFkmu0008.TRE_FJARDEDELAR.code()),
+            se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateRangeCheckbox.builder()
+                .checkbox(new PdfFieldId("form1[0].#subform[0].ksr_Trefjardedela[0]"))
+                .from(new PdfFieldId("form1[0].#subform[0].flt_datFranMed2[0]"))
+                .to(new PdfFieldId("form1[0].#subform[0].flt_datLangstTillMed2[0]"))
+                .build(),
+            new FieldId(CodeSystemKvFkmu0008.HALVA.code()),
+            se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateRangeCheckbox.builder()
+                .checkbox(new PdfFieldId("form1[0].#subform[0].ksr_Halva[0]"))
+                .from(new PdfFieldId("form1[0].#subform[0].flt_datFranMed3[0]"))
+                .to(new PdfFieldId("form1[0].#subform[0].flt_datLangstTillMed3[0]"))
+                .build(),
+            new FieldId(CodeSystemKvFkmu0008.EN_FJARDEDEL.code()),
+            se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateRangeCheckbox.builder()
+                .checkbox(new PdfFieldId("form1[0].#subform[0].ksr_Enfjardedela[0]"))
+                .from(new PdfFieldId("form1[0].#subform[0].flt_datFranMed4[0]"))
+                .to(new PdfFieldId("form1[0].#subform[0].flt_datLangstTillMed4[0]"))
+                .build(),
+            new FieldId(CodeSystemKvFkmu0008.EN_ATTONDEL.code()),
+            se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateRangeCheckbox.builder()
+                .checkbox(new PdfFieldId("form1[0].#subform[0].ksr_EnAttondel[0]"))
+                .from(new PdfFieldId("form1[0].#subform[0].flt_datFranMed5[0]"))
+                .to(new PdfFieldId("form1[0].#subform[0].flt_datLangstTillMed5[0]"))
+                .build()
+        ))
+        .build();
     assertEquals(expected, element.pdfConfiguration());
   }
 }
