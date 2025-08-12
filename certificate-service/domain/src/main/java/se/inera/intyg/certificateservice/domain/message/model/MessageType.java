@@ -6,6 +6,7 @@ public enum MessageType {
   CONTACT("KONTKT", "Kontakt"),
   OTHER("OVRIGT", "Övrigt"),
   ANSWER("SVAR", "Svar"),
+  MEETING("AVSTMN", "Avstämningsmöte"),
   MISSING("SAKNAS", "Välj typ av fråga");
 
   public static final String OID = "ffa59d8f-8d7e-46ae-ac9e-31804e8e8499";

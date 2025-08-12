@@ -146,6 +146,10 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
             CertificateMessageType.builder()
                 .type(MessageType.OTHER)
                 .subject(new Subject(MessageType.OTHER.displayName()))
+                .build(),
+            CertificateMessageType.builder()
+                .type(MessageType.MEETING)
+                .subject(new Subject(MessageType.MEETING.displayName()))
                 .build()
         ))
         .texts(

@@ -160,6 +160,10 @@ class CertificateModelFactoryFK7804Test {
         CertificateMessageType.builder()
             .type(MessageType.OTHER)
             .subject(new Subject(MessageType.OTHER.displayName()))
+            .build(),
+        CertificateMessageType.builder()
+            .type(MessageType.MEETING)
+            .subject(new Subject(MessageType.MEETING.displayName()))
             .build()
     );
 
