@@ -50,12 +50,12 @@ class FK7804PdfSpecificationTest {
     final var signature = pdfSpecification.signature();
     assertAll(
         () -> assertNotNull(signature),
-        () -> assertEquals(new PdfTagIndex(36), signature.signatureWithAddressTagIndex()),
-        () -> assertEquals(new PdfTagIndex(36), signature.signatureWithoutAddressTagIndex()),
+        () -> assertEquals(new PdfTagIndex(10), signature.signatureWithAddressTagIndex()),
+        () -> assertEquals(new PdfTagIndex(10), signature.signatureWithoutAddressTagIndex()),
         () -> assertEquals(3, signature.signaturePageIndex()),
         () -> assertEquals(new PdfFieldId("form1[0].Sida4[0].flt_datUnderskrift[0]"),
             signature.signedDateFieldId()),
-        () -> assertEquals(new PdfFieldId("form1[0].Sida4[0].flt_txtNamnteckning[0]"),
+        () -> assertEquals(new PdfFieldId("form1[0].Sida4[0].flt_txtNamnfortydligande[0]"),
             signature.signedByNameFieldId()),
         () -> assertEquals(new PdfFieldId("form1[0].Sida4[0].flt_txtBefattning[0]"),
             signature.paTitleFieldId()),

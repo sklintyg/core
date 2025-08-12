@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804;
 
 import java.util.List;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.OverflowPageIndex;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfMcid;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
@@ -12,14 +13,13 @@ public class FK7804PdfSpecification {
   public static final Integer PDF_TEXT_FIELD_ROW_LENGTH = 52;
   public static final String PDF_FK_7804_PDF = "fk7804/pdf/fk7804_v2.pdf";
   public static final String PDF_NO_ADDRESS_FK_7804_PDF = "fk7804/pdf/fk7804_v2_no_address.pdf";
-  public static final PdfMcid PDF_MCID = new PdfMcid(100); // Example value, update as needed
-  private static final int PDF_SIGNATURE_PAGE_INDEX = 3; // Signature is on page 4 (0-based)
+  public static final PdfMcid PDF_MCID = new PdfMcid(100);
+  private static final int PDF_SIGNATURE_PAGE_INDEX = 3;
   private static final PdfTagIndex PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX = new PdfTagIndex(
-      36); // Example value
+      10);
   private static final PdfTagIndex PDF_SIGNATURE_WITHOUT_ADDRESS_TAG_INDEX = new PdfTagIndex(
-      36); // Example value
+      10);
 
-  // All field IDs from fk7804_structure.txt
   private static final PdfFieldId PDF_PATIENT_ID_FIELD_ID_1 = new PdfFieldId(
       "form1[0].#subform[0].flt_txtPersonNr[0]");
   private static final PdfFieldId PDF_PATIENT_ID_FIELD_ID_2 = new PdfFieldId(
@@ -34,7 +34,7 @@ public class FK7804PdfSpecification {
   private static final PdfFieldId PDF_SIGNED_DATE_FIELD_ID = new PdfFieldId(
       "form1[0].Sida4[0].flt_datUnderskrift[0]");
   private static final PdfFieldId PDF_SIGNED_BY_NAME_FIELD_ID = new PdfFieldId(
-      "form1[0].Sida4[0].flt_txtNamnteckning[0]");
+      "form1[0].Sida4[0].flt_txtNamnfortydligande[0]");
   private static final PdfFieldId PDF_SIGNED_BY_PA_TITLE = new PdfFieldId(
       "form1[0].Sida4[0].flt_txtBefattning[0]");
   private static final PdfFieldId PDF_SIGNED_BY_SPECIALTY = new PdfFieldId(
@@ -45,8 +45,6 @@ public class FK7804PdfSpecification {
       "form1[0].Sida4[0].flt_txtArbetsplatskod[0]");
   private static final PdfFieldId PDF_CONTACT_INFORMATION = new PdfFieldId(
       "form1[0].Sida4[0].flt_txtVardgivarensNamnAdressTelefon[0]");
-  private static final PdfFieldId PDF_OVERFLOW_FIELD_ID = new PdfFieldId(
-      "form1[0].#subform[4].flt_txtFortsattningsblad[0]");
 
   private FK7804PdfSpecification() {
     throw new IllegalStateException("Utility class");
@@ -56,6 +54,8 @@ public class FK7804PdfSpecification {
     return PdfSpecification.builder()
         .pdfTemplatePath(PDF_FK_7804_PDF)
         .pdfNoAddressTemplatePath(PDF_NO_ADDRESS_FK_7804_PDF)
+        .hasPageNbr(false)
+        .overFlowPageIndex(new OverflowPageIndex(4))
         .patientIdFieldIds(List.of(
             PDF_PATIENT_ID_FIELD_ID_1,
             PDF_PATIENT_ID_FIELD_ID_2,
@@ -77,6 +77,9 @@ public class FK7804PdfSpecification {
             .contactInformation(PDF_CONTACT_INFORMATION)
             .build()
         )
+        .untaggedWatermarks(
+            List.of("78040502",
+                "FK 7804 (006 F 001) Fastställd av Försäkringskassa i samråd med socialstyrelsen"))
         .build();
   }
 }

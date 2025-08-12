@@ -79,9 +79,9 @@ public class QuestionSvarareAtergangVidOjamnArbetstid {
                 )))
         .pdfConfiguration(
             PdfConfigurationRadioBoolean.builder()
-                .pdfFieldId(new PdfFieldId("form1[0].Sida3[0].RadioButtonList4[0]"))
-                .optionFalse(new PdfRadioOption("0"))
-                .optionTrue(new PdfRadioOption("1"))
+                .pdfFieldId(new PdfFieldId("form1[0].Sida3[0].RadioButtonList2[0]"))
+                .optionFalse(new PdfRadioOption("1"))
+                .optionTrue(new PdfRadioOption("2"))
                 .build()
         )
         .children(List.of(children))
