@@ -45,6 +45,9 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
+import se.inera.intyg.certificateservice.domain.common.model.CertificateLink;
+import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
+import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
@@ -101,6 +104,13 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
       <p>För arbetslösa bedöms arbetsförmågan i förhållande till arbeten som normalt förekommer på arbetsmarknaden redan från första dagen i sjukperioden.</p>
       """;
 
+  public static final String LINK_FK_ID = "LINK_FK";
+  private static final String PREAMBLE_TEXT = """
+      Det här är ditt intyg. Intyget innehåller all information som vården fyllt i. Du kan inte ändra något i ditt intyg. Har du frågor kontaktar du den som skrivit ditt intyg. Om du vill ansöka om sjukpenning, gör du det på {LINK_FK_ID}.
+      """;
+  public static final String URL_FK = "https://www.forsakringskassan.se/";
+  public static final String FK_NAME = "Försäkringskassan";
+
   public static final CertificateModelId FK7804_V2_0 = CertificateModelId.builder()
       .type(new CertificateType(FK_7804))
       .version(new CertificateVersion(VERSION))
@@ -138,6 +148,20 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
                 .subject(new Subject(MessageType.OTHER.displayName()))
                 .build()
         ))
+        .texts(
+            List.of(
+                CertificateText.builder()
+                    .text(PREAMBLE_TEXT)
+                    .type(CertificateTextType.PREAMBLE_TEXT)
+                    .links(List.of(CertificateLink.builder()
+                        .url(URL_FK)
+                        .id(LINK_FK_ID)
+                        .name(FK_NAME)
+                        .build()))
+                    .build()
+            )
+        )
+        .summaryProvider(new FK7804CertificateSummaryProvider())
         .certificateActionSpecifications(FK7804CertificateActionSpecification.create())
         .messageActionSpecifications(FK7804MessageActionSpecification.create())
         .elementSpecifications(List.of(

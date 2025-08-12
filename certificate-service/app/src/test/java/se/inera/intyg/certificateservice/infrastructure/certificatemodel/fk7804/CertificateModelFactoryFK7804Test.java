@@ -25,6 +25,9 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.domain.common.model.CertificateLink;
+import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
+import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
@@ -57,7 +60,7 @@ class CertificateModelFactoryFK7804Test {
   }
 
   @Test
-  void shallIncludeId() {
+  void shouldIncludeId() {
     final var expectedId =
         CertificateModelId.builder()
             .type(new CertificateType(TYPE))
@@ -70,7 +73,7 @@ class CertificateModelFactoryFK7804Test {
   }
 
   @Test
-  void shallIncludeName() {
+  void shouldIncludeName() {
     final var expectedName = "Läkarintyg för sjukpenning";
 
     final var certificateModel = certificateModelFactoryFK7804.create();
@@ -79,21 +82,21 @@ class CertificateModelFactoryFK7804Test {
   }
 
   @Test
-  void shallIncludeDescription() {
+  void shouldIncludeDescription() {
     final var certificateModel = certificateModelFactoryFK7804.create();
 
     assertFalse(certificateModel.description().isBlank());
   }
 
   @Test
-  void shallIncludeDetailedDescription() {
+  void shouldIncludeDetailedDescription() {
     final var certificateModel = certificateModelFactoryFK7804.create();
 
     assertFalse(certificateModel.detailedDescription().isBlank());
   }
 
   @Test
-  void shallIncludeActiveFrom() {
+  void shouldIncludeActiveFrom() {
     final var expectedActiveFrom = LocalDateTime.now(ZoneId.systemDefault());
     ReflectionTestUtils.setField(
         certificateModelFactoryFK7804,
@@ -107,14 +110,44 @@ class CertificateModelFactoryFK7804Test {
   }
 
   @Test
-  void shallIncludeAvailableForCitizen() {
+  void shouldIncludeAvailableForCitizen() {
     final var certificateModel = certificateModelFactoryFK7804.create();
 
     assertTrue(certificateModel.availableForCitizen());
   }
 
   @Test
-  void shallIncludeMessageTypes() {
+  void shouldIncludeTexts() {
+    final var expected = List.of(
+        CertificateText.builder()
+            .text(
+                "Det här är ditt intyg. Intyget innehåller all information som vården fyllt i. Du kan inte ändra något i ditt intyg. Har du frågor kontaktar du den som skrivit ditt intyg. Om du vill ansöka om sjukpenning, gör du det på {LINK_FK_ID}.\n")
+            .type(CertificateTextType.PREAMBLE_TEXT)
+            .links(List.of(
+                CertificateLink.builder()
+                    .id("LINK_FK")
+                    .name("Försäkringskassan")
+                    .url("https://www.forsakringskassan.se/")
+                    .build()
+            ))
+            .build()
+    );
+
+    final var certificateModel = certificateModelFactoryFK7804.create();
+
+    assertEquals(expected, certificateModel.texts());
+  }
+
+  @Test
+  void shouldIncludeSummaryProvider() {
+    final var certificateModel = certificateModelFactoryFK7804.create();
+
+    assertEquals(FK7804CertificateSummaryProvider.class,
+        certificateModel.summaryProvider().getClass());
+  }
+
+  @Test
+  void shouldIncludeMessageTypes() {
     final var expectedMessageTypes = List.of(
         CertificateMessageType.builder()
             .type(MessageType.MISSING)
@@ -136,7 +169,7 @@ class CertificateModelFactoryFK7804Test {
   }
 
   @Test
-  void shallIncludeRecipient() {
+  void shouldIncludeRecipient() {
     final var expectedRecipient = new Recipient(
         new RecipientId("FKASSA"),
         "Försäkringskassan",
@@ -149,7 +182,7 @@ class CertificateModelFactoryFK7804Test {
   }
 
   @Test
-  void shallIncludeCertificateActionSpecifications() {
+  void shouldIncludeCertificateActionSpecifications() {
     final var certificateModel = certificateModelFactoryFK7804.create();
 
     assertAll(
@@ -159,7 +192,7 @@ class CertificateModelFactoryFK7804Test {
   }
 
   @Test
-  void shallIncludeMessageActionSpecifications() {
+  void shouldIncludeMessageActionSpecifications() {
     final var certificateModel = certificateModelFactoryFK7804.create();
 
     assertAll(
@@ -169,7 +202,7 @@ class CertificateModelFactoryFK7804Test {
   }
 
   @Test
-  void shallIncludeCertificateActionFactory() {
+  void shouldIncludeCertificateActionFactory() {
     final var certificateModel = certificateModelFactoryFK7804.create();
 
     assertEquals(certificateActionFactory, certificateModel.certificateActionFactory());
@@ -207,7 +240,7 @@ class CertificateModelFactoryFK7804Test {
         "KAT_11", "KAT_12", "UNIT_CONTACT_INFORMATION", "27", "1", "1.3", "28", "29", "19", "32",
         "37", "34", "33", "33.2", "6", "44", "25", "39", "39.2", "39.4", "26", "26.2"
     })
-    void shallIncludeCategories(String id) {
+    void shouldIncludeCategories(String id) {
       final var elementId = new ElementId(id);
       final var certificateModel = certificateModelFactoryFK7804.create();
 
