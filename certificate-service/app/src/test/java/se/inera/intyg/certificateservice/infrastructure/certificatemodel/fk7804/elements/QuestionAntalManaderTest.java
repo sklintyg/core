@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -141,11 +140,13 @@ class QuestionAntalManaderTest {
 
   @Test
   void shouldContainCorrectPdfConfiguration() {
-    final var elementSpecification = QuestionAntalManader.questionAntalManader();
     final var expected = PdfConfigurationText.builder()
         .pdfFieldId(new PdfFieldId("form1[0].Sida3[0].flt_numManadManader[0]"))
         .build();
-    assertThat(elementSpecification.pdfConfiguration()).isEqualTo(expected);
+
+    final var elementSpecification = QuestionAntalManader.questionAntalManader();
+
+    assertEquals(expected, elementSpecification.pdfConfiguration());
   }
 }
 

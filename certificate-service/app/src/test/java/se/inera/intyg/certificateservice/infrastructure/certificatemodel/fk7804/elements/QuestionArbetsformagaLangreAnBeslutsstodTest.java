@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -35,7 +34,7 @@ class QuestionArbetsformagaLangreAnBeslutsstodTest {
         .overflowSheetFieldId(new PdfFieldId("form1[0].#subform[4].flt_txtFortsattningsblad[0]"))
         .maxLength(3 * FK7804PdfSpecification.PDF_TEXT_FIELD_ROW_LENGTH)
         .build();
-    assertThat(elementSpecification.pdfConfiguration()).isEqualTo(expected);
+    assertEquals(expected, elementSpecification.pdfConfiguration());
   }
 
   @Test

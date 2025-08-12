@@ -1,6 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -25,13 +25,13 @@ class QuestionOvrigtTest {
         .overflowSheetFieldId(new PdfFieldId("form1[0].#subform[4].flt_txtFortsattningsblad[0]"))
         .maxLength(8 * FK7804PdfSpecification.PDF_TEXT_FIELD_ROW_LENGTH)
         .build();
-    assertThat(elementSpecification.pdfConfiguration()).isEqualTo(expected);
+    assertEquals(expected, elementSpecification.pdfConfiguration());
   }
 
   @Test
   void shouldIncludeId() {
     final var element = QuestionOvrigt.questionOvrigt();
-    assertThat(element.id()).isEqualTo(new ElementId("25"));
+    assertEquals(new ElementId("25"), element.id());
   }
 
   @Test
@@ -41,7 +41,7 @@ class QuestionOvrigtTest {
         .name("Övriga upplysningar")
         .build();
     final var element = QuestionOvrigt.questionOvrigt();
-    assertThat(element.configuration()).isEqualTo(expectedConfiguration);
+    assertEquals(expectedConfiguration, element.configuration());
   }
 
   @Test
@@ -54,7 +54,7 @@ class QuestionOvrigtTest {
             .build()
     );
     final var element = QuestionOvrigt.questionOvrigt();
-    assertThat(element.rules()).isEqualTo(expectedRules);
+    assertEquals(expectedRules, element.rules());
   }
 
   @Test
@@ -66,6 +66,6 @@ class QuestionOvrigtTest {
             .build()
     );
     final var element = QuestionOvrigt.questionOvrigt();
-    assertThat(element.validations()).isEqualTo(expectedValidations);
+    assertEquals(expectedValidations, element.validations());
   }
 }
