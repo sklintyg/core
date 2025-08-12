@@ -25,7 +25,10 @@ public class XmlGeneratorIcfValue implements XmlGeneratorElementValue {
     }
 
     if (!(specification.configuration() instanceof ElementConfigurationIcf icfConfiguration)) {
-      return Collections.emptyList();
+      throw new IllegalArgumentException(
+          "Cannot generate xml for configuration of type '%s'"
+              .formatted(specification.configuration().getClass())
+      );
     }
 
     if (icfValue.text() == null || icfValue.text().isEmpty()) {
