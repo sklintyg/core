@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataIcfValue;
-import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueIcf;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationIcf;
@@ -61,7 +60,7 @@ class CertificateDataValueConverterIcfTest {
         .build();
 
     final var result = converter.convert(configuration, null);
-    assertNull(((CertificateDataValueText) result).getText());
+    assertNull(((CertificateDataIcfValue) result).getText());
   }
 
   @Test
@@ -131,7 +130,7 @@ class CertificateDataValueConverterIcfTest {
 
     final var result = converter.convert(configuration, elementValueIcf);
 
-    assertEquals(TEST_TEXT, ((CertificateDataValueText) result).getText());
+    assertEquals(TEST_TEXT, ((CertificateDataIcfValue) result).getText());
   }
 
   @Test
@@ -147,7 +146,7 @@ class CertificateDataValueConverterIcfTest {
 
     final var result = converter.convert(configuration, elementValueIcf);
 
-    assertNull(((CertificateDataValueText) result).getText(),
+    assertNull(((CertificateDataIcfValue) result).getText(),
         "If no value is provided value should be null");
   }
 

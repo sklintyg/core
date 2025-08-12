@@ -46,10 +46,7 @@ class CertificateDataIcfConfigConverterTest {
   void shouldReturnConvertedConfig() {
     final var expected = CertificateDataConfigIcf.builder()
         .id("ID")
-        .text("NAME")
         .description("DESCRIPTION")
-        .header("HEADER")
-        .label("LABEL")
         .modalLabel("MODAL_LABEL")
         .collectionsLabel("COLLECTIONS_LABEL")
         .placeholder("PLACEHOLDER")
@@ -61,7 +58,6 @@ class CertificateDataIcfConfigConverterTest {
             .configuration(
                 ElementConfigurationIcf.builder()
                     .id(new FieldId("ID"))
-                    .name("NAME")
                     .description("DESCRIPTION")
                     .modalLabel("MODAL_LABEL")
                     .collectionsLabel("COLLECTIONS_LABEL")

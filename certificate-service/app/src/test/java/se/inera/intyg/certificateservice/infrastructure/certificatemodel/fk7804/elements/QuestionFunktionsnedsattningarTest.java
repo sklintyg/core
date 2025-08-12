@@ -10,6 +10,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.IcfCodesPropertyType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationIcfValue;
 
@@ -32,6 +33,7 @@ class QuestionFunktionsnedsattningarTest {
             "Problem som påverkar patientens möjlighet att utföra sin sysselsättning:")
         .placeholder(
             "Vad grundar sig bedömningen på? På vilka sätt och i vilken utsträckning är patienten påverkad?")
+        .icfCodesPropertyName(IcfCodesPropertyType.FUNKTIONSNEDSATTNINGAR)
         .build();
 
     final var element = QuestionFunktionsnedsattningar.questionFunktionsnedsattningar();

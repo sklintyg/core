@@ -10,6 +10,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.IcfCodesPropertyType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationIcfValue;
 
@@ -32,6 +33,7 @@ class QuestionAktivitetsbegransningarTest {
             "Svårigheter som påverkar patientens sysselsättning:")
         .placeholder(
             "Hur begränsar ovanstående patientens sysselsättning och i vilken utsträckning?")
+        .icfCodesPropertyName(IcfCodesPropertyType.AKTIVITETSBEGRANSNINGAR)
         .build();
 
     final var element = QuestionAktivitetsbegransningar.questionAktivitetsbegransningar();

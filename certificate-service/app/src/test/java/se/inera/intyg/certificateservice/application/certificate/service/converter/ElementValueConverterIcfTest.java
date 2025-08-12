@@ -42,7 +42,7 @@ class ElementValueConverterIcfTest {
 
   @Test
   void shallReturnTypeText() {
-    assertEquals(CertificateDataValueType.TEXT, elementValueConverterIcf.getType());
+    assertEquals(CertificateDataValueType.ICF, elementValueConverterIcf.getType());
   }
 
   @Test
