@@ -32,31 +32,31 @@ public class QuestionGrundForMedicinsktUnderlag {
       ElementSpecification... children) {
     final var checkboxDates = List.of(
         CheckboxDate.builder()
-            .id(new FieldId("FYSISKUNDERSOKNING"))
+            .id(new FieldId(CodeSystemKvFkmu0001.FYSISKUNDERSOKNING.code()))
             .label(CodeSystemKvFkmu0001.FYSISKUNDERSOKNING.displayName())
             .code(CodeSystemKvFkmu0001.FYSISKUNDERSOKNING)
             .max(Period.ofDays(0))
             .build(),
         CheckboxDate.builder()
-            .id(new FieldId("DIGITALUNDERSOKNING"))
+            .id(new FieldId(CodeSystemKvFkmu0001.DIGITALUNDERSOKNING.code()))
             .label(CodeSystemKvFkmu0001.DIGITALUNDERSOKNING.displayName())
             .code(CodeSystemKvFkmu0001.DIGITALUNDERSOKNING)
             .max(Period.ofDays(0))
             .build(),
         CheckboxDate.builder()
-            .id(new FieldId("TELEFONKONTAKT"))
+            .id(new FieldId(CodeSystemKvFkmu0001.TELEFONKONTAKT.code()))
             .label(CodeSystemKvFkmu0001.TELEFONKONTAKT.displayName())
             .code(CodeSystemKvFkmu0001.TELEFONKONTAKT)
             .max(Period.ofDays(0))
             .build(),
         CheckboxDate.builder()
-            .id(new FieldId("JOURNALUPPGIFTER"))
+            .id(new FieldId(CodeSystemKvFkmu0001.JOURNALUPPGIFTER.code()))
             .label(CodeSystemKvFkmu0001.JOURNALUPPGIFTER.displayName())
             .code(CodeSystemKvFkmu0001.JOURNALUPPGIFTER)
             .max(Period.ofDays(0))
             .build(),
         CheckboxDate.builder()
-            .id(new FieldId("ANNAT"))
+            .id(new FieldId(CodeSystemKvFkmu0001.ANNAT.code()))
             .label(CodeSystemKvFkmu0001.ANNAT.displayName())
             .code(CodeSystemKvFkmu0001.ANNAT)
             .max(Period.ofDays(0))
@@ -100,34 +100,34 @@ public class QuestionGrundForMedicinsktUnderlag {
             PdfConfigurationDateList.builder()
                 .dateCheckboxes(
                     Map.of(
-                        new FieldId("FYSISKUNDERSOKNING"),
+                        new FieldId(CodeSystemKvFkmu0001.FYSISKUNDERSOKNING.code()),
                         PdfConfigurationDateCheckbox.builder()
                             .checkboxFieldId(
                                 new PdfFieldId("form1[0].#subform[0].ksr_FysisktVardmote[0]"))
                             .dateFieldId(new PdfFieldId("form1[0].#subform[0].flt_datumPatient[0]"))
                             .build(),
-                        new FieldId("DIGITALUNDERSOKNING"),
+                        new FieldId(CodeSystemKvFkmu0001.DIGITALUNDERSOKNING.code()),
                         PdfConfigurationDateCheckbox.builder()
                             .checkboxFieldId(
                                 new PdfFieldId("form1[0].#subform[0].ksr_DigitalVardmote[0]"))
                             .dateFieldId(
                                 new PdfFieldId("form1[0].#subform[0].flt_datumDigitaltVardmöte[0]"))
                             .build(),
-                        new FieldId("TELEFONKONTAKT"),
+                        new FieldId(CodeSystemKvFkmu0001.TELEFONKONTAKT.code()),
                         PdfConfigurationDateCheckbox.builder()
                             .checkboxFieldId(new PdfFieldId(
                                 "form1[0].#subform[0].ksr_TelefonkontaktPatienten[0]"))
                             .dateFieldId(
                                 new PdfFieldId("form1[0].#subform[0].flt_datumTelefonkontakt[0]"))
                             .build(),
-                        new FieldId("JOURNALUPPGIFTER"),
+                        new FieldId(CodeSystemKvFkmu0001.JOURNALUPPGIFTER.code()),
                         PdfConfigurationDateCheckbox.builder()
                             .checkboxFieldId(
                                 new PdfFieldId("form1[0].#subform[0].ksr_Journaluppgifter[0]"))
                             .dateFieldId(
                                 new PdfFieldId("form1[0].#subform[0].flt_datumJournaluppgifter[0]"))
                             .build(),
-                        new FieldId("ANNAT"),
+                        new FieldId(CodeSystemKvFkmu0001.ANNAT.code()),
                         PdfConfigurationDateCheckbox.builder()
                             .checkboxFieldId(new PdfFieldId("form1[0].#subform[0].ksr_Annat[0]"))
                             .dateFieldId(new PdfFieldId("form1[0].#subform[0].flt_datumAnnat[0]"))
