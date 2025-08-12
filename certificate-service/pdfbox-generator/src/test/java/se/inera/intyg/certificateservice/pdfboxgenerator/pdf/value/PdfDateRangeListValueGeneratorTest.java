@@ -6,12 +6,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateRangeCheckbox;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateRangeList;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0008;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 
@@ -59,7 +62,16 @@ class PdfDateRangeListValueGeneratorTest {
     final var elementSpecification = ElementSpecification.builder()
         .pdfConfiguration(
             PdfConfigurationDateRangeList.builder()
-                //.pdfFieldId(new PdfFieldId(FIELD_PREFIX))
+                .dateRanges(
+                    Map.of(
+                        DATE_RANGE.dateRangeId(),
+                        PdfConfigurationDateRangeCheckbox.builder()
+                            .checkbox(new PdfFieldId(FIELD_PREFIX + ".ksr_Hela[0]"))
+                            .from(new PdfFieldId(FIELD_PREFIX + ".flt_datFranMed[0]"))
+                            .to(new PdfFieldId(FIELD_PREFIX + ".flt_datLangstTillMed[0]"))
+                            .build()
+                    )
+                )
                 .build()
         )
         .build();
@@ -102,7 +114,22 @@ class PdfDateRangeListValueGeneratorTest {
     final var elementSpecification = ElementSpecification.builder()
         .pdfConfiguration(
             PdfConfigurationDateRangeList.builder()
-                //.pdfFieldId(new PdfFieldId(FIELD_PREFIX))
+                .dateRanges(
+                    Map.of(
+                        DATE_RANGE.dateRangeId(),
+                        PdfConfigurationDateRangeCheckbox.builder()
+                            .checkbox(new PdfFieldId(FIELD_PREFIX + ".ksr_Hela[0]"))
+                            .from(new PdfFieldId(FIELD_PREFIX + ".flt_datFranMed[0]"))
+                            .to(new PdfFieldId(FIELD_PREFIX + ".flt_datLangstTillMed[0]"))
+                            .build(),
+                        DATE_RANGE_2.dateRangeId(),
+                        PdfConfigurationDateRangeCheckbox.builder()
+                            .checkbox(new PdfFieldId(FIELD_PREFIX + ".ksr_Enfjardedela[0]"))
+                            .from(new PdfFieldId(FIELD_PREFIX + ".flt_datFranMed4[0]"))
+                            .to(new PdfFieldId(FIELD_PREFIX + ".flt_datLangstTillMed4[0]"))
+                            .build()
+                    )
+                )
                 .build()
         )
         .build();
@@ -164,7 +191,26 @@ class PdfDateRangeListValueGeneratorTest {
     final var elementSpecification = ElementSpecification.builder()
         .pdfConfiguration(
             PdfConfigurationDateRangeList.builder()
-                //.pdfFieldId(new PdfFieldId(FIELD_PREFIX))
+                .dateRanges(
+                    Map.of(
+                        DATE_RANGE_ONLY_FROM.dateRangeId(),
+                        PdfConfigurationDateRangeCheckbox.builder()
+                            .checkbox(new PdfFieldId(FIELD_PREFIX + ".ksr_EnAttondel[0]"))
+                            .from(new PdfFieldId(FIELD_PREFIX + ".flt_datFranMed5[0]"))
+                            .build(),
+                        DATE_RANGE_3.dateRangeId(),
+                        PdfConfigurationDateRangeCheckbox.builder()
+                            .checkbox(new PdfFieldId(FIELD_PREFIX + ".ksr_Halva[0]"))
+                            .from(new PdfFieldId(FIELD_PREFIX + ".flt_datFranMed3[0]"))
+                            .to(new PdfFieldId(FIELD_PREFIX + ".flt_datLangstTillMed3[0]"))
+                            .build(),
+                        DATE_RANGE_ONLY_TO.dateRangeId(),
+                        PdfConfigurationDateRangeCheckbox.builder()
+                            .checkbox(new PdfFieldId(FIELD_PREFIX + ".ksr_Trefjardedela[0]"))
+                            .to(new PdfFieldId(FIELD_PREFIX + ".flt_datLangstTillMed2[0]"))
+                            .build()
+                    )
+                )
                 .build()
         )
         .build();

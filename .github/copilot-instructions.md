@@ -10,35 +10,20 @@ for generating PDF documents.
 - The mapping is implemented in the `Pdf*ValueGenerator` classes, where each generator handles a
   specific `ElementValue` and produces the corresponding `PdfConfiguration`.
 - Example mappings from your codebase:
-    - `PdfTextValueGenerator` maps `ElementValueText` to `PdfConfigurationText`. Example where being
-      used: `QuestionHalsotillstandPsykiska` and tested in `QuestionHalsotillstandPsykiskaTest`
-    - `PdfBooleanValueGenerator` maps `ElementValueBoolean` to `PdfConfigurationBoolean`. Example
-      where being used: `QuestionSmittbararpenning` and tested in `QuestionSmittbararpenningTest`
-    - `PdfCodeValueGenerator` maps `ElementValueCode` to `PdfConfigurationCode`. Code handles
-      differently because it can be either a list of checkboxes or radiobuttons. If
-      radiobuttons don't use `PdfConfigurationCode` use `PdfConfigurationRadioCode`. Example where
-      being used as code: `QuestionSysselsattning` and tested in `QuestionSysselsattningTest`.
-      Example
-      where being used as radio `QuestionPrognos` and tested in `QuestionPrognosTest`.
-    - `PdfDateValueGenerator` maps `ElementValueDate` to `PdfConfigurationDate`. Example where being
-      used: `QuestionNarAktivaBehandlingenAvslutades` and tested in
-      `QuestionNarAktivaBehandlingenAvslutadesTest`
-    - `PdfDateRangeValueGenerator` maps `ElementValueDateRange` to `PdfConfigurationDateRange`.
-      Example where being used: `QuestionPeriod` and tested in `QuestionPeriodTest`
-    - `PdfDateListValueGenerator` maps `ElementValueDateList` to `PdfConfigurationDateList`. Example
-      where being used: `QuestionUtlatandeBaseratPa` and tested in
-      `QuestionUtlatandeBaseratPaTest`
-    - `PdfDateRangeListValueGenerator` maps `ElementValueDateRangeList` to
-      `PdfConfigurationDateRangeList`. Example where being used: `QuestionPeriod` and tested
-      in `QuestionPeriodTest`
-    - `PdfDiagnosisListValueGenerator` maps `ElementValueDiagnosisList` to
-      `PdfConfigurationDiagnoses`. Example where being used: `QuestionDiagnos` and tested in
-      `QuestionDiagnosTest`
-    - `PdfMedicalInvestigationListValueGenerator` maps `ElementValueMedicalInvestigationList` to
-      `PdfConfigurationMedicalInvestigationList`. Example where being used:
-      `QuestionMedicinskaUtredningar` and tested in `QuestionMedicinskaUtredningarTest`
-    - `PdfCodeListValueGenerator` maps `ElementValueCodeList` to `PdfConfigurationCode`.
-      Example where being used: `QuestionSysselsattning` and tested in `QuestionSysselsattningTest`
+
+| Value Generator Class                     | Maps From                            | Maps To                                          | Example Usage (Question)                               | Example Test File                               |
+|-------------------------------------------|--------------------------------------|--------------------------------------------------|--------------------------------------------------------|-------------------------------------------------|
+| PdfTextValueGenerator                     | ElementValueText                     | PdfConfigurationText                             | QuestionHalsotillstandPsykiska                         | QuestionHalsotillstandPsykiskaTest              |
+| PdfBooleanValueGenerator                  | ElementValueBoolean                  | PdfConfigurationBoolean                          | QuestionSmittbararpenning                              | QuestionSmittbararpenningTest                   |
+| PdfCodeValueGenerator                     | ElementValueCode                     | PdfConfigurationCode / PdfConfigurationRadioCode | QuestionSysselsattning (code), QuestionPrognos (radio) | QuestionSysselsattningTest, QuestionPrognosTest |
+| PdfDateValueGenerator                     | ElementValueDate                     | PdfConfigurationDate                             | QuestionNarAktivaBehandlingenAvslutades                | QuestionNarAktivaBehandlingenAvslutadesTest     |
+| PdfDateRangeValueGenerator                | ElementValueDateRange                | PdfConfigurationDateRange                        | QuestionPeriod                                         | QuestionPeriodTest                              |
+| PdfDateListValueGenerator                 | ElementValueDateList                 | PdfConfigurationDateList                         | QuestionUtlatandeBaseratPa                             | QuestionUtlatandeBaseratPaTest                  |
+| PdfDateRangeListValueGenerator            | ElementValueDateRangeList            | PdfConfigurationDateRangeList                    | QuestionPeriod                                         | QuestionPeriodTest                              |
+| PdfDiagnosisListValueGenerator            | ElementValueDiagnosisList            | PdfConfigurationDiagnoses                        | QuestionDiagnos                                        | QuestionDiagnosTest                             |
+| PdfMedicalInvestigationListValueGenerator | ElementValueMedicalInvestigationList | PdfConfigurationMedicalInvestigationList         | QuestionMedicinskaUtredningar                          | QuestionMedicinskaUtredningarTest               |
+| PdfCodeListValueGenerator                 | ElementValueCodeList                 | PdfConfigurationCode                             | QuestionSysselsattning                                 | QuestionSysselsattningTest                      |
+
 - To add or update a mapping, implement or modify the relevant `Pdf*ValueGenerator` class.
 
 ## Certificate PDF Specification and Structure
@@ -73,8 +58,8 @@ for generating PDF documents.
 ## Step-by-step Implementation Process
 
 1. **Start by generating a PdfSpecification and its tests.**
-    - Use an existing example as a template, such as `FK3226PdfSpecification` and tests
-      `FK3226PdfSpecificationTest`.
+    - Use an existing example as a template, such as `FK7804PdfSpecification` and tests
+      `FK7804PdfSpecificationTest`.
     - The PdfSpecification should define the template, field IDs, and all required metadata for the
       certificate type.
     - Write corresponding tests to ensure the PdfSpecification is correct and complete.
@@ -93,7 +78,7 @@ for generating PDF documents.
     - Use the examples and patterns in this file for both implementation and tests.
     - Open and create whatever files necessary.
 3. **Source all values like indexes and IDs from the structure file.**
-    - Always use the `certificateType_structure.txt` file (e.g., `fk3226_structure.txt`) to get the
+    - Always use the `certificateType_structure.txt` file (e.g., `fk7804_structure.txt`) to get the
       correct field IDs, indexes, and other mapping values.
     - This ensures alignment between the specification, configuration, and the actual PDF template.
 
