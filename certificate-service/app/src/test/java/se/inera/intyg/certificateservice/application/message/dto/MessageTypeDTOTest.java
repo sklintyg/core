@@ -34,6 +34,6 @@ class MessageTypeDTOTest {
 
   @Test
   void shouldConvertToMeeting() {
-    assertEquals(MessageType.MEETING, AVSTMN.toMessageType());
+    assertEquals(MessageType.COORDINATION, AVSTMN.toMessageType());
   }
 }

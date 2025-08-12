@@ -140,16 +140,16 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
                 .subject(new Subject(MessageType.MISSING.displayName()))
                 .build(),
             CertificateMessageType.builder()
+                .type(MessageType.COORDINATION)
+                .subject(new Subject(MessageType.COORDINATION.displayName()))
+                .build(),
+            CertificateMessageType.builder()
                 .type(MessageType.CONTACT)
                 .subject(new Subject(MessageType.CONTACT.displayName()))
                 .build(),
             CertificateMessageType.builder()
                 .type(MessageType.OTHER)
                 .subject(new Subject(MessageType.OTHER.displayName()))
-                .build(),
-            CertificateMessageType.builder()
-                .type(MessageType.MEETING)
-                .subject(new Subject(MessageType.MEETING.displayName()))
                 .build()
         ))
         .texts(

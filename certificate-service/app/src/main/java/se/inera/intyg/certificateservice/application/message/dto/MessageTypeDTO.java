@@ -11,7 +11,7 @@ public enum MessageTypeDTO {
       case PAMINN -> MessageType.REMINDER;
       case KONTKT -> MessageType.CONTACT;
       case OVRIGT -> MessageType.OTHER;
-      case AVSTMN -> MessageType.MEETING;
+      case AVSTMN -> MessageType.COORDINATION;
     };
   }
 }
