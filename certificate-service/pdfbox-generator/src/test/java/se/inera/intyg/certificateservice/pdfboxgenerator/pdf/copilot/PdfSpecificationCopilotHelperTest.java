@@ -17,6 +17,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDNonTerminalField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDRadioButton;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -79,6 +80,7 @@ class PdfSpecificationCopilotHelperTest {
   /**
    * Run to generate structure for the first time and save in resources/pdf folder.
    */
+  @Disabled
   @Test
   void shouldCreateStructureFileForPdf() {
     final var certificateType = FK_7472;
