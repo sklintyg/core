@@ -58,6 +58,7 @@ class InMemoryCertificateModelRepositoryTest {
           .build();
 
       doReturn(expectedModel).when(certificateModelFactoryOne).create();
+      initCertificateModelMap(inMemoryCertificateModelRepository);
 
       final var actualModels = inMemoryCertificateModelRepository.findAllActive();
 
@@ -81,6 +82,7 @@ class InMemoryCertificateModelRepositoryTest {
           .build();
 
       doReturn(expectedModel).when(certificateModelFactoryOne).create();
+      initCertificateModelMap(inMemoryCertificateModelRepository);
 
       final var actualModels = inMemoryCertificateModelRepository.findAllActive();
 
@@ -116,6 +118,7 @@ class InMemoryCertificateModelRepositoryTest {
           .build();
 
       doReturn(expectedModelTwo).when(certificateModelFactoryTwo).create();
+      initCertificateModelMap(inMemoryCertificateModelRepository);
 
       final var actualModels = inMemoryCertificateModelRepository.findAllActive();
 
@@ -126,6 +129,17 @@ class InMemoryCertificateModelRepositoryTest {
       assertTrue(actualModels.contains(expectedModelTwo),
           "Expected model with id: %s".formatted(expectedModelTwo.id())
       );
+    }
+  }
+
+  private void initCertificateModelMap(CertificateModelRepository repository) {
+    try {
+      final var postConstruct = InMemoryCertificateModelRepository.class.getDeclaredMethod(
+          "initCertificateModelMap");
+      postConstruct.setAccessible(true);
+      postConstruct.invoke(repository);
+    } catch (Exception ignored) {
+
     }
   }
 
@@ -149,6 +163,7 @@ class InMemoryCertificateModelRepositoryTest {
           .build();
 
       doReturn(expectedModel).when(certificateModelFactoryOne).create();
+      initCertificateModelMap(inMemoryCertificateModelRepository);
 
       final var actualModel = inMemoryCertificateModelRepository.findLatestActiveByType(
           new CertificateType(TYPE_ONE));
@@ -173,6 +188,7 @@ class InMemoryCertificateModelRepositoryTest {
           .build();
 
       doReturn(model).when(certificateModelFactoryOne).create();
+      initCertificateModelMap(inMemoryCertificateModelRepository);
 
       final var actualModel = inMemoryCertificateModelRepository.findLatestActiveByType(
           new CertificateType(TYPE_ONE));
@@ -199,6 +215,7 @@ class InMemoryCertificateModelRepositoryTest {
           .build();
 
       doReturn(model).when(certificateModelFactoryOne).create();
+      initCertificateModelMap(inMemoryCertificateModelRepository);
 
       final var actualModel = inMemoryCertificateModelRepository.findLatestActiveByType(
           new CertificateType(TYPE_ONE));
@@ -236,6 +253,7 @@ class InMemoryCertificateModelRepositoryTest {
 
       doReturn(modelOne).when(certificateModelFactoryOne).create();
       doReturn(expectedModel).when(certificateModelFactoryTwo).create();
+      initCertificateModelMap(inMemoryCertificateModelRepository);
 
       final var actualModel = inMemoryCertificateModelRepository.findLatestActiveByType(
           new CertificateType(TYPE_ONE));
@@ -277,6 +295,7 @@ class InMemoryCertificateModelRepositoryTest {
           .build();
 
       doReturn(expectedModel).when(certificateModelFactoryOne).create();
+      initCertificateModelMap(inMemoryCertificateModelRepository);
 
       final var actualModel = inMemoryCertificateModelRepository.getById(expectedModel.id());
 
@@ -300,6 +319,7 @@ class InMemoryCertificateModelRepositoryTest {
           .build();
 
       doReturn(expectedModel).when(certificateModelFactoryOne).create();
+      initCertificateModelMap(inMemoryCertificateModelRepository);
 
       final var certificateModelId = CertificateModelId.builder()
           .type(new CertificateType(TYPE_TWO))
@@ -333,6 +353,7 @@ class InMemoryCertificateModelRepositoryTest {
       final var certificateModelId = expectedModel.id();
 
       doReturn(expectedModel).when(certificateModelFactoryOne).create();
+      initCertificateModelMap(inMemoryCertificateModelRepository);
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
           () -> inMemoryCertificateModelRepository.getById(certificateModelId)
@@ -395,6 +416,7 @@ class InMemoryCertificateModelRepositoryTest {
           .build();
 
       doReturn(expectedModelTwo).when(certificateModelFactoryTwo).create();
+      initCertificateModelMap(testabilityCertificateModelRepository);
 
       final var actualModels = testabilityCertificateModelRepository.all();
 
@@ -439,6 +461,7 @@ class InMemoryCertificateModelRepositoryTest {
           .build();
 
       doReturn(expectedModel).when(certificateModelFactoryOne).create();
+      initCertificateModelMap(inMemoryCertificateModelRepository);
 
       final var actualModel = inMemoryCertificateModelRepository.findLatestActiveByExternalType(
           new Code(CODE_1, CODE_SYSTEM_1, null)
@@ -459,6 +482,7 @@ class InMemoryCertificateModelRepositoryTest {
           .build();
 
       doReturn(expectedModel).when(certificateModelFactoryOne).create();
+      initCertificateModelMap(inMemoryCertificateModelRepository);
 
       final var actualModel = inMemoryCertificateModelRepository.findLatestActiveByExternalType(
           new Code(CODE_1, CODE_SYSTEM_1, null)
@@ -481,6 +505,7 @@ class InMemoryCertificateModelRepositoryTest {
           .build();
 
       doReturn(expectedModel).when(certificateModelFactoryOne).create();
+      initCertificateModelMap(inMemoryCertificateModelRepository);
 
       final var actualModel = inMemoryCertificateModelRepository.findLatestActiveByExternalType(
           new Code(CODE_2, CODE_SYSTEM_1, null)
@@ -502,6 +527,7 @@ class InMemoryCertificateModelRepositoryTest {
           .build();
 
       doReturn(expectedModel).when(certificateModelFactoryOne).create();
+      initCertificateModelMap(inMemoryCertificateModelRepository);
 
       final var actualModel = inMemoryCertificateModelRepository.findLatestActiveByExternalType(
           new Code(CODE_1, CODE_SYSTEM_2, null)

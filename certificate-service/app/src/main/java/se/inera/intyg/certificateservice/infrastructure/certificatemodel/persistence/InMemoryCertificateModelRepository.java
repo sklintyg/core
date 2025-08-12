@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.persistence;
 
+import jakarta.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Comparator;
@@ -27,6 +28,21 @@ public class InMemoryCertificateModelRepository implements CertificateModelRepos
 
   private final List<CertificateModelFactory> certificateModelFactories;
   private Map<CertificateModelId, CertificateModel> certificateModelMap;
+
+  @PostConstruct
+  private void initCertificateModelMap() {
+    log.info("Initiate certificate model repository");
+    certificateModelMap = new HashMap<>();
+    certificateModelFactories.forEach(certificateModelFactory -> {
+      final var certificateModel = certificateModelFactory.create();
+      certificateModelMap.put(certificateModel.id(), certificateModel);
+      log.info("Loaded certificate model '{}' to repository", certificateModel.id());
+    });
+  }
+
+  private Map<CertificateModelId, CertificateModel> getCertificateModelMap() {
+    return certificateModelMap;
+  }
 
   @Override
   public List<CertificateModel> findAllActive() {
@@ -87,20 +103,6 @@ public class InMemoryCertificateModelRepository implements CertificateModelRepos
   @Override
   public List<CertificateModel> all() {
     return getCertificateModelMap().values().stream().toList();
-  }
-
-  private Map<CertificateModelId, CertificateModel> getCertificateModelMap() {
-    if (certificateModelMap == null) {
-      log.info("Initiate certificate model repository");
-      certificateModelMap = new HashMap<>();
-      certificateModelFactories.forEach(certificateModelFactory -> {
-            final var certificateModel = certificateModelFactory.create();
-            certificateModelMap.put(certificateModel.id(), certificateModel);
-            log.info("Loaded certificate model '{}' to repository", certificateModel.id());
-          }
-      );
-    }
-    return certificateModelMap;
   }
 
   private static Predicate<CertificateModel> filterActiveCertificateModels() {
