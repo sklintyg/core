@@ -611,4 +611,10 @@
       referencedTableName="message"
       referencedColumnNames="key"/>
   </changeSet>
+  
+  <changeSet id="3" author="cs">
+    <insert tableName="message_type">
+      <column name="type" value="COORDINATION"/>
+    </insert>
+  </changeSet>
 </databaseChangeLog>
