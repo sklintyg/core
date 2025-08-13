@@ -58,7 +58,7 @@
       <iso:assert test="count(gn:svar[@id='27']) le 1">Ett 'LISJP' får ha högst ett
         'Smittbärarpenning'
       </iso:assert>
-      <iso:let name="svarsIdExpr" value="^(1|6|19|25|26|27|28|29|32|33|34|37|39|44)$"/>
+      <iso:let name="svarsIdExpr" value="^(1|6|17|19|25|26|27|28|29|32|33|34|35|37|39|44)$"/>
       <iso:assert test="count(gn:svar[not(matches(@id, $svarsIdExpr))]) = 0">
         Oväntat svars-id. Svars-id:n måste matcha "<value-of select="$svarsIdExpr"/>".
       </iso:assert>
