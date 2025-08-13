@@ -121,21 +121,18 @@
         Ett 'LISJP' måste ange minst en 'Typ av sysselsättning' om 'Om smittbärarpenning' är
         'false'.
       </iso:assert>
-      <iso:assert test="matches(normalize-space(.), '1|true') or count(//gn:svar[@id='39']) = 1">
-        Ett 'LISJP' måste ange 'Prognos' om 'Om smittbärarpenning' är 'false'.
-      </iso:assert>
-      <iso:assert test="matches(normalize-space(.), '1|true') or count(//gn:svar[@id='19']) ge 1">
-        Ett 'LISJP' måste ange minst en 'Medicinsk behandling' om 'Om smittbärarpenning' är 'false'.
-      </iso:assert>
-      <iso:assert test="matches(normalize-space(.), '1|true') or count(//gn:svar[@id='39']) ge 1">
-        Ett 'LISJP' måste ange minst en 'Prognos' om 'Om smittbärarpenning' är 'false'.
-      </iso:assert>
       <iso:assert test="matches(normalize-space(.), '1|true') or count(//gn:svar[@id='35']) = 1">
         Ett 'LISJP' måste ange minst en 'Funktionsnedsättning' om 'Om smittbärarpenning' är 'false'.
       </iso:assert>
       <iso:assert test="matches(normalize-space(.), '1|true') or count(//gn:svar[@id='17']) = 1">
         Ett 'LISJP' måste ange minst en 'Aktivitetsbegränsning' om 'Om smittbärarpenning' är
         'false'.
+      </iso:assert>
+      <iso:assert test="matches(normalize-space(.), '1|true') or count(//gn:svar[@id='39']) = 1">
+        Ett 'LISJP' måste ange 'Prognos' om 'Om smittbärarpenning' är 'false'.
+      </iso:assert>
+      <iso:assert test="matches(normalize-space(.), '1|true') or count(//gn:svar[@id='39']) ge 1">
+        Ett 'LISJP' måste ange minst en 'Prognos' om 'Om smittbärarpenning' är 'false'.
       </iso:assert>
     </iso:rule>
   </iso:pattern>
