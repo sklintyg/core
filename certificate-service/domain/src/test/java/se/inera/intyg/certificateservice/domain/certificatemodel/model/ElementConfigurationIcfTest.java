@@ -21,8 +21,7 @@ class ElementConfigurationIcfTest {
     final var result = """
         %s
         
-        %s
-        """.formatted(
+        %s""".formatted(
         String.join(" - ", value.icfCodes()),
         value.text());
 
