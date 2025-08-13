@@ -43,14 +43,20 @@ public class ElementConfigurationIcf implements ElementConfiguration {
       return Optional.empty();
     }
 
+    if (elementValue.icfCodes().isEmpty()) {
+      return Optional.of(
+          ElementSimplifiedValueText.builder()
+              .text(elementValue.text())
+              .build());
+    }
+
     return Optional.of(
         ElementSimplifiedValueText.builder()
             .text(
                 """
                     %s
                     
-                    %s
-                    """.formatted(
+                    %s""".formatted(
                     String.join(" - ", elementValue.icfCodes()),
                     elementValue.text()))
             .build());
