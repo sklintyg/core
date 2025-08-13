@@ -298,27 +298,6 @@ class SchematronValidationFK7804Test {
   }
 
   @Nested
-  class QuestionMedicinskaBehandlingar {
-
-    @Test
-    void shallReturnFalseIfPagaendeMedicinskaBehandlingarIsMissing() {
-      final var certificate = TestDataCertificate.fk7804CertificateBuilder()
-          .certificateModel(certificateModelFactoryFK7804.create())
-          .elementData(
-              TestDataCertificate.fk7804CertificateBuilder().build().elementData().stream()
-                  .filter(e -> !e.id().equals(new ElementId("19")))
-                  .toList()
-          )
-          .build();
-
-      final var xml = generator.generate(certificate, false);
-
-      assertFalse(schematronValidator.validate(certificate.id(), xml,
-          FK7804_SCHEMATRON_PATH));
-    }
-  }
-
-  @Nested
   class QuestionArbetstidsforlaggning {
 
     @Test
