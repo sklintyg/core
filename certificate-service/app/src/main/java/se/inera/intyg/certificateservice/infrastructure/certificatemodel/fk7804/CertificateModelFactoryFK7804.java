@@ -58,8 +58,8 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 @RequiredArgsConstructor
 public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
 
-  public static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
-      "fk7804/schematron/lisjp_v2_0.sch");
+  private static final SchematronPath SCHEMATRON_PATH = new SchematronPath(
+      "fk7804/schematron/lisjp.v2.sch");
   private final CertificateActionFactory certificateActionFactory;
 
   @Value("${certificate.model.fk7804.v2_0.active.from}")

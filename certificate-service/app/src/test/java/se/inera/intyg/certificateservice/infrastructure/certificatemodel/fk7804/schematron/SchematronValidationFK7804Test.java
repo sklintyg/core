@@ -84,7 +84,7 @@ class SchematronValidationFK7804Test {
     final var xml = generator.generate(certificate, false);
 
     assertTrue(schematronValidator.validate(certificate.id(), xml,
-        CertificateModelFactoryFK7804.SCHEMATRON_PATH)
+        FK7804_SCHEMATRON_PATH)
     );
   }
 

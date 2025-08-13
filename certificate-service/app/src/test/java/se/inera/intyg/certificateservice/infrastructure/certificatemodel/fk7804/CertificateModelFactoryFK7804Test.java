@@ -172,6 +172,13 @@ class CertificateModelFactoryFK7804Test {
     assertEquals(certificateActionFactory, certificateModel.certificateActionFactory());
   }
 
+  @Test
+  void shallIncludeSchematronPath() {
+    final var certificateModel = certificateModelFactoryFK7804.create();
+
+    assertEquals("fk7804/schematron/lisjp.v2.sch", certificateModel.schematronPath().value());
+  }
+
   @Nested
   class CertificateSpecifications {
 
