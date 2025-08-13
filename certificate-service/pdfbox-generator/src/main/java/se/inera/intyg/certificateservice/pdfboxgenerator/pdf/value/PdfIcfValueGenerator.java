@@ -29,8 +29,7 @@ public class PdfIcfValueGenerator implements PdfElementValue<ElementValueIcf> {
     if (simplifiedValue.isEmpty()) {
       return Collections.emptyList();
     }
-    final var simplifiedValueText = (ElementSimplifiedValueText) elementSpecification.configuration()
-        .simplified(elementValueIcf).get();
+    final var simplifiedValueText = (ElementSimplifiedValueText) simplifiedValue.get();
 
     if (hasOverflow(simplifiedValueText, pdfConfiguration)) {
       final var splitIcf = PdfValueGeneratorUtil.splitByLimit(pdfConfiguration.maxLength(),
