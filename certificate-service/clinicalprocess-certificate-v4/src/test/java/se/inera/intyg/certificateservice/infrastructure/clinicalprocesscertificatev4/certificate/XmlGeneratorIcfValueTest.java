@@ -49,7 +49,7 @@ class XmlGeneratorIcfValueTest {
   }
 
   @Test
-  void shouldMapIcf() {
+  void shouldMapIcfWithCodes() {
     final var data = ElementData.builder()
         .id(new ElementId(QUESTION_ID))
         .value(ElementValueIcf.builder()
@@ -59,7 +59,7 @@ class XmlGeneratorIcfValueTest {
             .build())
         .build();
 
-    var EXPECTED_TEXT = """
+    var expectedText = """
         %s %s
         
         %s
@@ -70,7 +70,7 @@ class XmlGeneratorIcfValueTest {
 
     final var expectedData = new Svar();
     final var subAnswer = new Delsvar();
-    subAnswer.getContent().add(EXPECTED_TEXT);
+    subAnswer.getContent().add(expectedText);
     expectedData.setId(QUESTION_ID);
     subAnswer.setId(ANSWER_ID);
     expectedData.getDelsvar().add(subAnswer);
@@ -86,6 +86,34 @@ class XmlGeneratorIcfValueTest {
     );
   }
 
+  @Test
+  void shouldMapIcfWithoutCodes() {
+    final var data = ElementData.builder()
+        .id(new ElementId(QUESTION_ID))
+        .value(ElementValueIcf.builder()
+            .id(new FieldId(ANSWER_ID))
+            .text(TEXT)
+            .build())
+        .build();
+
+    final var expectedData = new Svar();
+    final var subAnswer = new Delsvar();
+    subAnswer.getContent().add(TEXT);
+    expectedData.setId(QUESTION_ID);
+    subAnswer.setId(ANSWER_ID);
+    expectedData.getDelsvar().add(subAnswer);
+
+    final var response = xmlGeneratorIcfValue.generate(data, ELEMENT_SPECIFICATION);
+
+    assertAll(
+        () -> assertEquals(expectedData.getId(), response.getFirst().getId()),
+        () -> assertEquals(expectedData.getDelsvar().getFirst().getId(),
+            response.getFirst().getDelsvar().getFirst().getId()),
+        () -> assertEquals(expectedData.getDelsvar().getFirst().getContent().getFirst(),
+            response.getFirst().getDelsvar().getFirst().getContent().getFirst())
+    );
+  }
+  
   @Test
   void shouldMapEmptyIfNullValue() {
     final var data = ElementData.builder()
