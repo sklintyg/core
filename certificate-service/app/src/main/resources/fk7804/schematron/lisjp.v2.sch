@@ -303,7 +303,7 @@
       <iso:assert test="count(gn:delsvar[@id='33.1']) = 1">'Arbetstidsförläggning' måste ha ett
         booleskt delsvar.
       </iso:assert>
-      <iso:assert test="count(gn:delsvar[@id='33.2']) = 1">'Arbetstidsförläggning' måste ha ett
+      <iso:assert test="count(gn:delsvar[@id='33.2']) le 1">'Arbetstidsförläggning' måste ha ett
         textdelsvar.
       </iso:assert>
     </iso:rule>
