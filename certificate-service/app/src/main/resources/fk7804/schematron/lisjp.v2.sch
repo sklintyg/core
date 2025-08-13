@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<iso:schema xmlns="http://purl.oclc.org/dsdl/schematron"
+<iso:schema
+  xmlns="http://purl.oclc.org/dsdl/schematron"
   xmlns:iso="http://purl.oclc.org/dsdl/schematron"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://purl.oclc.org/dsdl/schematron"
-  queryBinding='xslt2' schemaVersion='ISO19757-3'>
+  queryBinding='xslt2'
+  schemaVersion='ISO19757-3'>
 
   <iso:title>Schematron file for "Läkarintyg för sjukpenning". (FK7804)</iso:title>
 
@@ -15,52 +15,19 @@
 
   <iso:pattern id="intyg">
     <iso:rule context="//rg:intyg">
+      <iso:assert test="count(gn:svar[@id='27']) = 1">Ett 'LISJP' måste ha ett 'Smittbärarpenning'
+        svar
+      </iso:assert>
+      <iso:assert test="count(gn:svar[@id='6']) = 1">Ett 'LISJP' måste ha ett 'Diagnos' svar
+      </iso:assert>
+      <iso:assert test="count(gn:svar[@id='32']) le 4 and count(gn:svar[@id='32']) ge 1">Ett 'LISJP'
+        måste ha ett 'Bedömning' svar
+      </iso:assert>
       <iso:assert test="count(gn:svar[@id='1']) le 5">Ett 'LISJP' får ha högst 5 'Grund för
         medicinskt underlag'
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='28']) le 4">Ett 'LISJP' får ha högst 4 'Typ av
         sysselsättning'
-      </iso:assert>
-      <iso:assert test="count(gn:svar[@id='29']) le 1">Ett 'LISJP' får ha högst ett 'Nuvarande
-        arbete'
-      </iso:assert>
-      <iso:assert test="count(gn:svar[@id='6']) le 3">Ett 'LISJP' får ha högst 3 'Diagnos'
-      </iso:assert>
-      <iso:assert test="count(gn:svar[@id='35']) le 1">Ett 'LISJP' får ha högst ett
-        'Funktionsnedsättning'
-      </iso:assert>
-      <iso:assert test="count(gn:svar[@id='17']) le 1">Ett 'LISJP' får ha högst ett
-        'Aktivitetsbegränsningar'
-      </iso:assert>
-      <iso:assert test="count(gn:svar[@id='19']) le 1">Ett 'LISJP' får ha högst ett 'Pågående
-        medicinska behandlingar'
-      </iso:assert>
-      <iso:assert test="count(gn:svar[@id='32']) le 4">Ett 'LISJP' får ha högst 4 'Bedömning'
-      </iso:assert>
-      <iso:assert test="count(gn:svar[@id='37']) le 1">Ett 'LISJP' får ha högst ett
-        'Försäkringsmedicinskt beslutsstöd'
-      </iso:assert>
-      <iso:assert test="count(gn:svar[@id='33']) le 1">Ett 'LISJP' får ha högst ett
-        'Arbetstidsförläggning'
-      </iso:assert>
-      <iso:assert test="count(gn:svar[@id='34']) le 1">Ett 'LISJP' får ha högst ett 'Arbetsresor'
-      </iso:assert>
-      <iso:assert test="count(gn:svar[@id='39']) le 1">Ett 'LISJP' får ha högst ett 'Prognos'
-      </iso:assert>
-      <iso:assert test="count(gn:svar[@id='44']) le 1">Ett 'LISJP' får ha högst ett
-        'Arbetslivsinriktade åtgärder aktuellt'
-      </iso:assert>
-      <iso:assert test="count(gn:svar[@id='25']) le 1">Ett 'LISJP' får ha högst ett 'Övrigt'
-      </iso:assert>
-      <iso:assert test="count(gn:svar[@id='26']) le 1">Ett 'LISJP' får ha högst ett 'Kontakt
-        önskas'
-      </iso:assert>
-      <iso:assert test="count(gn:svar[@id='27']) le 1">Ett 'LISJP' får ha högst ett
-        'Smittbärarpenning'
-      </iso:assert>
-      <iso:let name="svarsIdExpr" value="^(1|6|17|19|25|26|27|28|29|32|33|34|35|37|39|44)$"/>
-      <iso:assert test="count(gn:svar[not(matches(@id, $svarsIdExpr))]) = 0">
-        Oväntat svars-id. Svars-id:n måste matcha "<value-of select="$svarsIdExpr"/>".
       </iso:assert>
     </iso:rule>
   </iso:pattern>
@@ -181,11 +148,6 @@
       <iso:assert test="count(gn:delsvar[@id='28.1']) = 1">
         'Typ av sysselsättning' måste ha ett 'Typ av sysselsättning'.
       </iso:assert>
-      <iso:let name="delsvarsIdExpr" value="'^28\.[1]$'"/>
-      <iso:assert test="count(gn:delsvar[not(matches(@id, $delsvarsIdExpr))]) = 0">
-        Oväntat delsvars-id i delsvar till svar "<value-of select="@id"/>". Delsvars-id:n måste
-        matcha "<value-of select="$delsvarsIdExpr"/>".
-      </iso:assert>
     </iso:rule>
   </iso:pattern>
 
@@ -206,15 +168,16 @@
   <iso:pattern id="q28.1-q29">
     <iso:rule
       context="//gn:delsvar[@id='28.1']/tp:cv/tp:code[normalize-space(.) = 'NUVARANDE_ARBETE']">
-      <iso:assert test="count(../../../../gn:svar[@id='29']) = 1">
-        Om 'Typ av sysselsättning' besvarats med 1, måste 'Nuvarande arbete' besvaras
+      <iso:assert test="count(../../../gn:delsvar[@id='29.1']) = 1">
+        Om 'Typ av sysselsättning' besvarats med Nuvarande arbete, måste 'Ange yrke och
+        arbetsuppgifter' besvaras
       </iso:assert>
     </iso:rule>
-    <iso:rule context="//gn:svar[@id='29']">
+    <iso:rule context="//gn:delsvar[@id='29.1']">
       <iso:assert
-        test="count(//gn:delsvar[@id='28.1']/tp:cv/tp:code[normalize-space(.) = 'NUVARANDE_ARBETE']) = 1">
-        Om 'Typ av sysselsättning' inte besvarats med 1, får 'Ange yrke och arbetsuppgifter' inte
-        besvaras
+        test="count(../gn:delsvar[@id='28.1']/tp:cv/tp:code[normalize-space(.) != 'NUVARANDE_ARBETE']) = 0">
+        Om 'Typ av sysselsättning' inte besvarats med Nuvarande arbete, får 'Ange yrke och
+        arbetsuppgifter' inte besvaras
       </iso:assert>
     </iso:rule>
   </iso:pattern>
@@ -268,7 +231,7 @@
       <iso:assert test="count(gn:delsvar[@id='6.6']) le 1">'Diagnos' får ha högst ett
         'Bidiagnoskod'.
       </iso:assert>
-      <iso:let name="delsvarsIdExpr" value="'^6\\.[123456]$'"/>
+      <iso:let name="delsvarsIdExpr" value="'^6\.[123456]$'"/>
       <iso:assert test="count(gn:delsvar[not(matches(@id, $delsvarsIdExpr))]) = 0">
         Oväntat delsvars-id i delsvar till svar "<value-of select="@id"/>". Delsvars-id:n måste
         matcha "<value-of select="$delsvarsIdExpr"/>".

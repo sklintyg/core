@@ -40,6 +40,8 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDa
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueIcf;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueInteger;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueMedicalInvestigationList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
@@ -1082,20 +1084,11 @@ public class TestDataCertificate {
                             .dateList(
                                 List.of(
                                     ElementValueDate.builder()
-                                        .dateId(new FieldId("ANNAT"))
+                                        .dateId(new FieldId("FYSISKUNDERSOKNING"))
                                         .date(LocalDate.now())
                                         .build()
                                 )
                             )
-                            .build()
-                    )
-                    .build(),
-                ElementData.builder()
-                    .id(new ElementId("1.3"))
-                    .value(
-                        ElementValueText.builder()
-                            .textId(new FieldId("1.3"))
-                            .text("Patienten har fått rådgivning via e-post.")
                             .build()
                     )
                     .build(),
@@ -1112,6 +1105,24 @@ public class TestDataCertificate {
                                         .build()
                                 )
                             )
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("35"))
+                    .value(
+                        ElementValueIcf.builder()
+                            .id(new FieldId("35.1"))
+                            .text("Funktionsnedsättning")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("17"))
+                    .value(
+                        ElementValueIcf.builder()
+                            .id(new FieldId("17.1"))
+                            .text("Aktivitetsbegräsning")
                             .build()
                     )
                     .build(),
@@ -1218,20 +1229,11 @@ public class TestDataCertificate {
                     )
                     .build(),
                 ElementData.builder()
-                    .id(new ElementId("39.2"))
-                    .value(
-                        ElementValueText.builder()
-                            .textId(new FieldId("39.2"))
-                            .text("Prognosen är svårbedömd på grund av komplex sjukdomsbild.")
-                            .build()
-                    )
-                    .build(),
-                ElementData.builder()
                     .id(new ElementId("39.4"))
                     .value(
-                        ElementValueText.builder()
-                            .textId(new FieldId("39.4"))
-                            .text("6")
+                        ElementValueInteger.builder()
+                            .integerId(new FieldId("39.4"))
+                            .value(6)
                             .build()
                     )
                     .build(),

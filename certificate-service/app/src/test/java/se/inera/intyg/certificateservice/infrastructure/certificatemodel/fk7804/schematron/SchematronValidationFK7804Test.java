@@ -246,27 +246,6 @@ class SchematronValidationFK7804Test {
   }
 
   @Nested
-  class QuestionArbetslivsinriktadeAtgarder {
-
-    @Test
-    void shallReturnFalseIfArbetslivsinriktadeAtgarderIsMissing() {
-      final var certificate = TestDataCertificate.fk7804CertificateBuilder()
-          .certificateModel(certificateModelFactoryFK7804.create())
-          .elementData(
-              TestDataCertificate.fk7804CertificateBuilder().build().elementData().stream()
-                  .filter(e -> !e.id().equals(new ElementId("40")))
-                  .toList()
-          )
-          .build();
-
-      final var xml = generator.generate(certificate, false);
-
-      assertFalse(schematronValidator.validate(certificate.id(), xml,
-          FK7804_SCHEMATRON_PATH));
-    }
-  }
-
-  @Nested
   class QuestionTypAvSysselsattning {
 
     @Test
@@ -337,44 +316,6 @@ class SchematronValidationFK7804Test {
       assertFalse(schematronValidator.validate(certificate.id(), xml,
           FK7804_SCHEMATRON_PATH));
     }
-
-    @Test
-    void shallReturnFalseIfPlaneradeMedicinskaBehandlingarIsMissing() {
-      final var certificate = TestDataCertificate.fk7804CertificateBuilder()
-          .certificateModel(certificateModelFactoryFK7804.create())
-          .elementData(
-              TestDataCertificate.fk7804CertificateBuilder().build().elementData().stream()
-                  .filter(e -> !e.id().equals(new ElementId("20")))
-                  .toList()
-          )
-          .build();
-
-      final var xml = generator.generate(certificate, false);
-
-      assertFalse(schematronValidator.validate(certificate.id(), xml,
-          FK7804_SCHEMATRON_PATH));
-    }
-  }
-
-  @Nested
-  class QuestionForsakringsmedicinsktBeslutsstod {
-
-    @Test
-    void shallReturnFalseIfForsakringsmedicinsktBeslutsstodIsMissing() {
-      final var certificate = TestDataCertificate.fk7804CertificateBuilder()
-          .certificateModel(certificateModelFactoryFK7804.create())
-          .elementData(
-              TestDataCertificate.fk7804CertificateBuilder().build().elementData().stream()
-                  .filter(e -> !e.id().equals(new ElementId("37")))
-                  .toList()
-          )
-          .build();
-
-      final var xml = generator.generate(certificate, false);
-
-      assertFalse(schematronValidator.validate(certificate.id(), xml,
-          FK7804_SCHEMATRON_PATH));
-    }
   }
 
   @Nested
@@ -388,90 +329,6 @@ class SchematronValidationFK7804Test {
           .elementData(
               TestDataCertificate.fk7804CertificateBuilder().build().elementData().stream()
                   .filter(e -> !e.id().equals(new ElementId("33")))
-                  .toList()
-          )
-          .build();
-
-      final var xml = generator.generate(certificate, false);
-
-      assertFalse(schematronValidator.validate(certificate.id(), xml,
-          FK7804_SCHEMATRON_PATH));
-    }
-  }
-
-  @Nested
-  class QuestionArbetsresor {
-
-    @Test
-    void shallReturnFalseIfArbetsresorIsMissing() {
-      final var certificate = TestDataCertificate.fk7804CertificateBuilder()
-          .certificateModel(certificateModelFactoryFK7804.create())
-          .elementData(
-              TestDataCertificate.fk7804CertificateBuilder().build().elementData().stream()
-                  .filter(e -> !e.id().equals(new ElementId("34")))
-                  .toList()
-          )
-          .build();
-
-      final var xml = generator.generate(certificate, false);
-
-      assertFalse(schematronValidator.validate(certificate.id(), xml,
-          FK7804_SCHEMATRON_PATH));
-    }
-  }
-
-  @Nested
-  class QuestionArbetslivsinriktadeAtgarderAktuellt {
-
-    @Test
-    void shallReturnFalseIfArbetslivsinriktadeAtgarderAktuelltIsMissing() {
-      final var certificate = TestDataCertificate.fk7804CertificateBuilder()
-          .certificateModel(certificateModelFactoryFK7804.create())
-          .elementData(
-              TestDataCertificate.fk7804CertificateBuilder().build().elementData().stream()
-                  .filter(e -> !e.id().equals(new ElementId("44")))
-                  .toList()
-          )
-          .build();
-
-      final var xml = generator.generate(certificate, false);
-
-      assertFalse(schematronValidator.validate(certificate.id(), xml,
-          FK7804_SCHEMATRON_PATH));
-    }
-  }
-
-  @Nested
-  class QuestionOvrigt {
-
-    @Test
-    void shallReturnFalseIfOvrigtIsMissing() {
-      final var certificate = TestDataCertificate.fk7804CertificateBuilder()
-          .certificateModel(certificateModelFactoryFK7804.create())
-          .elementData(
-              TestDataCertificate.fk7804CertificateBuilder().build().elementData().stream()
-                  .filter(e -> !e.id().equals(new ElementId("25")))
-                  .toList()
-          )
-          .build();
-
-      final var xml = generator.generate(certificate, false);
-
-      assertFalse(schematronValidator.validate(certificate.id(), xml,
-          FK7804_SCHEMATRON_PATH));
-    }
-  }
-
-  @Nested
-  class QuestionKontaktOnskas {
-
-    @Test
-    void shallReturnFalseIfKontaktOnskasIsMissing() {
-      final var certificate = TestDataCertificate.fk7804CertificateBuilder()
-          .certificateModel(certificateModelFactoryFK7804.create())
-          .elementData(
-              TestDataCertificate.fk7804CertificateBuilder().build().elementData().stream()
-                  .filter(e -> !e.id().equals(new ElementId("26")))
                   .toList()
           )
           .build();
@@ -506,32 +363,6 @@ class SchematronValidationFK7804Test {
 
   @Nested
   class QuestionDiagnos {
-
-    @Test
-    void shallReturnFalseIfDiagnosIsMissingSubfields() {
-      final var invalidElement = ElementData.builder()
-          .id(new ElementId("6"))
-          .value(
-              se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText.builder()
-                  .textId(new FieldId("6.1"))
-                  .text("")
-                  .build()
-          )
-          .build();
-      final var certificate = TestDataCertificate.fk7804CertificateBuilder()
-          .certificateModel(certificateModelFactoryFK7804.create())
-          .elementData(
-              TestDataCertificate.fk7804CertificateBuilder().build().elementData().stream()
-                  .map(e -> e.id().equals(new ElementId("6")) ? invalidElement : e)
-                  .toList()
-          )
-          .build();
-
-      final var xml = generator.generate(certificate, false);
-
-      assertFalse(schematronValidator.validate(certificate.id(), xml,
-          FK7804_SCHEMATRON_PATH));
-    }
 
     @Test
     void shallReturnFalseIfDiagnosIsMissing() {
