@@ -18,7 +18,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueTe
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 
 class FK7804CertificateSendContentProviderTest {
-
+    
   private static final ElementId QUESTION_NEDSATTNING_ARBETSFORMAGA_ID = new ElementId("32");
 
   private static final String SHORT_BODY =
@@ -73,7 +73,7 @@ class FK7804CertificateSendContentProviderTest {
             List.of(
                 DateRange.builder()
                     .from(LocalDate.of(2023, 1, 1))
-                    .to(LocalDate.of(2023, 1, 15))
+                    .to(LocalDate.of(2023, 1, 14))
                     .build()
             )
         ),
@@ -89,7 +89,7 @@ class FK7804CertificateSendContentProviderTest {
                     .build(),
                 DateRange.builder()
                     .from(LocalDate.of(2023, 1, 11))
-                    .to(LocalDate.of(2023, 1, 15))
+                    .to(LocalDate.of(2023, 1, 14))
                     .build()
             )
         ),
@@ -105,7 +105,7 @@ class FK7804CertificateSendContentProviderTest {
                     .build(),
                 DateRange.builder()
                     .from(LocalDate.of(2023, 1, 13))
-                    .to(LocalDate.of(2023, 1, 15))
+                    .to(LocalDate.of(2023, 1, 14))
                     .build()
             )
         ),
@@ -121,11 +121,11 @@ class FK7804CertificateSendContentProviderTest {
                     .build(),
                 DateRange.builder()
                     .from(LocalDate.of(2023, 1, 12))
-                    .to(LocalDate.of(2023, 1, 14))
+                    .to(LocalDate.of(2023, 1, 12))
                     .build(),
                 DateRange.builder()
-                    .from(LocalDate.of(2023, 1, 20))
-                    .to(LocalDate.of(2023, 1, 21))
+                    .from(LocalDate.of(2023, 1, 13))
+                    .to(LocalDate.of(2023, 1, 14))
                     .build()
             )
         ),
@@ -137,7 +137,7 @@ class FK7804CertificateSendContentProviderTest {
                     .build(),
                 DateRange.builder()
                     .from(LocalDate.of(2023, 1, 11))
-                    .to(LocalDate.of(2023, 1, 15))
+                    .to(LocalDate.of(2023, 1, 14))
                     .build(),
                 DateRange.builder()
                     .from(LocalDate.of(2023, 1, 1))
@@ -163,7 +163,7 @@ class FK7804CertificateSendContentProviderTest {
             List.of(
                 DateRange.builder()
                     .from(LocalDate.of(2023, 1, 1))
-                    .to(LocalDate.of(2023, 1, 16))
+                    .to(LocalDate.of(2023, 1, 15))
                     .build()
             )
         ),
@@ -179,7 +179,7 @@ class FK7804CertificateSendContentProviderTest {
                     .build(),
                 DateRange.builder()
                     .from(LocalDate.of(2023, 1, 11))
-                    .to(LocalDate.of(2023, 1, 16))
+                    .to(LocalDate.of(2023, 1, 15))
                     .build()
             )
         ),
@@ -195,7 +195,7 @@ class FK7804CertificateSendContentProviderTest {
                     .build(),
                 DateRange.builder()
                     .from(LocalDate.of(2023, 1, 12))
-                    .to(LocalDate.of(2023, 1, 19))
+                    .to(LocalDate.of(2023, 1, 18))
                     .build()
             )
         )
@@ -209,7 +209,7 @@ class FK7804CertificateSendContentProviderTest {
         List.of(
             DateRange.builder()
                 .from(LocalDate.of(2023, 1, 1))
-                .to(LocalDate.of(2023, 1, 16))
+                .to(LocalDate.of(2023, 1, 15))
                 .build()
         )
     );

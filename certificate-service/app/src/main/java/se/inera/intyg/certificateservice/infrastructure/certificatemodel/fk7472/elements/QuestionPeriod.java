@@ -7,6 +7,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateRangeCheckbox;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateRangeList;
@@ -17,8 +18,6 @@ public class QuestionPeriod {
 
   public static final ElementId QUESTION_PERIOD_ID = new ElementId("56");
   private static final String QUESTION_PERIOD_FIELD_ID = "56.1";
-  private static final PdfFieldId PDF_PERIOD_FIELD_ID_PREFIX = new PdfFieldId(
-      "form1[0].#subform[0]");
 
   private QuestionPeriod() {
     throw new IllegalStateException("Utility class");
@@ -84,7 +83,38 @@ public class QuestionPeriod {
         )
         .pdfConfiguration(
             PdfConfigurationDateRangeList.builder()
-                .pdfFieldId(PDF_PERIOD_FIELD_ID_PREFIX)
+                .dateRanges(java.util.Map.of(
+                    new FieldId(CodeSystemKvFkmu0008.HELA.code()),
+                    PdfConfigurationDateRangeCheckbox.builder()
+                        .checkbox(new PdfFieldId("form1[0].#subform[0].ksr_Hela[0]"))
+                        .from(new PdfFieldId("form1[0].#subform[0].flt_datFranMed[0]"))
+                        .to(new PdfFieldId("form1[0].#subform[0].flt_datLangstTillMed[0]"))
+                        .build(),
+                    new FieldId(CodeSystemKvFkmu0008.TRE_FJARDEDELAR.code()),
+                    PdfConfigurationDateRangeCheckbox.builder()
+                        .checkbox(new PdfFieldId("form1[0].#subform[0].ksr_Trefjardedela[0]"))
+                        .from(new PdfFieldId("form1[0].#subform[0].flt_datFranMed2[0]"))
+                        .to(new PdfFieldId("form1[0].#subform[0].flt_datLangstTillMed2[0]"))
+                        .build(),
+                    new FieldId(CodeSystemKvFkmu0008.HALVA.code()),
+                    PdfConfigurationDateRangeCheckbox.builder()
+                        .checkbox(new PdfFieldId("form1[0].#subform[0].ksr_Halva[0]"))
+                        .from(new PdfFieldId("form1[0].#subform[0].flt_datFranMed3[0]"))
+                        .to(new PdfFieldId("form1[0].#subform[0].flt_datLangstTillMed3[0]"))
+                        .build(),
+                    new FieldId(CodeSystemKvFkmu0008.EN_FJARDEDEL.code()),
+                    PdfConfigurationDateRangeCheckbox.builder()
+                        .checkbox(new PdfFieldId("form1[0].#subform[0].ksr_Enfjardedela[0]"))
+                        .from(new PdfFieldId("form1[0].#subform[0].flt_datFranMed4[0]"))
+                        .to(new PdfFieldId("form1[0].#subform[0].flt_datLangstTillMed4[0]"))
+                        .build(),
+                    new FieldId(CodeSystemKvFkmu0008.EN_ATTONDEL.code()),
+                    PdfConfigurationDateRangeCheckbox.builder()
+                        .checkbox(new PdfFieldId("form1[0].#subform[0].ksr_EnAttondel[0]"))
+                        .from(new PdfFieldId("form1[0].#subform[0].flt_datFranMed5[0]"))
+                        .to(new PdfFieldId("form1[0].#subform[0].flt_datLangstTillMed5[0]"))
+                        .build()
+                ))
                 .build()
         )
         .build();

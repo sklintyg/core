@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.FK7804PdfSpecification.PDF_TEXT_FIELD_ROW_LENGTH;
 
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -15,6 +16,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
@@ -79,6 +82,17 @@ class QuestionGrundForBedomningTest {
     assertEquals(expectedValidations, element.validations());
   }
 
+  @Test
+  void shouldHaveCorrectPdfConfiguration() {
+    final var element = QuestionGrundForBedomning.questionGrundForBedomning();
+    final var expected = PdfConfigurationText.builder()
+        .pdfFieldId(new PdfFieldId("form1[0].Sida3[0].flt_txtAlternativFyra[0]"))
+        .overflowSheetFieldId(new PdfFieldId("form1[0].#subform[4].flt_txtFortsattningsblad[0]"))
+        .maxLength(PDF_TEXT_FIELD_ROW_LENGTH)
+        .build();
+    assertEquals(expected, element.pdfConfiguration());
+  }
+
   @Nested
   class ShouldValidate {
 
@@ -117,4 +131,3 @@ class QuestionGrundForBedomningTest {
     }
   }
 }
-

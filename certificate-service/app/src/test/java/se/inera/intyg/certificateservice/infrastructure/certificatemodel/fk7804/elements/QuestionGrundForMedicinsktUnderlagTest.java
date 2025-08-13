@@ -8,6 +8,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 
 import java.time.Period;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
@@ -18,6 +19,9 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateCheckbox;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateList;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateList;
@@ -158,6 +162,42 @@ class QuestionGrundForMedicinsktUnderlagTest {
     final var element = questionGrundForMedicinsktUnderlag();
 
     assertEquals(expectedValidations, element.validations());
+  }
+
+  @Test
+  void shouldHaveCorrectPdfConfiguration() {
+    final var element = questionGrundForMedicinsktUnderlag();
+    final var expected = PdfConfigurationDateList.builder()
+        .dateCheckboxes(Map.of(
+            new FieldId("FYSISKUNDERSOKNING"),
+            PdfConfigurationDateCheckbox.builder()
+                .checkboxFieldId(new PdfFieldId("form1[0].#subform[0].ksr_FysisktVardmote[0]"))
+                .dateFieldId(new PdfFieldId("form1[0].#subform[0].flt_datumPatient[0]"))
+                .build(),
+            new FieldId("DIGITALUNDERSOKNING"),
+            PdfConfigurationDateCheckbox.builder()
+                .checkboxFieldId(new PdfFieldId("form1[0].#subform[0].ksr_DigitalVardmote[0]"))
+                .dateFieldId(new PdfFieldId("form1[0].#subform[0].flt_datumDigitaltVardmöte[0]"))
+                .build(),
+            new FieldId("TELEFONKONTAKT"),
+            PdfConfigurationDateCheckbox.builder()
+                .checkboxFieldId(
+                    new PdfFieldId("form1[0].#subform[0].ksr_TelefonkontaktPatienten[0]"))
+                .dateFieldId(new PdfFieldId("form1[0].#subform[0].flt_datumTelefonkontakt[0]"))
+                .build(),
+            new FieldId("JOURNALUPPGIFTER"),
+            PdfConfigurationDateCheckbox.builder()
+                .checkboxFieldId(new PdfFieldId("form1[0].#subform[0].ksr_Journaluppgifter[0]"))
+                .dateFieldId(new PdfFieldId("form1[0].#subform[0].flt_datumJournaluppgifter[0]"))
+                .build(),
+            new FieldId("ANNAT"),
+            PdfConfigurationDateCheckbox.builder()
+                .checkboxFieldId(new PdfFieldId("form1[0].#subform[0].ksr_Annat[0]"))
+                .dateFieldId(new PdfFieldId("form1[0].#subform[0].flt_datumAnnat[0]"))
+                .build()
+        ))
+        .build();
+    assertEquals(expected, element.pdfConfiguration());
   }
 
   @Nested

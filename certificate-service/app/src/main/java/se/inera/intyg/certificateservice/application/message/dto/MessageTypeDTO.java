@@ -11,7 +11,7 @@ public enum MessageTypeDTO {
       case PAMINN -> MessageType.REMINDER;
       case KONTKT -> MessageType.CONTACT;
       case OVRIGT -> MessageType.OTHER;
-      default -> throw new IllegalStateException("MessageType '%s' not supported".formatted(this));
+      case AVSTMN -> MessageType.COORDINATION;
     };
   }
 }

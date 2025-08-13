@@ -13,6 +13,8 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationBoolean;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 
 class QuestionKontaktTest {
@@ -47,6 +49,15 @@ class QuestionKontaktTest {
             .build()
     );
     assertEquals(expectedValidations, element.validations());
+  }
+
+  @Test
+  void shouldHaveCorrectPdfConfiguration() {
+    final var element = QuestionKontakt.questionKontakt();
+    final var expected = PdfConfigurationBoolean.builder()
+        .checkboxTrue(new PdfFieldId("form1[0].Sida4[0].ksr_ForsakringskassanKontakar[0]"))
+        .build();
+    assertEquals(expected, element.pdfConfiguration());
   }
 
   @Nested

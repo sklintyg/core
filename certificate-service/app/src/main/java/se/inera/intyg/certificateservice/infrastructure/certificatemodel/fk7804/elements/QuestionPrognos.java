@@ -4,12 +4,15 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSmittbararpenning.QUESTION_SMITTBARARPENNING_ID;
 
 import java.util.List;
+import java.util.Map;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementLayout;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationRadioCode;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCode;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
@@ -64,6 +67,18 @@ public class QuestionPrognos {
                 .description("En viktig information för att underlätta planeringen.")
                 .elementLayout(ElementLayout.ROWS)
                 .list(radioMultipleCodes)
+                .build()
+        )
+        .pdfConfiguration(
+            PdfConfigurationRadioCode.builder()
+                .radioGroupFieldId(new PdfFieldId("form1[0].Sida3[0].RadioButtonList4[0]"))
+                .codes(Map.of(
+                    new FieldId(CodeSystemKvFkmu0006.STOR_SANNOLIKHET.code()), new PdfFieldId("1"),
+                    new FieldId(CodeSystemKvFkmu0006.ATER_X_ANTAL_MANADER.code()),
+                    new PdfFieldId("2"),
+                    new FieldId(CodeSystemKvFkmu0006.SANNOLIKT_INTE.code()), new PdfFieldId("4"),
+                    new FieldId(CodeSystemKvFkmu0006.PROGNOS_OKLAR.code()), new PdfFieldId("3")
+                ))
                 .build()
         )
         .rules(

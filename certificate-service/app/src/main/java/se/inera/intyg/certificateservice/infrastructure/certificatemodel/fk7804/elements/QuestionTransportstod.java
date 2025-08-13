@@ -8,6 +8,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationBoolean;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
@@ -34,6 +36,11 @@ public class QuestionTransportstod {
                     "Patienten skulle kunna arbeta helt eller delvis vid hjälp med transport till och från arbetsplatsen")
                 .selectedText("Ja")
                 .unselectedText("Ej angivet")
+                .build()
+        )
+        .pdfConfiguration(
+            PdfConfigurationBoolean.builder()
+                .checkboxTrue(new PdfFieldId("form1[0].Sida3[0].ksr_Resor[0]"))
                 .build()
         )
         .rules(

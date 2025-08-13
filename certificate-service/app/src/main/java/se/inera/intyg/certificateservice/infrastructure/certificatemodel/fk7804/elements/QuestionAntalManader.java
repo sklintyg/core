@@ -8,6 +8,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationInteger;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
@@ -34,6 +36,11 @@ public class QuestionAntalManader {
                 .min(1)
                 .max(99)
                 .unitOfMeasurement("månader")
+                .build()
+        )
+        .pdfConfiguration(
+            PdfConfigurationText.builder()
+                .pdfFieldId(new PdfFieldId("form1[0].Sida3[0].flt_numManadManader[0]"))
                 .build()
         )
         .rules(

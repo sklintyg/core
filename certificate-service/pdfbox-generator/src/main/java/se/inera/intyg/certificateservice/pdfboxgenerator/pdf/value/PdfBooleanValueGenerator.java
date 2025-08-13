@@ -37,6 +37,10 @@ public class PdfBooleanValueGenerator implements PdfElementValue<ElementValueBoo
       return Collections.emptyList();
     }
 
+    if (configuration.checkboxFalse() == null && !valueBoolean.value()) {
+      return List.of();
+    }
+
     final var pdfFieldId = getCheckboxId(configuration, valueBoolean);
 
     return List.of(

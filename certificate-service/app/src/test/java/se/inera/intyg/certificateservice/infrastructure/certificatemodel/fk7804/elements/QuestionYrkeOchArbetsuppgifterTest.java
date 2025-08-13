@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0002.NUVARANDE_ARBETE;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0002.STUDIER;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.FK7804PdfSpecification.PDF_TEXT_FIELD_ROW_LENGTH;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSysselsattning.QUESTION_SYSSELSATTNING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionYrkeOchArbetsuppgifter.QUESTION_YRKE_ARBETSUPPGIFTER_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionYrkeOchArbetsuppgifter.QUESTION_YRKE_ARBETSUPPGIFTER_ID;
@@ -21,6 +22,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMa
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 
@@ -42,6 +45,19 @@ class QuestionYrkeOchArbetsuppgifterTest {
     final var element = QuestionYrkeOchArbetsuppgifter.questionYrkeOchArbetsuppgifter();
 
     assertEquals(expectedConfiguration, element.configuration());
+  }
+
+  @Test
+  void shouldIncludePdfConfiguration() {
+    final var expectedPdfConfiguration = PdfConfigurationText.builder()
+        .pdfFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtYrkeArbetsuppgifter[0]"))
+        .overflowSheetFieldId(new PdfFieldId("form1[0].#subform[4].flt_txtFortsattningsblad[0]"))
+        .maxLength(3 * PDF_TEXT_FIELD_ROW_LENGTH)
+        .build();
+
+    final var element = QuestionYrkeOchArbetsuppgifter.questionYrkeOchArbetsuppgifter();
+
+    assertEquals(expectedPdfConfiguration, element.pdfConfiguration());
   }
 
   @Test

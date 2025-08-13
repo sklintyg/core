@@ -1,7 +1,6 @@
 package se.inera.intyg.certificateservice.application.message.dto;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static se.inera.intyg.certificateservice.application.message.dto.MessageTypeDTO.AVSTMN;
 import static se.inera.intyg.certificateservice.application.message.dto.MessageTypeDTO.KOMPLT;
 import static se.inera.intyg.certificateservice.application.message.dto.MessageTypeDTO.KONTKT;
@@ -34,7 +33,7 @@ class MessageTypeDTOTest {
   }
 
   @Test
-  void shallThrowIfTypeNotSupported() {
-    assertThrows(IllegalStateException.class, AVSTMN::toMessageType);
+  void shouldConvertToMeeting() {
+    assertEquals(MessageType.COORDINATION, AVSTMN.toMessageType());
   }
 }

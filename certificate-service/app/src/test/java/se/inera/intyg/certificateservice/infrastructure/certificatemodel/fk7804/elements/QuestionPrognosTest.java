@@ -11,6 +11,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionPrognos.STOR_SANNOLIKHET_FIELD_ID;
 
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
@@ -21,6 +22,9 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementLayout;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationRadioCode;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCode;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0006;
@@ -146,4 +150,19 @@ class QuestionPrognosTest {
     }
   }
 
+  @Test
+  void shouldContainCorrectPdfConfiguration() {
+    final var elementSpecification = QuestionPrognos.questionPrognos();
+    final var expected = PdfConfigurationRadioCode.builder()
+        .radioGroupFieldId(new PdfFieldId("form1[0].Sida3[0].RadioButtonList4[0]"))
+        .codes(Map.of(
+            new FieldId(CodeSystemKvFkmu0006.STOR_SANNOLIKHET.code()), new PdfFieldId("1"),
+            new FieldId(CodeSystemKvFkmu0006.ATER_X_ANTAL_MANADER.code()), new PdfFieldId("2"),
+            new FieldId(CodeSystemKvFkmu0006.SANNOLIKT_INTE.code()), new PdfFieldId("4"),
+            new FieldId(CodeSystemKvFkmu0006.PROGNOS_OKLAR.code()), new PdfFieldId("3")
+        ))
+        .build();
+    assertEquals(expected, elementSpecification.pdfConfiguration());
+  }
 }
+

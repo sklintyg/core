@@ -11,6 +11,8 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationCode;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDropdownCode;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationRadioCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 
@@ -129,5 +131,67 @@ class PdfCodeValueGeneratorTest {
     assertThrows(IllegalArgumentException.class,
         () -> pdfCodeValueGenerator.generate(elementSpecification, elementValue)
     );
+  }
+
+  @Test
+  void shouldSetValueIfElementDataWithDropdownCodeValue() {
+    final var dropdownFieldId = "form1[0].#subform[1].dropdownField[0]";
+    final var dropdownCodeId = new FieldId("DROPDOWN_CODE");
+    final var dropdownLabel = "Dropdown Label";
+    final var expected = List.of(
+        PdfField.builder()
+            .id(dropdownFieldId)
+            .value(dropdownLabel)
+            .build()
+    );
+
+    final var elementSpecification = ElementSpecification.builder()
+        .pdfConfiguration(
+            PdfConfigurationDropdownCode.builder()
+                .fieldId(new PdfFieldId(dropdownFieldId))
+                .codes(Map.of(dropdownCodeId, dropdownLabel))
+                .build()
+        )
+        .build();
+
+    final var elementValue = ElementValueCode.builder()
+        .codeId(dropdownCodeId)
+        .code(dropdownCodeId.value())
+        .build();
+
+    final var result = pdfCodeValueGenerator.generate(elementSpecification, elementValue);
+
+    assertEquals(expected, result);
+  }
+
+  @Test
+  void shouldSetValueIfElementDataWithRadioCodeValue() {
+    final var radioGroupFieldId = "form1[0].#subform[1].radioGroup[0]";
+    final var radioCodeId = new FieldId("RADIO_CODE");
+    final var radioPdfFieldId = new PdfFieldId("radioValue");
+    final var expected = List.of(
+        PdfField.builder()
+            .id(radioGroupFieldId)
+            .value(radioPdfFieldId.id())
+            .build()
+    );
+
+    final var elementSpecification = ElementSpecification.builder()
+        .pdfConfiguration(
+            PdfConfigurationRadioCode.builder()
+                .radioGroupFieldId(new PdfFieldId(radioGroupFieldId))
+                .codes(Map.of(radioCodeId, radioPdfFieldId))
+                .build()
+        )
+        .build();
+
+    final var elementValue = ElementValueCode.builder()
+        .codeId(radioCodeId)
+        .code(radioCodeId.value())
+        .build();
+
+    final var result = pdfCodeValueGenerator.generate(elementSpecification, elementValue);
+
+    assertEquals(expected, result);
   }
 }

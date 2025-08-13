@@ -18,7 +18,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_HUDMOTTAGNINGEN_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJLA_DOKTOR;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ALVA_VARDADMINISTRATOR;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.DAN_DENTIST;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajlaDoctorBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AGREEMENT_FALSE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALLOW_COPY_FALSE;
@@ -169,9 +169,9 @@ class CertificateActionRenewTest {
   }
 
   @Test
-  void shallReturnFalseIfNotDoctor() {
+  void shallReturnFalseIfDentist() {
     final var actionEvaluation = actionEvaluationBuilder
-        .user(ALVA_VARDADMINISTRATOR)
+        .user(DAN_DENTIST)
         .build();
 
     final var certificate = certificateBuilder.build();

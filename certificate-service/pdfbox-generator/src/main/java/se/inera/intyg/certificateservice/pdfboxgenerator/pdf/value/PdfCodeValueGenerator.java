@@ -10,6 +10,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDropdownCode;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationRadioCode;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 
 @Component
@@ -29,6 +30,8 @@ public class PdfCodeValueGenerator implements PdfElementValue<ElementValueCode> 
       case PdfConfigurationCode codeConfig -> getField(elementValueCode, codeConfig);
       case PdfConfigurationDropdownCode dropdownConfig ->
           getDropdownField(elementValueCode, dropdownConfig);
+      case PdfConfigurationRadioCode radioConfig ->
+          getRadioCodeField(elementValueCode, radioConfig);
       default -> throw new IllegalArgumentException(
           "Unsupported PDF configuration: " + pdfConfiguration.getClass());
     };
@@ -67,6 +70,25 @@ public class PdfCodeValueGenerator implements PdfElementValue<ElementValueCode> 
         PdfField.builder()
             .id(codeId.id())
             .value(CHECKED_BOX_VALUE)
+            .build()
+    );
+  }
+
+  private List<PdfField> getRadioCodeField(ElementValueCode code,
+      PdfConfigurationRadioCode configuration) {
+    if (codeIsInvalid(code)) {
+      return Collections.emptyList();
+    }
+
+    final var codeId = configuration.codes().get(code.codeId());
+    if (codeId == null) {
+      throw new IllegalArgumentException("Code " + code.codeId() + " not found");
+    }
+
+    return List.of(
+        PdfField.builder()
+            .id(configuration.radioGroupFieldId().id())
+            .value(codeId.id())
             .build()
     );
   }
