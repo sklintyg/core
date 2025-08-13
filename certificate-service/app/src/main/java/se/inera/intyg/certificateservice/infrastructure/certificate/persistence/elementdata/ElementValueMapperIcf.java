@@ -10,13 +10,13 @@ public class ElementValueMapperIcf implements ElementValueMapper {
 
   @Override
   public boolean supports(Class<?> c) {
-    return c.equals(MappedElementValueIcfValue.class)
+    return c.equals(MappedElementValueIcf.class)
         || c.equals(ElementValueIcf.class);
   }
 
   @Override
   public ElementValue toDomain(MappedElementValue mappedValue) {
-    if (mappedValue instanceof MappedElementValueIcfValue valueIcf) {
+    if (mappedValue instanceof MappedElementValueIcf valueIcf) {
       return ElementValueIcf.builder()
           .id(new FieldId(valueIcf.getId()))
           .text(valueIcf.getText())
@@ -30,7 +30,7 @@ public class ElementValueMapperIcf implements ElementValueMapper {
   @Override
   public MappedElementValue toMapped(ElementValue value) {
     if (value instanceof ElementValueIcf elementValueIcf) {
-      return MappedElementValueIcfValue.builder()
+      return MappedElementValueIcf.builder()
           .id(elementValueIcf.id().value())
           .text(elementValueIcf.text())
           .icfCodes(elementValueIcf.icfCodes())

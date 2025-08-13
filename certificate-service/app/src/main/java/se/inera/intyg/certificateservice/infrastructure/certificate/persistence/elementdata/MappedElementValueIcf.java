@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MappedElementValueIcfValue implements MappedElementValue {
+public class MappedElementValueIcf implements MappedElementValue {
 
   private String id;
   private String text;

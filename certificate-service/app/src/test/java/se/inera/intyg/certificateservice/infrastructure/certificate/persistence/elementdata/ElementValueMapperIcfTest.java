@@ -24,7 +24,7 @@ class ElementValueMapperIcfTest {
 
   @Test
   void shallReturnTrueIfClassMappedElementValueIcf() {
-    assertTrue(elementValueMapperIcf.supports(MappedElementValueIcfValue.class));
+    assertTrue(elementValueMapperIcf.supports(MappedElementValueIcf.class));
   }
 
   @Test
@@ -45,7 +45,7 @@ class ElementValueMapperIcfTest {
         .icfCodes(VALUES)
         .build();
 
-    final var mappedElementValueIcf = MappedElementValueIcfValue.builder()
+    final var mappedElementValueIcf = MappedElementValueIcf.builder()
         .id(ID)
         .text(TEXT)
         .icfCodes(VALUES)
@@ -60,7 +60,7 @@ class ElementValueMapperIcfTest {
 
   @Test
   void shallMapToMapped() {
-    final var expectedValue = MappedElementValueIcfValue.builder()
+    final var expectedValue = MappedElementValueIcf.builder()
         .id(ID)
         .text(TEXT)
         .icfCodes(VALUES)
