@@ -217,6 +217,7 @@ class CertificateModelFactoryFK7804Test {
     final var certificateModel = certificateModelFactoryFK7804.create();
 
     assertEquals("fk7804/schematron/lisjp.v2.sch", certificateModel.schematronPath().value());
+  }
 
   @Test
   void shouldIncludePdfSpecification() {
