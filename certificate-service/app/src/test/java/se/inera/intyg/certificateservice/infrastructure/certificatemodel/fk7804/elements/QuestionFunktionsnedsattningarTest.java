@@ -1,12 +1,17 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.FK7804PdfSpecification.PDF_TEXT_FIELD_ROW_LENGTH;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionFunktionsnedsattningar.QUESTION_FUNKTIONSNEDSATTNINGAR_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionFunktionsnedsattningar.QUESTION_FUNKTIONSNEDSATTNINGAR_ID;
 
 import java.util.List;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationIcf;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
@@ -90,5 +95,48 @@ class QuestionFunktionsnedsattningarTest {
         .build();
 
     assertEquals(expectedPdfConfiguration, element.pdfConfiguration());
+  }
+
+  @Nested
+  class ShouldValidate {
+
+    @Test
+    void shouldReturnTrueIfBooleanIsFalse() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId("27"))
+              .value(ElementValueBoolean.builder().value(false).build())
+              .build()
+      );
+      final var element = QuestionFunktionsnedsattningar.questionFunktionsnedsattningar();
+      final var shouldValidate = element.shouldValidate();
+      assertTrue(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shouldReturnTrueIfElementMissing() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId("7"))
+              .value(ElementValueBoolean.builder().value(true).build())
+              .build()
+      );
+      final var element = QuestionFunktionsnedsattningar.questionFunktionsnedsattningar();
+      final var shouldValidate = element.shouldValidate();
+      assertTrue(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shouldReturnFalseIfBooleanIsTrue() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId("27"))
+              .value(ElementValueBoolean.builder().value(true).build())
+              .build()
+      );
+      final var element = QuestionFunktionsnedsattningar.questionFunktionsnedsattningar();
+      final var shouldValidate = element.shouldValidate();
+      assertFalse(shouldValidate.test(elementData));
+    }
   }
 }

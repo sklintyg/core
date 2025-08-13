@@ -14,6 +14,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfig
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationIcfValue;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
 
 public class QuestionFunktionsnedsattningar {
 
@@ -58,6 +59,7 @@ public class QuestionFunktionsnedsattningar {
                 .limit(4000)
                 .build()
         ))
+        .shouldValidate(ShouldValidateFactory.checkboxBoolean(QUESTION_SMITTBARARPENNING_ID, false))
         .pdfConfiguration(
             PdfConfigurationText.builder()
                 .pdfFieldId(new PdfFieldId("form1[0].Sida2[0].flt_txtBeskrivUndersokningsfynd[0]"))
