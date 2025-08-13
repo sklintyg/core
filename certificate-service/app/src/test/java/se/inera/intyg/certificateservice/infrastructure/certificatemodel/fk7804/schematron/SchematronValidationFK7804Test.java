@@ -2,10 +2,9 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7809_SCHEMATRON_PATH;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7804_SCHEMATRON_PATH;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -27,7 +26,10 @@ import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertifica
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorDateList;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorDateRangeList;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorDiagnosisList;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorIcfValue;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorInteger;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorText;
+import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorUnifiedDiagnosisList;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorValue;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.validation.SchemaValidatorV4;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.validation.SchematronValidator;
@@ -51,9 +53,13 @@ class SchematronValidationFK7804Test {
               new XmlGeneratorCode(),
               new XmlGeneratorCodeList(),
               new XmlGeneratorDateList(),
-              new XmlGeneratorDiagnosisList()
+              new XmlGeneratorDiagnosisList(),
+              new XmlGeneratorIcfValue(),
+              new XmlGeneratorInteger()
           ),
-          Collections.emptyList()
+          List.of(
+              new XmlGeneratorUnifiedDiagnosisList()
+          )
       ),
       new XmlValidationService(
           new SchematronValidator(),
@@ -99,7 +105,7 @@ class SchematronValidationFK7804Test {
       final var xml = generator.generate(certificate, false);
 
       assertFalse(schematronValidator.validate(certificate.id(), xml,
-          FK7809_SCHEMATRON_PATH));
+          FK7804_SCHEMATRON_PATH));
     }
   }
 
@@ -120,7 +126,7 @@ class SchematronValidationFK7804Test {
       final var xml = generator.generate(certificate, false);
 
       assertFalse(schematronValidator.validate(certificate.id(), xml,
-          FK7809_SCHEMATRON_PATH));
+          FK7804_SCHEMATRON_PATH));
     }
   }
 
@@ -141,7 +147,7 @@ class SchematronValidationFK7804Test {
       final var xml = generator.generate(certificate, false);
 
       assertFalse(schematronValidator.validate(certificate.id(), xml,
-          FK7809_SCHEMATRON_PATH));
+          FK7804_SCHEMATRON_PATH));
     }
 
     @Test
@@ -167,7 +173,7 @@ class SchematronValidationFK7804Test {
       final var xml = generator.generate(certificate, false);
 
       assertFalse(schematronValidator.validate(certificate.id(), xml,
-          FK7809_SCHEMATRON_PATH));
+          FK7804_SCHEMATRON_PATH));
     }
   }
 
@@ -188,7 +194,7 @@ class SchematronValidationFK7804Test {
       final var xml = generator.generate(certificate, false);
 
       assertFalse(schematronValidator.validate(certificate.id(), xml,
-          FK7809_SCHEMATRON_PATH));
+          FK7804_SCHEMATRON_PATH));
     }
 
     @Test
@@ -214,7 +220,7 @@ class SchematronValidationFK7804Test {
       final var xml = generator.generate(certificate, false);
 
       assertFalse(schematronValidator.validate(certificate.id(), xml,
-          FK7809_SCHEMATRON_PATH));
+          FK7804_SCHEMATRON_PATH));
     }
   }
 
@@ -235,7 +241,7 @@ class SchematronValidationFK7804Test {
       final var xml = generator.generate(certificate, false);
 
       assertFalse(schematronValidator.validate(certificate.id(), xml,
-          FK7809_SCHEMATRON_PATH));
+          FK7804_SCHEMATRON_PATH));
     }
   }
 
@@ -256,7 +262,7 @@ class SchematronValidationFK7804Test {
       final var xml = generator.generate(certificate, false);
 
       assertFalse(schematronValidator.validate(certificate.id(), xml,
-          FK7809_SCHEMATRON_PATH));
+          FK7804_SCHEMATRON_PATH));
     }
   }
 
@@ -277,7 +283,7 @@ class SchematronValidationFK7804Test {
       final var xml = generator.generate(certificate, false);
 
       assertFalse(schematronValidator.validate(certificate.id(), xml,
-          FK7809_SCHEMATRON_PATH));
+          FK7804_SCHEMATRON_PATH));
     }
   }
 
@@ -308,7 +314,7 @@ class SchematronValidationFK7804Test {
       final var xml = generator.generate(updatedCertificate, false);
 
       assertFalse(schematronValidator.validate(updatedCertificate.id(), xml,
-          FK7809_SCHEMATRON_PATH));
+          FK7804_SCHEMATRON_PATH));
     }
   }
 
@@ -329,7 +335,7 @@ class SchematronValidationFK7804Test {
       final var xml = generator.generate(certificate, false);
 
       assertFalse(schematronValidator.validate(certificate.id(), xml,
-          FK7809_SCHEMATRON_PATH));
+          FK7804_SCHEMATRON_PATH));
     }
 
     @Test
@@ -346,7 +352,7 @@ class SchematronValidationFK7804Test {
       final var xml = generator.generate(certificate, false);
 
       assertFalse(schematronValidator.validate(certificate.id(), xml,
-          FK7809_SCHEMATRON_PATH));
+          FK7804_SCHEMATRON_PATH));
     }
   }
 
@@ -367,7 +373,7 @@ class SchematronValidationFK7804Test {
       final var xml = generator.generate(certificate, false);
 
       assertFalse(schematronValidator.validate(certificate.id(), xml,
-          FK7809_SCHEMATRON_PATH));
+          FK7804_SCHEMATRON_PATH));
     }
   }
 
@@ -389,7 +395,7 @@ class SchematronValidationFK7804Test {
       final var xml = generator.generate(certificate, false);
 
       assertFalse(schematronValidator.validate(certificate.id(), xml,
-          FK7809_SCHEMATRON_PATH));
+          FK7804_SCHEMATRON_PATH));
     }
   }
 
@@ -410,7 +416,7 @@ class SchematronValidationFK7804Test {
       final var xml = generator.generate(certificate, false);
 
       assertFalse(schematronValidator.validate(certificate.id(), xml,
-          FK7809_SCHEMATRON_PATH));
+          FK7804_SCHEMATRON_PATH));
     }
   }
 
@@ -431,7 +437,7 @@ class SchematronValidationFK7804Test {
       final var xml = generator.generate(certificate, false);
 
       assertFalse(schematronValidator.validate(certificate.id(), xml,
-          FK7809_SCHEMATRON_PATH));
+          FK7804_SCHEMATRON_PATH));
     }
   }
 
@@ -452,7 +458,7 @@ class SchematronValidationFK7804Test {
       final var xml = generator.generate(certificate, false);
 
       assertFalse(schematronValidator.validate(certificate.id(), xml,
-          FK7809_SCHEMATRON_PATH));
+          FK7804_SCHEMATRON_PATH));
     }
   }
 
@@ -473,7 +479,7 @@ class SchematronValidationFK7804Test {
       final var xml = generator.generate(certificate, false);
 
       assertFalse(schematronValidator.validate(certificate.id(), xml,
-          FK7809_SCHEMATRON_PATH));
+          FK7804_SCHEMATRON_PATH));
     }
   }
 
@@ -494,7 +500,7 @@ class SchematronValidationFK7804Test {
       final var xml = generator.generate(certificate, false);
 
       assertFalse(schematronValidator.validate(certificate.id(), xml,
-          FK7809_SCHEMATRON_PATH));
+          FK7804_SCHEMATRON_PATH));
     }
   }
 
@@ -524,7 +530,7 @@ class SchematronValidationFK7804Test {
       final var xml = generator.generate(certificate, false);
 
       assertFalse(schematronValidator.validate(certificate.id(), xml,
-          FK7809_SCHEMATRON_PATH));
+          FK7804_SCHEMATRON_PATH));
     }
 
     @Test
@@ -541,7 +547,7 @@ class SchematronValidationFK7804Test {
       final var xml = generator.generate(certificate, false);
 
       assertFalse(schematronValidator.validate(certificate.id(), xml,
-          FK7809_SCHEMATRON_PATH));
+          FK7804_SCHEMATRON_PATH));
     }
   }
 }

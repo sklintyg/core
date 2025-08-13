@@ -163,6 +163,13 @@
       <iso:assert test="matches(normalize-space(.), '1|true') or count(//gn:svar[@id='39']) ge 1">
         Ett 'LISJP' måste ange minst en 'Prognos' om 'Om smittbärarpenning' är 'false'.
       </iso:assert>
+      <iso:assert test="matches(normalize-space(.), '1|true') or count(//gn:svar[@id='35']) = 1">
+        Ett 'LISJP' måste ange minst en 'Funktionsnedsättning' om 'Om smittbärarpenning' är 'false'.
+      </iso:assert>
+      <iso:assert test="matches(normalize-space(.), '1|true') or count(//gn:svar[@id='17']) = 1">
+        Ett 'LISJP' måste ange minst en 'Aktivitetsbegränsning' om 'Om smittbärarpenning' är
+        'false'.
+      </iso:assert>
     </iso:rule>
   </iso:pattern>
 
@@ -269,35 +276,9 @@
     </iso:rule>
   </iso:pattern>
 
-  <iso:pattern id="q35">
-    <iso:rule context="//gn:svar[@id='35']">
-      <iso:assert test="count(gn:delsvar[@id='35.1']) = 1">
-        'Funktionsnedsättning' måste ha ett 'Beskrivning'.
-      </iso:assert>
-      <iso:let name="delsvarsIdExpr" value="'^35\.[1]$'"/>
-      <iso:assert test="count(gn:delsvar[not(matches(@id, $delsvarsIdExpr))]) = 0">
-        Oväntat delsvars-id i delsvar till svar "<value-of select="@id"/>". Delsvars-id:n måste
-        matcha "<value-of select="$delsvarsIdExpr"/>".
-      </iso:assert>
-    </iso:rule>
-  </iso:pattern>
-
   <iso:pattern id="q35.1">
     <iso:rule context="//gn:delsvar[@id='35.1']">
       <iso:extends rule="non-empty-string"/>
-    </iso:rule>
-  </iso:pattern>
-
-  <iso:pattern id="q17">
-    <iso:rule context="//gn:svar[@id='17']">
-      <iso:assert test="count(gn:delsvar[@id='17.1']) = 1">
-        'Aktivitetsbegränsningar' måste ha ett 'Beskrivning'.
-      </iso:assert>
-      <iso:let name="delsvarsIdExpr" value="'^17\.[1]$'"/>
-      <iso:assert test="count(gn:delsvar[not(matches(@id, $delsvarsIdExpr))]) = 0">
-        Oväntat delsvars-id i delsvar till svar "<value-of select="@id"/>". Delsvars-id:n måste
-        matcha "<value-of select="$delsvarsIdExpr"/>".
-      </iso:assert>
     </iso:rule>
   </iso:pattern>
 
