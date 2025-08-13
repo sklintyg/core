@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     @Type(value = CertificateDataConfigDropdown.class, name = "UE_DROPDOWN"),
     @Type(value = CertificateDataConfigInteger.class, name = "UE_INTEGER"),
     @Type(value = CertificateDataConfigCheckboxBoolean.class, name = "UE_CHECKBOX_BOOLEAN"),
+    @Type(value = CertificateDataConfigIcf.class, name = "UE_ICF")
 })
 
 public interface CertificateDataConfig {

@@ -12,16 +12,21 @@ public class PdfValueGeneratorUtil {
   }
 
   public static List<String> splitByLimit(Integer limit, String s) {
-    return splitByLimit(limit, s, null);
+    return splitByLimit(limit, s, null, true);
   }
 
   public static List<String> splitByLimit(Integer limit, String s, String message) {
+    return splitByLimit(limit, s, message, true);
+  }
+
+  public static List<String> splitByLimit(Integer limit, String s, String message,
+      boolean shouldRemoveLineBreaks) {
     final var informationText = message != null
         ? message
         : getInformationText(limit);
 
     final var updatedLimit = limit - informationText.length();
-    final var noLineBreak = s.replace("\n", "");
+    final var noLineBreak = shouldRemoveLineBreaks ? s.replace("\n", "") : s;
     final var words = noLineBreak.split(" ");
 
     final var firstPart = new StringBuilder();

@@ -213,6 +213,13 @@ class CertificateModelFactoryFK7804Test {
   }
 
   @Test
+  void shallIncludeSchematronPath() {
+    final var certificateModel = certificateModelFactoryFK7804.create();
+
+    assertEquals("fk7804/schematron/lisjp.v2.sch", certificateModel.schematronPath().value());
+  }
+
+  @Test
   void shouldIncludePdfSpecification() {
     final var model = certificateModelFactoryFK7804.create();
     assertNotNull(model.pdfSpecification(), "PdfSpecification in FK7804 model should not be null");

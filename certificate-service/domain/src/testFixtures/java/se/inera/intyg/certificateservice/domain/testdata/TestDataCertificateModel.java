@@ -198,7 +198,7 @@ public class TestDataCertificateModel {
         .certificateActionSpecifications(Collections.emptyList())
         .name(TestDataCertificateModelConstants.FK7804_NAME)
         .type(TestDataCertificateModelConstants.FK7804_CODE_TYPE)
-        .availableForCitizen(false)
+        .availableForCitizen(true)
         .schematronPath(TestDataCertificateModelConstants.FK7804_SCHEMATRON_PATH)
         .recipient(TestDataCertificateModelConstants.FK_RECIPIENT)
         .certificateActionFactory(new CertificateActionFactory(null));
