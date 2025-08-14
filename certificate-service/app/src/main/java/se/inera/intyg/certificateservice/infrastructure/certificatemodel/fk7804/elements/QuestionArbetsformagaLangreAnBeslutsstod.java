@@ -13,7 +13,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfig
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
 
 public class QuestionArbetsformagaLangreAnBeslutsstod {
 
@@ -64,9 +63,6 @@ public class QuestionArbetsformagaLangreAnBeslutsstod {
                     .limit(4000)
                     .build()
             )
-        )
-        .shouldValidate(
-            ShouldValidateFactory.checkboxBoolean(QUESTION_SMITTBARARPENNING_ID, false)
         )
         .build();
   }

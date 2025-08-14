@@ -34,7 +34,9 @@ public class ShouldValidateFactory {
     return elementData -> {
       final var matches = elementData.stream()
           .filter(data -> elementId.equals(data.id()))
+          .filter(element -> element.value() != null)
           .map(element -> (ElementValueBoolean) element.value())
+          .filter(elementValueBoolean -> elementValueBoolean.value() != null)
           .toList();
 
       if (!expectedValue && matches.isEmpty()) {
