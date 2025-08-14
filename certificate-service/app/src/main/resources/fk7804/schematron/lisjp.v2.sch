@@ -15,9 +15,6 @@
 
   <iso:pattern id="intyg">
     <iso:rule context="//rg:intyg">
-      <iso:assert test="count(gn:svar[@id='27']) = 1">Ett 'LISJP' måste ha ett 'Smittbärarpenning'
-        svar
-      </iso:assert>
       <iso:assert test="count(gn:svar[@id='6']) = 1">Ett 'LISJP' måste ha ett 'Diagnos' svar
       </iso:assert>
       <iso:assert test="count(gn:svar[@id='32']) le 4 and count(gn:svar[@id='32']) ge 1">Ett 'LISJP'

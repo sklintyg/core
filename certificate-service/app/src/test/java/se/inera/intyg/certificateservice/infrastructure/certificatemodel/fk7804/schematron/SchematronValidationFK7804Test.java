@@ -323,7 +323,7 @@ class SchematronValidationFK7804Test {
   class QuestionSmittbararpenning {
 
     @Test
-    void shallReturnFalseIfSmittbararpenningIsMissing() {
+    void shallReturnTrueIfSmittbararpenningIsMissing() {
       final var certificate = TestDataCertificate.fk7804CertificateBuilder()
           .certificateModel(certificateModelFactoryFK7804.create())
           .elementData(
@@ -335,7 +335,7 @@ class SchematronValidationFK7804Test {
 
       final var xml = generator.generate(certificate, false);
 
-      assertFalse(schematronValidator.validate(certificate.id(), xml,
+      assertTrue(schematronValidator.validate(certificate.id(), xml,
           FK7804_SCHEMATRON_PATH));
     }
   }
