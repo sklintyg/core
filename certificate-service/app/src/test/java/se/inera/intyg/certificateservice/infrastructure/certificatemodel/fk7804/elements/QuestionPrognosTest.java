@@ -148,6 +148,19 @@ class QuestionPrognosTest {
       final var shouldValidate = element.shouldValidate();
       assertFalse(shouldValidate.test(elementData));
     }
+
+    @Test
+    void shouldReturnTrueIfBooleanIsNull() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId("27"))
+              .value(ElementValueBoolean.builder().value(null).build())
+              .build()
+      );
+      final var element = QuestionPrognos.questionPrognos();
+      final var shouldValidate = element.shouldValidate();
+      assertTrue(shouldValidate.test(elementData));
+    }
   }
 
   @Test
