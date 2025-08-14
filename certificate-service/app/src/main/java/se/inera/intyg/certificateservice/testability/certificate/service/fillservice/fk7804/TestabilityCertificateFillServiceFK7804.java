@@ -77,7 +77,6 @@ public class TestabilityCertificateFillServiceFK7804 implements TestabilityCerti
       QUESTION_MEDICINSKA_SKAL_ID,
       QUESTION_PROGNOS_ID,
       QUESTION_ANTAL_MANADER_ID,
-      QUESTION_GRUND_FOR_BEDOMNING_ID,
       QUESTION_ATGARDER_ID,
       QUESTION_OVRIGT_ID,
       QUESTION_KONTAKT_ID,
