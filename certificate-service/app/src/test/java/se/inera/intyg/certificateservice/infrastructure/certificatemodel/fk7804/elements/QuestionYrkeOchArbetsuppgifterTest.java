@@ -16,15 +16,17 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCodeList;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextField;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 
 class QuestionYrkeOchArbetsuppgifterTest {
@@ -37,7 +39,7 @@ class QuestionYrkeOchArbetsuppgifterTest {
 
   @Test
   void shouldIncludeConfiguration() {
-    final var expectedConfiguration = ElementConfigurationTextField.builder()
+    final var expectedConfiguration = ElementConfigurationTextArea.builder()
         .id(QUESTION_YRKE_ARBETSUPPGIFTER_FIELD_ID)
         .name("Ange yrke och arbetsuppgifter")
         .build();
@@ -65,7 +67,8 @@ class QuestionYrkeOchArbetsuppgifterTest {
     final var element = QuestionYrkeOchArbetsuppgifter.questionYrkeOchArbetsuppgifter();
     final var expectedValidations = List.of(
         ElementValidationText.builder()
-            .mandatory(false)
+            .mandatory(true)
+            .limit(4000)
             .build()
     );
     assertEquals(expectedValidations, element.validations());
@@ -90,6 +93,11 @@ class QuestionYrkeOchArbetsuppgifterTest {
             .type(ElementRuleType.MANDATORY)
             .id(QUESTION_YRKE_ARBETSUPPGIFTER_ID)
             .expression(new RuleExpression("$" + QUESTION_YRKE_ARBETSUPPGIFTER_FIELD_ID.value()))
+            .build(),
+        ElementRuleLimit.builder()
+            .type(ElementRuleType.TEXT_LIMIT)
+            .id(QUESTION_YRKE_ARBETSUPPGIFTER_ID)
+            .limit(new RuleLimit((short) 4000))
             .build()
     );
 

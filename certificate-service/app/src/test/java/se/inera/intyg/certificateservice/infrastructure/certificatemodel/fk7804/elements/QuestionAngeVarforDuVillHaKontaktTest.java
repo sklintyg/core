@@ -47,7 +47,7 @@ class QuestionAngeVarforDuVillHaKontaktTest {
     final var element = QuestionAngeVarforDuVillHaKontakt.questionAngeVarforDuVillHaKontakt();
     final var expectedValidations = List.of(
         ElementValidationText.builder()
-            .mandatory(true)
+            .mandatory(false)
             .limit(4000)
             .build()
     );
