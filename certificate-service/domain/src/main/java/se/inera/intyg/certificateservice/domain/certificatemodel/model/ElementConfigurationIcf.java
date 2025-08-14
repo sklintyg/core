@@ -30,6 +30,7 @@ public class ElementConfigurationIcf implements ElementConfiguration {
   @Override
   public ElementValue emptyValue() {
     return ElementValueIcf.builder()
+        .id(id)
         .build();
   }
 

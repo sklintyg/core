@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.testability.certificate.service.fillservice.fk7804;
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.CertificateModelFactoryFK7804.FK7804_V2_0;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionAktivitetsbegransningar.QUESTION_AKTIVITETSBEGRANSNING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionAngeVarforDuVillHaKontakt.QUESTION_VARFOR_KONTAKT_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionAnnanGrundForMedicinsktUnderlag.QUESTION_ANNAN_GRUND_FOR_MEDICINSKT_UNDERLAG_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionAntalManader.QUESTION_ANTAL_MANADER_FIELD_ID;
@@ -8,6 +9,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionArbetsformagaLangreAnBeslutsstod.QUESTION_ARBETFORMAGA_LANGRE_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionAtgarderSomKanFramjaAtergang.QUESTION_ATGARDER_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionDiagnos.QUESTION_DIAGNOS_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionFunktionsnedsattningar.QUESTION_FUNKTIONSNEDSATTNINGAR_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionGrundForBedomning.QUESTION_GRUND_FOR_BEDOMNING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionGrundForMedicinsktUnderlag.QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionKontakt.QUESTION_KONTAKT_ID;
@@ -41,6 +43,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDa
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueIcf;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueInteger;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
@@ -74,13 +77,12 @@ public class TestabilityCertificateFillServiceFK7804 implements TestabilityCerti
       QUESTION_MEDICINSKA_SKAL_ID,
       QUESTION_PROGNOS_ID,
       QUESTION_ANTAL_MANADER_ID,
-      QUESTION_GRUND_FOR_BEDOMNING_ID,
       QUESTION_ATGARDER_ID,
       QUESTION_OVRIGT_ID,
       QUESTION_KONTAKT_ID,
       QUESTION_VARFOR_KONTAKT_ID,
-      QUESTION_DIAGNOS_ID
-
+      QUESTION_AKTIVITETSBEGRANSNING_ID,
+      QUESTION_FUNKTIONSNEDSATTNINGAR_ID
   );
 
   private static final List<ElementId> MINIMAL_IDS = List.of(
@@ -106,7 +108,11 @@ public class TestabilityCertificateFillServiceFK7804 implements TestabilityCerti
       Map.entry(QUESTION_OVRIGT_ID,
           "Patienten har svårt att ta sig till arbetsplatsen med kollektivtrafik."),
       Map.entry(QUESTION_VARFOR_KONTAKT_ID,
-          "Behöver diskutera kompletterande intyg med handläggare.")
+          "Behöver diskutera kompletterande intyg med handläggare."),
+      Map.entry(QUESTION_AKTIVITETSBEGRANSNING_ID,
+          "Patienten har svårt att lyfta tunga föremål och behöver undvika långvarigt stående arbete."),
+      Map.entry(QUESTION_FUNKTIONSNEDSATTNINGAR_ID,
+          "Patienten har nedsatt rörlighet i höger arm och behöver hjälp med vissa rörelser.")
   );
 
   @Override
@@ -238,6 +244,16 @@ public class TestabilityCertificateFillServiceFK7804 implements TestabilityCerti
               ))
           )
           .build();
+    }
+
+    if (value instanceof ElementValueIcf elementValueIcf) {
+      return ElementData.builder()
+          .id(elementSpecification.id())
+          .value(
+              elementValueIcf.withText(
+                  TEXT_QUESTION_MOCKS.get(elementSpecification.id())
+              )
+          ).build();
     }
 
     throw new IllegalStateException("No matching fill for element: " + elementSpecification.id());
