@@ -13,6 +13,7 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidato
 public class ElementValueIcf implements ElementValue {
 
   FieldId id;
+  @With
   String text;
   @With
   @Builder.Default
