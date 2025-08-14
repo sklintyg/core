@@ -5,7 +5,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSysselsattning.QUESTION_SYSSELSATTNING_ID;
 
 import java.util.List;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextField;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
@@ -30,7 +30,7 @@ public class QuestionYrkeOchArbetsuppgifter {
     return ElementSpecification.builder()
         .id(QUESTION_YRKE_ARBETSUPPGIFTER_ID)
         .configuration(
-            ElementConfigurationTextField.builder()
+            ElementConfigurationTextArea.builder()
                 .id(QUESTION_YRKE_ARBETSUPPGIFTER_FIELD_ID)
                 .name("Ange yrke och arbetsuppgifter")
                 .build()
@@ -44,13 +44,17 @@ public class QuestionYrkeOchArbetsuppgifter {
                 CertificateElementRuleFactory.mandatory(
                     QUESTION_YRKE_ARBETSUPPGIFTER_ID,
                     QUESTION_YRKE_ARBETSUPPGIFTER_FIELD_ID
-                )
-            )
+                ),
+                CertificateElementRuleFactory.limit(
+                    QUESTION_YRKE_ARBETSUPPGIFTER_ID,
+                    (short) 4000
+                ))
         )
         .validations(
             List.of(
                 ElementValidationText.builder()
-                    .mandatory(false)
+                    .mandatory(true)
+                    .limit(4000)
                     .build()
             )
         )

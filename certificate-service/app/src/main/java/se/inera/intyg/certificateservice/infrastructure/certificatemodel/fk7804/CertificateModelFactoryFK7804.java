@@ -81,7 +81,7 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
       Sjukpenning är en ersättning för personer som arbetar i Sverige och har en nedsatt arbetsförmåga på grund av sjukdom. Beroende på hur mycket arbetsförmågan är nedsatt kan man få en fjärdedels, halv, tre fjärdedels eller hel sjukpenning.\s
       
       <b>Andra förmåner som detta läkarintyg används till</b>
-      Om du stänger av patienten enligt smittskyddslagen ska du även använda detta intyg
+      Om du stänger av patienten enligt smittskyddslagen ska du även använda detta intyg.
       """;
 
   private static final String DETAILED_DESCRIPTION = """

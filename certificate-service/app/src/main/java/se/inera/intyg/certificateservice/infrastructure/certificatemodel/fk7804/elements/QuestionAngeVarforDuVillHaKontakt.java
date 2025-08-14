@@ -56,7 +56,7 @@ public class QuestionAngeVarforDuVillHaKontakt {
         .validations(
             List.of(
                 ElementValidationText.builder()
-                    .mandatory(true)
+                    .mandatory(false)
                     .limit(4000)
                     .build()
             )

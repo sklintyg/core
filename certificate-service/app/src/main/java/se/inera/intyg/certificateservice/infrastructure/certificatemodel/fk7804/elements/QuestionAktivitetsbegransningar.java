@@ -35,7 +35,7 @@ public class QuestionAktivitetsbegransningar {
                 .icfCodesPropertyName(
                     IcfCodesPropertyType.AKTIVITETSBEGRANSNINGAR)
                 .name(
-                    "Ange vilken/vilka funktionsnedsättningar patienten har till följd av sjukdom och om möjligt svårighetsgrad. Ange även vad din bedömning av funktionsnedsättningar baseras på. Beskriv relevanta undersökningsfynd, testresultat, utredningssvar eller andra uppgifter (exempelvis anamnesuppgifter) och hur du bedömer dem.")
+                    "Beskriv vad du bedömer att patienten har svårt att göra på grund av sin sjukdom. Ange exempel på sådana begränsningar relaterade till de arbetsuppgifter eller annan sysselsättning som du bedömer arbetsförmågan i förhållande till. Ange om möjligt svårighetsgrad.")
                 .modalLabel("Välj enbart de svårigheter som påverkar patientens sysselsättning.")
                 .collectionsLabel(
                     "Svårigheter som påverkar patientens sysselsättning:")
