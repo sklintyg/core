@@ -39,7 +39,7 @@ public class MessageNedsattningArbetsformagaStartDateInfo {
                 CertificateElementRuleFactory.show(
                     QUESTION_NEDSATTNING_ARBETSFORMAGA_ID,
                     new RuleExpression(String.format(
-                        "($%s.from <= -7) || ($%s.from <= -7) || ($%s.from <= -7) || ($%s.from <= -7)",
+                        "($%s.from < -7) || ($%s.from < -7) || ($%s.from < -7) || ($%s.from < -7)",
                         CodeSystemKvFkmu0003.EN_FJARDEDEL.code(),
                         CodeSystemKvFkmu0003.HALFTEN.code(),
                         CodeSystemKvFkmu0003.TRE_FJARDEDEL.code(),

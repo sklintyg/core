@@ -46,7 +46,7 @@ class MessageNedsattningArbetsformagaStartDateInfoTest {
             .id(new ElementId("32"))
             .expression(
                 new RuleExpression(
-                    "($EN_FJARDEDEL.from <= -7) || ($HALFTEN.from <= -7) || ($TRE_FJARDEDEL.from <= -7) || ($HELT_NEDSATT.from <= -7)"
+                    "($EN_FJARDEDEL.from < -7) || ($HALFTEN.from < -7) || ($TRE_FJARDEDEL.from < -7) || ($HELT_NEDSATT.from < -7)"
                 ))
             .build()
     );
