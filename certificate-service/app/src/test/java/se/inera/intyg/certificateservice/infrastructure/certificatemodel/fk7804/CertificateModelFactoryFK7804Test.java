@@ -22,6 +22,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationMessage;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
@@ -233,6 +234,7 @@ class CertificateModelFactoryFK7804Test {
 
   private void checkPdfConfigRecursive(ElementSpecification element) {
     if (!(element.configuration() instanceof ElementConfigurationCategory)
+        && !(element.configuration() instanceof ElementConfigurationMessage)
         && !(element.configuration() instanceof ElementConfigurationUnitContactInformation)) {
       assertNotNull(
           element.pdfConfiguration(),
