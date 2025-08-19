@@ -29,6 +29,7 @@ public class QuestionAntalManader {
   public static ElementSpecification questionAntalManader() {
     return ElementSpecification.builder()
         .id(QUESTION_ANTAL_MANADER_ID)
+        .includeWhenRenewing(false)
         .configuration(
             ElementConfigurationInteger.builder()
                 .id(QUESTION_ANTAL_MANADER_FIELD_ID)
@@ -75,6 +76,7 @@ public class QuestionAntalManader {
         .mapping(
             new ElementMapping(QUESTION_PROGNOS_ID, CodeSystemKvFkmu0006.ATER_X_ANTAL_MANADER)
         )
+        .includeWhenRenewing(false)
         .build();
   }
 

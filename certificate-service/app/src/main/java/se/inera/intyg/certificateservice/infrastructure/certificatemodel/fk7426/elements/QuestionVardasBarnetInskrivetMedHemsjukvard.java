@@ -64,6 +64,7 @@ public class QuestionVardasBarnetInskrivetMedHemsjukvard {
                 .build()
         )
         .mapping(new ElementMapping(QUESTION_VARDAS_BARNET_INNELIGGANDE_PA_SJUKHUS_ID, null))
+        .includeWhenRenewing(false)
         .children(List.of(children))
         .build();
   }

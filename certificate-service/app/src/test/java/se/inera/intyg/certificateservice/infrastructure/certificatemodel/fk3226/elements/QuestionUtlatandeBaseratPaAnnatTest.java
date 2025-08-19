@@ -162,4 +162,11 @@ class QuestionUtlatandeBaseratPaAnnatTest {
 
     assertEquals(expected, element.pdfConfiguration());
   }
+
+  @Test
+  void shouldNotIncludeWhenRenewing() {
+    final var element = QuestionUtlatandeBaseratPaAnnat.questionUtlatandeBaseratPaAnnat();
+
+    assertFalse(element.includeWhenRenewing());
+  }
 }

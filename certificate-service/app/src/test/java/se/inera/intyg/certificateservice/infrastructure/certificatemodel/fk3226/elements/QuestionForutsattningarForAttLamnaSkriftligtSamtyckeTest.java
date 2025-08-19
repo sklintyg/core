@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.elements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -82,5 +83,11 @@ class QuestionForutsattningarForAttLamnaSkriftligtSamtyckeTest {
     final var element = QuestionForutsattningarForAttLamnaSkriftligtSamtycke.questionForutsattningarForAttLamnaSkriftligtSamtycke();
 
     assertEquals(expected, element.pdfConfiguration());
+  }
+
+  @Test
+  void shouldHaveIncludeWhenRenewingFalse() {
+    final var element = QuestionForutsattningarForAttLamnaSkriftligtSamtycke.questionForutsattningarForAttLamnaSkriftligtSamtycke();
+    assertFalse(element.includeWhenRenewing());
   }
 }

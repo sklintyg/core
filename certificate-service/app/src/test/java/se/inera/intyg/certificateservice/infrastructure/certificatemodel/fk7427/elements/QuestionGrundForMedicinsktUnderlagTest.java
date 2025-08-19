@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.time.Period;
 import java.util.List;
@@ -12,10 +13,10 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateCheckbox;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDateList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateList;
 
@@ -184,5 +185,11 @@ class QuestionGrundForMedicinsktUnderlagTest {
     final var element = QuestionGrundForMedicinsktUnderlag.questionGrundForMedicinsktUnderlag();
 
     assertEquals(expectedPdfConfiguration, element.pdfConfiguration());
+  }
+
+  @Test
+  void shouldSetIncludeWhenRenewing() {
+    final var element = QuestionGrundForMedicinsktUnderlag.questionGrundForMedicinsktUnderlag();
+    assertFalse(element.includeWhenRenewing());
   }
 }

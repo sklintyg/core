@@ -170,5 +170,12 @@ class QuestionAnnanGrundForMedicinsktUnderlagTest {
       assertFalse(shouldValidate.test(elementData));
     }
   }
+
+  @Test
+  void shouldNotIncludeWhenRenewing() {
+    final var element = questionAnnanGrundForMedicinsktUnderlag();
+
+    assertFalse(element.includeWhenRenewing());
+  }
 }
 

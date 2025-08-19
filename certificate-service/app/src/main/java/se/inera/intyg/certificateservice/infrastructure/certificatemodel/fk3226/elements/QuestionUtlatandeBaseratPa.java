@@ -116,6 +116,7 @@ public class QuestionUtlatandeBaseratPa {
                 )
                 .build()
         )
+        .includeWhenRenewing(false)
         .build();
   }
 }

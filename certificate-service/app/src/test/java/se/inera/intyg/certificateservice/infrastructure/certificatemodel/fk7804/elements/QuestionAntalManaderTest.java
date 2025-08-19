@@ -148,5 +148,10 @@ class QuestionAntalManaderTest {
 
     assertEquals(expected, elementSpecification.pdfConfiguration());
   }
-}
 
+  @Test
+  void shouldNotIncludeWhenRenewing() {
+    final var element = QuestionAntalManader.questionAntalManader();
+    assertFalse(element.includeWhenRenewing());
+  }
+}

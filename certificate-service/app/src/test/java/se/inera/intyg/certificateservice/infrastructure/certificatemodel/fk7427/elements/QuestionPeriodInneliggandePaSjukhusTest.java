@@ -161,4 +161,10 @@ class QuestionPeriodInneliggandePaSjukhusTest {
       assertFalse(shouldValidate.test(elementData));
     }
   }
+
+  @Test
+  void shouldNotIncludeWhenRenewing() {
+    final var element = QuestionPeriodInneliggandePaSjukhus.questionPeriodInneliggandePaSjukhus();
+    assertFalse(element.includeWhenRenewing());
+  }
 }

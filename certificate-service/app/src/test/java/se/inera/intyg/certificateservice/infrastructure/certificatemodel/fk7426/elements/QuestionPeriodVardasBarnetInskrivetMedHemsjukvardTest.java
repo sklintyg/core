@@ -161,4 +161,10 @@ class QuestionPeriodVardasBarnetInskrivetMedHemsjukvardTest {
       assertEquals(expectedPdfConfiguration, element.pdfConfiguration());
     }
   }
+
+  @Test
+  void shouldHaveIncludeWhenRenewingFalse() {
+    final var element = QuestionPeriodVardasBarnetInskrivetMedHemsjukvard.questionPeriodVardasBarnetInskrivetMedHemsjukvard();
+    assertFalse(element.includeWhenRenewing());
+  }
 }

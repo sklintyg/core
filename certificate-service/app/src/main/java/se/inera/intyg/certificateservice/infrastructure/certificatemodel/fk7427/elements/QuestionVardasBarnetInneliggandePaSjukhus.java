@@ -66,6 +66,7 @@ public class QuestionVardasBarnetInneliggandePaSjukhus {
                 .optionFalse(PDF_VARDAS_BARNET_OPTION_FALSE)
                 .build()
         )
+        .includeWhenRenewing(false)
         .children(List.of(children))
         .build();
   }

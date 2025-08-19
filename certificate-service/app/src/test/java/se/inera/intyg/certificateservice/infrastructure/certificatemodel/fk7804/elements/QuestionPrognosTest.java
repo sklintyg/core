@@ -177,5 +177,10 @@ class QuestionPrognosTest {
         .build();
     assertEquals(expected, elementSpecification.pdfConfiguration());
   }
-}
 
+  @Test
+  void shouldNotIncludeWhenRenewing() {
+    final var element = QuestionPrognos.questionPrognos();
+    assertFalse(element.includeWhenRenewing());
+  }
+}

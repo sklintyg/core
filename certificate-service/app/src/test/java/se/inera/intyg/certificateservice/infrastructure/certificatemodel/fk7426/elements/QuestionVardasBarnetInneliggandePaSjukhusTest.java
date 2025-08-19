@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionVardasBarnetInneliggandePaSjukhus.questionVardasBarnetInneliggandePaSjukhus;
 
 import java.util.List;
@@ -79,5 +80,11 @@ class QuestionVardasBarnetInneliggandePaSjukhusTest {
 
     final var elementSpecification = questionVardasBarnetInneliggandePaSjukhus();
     assertEquals(expectedPdfConfiguration, elementSpecification.pdfConfiguration());
+  }
+
+  @Test
+  void shouldHaveIncludeWhenRenewingFalse() {
+    final var elementSpecification = questionVardasBarnetInneliggandePaSjukhus();
+    assertFalse(elementSpecification.includeWhenRenewing());
   }
 }

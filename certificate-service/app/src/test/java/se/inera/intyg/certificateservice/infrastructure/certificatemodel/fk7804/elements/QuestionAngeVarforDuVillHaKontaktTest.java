@@ -148,5 +148,11 @@ class QuestionAngeVarforDuVillHaKontaktTest {
 
     assertEquals(expected, elementSpecification.pdfConfiguration());
   }
+
+  @Test
+  void shouldNotIncludeWhenRenewing() {
+    final var elementSpecification = QuestionAngeVarforDuVillHaKontakt.questionAngeVarforDuVillHaKontakt();
+    assertFalse(elementSpecification.includeWhenRenewing());
+  }
 }
 

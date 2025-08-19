@@ -87,6 +87,12 @@ class QuestionPeriodVardasBarnInneliggandePaSjukhusTest {
     );
   }
 
+  @Test
+  void shouldHaveIncludeWhenRenewingFalse() {
+    final var element = questionPeriodVardasBarnInneliggandePaSjukhus();
+    assertFalse(element.includeWhenRenewing());
+  }
+
   @Nested
   class ShouldValidate {
 

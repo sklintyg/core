@@ -79,6 +79,7 @@ public class QuestionUtlatandeBaseratPaAnnat {
                 .pdfFieldId(PDF_STATEMENT_BASED_ON_OTHER_FIELD_ID)
                 .build()
         )
+        .includeWhenRenewing(false)
         .build();
   }
 }

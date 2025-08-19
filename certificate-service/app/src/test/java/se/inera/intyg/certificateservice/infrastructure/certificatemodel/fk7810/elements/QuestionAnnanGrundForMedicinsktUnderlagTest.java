@@ -166,4 +166,10 @@ class QuestionAnnanGrundForMedicinsktUnderlagTest {
 
     assertEquals(expected, element.pdfConfiguration());
   }
+
+  @Test
+  void shouldNotIncludeWhenRenewing() {
+    final var element = questionAnnanGrundForMedicinsktUnderlag();
+    assertFalse(element.includeWhenRenewing());
+  }
 }

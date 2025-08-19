@@ -68,6 +68,7 @@ public class QuestionPeriodVardasBarnetInskrivetMedHemsjukvard {
                 .to(PDF_FIELD_ID_TO)
                 .build()
         )
+        .includeWhenRenewing(false)
         .mapping(new ElementMapping(QUESTION_VARDAS_BARNET_INNELIGGANDE_PA_SJUKHUS_ID, null))
         .build();
   }

@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionGrundForMedicinsktUnderlag.questionGrundForMedicinsktUnderlag;
 
 import java.time.Period;
@@ -186,5 +187,11 @@ class QuestionGrundForMedicinsktUnderlagTest {
     final var element = questionGrundForMedicinsktUnderlag();
 
     assertEquals(expected, element.pdfConfiguration());
+  }
+
+  @Test
+  void shouldNotIncludeWhenRenewing() {
+    final var element = questionGrundForMedicinsktUnderlag();
+    assertFalse(element.includeWhenRenewing());
   }
 }

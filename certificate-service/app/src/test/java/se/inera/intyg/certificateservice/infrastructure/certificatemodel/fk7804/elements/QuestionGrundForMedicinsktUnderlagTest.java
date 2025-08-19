@@ -200,6 +200,12 @@ class QuestionGrundForMedicinsktUnderlagTest {
     assertEquals(expected, element.pdfConfiguration());
   }
 
+  @Test
+  void shouldNotIncludeWhenRenewing() {
+    final var element = questionGrundForMedicinsktUnderlag();
+    assertFalse(element.includeWhenRenewing());
+  }
+
   @Nested
   class ShouldValidate {
 

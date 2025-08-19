@@ -93,6 +93,12 @@ class QuestionGrundForBedomningTest {
     assertEquals(expected, element.pdfConfiguration());
   }
 
+  @Test
+  void shouldNotIncludeWhenRenewing() {
+    final var element = QuestionGrundForBedomning.questionGrundForBedomning();
+    assertFalse(element.includeWhenRenewing());
+  }
+
   @Nested
   class ShouldValidate {
 

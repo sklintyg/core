@@ -80,6 +80,7 @@ public class QuestionRelationTillPatienten {
                 .overflowSheetFieldId(OVERFLOW_SHEET_FIELD_ID)
                 .build()
         )
+        .includeWhenRenewing(false)
         .build();
   }
 }

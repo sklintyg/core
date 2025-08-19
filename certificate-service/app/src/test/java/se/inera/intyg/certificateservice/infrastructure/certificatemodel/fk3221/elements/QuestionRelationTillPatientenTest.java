@@ -166,4 +166,11 @@ class QuestionRelationTillPatientenTest {
 
     assertEquals(expected, element.pdfConfiguration());
   }
+
+  @Test
+  void shouldNotIncludeWhenRenewing() {
+    final var element = questionRelationTillPatienten();
+
+    assertFalse(element.includeWhenRenewing());
+  }
 }

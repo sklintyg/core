@@ -50,7 +50,7 @@ public class QuestionGrundForMedicinsktUnderlag {
       "form1[0].#subform[0].ksr_Annat[0]");
   public static final PdfFieldId PDF_OTHER_DATE_ID = new PdfFieldId(
       "form1[0].#subform[0].flt_datumAnnat[0]");
-  
+
   private QuestionGrundForMedicinsktUnderlag() {
     throw new IllegalStateException("Utility class");
   }
@@ -153,6 +153,7 @@ public class QuestionGrundForMedicinsktUnderlag {
                 )
                 .build()
         )
+        .includeWhenRenewing(false)
         .children(List.of(children))
         .build();
   }

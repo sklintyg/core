@@ -66,6 +66,7 @@ public class QuestionKannedomOmPatienten {
             .fieldId(QUESTION_GRUND_FOR_KANNEDOM_OM_PATIENTEN_PDF_FIELD_ID)
             .codes(PdfConfigurationDropdownCode.fromCodeConfig(dropdownItems))
             .build())
+        .includeWhenRenewing(false)
         .children(List.of(children))
         .build();
   }

@@ -64,6 +64,7 @@ public class QuestionAngeVarforDuVillHaKontakt {
         .shouldValidate(
             ShouldValidateFactory.checkboxBoolean(QUESTION_KONTAKT_ID, true)
         )
+        .includeWhenRenewing(false)
         .mapping(new ElementMapping(QUESTION_KONTAKT_ID, null))
         .build();
   }

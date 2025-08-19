@@ -45,6 +45,7 @@ public class QuestionForutsattningarForAttLamnaSkriftligtSamtycke {
                 )
             )
         )
+        .includeWhenRenewing(false)
         .validations(
             List.of(
                 ElementValidationBoolean.builder()

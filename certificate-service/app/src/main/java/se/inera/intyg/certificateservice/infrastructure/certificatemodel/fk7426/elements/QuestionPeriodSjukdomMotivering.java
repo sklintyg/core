@@ -61,7 +61,7 @@ public class QuestionPeriodSjukdomMotivering {
                 .overflowSheetFieldId(FORTSATTNINGSBLAD_ID)
                 .build()
         )
+        .includeWhenRenewing(false)
         .build();
   }
 }
-

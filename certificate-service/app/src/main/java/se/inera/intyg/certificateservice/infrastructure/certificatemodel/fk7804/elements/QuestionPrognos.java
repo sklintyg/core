@@ -60,6 +60,7 @@ public class QuestionPrognos {
 
     return ElementSpecification.builder()
         .id(QUESTION_PROGNOS_ID)
+        .includeWhenRenewing(false)
         .configuration(
             ElementConfigurationRadioMultipleCode.builder()
                 .id(QUESTION_PROGNOS_FIELD_ID)

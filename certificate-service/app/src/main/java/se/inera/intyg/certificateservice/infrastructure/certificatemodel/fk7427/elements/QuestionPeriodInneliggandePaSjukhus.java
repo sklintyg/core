@@ -72,6 +72,7 @@ public class QuestionPeriodInneliggandePaSjukhus {
                 .to(PDF_FIELD_ID_TO)
                 .build()
         )
+        .includeWhenRenewing(false)
         .build();
   }
 }
