@@ -14,7 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.intygproxyservice.integration.api.elva77.Elva77Request;
 import se.inera.intyg.intygproxyservice.integration.api.elva77.Elva77Response;
 import se.inera.intyg.intygproxyservice.integration.api.elva77.Result;
-import se.inera.intyg.intygproxyservice.integration.elva77.GetUserProfileResponseTypeHandler;
+import se.inera.intyg.intygproxyservice.integration.elva77.UserProfileResponseTypeHandler;
 import se.mkv.itintegration.getuserprofile.v2.GetUserProfileResponderInterface;
 import se.mkv.itintegration.getuserprofileresponder.v2.GetUserProfileResponseType;
 import se.mkv.itintegration.getuserprofileresponder.v2.GetUserProfileType;
@@ -30,7 +30,7 @@ class Elva77ClientTest {
   @Mock
   GetUserProfileResponderInterface getUserProfileResponderInterface;
   @Mock
-  GetUserProfileResponseTypeHandler getUserProfileResponseTypeHandler;
+  UserProfileResponseTypeHandler userProfileResponseTypeHandler;
   @InjectMocks
   Elva77Client elva77Client;
 
@@ -51,7 +51,7 @@ class Elva77ClientTest {
 
     when(getUserProfileResponderInterface.getUserProfile(any(GetUserProfileType.class)))
         .thenReturn(profileResponseType);
-    when(getUserProfileResponseTypeHandler.handle(profileResponseType)).thenReturn(
+    when(userProfileResponseTypeHandler.handle(profileResponseType)).thenReturn(
         expectedResponse);
 
     final var response = elva77Client.findUser(REQUEST);

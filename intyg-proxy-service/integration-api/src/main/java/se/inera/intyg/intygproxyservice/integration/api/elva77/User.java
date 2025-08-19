@@ -15,4 +15,11 @@ public class User {
   String postort;
   boolean isActive;
 
+  public static User inactive(String personId) {
+    return User.builder()
+        .personnummer(personId)
+        .isActive(false)
+        .build();
+  }
+
 }

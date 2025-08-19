@@ -9,8 +9,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.intygproxyservice.integration.api.elva77.Elva77Request;
 import se.inera.intyg.intygproxyservice.integration.api.elva77.Elva77Response;
-import se.inera.intyg.intygproxyservice.integration.api.elva77.Result;
-import se.inera.intyg.intygproxyservice.integration.elva77.GetUserProfileResponseTypeHandler;
+import se.inera.intyg.intygproxyservice.integration.elva77.UserProfileResponseTypeHandler;
 import se.inera.intyg.intygproxyservice.logging.PerformanceLogging;
 import se.mkv.itintegration.getuserprofile.v2.GetUserProfileResponderInterface;
 import se.mkv.itintegration.getuserprofileresponder.v2.GetUserProfileType;
@@ -22,7 +21,7 @@ import se.mkv.itintegration.getuserprofileresponder.v2.GetUserProfileType;
 public class Elva77Client {
 
   private final GetUserProfileResponderInterface getUserProfileResponderInterface;
-  private final GetUserProfileResponseTypeHandler getUserProfileResponseTypeHandler;
+  private final UserProfileResponseTypeHandler userProfileResponseTypeHandler;
 
   @PerformanceLogging(eventAction = "get-user-profile", eventType = EVENT_TYPE_ACCESSED)
   public Elva77Response findUser(Elva77Request request) {
@@ -33,12 +32,10 @@ public class Elva77Client {
           parameters
       );
 
-      return getUserProfileResponseTypeHandler.handle(getUserProfileResponseType);
+      return userProfileResponseTypeHandler.handle(getUserProfileResponseType);
     } catch (Exception ex) {
       log.error("Unexpected error occurred when trying to call Elva77", ex);
-      return Elva77Response.builder()
-          .result(Result.ERROR)
-          .build();
+      return Elva77Response.error();
     }
   }
 
