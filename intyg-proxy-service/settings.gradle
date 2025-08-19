@@ -17,4 +17,4 @@ include 'integration-fakehsa'
 include 'integration-common'
 include 'logging'
 include 'integration-test'
-
+include 'integration-elva77'
