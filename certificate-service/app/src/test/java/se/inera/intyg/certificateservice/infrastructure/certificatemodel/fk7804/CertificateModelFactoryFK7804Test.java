@@ -122,7 +122,7 @@ class CertificateModelFactoryFK7804Test {
     final var expected = List.of(
         CertificateText.builder()
             .text(
-                "Det här är ditt intyg. Intyget innehåller all information som vården fyllt i. Du kan inte ändra något i ditt intyg. Har du frågor kontaktar du den som skrivit ditt intyg. Om du vill ansöka om sjukpenning, gör du det på {LINK_FK_ID}.\n")
+                "Det här är ditt intyg. Intyget innehåller all information som vården fyllt i. Du kan inte ändra något i ditt intyg. Har du frågor kontaktar du den som skrivit ditt intyg. Om du vill ansöka om sjukpenning, gör du det på {LINK_FK}.\n")
             .type(CertificateTextType.PREAMBLE_TEXT)
             .links(List.of(
                 CertificateLink.builder()
