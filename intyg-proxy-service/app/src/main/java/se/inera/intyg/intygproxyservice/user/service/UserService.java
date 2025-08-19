@@ -9,7 +9,17 @@ public class UserService {
 
 
   public UserResponse findUser(UserRequest userRequest) {
-    
+    validateRequest(userRequest);
     return null;
+  }
+
+  private void validateRequest(UserRequest userRequest) {
+    if (userRequest == null) {
+      throw new IllegalArgumentException("Invalid request, UserRequest is null");
+    }
+
+    if (userRequest.getPersonId() == null || userRequest.getPersonId().isBlank()) {
+      throw new IllegalArgumentException("Invalid request, PersonId is missing");
+    }
   }
 }
