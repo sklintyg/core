@@ -13,7 +13,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 public class QuestionPeriodSjukdom {
 
   public static final ElementId QUESTION_PERIOD_SJUKDOM_ID = new ElementId("61");
-  private static final FieldId QUESTION_PERIOD_SJUKDOM_FIELD_ID = new FieldId("61.1");
+  public static final FieldId QUESTION_PERIOD_SJUKDOM_FIELD_ID = new FieldId("61.1");
   private static final PdfFieldId PDF_FIELD_ID_FROM = new PdfFieldId(
       "form1[0].#subform[3].flt_datumFranMed[0]");
   private static final PdfFieldId PDF_FIELD_ID_TO = new PdfFieldId(

@@ -394,6 +394,36 @@ public class CertificateUtil {
         .build();
   }
 
+  public static CertificateDataElement updateDateRangeValue(CertificateDTO certificateDTO,
+      String questionId, CertificateDataValueDateRange newValue) {
+    final var certificate = Objects.requireNonNull(certificateDTO.getData().get(questionId));
+    return CertificateDataElement.builder()
+        .id(certificate.getId())
+        .parent(certificate.getParent())
+        .config(certificate.getConfig())
+        .validation(certificate.getValidation())
+        .value(
+            newValue
+        )
+        .build();
+  }
+
+  public static CertificateDataElement updateDateListValue(CertificateDTO certificateDTO,
+      String questionId, List<CertificateDataValueDate> newList) {
+    final var certificate = Objects.requireNonNull(certificateDTO.getData().get(questionId));
+    return CertificateDataElement.builder()
+        .id(certificate.getId())
+        .parent(certificate.getParent())
+        .config(certificate.getConfig())
+        .validation(certificate.getValidation())
+        .value(
+            CertificateDataValueDateList.builder()
+                .list(newList)
+                .build()
+        )
+        .build();
+  }
+
   public static LocalDate getValueDate(ResponseEntity<UpdateCertificateResponse> response,
       String questionId) {
     if (response == null || response.getBody() == null) {
