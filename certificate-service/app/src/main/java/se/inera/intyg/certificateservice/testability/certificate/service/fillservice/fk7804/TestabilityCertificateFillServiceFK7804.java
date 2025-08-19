@@ -87,7 +87,6 @@ public class TestabilityCertificateFillServiceFK7804 implements TestabilityCerti
 
   private static final List<ElementId> MINIMAL_IDS = List.of(
       QUESTION_SMITTBARARPENNING_ID,
-      QUESTION_MEDICINSK_BEHANDLING_ID,
       QUESTION_NEDSATTNING_ARBETSFORMAGA_ID,
       QUESTION_DIAGNOS_ID
   );
