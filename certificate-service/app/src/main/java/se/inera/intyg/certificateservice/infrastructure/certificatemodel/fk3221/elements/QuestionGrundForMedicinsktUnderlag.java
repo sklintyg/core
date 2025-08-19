@@ -152,6 +152,7 @@ public class QuestionGrundForMedicinsktUnderlag {
                 )
                 .build()
         )
+        .includeWhenRenewing(false)
         .children(List.of(children))
         .build();
   }

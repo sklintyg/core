@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -75,5 +76,11 @@ class QuestionPeriodSjukdomTest {
     final var element = QuestionPeriodSjukdom.questionPeriodSjukdom();
 
     assertEquals(expectedPdfConfiguration, element.pdfConfiguration());
+  }
+
+  @Test
+  void shouldHaveIncludeWhenRenewingFalse() {
+    final var element = QuestionPeriodSjukdom.questionPeriodSjukdom();
+    assertFalse(element.includeWhenRenewing());
   }
 }

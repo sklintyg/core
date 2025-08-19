@@ -136,6 +136,7 @@ public class QuestionGrundForMedicinsktUnderlag {
                 )
                 .build()
         )
+        .includeWhenRenewing(false)
         .build();
   }
 }

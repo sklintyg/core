@@ -100,4 +100,10 @@ class QuestionKannedomOmPatientenTest {
   void shallNotBeIncludedWhenRenewing() {
     assertFalse(questionKannedomOmPatienten().includeWhenRenewing());
   }
+
+  @Test
+  void shouldHaveIncludeWhenRenewingFalse() {
+    final var element = questionKannedomOmPatienten();
+    assertFalse(element.includeWhenRenewing());
+  }
 }

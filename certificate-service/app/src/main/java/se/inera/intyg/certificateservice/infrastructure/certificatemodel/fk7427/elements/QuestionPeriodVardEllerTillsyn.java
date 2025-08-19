@@ -30,6 +30,7 @@ public class QuestionPeriodVardEllerTillsyn {
   public static ElementSpecification questionPeriodVardEllerTillsyn() {
     return ElementSpecification.builder()
         .id(QUESTION_PERIOD_VARD_ELLER_TILLSYN_ID)
+        .includeWhenRenewing(false)
         .configuration(
             ElementConfigurationDateRange.builder()
                 .name("Under vilken period behöver barnet vård eller tillsyn?")

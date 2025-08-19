@@ -28,6 +28,7 @@ public class QuestionKontakt {
   public static ElementSpecification questionKontakt(ElementSpecification... children) {
     return ElementSpecification.builder()
         .id(QUESTION_KONTAKT_ID)
+        .includeWhenRenewing(false)
         .configuration(
             ElementConfigurationCheckboxBoolean.builder()
                 .id(QUESTION_KONTAKT_FIELD_ID)

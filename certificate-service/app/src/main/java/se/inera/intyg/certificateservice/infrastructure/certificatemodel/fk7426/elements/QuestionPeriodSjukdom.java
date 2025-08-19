@@ -53,6 +53,7 @@ public class QuestionPeriodSjukdom {
                 .to(PDF_FIELD_ID_TO)
                 .build()
         )
+        .includeWhenRenewing(false)
         .build();
   }
 }

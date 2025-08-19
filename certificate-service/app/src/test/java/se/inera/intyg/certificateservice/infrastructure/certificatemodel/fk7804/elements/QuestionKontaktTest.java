@@ -114,5 +114,11 @@ class QuestionKontaktTest {
       final var shouldValidate = element.elementSpecification(QUESTION_KONTAKT_ID).shouldValidate();
       assertFalse(shouldValidate.test(elementData));
     }
+
+    @Test
+    void shouldNotIncludeWhenRenewing() {
+      final var element = QuestionKontakt.questionKontakt();
+      assertFalse(element.includeWhenRenewing());
+    }
   }
 }

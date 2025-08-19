@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.FK7426PdfSpecification.ROW_MAX_LENGTH;
 
 import java.util.List;
@@ -88,5 +89,11 @@ class QuestionPeriodSjukdomMotiveringTest {
     final var element = QuestionPeriodSjukdomMotivering.questionPeriodSjukdomMotivering();
 
     assertEquals(expected, element.pdfConfiguration());
+  }
+
+  @Test
+  void shouldHaveIncludeWhenRenewingFalse() {
+    final var element = QuestionPeriodSjukdomMotivering.questionPeriodSjukdomMotivering();
+    assertFalse(element.includeWhenRenewing());
   }
 }

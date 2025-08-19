@@ -29,6 +29,7 @@ public class QuestionGrundForBedomning {
   public static ElementSpecification questionGrundForBedomning() {
     return ElementSpecification.builder()
         .id(QUESTION_GRUND_FOR_BEDOMNING_ID)
+        .includeWhenRenewing(false)
         .configuration(
             ElementConfigurationTextArea.builder()
                 .id(QUESTION_GRUND_FOR_BEDOMNING_FIELD_ID)
