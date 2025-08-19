@@ -8,9 +8,14 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.BERTIL_BARNMORSKA_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.incomingComplementDTOBuilder;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.incomingComplementMessageBuilder;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionPeriodVardEllerTillsyn.QUESTION_PERIOD_VARD_ELLER_TILLSYN_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionVardEllerTillsyn.QUESTION_VARD_ELLER_TILLSYN_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7427.elements.QuestionVardasBarnetInneliggandePaSjukhus.QUESTION_VARDAS_BARNET_INNELIGGANDE_PA_SJUKHUS_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionGrundForMedicinsktUnderlag.QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionGrundForMedicinsktUnderlag.UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID;
 import static se.inera.intyg.certificateservice.integrationtest.fk7427.FK7427Constants.CODE;
 import static se.inera.intyg.certificateservice.integrationtest.fk7427.FK7427Constants.CODE_SYSTEM;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customUpdateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetCertificateMessageRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultRenewCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultSendCertificateRequest;
@@ -19,7 +24,12 @@ import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestU
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificate;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateId;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.questions;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.updateBooleanValue;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.updateDateListValue;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.updateDateRangeValue;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.updateTextValue;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -29,6 +39,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.provider.Arguments;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDate;
+import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDateRange;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.integrationtest.AccessLevelsDeepIntegrationIT;
 import se.inera.intyg.certificateservice.integrationtest.AccessLevelsSVODIT;
@@ -178,10 +190,56 @@ public class FK7427ActiveIT {
 
       final var renewingCertificate = certificate(renewResponse.getBody());
 
+      Objects.requireNonNull(renewingCertificate).getData().put(
+          QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID.id(),
+          updateDateListValue(renewingCertificate, QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID.id(),
+              List.of(
+                  CertificateDataValueDate.builder()
+                      .id(UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID)
+                      .date(LocalDate.now())
+                      .build()
+              )
+          )
+      );
+
+      Objects.requireNonNull(renewingCertificate).getData().put(
+          QUESTION_PERIOD_VARD_ELLER_TILLSYN_ID.id(),
+          updateDateRangeValue(renewingCertificate, QUESTION_PERIOD_VARD_ELLER_TILLSYN_ID.id(),
+              CertificateDataValueDateRange.builder()
+                  .id(QUESTION_PERIOD_VARD_ELLER_TILLSYN_ID.id())
+                  .to(LocalDate.now().plusDays(7))
+                  .from(LocalDate.now())
+                  .build()
+          )
+
+      );
+
+      Objects.requireNonNull(renewingCertificate).getData().put(
+          QUESTION_VARD_ELLER_TILLSYN_ID.id(),
+          updateTextValue(renewingCertificate, QUESTION_VARD_ELLER_TILLSYN_ID.id(),
+              "text"
+          )
+      );
+
+      Objects.requireNonNull(renewingCertificate).getData().put(
+          QUESTION_VARDAS_BARNET_INNELIGGANDE_PA_SJUKHUS_ID.id(),
+          updateBooleanValue(renewingCertificate,
+              QUESTION_VARDAS_BARNET_INNELIGGANDE_PA_SJUKHUS_ID.id(),
+              false
+          )
+      );
+
+      final var updateResponse = api.updateCertificate(
+          customUpdateCertificateRequest()
+              .certificate(renewingCertificate)
+              .build(),
+          certificateId(renewResponse.getBody())
+      );
+
       api.signCertificate(
           defaultSignCertificateRequest(),
           certificateId(renewResponse.getBody()),
-          Objects.requireNonNull(renewingCertificate).getMetadata().getVersion()
+          Objects.requireNonNull(certificate(updateResponse.getBody())).getMetadata().getVersion()
       );
 
       final var messagesForCertificate = api.getMessagesForCertificate(
