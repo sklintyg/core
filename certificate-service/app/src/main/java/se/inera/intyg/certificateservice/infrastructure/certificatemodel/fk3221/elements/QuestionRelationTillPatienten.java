@@ -81,6 +81,7 @@ public class QuestionRelationTillPatienten {
                     new PdfFieldId(("form1[0].#subform[4].flt_txtFortsattningsblad[0]")))
                 .build()
         )
+        .includeWhenRenewing(false)
         .build();
   }
 }

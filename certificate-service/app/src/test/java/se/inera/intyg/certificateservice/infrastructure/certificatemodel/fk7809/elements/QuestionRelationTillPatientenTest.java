@@ -164,4 +164,11 @@ class QuestionRelationTillPatientenTest {
       assertFalse(shouldValidate.test(elementData));
     }
   }
+
+  @Test
+  void shouldNotIncludeWhenRenewing() {
+    final var element = QuestionRelationTillPatienten.questionRelationTillPatienten();
+
+    assertFalse(element.includeWhenRenewing());
+  }
 }
