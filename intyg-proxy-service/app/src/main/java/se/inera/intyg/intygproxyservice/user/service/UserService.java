@@ -14,7 +14,6 @@ public class UserService {
   private final Elva77Service elva77Service;
   private final Elva77ResponseConverter elva77ResponseConverter;
 
-
   public UserResponse findUser(UserRequest userRequest) {
     validateRequest(userRequest);
 

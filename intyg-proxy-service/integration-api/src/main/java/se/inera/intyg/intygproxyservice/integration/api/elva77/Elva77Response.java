@@ -8,4 +8,5 @@ import lombok.Value;
 public class Elva77Response {
 
   User user;
+  Result result;
 }
