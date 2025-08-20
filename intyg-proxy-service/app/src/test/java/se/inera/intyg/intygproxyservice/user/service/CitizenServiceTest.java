@@ -10,16 +10,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.intygproxyservice.integration.api.elva77.Citizen;
 import se.inera.intyg.intygproxyservice.integration.api.elva77.Elva77Request;
 import se.inera.intyg.intygproxyservice.integration.api.elva77.Elva77Response;
 import se.inera.intyg.intygproxyservice.integration.api.elva77.Elva77Service;
-import se.inera.intyg.intygproxyservice.integration.api.elva77.User;
-import se.inera.intyg.intygproxyservice.user.dto.UserDTO;
-import se.inera.intyg.intygproxyservice.user.dto.UserRequest;
-import se.inera.intyg.intygproxyservice.user.dto.UserResponse;
+import se.inera.intyg.intygproxyservice.user.dto.CitizenDTO;
+import se.inera.intyg.intygproxyservice.user.dto.CitizenRequest;
+import se.inera.intyg.intygproxyservice.user.dto.CitizenResponse;
 
 @ExtendWith(MockitoExtension.class)
-class UserServiceTest {
+class CitizenServiceTest {
 
   private static final String PERSON_ID = "personId";
 
@@ -28,7 +28,7 @@ class UserServiceTest {
   @Mock
   Elva77ResponseConverter elva77ResponseConverter;
   @InjectMocks
-  UserService userService;
+  CitizenService citizenService;
 
   @Nested
   class ValidateRequest {
@@ -36,41 +36,41 @@ class UserServiceTest {
     @Test
     void shouldThrowIfRequestIsNull() {
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> userService.findUser(null));
+          () -> citizenService.findCitizen(null));
       assertEquals("Invalid request, UserRequest is null", illegalArgumentException.getMessage());
     }
 
     @Test
     void shouldThrowIfPersonIdInRequestIsNull() {
-      final var request = UserRequest.builder()
+      final var request = CitizenRequest.builder()
           .personId(null)
           .build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> userService.findUser(request));
+          () -> citizenService.findCitizen(request));
       assertEquals("Invalid request, PersonId is missing", illegalArgumentException.getMessage());
     }
 
     @Test
     void shouldThrowIfPersonIdInRequestIsEmpty() {
-      final var request = UserRequest.builder()
+      final var request = CitizenRequest.builder()
           .personId("")
           .build();
 
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> userService.findUser(request));
+          () -> citizenService.findCitizen(request));
       assertEquals("Invalid request, PersonId is missing", illegalArgumentException.getMessage());
     }
   }
 
   @Test
   void shouldReturnUserResponse() {
-    final var userDTO = UserDTO.builder().build();
-    final var expectedResponse = UserResponse.builder()
-        .user(userDTO)
+    final var userDTO = CitizenDTO.builder().build();
+    final var expectedResponse = CitizenResponse.builder()
+        .citizen(userDTO)
         .build();
 
-    final var request = UserRequest.builder()
+    final var request = CitizenRequest.builder()
         .personId(PERSON_ID)
         .build();
 
@@ -78,15 +78,15 @@ class UserServiceTest {
         .personId(PERSON_ID)
         .build();
 
-    final var user = User.builder().build();
+    final var user = Citizen.builder().build();
     final var elva77Response = Elva77Response.builder()
-        .user(user)
+        .citizen(user)
         .build();
 
-    when(elva77Service.findUser(elva77Request)).thenReturn(elva77Response);
+    when(elva77Service.findCitizen(elva77Request)).thenReturn(elva77Response);
     when(elva77ResponseConverter.convert(user)).thenReturn(userDTO);
 
-    final var response = userService.findUser(request);
+    final var response = citizenService.findCitizen(request);
     assertEquals(expectedResponse, response);
   }
 }

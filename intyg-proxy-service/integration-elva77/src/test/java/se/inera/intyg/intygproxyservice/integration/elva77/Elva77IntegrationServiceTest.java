@@ -25,9 +25,9 @@ class Elva77IntegrationServiceTest {
     final var expectedResponse = Elva77Response.builder().build();
     final var request = Elva77Request.builder().build();
 
-    when(elva77Client.findUser(request)).thenReturn(expectedResponse);
+    when(elva77Client.findCitizen(request)).thenReturn(expectedResponse);
 
-    final var response = elva77IntegrationService.findUser(request);
+    final var response = elva77IntegrationService.findCitizen(request);
     assertEquals(expectedResponse, response);
   }
 }

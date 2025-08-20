@@ -24,7 +24,7 @@ public class Elva77Client {
   private final UserProfileResponseTypeHandler userProfileResponseTypeHandler;
 
   @PerformanceLogging(eventAction = "get-user-profile", eventType = EVENT_TYPE_ACCESSED)
-  public Elva77Response findUser(Elva77Request request) {
+  public Elva77Response findCitizen(Elva77Request request) {
     final var parameters = getParameters(request.getPersonId());
 
     try {

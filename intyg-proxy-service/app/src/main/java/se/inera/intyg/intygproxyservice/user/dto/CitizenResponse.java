@@ -4,17 +4,17 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.intygproxyservice.user.dto.UserResponse.UserResponseBuilder;
+import se.inera.intyg.intygproxyservice.user.dto.CitizenResponse.CitizenResponseBuilder;
 
-@JsonDeserialize(builder = UserResponseBuilder.class)
+@JsonDeserialize(builder = CitizenResponseBuilder.class)
 @Value
 @Builder
-public class UserResponse {
+public class CitizenResponse {
 
-  UserDTO user;
+  CitizenDTO citizen;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class UserResponseBuilder {
+  public static class CitizenResponseBuilder {
 
   }
 }

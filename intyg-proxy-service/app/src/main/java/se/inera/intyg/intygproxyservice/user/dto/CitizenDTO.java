@@ -4,12 +4,12 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.intygproxyservice.user.dto.UserDTO.UserDTOBuilder;
+import se.inera.intyg.intygproxyservice.user.dto.CitizenDTO.CitizenDTOBuilder;
 
-@JsonDeserialize(builder = UserDTOBuilder.class)
+@JsonDeserialize(builder = CitizenDTOBuilder.class)
 @Value
 @Builder
-public class UserDTO {
+public class CitizenDTO {
 
   String personnummer;
   String fornamn;
@@ -20,7 +20,7 @@ public class UserDTO {
   boolean isActive;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class UserDTOBuilder {
+  public static class CitizenDTOBuilder {
 
   }
 }

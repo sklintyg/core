@@ -5,7 +5,7 @@ import lombok.Value;
 
 @Value
 @Builder
-public class User {
+public class Citizen {
 
   String personnummer;
   String fornamn;
@@ -15,8 +15,8 @@ public class User {
   String postort;
   boolean isActive;
 
-  public static User inactive(String personId) {
-    return User.builder()
+  public static Citizen inactive(String personId) {
+    return Citizen.builder()
         .personnummer(personId)
         .isActive(false)
         .build();

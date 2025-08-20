@@ -7,7 +7,7 @@ import lombok.Value;
 @Builder
 public class Elva77Response {
 
-  User user;
+  Citizen citizen;
   Result result;
 
   public static Elva77Response error() {
@@ -18,7 +18,7 @@ public class Elva77Response {
 
   public static Elva77Response inactive(String subjectOfCareId) {
     return Elva77Response.builder()
-        .user(User.inactive(subjectOfCareId))
+        .citizen(Citizen.inactive(subjectOfCareId))
         .result(Result.INFO)
         .build();
   }

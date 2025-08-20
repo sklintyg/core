@@ -4,36 +4,36 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.intygproxyservice.integration.api.elva77.Elva77Request;
 import se.inera.intyg.intygproxyservice.integration.api.elva77.Elva77Service;
-import se.inera.intyg.intygproxyservice.user.dto.UserRequest;
-import se.inera.intyg.intygproxyservice.user.dto.UserResponse;
+import se.inera.intyg.intygproxyservice.user.dto.CitizenRequest;
+import se.inera.intyg.intygproxyservice.user.dto.CitizenResponse;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class CitizenService {
 
   private final Elva77Service elva77Service;
   private final Elva77ResponseConverter elva77ResponseConverter;
 
-  public UserResponse findUser(UserRequest userRequest) {
-    validateRequest(userRequest);
+  public CitizenResponse findCitizen(CitizenRequest citizenRequest) {
+    validateRequest(citizenRequest);
 
-    final var elva77Response = elva77Service.findUser(
+    final var elva77Response = elva77Service.findCitizen(
         Elva77Request.builder()
-            .personId(userRequest.getPersonId())
+            .personId(citizenRequest.getPersonId())
             .build()
     );
 
-    return UserResponse.builder()
-        .user(elva77ResponseConverter.convert(elva77Response.getUser()))
+    return CitizenResponse.builder()
+        .citizen(elva77ResponseConverter.convert(elva77Response.getCitizen()))
         .build();
   }
 
-  private void validateRequest(UserRequest userRequest) {
-    if (userRequest == null) {
+  private void validateRequest(CitizenRequest citizenRequest) {
+    if (citizenRequest == null) {
       throw new IllegalArgumentException("Invalid request, UserRequest is null");
     }
 
-    if (userRequest.getPersonId() == null || userRequest.getPersonId().isBlank()) {
+    if (citizenRequest.getPersonId() == null || citizenRequest.getPersonId().isBlank()) {
       throw new IllegalArgumentException("Invalid request, PersonId is missing");
     }
   }
