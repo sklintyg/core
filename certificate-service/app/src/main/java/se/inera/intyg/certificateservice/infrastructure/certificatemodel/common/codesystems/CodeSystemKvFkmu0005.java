@@ -81,7 +81,7 @@ public class CodeSystemKvFkmu0005 {
   public static final Code SYNHABILITERINGEN = new Code(
       "SYNHABILITERINGEN",
       CODE_SYSTEM,
-      "Underlag från synhabiliteringenen"
+      "Underlag från synhabiliteringen"
   );
 
   public static final Code AUDIONOM = new Code(

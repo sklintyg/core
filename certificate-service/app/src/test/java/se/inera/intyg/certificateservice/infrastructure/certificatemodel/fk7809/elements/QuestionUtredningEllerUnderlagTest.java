@@ -185,7 +185,7 @@ class QuestionUtredningEllerUnderlagTest {
         entry(HORSELHABILITERING.code(),
             "Underlag från hörselhabiliteringen"),
         entry(SYNHABILITERINGEN.code(),
-            "Underlag från synhabiliteringenen"),
+            "Underlag från synhabiliteringen"),
         entry(AUDIONOM.code(),
             "Underlag från audionom"),
         entry(DIETIST.code(),
