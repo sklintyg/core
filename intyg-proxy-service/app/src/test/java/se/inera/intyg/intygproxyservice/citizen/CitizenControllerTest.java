@@ -32,7 +32,7 @@ class CitizenControllerTest {
 
     when(citizenService.findCitizen(REQUEST)).thenReturn(expectedResponse);
 
-    final var response = citizenController.findUser(REQUEST);
+    final var response = citizenController.findCitizen(REQUEST);
     assertEquals(expectedResponse, response);
   }
 }

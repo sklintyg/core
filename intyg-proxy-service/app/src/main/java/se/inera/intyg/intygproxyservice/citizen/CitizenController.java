@@ -20,8 +20,8 @@ public class CitizenController {
   private final CitizenService citizenService;
 
   @PostMapping("")
-  @PerformanceLogging(eventAction = "find-user", eventType = EVENT_TYPE_ACCESSED)
-  CitizenResponse findCitizen(@RequestBody CitizenRequest citizenRequest) {
+  @PerformanceLogging(eventAction = "find-citizen", eventType = EVENT_TYPE_ACCESSED)
+  public CitizenResponse findCitizen(@RequestBody CitizenRequest citizenRequest) {
     return citizenService.findCitizen(citizenRequest);
   }
 }

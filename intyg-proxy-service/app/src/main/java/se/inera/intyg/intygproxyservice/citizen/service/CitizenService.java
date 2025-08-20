@@ -23,10 +23,7 @@ public class CitizenService {
             .build()
     );
 
-    return CitizenResponse.builder()
-        .citizen(elva77ResponseConverter.convert(elva77Response.getCitizen()))
-        .status(elva77Response.getResult().toStatus())
-        .build();
+    return elva77ResponseConverter.convert(elva77Response);
   }
 
   private void validateRequest(CitizenRequest citizenRequest) {
