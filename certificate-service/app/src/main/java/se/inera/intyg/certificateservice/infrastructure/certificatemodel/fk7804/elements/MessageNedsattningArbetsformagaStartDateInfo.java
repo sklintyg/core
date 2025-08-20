@@ -28,7 +28,7 @@ public class MessageNedsattningArbetsformagaStartDateInfo {
                 .message(
                     ElementMessage.builder()
                         .content(
-                            "Du har angett att perioden startar mer än 7 dagar bakåt i tiden. Ange orsaken till detta i fältet \"Övriga upplysningar\".")
+                            "Du har angett att sjukskrivningsperioden startar mer än 7 dagar bakåt i tiden. Ange orsaken till detta i fältet \"Övriga upplysningar\".")
                         .level(MessageLevel.OBSERVE)
                         .build()
                 )
