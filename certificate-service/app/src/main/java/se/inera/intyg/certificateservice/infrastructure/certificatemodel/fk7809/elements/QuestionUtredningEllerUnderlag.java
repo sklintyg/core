@@ -13,7 +13,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.OVRIGT;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.PSYKOLOG;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.SPECIALISTKLINIK;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.SYNHABILITERING;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.SYNHABILITERINGEN;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.VARD_UTOMLANDS;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionBaseratPaAnnatMedicinsktUnderlag.QUESTION_BASERAT_PA_ANNAT_UNDERLAG_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionBaseratPaAnnatMedicinsktUnderlag.QUESTION_BASERAT_PA_ANNAT_UNDERLAG_ID;
@@ -163,7 +163,7 @@ public class QuestionUtredningEllerUnderlag {
             SPECIALISTKLINIK,
             VARD_UTOMLANDS,
             HORSELHABILITERING,
-            SYNHABILITERING,
+            SYNHABILITERINGEN,
             AUDIONOM,
             DIETIST,
             ORTOPTIST,
@@ -194,7 +194,7 @@ public class QuestionUtredningEllerUnderlag {
                 SPECIALISTKLINIK,
                 VARD_UTOMLANDS,
                 HORSELHABILITERING,
-                SYNHABILITERING,
+                SYNHABILITERINGEN,
                 AUDIONOM,
                 DIETIST,
                 ORTOPTIST,

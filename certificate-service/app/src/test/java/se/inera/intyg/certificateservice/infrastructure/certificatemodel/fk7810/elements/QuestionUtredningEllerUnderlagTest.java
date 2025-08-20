@@ -14,7 +14,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.PSYKOLOG;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.SKOLHALSOVARD;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.SPECIALISTKLINIK;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.SYNHABILITERING;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.SYNHABILITERINGEN;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.VARDCENTRAL;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.VARD_UTOMLANDS;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionUtredningEllerUnderlag.questionUtredningEllerUnderlag;
@@ -60,7 +60,7 @@ class QuestionUtredningEllerUnderlagTest {
         SPECIALISTKLINIK,
         VARD_UTOMLANDS,
         HORSELHABILITERING,
-        SYNHABILITERING,
+        SYNHABILITERINGEN,
         DIETIST,
         OVRIGT
     );
@@ -183,8 +183,8 @@ class QuestionUtredningEllerUnderlagTest {
             "Utredning från vårdinrättning utomlands"),
         entry(HORSELHABILITERING.code(),
             "Underlag från hörselhabiliteringen"),
-        entry(SYNHABILITERING.code(),
-            "Underlag från synhabiliteringen"),
+        entry(SYNHABILITERINGEN.code(),
+            "Underlag från synhabiliteringenen"),
         entry(DIETIST.code(),
             "Underlag från dietist"),
         entry(OVRIGT.code(),
