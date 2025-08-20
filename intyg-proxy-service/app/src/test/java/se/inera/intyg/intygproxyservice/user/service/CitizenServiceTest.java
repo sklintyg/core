@@ -1,4 +1,4 @@
-package se.inera.intyg.intygproxyservice.user.service;
+package se.inera.intyg.intygproxyservice.citizen.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -10,13 +10,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.intygproxyservice.citizen.dto.CitizenDTO;
+import se.inera.intyg.intygproxyservice.citizen.dto.CitizenRequest;
+import se.inera.intyg.intygproxyservice.citizen.dto.CitizenResponse;
 import se.inera.intyg.intygproxyservice.integration.api.elva77.Citizen;
 import se.inera.intyg.intygproxyservice.integration.api.elva77.Elva77Request;
 import se.inera.intyg.intygproxyservice.integration.api.elva77.Elva77Response;
 import se.inera.intyg.intygproxyservice.integration.api.elva77.Elva77Service;
-import se.inera.intyg.intygproxyservice.user.dto.CitizenDTO;
-import se.inera.intyg.intygproxyservice.user.dto.CitizenRequest;
-import se.inera.intyg.intygproxyservice.user.dto.CitizenResponse;
 
 @ExtendWith(MockitoExtension.class)
 class CitizenServiceTest {

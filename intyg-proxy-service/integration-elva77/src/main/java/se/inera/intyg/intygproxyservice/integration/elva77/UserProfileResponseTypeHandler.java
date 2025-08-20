@@ -25,6 +25,6 @@ public class UserProfileResponseTypeHandler {
   }
 
   private static boolean userNotFound(Boolean isActive, UserProfileType userProfile) {
-    return isActive == null && userProfile == null;
+    return isActive == null || userProfile == null;
   }
 }

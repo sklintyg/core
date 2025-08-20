@@ -24,7 +24,7 @@ public class Elva77Client {
   private final UserProfileResponseTypeHandler userProfileResponseTypeHandler;
 
   @PerformanceLogging(eventAction = "get-user-profile", eventType = EVENT_TYPE_ACCESSED)
-  public Elva77Response findCitizen(Elva77Request request) {
+  public Elva77Response getUserProfile(Elva77Request request) {
     final var parameters = getParameters(request.getPersonId());
 
     try {
@@ -34,7 +34,7 @@ public class Elva77Client {
 
       return userProfileResponseTypeHandler.handle(getUserProfileResponseType);
     } catch (Exception ex) {
-      log.error("Unexpected error occurred when trying to call Elva77", ex);
+      log.error("Unexpected error occurred when trying to get user profile", ex);
       return Elva77Response.error();
     }
   }

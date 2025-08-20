@@ -38,7 +38,7 @@ class Elva77ClientTest {
   void shouldSetPersonIdToSubjectOfCare() {
     final var captor = ArgumentCaptor.forClass(GetUserProfileType.class);
 
-    elva77Client.findCitizen(REQUEST);
+    elva77Client.getUserProfile(REQUEST);
 
     verify(getUserProfileResponderInterface).getUserProfile(captor.capture());
     assertEquals(PERSON_ID, captor.getValue().getSubjectOfCare());
@@ -54,7 +54,7 @@ class Elva77ClientTest {
     when(userProfileResponseTypeHandler.handle(profileResponseType)).thenReturn(
         expectedResponse);
 
-    final var response = elva77Client.findCitizen(REQUEST);
+    final var response = elva77Client.getUserProfile(REQUEST);
     assertEquals(expectedResponse, response);
   }
 
@@ -67,7 +67,7 @@ class Elva77ClientTest {
     when(getUserProfileResponderInterface.getUserProfile(any(GetUserProfileType.class)))
         .thenThrow(IllegalStateException.class);
 
-    final var response = elva77Client.findCitizen(REQUEST);
+    final var response = elva77Client.getUserProfile(REQUEST);
     assertEquals(expectedResponse, response);
   }
 }

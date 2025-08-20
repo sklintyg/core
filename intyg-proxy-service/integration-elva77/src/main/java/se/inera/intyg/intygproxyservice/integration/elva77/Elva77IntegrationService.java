@@ -21,6 +21,6 @@ public class Elva77IntegrationService implements Elva77Service {
 
   @Override
   public Elva77Response findCitizen(Elva77Request request) {
-    return elva77Client.findCitizen(request);
+    return elva77Client.getUserProfile(request);
   }
 }

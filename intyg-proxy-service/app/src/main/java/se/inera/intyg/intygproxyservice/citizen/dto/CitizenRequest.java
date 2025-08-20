@@ -1,4 +1,4 @@
-package se.inera.intyg.intygproxyservice.user.dto;
+package se.inera.intyg.intygproxyservice.citizen.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -7,17 +7,17 @@ import lombok.Value;
 @Builder
 public class Citizen {
 
-  String personnummer;
-  String fornamn;
-  String efternamn;
-  String postadress;
-  String postnummer;
-  String postort;
-  boolean isActive;
+  String subjectOfCareId;
+  String firstname;
+  String lastname;
+  String streetAddress;
+  String zip;
+  String city;
+  Boolean isActive;
 
   public static Citizen inactive(String personId) {
     return Citizen.builder()
-        .personnummer(personId)
+        .subjectOfCareId(personId)
         .isActive(false)
         .build();
   }

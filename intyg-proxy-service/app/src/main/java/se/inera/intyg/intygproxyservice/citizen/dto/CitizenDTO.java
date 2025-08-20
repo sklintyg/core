@@ -1,10 +1,10 @@
-package se.inera.intyg.intygproxyservice.user.dto;
+package se.inera.intyg.intygproxyservice.citizen.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.intygproxyservice.user.dto.CitizenDTO.CitizenDTOBuilder;
+import se.inera.intyg.intygproxyservice.citizen.dto.CitizenDTO.CitizenDTOBuilder;
 
 @JsonDeserialize(builder = CitizenDTOBuilder.class)
 @Value
