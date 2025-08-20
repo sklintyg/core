@@ -78,8 +78,8 @@ public class CodeSystemKvFkmu0005 {
       "Underlag från hörselhabiliteringen"
   );
 
-  public static final Code SYNHABILITERING = new Code(
-      "SYNHABILITERING",
+  public static final Code SYNHABILITERINGEN = new Code(
+      "SYNHABILITERINGEN",
       CODE_SYSTEM,
       "Underlag från synhabiliteringen"
   );

@@ -11,7 +11,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.PSYKOLOG;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.SKOLHALSOVARD;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.SPECIALISTKLINIK;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.SYNHABILITERING;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.SYNHABILITERINGEN;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.VARDCENTRAL;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.VARD_UTOMLANDS;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionBaseratPaAnnatMedicinsktUnderlag.QUESTION_BASERAT_PA_ANNAT_UNDERLAG_FIELD_ID;
@@ -166,7 +166,7 @@ public class QuestionUtredningEllerUnderlag {
             SKOLHALSOVARD,
             VARD_UTOMLANDS,
             HORSELHABILITERING,
-            SYNHABILITERING,
+            SYNHABILITERINGEN,
             DIETIST,
             OVRIGT
         )
@@ -196,7 +196,7 @@ public class QuestionUtredningEllerUnderlag {
                 SKOLHALSOVARD,
                 VARD_UTOMLANDS,
                 HORSELHABILITERING,
-                SYNHABILITERING,
+                SYNHABILITERINGEN,
                 DIETIST,
                 OVRIGT
             )

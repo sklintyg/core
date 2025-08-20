@@ -16,7 +16,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.OVRIGT;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.PSYKOLOG;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.SPECIALISTKLINIK;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.SYNHABILITERING;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.SYNHABILITERINGEN;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.VARD_UTOMLANDS;
 
 import java.time.Period;
@@ -60,7 +60,7 @@ class QuestionUtredningEllerUnderlagTest {
         SPECIALISTKLINIK,
         VARD_UTOMLANDS,
         HORSELHABILITERING,
-        SYNHABILITERING,
+        SYNHABILITERINGEN,
         AUDIONOM,
         DIETIST,
         CodeSystemKvFkmu0005.ORTOPTIST,
@@ -184,7 +184,7 @@ class QuestionUtredningEllerUnderlagTest {
             "Utredning från vårdinrättning utomlands"),
         entry(HORSELHABILITERING.code(),
             "Underlag från hörselhabiliteringen"),
-        entry(SYNHABILITERING.code(),
+        entry(SYNHABILITERINGEN.code(),
             "Underlag från synhabiliteringen"),
         entry(AUDIONOM.code(),
             "Underlag från audionom"),
