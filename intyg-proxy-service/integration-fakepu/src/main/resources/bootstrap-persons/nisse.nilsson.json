@@ -22,5 +22,6 @@
       "postalCode": 54321,
       "city": "Nilscity"
     }
-  }
+  },
+  "isActive": true
 }

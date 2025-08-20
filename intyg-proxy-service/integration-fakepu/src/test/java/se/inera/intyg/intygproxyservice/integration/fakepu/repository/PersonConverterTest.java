@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static se.inera.intyg.intygproxyservice.integration.fakepu.TestData.CITY;
 import static se.inera.intyg.intygproxyservice.integration.fakepu.TestData.DECEASED;
 import static se.inera.intyg.intygproxyservice.integration.fakepu.TestData.GIVEN_NAME;
+import static se.inera.intyg.intygproxyservice.integration.fakepu.TestData.IS_ACTIVE;
 import static se.inera.intyg.intygproxyservice.integration.fakepu.TestData.MIDDLE_NAME;
 import static se.inera.intyg.intygproxyservice.integration.fakepu.TestData.PARSED_PERSON;
 import static se.inera.intyg.intygproxyservice.integration.fakepu.TestData.PERSON_ID;
@@ -66,5 +67,10 @@ class PersonConverterTest {
   @Test
   void shallIncludeTestIndicator() {
     assertEquals(TEST_INDICATED, convert(PARSED_PERSON).isTestIndicator());
+  }
+
+  @Test
+  void shallIncludeIsActive() {
+    assertEquals(IS_ACTIVE, convert(PARSED_PERSON).isActive());
   }
 }

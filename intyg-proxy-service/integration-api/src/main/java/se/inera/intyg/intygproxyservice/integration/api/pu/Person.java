@@ -22,6 +22,7 @@ public class Person implements Serializable {
   String postnummer;
   String postort;
   boolean testIndicator;
+  boolean isActive;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class PersonBuilder {

@@ -52,6 +52,9 @@ public class PersonConverter {
         .testIndicator(
             parsedPerson.isTestIndicator()
         )
+        .isActive(
+            parsedPerson.isActive()
+        )
         .build();
   }
 

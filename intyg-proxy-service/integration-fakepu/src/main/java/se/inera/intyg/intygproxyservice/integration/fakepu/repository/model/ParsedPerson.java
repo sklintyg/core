@@ -15,6 +15,7 @@ public class ParsedPerson {
   boolean protectedPersonIndicator;
   boolean protectedPopulationRecord;
   boolean testIndicator;
+  boolean isActive;
   boolean primaryIdentity;
   ParsedNameWrapper name;
   ParsedAddressInformation addressInformation;

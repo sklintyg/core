@@ -22,5 +22,6 @@
       "postalCode": 12345,
       "city": "Småmåla"
     }
-  }
+  },
+  "isActive": false
 }

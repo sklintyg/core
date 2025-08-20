@@ -19,5 +19,6 @@
   "addressInformation": {
     "residentialAddress": {
     }
-  }
+  },
+  "isActive": true
 }

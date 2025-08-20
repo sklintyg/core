@@ -24,6 +24,7 @@ public class TestData {
   public static final boolean PROTECTED_PERSON = true;
   public static final boolean TEST_INDICATED = true;
   public static final String DEREGISTRATION_REASON_CODE_FOR_DECEASED = "AV";
+  public static final boolean IS_ACTIVE = true;
   public static final ParsedPerson PARSED_PERSON = ParsedPerson.builder()
       .personalIdentity(
           ParsedPersonalIdentity.builder()
@@ -67,5 +68,6 @@ public class TestData {
       )
       .protectedPersonIndicator(PROTECTED_PERSON)
       .testIndicator(TEST_INDICATED)
+      .isActive(IS_ACTIVE)
       .build();
 }
