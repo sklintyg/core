@@ -12,7 +12,8 @@ import se.inera.intyg.intygproxyservice.integration.api.pu.Status;
 @Builder
 public class CitizenResponse {
 
-  CitizenDTO citizen;
+  @Builder.Default
+  CitizenDTO citizen = CitizenDTO.builder().build();
   Status status;
 
   @JsonPOJOBuilder(withPrefix = "")

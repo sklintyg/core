@@ -14,17 +14,16 @@ public class UserProfileResponseTypeHandler {
   private final UserProfileResponseTypeConverter userProfileResponseTypeConverter;
 
   public Elva77Response handle(GetUserProfileResponseType responseType) {
-    final var isActive = responseType.isIsActive();
     final var userProfile = responseType.getUserProfile();
 
-    if (userNotFound(isActive, userProfile)) {
+    if (userNotFound(userProfile)) {
       return Elva77Response.error();
     }
 
     return userProfileResponseTypeConverter.convert(responseType);
   }
 
-  private static boolean userNotFound(Boolean isActive, UserProfileType userProfile) {
-    return isActive == null || userProfile == null;
+  private static boolean userNotFound(UserProfileType userProfile) {
+    return userProfile == null;
   }
 }

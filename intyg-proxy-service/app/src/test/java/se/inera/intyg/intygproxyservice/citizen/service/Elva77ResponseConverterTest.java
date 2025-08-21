@@ -23,7 +23,7 @@ class Elva77ResponseConverterTest {
   @Test
   void shouldConvertResponseWithErrorResult() {
     final var expectedResponse = CitizenResponse.builder()
-        .status(Status.ERROR)
+        .status(Status.NOT_FOUND)
         .build();
 
     final var error = Elva77Response.error();
