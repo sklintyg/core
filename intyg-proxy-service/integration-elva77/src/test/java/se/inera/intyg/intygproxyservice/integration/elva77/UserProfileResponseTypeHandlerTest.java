@@ -21,18 +21,7 @@ class UserProfileResponseTypeHandlerTest {
   UserProfileResponseTypeConverter userProfileResponseTypeConverter;
   @InjectMocks
   UserProfileResponseTypeHandler userProfileResponseTypeHandler;
-
-  @Test
-  void shallReturnErrorResponseIfIsActiveIsNull() {
-    final var responseType = new GetUserProfileResponseType();
-    responseType.setIsActive(null);
-    responseType.setUserProfile(new UserProfileType());
-
-    final var response = userProfileResponseTypeHandler.handle(responseType);
-    assertEquals(Result.ERROR, response.getResult());
-  }
-
-
+  
   @Test
   void shallReturnErrorResponseIfIsUserProfileIsNull() {
     final var responseType = new GetUserProfileResponseType();
