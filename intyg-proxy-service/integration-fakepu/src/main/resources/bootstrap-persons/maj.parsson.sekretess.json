@@ -20,5 +20,6 @@
       "postalCode": 41234,
       "city": "GÖTEBORG"
     }
-  }
+  },
+  "isActive": true
 }

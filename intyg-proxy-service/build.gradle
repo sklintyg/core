@@ -115,5 +115,6 @@ reporting {
         testReportAggregation project(':integration-pu')
         testReportAggregation project(':integration-pu-v5')
         testReportAggregation project(':integration-test')
+        testReportAggregation project(':integration-elva77')
     }
 }

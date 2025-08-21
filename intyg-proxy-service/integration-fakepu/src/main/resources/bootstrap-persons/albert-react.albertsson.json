@@ -22,5 +22,6 @@
       "postalCode": 65340,
       "city": "Karlstad"
     }
-  }
+  },
+  "isActive": true
 }

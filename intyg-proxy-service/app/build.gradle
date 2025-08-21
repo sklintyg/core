@@ -13,6 +13,7 @@ dependencies {
     runtimeOnly project(':integration-fakepu')
     runtimeOnly project(':integration-hsa')
     runtimeOnly project(':integration-fakehsa')
+    runtimeOnly project(':integration-elva77')
 
     implementation "co.elastic.logging:logback-ecs-encoder:${logbackEcsEncoderVersion}"
     implementation "com.google.guava:guava-gwt:${guavaVersion}"

@@ -2,6 +2,7 @@ package se.inera.intyg.intygproxyservice.integration.fakepu;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static se.inera.intyg.intygproxyservice.integration.fakepu.TestData.PERSON_ID;
@@ -15,6 +16,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.intygproxyservice.integration.api.elva77.Elva77Request;
+import se.inera.intyg.intygproxyservice.integration.api.elva77.Result;
 import se.inera.intyg.intygproxyservice.integration.api.pu.Person;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PersonId;
 import se.inera.intyg.intygproxyservice.integration.api.pu.PuPersonsRequest;
@@ -193,6 +196,76 @@ class FakePuIntegrationServiceTest {
             () -> assertEquals(Status.FOUND, actualPuResponse.getPersons().get(1).status())
         );
       }
+    }
+  }
+
+  @Nested
+  class FindCitizen {
+
+    @Nested
+    class PersonFound {
+
+      @BeforeEach
+      void setUp() {
+        final var personFound = Person.builder()
+            .personnummer(PersonId.of(PERSON_ID))
+            .build();
+
+        doReturn(personFound)
+            .when(fakePuRepository)
+            .getPerson(PERSON_ID);
+      }
+
+      @Test
+      void shallReturnResultOkWhenPersonExists() {
+        final var elva77Response = fakePuIntegrationService.findCitizen(
+            Elva77Request.builder()
+                .personId(PERSON_ID)
+                .build()
+        );
+
+        assertEquals(Result.OK, elva77Response.getResult());
+      }
+
+      @Test
+      void shallReturnPersonWhenPersonExists() {
+        final var elva77Response = fakePuIntegrationService.findCitizen(
+            Elva77Request.builder()
+                .personId(PERSON_ID)
+                .build()
+        );
+
+        assertNotNull(elva77Response.getCitizen());
+      }
+    }
+
+    @Nested
+    class PersonNotFound {
+
+      @BeforeEach
+      void setUp() {
+        doReturn(null)
+            .when(fakePuRepository)
+            .getPerson(PERSON_ID);
+      }
+
+      @Test
+      void shallReturnResultErrorWhenPersonNotFound() {
+        final var elva77Response = fakePuIntegrationService.findCitizen(
+            Elva77Request.builder()
+                .personId(PERSON_ID)
+                .build()
+        );
+
+        assertEquals(Result.ERROR, elva77Response.getResult());
+      }
+    }
+
+    @Test
+    void shallThrowExceptionIfElva77RequestIsNull() {
+      assertThrows(IllegalArgumentException.class,
+          () -> fakePuIntegrationService.findCitizen(null)
+      );
     }
   }
 }
