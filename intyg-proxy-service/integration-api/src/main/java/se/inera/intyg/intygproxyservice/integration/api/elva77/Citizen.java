@@ -15,8 +15,7 @@ public class Citizen {
   String city;
   Boolean isActive;
 
-  public static Citizen
-  inactive(String personId) {
+  public static Citizen inactive(String personId) {
     return Citizen.builder()
         .subjectOfCareId(personId)
         .isActive(false)
