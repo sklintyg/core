@@ -15,7 +15,7 @@ public class CodeSystemKvFkmu0006 {
   public static final Code ATER_X_ANTAL_MANADER = new Code(
       "ATER_X_ANTAL_MANADER",
       CODE_SYSTEM,
-      "Patienten förväntas kunna återgå helt i nuvarande sysselsättning efter angiven tid)"
+      "Patienten förväntas kunna återgå helt i nuvarande sysselsättning efter angiven tid"
   );
 
   public static final Code SANNOLIKT_INTE = new Code(
