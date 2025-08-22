@@ -37,6 +37,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetCertific
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.RenewCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.RenewCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.RenewExternalCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ReplaceCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ReplaceCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.RevokeCertificateRequest;
@@ -61,6 +62,7 @@ import se.inera.intyg.certificateservice.application.certificate.service.GetCert
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateXmlService;
 import se.inera.intyg.certificateservice.application.certificate.service.RenewCertificateService;
+import se.inera.intyg.certificateservice.application.certificate.service.RenewExternalCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.ReplaceCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.RevokeCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.SendCertificateService;
@@ -90,6 +92,7 @@ public class CertificateController {
   private final RevokeCertificateService revokeCertificateService;
   private final ReplaceCertificateService replaceCertificateService;
   private final RenewCertificateService renewCertificateService;
+  private final RenewExternalCertificateService renewExternalCertificateService;
   private final ComplementCertificateService complementCertificateService;
   private final AnswerComplementService answerComplementService;
   private final ForwardCertificateService forwardCertificateService;
@@ -205,6 +208,14 @@ public class CertificateController {
       @RequestBody RenewCertificateRequest renewCertificateRequest,
       @PathVariable("certificateId") String certificateId) {
     return renewCertificateService.renew(renewCertificateRequest, certificateId);
+  }
+
+  @PostMapping("/{certificateId}/renew/external")
+  @PerformanceLogging(eventAction = "renew-external-certificate", eventType = EVENT_TYPE_CREATION)
+  RenewCertificateResponse renewExternalCertificate(
+      @RequestBody RenewExternalCertificateRequest renewExternalCertificateRequest,
+      @PathVariable("certificateId") String certificateId) {
+    return renewExternalCertificateService.renew(renewExternalCertificateRequest, certificateId);
   }
 
   @PostMapping("/{certificateId}/complement")
