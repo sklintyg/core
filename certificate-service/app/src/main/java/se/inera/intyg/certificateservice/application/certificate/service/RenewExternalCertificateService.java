@@ -11,7 +11,10 @@ import se.inera.intyg.certificateservice.application.certificate.service.validat
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
 import se.inera.intyg.certificateservice.application.common.converter.ResourceLinkConverter;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
-import se.inera.intyg.certificateservice.domain.certificate.service.RenewCertificateDomainService;
+import se.inera.intyg.certificateservice.domain.certificate.service.RenewExternalCertificateDomainService;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
 
 @Service
@@ -20,7 +23,7 @@ public class RenewExternalCertificateService {
 
   private final RenewExternalCertificateRequestValidator renewExternalCertificateRequestValidator;
   private final ActionEvaluationFactory actionEvaluationFactory;
-  private final RenewCertificateDomainService renewCertificateDomainService;
+  private final RenewExternalCertificateDomainService renewExternalCertificateDomainService;
   private final CertificateConverter certificateConverter;
   private final ResourceLinkConverter resourceLinkConverter;
 
@@ -41,12 +44,13 @@ public class RenewExternalCertificateService {
         renewExternalCertificateRequest.getCareProvider()
     );
 
-    final var certificate = renewCertificateDomainService.renew(
+    final var certificate = renewExternalCertificateDomainService.renew(
         new CertificateId(certificateId),
         actionEvaluation,
         renewExternalCertificateRequest.getExternalReference() != null
             ? new ExternalReference(renewExternalCertificateRequest.getExternalReference())
-            : null
+            : null,
+        certificateModelId(renewExternalCertificateRequest)
     );
 
     return RenewCertificateResponse.builder()
@@ -63,6 +67,22 @@ public class RenewExternalCertificateService {
                     )
                     .toList(),
                 actionEvaluation
+            )
+        )
+        .build();
+  }
+
+  private static CertificateModelId certificateModelId(
+      RenewExternalCertificateRequest renewExternalCertificateRequest) {
+    return CertificateModelId.builder()
+        .type(
+            new CertificateType(
+                renewExternalCertificateRequest.getCertificateModelId().getType()
+            )
+        )
+        .version(
+            new CertificateVersion(
+                renewExternalCertificateRequest.getCertificateModelId().getVersion()
             )
         )
         .build();
