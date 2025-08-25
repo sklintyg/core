@@ -245,10 +245,11 @@ public class AppConfig {
 
   @Bean
   public RenewExternalCertificateDomainService renewExternalCertificateDomainService(
+      CertificateModelRepository certificateModelRepository,
       CertificateRepository certificateRepository,
       CertificateEventDomainService certificateEventDomainService) {
-    return new RenewExternalCertificateDomainService(certificateRepository,
-        certificateEventDomainService);
+    return new RenewExternalCertificateDomainService(certificateModelRepository,
+        certificateRepository, certificateEventDomainService);
   }
 
   @Bean
