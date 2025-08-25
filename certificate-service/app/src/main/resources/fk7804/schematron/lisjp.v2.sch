@@ -260,14 +260,6 @@
     </iso:rule>
   </iso:pattern>
 
-  <iso:pattern id="q29">
-    <iso:rule context="//gn:svar[@id='29']">
-      <iso:assert test="count(gn:delsvar[@id='29.1']) = 1">'Nuvarande arbete' måste ha ett
-        textdelsvar.
-      </iso:assert>
-    </iso:rule>
-  </iso:pattern>
-
   <iso:pattern id="q32">
     <iso:rule context="//gn:svar[@id='32']">
       <iso:assert test="count(gn:delsvar[@id='32.1']) = 1">'Nedsättning av arbetsförmågan' måste ha
