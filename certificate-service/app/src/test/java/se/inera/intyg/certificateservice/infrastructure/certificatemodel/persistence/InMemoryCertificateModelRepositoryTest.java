@@ -30,6 +30,11 @@ class InMemoryCertificateModelRepositoryTest {
   private static final String VERSION_ONE = "version1";
   private static final String TYPE_TWO = "type2";
   private static final String VERSION_TWO = "version2";
+  private static final String DISPLAY_NAME = "displayName";
+  private static final String CODE_1 = "code1";
+  private static final String CODE_SYSTEM_1 = "codeSystem1";
+  private static final String CODE_2 = "code2";
+  private static final String CODE_SYSTEM_2 = "codeSystem2";
   @Mock
   private CertificateModelFactory certificateModelFactoryOne;
 
@@ -211,6 +216,9 @@ class InMemoryCertificateModelRepositoryTest {
                   .version(new CertificateVersion(VERSION_ONE))
                   .build()
           )
+          .type(
+              new Code(CODE_1, CODE_SYSTEM_1, null)
+          )
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
           .build();
 
@@ -272,6 +280,129 @@ class InMemoryCertificateModelRepositoryTest {
       );
 
       assertEquals("CertificateType is null!", illegalArgumentException.getMessage());
+    }
+  }
+
+  @Nested
+  class FindLastestActiveByCode {
+
+    @Test
+    void shallReturnCertificateModelIfActiveAndMatchCode() {
+      inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
+          List.of(certificateModelFactoryOne)
+      );
+
+      final var expectedModel = CertificateModel.builder()
+          .id(
+              CertificateModelId.builder()
+                  .type(new CertificateType(TYPE_TWO))
+                  .version(new CertificateVersion(VERSION_ONE))
+                  .build()
+          )
+          .type(new Code(TYPE_ONE, CODE_SYSTEM_1, null))
+          .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
+          .build();
+
+      doReturn(expectedModel).when(certificateModelFactoryOne).create();
+      initCertificateModelMap(inMemoryCertificateModelRepository);
+
+      final var actualModel = inMemoryCertificateModelRepository.findLatestActiveByType(
+          new CertificateType(TYPE_ONE));
+
+      assertEquals(expectedModel, actualModel.orElse(null));
+    }
+
+    @Test
+    void shallReturnEmptyIfNotActiveAndMatchCode() {
+      inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
+          List.of(certificateModelFactoryOne)
+      );
+
+      final var model = CertificateModel.builder()
+          .id(
+              CertificateModelId.builder()
+                  .type(new CertificateType(TYPE_TWO))
+                  .version(new CertificateVersion(VERSION_ONE))
+                  .build()
+          )
+          .type(new Code(TYPE_ONE, CODE_SYSTEM_1, null))
+          .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).plusMinutes(1))
+          .build();
+
+      doReturn(model).when(certificateModelFactoryOne).create();
+      initCertificateModelMap(inMemoryCertificateModelRepository);
+
+      final var actualModel = inMemoryCertificateModelRepository.findLatestActiveByType(
+          new CertificateType(TYPE_ONE));
+
+      assertTrue(actualModel.isEmpty(),
+          () -> "Expect model to be empty but retured %s".formatted(actualModel.orElseThrow())
+      );
+    }
+
+    @Test
+    void shallReturnEmptyIfActiveAndDifferentCode() {
+      inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
+          List.of(certificateModelFactoryOne)
+      );
+
+      final var model = CertificateModel.builder()
+          .id(
+              CertificateModelId.builder()
+                  .type(new CertificateType(TYPE_TWO))
+                  .version(new CertificateVersion(VERSION_ONE))
+                  .build()
+          )
+          .type(new Code(CODE_1, CODE_SYSTEM_1, null))
+          .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
+          .build();
+
+      doReturn(model).when(certificateModelFactoryOne).create();
+      initCertificateModelMap(inMemoryCertificateModelRepository);
+
+      final var actualModel = inMemoryCertificateModelRepository.findLatestActiveByType(
+          new CertificateType(TYPE_ONE));
+
+      assertTrue(actualModel.isEmpty(),
+          () -> "Expect model to be empty but retured %s".formatted(actualModel.orElseThrow())
+      );
+    }
+
+    @Test
+    void shallReturnLatestCertificateModelIfActiveAndMatchCode() {
+      inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
+          List.of(certificateModelFactoryOne, certificateModelFactoryTwo)
+      );
+
+      final var modelOne = CertificateModel.builder()
+          .id(
+              CertificateModelId.builder()
+                  .type(new CertificateType(TYPE_ONE))
+                  .version(new CertificateVersion(VERSION_ONE))
+                  .build()
+          )
+          .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(5))
+          .build();
+
+      final var expectedModel = CertificateModel.builder()
+          .id(
+              CertificateModelId.builder()
+                  .type(new CertificateType(TYPE_TWO))
+                  .version(new CertificateVersion(VERSION_TWO))
+                  .build()
+          )
+          .type(new Code(TYPE_ONE, CODE_SYSTEM_1, null))
+          .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
+          .build();
+
+      doReturn(modelOne).when(certificateModelFactoryOne).create();
+      doReturn(expectedModel).when(certificateModelFactoryTwo).create();
+      initCertificateModelMap(inMemoryCertificateModelRepository);
+
+      final var actualModel = inMemoryCertificateModelRepository.findLatestActiveByType(
+          new CertificateType(TYPE_ONE));
+
+      assertEquals(expectedModel, actualModel.orElse(null));
     }
   }
 
@@ -432,12 +563,6 @@ class InMemoryCertificateModelRepositoryTest {
 
   @Nested
   class FindLatestActiveByExternalTypeTests {
-
-    private static final String DISPLAY_NAME = "displayName";
-    private static final String CODE_1 = "code1";
-    private static final String CODE_SYSTEM_1 = "codeSystem1";
-    private static final String CODE_2 = "code2";
-    private static final String CODE_SYSTEM_2 = "codeSystem2";
 
     @Test
     void shallThrowIfCodeIsNull() {

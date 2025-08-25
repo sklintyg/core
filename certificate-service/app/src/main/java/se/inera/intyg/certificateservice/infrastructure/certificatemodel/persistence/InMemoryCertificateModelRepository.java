@@ -58,7 +58,8 @@ public class InMemoryCertificateModelRepository implements CertificateModelRepos
     }
 
     return getCertificateModelMap().values().stream()
-        .filter(certificateModel -> certificateType.equals(certificateModel.id().type()))
+        .filter(certificateModel -> certificateType.equals(certificateModel.id().type())
+            || certificateType.type().equalsIgnoreCase(certificateModel.type().code()))
         .filter(filterActiveCertificateModels())
         .max(Comparator.comparing(CertificateModel::activeFrom));
   }
