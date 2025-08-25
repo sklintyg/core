@@ -29,9 +29,7 @@ public class RenewExternalCertificateDomainService {
   public Certificate renew(CertificateId certificateId, ActionEvaluation actionEvaluation,
       ExternalReference externalReference, CertificateModelId certificateModelId) {
     final var start = LocalDateTime.now(ZoneId.systemDefault());
-
     final var certificateModel = certificateModelRepository.getById(certificateModelId);
-
     final var placeHolderCertificate = Certificate.builder()
         .id(certificateId)
         .created(LocalDateTime.now())
@@ -41,7 +39,6 @@ public class RenewExternalCertificateDomainService {
         .build();
 
     placeHolderCertificate.updateMetadata(actionEvaluation);
-
     if (!placeHolderCertificate.allowTo(CertificateActionType.RENEW,
         Optional.of(actionEvaluation))) {
       throw new CertificateActionForbidden(
@@ -52,7 +49,6 @@ public class RenewExternalCertificateDomainService {
     }
 
     final var savedPlaceHolderCertificate = certificateRepository.save(placeHolderCertificate);
-
     final var newCertificate = savedPlaceHolderCertificate.renew(actionEvaluation);
     newCertificate.externalReference(externalReference);
 
