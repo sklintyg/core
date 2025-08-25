@@ -8,8 +8,6 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionE
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
-import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
-import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
@@ -30,16 +28,10 @@ public class RenewExternalCertificateDomainService {
       ExternalReference externalReference, CertificateModelId certificateModelId) {
     final var start = LocalDateTime.now(ZoneId.systemDefault());
     final var certificateModel = certificateModelRepository.getById(certificateModelId);
-    final var placeHolderCertificate = Certificate.builder()
-        .id(certificateId)
-        .created(LocalDateTime.now())
-        .certificateModel(certificateModel)
-        .status(Status.SIGNED)
-        .revision(new Revision(0))
-        .build();
+    final var certificate = certificateModel.placeholderCertificate(certificateId);
+    certificate.updateMetadata(actionEvaluation);
 
-    placeHolderCertificate.updateMetadata(actionEvaluation);
-    if (!placeHolderCertificate.allowTo(CertificateActionType.RENEW,
+    if (!certificate.allowTo(CertificateActionType.RENEW,
         Optional.of(actionEvaluation))) {
       throw new CertificateActionForbidden(
           "Not allowed to renew certificateModel for %s".formatted(certificateId),
@@ -48,8 +40,8 @@ public class RenewExternalCertificateDomainService {
       );
     }
 
-    final var savedPlaceHolderCertificate = certificateRepository.save(placeHolderCertificate);
-    final var newCertificate = savedPlaceHolderCertificate.renew(actionEvaluation);
+    final var placeholderCertificate = certificateRepository.save(certificate);
+    final var newCertificate = placeholderCertificate.renew(actionEvaluation);
     newCertificate.externalReference(externalReference);
 
     final var savedCertificate = certificateRepository.save(newCertificate);
