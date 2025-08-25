@@ -134,8 +134,8 @@ public class CertificateModel implements Comparator<ElementId> {
   public Certificate placeholderCertificate(CertificateId certificateId) {
     return Certificate.builder()
         .id(certificateId)
-        .created(LocalDateTime.now())
         .certificateModel(this)
+        .created(LocalDateTime.now())
         .status(Status.SIGNED)
         .revision(new Revision(0))
         .build();
