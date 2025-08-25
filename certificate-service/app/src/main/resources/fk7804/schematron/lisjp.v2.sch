@@ -260,14 +260,6 @@
     </iso:rule>
   </iso:pattern>
 
-  <iso:pattern id="q27">
-    <iso:rule context="//gn:svar[@id='27']">
-      <iso:assert test="count(gn:delsvar[@id='27.1']) = 1">'Smittbärarpenning' måste ha ett booleskt
-        delsvar.
-      </iso:assert>
-    </iso:rule>
-  </iso:pattern>
-
   <iso:pattern id="q28">
     <iso:rule context="//gn:svar[@id='28']">
       <iso:assert test="count(gn:delsvar[@id='28.1']) = 1">'Sysselsättning' måste ha ett
