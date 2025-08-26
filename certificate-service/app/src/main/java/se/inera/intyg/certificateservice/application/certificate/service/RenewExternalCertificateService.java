@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.application.certificate.service;
 
+import static se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO.toStatus;
+
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import se.inera.intyg.certificateservice.domain.certificate.service.RenewExterna
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PlaceholderRequest;
 import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
 
 @Service
@@ -45,12 +48,11 @@ public class RenewExternalCertificateService {
     );
 
     final var certificate = renewExternalCertificateDomainService.renew(
-        new CertificateId(certificateId),
         actionEvaluation,
         renewExternalCertificateRequest.getExternalReference() != null
             ? new ExternalReference(renewExternalCertificateRequest.getExternalReference())
             : null,
-        certificateModelId(renewExternalCertificateRequest)
+        getPlaceholderRequest(renewExternalCertificateRequest, certificateId)
     );
 
     return RenewCertificateResponse.builder()
@@ -69,6 +71,17 @@ public class RenewExternalCertificateService {
                 actionEvaluation
             )
         )
+        .build();
+  }
+
+  private static PlaceholderRequest getPlaceholderRequest(
+      RenewExternalCertificateRequest renewExternalCertificateRequest, String certificateId) {
+    return PlaceholderRequest.builder()
+        .certificateId(new CertificateId(certificateId))
+        .certificateModelId(certificateModelId(renewExternalCertificateRequest))
+        .created(renewExternalCertificateRequest.getCreated())
+        .status(toStatus(renewExternalCertificateRequest.getStatus()))
+        .version(renewExternalCertificateRequest.getVersion())
         .build();
   }
 

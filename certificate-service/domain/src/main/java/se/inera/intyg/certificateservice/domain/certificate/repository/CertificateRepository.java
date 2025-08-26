@@ -5,12 +5,15 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateExportPage;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PlaceholderRequest;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 
 public interface CertificateRepository {
 
   Certificate create(CertificateModel certificateModel);
+
+  Certificate createAndSave(PlaceholderRequest request);
 
   Certificate save(Certificate certificate);
 

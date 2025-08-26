@@ -17,10 +17,6 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.Certifi
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.action.message.model.MessageAction;
 import se.inera.intyg.certificateservice.domain.action.message.model.MessageActionFactory;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
-import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
-import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
-import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
@@ -129,16 +125,6 @@ public class CertificateModel implements Comparator<ElementId> {
             specification -> specification.certificateActionType().equals(certificateActionType)
         )
         .findFirst();
-  }
-
-  public Certificate placeholderCertificate(CertificateId certificateId) {
-    return Certificate.builder()
-        .id(certificateId)
-        .certificateModel(this)
-        .created(LocalDateTime.now())
-        .status(Status.SIGNED)
-        .revision(new Revision(0))
-        .build();
   }
 
   @Override

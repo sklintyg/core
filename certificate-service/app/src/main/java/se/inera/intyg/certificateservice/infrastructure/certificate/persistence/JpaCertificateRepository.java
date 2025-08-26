@@ -19,6 +19,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PlaceholderRequest;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
@@ -52,6 +53,24 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
         .certificateModel(certificateModel)
         .revision(new Revision(0))
         .build();
+  }
+
+  @Override
+  public Certificate createAndSave(PlaceholderRequest request) {
+    //TODO: Do we really care about revision and created if were gonna implement custom storage?
+    final var placeholderCertificate = Certificate.builder()
+        .id(request.certificateId())
+        .created(request.created())
+        .revision(new Revision(request.version()))
+        .build();
+
+    //TODO: Implement persistence of placeholder certificate
+    final var savedEntity = certificateEntityRepository.save(
+        certificateEntityMapper.toEntity(placeholderCertificate)
+    );
+
+    //TODO: Map placeholderCertificate back to domain
+    return certificateEntityMapper.toDomain(savedEntity);
   }
 
   @Override
@@ -188,7 +207,8 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
       throw new IllegalArgumentException("Cannot get certificates if careProviderId is null");
     }
 
-    final var pageable = PageRequest.of(page, size, Sort.by(Direction.ASC, "signed", "certificateId"));
+    final var pageable = PageRequest.of(page, size,
+        Sort.by(Direction.ASC, "signed", "certificateId"));
 
     final var certificateEntitiesPage = certificateEntityRepository.findSignedCertificateEntitiesByCareProviderHsaId(
         careProviderId.id(), pageable
@@ -215,7 +235,8 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
       throw new IllegalArgumentException("Cannot delete certificates if careProviderId is null");
     }
 
-    final var pageable = PageRequest.of(0, eraseCertificatesPageSize, Sort.by(Direction.ASC, "signed", "certificateId"));
+    final var pageable = PageRequest.of(0, eraseCertificatesPageSize,
+        Sort.by(Direction.ASC, "signed", "certificateId"));
     Page<CertificateEntity> certificateEntitiesPage;
 
     do {

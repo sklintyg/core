@@ -15,6 +15,7 @@ import java.util.stream.Stream;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.With;
 import lombok.extern.slf4j.Slf4j;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateAction;
@@ -62,6 +63,7 @@ public class Certificate {
   private Sent sent;
   private Revoked revoked;
   private ExternalReference externalReference;
+  @With
   private Relation parent;
   @Builder.Default
   private List<Relation> children = Collections.emptyList();
@@ -324,6 +326,14 @@ public class Certificate {
           "Certificate with id '%s' already has an external reference".formatted(id().id()));
     }
     this.externalReference = externalReference;
+  }
+
+  public void parent(Relation relation) {
+    if (this.parent != null) {
+      throw new IllegalStateException(
+          "Certificate with id '%s' already has an parent".formatted(id().id()));
+    }
+    this.parent = relation;
   }
 
   public Optional<ElementData> getElementDataById(ElementId id) {

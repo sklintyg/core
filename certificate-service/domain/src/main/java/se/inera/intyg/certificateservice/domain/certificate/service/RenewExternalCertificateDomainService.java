@@ -2,16 +2,17 @@ package se.inera.intyg.certificateservice.domain.certificate.service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
+import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
+import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PlaceholderRequest;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
-import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType;
@@ -24,25 +25,32 @@ public class RenewExternalCertificateDomainService {
   private final CertificateRepository certificateRepository;
   private final CertificateEventDomainService certificateEventDomainService;
 
-  public Certificate renew(CertificateId certificateId, ActionEvaluation actionEvaluation,
-      ExternalReference externalReference, CertificateModelId certificateModelId) {
+  public Certificate renew(ActionEvaluation actionEvaluation,
+      ExternalReference externalReference, PlaceholderRequest request) {
     final var start = LocalDateTime.now(ZoneId.systemDefault());
-    final var certificateModel = certificateModelRepository.getById(certificateModelId);
-    final var certificate = certificateModel.placeholderCertificate(certificateId);
-    certificate.updateMetadata(actionEvaluation);
 
-    if (!certificate.allowTo(CertificateActionType.RENEW,
-        Optional.of(actionEvaluation))) {
-      throw new CertificateActionForbidden(
-          "Not allowed to renew certificateModel for %s".formatted(certificateId),
-          certificateModel.reasonNotAllowed(CertificateActionType.RENEW,
-              Optional.of(actionEvaluation))
-      );
-    }
+    final var certificateModel = certificateModelRepository.getById(
+        request.certificateModelId()
+    );
+    //TODO: Do we need to set child for this certificate?
+    final var placeholderCertificate = certificateRepository.createAndSave(request);
 
-    final var placeholderCertificate = certificateRepository.save(certificate);
-    final var newCertificate = placeholderCertificate.renew(actionEvaluation);
+    final var newCertificate = Certificate.builder()
+        .id(new CertificateId(UUID.randomUUID().toString()))
+        .created(LocalDateTime.now(ZoneId.systemDefault()))
+        .certificateModel(certificateModel)
+        .revision(new Revision(0))
+        .build();
+
+    newCertificate.updateMetadata(actionEvaluation);
     newCertificate.externalReference(externalReference);
+    newCertificate.parent(
+        Relation.builder()
+            .certificate(placeholderCertificate)
+            .type(RelationType.RENEW)
+            .created(newCertificate.created())
+            .build()
+    );
 
     final var savedCertificate = certificateRepository.save(newCertificate);
 
