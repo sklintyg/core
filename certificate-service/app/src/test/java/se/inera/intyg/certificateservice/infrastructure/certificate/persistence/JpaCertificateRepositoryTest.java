@@ -38,8 +38,8 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateExportPage;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.PlaceholderCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
-import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PlaceholderRequest;
@@ -561,7 +561,6 @@ class JpaCertificateRepositoryTest {
     void shouldCreateMedicalCertificateWithParentRelationFromPlaceholder() {
       final var placeHolderRequest = PlaceholderRequest.builder()
           .certificateId(new CertificateId(ID))
-          .created(LocalDateTime.now())
           .status(Status.SIGNED)
           .build();
 
@@ -569,15 +568,9 @@ class JpaCertificateRepositoryTest {
           .createFromPlaceholder(placeHolderRequest, CONVERTED_MODEL);
 
       assertAll(
-          () -> assertEquals(placeHolderRequest.created(),
-              response.parent().certificate().created()),
           () -> assertEquals(RelationType.RENEW, response.parent().type()),
-          () -> assertEquals(placeHolderRequest.created(), response.parent().created()),
           () -> assertEquals(ID, response.parent().certificate().id().id()),
-          () -> assertEquals(placeHolderRequest.created(),
-              response.parent().certificate().created()),
-          () -> assertEquals(Status.SIGNED, response.parent().certificate().status()),
-          () -> assertEquals(0, response.parent().certificate().revision().value())
+          () -> assertEquals(Status.SIGNED, response.parent().certificate().status())
       );
     }
 
@@ -585,7 +578,6 @@ class JpaCertificateRepositoryTest {
     void shouldCreateMedicalCertificate() {
       final var placeHolderRequest = PlaceholderRequest.builder()
           .certificateId(new CertificateId(ID))
-          .created(LocalDateTime.now())
           .status(Status.DRAFT)
           .build();
 
@@ -605,15 +597,14 @@ class JpaCertificateRepositoryTest {
     void shouldSavePlaceHolderCertificate() {
       final var placeHolderRequest = PlaceholderRequest.builder()
           .certificateId(new CertificateId(ID))
-          .created(LocalDateTime.now())
           .status(Status.DRAFT)
           .build();
-      final var expectedPlaceHolderCertificate = MedicalCertificate.builder()
+
+      final var expectedPlaceHolderCertificate = PlaceholderCertificate.builder()
           .id(new CertificateId(ID))
-          .revision(new Revision(0))
-          .created(placeHolderRequest.created())
-          .status(placeHolderRequest.status())
+          .status(Status.DRAFT)
           .build();
+
       when(placeHolderEntityMapper.toEntity(expectedPlaceHolderCertificate))
           .thenReturn(CERTIFICATE_ENTITY);
 

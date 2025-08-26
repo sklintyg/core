@@ -113,7 +113,6 @@ class RenewExternalCertificateServiceTest {
     final var placeHolderRequest = PlaceholderRequest.builder()
         .certificateId(new CertificateId(CERTIFICATE_ID))
         .status(Status.SIGNED)
-        .created(RENEW_EXTERNAL_CERTIFICATE_REQUEST.getCreated())
         .certificateModelId(
             CertificateModelId.builder()
                 .type(new CertificateType(
@@ -122,7 +121,6 @@ class RenewExternalCertificateServiceTest {
                     RENEW_EXTERNAL_CERTIFICATE_REQUEST.getCertificateModelId().getVersion()))
                 .build()
         )
-        .version(RENEW_EXTERNAL_CERTIFICATE_REQUEST.getVersion())
         .build();
 
     final var certificate = mock(MedicalCertificate.class);
