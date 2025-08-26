@@ -32,7 +32,6 @@ public class PlaceholderCertificate implements Certificate {
   private final LocalDateTime created;
   private Status status;
 
-
   @Override
   public List<CertificateAction> actions(Optional<ActionEvaluation> actionEvaluation) {
     return List.of();

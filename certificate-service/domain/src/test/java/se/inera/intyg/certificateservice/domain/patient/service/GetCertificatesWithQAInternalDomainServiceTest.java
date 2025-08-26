@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
@@ -28,7 +29,7 @@ class GetCertificatesWithQAInternalDomainServiceTest {
   @Test
   void shallReturnXml() {
     final var expectedXml = new Xml("expectedXml");
-    final var certificates = List.of(
+    final List<Certificate> certificates = List.of(
         MedicalCertificate.builder().build(), MedicalCertificate.builder().build());
     final var certificateIds = List.of(new CertificateId("ID1"), new CertificateId("ID2"));
 

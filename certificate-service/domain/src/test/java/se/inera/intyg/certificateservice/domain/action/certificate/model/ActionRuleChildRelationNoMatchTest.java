@@ -23,7 +23,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 
 class ActionRuleChildRelationNoMatchTest {
 
-  private MedicalCertificate.CertificateBuilder certificateBuilder;
+  private MedicalCertificate.MedicalCertificateBuilder certificateBuilder;
 
   @BeforeEach
   void setUp() {
