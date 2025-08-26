@@ -652,5 +652,9 @@
       <column name="version" value="PLACEHOLDER"/>
       <column name="name" value="PLACEHOLDER"/>
     </insert>
+
+    <addColumn tableName="certificate">
+      <column name="placeholder" defaultValue="0" type="tinyint unsigned"/>
+    </addColumn>
   </changeSet>
 </databaseChangeLog>

@@ -4,19 +4,14 @@ import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
-import se.inera.intyg.certificateservice.domain.common.model.HsaId;
-import se.inera.intyg.certificateservice.domain.common.model.PersonId;
-import se.inera.intyg.certificateservice.domain.patient.model.Patient;
-import se.inera.intyg.certificateservice.domain.unit.model.CareProvider;
-import se.inera.intyg.certificateservice.domain.unit.model.CareUnit;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.PatientRepository;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.UnitRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateStatus;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateStatusEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateModelEntityRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.PatientEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffEntityRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitEntityRepository;
 
 @Component
 @RequiredArgsConstructor
@@ -25,9 +20,9 @@ public class PlaceholderCertificateEntityMapper {
   private static final String PLACEHOLDER = "PLACEHOLDER";
   private final CertificateEntityRepository certificateEntityRepository;
   private final CertificateModelEntityRepository certificateModelEntityRepository;
+  private final PatientEntityRepository patientEntityRepository;
   private final StaffEntityRepository staffEntityRepository;
-  private final PatientRepository patientRepository;
-  private final UnitRepository unitRepository;
+  private final UnitEntityRepository unitRepository;
 
   public CertificateEntity toEntity(Certificate certificate) {
     final var certificateEntity = certificateEntityRepository.findByCertificateId(
@@ -43,36 +38,18 @@ public class PlaceholderCertificateEntityMapper {
     );
 
     certificateEntity.setPatient(
-        patientRepository.patient(
-            Patient.builder()
-                .id(
-                    PersonId.builder()
-                        .id(PLACEHOLDER)
-                        .build()
-                )
-                .build()
-        )
+        patientEntityRepository.findById(PLACEHOLDER).orElseThrow()
     );
     certificateEntity.setCareProvider(
-        unitRepository.careProvider(
-            CareProvider.builder()
-                .hsaId(new HsaId(PLACEHOLDER))
-                .build()
-        )
+        unitRepository.findByHsaId(PLACEHOLDER).orElseThrow()
+
     );
     certificateEntity.setCareUnit(
-        unitRepository.careUnit(
-            CareUnit.builder()
-                .hsaId(new HsaId(PLACEHOLDER))
-                .build()
-        )
+        unitRepository.findByHsaId(PLACEHOLDER).orElseThrow()
+
     );
     certificateEntity.setIssuedOnUnit(
-        unitRepository.issuingUnit(
-            CareUnit.builder()
-                .hsaId(new HsaId(PLACEHOLDER))
-                .build()
-        )
+        unitRepository.findByHsaId(PLACEHOLDER).orElseThrow()
     );
     certificateEntity.setIssuedBy(
         staffEntityRepository.findByHsaId(PLACEHOLDER)
@@ -85,6 +62,8 @@ public class PlaceholderCertificateEntityMapper {
         certificateModelEntityRepository.findByTypeAndVersion(PLACEHOLDER, PLACEHOLDER)
             .orElseThrow()
     );
+
+    certificateEntity.setPlaceholder(true);
 
     return certificateEntity;
   }

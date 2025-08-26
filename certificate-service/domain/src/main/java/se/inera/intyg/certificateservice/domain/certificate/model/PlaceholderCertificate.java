@@ -3,6 +3,9 @@ package se.inera.intyg.certificateservice.domain.certificate.model;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
@@ -20,6 +23,9 @@ import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationResult;
 
+@Getter
+@Builder
+@EqualsAndHashCode
 public class PlaceholderCertificate implements Certificate {
 
   @Override
