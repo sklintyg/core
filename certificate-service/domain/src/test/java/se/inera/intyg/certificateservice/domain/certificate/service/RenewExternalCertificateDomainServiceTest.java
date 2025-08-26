@@ -36,8 +36,10 @@ class RenewExternalCertificateDomainServiceTest {
   private RenewExternalCertificateDomainService renewExternalCertificateDomainService;
 
   @Test
-  void shallRenewCertificate() {
-    final var placeholderRequest = PlaceholderRequest.builder().build();
+  void shouldUpdateMetadataOnCertificate() {
+    final var placeholderRequest = PlaceholderRequest.builder()
+        .certificateModelId(FK7804_CERTIFICATE_MODEL_ID)
+        .build();
     final var certificate = mock(MedicalCertificate.class);
     final var certificateModel = mock(CertificateModel.class);
 
@@ -49,12 +51,14 @@ class RenewExternalCertificateDomainServiceTest {
     renewExternalCertificateDomainService.renew(ACTION_EVALUATION, EXTERNAL_REFERENCE,
         placeholderRequest);
 
-    verify(certificate).renew(ACTION_EVALUATION);
+    verify(certificate).updateMetadata(ACTION_EVALUATION);
   }
 
   @Test
   void shallSetExternalReferenceOnRenewCertificate() {
-    final var placeholderRequest = PlaceholderRequest.builder().build();
+    final var placeholderRequest = PlaceholderRequest.builder()
+        .certificateModelId(FK7804_CERTIFICATE_MODEL_ID)
+        .build();
     final var certificate = mock(MedicalCertificate.class);
     final var certificateModel = mock(CertificateModel.class);
 
@@ -71,7 +75,9 @@ class RenewExternalCertificateDomainServiceTest {
 
   @Test
   void shallReturnNewCertificate() {
-    final var placeholderRequest = PlaceholderRequest.builder().build();
+    final var placeholderRequest = PlaceholderRequest.builder()
+        .certificateModelId(FK7804_CERTIFICATE_MODEL_ID)
+        .build();
     final var certificate = mock(MedicalCertificate.class);
     final var certificateModel = mock(CertificateModel.class);
 
@@ -79,10 +85,10 @@ class RenewExternalCertificateDomainServiceTest {
         .getById(FK7804_CERTIFICATE_MODEL_ID);
     doReturn(certificate).when(certificateRepository)
         .createFromPlaceholder(placeholderRequest, certificateModel);
+    doReturn(certificate).when(certificateRepository).save(certificate);
 
     final var actualCertificate = renewExternalCertificateDomainService.renew(ACTION_EVALUATION,
-        EXTERNAL_REFERENCE,
-        placeholderRequest);
+        EXTERNAL_REFERENCE, placeholderRequest);
 
     assertEquals(certificate, actualCertificate);
   }
@@ -90,7 +96,9 @@ class RenewExternalCertificateDomainServiceTest {
   @Test
   void shouldPublishDomainEvent() {
     final var captor = ArgumentCaptor.forClass(CertificateEvent.class);
-    final var placeholderRequest = PlaceholderRequest.builder().build();
+    final var placeholderRequest = PlaceholderRequest.builder()
+        .certificateModelId(FK7804_CERTIFICATE_MODEL_ID)
+        .build();
     final var certificate = mock(MedicalCertificate.class);
     final var certificateModel = mock(CertificateModel.class);
 
