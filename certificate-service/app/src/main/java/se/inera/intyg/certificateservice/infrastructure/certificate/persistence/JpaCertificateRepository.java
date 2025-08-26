@@ -66,6 +66,7 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
         .build();
 
     //TODO: Implement persistence of placeholder certificate
+    //TODO: Inject placeholder values in changelog
     final var savedEntity = certificateEntityRepository.save(
         certificateEntityMapper.toEntity(placeholderCertificate)
     );

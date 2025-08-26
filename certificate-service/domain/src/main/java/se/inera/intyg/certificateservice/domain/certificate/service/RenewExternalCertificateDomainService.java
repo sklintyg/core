@@ -33,6 +33,7 @@ public class RenewExternalCertificateDomainService {
         request.certificateModelId()
     );
     //TODO: Do we need to set child for this certificate?
+    //TODO: Move creation of newCertificate to repo
     final var placeholderCertificate = certificateRepository.createAndSave(request);
 
     final var newCertificate = Certificate.builder()
