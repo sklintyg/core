@@ -28,7 +28,7 @@ class PdfElementValueGeneratorTest {
 
   private static final ElementId ELEMENT_ID = new ElementId("1");
 
-  private final MedicalCertificate.CertificateBuilder certificateBuilder = fk7210CertificateBuilder();
+  private final MedicalCertificate.MedicalCertificateBuilder certificateBuilder = fk7210CertificateBuilder();
   private final ElementSpecification elementSpecification = ElementSpecification.builder()
       .id(ELEMENT_ID)
       .build();
