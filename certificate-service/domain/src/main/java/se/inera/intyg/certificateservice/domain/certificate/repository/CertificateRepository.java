@@ -13,7 +13,7 @@ public interface CertificateRepository {
 
   Certificate create(CertificateModel certificateModel);
 
-  Certificate createAndSave(PlaceholderRequest request);
+  Certificate createFromPlaceholder(PlaceholderRequest request, CertificateModel model);
 
   Certificate save(Certificate certificate);
 

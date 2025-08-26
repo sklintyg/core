@@ -2,15 +2,9 @@ package se.inera.intyg.certificateservice.domain.certificate.service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
-import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
-import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
-import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
-import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
-import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PlaceholderRequest;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
@@ -33,28 +27,12 @@ public class RenewExternalCertificateDomainService {
     final var certificateModel = certificateModelRepository.getById(
         request.certificateModelId()
     );
-    //TODO: Do we need to set child for this certificate?
-    //TODO: Move creation of newCertificate to repo
-    final var placeholderCertificate = certificateRepository.createAndSave(request);
+    final var certificate = certificateRepository.createFromPlaceholder(request, certificateModel);
 
-    final var newCertificate = MedicalCertificate.builder()
-        .id(new CertificateId(UUID.randomUUID().toString()))
-        .created(LocalDateTime.now(ZoneId.systemDefault()))
-        .certificateModel(certificateModel)
-        .revision(new Revision(0))
-        .build();
+    certificate.updateMetadata(actionEvaluation);
+    certificate.externalReference(externalReference);
 
-    newCertificate.updateMetadata(actionEvaluation);
-    newCertificate.externalReference(externalReference);
-    newCertificate.parent(
-        Relation.builder()
-            .certificate(placeholderCertificate)
-            .type(RelationType.RENEW)
-            .created(newCertificate.created())
-            .build()
-    );
-
-    final var savedCertificate = certificateRepository.save(newCertificate);
+    final var savedCertificate = certificateRepository.save(certificate);
 
     certificateEventDomainService.publish(
         CertificateEvent.builder()

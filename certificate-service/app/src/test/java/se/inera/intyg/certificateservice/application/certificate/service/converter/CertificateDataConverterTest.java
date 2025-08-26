@@ -24,7 +24,6 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigDate;
 import se.inera.intyg.certificateservice.application.certificate.dto.validation.CertificateDataValidationMandatory;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDate;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.CertificateBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
@@ -71,7 +70,7 @@ class CertificateDataConverterTest {
 
   private CertificateDataConverter certificateDataConverter;
 
-  private CertificateBuilder certificateBuilder;
+  private MedicalCertificate.MedicalCertificateBuilder certificateBuilder;
 
   @BeforeEach
   void setup() {

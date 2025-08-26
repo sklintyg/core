@@ -30,13 +30,8 @@ import se.inera.intyg.certificateservice.application.common.converter.ResourceLi
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateAction;
-import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.service.RenewExternalCertificateDomainService;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
-import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
 
 @ExtendWith(MockitoExtension.class)
 class RenewExternalCertificateServiceTest {
@@ -105,7 +100,7 @@ class RenewExternalCertificateServiceTest {
     );
 
     final var certificate = mock(MedicalCertificate.class);
-    doReturn(certificate).when(renewExternalCertificateDomainService).renew(
+/*    doReturn(certificate).when(renewExternalCertificateDomainService).renew(
         new CertificateId(CERTIFICATE_ID),
         actionEvaluation,
         new ExternalReference(EXTERNAL_REF),
@@ -113,7 +108,7 @@ class RenewExternalCertificateServiceTest {
             .type(new CertificateType(TYPE))
             .version(new CertificateVersion(VERSION))
             .build()
-    );
+    );*/
 
     final var certificateAction = mock(CertificateAction.class);
     final List<CertificateAction> certificateActions = List.of(certificateAction);

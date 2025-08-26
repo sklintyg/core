@@ -33,7 +33,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.CertificateBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
@@ -49,7 +48,7 @@ class CertificateActionCannotComplementTest {
       CertificateActionSpecification.builder()
           .certificateActionType(CertificateActionType.CANNOT_COMPLEMENT)
           .build();
-  private CertificateBuilder certificateBuilder;
+  private MedicalCertificate.MedicalCertificateBuilder certificateBuilder;
   private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
 
   @Mock

@@ -147,7 +147,7 @@ class CertificateMetadataConverterTest {
 
   private static final String CERTIFICATE_ID = "certificateId";
   private Certificate certificate;
-  private MedicalCertificate.CertificateBuilder certificateBuilder;
+  private MedicalCertificate.MedicalCertificateBuilder certificateBuilder;
 
   @BeforeEach
   void setUp() {

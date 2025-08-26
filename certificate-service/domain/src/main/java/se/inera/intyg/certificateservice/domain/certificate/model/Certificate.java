@@ -7,11 +7,13 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.Certifi
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.service.PrefillProcessor;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
 import se.inera.intyg.certificateservice.domain.message.model.Content;
+import se.inera.intyg.certificateservice.domain.message.model.Forwarded;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
@@ -96,7 +98,7 @@ public interface Certificate {
 
   CertificateId id();
 
-  se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel certificateModel();
+  CertificateModel certificateModel();
 
   java.time.LocalDateTime created();
 
@@ -130,5 +132,5 @@ public interface Certificate {
 
   List<Message> messages();
 
-  se.inera.intyg.certificateservice.domain.message.model.Forwarded forwarded();
+  Forwarded forwarded();
 }
