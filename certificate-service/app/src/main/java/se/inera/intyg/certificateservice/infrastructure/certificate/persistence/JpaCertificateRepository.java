@@ -17,6 +17,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateExportPage;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.PlaceholderCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
@@ -62,10 +63,8 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
 
   @Override
   public Certificate createFromPlaceholder(PlaceholderRequest request, CertificateModel model) {
-    final var placeholderCertificate = MedicalCertificate.builder()
+    final var placeholderCertificate = PlaceholderCertificate.builder()
         .id(request.certificateId())
-        .created(request.created())
-        .revision(new Revision(0))
         .status(request.status())
         .build();
 
@@ -78,11 +77,13 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
         .created(LocalDateTime.now(ZoneId.systemDefault()))
         .certificateModel(model)
         .revision(new Revision(0))
-        .parent(Relation.builder()
-            .certificate(placeholderCertificate)
-            .type(RelationType.RENEW)
-            .created(request.created())
-            .build())
+        .parent(
+            Relation.builder()
+                .certificate(placeholderCertificate)
+                .type(RelationType.RENEW)
+                .created(LocalDateTime.now(ZoneId.systemDefault()))
+                .build()
+        )
         .build();
   }
 

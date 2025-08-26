@@ -79,9 +79,7 @@ public class RenewExternalCertificateService {
     return PlaceholderRequest.builder()
         .certificateId(new CertificateId(certificateId))
         .certificateModelId(certificateModelId(renewExternalCertificateRequest))
-        .created(renewExternalCertificateRequest.getCreated())
         .status(toStatus(renewExternalCertificateRequest.getStatus()))
-        .version(renewExternalCertificateRequest.getVersion())
         .build();
   }
 

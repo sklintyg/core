@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
-import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Value;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
@@ -12,7 +11,5 @@ public class PlaceholderRequest {
 
   CertificateModelId certificateModelId;
   CertificateId certificateId;
-  LocalDateTime created;
   Status status;
-  long version;
 }
