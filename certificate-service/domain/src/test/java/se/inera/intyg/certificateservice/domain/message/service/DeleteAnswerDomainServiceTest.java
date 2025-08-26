@@ -15,8 +15,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 import se.inera.intyg.certificateservice.domain.message.model.Answer;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
@@ -34,7 +34,7 @@ class DeleteAnswerDomainServiceTest {
 
   @Test
   void shallThrowIfNotAllowedToDeleteAnswer() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     final var message = mock(Message.class);
 
     doReturn(CERTIFICATE_ID).when(certificate).id();
@@ -54,7 +54,7 @@ class DeleteAnswerDomainServiceTest {
                 .status(MessageStatus.DRAFT)
                 .build())
         .build();
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
 
     doReturn(true).when(certificate)
         .allowTo(CertificateActionType.DELETE_ANSWER, Optional.of(ACTION_EVALUATION));
@@ -74,7 +74,7 @@ class DeleteAnswerDomainServiceTest {
                 .status(MessageStatus.DRAFT)
                 .build())
         .build();
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(true).when(certificate)
         .allowTo(CertificateActionType.DELETE_ANSWER, Optional.of(ACTION_EVALUATION));
     doReturn(expectedMessage).when(messageRepository).save(expectedMessage);
@@ -89,7 +89,7 @@ class DeleteAnswerDomainServiceTest {
   @Test
   void shallCallDeleteAnswerOnMessage() {
     final var message = mock(Message.class);
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(true).when(certificate)
         .allowTo(CertificateActionType.DELETE_ANSWER, Optional.of(ACTION_EVALUATION));
     doReturn(message).when(messageRepository).save(message);

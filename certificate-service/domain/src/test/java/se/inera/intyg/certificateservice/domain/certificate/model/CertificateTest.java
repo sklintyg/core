@@ -112,7 +112,7 @@ import se.inera.intyg.certificateservice.domain.validation.model.ValidationResul
 class CertificateTest {
 
   private Certificate certificate;
-  private Certificate.CertificateBuilder certificateBuilder;
+  private MedicalCertificate.CertificateBuilder certificateBuilder;
   private CertificateModel certificateModel;
   private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
   @Mock
@@ -125,7 +125,7 @@ class CertificateTest {
   @BeforeEach
   void setUp() {
     certificateModel = mock(CertificateModel.class);
-    certificateBuilder = Certificate.builder()
+    certificateBuilder = MedicalCertificate.builder()
         .id(CERTIFICATE_ID)
         .revision(REVISION)
         .certificateModel(certificateModel)
@@ -2319,7 +2319,7 @@ class CertificateTest {
               .children(List.of(
                   Relation.builder()
                       .certificate(
-                          Certificate.builder()
+                          MedicalCertificate.builder()
                               .status(Status.SIGNED)
                               .build()
                       )
@@ -2339,7 +2339,7 @@ class CertificateTest {
               .status(Status.SIGNED)
               .children(List.of(
                   Relation.builder()
-                      .certificate(Certificate.builder()
+                      .certificate(MedicalCertificate.builder()
                           .status(Status.DRAFT)
                           .build())
                       .type(RelationType.REPLACE)
@@ -2358,7 +2358,7 @@ class CertificateTest {
               .status(Status.SIGNED)
               .children(List.of(
                   Relation.builder()
-                      .certificate(Certificate.builder()
+                      .certificate(MedicalCertificate.builder()
                           .status(Status.SIGNED)
                           .build())
                       .type(RelationType.RENEW)
@@ -2391,7 +2391,7 @@ class CertificateTest {
           .created(LocalDateTime.now())
           .build();
 
-      final var certificate = Certificate.builder()
+      final var certificate = MedicalCertificate.builder()
           .children(
               List.of(
                   expectedRelation
@@ -2405,7 +2405,7 @@ class CertificateTest {
 
     @Test
     void shallReturnOptionalEmptyIfNoMatchingChildRelation() {
-      final var certificate = Certificate.builder()
+      final var certificate = MedicalCertificate.builder()
           .children(
               List.of(
                   Relation.builder()
@@ -2429,7 +2429,7 @@ class CertificateTest {
           .created(now)
           .build();
 
-      final var certificate = Certificate.builder()
+      final var certificate = MedicalCertificate.builder()
           .children(
               List.of(
                   expectedRelation,
@@ -2735,7 +2735,7 @@ class CertificateTest {
           .build();
 
       final var certificateWithUnitContactInformation =
-          Certificate.builder()
+          MedicalCertificate.builder()
               .elementData(List.of(unitContactInformation))
               .build();
 
@@ -2745,7 +2745,7 @@ class CertificateTest {
 
     @Test
     void shallReturnOptionalEmptyIfUnitContactInformationIsMissing() {
-      final var certificateWithoutUnitContactInformation = Certificate.builder()
+      final var certificateWithoutUnitContactInformation = MedicalCertificate.builder()
           .elementData(
               List.of(
                   ElementData.builder()

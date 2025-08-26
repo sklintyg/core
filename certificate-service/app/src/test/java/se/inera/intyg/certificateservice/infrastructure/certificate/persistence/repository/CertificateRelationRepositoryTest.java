@@ -16,8 +16,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
@@ -39,14 +39,14 @@ class CertificateRelationRepositoryTest {
 
     @Test
     void shallNotContinueIfParentIsNull() {
-      final var certificate = Certificate.builder().build();
+      final var certificate = MedicalCertificate.builder().build();
       certificateRelationRepository.save(certificate, null);
       verifyNoInteractions(relationEntityRepository);
     }
 
     @Test
     void shallNotSaveIfCertificateAlreadyHasChildRelation() {
-      final var certificate = Certificate.builder()
+      final var certificate = MedicalCertificate.builder()
           .parent(Relation.builder().build())
           .build();
 
@@ -62,11 +62,11 @@ class CertificateRelationRepositoryTest {
 
     @Test
     void shallSaveIfCertificateDoesNotHaveChildRelation() {
-      final var certificate = Certificate.builder()
+      final var certificate = MedicalCertificate.builder()
           .parent(
               Relation.builder()
                   .certificate(
-                      Certificate.builder()
+                      MedicalCertificate.builder()
                           .id(new CertificateId(ID))
                           .build()
                   )

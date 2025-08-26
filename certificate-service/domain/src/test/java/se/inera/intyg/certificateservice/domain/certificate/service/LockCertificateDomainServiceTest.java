@@ -12,7 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
@@ -33,7 +33,7 @@ class LockCertificateDomainServiceTest {
 
   @Test
   void shallLockDraft() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(List.of(certificate)).when(certificateRepository).findByCertificatesRequest(request);
 
     service.lock(cutoffDate);
@@ -43,7 +43,7 @@ class LockCertificateDomainServiceTest {
 
   @Test
   void shallPersistLockedDraft() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(List.of(certificate)).when(certificateRepository).findByCertificatesRequest(request);
 
     service.lock(cutoffDate);
@@ -53,8 +53,8 @@ class LockCertificateDomainServiceTest {
 
   @Test
   void shallReturnLockedDrafts() {
-    final var certificate = mock(Certificate.class);
-    final var lockedCertificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
+    final var lockedCertificate = mock(MedicalCertificate.class);
 
     doReturn(List.of(certificate)).when(certificateRepository).findByCertificatesRequest(request);
     doReturn(lockedCertificate).when(certificateRepository).save(certificate);

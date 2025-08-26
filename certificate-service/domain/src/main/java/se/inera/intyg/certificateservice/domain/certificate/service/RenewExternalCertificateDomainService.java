@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
@@ -36,7 +37,7 @@ public class RenewExternalCertificateDomainService {
     //TODO: Move creation of newCertificate to repo
     final var placeholderCertificate = certificateRepository.createAndSave(request);
 
-    final var newCertificate = Certificate.builder()
+    final var newCertificate = MedicalCertificate.builder()
         .id(new CertificateId(UUID.randomUUID().toString()))
         .created(LocalDateTime.now(ZoneId.systemDefault()))
         .certificateModel(certificateModel)

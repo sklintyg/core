@@ -21,6 +21,7 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionE
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 import se.inera.intyg.certificateservice.domain.message.model.Answer;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
@@ -54,7 +55,7 @@ class HandleMessageDomainServiceTest {
 
     @Test
     void shouldThrowErrorIfNotAllowedToHandle() {
-      certificate = mock(Certificate.class);
+      certificate = mock(MedicalCertificate.class);
 
       when(certificate.id())
           .thenReturn(new CertificateId("ID"));
@@ -74,7 +75,7 @@ class HandleMessageDomainServiceTest {
       @BeforeEach
       void setup() {
         savedMessage = mock(Message.class);
-        certificate = mock(Certificate.class);
+        certificate = mock(MedicalCertificate.class);
         when(certificate.allowTo(CertificateActionType.HANDLE_COMPLEMENT,
             Optional.of(ACTION_EVALUATION)))
             .thenReturn(true);
@@ -127,7 +128,7 @@ class HandleMessageDomainServiceTest {
   @Nested
   class HandleAdministrativeMessage {
 
-    private final Certificate certificate = mock(Certificate.class);
+    private final Certificate certificate = mock(MedicalCertificate.class);
     private final Message savedMessage = Message.builder().build();
     private final Message.MessageBuilder administrativeMessage = Message.builder()
         .type(MessageType.CONTACT);

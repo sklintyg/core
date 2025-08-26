@@ -28,6 +28,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
@@ -68,7 +69,7 @@ class CreateCertificateDomainServiceTest {
       .careUnit(ALFA_VARDCENTRAL)
       .careProvider(ALFA_REGIONEN)
       .build();
-  private Certificate certificate = mock(Certificate.class);
+  private Certificate certificate = mock(MedicalCertificate.class);
   private CertificateModel certificateModel = mock(CertificateModel.class);
 
   @Nested

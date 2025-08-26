@@ -11,8 +11,8 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 
 class ActionRulePatientAliveTest {
 
@@ -62,7 +62,7 @@ class ActionRulePatientAliveTest {
           .user(AJLA_DOKTOR)
           .build();
 
-      final var certificate = Certificate.builder()
+      final var certificate = MedicalCertificate.builder()
           .certificateMetaData(
               CertificateMetaData.builder()
                   .patient(ATHENA_REACT_ANDERSSON)
@@ -81,7 +81,7 @@ class ActionRulePatientAliveTest {
           .user(AJLA_DOKTOR)
           .build();
 
-      final var certificate = Certificate.builder()
+      final var certificate = MedicalCertificate.builder()
           .certificateMetaData(
               CertificateMetaData.builder()
                   .patient(ATHENA_REACT_ANDERSSON)
@@ -102,7 +102,7 @@ class ActionRulePatientAliveTest {
         .user(AJLA_DOKTOR)
         .build();
 
-    final var certificate = Certificate.builder()
+    final var certificate = MedicalCertificate.builder()
         .certificateMetaData(CertificateMetaData.builder()
             .build())
         .build();

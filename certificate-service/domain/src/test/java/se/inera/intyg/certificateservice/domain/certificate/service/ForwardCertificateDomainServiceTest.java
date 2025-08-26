@@ -14,8 +14,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 
@@ -30,7 +30,7 @@ class ForwardCertificateDomainServiceTest {
 
   @Test
   void shallThrowIfNotAllowedToForwardCertificate() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(CERTIFICATE_ID).when(certificate).id();
     doReturn(false).when(certificate)
         .allowTo(CertificateActionType.FORWARD_CERTIFICATE, Optional.of(ACTION_EVALUATION));
@@ -43,7 +43,7 @@ class ForwardCertificateDomainServiceTest {
 
   @Test
   void shallForwardIfAllowedToForwardCertificate() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(true).when(certificate)
         .allowTo(CertificateActionType.FORWARD_CERTIFICATE,
             Optional.of(ACTION_EVALUATION));
@@ -54,7 +54,7 @@ class ForwardCertificateDomainServiceTest {
 
   @Test
   void shallForwardIfAllowedToForwardCertificateFromList() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(false).when(certificate)
         .allowTo(CertificateActionType.FORWARD_CERTIFICATE,
             Optional.of(ACTION_EVALUATION));
@@ -68,7 +68,7 @@ class ForwardCertificateDomainServiceTest {
 
   @Test
   void shallPersistForwardedCertificate() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(true).when(certificate)
         .allowTo(CertificateActionType.FORWARD_CERTIFICATE, Optional.of(ACTION_EVALUATION));
 
@@ -79,7 +79,7 @@ class ForwardCertificateDomainServiceTest {
 
   @Test
   void shallReturnCertificate() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(true).when(certificate)
         .allowTo(CertificateActionType.FORWARD_CERTIFICATE, Optional.of(ACTION_EVALUATION));
     doReturn(certificate).when(certificateRepository).save(certificate);

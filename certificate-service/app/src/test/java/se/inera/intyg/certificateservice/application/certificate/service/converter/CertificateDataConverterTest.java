@@ -24,10 +24,10 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfigDate;
 import se.inera.intyg.certificateservice.application.certificate.dto.validation.CertificateDataValidationMandatory;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDate;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.CertificateBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
@@ -95,7 +95,7 @@ class CertificateDataConverterTest {
       when(certificateDataValueConverterDate.getType())
           .thenReturn(ElementType.DATE);
       when(certificateDataDateConfigConverter.convert(any(ElementSpecification.class),
-          any(Certificate.class)))
+          any(MedicalCertificate.class)))
           .thenReturn(
               CertificateDataConfigDate.builder().build()
           );
@@ -776,7 +776,7 @@ class CertificateDataConverterTest {
       when(certificateDataValueConverterDate.getType())
           .thenReturn(ElementType.DATE);
       when(certificateDataDateConfigConverter.convert(any(ElementSpecification.class),
-          any(Certificate.class)))
+          any(MedicalCertificate.class)))
           .thenReturn(
               CertificateDataConfigDate.builder().build()
           );

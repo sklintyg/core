@@ -20,7 +20,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 import se.inera.intyg.certificateservice.domain.event.model.MessageEvent;
@@ -57,7 +57,7 @@ class AnswerComplementDomainServiceTest {
 
   @Test
   void shallThrowExceptionIfUserDontHasNoAccessToCannotComplement() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(false).when(certificate).allowTo(CANNOT_COMPLEMENT, Optional.of(ACTION_EVALUATION));
 
@@ -69,7 +69,7 @@ class AnswerComplementDomainServiceTest {
 
   @Test
   void shallAnswerComplementForCertificate() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
 
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(CANNOT_COMPLEMENT, Optional.of(ACTION_EVALUATION));
@@ -83,7 +83,7 @@ class AnswerComplementDomainServiceTest {
 
   @Test
   void shallReturnCertificate() {
-    final var expectedCertificate = mock(Certificate.class);
+    final var expectedCertificate = mock(MedicalCertificate.class);
 
     doReturn(expectedCertificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(expectedCertificate)
@@ -99,7 +99,7 @@ class AnswerComplementDomainServiceTest {
   @Test
   void shallPublishAnswerComplementMessageEventWithLatestAnswer() {
     final var certificateEventCaptor = ArgumentCaptor.forClass(MessageEvent.class);
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
 
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(CERTIFICATE_ID).when(certificate).id();
@@ -140,7 +140,7 @@ class AnswerComplementDomainServiceTest {
 
   @Test
   void shallIncludeReasonNotAllowedToException() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     final var expectedReason = List.of("expectedReason");
 
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
@@ -158,7 +158,7 @@ class AnswerComplementDomainServiceTest {
 
   @Test
   void shallSetMessagesToHandleIfMessageTypeComplement() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
 
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(CANNOT_COMPLEMENT, Optional.of(ACTION_EVALUATION));

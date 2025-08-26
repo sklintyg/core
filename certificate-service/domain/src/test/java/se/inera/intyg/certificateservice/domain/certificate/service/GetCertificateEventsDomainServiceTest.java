@@ -21,6 +21,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateEvent;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateEventType;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 
@@ -62,7 +63,7 @@ class GetCertificateEventsDomainServiceTest {
       when(certificate.allowTo(CertificateActionType.READ, Optional.of(ACTION_EVALUATION)))
           .thenReturn(true);
       when(getCertificateEventsOfTypeDomainService.events(
-          any(Certificate.class),
+          any(MedicalCertificate.class),
           any(CertificateEventType.class))
       ).thenReturn(EVENT);
     }

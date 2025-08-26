@@ -20,7 +20,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
@@ -39,7 +39,7 @@ class ComplementCertificateDomainServiceTest {
 
   @Test
   void shallThrowExceptionIfUserHasNoAccessToComplement() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(false).when(certificate).allowTo(COMPLEMENT, Optional.of(ACTION_EVALUATION));
 
@@ -51,8 +51,8 @@ class ComplementCertificateDomainServiceTest {
 
   @Test
   void shallComplementCertificate() {
-    final var newCertificate = mock(Certificate.class);
-    final var certificate = mock(Certificate.class);
+    final var newCertificate = mock(MedicalCertificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(COMPLEMENT, Optional.of(ACTION_EVALUATION));
     doReturn(newCertificate).when(certificate).complement(ACTION_EVALUATION);
@@ -65,8 +65,8 @@ class ComplementCertificateDomainServiceTest {
 
   @Test
   void shallSetExternalReferenceOnComplementCertificate() {
-    final var newCertificate = mock(Certificate.class);
-    final var certificate = mock(Certificate.class);
+    final var newCertificate = mock(MedicalCertificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(COMPLEMENT, Optional.of(ACTION_EVALUATION));
     doReturn(newCertificate).when(certificate).complement(ACTION_EVALUATION);
@@ -79,10 +79,10 @@ class ComplementCertificateDomainServiceTest {
 
   @Test
   void shallReturnNewCertificate() {
-    final var expectedCertificate = mock(Certificate.class);
-    final var newCertificate = mock(Certificate.class);
+    final var expectedCertificate = mock(MedicalCertificate.class);
+    final var newCertificate = mock(MedicalCertificate.class);
 
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(COMPLEMENT, Optional.of(ACTION_EVALUATION));
     doReturn(newCertificate).when(certificate).complement(ACTION_EVALUATION);
@@ -96,10 +96,10 @@ class ComplementCertificateDomainServiceTest {
 
   @Test
   void shallPublishComplementCertificateEvent() {
-    final var expectedCertificate = mock(Certificate.class);
-    final var newCertificate = mock(Certificate.class);
+    final var expectedCertificate = mock(MedicalCertificate.class);
+    final var newCertificate = mock(MedicalCertificate.class);
 
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(COMPLEMENT, Optional.of(ACTION_EVALUATION));
     doReturn(newCertificate).when(certificate).complement(ACTION_EVALUATION);
@@ -122,7 +122,7 @@ class ComplementCertificateDomainServiceTest {
 
   @Test
   void shallIncludeReasonNotAllowedToException() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     final var expectedReason = List.of("expectedReason");
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(false).when(certificate).allowTo(COMPLEMENT, Optional.of(ACTION_EVALUATION));

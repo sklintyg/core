@@ -18,7 +18,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.common.exception.CitizenCertificateForbidden;
@@ -44,7 +44,7 @@ class SendCitizenCertificateDomainServiceTest {
 
   @Test
   void shallThrowExceptionIfCertificateNotIssuedOnPatient() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
 
     assertThrows(CitizenCertificateForbidden.class,
@@ -54,7 +54,7 @@ class SendCitizenCertificateDomainServiceTest {
 
   @Test
   void shallThrowExceptionIfCertificateNotAvailableForCitizen() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     final var certificateModel = CertificateModel.builder()
         .availableForCitizen(false)
         .build();
@@ -73,7 +73,7 @@ class SendCitizenCertificateDomainServiceTest {
     final var certificateModel = CertificateModel.builder()
         .availableForCitizen(true)
         .build();
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
 
     doReturn(true).when(certificate).isCertificateIssuedOnPatient(PERSON_ID);
     doReturn(certificateModel).when(certificate).certificateModel();
@@ -86,11 +86,11 @@ class SendCitizenCertificateDomainServiceTest {
 
   @Test
   void shallReturnSentCertificate() {
-    final var expectedCertificate = mock(Certificate.class);
+    final var expectedCertificate = mock(MedicalCertificate.class);
     final var certificateModel = CertificateModel.builder()
         .availableForCitizen(true)
         .build();
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
 
     doReturn(true).when(certificate).isCertificateIssuedOnPatient(PERSON_ID);
     doReturn(certificateModel).when(certificate).certificateModel();
@@ -105,12 +105,12 @@ class SendCitizenCertificateDomainServiceTest {
 
   @Test
   void shallPublishSentCertificateEvent() {
-    final var expectedCertificate = mock(Certificate.class);
+    final var expectedCertificate = mock(MedicalCertificate.class);
 
     final var certificateModel = CertificateModel.builder()
         .availableForCitizen(true)
         .build();
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
 
     doReturn(true).when(certificate).isCertificateIssuedOnPatient(PERSON_ID);
     doReturn(certificateModel).when(certificate).certificateModel();

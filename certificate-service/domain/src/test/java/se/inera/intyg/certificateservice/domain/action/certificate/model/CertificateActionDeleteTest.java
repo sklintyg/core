@@ -30,6 +30,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.CertificateBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
@@ -53,7 +54,7 @@ class CertificateActionDeleteTest {
   void setUp() {
     certificateActionDelete = (CertificateActionDelete) certificateActionFactory.create(
         CERTIFICATE_ACTION_SPECIFICATION);
-    certificateBuilder = Certificate.builder()
+    certificateBuilder = MedicalCertificate.builder()
         .certificateMetaData(
             CertificateMetaData.builder()
                 .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
@@ -289,7 +290,7 @@ class CertificateActionDeleteTest {
     void setUp() {
       certificateActionDelete = (CertificateActionDelete) certificateActionFactory.create(
           CERTIFICATE_ACTION_SPECIFICATION);
-      certificateBuilder = Certificate.builder()
+      certificateBuilder = MedicalCertificate.builder()
           .status(Status.DRAFT)
           .certificateMetaData(
               CertificateMetaData.builder()

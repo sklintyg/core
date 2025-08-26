@@ -32,9 +32,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation.ActionEvaluationBuilder;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.CertificateBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
@@ -70,7 +70,7 @@ class CertificateActionForwardCertificateMessageTest {
         .careProvider(ALFA_REGIONEN)
         .careUnit(ALFA_MEDICINCENTRUM);
 
-    certificateBuilder = Certificate.builder()
+    certificateBuilder = MedicalCertificate.builder()
         .status(Status.SIGNED)
         .sent(Sent.builder().build())
         .certificateMetaData(
@@ -252,7 +252,7 @@ class CertificateActionForwardCertificateMessageTest {
 
     @BeforeEach
     void setUp() {
-      certificateBuilder = Certificate.builder()
+      certificateBuilder = MedicalCertificate.builder()
           .status(Status.SIGNED)
           .sent(Sent.builder().build())
           .certificateMetaData(

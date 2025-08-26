@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ReadyForSign;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revoked;
@@ -65,7 +66,7 @@ public class CertificateEntityMapper {
     return toDomain(certificateEntity, true);
   }
 
-  public Certificate toDomain(CertificateEntity certificateEntity, boolean includeRelations) {
+  public MedicalCertificate toDomain(CertificateEntity certificateEntity, boolean includeRelations) {
     return toDomain(
         certificateEntity,
         certificateModelRepository.getById(
@@ -241,7 +242,7 @@ public class CertificateEntityMapper {
     return toDomain(certificateEntity, model, true);
   }
 
-  public Certificate toDomain(CertificateEntity certificateEntity, CertificateModel model,
+  public MedicalCertificate toDomain(CertificateEntity certificateEntity, CertificateModel model,
       boolean includeRelations) {
     final var relations = getRelations(certificateEntity, includeRelations);
     final var messages = messageEntityRepository.findMessageEntitiesByCertificate(certificateEntity)
@@ -250,7 +251,7 @@ public class CertificateEntityMapper {
         .map(messageEntityMapper::toDomain)
         .toList();
 
-    return Certificate.builder()
+    return MedicalCertificate.builder()
         .id(new CertificateId(certificateEntity.getCertificateId()))
         .created(certificateEntity.getCreated())
         .signed(certificateEntity.getSigned())

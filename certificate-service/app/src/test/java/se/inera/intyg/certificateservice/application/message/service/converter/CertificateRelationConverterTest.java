@@ -10,8 +10,8 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
@@ -29,7 +29,7 @@ class CertificateRelationConverterTest {
         Relation.builder()
             .type(RelationType.COMPLEMENT)
             .certificate(
-                Certificate.builder()
+                MedicalCertificate.builder()
                     .id(CHILD_CERTIFICATE_ID)
                     .status(Status.SIGNED)
                     .build()

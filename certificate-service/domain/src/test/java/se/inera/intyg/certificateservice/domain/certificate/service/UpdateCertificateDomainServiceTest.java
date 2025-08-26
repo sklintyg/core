@@ -23,7 +23,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
@@ -45,7 +45,7 @@ class UpdateCertificateDomainServiceTest {
   void shallThrowExceptionIfUserHasNoAccessToUpdate() {
     final var data = List.of(DATE);
 
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(false).when(certificate).allowTo(UPDATE, Optional.of(ACTION_EVALUATION));
 
@@ -59,7 +59,7 @@ class UpdateCertificateDomainServiceTest {
   void shallUpdateMetadataInCertificate() {
     final var data = List.of(DATE);
 
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(UPDATE, Optional.of(ACTION_EVALUATION));
 
@@ -72,7 +72,7 @@ class UpdateCertificateDomainServiceTest {
   @Test
   void shallUpdateExternalReferenceIfExternalReferenceIsNotAlreadySet() {
     final var data = List.of(DATE);
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
 
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(UPDATE, Optional.of(ACTION_EVALUATION));
@@ -86,7 +86,7 @@ class UpdateCertificateDomainServiceTest {
   @Test
   void shallNotUpdateExternalReferenceIfExternalReferenceIsAlreadySet() {
     final var data = List.of(DATE);
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
 
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(UPDATE, Optional.of(ACTION_EVALUATION));
@@ -104,7 +104,7 @@ class UpdateCertificateDomainServiceTest {
     final var data = List.of(DATE);
     final var revision = new Revision(0);
 
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(UPDATE, Optional.of(ACTION_EVALUATION));
 
@@ -118,7 +118,7 @@ class UpdateCertificateDomainServiceTest {
   void shallSaveCertificate() {
     final var data = List.of(DATE);
 
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(UPDATE, Optional.of(ACTION_EVALUATION));
 
@@ -130,10 +130,10 @@ class UpdateCertificateDomainServiceTest {
 
   @Test
   void shallReturnSaveCertificate() {
-    final var expectedCertificate = Certificate.builder().build();
+    final var expectedCertificate = MedicalCertificate.builder().build();
     final var data = List.of(DATE);
 
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(UPDATE, Optional.of(ACTION_EVALUATION));
     doReturn(expectedCertificate).when(certificateRepository).save(certificate);
@@ -146,10 +146,10 @@ class UpdateCertificateDomainServiceTest {
 
   @Test
   void shallPublishUpdateCertificateEvent() {
-    final var expectedCertificate = Certificate.builder().build();
+    final var expectedCertificate = MedicalCertificate.builder().build();
     final var data = List.of(DATE);
 
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(UPDATE, Optional.of(ACTION_EVALUATION));
     doReturn(expectedCertificate).when(certificateRepository).save(certificate);
@@ -171,7 +171,7 @@ class UpdateCertificateDomainServiceTest {
   @Test
   void shallIncludeReasonNotAllowedToException() {
     final var data = List.of(DATE);
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     final var expectedReason = List.of("expectedReason");
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(false).when(certificate).allowTo(UPDATE, Optional.of(ACTION_EVALUATION));

@@ -36,6 +36,7 @@ import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.application.message.dto.ComplementDTO;
 import se.inera.intyg.certificateservice.application.message.dto.QuestionTypeDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.message.model.Answer;
 import se.inera.intyg.certificateservice.domain.message.model.Author;
@@ -64,7 +65,7 @@ class QuestionConverterTest {
   @InjectMocks
   QuestionConverter questionConverter;
 
-  private static final Certificate CERTIFICATE = Certificate.builder().build();
+  private static final Certificate CERTIFICATE = MedicalCertificate.builder().build();
 
   @BeforeEach
   void setUp() {

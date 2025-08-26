@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 
 class ElementMessageTest {
@@ -16,7 +16,7 @@ class ElementMessageTest {
         .includedForStatuses(List.of(Status.DRAFT))
         .build();
 
-    final var certificate = Certificate.builder()
+    final var certificate = MedicalCertificate.builder()
         .status(Status.DRAFT)
         .build();
 
@@ -29,7 +29,7 @@ class ElementMessageTest {
         .includedForStatuses(List.of(Status.DRAFT))
         .build();
 
-    final var certificate = Certificate.builder()
+    final var certificate = MedicalCertificate.builder()
         .status(Status.SIGNED)
         .build();
 

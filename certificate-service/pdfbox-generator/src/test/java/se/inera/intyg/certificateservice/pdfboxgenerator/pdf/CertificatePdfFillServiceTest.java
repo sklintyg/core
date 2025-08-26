@@ -34,6 +34,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
@@ -108,14 +109,14 @@ class CertificatePdfFillServiceTest {
 
     @BeforeEach
     void setup() {
-      when(pdfPatientValueGenerator.generate(any(Certificate.class),
+      when(pdfPatientValueGenerator.generate(any(MedicalCertificate.class),
           eq(List.of(new PdfFieldId(PATIENT_ID_FIELD_ID)))))
           .thenReturn(List.of(PATIENT_FIELD));
 
-      when(pdfUnitValueGenerator.generate(any(Certificate.class)))
+      when(pdfUnitValueGenerator.generate(any(MedicalCertificate.class)))
           .thenReturn(List.of(UNIT_FIELD));
 
-      when(pdfElementValueGenerator.generate(any(Certificate.class)))
+      when(pdfElementValueGenerator.generate(any(MedicalCertificate.class)))
           .thenReturn(List.of(SYMPTOM_FIELD));
     }
 
@@ -215,7 +216,7 @@ class CertificatePdfFillServiceTest {
       @BeforeEach
       void setup() {
         certificate = getCertificate();
-        when(pdfSignatureValueGenerator.generate(any(Certificate.class)))
+        when(pdfSignatureValueGenerator.generate(any(MedicalCertificate.class)))
             .thenReturn(List.of(SIGNED_DATE_FIELD));
       }
 
@@ -318,7 +319,7 @@ class CertificatePdfFillServiceTest {
       @BeforeEach
       void setup() {
         certificate = getSentCertificate();
-        when(pdfSignatureValueGenerator.generate(any(Certificate.class)))
+        when(pdfSignatureValueGenerator.generate(any(MedicalCertificate.class)))
             .thenReturn(List.of(SIGNED_DATE_FIELD));
       }
 
@@ -422,7 +423,7 @@ class CertificatePdfFillServiceTest {
     @BeforeEach
     void setup() {
       certificate = getfk7809Certificate();
-      when(pdfElementValueGenerator.generate(any(Certificate.class)))
+      when(pdfElementValueGenerator.generate(any(MedicalCertificate.class)))
           .thenReturn(List.of(DIAGNOSE_DESCRIPTION_1, DIAGNOSE_DESCRIPTION_2));
     }
 
@@ -451,7 +452,7 @@ class CertificatePdfFillServiceTest {
     @BeforeEach
     void setup() {
       certificate = getCertificateWithSeveralPages();
-      when(pdfSignatureValueGenerator.generate(any(Certificate.class)))
+      when(pdfSignatureValueGenerator.generate(any(MedicalCertificate.class)))
           .thenReturn(Collections.emptyList());
     }
 

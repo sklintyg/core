@@ -18,7 +18,7 @@ import se.inera.intyg.certificateservice.application.common.dto.AvailableFunctio
 import se.inera.intyg.certificateservice.application.common.dto.AvailableFunctionType;
 import se.inera.intyg.certificateservice.application.common.dto.InformationDTO;
 import se.inera.intyg.certificateservice.application.common.dto.InformationType;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
@@ -118,7 +118,7 @@ class AvailableFunctionsFactoryTest {
               .children(List.of(
                   Relation.builder()
                       .certificate(
-                          Certificate.builder()
+                          MedicalCertificate.builder()
                               .status(Status.SIGNED)
                               .build()
                       )
@@ -139,7 +139,7 @@ class AvailableFunctionsFactoryTest {
               .status(Status.SIGNED)
               .children(List.of(
                   Relation.builder()
-                      .certificate(Certificate.builder()
+                      .certificate(MedicalCertificate.builder()
                           .status(Status.DRAFT)
                           .build())
                       .type(RelationType.REPLACE)
@@ -159,7 +159,7 @@ class AvailableFunctionsFactoryTest {
               .status(Status.SIGNED)
               .children(List.of(
                   Relation.builder()
-                      .certificate(Certificate.builder()
+                      .certificate(MedicalCertificate.builder()
                           .status(Status.SIGNED)
                           .build())
                       .type(RelationType.RENEW)

@@ -21,7 +21,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
@@ -50,7 +50,7 @@ class RevokeCertificateDomainServiceTest {
 
   @Test
   void shallThrowExceptionIfUserHasNoAccessToRevoke() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(false).when(certificate).allowTo(REVOKE, Optional.of(ACTION_EVALUATION));
 
@@ -63,8 +63,8 @@ class RevokeCertificateDomainServiceTest {
   @Test
   void shallRevokeCertificate() {
 
-    final var certificate = mock(Certificate.class);
-    final var revokedCertificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
+    final var revokedCertificate = mock(MedicalCertificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(REVOKE, Optional.of(ACTION_EVALUATION));
     doReturn(revokedCertificate).when(certificateRepository).save(certificate);
@@ -76,9 +76,9 @@ class RevokeCertificateDomainServiceTest {
 
   @Test
   void shallReturnRevokedCertificate() {
-    final var expectedCertificate = mock(Certificate.class);
+    final var expectedCertificate = mock(MedicalCertificate.class);
 
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(REVOKE, Optional.of(ACTION_EVALUATION));
     doReturn(expectedCertificate).when(certificateRepository).save(certificate);
@@ -91,9 +91,9 @@ class RevokeCertificateDomainServiceTest {
 
   @Test
   void shallPublishRevokedCertificateEvent() {
-    final var expectedCertificate = mock(Certificate.class);
+    final var expectedCertificate = mock(MedicalCertificate.class);
 
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(REVOKE, Optional.of(ACTION_EVALUATION));
     doReturn(expectedCertificate).when(certificateRepository).save(certificate);
@@ -113,7 +113,7 @@ class RevokeCertificateDomainServiceTest {
 
   @Test
   void shallIncludeReasonNotAllowedToException() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     final var expectedReason = List.of("expectedReason");
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(false).when(certificate)
@@ -131,9 +131,9 @@ class RevokeCertificateDomainServiceTest {
   @Test
   void shallSetMessagesToHandleIfContainingMessages() {
     final var expectedMessages = List.of(COMPLEMENT_MESSAGE);
-    final var revokedCertificate = mock(Certificate.class);
+    final var revokedCertificate = mock(MedicalCertificate.class);
 
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(REVOKE, Optional.of(ACTION_EVALUATION));
     doReturn(revokedCertificate).when(certificateRepository).save(certificate);

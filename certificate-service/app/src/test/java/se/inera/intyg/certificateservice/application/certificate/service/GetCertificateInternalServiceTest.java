@@ -13,8 +13,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateConverter;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,7 +29,7 @@ class GetCertificateInternalServiceTest {
 
   @Test
   void shallReturnGetCertificateResponse() {
-    final var certificate = Certificate.builder().build();
+    final var certificate = MedicalCertificate.builder().build();
     final var certificateDto = CertificateDTO.builder().build();
     final var expectedResponse = GetCertificateInternalResponse.builder()
         .certificate(certificateDto)

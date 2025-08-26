@@ -13,11 +13,11 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
@@ -35,7 +35,7 @@ class FK3226CertificateSummaryProviderTest {
   @Test
   void shallIncludeLabel() {
     assertEquals("Avser diagnos",
-        provider.summaryOf(Certificate.builder().build()).label()
+        provider.summaryOf(MedicalCertificate.builder().build()).label()
     );
   }
 
@@ -45,7 +45,7 @@ class FK3226CertificateSummaryProviderTest {
 
     @Test
     void shallReturnEmptyValueIfCertificateSignedIsNull() {
-      final var certificate = Certificate.builder()
+      final var certificate = MedicalCertificate.builder()
           .signed(null)
           .build();
 
@@ -56,7 +56,7 @@ class FK3226CertificateSummaryProviderTest {
 
     @Test
     void shallReturnEmptyValueIfCertificateCertificateDontContainDiagnosisValue() {
-      final var certificate = Certificate.builder()
+      final var certificate = MedicalCertificate.builder()
           .signed(LocalDateTime.now())
           .elementData(
               List.of(
@@ -74,7 +74,7 @@ class FK3226CertificateSummaryProviderTest {
 
     @Test
     void shallThrowIfCertificateCertificateContainDiagnosisValueButWrongType() {
-      final var certificate = Certificate.builder()
+      final var certificate = MedicalCertificate.builder()
           .signed(LocalDateTime.now())
           .elementData(
               List.of(
@@ -94,7 +94,7 @@ class FK3226CertificateSummaryProviderTest {
     @Test
     void shallReturnValueFromDiagnosisIfCertificateContainDiagnosisValue() {
       final var expectedCode = "expectedCode";
-      final var certificate = Certificate.builder()
+      final var certificate = MedicalCertificate.builder()
           .signed(LocalDateTime.now())
           .elementData(
               List.of(
@@ -122,7 +122,7 @@ class FK3226CertificateSummaryProviderTest {
 
     @Test
     void shallReturnEmptyValueFromDiagnosisIfCertificateContainDiagnosisValueButNotCorrectId() {
-      final var certificate = Certificate.builder()
+      final var certificate = MedicalCertificate.builder()
           .signed(LocalDateTime.now())
           .elementData(
               List.of(

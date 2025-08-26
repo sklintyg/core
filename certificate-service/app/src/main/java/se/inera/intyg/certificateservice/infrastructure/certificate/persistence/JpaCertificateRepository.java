@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateExportPage;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
@@ -47,7 +48,7 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
       throw new IllegalArgumentException("Unable to create, certificateModel was null");
     }
 
-    return Certificate.builder()
+    return MedicalCertificate.builder()
         .id(new CertificateId(UUID.randomUUID().toString()))
         .created(LocalDateTime.now(ZoneId.systemDefault()))
         .certificateModel(certificateModel)
@@ -58,7 +59,7 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
   @Override
   public Certificate createAndSave(PlaceholderRequest request) {
     //TODO: Do we really care about revision and created if were gonna implement custom storage? Created is used when creating relations so its needed.
-    final var placeholderCertificate = Certificate.builder()
+    final var placeholderCertificate = MedicalCertificate.builder()
         .id(request.certificateId())
         .created(request.created())
         .revision(new Revision(request.version()))

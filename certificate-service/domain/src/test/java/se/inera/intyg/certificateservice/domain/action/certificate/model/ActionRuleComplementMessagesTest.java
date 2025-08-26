@@ -7,8 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionRuleComplementMessages;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.message.model.Answer;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
@@ -22,7 +21,7 @@ class ActionRuleComplementMessagesTest {
   void shouldReturnTrueIfMessageIsComplementAndNotAnsweredOrHandled() {
     final var result = actionRule.evaluate(
         Optional.of(
-            Certificate.builder()
+            MedicalCertificate.builder()
                 .messages(List.of(
                     Message.builder()
                         .type(MessageType.COMPLEMENT)
@@ -41,7 +40,7 @@ class ActionRuleComplementMessagesTest {
   void shouldReturnFalseIfNoComplement() {
     final var result = actionRule.evaluate(
         Optional.of(
-            Certificate.builder()
+            MedicalCertificate.builder()
                 .messages(List.of(
                     Message.builder()
                         .type(MessageType.REMINDER)
@@ -59,7 +58,7 @@ class ActionRuleComplementMessagesTest {
   void shouldReturnFalseIfNoMessages() {
     final var result = actionRule.evaluate(
         Optional.of(
-            Certificate.builder()
+            MedicalCertificate.builder()
                 .messages(Collections.emptyList())
                 .build()
         ),
@@ -73,7 +72,7 @@ class ActionRuleComplementMessagesTest {
   void shouldReturnFalseIfNullMessages() {
     final var result = actionRule.evaluate(
         Optional.of(
-            Certificate.builder()
+            MedicalCertificate.builder()
                 .build()
         ),
         Optional.empty()
@@ -86,7 +85,7 @@ class ActionRuleComplementMessagesTest {
   void shouldReturnFalseIfHandledComplement() {
     final var result = actionRule.evaluate(
         Optional.of(
-            Certificate.builder()
+            MedicalCertificate.builder()
                 .messages(List.of(
                     Message.builder()
                         .type(MessageType.COMPLEMENT)
@@ -104,7 +103,7 @@ class ActionRuleComplementMessagesTest {
   void shouldReturnFalseIfAnsweredComplement() {
     final var result = actionRule.evaluate(
         Optional.of(
-            Certificate.builder()
+            MedicalCertificate.builder()
                 .messages(List.of(
                     Message.builder()
                         .type(MessageType.COMPLEMENT)

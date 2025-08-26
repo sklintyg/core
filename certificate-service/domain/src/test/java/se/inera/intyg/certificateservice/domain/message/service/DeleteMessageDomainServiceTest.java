@@ -13,8 +13,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
@@ -35,7 +35,7 @@ class DeleteMessageDomainServiceTest {
 
   @Test
   void shallThrowIfNotAllowedToDeleteMessage() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     final var message = mock(Message.class);
     doReturn(message).when(messageRepository).getById(MESSAGE_ID);
     doReturn(CERTIFICATE_ID).when(message).certificateId();
@@ -51,7 +51,7 @@ class DeleteMessageDomainServiceTest {
 
   @Test
   void shallDeleteMessage() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     final var message = mock(Message.class);
     doReturn(message).when(messageRepository).getById(MESSAGE_ID);
     doReturn(CERTIFICATE_ID).when(message).certificateId();
@@ -66,7 +66,7 @@ class DeleteMessageDomainServiceTest {
 
   @Test
   void shallPersistDeletedMessage() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     final var message = mock(Message.class);
     doReturn(message).when(messageRepository).getById(MESSAGE_ID);
     doReturn(CERTIFICATE_ID).when(message).certificateId();

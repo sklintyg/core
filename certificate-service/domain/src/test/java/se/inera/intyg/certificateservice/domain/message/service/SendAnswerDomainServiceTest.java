@@ -18,7 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 import se.inera.intyg.certificateservice.domain.event.model.MessageEvent;
@@ -50,7 +50,7 @@ class SendAnswerDomainServiceTest {
 
   @Test
   void shallThrowIfNotAllowedToSendAnswer() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     final var message = mock(Message.class);
 
     doReturn(CERTIFICATE_ID).when(certificate).id();
@@ -64,7 +64,7 @@ class SendAnswerDomainServiceTest {
 
   @Test
   void shallReturnSentMessageWithAnswer() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     final var message = mock(Message.class);
     final var expectedMessage = mock(Message.class);
 
@@ -80,7 +80,7 @@ class SendAnswerDomainServiceTest {
 
   @Test
   void shallUpdateMessageWithSentAnswer() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     final var message = mock(Message.class);
 
     doReturn(CERTIFICATE_ID).when(certificate).id();
@@ -95,7 +95,7 @@ class SendAnswerDomainServiceTest {
 
   @Test
   void shallPublishEventToMessageEventDomainService() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     final var message = mock(Message.class);
     final var certificateEventCaptor = ArgumentCaptor.forClass(MessageEvent.class);
 

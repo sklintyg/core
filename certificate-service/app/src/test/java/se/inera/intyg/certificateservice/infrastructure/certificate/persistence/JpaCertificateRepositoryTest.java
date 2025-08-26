@@ -36,6 +36,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateExportPage;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
@@ -156,7 +157,7 @@ class JpaCertificateRepositoryTest {
       .data(DATA)
       .build();
 
-  private static final Certificate CERTIFICATE = Certificate.builder().build();
+  private static final Certificate CERTIFICATE = MedicalCertificate.builder().build();
 
   @Nested
   class Create {
@@ -211,7 +212,7 @@ class JpaCertificateRepositoryTest {
 
     @Test
     void shouldReturnCertificate() {
-      final var certificate = Certificate.builder().build();
+      final var certificate = MedicalCertificate.builder().build();
 
       doReturn(CERTIFICATE_ENTITY).when(certificateEntityMapper).toEntity(certificate);
       doReturn(CERTIFICATE_ENTITY).when(certificateEntityRepository).save(CERTIFICATE_ENTITY);
@@ -224,7 +225,7 @@ class JpaCertificateRepositoryTest {
 
     @Test
     void shouldDeleteCertificate() {
-      final var expectedResult = Certificate.builder()
+      final var expectedResult = MedicalCertificate.builder()
           .id(CERTIFICATE_ID)
           .status(Status.DELETED_DRAFT)
           .build();
@@ -240,7 +241,7 @@ class JpaCertificateRepositoryTest {
 
     @Test
     void shouldDeleteRelationsIfStatusLockedDraft() {
-      final var expectedResult = Certificate.builder()
+      final var expectedResult = MedicalCertificate.builder()
           .id(CERTIFICATE_ID)
           .status(Status.LOCKED_DRAFT)
           .build();
@@ -254,7 +255,7 @@ class JpaCertificateRepositoryTest {
 
     @Test
     void shouldSaveCertificateRelations() {
-      final var certificate = Certificate.builder().build();
+      final var certificate = MedicalCertificate.builder().build();
 
       doReturn(CERTIFICATE_ENTITY).when(certificateEntityMapper).toEntity(certificate);
       doReturn(CERTIFICATE_ENTITY).when(certificateEntityRepository).save(CERTIFICATE_ENTITY);
@@ -284,7 +285,7 @@ class JpaCertificateRepositoryTest {
 
     @Test
     void shouldReturnCertificateFromRepository() {
-      final var expectedCertificate = Certificate.builder().build();
+      final var expectedCertificate = MedicalCertificate.builder().build();
 
       when(certificateEntityRepository.findByCertificateId("ID"))
           .thenReturn(Optional.of(CERTIFICATE_ENTITY));
@@ -316,7 +317,7 @@ class JpaCertificateRepositoryTest {
 
     @Test
     void shouldReturnCertificatesFromRepository() {
-      final var expectedCertificate = Certificate.builder().build();
+      final var expectedCertificate = MedicalCertificate.builder().build();
       final var expectedCertificates = List.of(expectedCertificate, expectedCertificate);
       final var certificate1 = new CertificateId("ID1");
       final var certificate2 = new CertificateId("ID2");

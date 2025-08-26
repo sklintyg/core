@@ -17,7 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
@@ -38,7 +38,7 @@ class RenewExternalCertificateDomainServiceTest {
 
   @Test
   void shallThrowExceptionIfUserHasNoAccessToRenew() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     final var certificateModel = mock(CertificateModel.class);
     doReturn(certificateModel).when(certificateModelRepository)
         .getById(FK7804_CERTIFICATE_MODEL_ID);
@@ -53,8 +53,8 @@ class RenewExternalCertificateDomainServiceTest {
 
   @Test
   void shallRenewCertificate() {
-    final var certificate = mock(Certificate.class);
-    final var newCertificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
+    final var newCertificate = mock(MedicalCertificate.class);
     final var certificateModel = mock(CertificateModel.class);
 
     doReturn(certificateModel).when(certificateModelRepository)
@@ -72,8 +72,8 @@ class RenewExternalCertificateDomainServiceTest {
 
   @Test
   void shallSetExternalReferenceOnRenewCertificate() {
-    final var certificate = mock(Certificate.class);
-    final var newCertificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
+    final var newCertificate = mock(MedicalCertificate.class);
     final var certificateModel = mock(CertificateModel.class);
 
     doReturn(certificateModel).when(certificateModelRepository)
@@ -91,10 +91,10 @@ class RenewExternalCertificateDomainServiceTest {
 
   @Test
   void shallReturnNewCertificate() {
-    final var expectedCertificate = mock(Certificate.class);
+    final var expectedCertificate = mock(MedicalCertificate.class);
 
-    final var certificate = mock(Certificate.class);
-    final var newCertificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
+    final var newCertificate = mock(MedicalCertificate.class);
     final var certificateModel = mock(CertificateModel.class);
 
     doReturn(certificateModel).when(certificateModelRepository)

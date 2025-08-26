@@ -29,8 +29,8 @@ import se.inera.intyg.certificateservice.application.common.converter.ResourceLi
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateAction;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.service.RenewCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
 
@@ -92,7 +92,7 @@ class RenewCertificateServiceTest {
         RENEW_CERTIFICATE_REQUEST.getCareProvider()
     );
 
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(certificate).when(renewCertificateDomainService).renew(
         new CertificateId(CERTIFICATE_ID),
         actionEvaluation,

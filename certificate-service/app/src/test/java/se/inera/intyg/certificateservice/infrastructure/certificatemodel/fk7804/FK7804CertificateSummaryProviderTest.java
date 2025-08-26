@@ -8,10 +8,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateSummary;
 
 class FK7804CertificateSummaryProviderTest {
@@ -27,7 +27,7 @@ class FK7804CertificateSummaryProviderTest {
             DateRange.builder().from(FROM).to(TO).build()
         ))
         .build();
-    final var certificate = Certificate.builder()
+    final var certificate = MedicalCertificate.builder()
         .signed(SIGNED)
         .elementData(List.of(ElementData.builder()
             .id(QUESTION_NEDSATTNING_ARBETSFORMAGA_ID)
@@ -52,7 +52,7 @@ class FK7804CertificateSummaryProviderTest {
             DateRange.builder().from(FROM.minusDays(5)).to(TO.plusDays(5)).build()
         ))
         .build();
-    final var certificate = Certificate.builder()
+    final var certificate = MedicalCertificate.builder()
         .signed(SIGNED)
         .elementData(List.of(ElementData.builder()
             .id(QUESTION_NEDSATTNING_ARBETSFORMAGA_ID)
@@ -78,7 +78,7 @@ class FK7804CertificateSummaryProviderTest {
             DateRange.builder().from(FROM.minusDays(10)).to(TO).build()
         ))
         .build();
-    final var certificate = Certificate.builder()
+    final var certificate = MedicalCertificate.builder()
         .signed(SIGNED)
         .elementData(List.of(ElementData.builder()
             .id(QUESTION_NEDSATTNING_ARBETSFORMAGA_ID)
@@ -95,4 +95,3 @@ class FK7804CertificateSummaryProviderTest {
     assertEquals(expected, new FK7804CertificateSummaryProvider().summaryOf(certificate));
   }
 }
-
