@@ -77,7 +77,9 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 class CertificateEntityMapperTest {
 
   @Mock
-  CertificateEntityRepository certificateEntityRepository;
+  private PlaceholderCertificateEntityMapper placeholderCertificateEntityMapper;
+  @Mock
+  private CertificateEntityRepository certificateEntityRepository;
   @Mock
   private PatientRepository patientRepository;
 
