@@ -25,6 +25,7 @@ import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateEntityMapper;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.PlaceholderCertificateEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecificationFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateRelationRepository;
@@ -37,6 +38,7 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
   @Value("${erase.certificates.page.size:1000}")
   private int eraseCertificatesPageSize;
 
+  private final PlaceholderCertificateEntityMapper placeholderCertificateEntityMapper;
   private final CertificateEntityRepository certificateEntityRepository;
   private final CertificateEntityMapper certificateEntityMapper;
   private final CertificateEntitySpecificationFactory certificateEntitySpecificationFactory;
@@ -69,11 +71,11 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
     //TODO: Implement persistence of placeholder certificate
     //TODO: Inject placeholder values in changelog
     final var savedEntity = certificateEntityRepository.save(
-        certificateEntityMapper.toEntity(placeholderCertificate)
+        placeholderCertificateEntityMapper.toEntity(placeholderCertificate)
     );
 
     //TODO: Map placeholderCertificate back to domain
-    return certificateEntityMapper.toDomain(savedEntity);
+    return placeholderCertificateEntityMapper.toDomain(savedEntity);
   }
 
   @Override
