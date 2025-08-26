@@ -57,7 +57,7 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
 
   @Override
   public Certificate createAndSave(PlaceholderRequest request) {
-    //TODO: Do we really care about revision and created if were gonna implement custom storage?
+    //TODO: Do we really care about revision and created if were gonna implement custom storage? Created is used when creating relations so its needed.
     final var placeholderCertificate = Certificate.builder()
         .id(request.certificateId())
         .created(request.created())
