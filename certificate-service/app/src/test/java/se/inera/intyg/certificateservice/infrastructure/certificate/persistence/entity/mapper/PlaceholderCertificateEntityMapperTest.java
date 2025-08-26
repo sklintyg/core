@@ -30,7 +30,7 @@ class PlaceholderCertificateEntityMapperTest {
   PlaceholderCertificateEntityMapper certificateEntityMapper;
 
   @Test
-  void shouldDoSomething() {
+  void shouldSetCertificateId() {
     certificateEntityMapper.toEntity(PlaceholderCertificate.builder().build());
   }
 }

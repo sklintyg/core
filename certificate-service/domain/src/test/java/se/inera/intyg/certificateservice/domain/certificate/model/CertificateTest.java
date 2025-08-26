@@ -112,7 +112,7 @@ import se.inera.intyg.certificateservice.domain.validation.model.ValidationResul
 class CertificateTest {
 
   private Certificate certificate;
-  private MedicalCertificate.CertificateBuilder certificateBuilder;
+  private MedicalCertificate.MedicalCertificateBuilder certificateBuilder;
   private CertificateModel certificateModel;
   private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
   @Mock

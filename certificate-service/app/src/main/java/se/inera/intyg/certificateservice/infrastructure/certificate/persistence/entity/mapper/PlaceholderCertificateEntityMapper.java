@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.PlaceholderCertificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateStatus;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateStatusEntity;
@@ -66,6 +69,14 @@ public class PlaceholderCertificateEntityMapper {
     certificateEntity.setPlaceholder(true);
 
     return certificateEntity;
+  }
+
+  public PlaceholderCertificate toDomain(CertificateEntity certificateEntity) {
+    return PlaceholderCertificate.builder()
+        .id(new CertificateId(certificateEntity.getCertificateId()))
+        .status(Status.valueOf(certificateEntity.getStatus().getStatus()))
+        .created(certificateEntity.getCreated())
+        .build();
   }
 
   private CertificateEntity toCertificateEntity(Certificate certificate) {

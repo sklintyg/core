@@ -28,6 +28,11 @@ import se.inera.intyg.certificateservice.domain.validation.model.ValidationResul
 @EqualsAndHashCode
 public class PlaceholderCertificate implements Certificate {
 
+  private final CertificateId id;
+  private final LocalDateTime created;
+  private Status status;
+
+
   @Override
   public List<CertificateAction> actions(Optional<ActionEvaluation> actionEvaluation) {
     return List.of();
@@ -209,17 +214,7 @@ public class PlaceholderCertificate implements Certificate {
   }
 
   @Override
-  public CertificateId id() {
-    return null;
-  }
-
-  @Override
   public CertificateModel certificateModel() {
-    return null;
-  }
-
-  @Override
-  public LocalDateTime created() {
     return null;
   }
 
@@ -255,11 +250,6 @@ public class PlaceholderCertificate implements Certificate {
 
   @Override
   public Revision revision() {
-    return null;
-  }
-
-  @Override
-  public Status status() {
     return null;
   }
 

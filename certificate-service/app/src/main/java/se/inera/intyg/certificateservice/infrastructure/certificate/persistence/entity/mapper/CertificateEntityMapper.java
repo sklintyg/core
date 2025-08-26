@@ -61,12 +61,17 @@ public class CertificateEntityMapper {
   private final CertificateRelationRepository certificateRelationRepository;
   private final MessageEntityRepository messageEntityRepository;
   private final MessageEntityMapper messageEntityMapper;
+  private final PlaceholderCertificateEntityMapper placeholderCertificateEntityMapper;
 
   public Certificate toDomain(CertificateEntity certificateEntity) {
     return toDomain(certificateEntity, true);
   }
 
-  public MedicalCertificate toDomain(CertificateEntity certificateEntity, boolean includeRelations) {
+  public Certificate toDomain(CertificateEntity certificateEntity, boolean includeRelations) {
+    if (Boolean.TRUE.equals(certificateEntity.getPlaceholder())) {
+      return placeholderCertificateEntityMapper.toDomain(certificateEntity);
+    }
+    
     return toDomain(
         certificateEntity,
         certificateModelRepository.getById(
