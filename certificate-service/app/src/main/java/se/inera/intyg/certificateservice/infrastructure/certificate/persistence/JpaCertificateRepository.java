@@ -62,6 +62,7 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
         .id(request.certificateId())
         .created(request.created())
         .revision(new Revision(request.version()))
+        .status(request.status())
         .build();
 
     //TODO: Implement persistence of placeholder certificate
