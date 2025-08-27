@@ -22,5 +22,8 @@ public class RenewExternalCertificateRequestValidator {
     validatePatient(renewCertificateRequest.getPatient());
     validateCertificateId(certificateId);
     validateCertificateModelId(renewCertificateRequest.getCertificateModelId());
+    if (renewCertificateRequest.getStatus() == null) {
+      throw new IllegalArgumentException("Required parameter missing: status");
+    }
   }
 }

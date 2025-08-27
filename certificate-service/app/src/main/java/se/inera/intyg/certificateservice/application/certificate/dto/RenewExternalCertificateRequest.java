@@ -2,7 +2,6 @@ package se.inera.intyg.certificateservice.application.certificate.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Value;
 import se.inera.intyg.certificateservice.application.certificate.dto.RenewExternalCertificateRequest.RenewExternalCertificateRequestBuilder;
@@ -23,9 +22,7 @@ public class RenewExternalCertificateRequest {
   PatientDTO patient;
   String externalReference;
   CertificateModelIdDTO certificateModelId;
-  LocalDateTime created;
   CertificateStatusTypeDTO status;
-  long version;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class RenewExternalCertificateRequestBuilder {

@@ -12,7 +12,6 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.EXTERNAL_REF;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -75,8 +74,6 @@ class RenewExternalCertificateServiceTest {
       .patient(ATHENA_REACT_ANDERSSON_DTO)
       .externalReference(EXTERNAL_REF)
       .status(CertificateStatusTypeDTO.SIGNED)
-      .created(LocalDateTime.now())
-      .version(1L)
       .build();
 
   @Test

@@ -17,6 +17,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.RenewExternalCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
@@ -40,6 +41,7 @@ class RenewExternalCertificateRequestValidatorTest {
         .careProvider(ALFA_REGIONEN_DTO)
         .patient(ATHENA_REACT_ANDERSSON_DTO)
         .externalReference(EXTERNAL_REF)
+        .status(CertificateStatusTypeDTO.SIGNED)
         .certificateModelId(
             CertificateModelIdDTO.builder()
                 .type("type")
@@ -698,5 +700,18 @@ class RenewExternalCertificateRequestValidatorTest {
       assertEquals("Required parameter missing: CertificateModelId.type",
           illegalArgumentException.getMessage());
     }
+  }
+
+  @Test
+  void shallThrowIfStatusIsMissing() {
+    final var request = requestBuilder
+        .status(null)
+        .build();
+
+    final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+        () -> validator.validate(request, CERTIFICATE_ID));
+
+    assertEquals("Required parameter missing: status",
+        illegalArgumentException.getMessage());
   }
 }
