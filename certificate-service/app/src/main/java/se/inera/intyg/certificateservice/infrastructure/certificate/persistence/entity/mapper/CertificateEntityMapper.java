@@ -68,10 +68,10 @@ public class CertificateEntityMapper {
   }
 
   public Certificate toDomain(CertificateEntity certificateEntity, boolean includeRelations) {
-    if (Boolean.TRUE.equals(certificateEntity.getPlaceholder())) {
+    if (certificateEntity.isPlaceHolder()) {
       return placeholderCertificateEntityMapper.toDomain(certificateEntity);
     }
-    
+
     return toDomain(
         certificateEntity,
         certificateModelRepository.getById(
