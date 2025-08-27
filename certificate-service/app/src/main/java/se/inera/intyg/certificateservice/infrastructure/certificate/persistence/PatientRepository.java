@@ -14,11 +14,14 @@ public class PatientRepository {
   private final PatientEntityRepository patientEntityRepository;
 
   public PatientEntity patient(Patient patient) {
-    return patientEntityRepository.findById(patient.id().idWithoutDash())
+    final var entity = patientEntityRepository.findById(patient.id().idWithoutDash())
+        .map(existing ->
+            PatientEntityMapper.updateEntity(existing, patient)
+        )
         .orElseGet(
-            () -> patientEntityRepository.save(
-                PatientEntityMapper.toEntity(patient)
-            )
+            () -> PatientEntityMapper.toEntity(patient)
         );
+
+    return patientEntityRepository.save(entity);
   }
 }
