@@ -37,6 +37,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateExportPage;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.PlaceholderCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
@@ -45,6 +46,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PlaceholderCertificateRequest;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
+import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateDataEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateModelEntity;
@@ -595,14 +597,21 @@ class JpaCertificateRepositoryTest {
 
     @Test
     void shouldSavePlaceHolderCertificate() {
+      final var issuingUnit = SubUnit.builder().build();
       final var placeHolderRequest = PlaceholderCertificateRequest.builder()
           .certificateId(new CertificateId(ID))
           .status(Status.DRAFT)
+          .issuingUnit(issuingUnit)
           .build();
 
       final var expectedPlaceHolderCertificate = PlaceholderCertificate.builder()
           .id(new CertificateId(ID))
           .status(Status.DRAFT)
+          .certificateMetaData(
+              CertificateMetaData.builder()
+                  .issuingUnit(issuingUnit)
+                  .build()
+          )
           .build();
 
       when(placeHolderEntityMapper.toEntity(expectedPlaceHolderCertificate))
