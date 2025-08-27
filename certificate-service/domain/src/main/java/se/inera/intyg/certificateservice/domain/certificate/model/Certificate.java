@@ -133,4 +133,8 @@ public interface Certificate {
   List<Message> messages();
 
   Forwarded forwarded();
+
+  default boolean isPlaceholder() {
+    return false;
+  }
 }

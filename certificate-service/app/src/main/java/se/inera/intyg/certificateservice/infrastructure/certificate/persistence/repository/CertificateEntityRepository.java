@@ -16,7 +16,7 @@ public interface CertificateEntityRepository extends CrudRepository<CertificateE
     JpaSpecificationExecutor<CertificateEntity> {
 
 
-  //TODO: Should exclude placeholder certificate. Set boolean flag placeholder
+  @Query("SELECT c FROM CertificateEntity c WHERE c.certificateId = :certificateId AND c.placeholder != true")
   Optional<CertificateEntity> findByCertificateId(String certificateId);
 
   List<CertificateEntity> findCertificateEntitiesByCertificateIdIn(
@@ -35,5 +35,8 @@ public interface CertificateEntityRepository extends CrudRepository<CertificateE
   @Query("SELECT count(c.certificateId) FROM CertificateEntity c WHERE c.careProvider.hsaId = :careProviderHsaId AND c.revoked IS NOT null")
   long findRevokedCertificateEntitiesByCareProviderHsaId(
       @Param("careProviderHsaId") String careProviderHsaId);
+
+  @Query("SELECT c FROM CertificateEntity c WHERE c.certificateId = :certificateId AND c.placeholder = true")
+  Optional<CertificateEntity> findPlaceholderByCertificateId(String certificateId);
 
 }
