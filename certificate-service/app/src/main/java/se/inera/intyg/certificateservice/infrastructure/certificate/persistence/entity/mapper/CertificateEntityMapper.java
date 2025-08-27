@@ -193,6 +193,8 @@ public class CertificateEntityMapper {
       certificateEntity.setForwarded(certificate.forwarded().value());
     }
 
+    certificateEntity.setPlaceholder(false);
+    
     return certificateEntity;
   }
 
