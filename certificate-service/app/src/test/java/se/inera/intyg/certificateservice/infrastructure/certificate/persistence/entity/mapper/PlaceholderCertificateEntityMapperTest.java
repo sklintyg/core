@@ -66,7 +66,7 @@ class PlaceholderCertificateEntityMapperTest {
 
     @BeforeEach
     void setUp() {
-      when(certificateEntityRepository.findByCertificateId(CERTIFICATE_ID.id()))
+      when(certificateEntityRepository.findPlaceholderByCertificateId(CERTIFICATE_ID.id()))
           .thenReturn(Optional.empty());
       when(patientEntityRepository.findById(PLACEHOLDER)).thenReturn(Optional.of(PATIENT_ENTITY));
       when(unitRepository.findByHsaId(PLACEHOLDER)).thenReturn(Optional.of(UNIT_ENTITY));

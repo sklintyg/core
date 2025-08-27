@@ -28,7 +28,7 @@ public class PlaceholderCertificateEntityMapper {
   private final UnitEntityRepository unitRepository;
 
   public CertificateEntity toEntity(Certificate certificate) {
-    final var certificateEntity = certificateEntityRepository.findByCertificateId(
+    final var certificateEntity = certificateEntityRepository.findPlaceholderByCertificateId(
         certificate.id().id()
     ).orElse(toCertificateEntity(certificate));
 

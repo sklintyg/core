@@ -291,4 +291,9 @@ public class PlaceholderCertificate implements Certificate {
   public Forwarded forwarded() {
     return null;
   }
+
+  @Override
+  public boolean isPlaceholder() {
+    return true;
+  }
 }
