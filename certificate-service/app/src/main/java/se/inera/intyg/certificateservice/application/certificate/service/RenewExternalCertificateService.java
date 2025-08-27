@@ -26,6 +26,7 @@ import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitAddress;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitContactInfo;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitName;
+import se.inera.intyg.certificateservice.domain.unit.model.WorkplaceCode;
 
 @Service
 @RequiredArgsConstructor
@@ -110,6 +111,9 @@ public class RenewExternalCertificateService {
                 .build()
         )
         .inactive(unit.getInactive() != null ? new Inactive(unit.getInactive()) : null)
+        .workplaceCode(
+            unit.getWorkplaceCode() != null ? new WorkplaceCode(unit.getWorkplaceCode()) : null
+        )
         .build();
   }
 

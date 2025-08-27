@@ -46,6 +46,7 @@ import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitAddress;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitContactInfo;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitName;
+import se.inera.intyg.certificateservice.domain.unit.model.WorkplaceCode;
 
 @ExtendWith(MockitoExtension.class)
 class RenewExternalCertificateServiceTest {
@@ -143,6 +144,7 @@ class RenewExternalCertificateServiceTest {
                         .build()
                 )
                 .inactive(new Inactive(ALFA_MEDICINCENTRUM_DTO.getInactive()))
+                .workplaceCode(new WorkplaceCode(ALFA_MEDICINCENTRUM_DTO.getWorkplaceCode()))
                 .build()
         )
         .build();
