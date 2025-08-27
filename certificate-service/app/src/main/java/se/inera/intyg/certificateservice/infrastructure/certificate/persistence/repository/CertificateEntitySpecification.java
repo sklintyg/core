@@ -28,4 +28,9 @@ public class CertificateEntitySpecification {
     return (root, query, criteriaBuilder) ->
         criteriaBuilder.lessThanOrEqualTo(root.get("created"), to);
   }
+
+  public static Specification<CertificateEntity> notPlacerholderCertificate() {
+    return (root, query, criteriaBuilder) ->
+        criteriaBuilder.isFalse(root.get("placeholder"));
+  }
 }

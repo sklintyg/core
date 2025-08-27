@@ -207,8 +207,10 @@ class CertificateEntitySpecificationFactoryTest {
               CertificateEntitySpecification.class)
       ) {
         assertNotNull(certificateEntitySpecificationFactory.create(certificatesRequest));
-
-        specification.verifyNoInteractions();
+        specification.verify(
+            CertificateEntitySpecification::notPlacerholderCertificate
+        );
+        specification.verifyNoMoreInteractions();
       }
     }
 
@@ -245,8 +247,10 @@ class CertificateEntitySpecificationFactoryTest {
               CertificateEntitySpecification.class)
       ) {
         assertNotNull(certificateEntitySpecificationFactory.create(certificatesRequest));
-
-        specification.verifyNoInteractions();
+        specification.verify(
+            CertificateEntitySpecification::notPlacerholderCertificate
+        );
+        specification.verifyNoMoreInteractions();
       }
     }
 
@@ -284,7 +288,10 @@ class CertificateEntitySpecificationFactoryTest {
       ) {
         assertNotNull(certificateEntitySpecificationFactory.create(certificatesRequest));
 
-        specification.verifyNoInteractions();
+        specification.verify(
+            CertificateEntitySpecification::notPlacerholderCertificate
+        );
+        specification.verifyNoMoreInteractions();
       }
     }
 
@@ -321,8 +328,10 @@ class CertificateEntitySpecificationFactoryTest {
               CertificateEntitySpecification.class)
       ) {
         assertNotNull(certificateEntitySpecificationFactory.create(certificatesRequest));
-
-        specification.verifyNoInteractions();
+        specification.verify(
+            CertificateEntitySpecification::notPlacerholderCertificate
+        );
+        specification.verifyNoMoreInteractions();
       }
     }
 
@@ -371,6 +380,21 @@ class CertificateEntitySpecificationFactoryTest {
       ) {
         assertNotNull(certificateEntitySpecificationFactory.create(certificatesRequest));
         specification.verifyNoInteractions();
+      }
+    }
+
+    @Test
+    void shallIncludeNotPlaceholderCertificateSpecification() {
+      final var certificatesRequest = CertificatesRequest.builder()
+          .build();
+      try (
+          MockedStatic<CertificateEntitySpecification> specification = mockStatic(
+              CertificateEntitySpecification.class)
+      ) {
+        assertNotNull(certificateEntitySpecificationFactory.create(certificatesRequest));
+        specification.verify(
+            CertificateEntitySpecification::notPlacerholderCertificate
+        );
       }
     }
   }
