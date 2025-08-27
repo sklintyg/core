@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateExportPage;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.PlaceholderCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
@@ -23,7 +24,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PlaceholderRequest;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PlaceholderCertificateRequest;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
@@ -62,10 +63,16 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
   }
 
   @Override
-  public Certificate createFromPlaceholder(PlaceholderRequest request, CertificateModel model) {
+  public Certificate createFromPlaceholder(PlaceholderCertificateRequest request,
+      CertificateModel model) {
     final var placeholderCertificate = PlaceholderCertificate.builder()
         .id(request.certificateId())
         .status(request.status())
+        .certificateMetaData(
+            CertificateMetaData.builder()
+                .issuingUnit(request.issuingUnit())
+                .build()
+        )
         .build();
 
     certificateEntityRepository.save(

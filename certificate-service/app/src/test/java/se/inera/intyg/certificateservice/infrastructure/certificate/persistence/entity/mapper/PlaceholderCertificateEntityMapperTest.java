@@ -3,6 +3,8 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitEntity.ALFA_ALLERGIMOTTAGNINGEN_ENTITY;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -14,8 +16,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.PlaceholderCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
+import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.UnitRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateModelEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateStatusEntity;
@@ -42,6 +47,9 @@ class PlaceholderCertificateEntityMapperTest {
       .key(2)
       .status("SIGNED")
       .build();
+
+  @Mock
+  UnitRepository unitRepository;
   @Mock
   CertificateEntityRepository certificateEntityRepository;
   @Mock
@@ -51,14 +59,20 @@ class PlaceholderCertificateEntityMapperTest {
   @Mock
   StaffEntityRepository staffEntityRepository;
   @Mock
-  UnitEntityRepository unitRepository;
+  UnitEntityRepository unitEntityRepository;
   @InjectMocks
   PlaceholderCertificateEntityMapper certificateEntityMapper;
 
   private static final CertificateId CERTIFICATE_ID = new CertificateId("certificateId");
+  private static final SubUnit ISSUING_UNIT = SubUnit.builder().build();
   private static final PlaceholderCertificate PLACEHOLDER_CERTIFICATE = PlaceholderCertificate.builder()
       .id(CERTIFICATE_ID)
       .status(Status.SIGNED)
+      .certificateMetaData(
+          CertificateMetaData.builder()
+              .issuingUnit(ISSUING_UNIT)
+              .build()
+      )
       .build();
 
   @Nested
@@ -69,13 +83,14 @@ class PlaceholderCertificateEntityMapperTest {
       when(certificateEntityRepository.findPlaceholderByCertificateId(CERTIFICATE_ID.id()))
           .thenReturn(Optional.empty());
       when(patientEntityRepository.findById(PLACEHOLDER)).thenReturn(Optional.of(PATIENT_ENTITY));
-      when(unitRepository.findByHsaId(PLACEHOLDER)).thenReturn(Optional.of(UNIT_ENTITY));
+      when(unitEntityRepository.findByHsaId(PLACEHOLDER)).thenReturn(Optional.of(UNIT_ENTITY));
       when(staffEntityRepository.findByHsaId(PLACEHOLDER)).thenReturn(Optional.of(STAFF_ENTITY));
       when(
           certificateModelEntityRepository.findByTypeAndVersion(PLACEHOLDER,
               PLACEHOLDER)).thenReturn(
           Optional.of(CERTIFICATE_MODEL_ENTITY)
       );
+      when(unitRepository.issuingUnit(ISSUING_UNIT)).thenReturn(UNIT_ENTITY);
     }
 
     @Test
@@ -149,6 +164,7 @@ class PlaceholderCertificateEntityMapperTest {
         .certificateId(PLACEHOLDER)
         .status(SIGNED)
         .created(CREATED)
+        .issuedOnUnit(ALFA_ALLERGIMOTTAGNINGEN_ENTITY)
         .build();
 
     @Test
@@ -167,6 +183,12 @@ class PlaceholderCertificateEntityMapperTest {
     void shouldSetCreated() {
       final var domain = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY);
       assertEquals(CREATED, domain.created());
+    }
+
+    @Test
+    void shouldSetIssuedOnUnit() {
+      final var domain = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY);
+      assertEquals(ALFA_ALLERGIMOTTAGNINGEN, domain.certificateMetaData().issuingUnit());
     }
   }
 }

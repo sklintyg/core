@@ -38,8 +38,14 @@ import se.inera.intyg.certificateservice.domain.certificate.service.RenewExterna
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PlaceholderRequest;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PlaceholderCertificateRequest;
 import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
+import se.inera.intyg.certificateservice.domain.common.model.HsaId;
+import se.inera.intyg.certificateservice.domain.unit.model.Inactive;
+import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
+import se.inera.intyg.certificateservice.domain.unit.model.UnitAddress;
+import se.inera.intyg.certificateservice.domain.unit.model.UnitContactInfo;
+import se.inera.intyg.certificateservice.domain.unit.model.UnitName;
 
 @ExtendWith(MockitoExtension.class)
 class RenewExternalCertificateServiceTest {
@@ -74,6 +80,7 @@ class RenewExternalCertificateServiceTest {
       .patient(ATHENA_REACT_ANDERSSON_DTO)
       .externalReference(EXTERNAL_REF)
       .status(CertificateStatusTypeDTO.SIGNED)
+      .issuingUnit(ALFA_MEDICINCENTRUM_DTO)
       .build();
 
   @Test
@@ -107,7 +114,7 @@ class RenewExternalCertificateServiceTest {
         RENEW_EXTERNAL_CERTIFICATE_REQUEST.getCareUnit(),
         RENEW_EXTERNAL_CERTIFICATE_REQUEST.getCareProvider()
     );
-    final var placeHolderRequest = PlaceholderRequest.builder()
+    final var placeHolderRequest = PlaceholderCertificateRequest.builder()
         .certificateId(new CertificateId(CERTIFICATE_ID))
         .status(Status.SIGNED)
         .certificateModelId(
@@ -116,6 +123,26 @@ class RenewExternalCertificateServiceTest {
                     RENEW_EXTERNAL_CERTIFICATE_REQUEST.getCertificateModelId().getType()))
                 .version(new CertificateVersion(
                     RENEW_EXTERNAL_CERTIFICATE_REQUEST.getCertificateModelId().getVersion()))
+                .build()
+        )
+        .issuingUnit(
+            SubUnit.builder()
+                .hsaId(new HsaId(ALFA_MEDICINCENTRUM_DTO.getId()))
+                .name(new UnitName(ALFA_MEDICINCENTRUM_DTO.getName()))
+                .address(
+                    UnitAddress.builder()
+                        .address(ALFA_MEDICINCENTRUM_DTO.getAddress())
+                        .zipCode(ALFA_MEDICINCENTRUM_DTO.getZipCode())
+                        .city(ALFA_MEDICINCENTRUM_DTO.getCity())
+                        .build()
+                )
+                .contactInfo(
+                    UnitContactInfo.builder()
+                        .phoneNumber(ALFA_MEDICINCENTRUM_DTO.getPhoneNumber())
+                        .email(ALFA_MEDICINCENTRUM_DTO.getEmail())
+                        .build()
+                )
+                .inactive(new Inactive(ALFA_MEDICINCENTRUM_DTO.getInactive()))
                 .build()
         )
         .build();

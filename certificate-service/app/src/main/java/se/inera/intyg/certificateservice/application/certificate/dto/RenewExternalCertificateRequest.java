@@ -23,6 +23,7 @@ public class RenewExternalCertificateRequest {
   String externalReference;
   CertificateModelIdDTO certificateModelId;
   CertificateStatusTypeDTO status;
+  UnitDTO issuingUnit;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class RenewExternalCertificateRequestBuilder {

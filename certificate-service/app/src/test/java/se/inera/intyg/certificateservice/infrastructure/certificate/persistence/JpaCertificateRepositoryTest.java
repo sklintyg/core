@@ -42,7 +42,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.PlaceholderCer
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PlaceholderRequest;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PlaceholderCertificateRequest;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateDataEntity;
@@ -559,7 +559,7 @@ class JpaCertificateRepositoryTest {
 
     @Test
     void shouldCreateMedicalCertificateWithParentRelationFromPlaceholder() {
-      final var placeHolderRequest = PlaceholderRequest.builder()
+      final var placeHolderRequest = PlaceholderCertificateRequest.builder()
           .certificateId(new CertificateId(ID))
           .status(Status.SIGNED)
           .build();
@@ -576,7 +576,7 @@ class JpaCertificateRepositoryTest {
 
     @Test
     void shouldCreateMedicalCertificate() {
-      final var placeHolderRequest = PlaceholderRequest.builder()
+      final var placeHolderRequest = PlaceholderCertificateRequest.builder()
           .certificateId(new CertificateId(ID))
           .status(Status.DRAFT)
           .build();
@@ -595,7 +595,7 @@ class JpaCertificateRepositoryTest {
 
     @Test
     void shouldSavePlaceHolderCertificate() {
-      final var placeHolderRequest = PlaceholderRequest.builder()
+      final var placeHolderRequest = PlaceholderCertificateRequest.builder()
           .certificateId(new CertificateId(ID))
           .status(Status.DRAFT)
           .build();

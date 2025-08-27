@@ -31,6 +31,7 @@ public class PlaceholderCertificate implements Certificate {
   private final CertificateId id;
   private final LocalDateTime created;
   private Status status;
+  private CertificateMetaData certificateMetaData;
 
   @Override
   public List<CertificateAction> actions(Optional<ActionEvaluation> actionEvaluation) {
@@ -234,11 +235,6 @@ public class PlaceholderCertificate implements Certificate {
 
   @Override
   public ReadyForSign readyForSign() {
-    return null;
-  }
-
-  @Override
-  public CertificateMetaData certificateMetaData() {
     return null;
   }
 

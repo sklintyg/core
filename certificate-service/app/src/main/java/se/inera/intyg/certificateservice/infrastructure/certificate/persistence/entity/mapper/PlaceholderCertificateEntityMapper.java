@@ -5,8 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.PlaceholderCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.UnitRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateStatus;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateStatusEntity;
@@ -25,7 +27,8 @@ public class PlaceholderCertificateEntityMapper {
   private final CertificateModelEntityRepository certificateModelEntityRepository;
   private final PatientEntityRepository patientEntityRepository;
   private final StaffEntityRepository staffEntityRepository;
-  private final UnitEntityRepository unitRepository;
+  private final UnitEntityRepository unitEntityRepository;
+  private final UnitRepository unitRepository;
 
   public CertificateEntity toEntity(Certificate certificate) {
     final var certificateEntity = certificateEntityRepository.findPlaceholderByCertificateId(
@@ -44,15 +47,15 @@ public class PlaceholderCertificateEntityMapper {
         patientEntityRepository.findById(PLACEHOLDER).orElseThrow()
     );
     certificateEntity.setCareProvider(
-        unitRepository.findByHsaId(PLACEHOLDER).orElseThrow()
+        unitEntityRepository.findByHsaId(PLACEHOLDER).orElseThrow()
 
     );
     certificateEntity.setCareUnit(
-        unitRepository.findByHsaId(PLACEHOLDER).orElseThrow()
+        unitEntityRepository.findByHsaId(PLACEHOLDER).orElseThrow()
 
     );
     certificateEntity.setIssuedOnUnit(
-        unitRepository.findByHsaId(PLACEHOLDER).orElseThrow()
+        unitRepository.issuingUnit(certificate.certificateMetaData().issuingUnit())
     );
     certificateEntity.setIssuedBy(
         staffEntityRepository.findByHsaId(PLACEHOLDER)
@@ -76,6 +79,13 @@ public class PlaceholderCertificateEntityMapper {
         .id(new CertificateId(certificateEntity.getCertificateId()))
         .status(Status.valueOf(certificateEntity.getStatus().getStatus()))
         .created(certificateEntity.getCreated())
+        .certificateMetaData(
+            CertificateMetaData.builder()
+                .issuingUnit(
+                    UnitEntityMapper.toIssuingUnitDomain(certificateEntity.getIssuedOnUnit())
+                )
+                .build()
+        )
         .build();
   }
 

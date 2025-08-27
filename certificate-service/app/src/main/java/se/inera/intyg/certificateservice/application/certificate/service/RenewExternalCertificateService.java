@@ -12,13 +12,20 @@ import se.inera.intyg.certificateservice.application.certificate.service.convert
 import se.inera.intyg.certificateservice.application.certificate.service.validation.RenewExternalCertificateRequestValidator;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
 import se.inera.intyg.certificateservice.application.common.converter.ResourceLinkConverter;
+import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.service.RenewExternalCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PlaceholderRequest;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PlaceholderCertificateRequest;
 import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
+import se.inera.intyg.certificateservice.domain.common.model.HsaId;
+import se.inera.intyg.certificateservice.domain.unit.model.Inactive;
+import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
+import se.inera.intyg.certificateservice.domain.unit.model.UnitAddress;
+import se.inera.intyg.certificateservice.domain.unit.model.UnitContactInfo;
+import se.inera.intyg.certificateservice.domain.unit.model.UnitName;
 
 @Service
 @RequiredArgsConstructor
@@ -74,12 +81,35 @@ public class RenewExternalCertificateService {
         .build();
   }
 
-  private static PlaceholderRequest getPlaceholderRequest(
+  private static PlaceholderCertificateRequest getPlaceholderRequest(
       RenewExternalCertificateRequest renewExternalCertificateRequest, String certificateId) {
-    return PlaceholderRequest.builder()
+    final var unit = renewExternalCertificateRequest.getIssuingUnit();
+    return PlaceholderCertificateRequest.builder()
         .certificateId(new CertificateId(certificateId))
         .certificateModelId(certificateModelId(renewExternalCertificateRequest))
         .status(toStatus(renewExternalCertificateRequest.getStatus()))
+        .issuingUnit(getIssuingUnit(unit))
+        .build();
+  }
+
+  private static SubUnit getIssuingUnit(UnitDTO unit) {
+    return SubUnit.builder()
+        .hsaId(new HsaId(unit.getId()))
+        .name(new UnitName(unit.getName()))
+        .address(
+            UnitAddress.builder()
+                .address(unit.getAddress())
+                .zipCode(unit.getZipCode())
+                .city(unit.getCity())
+                .build()
+        )
+        .contactInfo(
+            UnitContactInfo.builder()
+                .phoneNumber(unit.getPhoneNumber())
+                .email(unit.getEmail())
+                .build()
+        )
+        .inactive(unit.getInactive() != null ? new Inactive(unit.getInactive()) : null)
         .build();
   }
 

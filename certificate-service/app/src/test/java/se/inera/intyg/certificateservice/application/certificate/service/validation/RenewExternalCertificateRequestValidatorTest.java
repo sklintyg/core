@@ -42,6 +42,7 @@ class RenewExternalCertificateRequestValidatorTest {
         .patient(ATHENA_REACT_ANDERSSON_DTO)
         .externalReference(EXTERNAL_REF)
         .status(CertificateStatusTypeDTO.SIGNED)
+        .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
         .certificateModelId(
             CertificateModelIdDTO.builder()
                 .type("type")
@@ -712,6 +713,19 @@ class RenewExternalCertificateRequestValidatorTest {
         () -> validator.validate(request, CERTIFICATE_ID));
 
     assertEquals("Required parameter missing: status",
+        illegalArgumentException.getMessage());
+  }
+
+  @Test
+  void shallThrowIfMissingIssuingUnit() {
+    final var request = requestBuilder
+        .issuingUnit(null)
+        .build();
+
+    final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+        () -> validator.validate(request, CERTIFICATE_ID));
+
+    assertEquals("Required parameter missing: IssuingUnit",
         illegalArgumentException.getMessage());
   }
 }

@@ -17,7 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PlaceholderRequest;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PlaceholderCertificateRequest;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType;
@@ -37,7 +37,7 @@ class RenewExternalCertificateDomainServiceTest {
 
   @Test
   void shouldUpdateMetadataOnCertificate() {
-    final var placeholderRequest = PlaceholderRequest.builder()
+    final var placeholderRequest = PlaceholderCertificateRequest.builder()
         .certificateModelId(FK7804_CERTIFICATE_MODEL_ID)
         .build();
     final var certificate = mock(MedicalCertificate.class);
@@ -56,7 +56,7 @@ class RenewExternalCertificateDomainServiceTest {
 
   @Test
   void shallSetExternalReferenceOnRenewCertificate() {
-    final var placeholderRequest = PlaceholderRequest.builder()
+    final var placeholderRequest = PlaceholderCertificateRequest.builder()
         .certificateModelId(FK7804_CERTIFICATE_MODEL_ID)
         .build();
     final var certificate = mock(MedicalCertificate.class);
@@ -75,7 +75,7 @@ class RenewExternalCertificateDomainServiceTest {
 
   @Test
   void shallReturnNewCertificate() {
-    final var placeholderRequest = PlaceholderRequest.builder()
+    final var placeholderRequest = PlaceholderCertificateRequest.builder()
         .certificateModelId(FK7804_CERTIFICATE_MODEL_ID)
         .build();
     final var certificate = mock(MedicalCertificate.class);
@@ -96,7 +96,7 @@ class RenewExternalCertificateDomainServiceTest {
   @Test
   void shouldPublishDomainEvent() {
     final var captor = ArgumentCaptor.forClass(CertificateEvent.class);
-    final var placeholderRequest = PlaceholderRequest.builder()
+    final var placeholderRequest = PlaceholderCertificateRequest.builder()
         .certificateModelId(FK7804_CERTIFICATE_MODEL_ID)
         .build();
     final var certificate = mock(MedicalCertificate.class);

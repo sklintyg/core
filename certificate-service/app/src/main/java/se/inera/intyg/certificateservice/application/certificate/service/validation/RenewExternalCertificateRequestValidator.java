@@ -25,5 +25,6 @@ public class RenewExternalCertificateRequestValidator {
     if (renewCertificateRequest.getStatus() == null) {
       throw new IllegalArgumentException("Required parameter missing: status");
     }
+    validateUnit(renewCertificateRequest.getIssuingUnit(), "IssuingUnit");
   }
 }

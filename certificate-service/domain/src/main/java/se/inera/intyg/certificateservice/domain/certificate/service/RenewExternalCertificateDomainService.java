@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PlaceholderRequest;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PlaceholderCertificateRequest;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
@@ -21,7 +21,7 @@ public class RenewExternalCertificateDomainService {
   private final CertificateEventDomainService certificateEventDomainService;
 
   public Certificate renew(ActionEvaluation actionEvaluation,
-      ExternalReference externalReference, PlaceholderRequest request) {
+      ExternalReference externalReference, PlaceholderCertificateRequest request) {
     final var start = LocalDateTime.now(ZoneId.systemDefault());
 
     final var certificateModel = certificateModelRepository.getById(
