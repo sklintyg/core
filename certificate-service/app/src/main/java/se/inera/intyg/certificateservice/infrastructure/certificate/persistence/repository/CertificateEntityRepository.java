@@ -16,6 +16,7 @@ public interface CertificateEntityRepository extends CrudRepository<CertificateE
     JpaSpecificationExecutor<CertificateEntity> {
 
 
+  @Query("SELECT c FROM CertificateEntity c WHERE c.certificateId = :certificateId AND c.placeholder != true")
   Optional<CertificateEntity> findByCertificateId(String certificateId);
 
   List<CertificateEntity> findCertificateEntitiesByCertificateIdIn(
@@ -24,12 +25,18 @@ public interface CertificateEntityRepository extends CrudRepository<CertificateE
   void deleteAllByCertificateIdIn(List<String> certificateIds);
 
   @Query("SELECT c FROM CertificateEntity c WHERE c.careProvider.hsaId = :careProviderHsaId AND c.signed IS NOT null")
-  Page<CertificateEntity> findSignedCertificateEntitiesByCareProviderHsaId(@Param("careProviderHsaId") String careProviderHsaId, Pageable pageable);
+  Page<CertificateEntity> findSignedCertificateEntitiesByCareProviderHsaId(
+      @Param("careProviderHsaId") String careProviderHsaId, Pageable pageable);
 
   @Query("SELECT c FROM CertificateEntity c WHERE c.careProvider.hsaId = :careProviderHsaId")
-  Page<CertificateEntity> findCertificateEntitiesByCareProviderHsaId(@Param("careProviderHsaId") String careProviderHsaId, Pageable pageable);
+  Page<CertificateEntity> findCertificateEntitiesByCareProviderHsaId(
+      @Param("careProviderHsaId") String careProviderHsaId, Pageable pageable);
 
   @Query("SELECT count(c.certificateId) FROM CertificateEntity c WHERE c.careProvider.hsaId = :careProviderHsaId AND c.revoked IS NOT null")
-  long findRevokedCertificateEntitiesByCareProviderHsaId(@Param("careProviderHsaId") String careProviderHsaId);
+  long findRevokedCertificateEntitiesByCareProviderHsaId(
+      @Param("careProviderHsaId") String careProviderHsaId);
+
+  @Query("SELECT c FROM CertificateEntity c WHERE c.certificateId = :certificateId AND c.placeholder = true")
+  Optional<CertificateEntity> findPlaceholderByCertificateId(String certificateId);
 
 }

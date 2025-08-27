@@ -18,8 +18,8 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 import se.inera.intyg.certificateservice.domain.message.model.Content;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
@@ -40,7 +40,7 @@ class CreateMessageDomainServiceTest {
 
   @Test
   void shallThrowIfNotAllowedToCreateMessage() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(CERTIFICATE_ID).when(certificate).id();
     doReturn(false).when(certificate)
         .allowTo(CertificateActionType.CREATE_MESSAGE, Optional.of(ACTION_EVALUATION));
@@ -53,7 +53,7 @@ class CreateMessageDomainServiceTest {
   @Test
   void shallPersistCreatedMessage() {
     final var expectedMessage = Message.builder().build();
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(true).when(certificate)
         .allowTo(CertificateActionType.CREATE_MESSAGE, Optional.of(ACTION_EVALUATION));
     doReturn(CERTIFICATE_ID).when(certificate).id();
@@ -80,7 +80,7 @@ class CreateMessageDomainServiceTest {
   @Test
   void shallReturnCreatedMessage() {
     final var expectedMessage = Message.builder().build();
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(true).when(certificate)
         .allowTo(CertificateActionType.CREATE_MESSAGE, Optional.of(ACTION_EVALUATION));
     doReturn(expectedMessage).when(messageRepository).save(expectedMessage);

@@ -12,8 +12,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateMetadataDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse;
 import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateMetadataConverter;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -42,7 +42,7 @@ class GetCertificateInternalMetadataServiceTest {
   @Test
   void shallReturnGetCertificateMetadataResponse() {
     final var metadata = CertificateMetadataDTO.builder().build();
-    final var certificate = Certificate.builder().build();
+    final var certificate = MedicalCertificate.builder().build();
     final var expectedResponse = GetCertificateInternalMetadataResponse.builder()
         .certificateMetadata(metadata)
         .build();

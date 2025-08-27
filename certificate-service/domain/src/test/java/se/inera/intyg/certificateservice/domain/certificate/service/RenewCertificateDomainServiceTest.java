@@ -20,7 +20,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
@@ -39,7 +39,7 @@ class RenewCertificateDomainServiceTest {
 
   @Test
   void shallThrowExceptionIfUserHasNoAccessToRenew() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(false).when(certificate).allowTo(RENEW, Optional.of(ACTION_EVALUATION));
 
@@ -51,8 +51,8 @@ class RenewCertificateDomainServiceTest {
 
   @Test
   void shallRenewCertificate() {
-    final var newCertificate = mock(Certificate.class);
-    final var certificate = mock(Certificate.class);
+    final var newCertificate = mock(MedicalCertificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(RENEW, Optional.of(ACTION_EVALUATION));
     doReturn(newCertificate).when(certificate).renew(ACTION_EVALUATION);
@@ -64,8 +64,8 @@ class RenewCertificateDomainServiceTest {
 
   @Test
   void shallSetExternalReferenceOnRenewCertificate() {
-    final var newCertificate = mock(Certificate.class);
-    final var certificate = mock(Certificate.class);
+    final var newCertificate = mock(MedicalCertificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(RENEW, Optional.of(ACTION_EVALUATION));
     doReturn(newCertificate).when(certificate).renew(ACTION_EVALUATION);
@@ -77,10 +77,10 @@ class RenewCertificateDomainServiceTest {
 
   @Test
   void shallReturnNewCertificate() {
-    final var expectedCertificate = mock(Certificate.class);
-    final var newCertificate = mock(Certificate.class);
+    final var expectedCertificate = mock(MedicalCertificate.class);
+    final var newCertificate = mock(MedicalCertificate.class);
 
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(RENEW, Optional.of(ACTION_EVALUATION));
     doReturn(newCertificate).when(certificate).renew(ACTION_EVALUATION);
@@ -94,10 +94,10 @@ class RenewCertificateDomainServiceTest {
 
   @Test
   void shallPublishRenewCertificateEvent() {
-    final var expectedCertificate = mock(Certificate.class);
-    final var newCertificate = mock(Certificate.class);
+    final var expectedCertificate = mock(MedicalCertificate.class);
+    final var newCertificate = mock(MedicalCertificate.class);
 
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(RENEW, Optional.of(ACTION_EVALUATION));
     doReturn(newCertificate).when(certificate).renew(ACTION_EVALUATION);
@@ -118,7 +118,7 @@ class RenewCertificateDomainServiceTest {
 
   @Test
   void shallIncludeReasonNotAllowedToException() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     final var expectedReason = List.of("expectedReason");
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(false).when(certificate).allowTo(RENEW, Optional.of(ACTION_EVALUATION));

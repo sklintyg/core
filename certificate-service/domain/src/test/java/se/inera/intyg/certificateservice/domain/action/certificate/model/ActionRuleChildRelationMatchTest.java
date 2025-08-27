@@ -15,19 +15,18 @@ import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionRuleChildRelationMatch;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 
 class ActionRuleChildRelationMatchTest {
 
-  private Certificate.CertificateBuilder certificateBuilder;
+  private MedicalCertificate.MedicalCertificateBuilder certificateBuilder;
 
   @BeforeEach
   void setUp() {
-    certificateBuilder = Certificate.builder()
+    certificateBuilder = MedicalCertificate.builder()
         .status(Status.SIGNED)
         .sent(null)
         .certificateMetaData(

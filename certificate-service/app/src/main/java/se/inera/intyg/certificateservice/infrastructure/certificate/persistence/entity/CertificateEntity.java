@@ -96,4 +96,10 @@ public class CertificateEntity {
   private ExternalReferenceEntity externalReference;
   @Column(name = "forwarded")
   private Boolean forwarded;
+  @Column(name = "placeholder")
+  private Boolean placeholder;
+
+  public boolean isPlaceHolder() {
+    return Boolean.TRUE.equals(placeholder);
+  }
 }

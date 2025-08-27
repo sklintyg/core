@@ -20,6 +20,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
@@ -43,7 +44,7 @@ class ActionRuleCertificateTypeActiveForUnitTest {
 
   @BeforeEach
   void setUp() {
-    certificate = Certificate
+    certificate = MedicalCertificate
         .builder()
         .certificateModel(
             CertificateModel.builder()

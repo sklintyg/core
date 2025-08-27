@@ -46,6 +46,10 @@ public class TestDataCertificateModel {
   public static final CertificateModel FK3221_CERTIFICATE_MODEL = fk3221certificateModelBuilder().build();
   public static final CertificateModel FK7810_CERTIFICATE_MODEL = fk7810certificateModelBuilder().build();
   public static final CertificateModel FK7804_CERTIFICATE_MODEL = fk7804certificateModelBuilder().build();
+  public static final CertificateModelId FK7804_CERTIFICATE_MODEL_ID = CertificateModelId.builder()
+      .type(TestDataCertificateModelConstants.FK7804_TYPE)
+      .version(TestDataCertificateModelConstants.FK7804_VERSION)
+      .build();
 
   public static CertificateModel.CertificateModelBuilder fk7210certificateModelBuilder() {
     return CertificateModel.builder()
@@ -189,12 +193,7 @@ public class TestDataCertificateModel {
 
   public static CertificateModel.CertificateModelBuilder fk7804certificateModelBuilder() {
     return CertificateModel.builder()
-        .id(
-            CertificateModelId.builder()
-                .type(TestDataCertificateModelConstants.FK7804_TYPE)
-                .version(TestDataCertificateModelConstants.FK7804_VERSION)
-                .build()
-        )
+        .id(FK7804_CERTIFICATE_MODEL_ID)
         .certificateActionSpecifications(Collections.emptyList())
         .name(TestDataCertificateModelConstants.FK7804_NAME)
         .type(TestDataCertificateModelConstants.FK7804_CODE_TYPE)

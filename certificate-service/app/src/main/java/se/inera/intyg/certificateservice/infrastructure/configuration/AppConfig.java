@@ -24,6 +24,7 @@ import se.inera.intyg.certificateservice.domain.certificate.service.PdfGenerator
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGeneratorProvider;
 import se.inera.intyg.certificateservice.domain.certificate.service.PrefillProcessor;
 import se.inera.intyg.certificateservice.domain.certificate.service.RenewCertificateDomainService;
+import se.inera.intyg.certificateservice.domain.certificate.service.RenewExternalCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.ReplaceCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.RevokeCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.SendCertificateDomainService;
@@ -240,6 +241,15 @@ public class AppConfig {
       CertificateRepository certificateRepository,
       CertificateEventDomainService certificateEventDomainService) {
     return new RenewCertificateDomainService(certificateRepository, certificateEventDomainService);
+  }
+
+  @Bean
+  public RenewExternalCertificateDomainService renewExternalCertificateDomainService(
+      CertificateModelRepository certificateModelRepository,
+      CertificateRepository certificateRepository,
+      CertificateEventDomainService certificateEventDomainService) {
+    return new RenewExternalCertificateDomainService(certificateModelRepository,
+        certificateRepository, certificateEventDomainService);
   }
 
   @Bean

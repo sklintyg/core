@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.common.exception.CitizenCertificateForbidden;
@@ -79,7 +80,7 @@ class GetCitizenCertificateDomainServiceTest {
   }
 
   private static Certificate getCertificate(String personId, Boolean availableForCitizen) {
-    return Certificate.builder()
+    return MedicalCertificate.builder()
         .certificateModel(CertificateModel.builder()
             .availableForCitizen(availableForCitizen)
             .build())

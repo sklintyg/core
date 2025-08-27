@@ -27,7 +27,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
@@ -72,7 +72,7 @@ class SignCertificateWithoutSignatureDomainServiceTest {
 
   @Test
   void shallThrowExceptionIfUserHasNoAccessToUpdate() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(false).when(certificate).allowTo(SIGN, Optional.of(actionEvaluation));
 
@@ -83,8 +83,8 @@ class SignCertificateWithoutSignatureDomainServiceTest {
 
   @Test
   void shallSignCertificate() {
-    final var certificate = mock(Certificate.class);
-    final var savedCertificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
+    final var savedCertificate = mock(MedicalCertificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(SIGN, Optional.of(actionEvaluation));
     doReturn(savedCertificate).when(certificateRepository).save(certificate);
@@ -98,8 +98,8 @@ class SignCertificateWithoutSignatureDomainServiceTest {
 
   @Test
   void shallUpdateMetaData() {
-    final var certificate = mock(Certificate.class);
-    final var savedCertificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
+    final var savedCertificate = mock(MedicalCertificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(SIGN, Optional.of(actionEvaluation));
     doReturn(savedCertificate).when(certificateRepository).save(certificate);
@@ -112,9 +112,9 @@ class SignCertificateWithoutSignatureDomainServiceTest {
 
   @Test
   void shallReturnSignedCertificate() {
-    final var expectedCertificate = mock(Certificate.class);
+    final var expectedCertificate = mock(MedicalCertificate.class);
 
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(SIGN, Optional.of(actionEvaluation));
     doReturn(expectedCertificate).when(certificateRepository).save(certificate);
@@ -127,9 +127,9 @@ class SignCertificateWithoutSignatureDomainServiceTest {
 
   @Test
   void shallPublishSignCertificateEvent() {
-    final var expectedCertificate = mock(Certificate.class);
+    final var expectedCertificate = mock(MedicalCertificate.class);
 
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(SIGN, Optional.of(actionEvaluation));
     doReturn(expectedCertificate).when(certificateRepository).save(certificate);
@@ -149,7 +149,7 @@ class SignCertificateWithoutSignatureDomainServiceTest {
 
   @Test
   void shallThrowCertificateActionForbiddenIfRoleIsNotPrivateDoctor() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(true).when(certificate).allowTo(SIGN, Optional.of(ACTION_EVALUATION));
 
@@ -161,7 +161,7 @@ class SignCertificateWithoutSignatureDomainServiceTest {
 
   @Test
   void shallIncludeReasonNotAllowedToException() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     final var expectedReason = List.of("expectedReason");
     doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
     doReturn(false).when(certificate).allowTo(SIGN, Optional.of(ACTION_EVALUATION));
@@ -179,9 +179,9 @@ class SignCertificateWithoutSignatureDomainServiceTest {
   void shallSetMessagesToHandleIfComplementingCertificate() {
     final var expectedMessages = List.of(COMPLEMENT_MESSAGE);
 
-    final var certificate = mock(Certificate.class);
-    final var savedCertificate = mock(Certificate.class);
-    final var parentCertificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
+    final var savedCertificate = mock(MedicalCertificate.class);
+    final var parentCertificate = mock(MedicalCertificate.class);
     final var parentRelation = Relation.builder()
         .certificate(parentCertificate)
         .type(RelationType.COMPLEMENT)

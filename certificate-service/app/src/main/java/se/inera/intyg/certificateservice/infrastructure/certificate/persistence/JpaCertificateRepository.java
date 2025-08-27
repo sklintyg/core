@@ -16,13 +16,20 @@ import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateExportPage;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.PlaceholderCertificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
+import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PlaceholderCertificateRequest;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateEntityMapper;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.PlaceholderCertificateEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecificationFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateRelationRepository;
@@ -35,6 +42,7 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
   @Value("${erase.certificates.page.size:1000}")
   private int eraseCertificatesPageSize;
 
+  private final PlaceholderCertificateEntityMapper placeholderCertificateEntityMapper;
   private final CertificateEntityRepository certificateEntityRepository;
   private final CertificateEntityMapper certificateEntityMapper;
   private final CertificateEntitySpecificationFactory certificateEntitySpecificationFactory;
@@ -46,11 +54,43 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
       throw new IllegalArgumentException("Unable to create, certificateModel was null");
     }
 
-    return Certificate.builder()
+    return MedicalCertificate.builder()
         .id(new CertificateId(UUID.randomUUID().toString()))
         .created(LocalDateTime.now(ZoneId.systemDefault()))
         .certificateModel(certificateModel)
         .revision(new Revision(0))
+        .build();
+  }
+
+  @Override
+  public Certificate createFromPlaceholder(PlaceholderCertificateRequest request,
+      CertificateModel model) {
+    final var placeholderCertificate = PlaceholderCertificate.builder()
+        .id(request.certificateId())
+        .status(request.status())
+        .certificateMetaData(
+            CertificateMetaData.builder()
+                .issuingUnit(request.issuingUnit())
+                .build()
+        )
+        .build();
+
+    certificateEntityRepository.save(
+        placeholderCertificateEntityMapper.toEntity(placeholderCertificate)
+    );
+
+    return MedicalCertificate.builder()
+        .id(new CertificateId(UUID.randomUUID().toString()))
+        .created(LocalDateTime.now(ZoneId.systemDefault()))
+        .certificateModel(model)
+        .revision(new Revision(0))
+        .parent(
+            Relation.builder()
+                .certificate(placeholderCertificate)
+                .type(RelationType.RENEW)
+                .created(LocalDateTime.now(ZoneId.systemDefault()))
+                .build()
+        )
         .build();
   }
 
@@ -188,7 +228,8 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
       throw new IllegalArgumentException("Cannot get certificates if careProviderId is null");
     }
 
-    final var pageable = PageRequest.of(page, size, Sort.by(Direction.ASC, "signed", "certificateId"));
+    final var pageable = PageRequest.of(page, size,
+        Sort.by(Direction.ASC, "signed", "certificateId"));
 
     final var certificateEntitiesPage = certificateEntityRepository.findSignedCertificateEntitiesByCareProviderHsaId(
         careProviderId.id(), pageable
@@ -215,7 +256,8 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
       throw new IllegalArgumentException("Cannot delete certificates if careProviderId is null");
     }
 
-    final var pageable = PageRequest.of(0, eraseCertificatesPageSize, Sort.by(Direction.ASC, "signed", "certificateId"));
+    final var pageable = PageRequest.of(0, eraseCertificatesPageSize,
+        Sort.by(Direction.ASC, "signed", "certificateId"));
     Page<CertificateEntity> certificateEntitiesPage;
 
     do {

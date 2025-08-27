@@ -21,7 +21,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest.CertificatesRequestBuilder;
@@ -83,7 +83,7 @@ class GetPatientCertificatesDomainServiceTest {
     final var actionEvaluation = actionEvaluationBuilder.build();
     final var certificatesRequest = certificatesRequestBuilder.build();
 
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(true).when(certificate)
         .allowTo(CertificateActionType.READ, Optional.of(actionEvaluation));
     doReturn(List.of(certificate)).when(certificateRepository)
@@ -99,8 +99,8 @@ class GetPatientCertificatesDomainServiceTest {
     final var actionEvaluation = actionEvaluationBuilder.build();
     final var certificatesRequest = certificatesRequestBuilder.build();
 
-    final var certificate1 = mock(Certificate.class);
-    final var certificate2 = mock(Certificate.class);
+    final var certificate1 = mock(MedicalCertificate.class);
+    final var certificate2 = mock(MedicalCertificate.class);
     doReturn(true).when(certificate1)
         .allowTo(CertificateActionType.READ, Optional.of(actionEvaluation));
     doReturn(false).when(certificate2)

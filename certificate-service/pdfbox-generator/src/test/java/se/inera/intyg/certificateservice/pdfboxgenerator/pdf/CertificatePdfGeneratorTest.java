@@ -22,6 +22,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
@@ -55,7 +56,7 @@ class CertificatePdfGeneratorTest {
 
   @Test
   void shouldThrowErrorIfNoPdfGeneratorForCertificateType() {
-    final var certificate = Certificate.builder()
+    final var certificate = MedicalCertificate.builder()
         .certificateModel(
             CertificateModel.builder()
                 .id(
@@ -79,7 +80,7 @@ class CertificatePdfGeneratorTest {
     @BeforeEach
     void setup() {
       when(
-          certificatePdfFillService.fillDocument(any(Certificate.class), anyString(), anyBoolean()))
+          certificatePdfFillService.fillDocument(any(MedicalCertificate.class), anyString(), anyBoolean()))
           .thenReturn(document);
     }
 

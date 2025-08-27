@@ -15,6 +15,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -45,7 +46,7 @@ class PrintCertificateQuestionConverterTest {
       .build();
 
   private static final Certificate CERTIFICATE =
-      Certificate.builder()
+      MedicalCertificate.builder()
           .elementData(List.of(ElementData.builder()
                   .id(new ElementId("1"))
                   .value(
@@ -63,7 +64,7 @@ class PrintCertificateQuestionConverterTest {
           )
           .build();
 
-  private static final Certificate CERTIFICATE_EMPTY = Certificate.builder()
+  private static final Certificate CERTIFICATE_EMPTY = MedicalCertificate.builder()
       .elementData(List.of(ElementData.builder()
           .id(new ElementId("1"))
           .value(

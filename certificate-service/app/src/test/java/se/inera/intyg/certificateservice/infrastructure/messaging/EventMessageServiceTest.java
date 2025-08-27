@@ -11,8 +11,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.jms.core.JmsTemplate;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType;
 import se.inera.intyg.certificateservice.domain.event.model.MessageEvent;
@@ -62,7 +62,7 @@ class EventMessageServiceTest {
     private CertificateEvent createEvent(CertificateEventType eventType) {
       return CertificateEvent.builder()
           .certificate(
-              Certificate.builder()
+              MedicalCertificate.builder()
                   .id(new CertificateId("ID"))
                   .build()
           )

@@ -33,6 +33,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetCertific
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.RenewCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.RenewCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.RenewExternalCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ReplaceCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ReplaceCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.RevokeCertificateRequest;
@@ -57,6 +58,7 @@ import se.inera.intyg.certificateservice.application.certificate.service.GetCert
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateXmlService;
 import se.inera.intyg.certificateservice.application.certificate.service.RenewCertificateService;
+import se.inera.intyg.certificateservice.application.certificate.service.RenewExternalCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.ReplaceCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.RevokeCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.SendCertificateService;
@@ -101,6 +103,8 @@ class CertificateControllerTest {
   private ReplaceCertificateService replaceCertificateService;
   @Mock
   private RenewCertificateService renewCertificateService;
+  @Mock
+  private RenewExternalCertificateService renewExternalCertificateService;
   @Mock
   private ComplementCertificateService complementCertificateService;
   @Mock
@@ -316,6 +320,18 @@ class CertificateControllerTest {
     doReturn(expectedResult).when(renewCertificateService).renew(request, CERTIFICATE_ID);
 
     final var actualResult = certificateController.renewCertificate(request, CERTIFICATE_ID);
+
+    assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  void shallReturnRenewExternalCertificateResponse() {
+    final var request = RenewExternalCertificateRequest.builder().build();
+    final var expectedResult = RenewCertificateResponse.builder().build();
+    doReturn(expectedResult).when(renewExternalCertificateService).renew(request, CERTIFICATE_ID);
+
+    final var actualResult = certificateController.renewExternalCertificate(request,
+        CERTIFICATE_ID);
 
     assertEquals(expectedResult, actualResult);
   }

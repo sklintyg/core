@@ -20,4 +20,13 @@ public enum CertificateStatusTypeDTO {
           );
     };
   }
+
+  public static Status toStatus(CertificateStatusTypeDTO statusTypeDTO) {
+    return switch (statusTypeDTO) {
+      case UNSIGNED -> Status.DRAFT;
+      case LOCKED -> Status.LOCKED_DRAFT;
+      case SIGNED -> Status.SIGNED;
+      case REVOKED, LOCKED_REVOKED -> Status.REVOKED;
+    };
+  }
 }

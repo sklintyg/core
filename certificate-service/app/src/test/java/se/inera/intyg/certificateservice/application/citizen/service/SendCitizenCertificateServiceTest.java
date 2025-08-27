@@ -18,8 +18,8 @@ import se.inera.intyg.certificateservice.application.citizen.dto.SendCitizenCert
 import se.inera.intyg.certificateservice.application.citizen.validation.CitizenCertificateRequestValidator;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.citizen.service.SendCitizenCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
@@ -60,7 +60,7 @@ class SendCitizenCertificateServiceTest {
     final var expectedResult = SendCitizenCertificateResponse.builder()
         .citizenCertificate(expectedCertificate)
         .build();
-    final var certificate = Certificate.builder().build();
+    final var certificate = MedicalCertificate.builder().build();
 
     doReturn(certificate).when(sendCitizenCertificateDomainService)
         .send(

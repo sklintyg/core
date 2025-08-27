@@ -15,11 +15,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCodeList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
@@ -33,7 +33,7 @@ class TS8071CertificateSummaryProviderTest {
   @Test
   void shallIncludeLabel() {
     assertEquals("Intyget avser",
-        provider.summaryOf(Certificate.builder().build()).label()
+        provider.summaryOf(MedicalCertificate.builder().build()).label()
     );
   }
 
@@ -43,7 +43,7 @@ class TS8071CertificateSummaryProviderTest {
 
     @Test
     void shallReturnEmptyValueIfCertificateSignedIsNull() {
-      final var certificate = Certificate.builder()
+      final var certificate = MedicalCertificate.builder()
           .signed(null)
           .build();
 
@@ -54,7 +54,7 @@ class TS8071CertificateSummaryProviderTest {
 
     @Test
     void shallReturnEmptyValueIfCertificateCertificateDontContainCodeValue() {
-      final var certificate = Certificate.builder()
+      final var certificate = MedicalCertificate.builder()
           .signed(LocalDateTime.now())
           .certificateModel(
               CertificateModel.builder()
@@ -81,7 +81,7 @@ class TS8071CertificateSummaryProviderTest {
 
     @Test
     void shallThrowIfCertificateCertificateContainCodeValueButWrongType() {
-      final var certificate = Certificate.builder()
+      final var certificate = MedicalCertificate.builder()
           .signed(LocalDateTime.now())
           .certificateModel(
               CertificateModel.builder()
@@ -110,7 +110,7 @@ class TS8071CertificateSummaryProviderTest {
     @Test
     void shallReturnValueFromCodeIfCertificateContainCodeValue() {
       final var expected = TAXI.displayName();
-      final var certificate = Certificate.builder()
+      final var certificate = MedicalCertificate.builder()
           .signed(LocalDateTime.now())
           .certificateModel(
               CertificateModel.builder()
@@ -148,7 +148,7 @@ class TS8071CertificateSummaryProviderTest {
     @Test
     void shallReturnValueFromCodesIfCertificateContainSeveralCodeValues() {
       final var expected = String.format("%s, %s", TAXI.displayName(), UTLANDSKT.displayName());
-      final var certificate = Certificate.builder()
+      final var certificate = MedicalCertificate.builder()
           .signed(LocalDateTime.now())
           .certificateModel(
               CertificateModel.builder()

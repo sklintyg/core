@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -36,8 +37,12 @@ import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateExportPage;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.PlaceholderCertificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.PlaceholderCertificateRequest;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateDataEntity;
@@ -51,6 +56,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitTypeEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateModelEntityMapper;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.PlaceholderCertificateEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecificationFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateRelationRepository;
@@ -70,6 +76,8 @@ class JpaCertificateRepositoryTest {
   PatientRepository patientRepository;
   @Mock
   CertificateEntityMapper certificateEntityMapper;
+  @Mock
+  PlaceholderCertificateEntityMapper placeHolderEntityMapper;
   @InjectMocks
   JpaCertificateRepository jpaCertificateRepository;
 
@@ -78,6 +86,8 @@ class JpaCertificateRepositoryTest {
       .type("TYPE")
       .version("VERSION")
       .build();
+
+  private static final String ID = "ID";
 
   private static final CertificateModel CONVERTED_MODEL = CertificateModelEntityMapper.toDomain(
       MODEL);
@@ -156,7 +166,7 @@ class JpaCertificateRepositoryTest {
       .data(DATA)
       .build();
 
-  private static final Certificate CERTIFICATE = Certificate.builder().build();
+  private static final Certificate CERTIFICATE = MedicalCertificate.builder().build();
 
   @Nested
   class Create {
@@ -211,7 +221,7 @@ class JpaCertificateRepositoryTest {
 
     @Test
     void shouldReturnCertificate() {
-      final var certificate = Certificate.builder().build();
+      final var certificate = MedicalCertificate.builder().build();
 
       doReturn(CERTIFICATE_ENTITY).when(certificateEntityMapper).toEntity(certificate);
       doReturn(CERTIFICATE_ENTITY).when(certificateEntityRepository).save(CERTIFICATE_ENTITY);
@@ -224,7 +234,7 @@ class JpaCertificateRepositoryTest {
 
     @Test
     void shouldDeleteCertificate() {
-      final var expectedResult = Certificate.builder()
+      final var expectedResult = MedicalCertificate.builder()
           .id(CERTIFICATE_ID)
           .status(Status.DELETED_DRAFT)
           .build();
@@ -240,7 +250,7 @@ class JpaCertificateRepositoryTest {
 
     @Test
     void shouldDeleteRelationsIfStatusLockedDraft() {
-      final var expectedResult = Certificate.builder()
+      final var expectedResult = MedicalCertificate.builder()
           .id(CERTIFICATE_ID)
           .status(Status.LOCKED_DRAFT)
           .build();
@@ -254,7 +264,7 @@ class JpaCertificateRepositoryTest {
 
     @Test
     void shouldSaveCertificateRelations() {
-      final var certificate = Certificate.builder().build();
+      final var certificate = MedicalCertificate.builder().build();
 
       doReturn(CERTIFICATE_ENTITY).when(certificateEntityMapper).toEntity(certificate);
       doReturn(CERTIFICATE_ENTITY).when(certificateEntityRepository).save(CERTIFICATE_ENTITY);
@@ -284,7 +294,7 @@ class JpaCertificateRepositoryTest {
 
     @Test
     void shouldReturnCertificateFromRepository() {
-      final var expectedCertificate = Certificate.builder().build();
+      final var expectedCertificate = MedicalCertificate.builder().build();
 
       when(certificateEntityRepository.findByCertificateId("ID"))
           .thenReturn(Optional.of(CERTIFICATE_ENTITY));
@@ -316,7 +326,7 @@ class JpaCertificateRepositoryTest {
 
     @Test
     void shouldReturnCertificatesFromRepository() {
-      final var expectedCertificate = Certificate.builder().build();
+      final var expectedCertificate = MedicalCertificate.builder().build();
       final var expectedCertificates = List.of(expectedCertificate, expectedCertificate);
       final var certificate1 = new CertificateId("ID1");
       final var certificate2 = new CertificateId("ID2");
@@ -472,7 +482,8 @@ class JpaCertificateRepositoryTest {
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
           () -> jpaCertificateRepository.getExportByCareProviderId(null, 0, 0));
 
-      assertEquals("Cannot get certificates if careProviderId is null", illegalArgumentException.getMessage());
+      assertEquals("Cannot get certificates if careProviderId is null",
+          illegalArgumentException.getMessage());
     }
 
     @Test
@@ -486,17 +497,20 @@ class JpaCertificateRepositoryTest {
       final var page = mock(Page.class);
       final var certificateEntity = CertificateEntity.builder().build();
 
-      doReturn(page).when(certificateEntityRepository).findSignedCertificateEntitiesByCareProviderHsaId(
-          eq(CARE_PROVIDER.getHsaId()), any(Pageable.class)
-      );
-      doReturn(2L).when(certificateEntityRepository).findRevokedCertificateEntitiesByCareProviderHsaId(
-          CARE_PROVIDER.getHsaId()
-      );
+      doReturn(page).when(certificateEntityRepository)
+          .findSignedCertificateEntitiesByCareProviderHsaId(
+              eq(CARE_PROVIDER.getHsaId()), any(Pageable.class)
+          );
+      doReturn(2L).when(certificateEntityRepository)
+          .findRevokedCertificateEntitiesByCareProviderHsaId(
+              CARE_PROVIDER.getHsaId()
+          );
       doReturn(Collections.singletonList(certificateEntity)).when(page).getContent();
       doReturn(2L).when(page).getTotalElements();
       doReturn(FK3226_CERTIFICATE).when(certificateEntityMapper).toDomain(certificateEntity);
 
-      final var actualResult = jpaCertificateRepository.getExportByCareProviderId(new HsaId(CARE_PROVIDER.getHsaId()), 0, 10);
+      final var actualResult = jpaCertificateRepository.getExportByCareProviderId(
+          new HsaId(CARE_PROVIDER.getHsaId()), 0, 10);
       assertEquals(expectedResult, actualResult);
     }
   }
@@ -530,11 +544,74 @@ class JpaCertificateRepositoryTest {
       doReturn(false).when(page).hasNext();
       doReturn(1L).when(page).getTotalElements();
 
-      final var deletedCount = jpaCertificateRepository.deleteByCareProviderId(new HsaId(CARE_PROVIDER.getHsaId()));
+      final var deletedCount = jpaCertificateRepository.deleteByCareProviderId(
+          new HsaId(CARE_PROVIDER.getHsaId()));
 
       verify(certificateRelationRepository).deleteRelations(certificateEntity);
-      verify(certificateEntityRepository).deleteAllByCertificateIdIn(List.of(certificateEntity.getCertificateId()));
+      verify(certificateEntityRepository).deleteAllByCertificateIdIn(
+          List.of(certificateEntity.getCertificateId()));
       assertEquals(1L, deletedCount);
+    }
+  }
+
+  @Nested
+  class CreateFromPlaceholder {
+
+    @Test
+    void shouldCreateMedicalCertificateWithParentRelationFromPlaceholder() {
+      final var placeHolderRequest = PlaceholderCertificateRequest.builder()
+          .certificateId(new CertificateId(ID))
+          .status(Status.SIGNED)
+          .build();
+
+      final var response = jpaCertificateRepository
+          .createFromPlaceholder(placeHolderRequest, CONVERTED_MODEL);
+
+      assertAll(
+          () -> assertEquals(RelationType.RENEW, response.parent().type()),
+          () -> assertEquals(ID, response.parent().certificate().id().id()),
+          () -> assertEquals(Status.SIGNED, response.parent().certificate().status())
+      );
+    }
+
+    @Test
+    void shouldCreateMedicalCertificate() {
+      final var placeHolderRequest = PlaceholderCertificateRequest.builder()
+          .certificateId(new CertificateId(ID))
+          .status(Status.DRAFT)
+          .build();
+
+      final var response = jpaCertificateRepository
+          .createFromPlaceholder(placeHolderRequest, CONVERTED_MODEL);
+
+      assertAll(
+          () -> assertNotNull(response.id().id()),
+          () -> assertNotNull(response.created()),
+          () -> assertEquals(CONVERTED_MODEL, response.certificateModel()),
+          () -> assertEquals(Status.DRAFT, response.status()),
+          () -> assertEquals(0, response.revision().value())
+      );
+    }
+
+    @Test
+    void shouldSavePlaceHolderCertificate() {
+      final var placeHolderRequest = PlaceholderCertificateRequest.builder()
+          .certificateId(new CertificateId(ID))
+          .status(Status.DRAFT)
+          .build();
+
+      final var expectedPlaceHolderCertificate = PlaceholderCertificate.builder()
+          .id(new CertificateId(ID))
+          .status(Status.DRAFT)
+          .build();
+
+      when(placeHolderEntityMapper.toEntity(expectedPlaceHolderCertificate))
+          .thenReturn(CERTIFICATE_ENTITY);
+
+      jpaCertificateRepository
+          .createFromPlaceholder(placeHolderRequest, CONVERTED_MODEL);
+
+      verify(certificateEntityRepository).save(CERTIFICATE_ENTITY);
     }
   }
 }

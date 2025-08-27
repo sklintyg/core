@@ -14,8 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageInternalResponse;
 import se.inera.intyg.certificateservice.application.message.dto.QuestionDTO;
 import se.inera.intyg.certificateservice.application.message.service.converter.QuestionConverter;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 
@@ -41,7 +41,7 @@ class GetCertificateMessageInternalServiceTest {
         .build();
 
     final var message = mock(Message.class);
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(true).when(certificateRepository).exists(new CertificateId(CERTIFICATE_ID));
     doReturn(certificate).when(certificateRepository).getById(new CertificateId(CERTIFICATE_ID));
 

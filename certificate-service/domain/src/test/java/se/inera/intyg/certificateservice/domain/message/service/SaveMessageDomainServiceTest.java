@@ -14,8 +14,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 import se.inera.intyg.certificateservice.domain.message.model.Content;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
@@ -38,7 +38,7 @@ class SaveMessageDomainServiceTest {
 
   @Test
   void shallThrowIfNotAllowedToSaveMessage() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(CERTIFICATE_ID).when(certificate).id();
     doReturn(false).when(certificate)
         .allowTo(CertificateActionType.SAVE_MESSAGE, Optional.of(ACTION_EVALUATION));
@@ -51,7 +51,7 @@ class SaveMessageDomainServiceTest {
   @Test
   void shallUpdateMessage() {
     final var message = mock(Message.class);
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(true).when(certificate)
         .allowTo(CertificateActionType.SAVE_MESSAGE, Optional.of(ACTION_EVALUATION));
     doReturn(message).when(messageRepository).getById(MESSAGE_ID);
@@ -67,7 +67,7 @@ class SaveMessageDomainServiceTest {
   @Test
   void shallPersistUpdatedMessage() {
     final var expectedMessage = Message.builder().build();
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(true).when(certificate)
         .allowTo(CertificateActionType.SAVE_MESSAGE, Optional.of(ACTION_EVALUATION));
     doReturn(expectedMessage).when(messageRepository).getById(MESSAGE_ID);
@@ -82,7 +82,7 @@ class SaveMessageDomainServiceTest {
   @Test
   void shallReturnSavedMessage() {
     final var expectedMessage = Message.builder().build();
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(true).when(certificate)
         .allowTo(CertificateActionType.SAVE_MESSAGE, Optional.of(ACTION_EVALUATION));
     doReturn(expectedMessage).when(messageRepository).getById(MESSAGE_ID);

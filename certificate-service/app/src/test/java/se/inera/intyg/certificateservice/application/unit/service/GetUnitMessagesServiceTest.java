@@ -32,8 +32,8 @@ import se.inera.intyg.certificateservice.application.unit.dto.MessagesQueryCrite
 import se.inera.intyg.certificateservice.application.unit.service.validator.GetUnitMessagesRequestValidator;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateAction;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.common.model.MessagesRequest;
 import se.inera.intyg.certificateservice.domain.common.model.MessagesResponse;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
@@ -102,7 +102,7 @@ class GetUnitMessagesServiceTest {
     doReturn(MESSAGES_REQUEST).when(messagesRequestFactory).create(CRITERIA_DTO);
 
     final var message = mock(Message.class);
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     final var messageResponse = MessagesResponse.builder()
         .messages(List.of(message))
         .certificates(List.of(certificate))

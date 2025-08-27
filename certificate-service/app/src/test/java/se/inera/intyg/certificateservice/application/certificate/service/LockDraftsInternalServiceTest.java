@@ -17,7 +17,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.LockDraftsRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.LockDraftsResponse;
 import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateConverter;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.service.LockCertificateDomainService;
 
 @ExtendWith(MockitoExtension.class)
@@ -47,7 +47,7 @@ class LockDraftsInternalServiceTest {
         .cutoffDate(LocalDateTime.now())
         .build();
 
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     final var certificates = List.of(certificate);
     doReturn(certificates).when(lockCertificateDomainService).lock(request.getCutoffDate());
     doReturn(expectedCertificate).when(converter)

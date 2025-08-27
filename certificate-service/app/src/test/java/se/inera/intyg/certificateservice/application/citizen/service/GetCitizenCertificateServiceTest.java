@@ -24,6 +24,7 @@ import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.citizen.service.GetCitizenCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
@@ -38,7 +39,7 @@ class GetCitizenCertificateServiceTest {
   private static final CertificateText CERTIFICATE_TEXT = CertificateText.builder().build();
   private static final CertificateTextDTO CONVERTED_TEXT =
       CertificateTextDTO.builder().build();
-  private static final Certificate CERTIFICATE = Certificate.builder()
+  private static final Certificate CERTIFICATE = MedicalCertificate.builder()
       .certificateModel(CertificateModel.builder()
           .texts(List.of(CERTIFICATE_TEXT))
           .build())

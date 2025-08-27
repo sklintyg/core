@@ -30,8 +30,8 @@ import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificate.service.ForwardCertificateDomainService;
@@ -166,7 +166,7 @@ class ForwardCertificateServiceTest {
         ALFA_REGIONEN_DTO
     );
 
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(false).when(certificate).isDraft();
     doReturn(certificate).when(certificateRepository)
         .getById(new CertificateId(CERTIFICATE_ID));

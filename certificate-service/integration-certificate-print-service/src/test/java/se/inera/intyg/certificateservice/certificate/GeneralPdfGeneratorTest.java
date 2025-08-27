@@ -24,6 +24,7 @@ import se.inera.intyg.certificateservice.certificate.dto.PrintCertificateRespons
 import se.inera.intyg.certificateservice.certificate.integration.PrintCertificateFromCertificatePrintService;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Pdf;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
@@ -48,7 +49,7 @@ class GeneralPdfGeneratorTest {
   private static final String TEXT = "Text";
   private static final String CERTIFICATE_ID = "CertificateId";
   private static final byte[] PDF_DATA = "pdfData".getBytes();
-  private static final Certificate CERTIFICATE = Certificate.builder()
+  private static final Certificate CERTIFICATE = MedicalCertificate.builder()
       .id(new CertificateId(CERTIFICATE_ID))
       .certificateModel(
           CertificateModel.builder()
@@ -64,7 +65,7 @@ class GeneralPdfGeneratorTest {
       )
       .build();
 
-  private static final Certificate CERTIFICATE_NO_GENERAL_RECIPIENT_NAME = Certificate.builder()
+  private static final Certificate CERTIFICATE_NO_GENERAL_RECIPIENT_NAME = MedicalCertificate.builder()
       .id(new CertificateId(CERTIFICATE_ID))
       .certificateModel(
           CertificateModel.builder()
@@ -180,7 +181,7 @@ class GeneralPdfGeneratorTest {
         )
         .build();
 
-    final var cert = Certificate.builder()
+    final var cert = MedicalCertificate.builder()
         .id(new CertificateId(CERTIFICATE_ID))
         .certificateModel(certificateModel)
         .build();
@@ -214,7 +215,7 @@ class GeneralPdfGeneratorTest {
             .build()))
         .build();
 
-    var certWithMultipleElements = Certificate.builder()
+    var certWithMultipleElements = MedicalCertificate.builder()
         .id(new CertificateId(CERTIFICATE_ID))
         .certificateModel(
             CertificateModel.builder()

@@ -34,6 +34,7 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionE
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Signature;
 import se.inera.intyg.certificateservice.domain.certificate.service.SignCertificateDomainService;
@@ -47,7 +48,7 @@ class SignCertificateServiceTest {
       SIGNATURE_XML.getBytes(StandardCharsets.UTF_8)
   );
   private static final long VERSION = 99;
-  private static final Certificate CERTIFICATE = mock(Certificate.class);
+  private static final Certificate CERTIFICATE = mock(MedicalCertificate.class);
   private static final ResourceLinkDTO RESOURCE_LINK_DTO = ResourceLinkDTO.builder()
       .type(ResourceLinkTypeDTO.CREATE_CERTIFICATE)
       .build();

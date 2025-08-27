@@ -8,7 +8,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionRuleSent;
+import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate;
 
 class ActionRuleSentTest {
@@ -25,7 +25,7 @@ class ActionRuleSentTest {
 
     @Test
     void shallReturnTrueIfSent() {
-      final var certificate = Optional.of(
+      final Optional<Certificate> certificate = Optional.of(
           TestDataCertificate.fk7210CertificateBuilder()
               .sent(TestDataCertificate.SENT)
               .build()
@@ -38,7 +38,7 @@ class ActionRuleSentTest {
 
     @Test
     void shallReturnFalseIfNotSent() {
-      final var certificate = Optional.of(
+      final Optional<Certificate> certificate = Optional.of(
           TestDataCertificate.fk7210CertificateBuilder()
               .sent(null)
               .build()
@@ -62,7 +62,7 @@ class ActionRuleSentTest {
 
     @Test
     void shallReturnFalseIfSent() {
-      final var certificate = Optional.of(
+      final Optional<Certificate> certificate = Optional.of(
           TestDataCertificate.fk7210CertificateBuilder()
               .sent(TestDataCertificate.SENT)
               .build()
@@ -75,7 +75,7 @@ class ActionRuleSentTest {
 
     @Test
     void shallReturnTrueIfNotSent() {
-      final var certificate = Optional.of(
+      final Optional<Certificate> certificate = Optional.of(
           TestDataCertificate.fk7210CertificateBuilder()
               .sent(null)
               .build()

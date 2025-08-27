@@ -28,8 +28,8 @@ import se.inera.intyg.certificateservice.application.message.dto.GetCertificateF
 import se.inera.intyg.certificateservice.application.message.service.validator.GetCertificateFromMessageRequestValidator;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateAction;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
@@ -93,7 +93,7 @@ class GetCertificateFromMessageServiceTest {
     doReturn(Message.builder().certificateId(new CertificateId(CERTIFICATE_ID)).build())
         .when(messageRepository).getById(new MessageId(MESSAGE_ID));
 
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(certificate).when(getCertificateDomainService).get(
         new CertificateId(CERTIFICATE_ID),
         actionEvaluation

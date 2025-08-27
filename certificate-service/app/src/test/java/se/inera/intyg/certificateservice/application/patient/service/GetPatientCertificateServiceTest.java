@@ -28,7 +28,7 @@ import se.inera.intyg.certificateservice.application.patient.dto.GetPatientCerti
 import se.inera.intyg.certificateservice.application.patient.service.validator.GetPatientCertificatesRequestValidator;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateAction;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.patient.service.GetPatientCertificatesDomainService;
 
 @ExtendWith(MockitoExtension.class)
@@ -80,7 +80,7 @@ class GetPatientCertificateServiceTest {
         ALFA_REGIONEN_DTO
     );
 
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(List.of(certificate)).when(getPatientCertificatesDomainService).get(
         actionEvaluation
     );

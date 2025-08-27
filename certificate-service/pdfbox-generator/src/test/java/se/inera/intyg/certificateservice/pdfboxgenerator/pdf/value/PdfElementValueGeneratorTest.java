@@ -13,11 +13,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
@@ -28,7 +28,7 @@ class PdfElementValueGeneratorTest {
 
   private static final ElementId ELEMENT_ID = new ElementId("1");
 
-  private final Certificate.CertificateBuilder certificateBuilder = fk7210CertificateBuilder();
+  private final MedicalCertificate.MedicalCertificateBuilder certificateBuilder = fk7210CertificateBuilder();
   private final ElementSpecification elementSpecification = ElementSpecification.builder()
       .id(ELEMENT_ID)
       .build();
@@ -110,5 +110,3 @@ class PdfElementValueGeneratorTest {
     );
   }
 }
-
-

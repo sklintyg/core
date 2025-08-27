@@ -72,6 +72,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ReadyForSign;
 import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
@@ -146,11 +147,11 @@ class CertificateMetadataConverterTest {
 
   private static final String CERTIFICATE_ID = "certificateId";
   private Certificate certificate;
-  private Certificate.CertificateBuilder certificateBuilder;
+  private MedicalCertificate.MedicalCertificateBuilder certificateBuilder;
 
   @BeforeEach
   void setUp() {
-    certificateBuilder = Certificate.builder()
+    certificateBuilder = MedicalCertificate.builder()
         .id(new CertificateId(CERTIFICATE_ID))
         .created(CREATED)
         .revision(REVISION)
@@ -280,11 +281,11 @@ class CertificateMetadataConverterTest {
         .value(CERTIFICATE_SUMMARY_VALUE)
         .build();
     doReturn(certificateSummary).when(certificateSummaryProvider)
-        .summaryOf(any(Certificate.class));
+        .summaryOf(any(MedicalCertificate.class));
 
     final var confirmationModal = CertificateConfirmationModal.builder().build();
     doReturn(confirmationModal).when(certificateConfirmationModalProvider)
-        .of(any(Certificate.class), any(ActionEvaluation.class));
+        .of(any(MedicalCertificate.class), any(ActionEvaluation.class));
     when(certificateConfirmationModalConverter.convert(confirmationModal))
         .thenReturn(CONVERTED_MODAL);
   }

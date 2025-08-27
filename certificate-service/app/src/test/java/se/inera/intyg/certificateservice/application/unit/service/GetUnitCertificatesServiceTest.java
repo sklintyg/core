@@ -30,7 +30,7 @@ import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificate
 import se.inera.intyg.certificateservice.application.unit.service.validator.GetUnitCertificatesRequestValidator;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateAction;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
 import se.inera.intyg.certificateservice.domain.unit.service.GetUnitCertificatesDomainService;
 
@@ -89,7 +89,7 @@ class GetUnitCertificatesServiceTest {
 
     doReturn(CERTIFICATES_REQUEST).when(certificatesRequestFactory).create(QUERY_CRITERIA_DTO);
 
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(List.of(certificate)).when(getUnitCertificatesDomainService).get(
         CERTIFICATES_REQUEST,
         actionEvaluation

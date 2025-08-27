@@ -15,6 +15,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 
 class FK7804CertificateSendContentProviderTest {
@@ -51,7 +52,7 @@ class FK7804CertificateSendContentProviderTest {
         .value(ElementValueText.builder().build())
         .build();
 
-    final var cert = Certificate.builder()
+    final var cert = MedicalCertificate.builder()
         .elementData(List.of(data))
         .build();
 
@@ -225,7 +226,7 @@ class FK7804CertificateSendContentProviderTest {
         .id(QUESTION_NEDSATTNING_ARBETSFORMAGA_ID)
         .value(value)
         .build();
-    return Certificate.builder()
+    return MedicalCertificate.builder()
         .elementData(List.of(data))
         .build();
   }

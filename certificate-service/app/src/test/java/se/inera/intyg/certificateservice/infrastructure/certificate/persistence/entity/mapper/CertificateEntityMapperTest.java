@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -77,7 +78,9 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 class CertificateEntityMapperTest {
 
   @Mock
-  CertificateEntityRepository certificateEntityRepository;
+  private PlaceholderCertificateEntityMapper placeholderCertificateEntityMapper;
+  @Mock
+  private CertificateEntityRepository certificateEntityRepository;
   @Mock
   private PatientRepository patientRepository;
 
@@ -277,6 +280,15 @@ class CertificateEntityMapperTest {
 
       final var response = certificateEntityMapper.toEntity(forwardedCertificate);
       assertTrue(response.getForwarded());
+    }
+
+    @Test
+    void shouldMapPlaceholder() {
+      final var forwardedCertificate = fk7210CertificateBuilder()
+          .build();
+
+      final var response = certificateEntityMapper.toEntity(forwardedCertificate);
+      assertFalse(response.getPlaceholder());
     }
   }
 

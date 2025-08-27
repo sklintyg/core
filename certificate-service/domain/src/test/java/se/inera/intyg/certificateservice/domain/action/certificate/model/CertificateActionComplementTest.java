@@ -35,8 +35,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.CertificateBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
@@ -51,7 +51,7 @@ class CertificateActionComplementTest {
   private CertificateActionComplement certificateActionComplement;
 
   private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
-  private CertificateBuilder certificateBuilder;
+  private MedicalCertificate.MedicalCertificateBuilder certificateBuilder;
   private static final CertificateActionSpecification CERTIFICATE_ACTION_SPECIFICATION =
       CertificateActionSpecification.builder()
           .certificateActionType(CertificateActionType.COMPLEMENT)
@@ -68,7 +68,7 @@ class CertificateActionComplementTest {
         CERTIFICATE_ACTION_SPECIFICATION
     );
 
-    certificateBuilder = Certificate.builder()
+    certificateBuilder = MedicalCertificate.builder()
         .status(Status.SIGNED)
         .sent(Sent.builder()
             .sentAt(LocalDateTime.now())
@@ -381,7 +381,7 @@ class CertificateActionComplementTest {
     void setUp() {
       certificateActionComplement = (CertificateActionComplement) certificateActionFactory.create(
           CERTIFICATE_ACTION_SPECIFICATION);
-      certificateBuilder = Certificate.builder()
+      certificateBuilder = MedicalCertificate.builder()
           .status(Status.SIGNED)
           .sent(Sent.builder().sentAt(LocalDateTime.now()).build())
           .messages(

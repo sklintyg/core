@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 
 
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
@@ -60,8 +61,22 @@ public class CertificateRelationRepository {
   }
 
   private CertificateEntity getParentEntity(Certificate certificate) {
-    return certificateEntityRepository.findByCertificateId(
-            certificate.parent().certificate().id().id())
+    if (certificate.parent().certificate().isPlaceholder()) {
+      return getCertificate(
+          certificateEntityRepository.findPlaceholderByCertificateId(
+              certificate.parent().certificate().id().id()), certificate
+      );
+    }
+
+    return getCertificate(
+        certificateEntityRepository.findByCertificateId(
+            certificate.parent().certificate().id().id()), certificate
+    );
+  }
+
+  private CertificateEntity getCertificate(
+      Optional<CertificateEntity> certificateEntityRepository, Certificate certificate) {
+    return certificateEntityRepository
         .orElseThrow(() -> new IllegalStateException("Parent certificate with id '%s' not found"
                 .formatted(certificate.parent().certificate().id().id())
             )

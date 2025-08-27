@@ -45,6 +45,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueIn
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueMedicalInvestigationList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalInvestigation;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revoked;
@@ -100,11 +101,11 @@ public class TestDataCertificate {
       .revokedAt(LocalDateTime.now(ZoneId.systemDefault()))
       .revokedInformation(REVOKED_INFORMATION)
       .build();
-  public static final Certificate FK7210_CERTIFICATE = fk7210CertificateBuilder().build();
+  public static final MedicalCertificate FK7210_CERTIFICATE = fk7210CertificateBuilder().build();
   public static final Certificate FK3226_CERTIFICATE = fk3226CertificateBuilder().build();
 
-  public static Certificate.CertificateBuilder fk7210CertificateBuilder() {
-    return Certificate.builder()
+  public static MedicalCertificate.MedicalCertificateBuilder fk7210CertificateBuilder() {
+    return MedicalCertificate.builder()
         .id(CERTIFICATE_ID)
         .revision(REVISION)
         .created(LocalDateTime.now(ZoneId.systemDefault()))
@@ -148,8 +149,8 @@ public class TestDataCertificate {
         );
   }
 
-  public static Certificate.CertificateBuilder fk3226CertificateBuilder() {
-    return Certificate.builder()
+  public static MedicalCertificate.MedicalCertificateBuilder fk3226CertificateBuilder() {
+    return MedicalCertificate.builder()
         .id(CERTIFICATE_ID)
         .revision(REVISION)
         .created(LocalDateTime.now(ZoneId.systemDefault()))
@@ -236,8 +237,8 @@ public class TestDataCertificate {
 
   public static final Certificate FK7472_CERTIFICATE = fk7472CertificateBuilder().build();
 
-  public static Certificate.CertificateBuilder fk7472CertificateBuilder() {
-    return Certificate.builder()
+  public static MedicalCertificate.MedicalCertificateBuilder fk7472CertificateBuilder() {
+    return MedicalCertificate.builder()
         .id(CERTIFICATE_ID)
         .revision(REVISION)
         .created(LocalDateTime.now(ZoneId.systemDefault()))
@@ -297,8 +298,8 @@ public class TestDataCertificate {
         );
   }
 
-  public static Certificate.CertificateBuilder fk7809CertificateBuilder() {
-    return Certificate.builder()
+  public static MedicalCertificate.MedicalCertificateBuilder fk7809CertificateBuilder() {
+    return MedicalCertificate.builder()
         .id(CERTIFICATE_ID)
         .revision(REVISION)
         .created(LocalDateTime.now(ZoneId.systemDefault()))
@@ -427,8 +428,8 @@ public class TestDataCertificate {
 
   public static final Certificate FK7427_CERTIFICATE = fk7427CertificateBuilder().build();
 
-  public static Certificate.CertificateBuilder fk7427CertificateBuilder() {
-    return Certificate.builder()
+  public static MedicalCertificate.MedicalCertificateBuilder fk7427CertificateBuilder() {
+    return MedicalCertificate.builder()
         .id(CERTIFICATE_ID)
         .revision(REVISION)
         .created(LocalDateTime.now(ZoneId.systemDefault()))
@@ -559,8 +560,8 @@ public class TestDataCertificate {
 
   public static final Certificate FK7426_CERTIFICATE = fk7426CertificateBuilder().build();
 
-  public static Certificate.CertificateBuilder fk7426CertificateBuilder() {
-    return Certificate.builder()
+  public static MedicalCertificate.MedicalCertificateBuilder fk7426CertificateBuilder() {
+    return MedicalCertificate.builder()
         .id(CERTIFICATE_ID)
         .revision(REVISION)
         .created(LocalDateTime.now(ZoneId.systemDefault()))
@@ -741,8 +742,8 @@ public class TestDataCertificate {
 
   public static final Certificate FK3221_CERTIFICATE = fk3221CertificateBuilder().build();
 
-  public static Certificate.CertificateBuilder fk3221CertificateBuilder() {
-    return Certificate.builder()
+  public static MedicalCertificate.MedicalCertificateBuilder fk3221CertificateBuilder() {
+    return MedicalCertificate.builder()
         .id(CERTIFICATE_ID)
         .revision(REVISION)
         .created(LocalDateTime.now(ZoneId.systemDefault()))
@@ -880,8 +881,8 @@ public class TestDataCertificate {
 
   public static final Certificate FK7810_CERTIFICATE = fk7810CertificateBuilder().build();
 
-  public static Certificate.CertificateBuilder fk7810CertificateBuilder() {
-    return Certificate.builder()
+  public static MedicalCertificate.MedicalCertificateBuilder fk7810CertificateBuilder() {
+    return MedicalCertificate.builder()
         .id(CERTIFICATE_ID)
         .revision(REVISION)
         .created(LocalDateTime.now(ZoneId.systemDefault()))
@@ -1064,8 +1065,8 @@ public class TestDataCertificate {
 
   public static final Certificate FK7804_CERTIFICATE = fk7804CertificateBuilder().build();
 
-  public static Certificate.CertificateBuilder fk7804CertificateBuilder() {
-    return Certificate.builder()
+  public static MedicalCertificate.MedicalCertificateBuilder fk7804CertificateBuilder() {
+    return MedicalCertificate.builder()
         .id(CERTIFICATE_ID)
         .revision(REVISION)
         .created(LocalDateTime.now(ZoneId.systemDefault()))

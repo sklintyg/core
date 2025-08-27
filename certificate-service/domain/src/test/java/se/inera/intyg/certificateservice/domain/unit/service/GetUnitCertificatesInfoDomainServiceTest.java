@@ -21,8 +21,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
@@ -66,8 +66,8 @@ class GetUnitCertificatesInfoDomainServiceTest {
         .issuer(ALVA_VARDADMINISTRATOR)
         .build();
 
-    final var certificate = mock(Certificate.class);
-    final var certificateTwo = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
+    final var certificateTwo = mock(MedicalCertificate.class);
     doReturn(certificateMetaData).when(certificate).certificateMetaData();
     doReturn(certificateMetaDataTwo).when(certificateTwo).certificateMetaData();
     doReturn(List.of(certificate, certificateTwo)).when(certificateRepository)
@@ -87,8 +87,8 @@ class GetUnitCertificatesInfoDomainServiceTest {
         .issuer(AJLA_DOKTOR)
         .build();
 
-    final var certificate = mock(Certificate.class);
-    final var certificateTwo = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
+    final var certificateTwo = mock(MedicalCertificate.class);
     doReturn(certificateMetaData).when(certificate).certificateMetaData();
     doReturn(certificateMetaData).when(certificateTwo).certificateMetaData();
     doReturn(List.of(certificate, certificateTwo)).when(certificateRepository)

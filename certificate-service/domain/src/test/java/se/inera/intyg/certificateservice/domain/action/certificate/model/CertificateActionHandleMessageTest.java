@@ -28,9 +28,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.CertificateBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
@@ -41,7 +40,7 @@ class CertificateActionHandleMessageTest {
 
   private CertificateActionHandleMessage certificateActionHandleMessage;
   private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
-  private CertificateBuilder certificateBuilder;
+  private MedicalCertificate.MedicalCertificateBuilder certificateBuilder;
   private static final CertificateActionSpecification CERTIFICATE_ACTION_SPECIFICATION =
       CertificateActionSpecification.builder()
           .certificateActionType(CertificateActionType.HANDLE_MESSAGE)
@@ -57,7 +56,7 @@ class CertificateActionHandleMessageTest {
         CERTIFICATE_ACTION_SPECIFICATION
     );
 
-    certificateBuilder = Certificate.builder()
+    certificateBuilder = MedicalCertificate.builder()
         .status(Status.SIGNED)
         .sent(Sent.builder().build())
         .certificateMetaData(
@@ -234,7 +233,7 @@ class CertificateActionHandleMessageTest {
 
     @BeforeEach
     void setUp() {
-      certificateBuilder = Certificate.builder()
+      certificateBuilder = MedicalCertificate.builder()
           .status(Status.SIGNED)
           .sent(Sent.builder().build())
           .certificateMetaData(

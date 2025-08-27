@@ -19,9 +19,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation.ActionEvaluationBuilder;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.CertificateBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.common.model.AccessScope;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
@@ -29,7 +28,7 @@ import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 class ActionRuleWithinAccessScopeTest {
 
   private ActionRuleWithinAccessScope actionRuleWithinAccessScope;
-  private CertificateBuilder certificateBuilder;
+  private MedicalCertificate.MedicalCertificateBuilder certificateBuilder;
   private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
 
   private AccessScope userAccessScope;
@@ -38,7 +37,7 @@ class ActionRuleWithinAccessScopeTest {
   void setUp() {
     actionEvaluationBuilder = new ActionEvaluationBuilder();
 
-    certificateBuilder = Certificate.builder()
+    certificateBuilder = MedicalCertificate.builder()
         .certificateMetaData(
             CertificateMetaData.builder()
                 .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)

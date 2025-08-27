@@ -15,8 +15,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
@@ -32,7 +32,7 @@ class ForwardCertificateMessagesDomainServiceTest {
 
   @Test
   void shallThrowIfNotAllowedToForwardMessages() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(CERTIFICATE_ID).when(certificate).id();
     doReturn(false).when(certificate)
         .allowTo(CertificateActionType.FORWARD_MESSAGE, Optional.of(ACTION_EVALUATION));
@@ -45,7 +45,7 @@ class ForwardCertificateMessagesDomainServiceTest {
 
   @Test
   void shallForwardMessages() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(true).when(certificate)
         .allowTo(CertificateActionType.FORWARD_MESSAGE, Optional.of(ACTION_EVALUATION));
 
@@ -57,7 +57,7 @@ class ForwardCertificateMessagesDomainServiceTest {
   @Test
   void shallPersistForwardedMessage() {
     final var expectedMessage = Message.builder().build();
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(true).when(certificate)
         .allowTo(CertificateActionType.FORWARD_MESSAGE, Optional.of(ACTION_EVALUATION));
     doReturn(List.of(expectedMessage)).when(certificate).messages();
@@ -69,7 +69,7 @@ class ForwardCertificateMessagesDomainServiceTest {
 
   @Test
   void shallReturnCertificate() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(true).when(certificate)
         .allowTo(CertificateActionType.FORWARD_MESSAGE, Optional.of(ACTION_EVALUATION));
 

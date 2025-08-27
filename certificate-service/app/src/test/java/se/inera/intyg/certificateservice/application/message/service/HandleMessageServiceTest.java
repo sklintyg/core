@@ -20,8 +20,8 @@ import se.inera.intyg.certificateservice.application.message.dto.QuestionDTO;
 import se.inera.intyg.certificateservice.application.message.service.converter.QuestionConverter;
 import se.inera.intyg.certificateservice.application.message.service.validator.HandleMessageRequestValidator;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageActionLink;
@@ -69,7 +69,7 @@ class HandleMessageServiceTest {
 
   @BeforeEach
   void setup() {
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     final var message = mock(Message.class);
     when(actionEvaluationFactory.create(REQUEST.getUser(), REQUEST.getUnit(), REQUEST.getCareUnit(),
         REQUEST.getCareProvider()))

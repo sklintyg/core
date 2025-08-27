@@ -29,8 +29,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate.CertificateBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
@@ -40,7 +40,7 @@ class CertificateActionUpdateTest {
 
   private CertificateActionUpdate certificateActionUpdate;
   private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
-  private CertificateBuilder certificateBuilder;
+  private MedicalCertificate.MedicalCertificateBuilder certificateBuilder;
   private static final CertificateActionSpecification CERTIFICATE_ACTION_SPECIFICATION =
       CertificateActionSpecification.builder()
           .certificateActionType(CertificateActionType.UPDATE)
@@ -54,7 +54,7 @@ class CertificateActionUpdateTest {
   void setUp() {
     certificateActionUpdate = (CertificateActionUpdate) certificateActionFactory.create(
         CERTIFICATE_ACTION_SPECIFICATION);
-    certificateBuilder = Certificate.builder()
+    certificateBuilder = MedicalCertificate.builder()
         .certificateMetaData(
             CertificateMetaData.builder()
                 .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
@@ -279,7 +279,7 @@ class CertificateActionUpdateTest {
     void setUp() {
       certificateActionUpdate = (CertificateActionUpdate) certificateActionFactory.create(
           CERTIFICATE_ACTION_SPECIFICATION);
-      certificateBuilder = Certificate.builder()
+      certificateBuilder = MedicalCertificate.builder()
           .status(Status.DRAFT)
           .certificateMetaData(
               CertificateMetaData.builder()

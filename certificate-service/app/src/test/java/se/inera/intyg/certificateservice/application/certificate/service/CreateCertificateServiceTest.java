@@ -30,7 +30,7 @@ import se.inera.intyg.certificateservice.application.common.converter.ResourceLi
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateAction;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.service.CreateCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
@@ -102,7 +102,7 @@ class CreateCertificateServiceTest {
         CREATE_CERTIFICATE_REQUEST.getCareProvider()
     );
 
-    final var certificate = mock(Certificate.class);
+    final var certificate = mock(MedicalCertificate.class);
     doReturn(certificate).when(createCertificateDomainService).create(
         CertificateModelId.builder()
             .type(new CertificateType(TYPE))

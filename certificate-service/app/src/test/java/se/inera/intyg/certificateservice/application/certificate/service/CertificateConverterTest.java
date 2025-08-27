@@ -21,6 +21,7 @@ import se.inera.intyg.certificateservice.application.certificate.service.convert
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateConverterTest {
@@ -42,7 +43,7 @@ class CertificateConverterTest {
 
     @BeforeEach
     void setUp() {
-      certificate = Certificate.builder().build();
+      certificate = MedicalCertificate.builder().build();
     }
 
     @Nested
@@ -93,7 +94,7 @@ class CertificateConverterTest {
 
     @BeforeEach
     void setUp() {
-      certificate = Certificate.builder().build();
+      certificate = MedicalCertificate.builder().build();
     }
 
     @Nested

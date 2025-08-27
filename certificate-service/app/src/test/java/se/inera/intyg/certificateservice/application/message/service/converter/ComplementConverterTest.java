@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -28,7 +29,7 @@ class ComplementConverterTest {
   @BeforeEach
   void setUp() {
     complementConverter = new ComplementConverter();
-    certificate = Certificate.builder()
+    certificate = MedicalCertificate.builder()
         .certificateModel(
             CertificateModel.builder()
                 .elementSpecifications(
