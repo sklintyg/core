@@ -5,6 +5,7 @@ import lombok.Value;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
+import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 
 @Value
 @Builder
@@ -14,4 +15,5 @@ public class PlaceholderCertificateRequest {
   CertificateId certificateId;
   Status status;
   SubUnit issuingUnit;
+  Xml prefillXml;
 }

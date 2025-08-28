@@ -572,6 +572,12 @@ public class MedicalCertificate implements Certificate {
 
   @Override
   public void prefill(Xml prefillXml, PrefillProcessor prefillProcessor, SubUnit subUnit) {
+    prefill(prefillXml, prefillProcessor, subUnit, false);
+  }
+
+  @Override
+  public void prefill(Xml prefillXml, PrefillProcessor prefillProcessor, SubUnit subUnit,
+      boolean filterOnIncludeWhenRenewing) {
     try {
       final var prefill = new ArrayList<>(
           prefillProcessor.prefill(certificateModel, prefillXml, id)
@@ -589,7 +595,14 @@ public class MedicalCertificate implements Certificate {
               )
               .build()
       );
-      this.elementData = prefill;
+
+      if (filterOnIncludeWhenRenewing) {
+        this.elementData = prefill.stream()
+            .filter(data -> certificateModel.elementSpecification(data.id()).includeWhenRenewing())
+            .toList();
+      } else {
+        this.elementData = prefill;
+      }
     } catch (Exception e) {
       log.warn("Failed to prefill certificate.", e);
     }

@@ -21,6 +21,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.PrefillXmlDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.RenewCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.RenewExternalCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateConverter;
@@ -34,6 +35,7 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.Certifi
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
+import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificate.service.RenewExternalCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
@@ -82,6 +84,7 @@ class RenewExternalCertificateServiceTest {
       .externalReference(EXTERNAL_REF)
       .status(CertificateStatusTypeDTO.SIGNED)
       .issuingUnit(ALFA_MEDICINCENTRUM_DTO)
+      .prefillXml(new PrefillXmlDTO("xml"))
       .build();
 
   @Test
@@ -126,6 +129,7 @@ class RenewExternalCertificateServiceTest {
                     RENEW_EXTERNAL_CERTIFICATE_REQUEST.getCertificateModelId().getVersion()))
                 .build()
         )
+        .prefillXml(new Xml("xml"))
         .issuingUnit(
             SubUnit.builder()
                 .hsaId(new HsaId(ALFA_MEDICINCENTRUM_DTO.getId()))

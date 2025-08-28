@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PlaceholderCertificateRequest;
@@ -22,6 +23,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.repository.Cert
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
+import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 
 @ExtendWith(MockitoExtension.class)
 class RenewExternalCertificateDomainServiceTest {
@@ -32,6 +34,8 @@ class RenewExternalCertificateDomainServiceTest {
   private CertificateModelRepository certificateModelRepository;
   @Mock
   private CertificateEventDomainService certificateEventDomainService;
+  @Mock
+  private PrefillProcessor prefillProcessor;
   @InjectMocks
   private RenewExternalCertificateDomainService renewExternalCertificateDomainService;
 
@@ -55,7 +59,7 @@ class RenewExternalCertificateDomainServiceTest {
   }
 
   @Test
-  void shallSetExternalReferenceOnRenewCertificate() {
+  void shouldSetExternalReferenceOnRenewCertificate() {
     final var placeholderRequest = PlaceholderCertificateRequest.builder()
         .certificateModelId(FK7804_CERTIFICATE_MODEL_ID)
         .build();
@@ -74,7 +78,7 @@ class RenewExternalCertificateDomainServiceTest {
   }
 
   @Test
-  void shallReturnNewCertificate() {
+  void shouldReturnNewCertificate() {
     final var placeholderRequest = PlaceholderCertificateRequest.builder()
         .certificateModelId(FK7804_CERTIFICATE_MODEL_ID)
         .build();
@@ -115,5 +119,28 @@ class RenewExternalCertificateDomainServiceTest {
     );
 
     assertEquals(CertificateEventType.RENEW, captor.getValue().type());
+  }
+
+  @Test
+  void shouldUsePrefillXmlToRenewCertificate() {
+    final var prefillXml = "<xml>data</xml>";
+    final var subUnit = mock(SubUnit.class);
+    final var placeholderRequest = PlaceholderCertificateRequest.builder()
+        .certificateModelId(FK7804_CERTIFICATE_MODEL_ID)
+        .prefillXml(new Xml(prefillXml))
+        .issuingUnit(subUnit)
+        .build();
+    final var certificate = mock(MedicalCertificate.class);
+    final var certificateModel = mock(CertificateModel.class);
+
+    doReturn(certificateModel).when(certificateModelRepository)
+        .getById(FK7804_CERTIFICATE_MODEL_ID);
+    doReturn(certificate).when(certificateRepository)
+        .createFromPlaceholder(placeholderRequest, certificateModel);
+
+    renewExternalCertificateDomainService.renew(ACTION_EVALUATION, EXTERNAL_REFERENCE,
+        placeholderRequest);
+
+    verify(certificate).prefill(placeholderRequest.prefillXml(), prefillProcessor, subUnit, true);
   }
 }

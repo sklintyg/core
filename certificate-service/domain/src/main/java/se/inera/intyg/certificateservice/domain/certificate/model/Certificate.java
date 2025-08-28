@@ -96,6 +96,9 @@ public interface Certificate {
 
   void prefill(Xml prefillXml, PrefillProcessor prefillProcessor, SubUnit subUnit);
 
+  void prefill(Xml prefillXml, PrefillProcessor prefillProcessor, SubUnit subUnit,
+      boolean filterOnIncludeWhenRenewing);
+
   CertificateId id();
 
   CertificateModel certificateModel();
