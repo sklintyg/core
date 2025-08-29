@@ -72,6 +72,7 @@ import se.inera.intyg.certificateservice.integrationtest.InternalApiIT;
 import se.inera.intyg.certificateservice.integrationtest.InternalApiMessagesIT;
 import se.inera.intyg.certificateservice.integrationtest.MessageExistsIT;
 import se.inera.intyg.certificateservice.integrationtest.RenewCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.RenewExternalCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ReplaceCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.RevokeCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.SendCertificateIT;
@@ -904,4 +905,18 @@ public class FK7426ActiveIT {
     }
   }
 
+  @Nested
+  @DisplayName(TYPE + "Förnya intyg från extern källa")
+  class RenewExternalCertificate extends RenewExternalCertificateIT {
+
+    @Override
+    protected String type() {
+      return CERTIFICATE_TYPE;
+    }
+
+    @Override
+    protected String typeVersion() {
+      return ACTIVE_VERSION;
+    }
+  }
 }
