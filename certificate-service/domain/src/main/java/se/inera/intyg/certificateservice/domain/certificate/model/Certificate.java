@@ -16,7 +16,6 @@ import se.inera.intyg.certificateservice.domain.message.model.Content;
 import se.inera.intyg.certificateservice.domain.message.model.Forwarded;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
-import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationResult;
 
 public interface Certificate {
@@ -60,8 +59,6 @@ public interface Certificate {
 
   void externalReference(ExternalReference externalReference);
 
-  void parent(Relation relation);
-
   Optional<ElementData> getElementDataById(ElementId id);
 
   Certificate replace(ActionEvaluation actionEvaluation);
@@ -94,10 +91,7 @@ public interface Certificate {
 
   Optional<ElementValueUnitContactInformation> unitContactInformation();
 
-  void prefill(Xml prefillXml, PrefillProcessor prefillProcessor, SubUnit subUnit);
-
-  void prefill(Xml prefillXml, PrefillProcessor prefillProcessor, SubUnit subUnit,
-      boolean filterOnIncludeWhenRenewing);
+  void prefill(Xml prefillXml, PrefillProcessor prefillProcessor);
 
   CertificateId id();
 

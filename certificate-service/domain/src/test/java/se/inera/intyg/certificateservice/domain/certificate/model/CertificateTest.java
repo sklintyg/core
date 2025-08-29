@@ -2766,7 +2766,7 @@ class CertificateTest {
 
     @Test
     void shallIncludeUnitContactInfo() {
-      certificate.prefill(XML, prefillProcessor, ALFA_ALLERGIMOTTAGNINGEN);
+      certificate.prefill(XML, prefillProcessor);
       assertTrue(certificate.elementData().contains(CONTACT_INFO));
     }
 
@@ -2777,12 +2777,18 @@ class CertificateTest {
       doReturn(Set.of(TEXT, DATE)).when(prefillProcessor)
           .prefill(certificate.certificateModel(), XML, CERTIFICATE_ID);
 
-      certificate.prefill(XML, prefillProcessor, ALFA_ALLERGIMOTTAGNINGEN);
+      certificate.prefill(XML, prefillProcessor);
       assertTrue(expectedElementData.containsAll(certificate.elementData()));
     }
 
     @Test
     void shouldPrefillCertificateAndFilterOnIncludeWhenRenewing() {
+      certificate = certificateBuilder.parent(
+              Relation.builder()
+                  .type(RelationType.RENEW)
+                  .build()
+          )
+          .build();
       when(certificateModel.elementSpecification(TEXT.id()))
           .thenReturn(
               ElementSpecification.builder()
@@ -2800,7 +2806,7 @@ class CertificateTest {
       doReturn(Set.of(TEXT, DATE)).when(prefillProcessor)
           .prefill(certificate.certificateModel(), XML, CERTIFICATE_ID);
 
-      certificate.prefill(XML, prefillProcessor, ALFA_ALLERGIMOTTAGNINGEN, true);
+      certificate.prefill(XML, prefillProcessor);
       assertTrue(expectedElementData.containsAll(certificate.elementData()));
     }
   }

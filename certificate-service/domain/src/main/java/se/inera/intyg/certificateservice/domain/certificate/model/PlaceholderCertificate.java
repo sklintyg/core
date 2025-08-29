@@ -20,7 +20,6 @@ import se.inera.intyg.certificateservice.domain.message.model.Content;
 import se.inera.intyg.certificateservice.domain.message.model.Forwarded;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
-import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationResult;
 
 @Getter
@@ -54,11 +53,6 @@ public class PlaceholderCertificate implements Certificate {
   public List<String> reasonNotAllowed(final CertificateActionType certificateActionType,
       final Optional<ActionEvaluation> actionEvaluation) {
     throw new IllegalStateException("Cannot get reason not allowed for a placeholder certificate");
-  }
-
-  @Override
-  public void parent(Relation relation) {
-    throw new IllegalStateException("Cannot set parent relation for a placeholder certificate");
   }
 
   @Override
@@ -216,13 +210,7 @@ public class PlaceholderCertificate implements Certificate {
   }
 
   @Override
-  public void prefill(Xml prefillXml, PrefillProcessor prefillProcessor, SubUnit subUnit) {
-    throw new IllegalStateException("Cannot prefill a placeholder certificate");
-  }
-
-  @Override
-  public void prefill(Xml prefillXml, PrefillProcessor prefillProcessor, SubUnit subUnit,
-      boolean filterOnIncludeWhenRenewing) {
+  public void prefill(Xml prefillXml, PrefillProcessor prefillProcessor) {
     throw new IllegalStateException("Cannot prefill a placeholder certificate");
   }
 

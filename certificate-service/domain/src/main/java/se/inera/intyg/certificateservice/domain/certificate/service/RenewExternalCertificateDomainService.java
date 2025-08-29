@@ -32,7 +32,7 @@ public class RenewExternalCertificateDomainService {
 
     certificate.updateMetadata(actionEvaluation);
     certificate.externalReference(externalReference);
-    certificate.prefill(request.prefillXml(), prefillProcessor, request.issuingUnit(), true);
+    certificate.prefill(request.prefillXml(), prefillProcessor);
 
     final var savedCertificate = certificateRepository.save(certificate);
 

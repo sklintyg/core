@@ -141,6 +141,6 @@ class RenewExternalCertificateDomainServiceTest {
     renewExternalCertificateDomainService.renew(ACTION_EVALUATION, EXTERNAL_REFERENCE,
         placeholderRequest);
 
-    verify(certificate).prefill(placeholderRequest.prefillXml(), prefillProcessor, subUnit, true);
+    verify(certificate).prefill(placeholderRequest.prefillXml(), prefillProcessor);
   }
 }

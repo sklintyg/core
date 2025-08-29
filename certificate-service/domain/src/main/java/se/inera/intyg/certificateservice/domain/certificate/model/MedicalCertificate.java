@@ -37,7 +37,6 @@ import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
-import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationResult;
 
 @Slf4j
@@ -346,15 +345,6 @@ public class MedicalCertificate implements Certificate {
   }
 
   @Override
-  public void parent(Relation relation) {
-    if (this.parent != null) {
-      throw new IllegalStateException(
-          "Certificate with id '%s' already has an parent".formatted(id().id()));
-    }
-    this.parent = relation;
-  }
-
-  @Override
   public Optional<ElementData> getElementDataById(ElementId id) {
     return elementData.stream()
         .filter(data -> id.id().equals(data.id().id()))
@@ -571,13 +561,7 @@ public class MedicalCertificate implements Certificate {
   }
 
   @Override
-  public void prefill(Xml prefillXml, PrefillProcessor prefillProcessor, SubUnit subUnit) {
-    prefill(prefillXml, prefillProcessor, subUnit, false);
-  }
-
-  @Override
-  public void prefill(Xml prefillXml, PrefillProcessor prefillProcessor, SubUnit subUnit,
-      boolean filterOnIncludeWhenRenewing) {
+  public void prefill(Xml prefillXml, PrefillProcessor prefillProcessor) {
     try {
       final var prefill = new ArrayList<>(
           prefillProcessor.prefill(certificateModel, prefillXml, id)
@@ -587,15 +571,17 @@ public class MedicalCertificate implements Certificate {
               .id(UNIT_CONTACT_INFORMATION)
               .value(
                   ElementValueUnitContactInformation.builder()
-                      .address(subUnit.address().address())
-                      .city(subUnit.address().city())
-                      .zipCode(subUnit.address().zipCode())
-                      .phoneNumber(subUnit.contactInfo().phoneNumber())
+                      .address(certificateMetaData.issuingUnit().address().address())
+                      .city(certificateMetaData.issuingUnit().address().city())
+                      .zipCode(certificateMetaData.issuingUnit().address().zipCode())
+                      .phoneNumber(certificateMetaData.issuingUnit().contactInfo().phoneNumber())
                       .build()
               )
               .build()
       );
 
+      final var filterOnIncludeWhenRenewing =
+          parent() != null && parent().type() == RelationType.RENEW;
       if (filterOnIncludeWhenRenewing) {
         this.elementData = prefill.stream()
             .filter(data -> certificateModel.elementSpecification(data.id()).includeWhenRenewing())
