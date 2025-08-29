@@ -36,6 +36,7 @@ import se.inera.intyg.certificateservice.integrationtest.GetUnitCertificatesInfo
 import se.inera.intyg.certificateservice.integrationtest.GetUnitCertificatesWhenSignedIT;
 import se.inera.intyg.certificateservice.integrationtest.InternalApiIT;
 import se.inera.intyg.certificateservice.integrationtest.MessagingNotAvailableIT;
+import se.inera.intyg.certificateservice.integrationtest.RenewExternalCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.RenewNotAvailableIT;
 import se.inera.intyg.certificateservice.integrationtest.ReplaceCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.RevokeCertificateIT;
@@ -658,6 +659,21 @@ public class TS8071ActiveIT {
     @Override
     protected boolean availableForCitizen() {
       return true;
+    }
+  }
+
+  @Nested
+  @DisplayName(TYPE + "Förnya intyg från extern källa")
+  class RenewExternalCertificate extends RenewExternalCertificateIT {
+
+    @Override
+    protected String type() {
+      return CERTIFICATE_TYPE;
+    }
+
+    @Override
+    protected String typeVersion() {
+      return ACTIVE_VERSION;
     }
   }
 }
