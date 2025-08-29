@@ -19,6 +19,7 @@ public class RenewExternalCertificateDomainService {
   private final CertificateModelRepository certificateModelRepository;
   private final CertificateRepository certificateRepository;
   private final CertificateEventDomainService certificateEventDomainService;
+  private final PrefillProcessor prefillProcessor;
 
   public Certificate renew(ActionEvaluation actionEvaluation,
       ExternalReference externalReference, PlaceholderCertificateRequest request) {
@@ -31,6 +32,7 @@ public class RenewExternalCertificateDomainService {
 
     certificate.updateMetadata(actionEvaluation);
     certificate.externalReference(externalReference);
+    certificate.prefill(request.prefillXml(), prefillProcessor);
 
     final var savedCertificate = certificateRepository.save(certificate);
 

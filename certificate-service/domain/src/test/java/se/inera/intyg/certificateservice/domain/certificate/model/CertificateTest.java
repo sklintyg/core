@@ -13,6 +13,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
 import static se.inera.intyg.certificateservice.domain.common.model.PersonIdType.COORDINATION_NUMBER;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
@@ -894,7 +895,7 @@ class CertificateTest {
       doReturn(true).when(certificateModel).elementSpecificationExists(DATE.id());
       certificate.updateData(newValue, REVISION, actionEvaluationBuilder.build());
 
-      newValue.remove(0);
+      newValue.removeFirst();
 
       assertNotEquals(newValue, certificate.elementData());
     }
@@ -1804,11 +1805,11 @@ class CertificateTest {
 
       assertAll(
           () -> assertEquals(expectedRelation.certificate(),
-              signedCertificate.children().get(0).certificate()),
+              signedCertificate.children().getFirst().certificate()),
           () -> assertEquals(expectedRelation.type(),
-              signedCertificate.children().get(0).type()),
+              signedCertificate.children().getFirst().type()),
           () -> assertEquals(expectedRelation.created().toLocalDate(),
-              signedCertificate.children().get(0).created().toLocalDate())
+              signedCertificate.children().getFirst().created().toLocalDate())
       );
     }
   }
@@ -2035,11 +2036,11 @@ class CertificateTest {
 
       assertAll(
           () -> assertEquals(expectedRelation.certificate(),
-              signedCertificate.children().get(0).certificate()),
+              signedCertificate.children().getFirst().certificate()),
           () -> assertEquals(expectedRelation.type(),
-              signedCertificate.children().get(0).type()),
+              signedCertificate.children().getFirst().type()),
           () -> assertEquals(expectedRelation.created().toLocalDate(),
-              signedCertificate.children().get(0).created().toLocalDate())
+              signedCertificate.children().getFirst().created().toLocalDate())
       );
     }
   }
@@ -2260,11 +2261,11 @@ class CertificateTest {
 
       assertAll(
           () -> assertEquals(expectedRelation.certificate(),
-              signedCertificate.children().get(0).certificate()),
+              signedCertificate.children().getFirst().certificate()),
           () -> assertEquals(expectedRelation.type(),
-              signedCertificate.children().get(0).type()),
+              signedCertificate.children().getFirst().type()),
           () -> assertEquals(expectedRelation.created().toLocalDate(),
-              signedCertificate.children().get(0).created().toLocalDate())
+              signedCertificate.children().getFirst().created().toLocalDate())
       );
     }
   }
@@ -2464,7 +2465,7 @@ class CertificateTest {
     void shallBuildAnswerWithId() {
       final var actionEvaluation = actionEvaluationBuilder.build();
       certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
-      final var answer = certificateWithMessages.messages().get(0).answer();
+      final var answer = certificateWithMessages.messages().getFirst().answer();
       assertNotNull(answer.id());
     }
 
@@ -2473,7 +2474,7 @@ class CertificateTest {
       final var actionEvaluation = actionEvaluationBuilder.build();
       final var expectedType = message.type();
       certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
-      final var answer = certificateWithMessages.messages().get(0).answer();
+      final var answer = certificateWithMessages.messages().getFirst().answer();
       assertEquals(expectedType, answer.type());
     }
 
@@ -2481,7 +2482,7 @@ class CertificateTest {
     void shallBuildAnswerWithCreated() {
       final var actionEvaluation = actionEvaluationBuilder.build();
       certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
-      final var answer = certificateWithMessages.messages().get(0).answer();
+      final var answer = certificateWithMessages.messages().getFirst().answer();
       assertNotNull(answer.created());
     }
 
@@ -2490,7 +2491,7 @@ class CertificateTest {
       final var expectedSubject = message.subject();
       final var actionEvaluation = actionEvaluationBuilder.build();
       certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
-      final var answer = certificateWithMessages.messages().get(0).answer();
+      final var answer = certificateWithMessages.messages().getFirst().answer();
       assertEquals(expectedSubject, answer.subject());
     }
 
@@ -2500,7 +2501,7 @@ class CertificateTest {
       final var expectedContent = new Content(CONTENT);
       final var actionEvaluation = actionEvaluationBuilder.build();
       certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
-      final var answer = certificateWithMessages.messages().get(0).answer();
+      final var answer = certificateWithMessages.messages().getFirst().answer();
       assertEquals(expectedContent, answer.content());
     }
 
@@ -2508,7 +2509,7 @@ class CertificateTest {
     void shallBuildAnswerWithModified() {
       final var actionEvaluation = actionEvaluationBuilder.build();
       certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
-      final var answer = certificateWithMessages.messages().get(0).answer();
+      final var answer = certificateWithMessages.messages().getFirst().answer();
       assertNotNull(answer.modified());
     }
 
@@ -2516,7 +2517,7 @@ class CertificateTest {
     void shallBuildAnswerWithSent() {
       final var actionEvaluation = actionEvaluationBuilder.build();
       certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
-      final var answer = certificateWithMessages.messages().get(0).answer();
+      final var answer = certificateWithMessages.messages().getFirst().answer();
       assertNotNull(answer.sent());
     }
 
@@ -2524,7 +2525,7 @@ class CertificateTest {
     void shallBuildAnswerWithStatus() {
       final var actionEvaluation = actionEvaluationBuilder.build();
       certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
-      final var answer = certificateWithMessages.messages().get(0).answer();
+      final var answer = certificateWithMessages.messages().getFirst().answer();
       assertEquals(MessageStatus.HANDLED, answer.status());
     }
 
@@ -2532,7 +2533,7 @@ class CertificateTest {
     void shallBuildAnswerWithAuthor() {
       final var actionEvaluation = actionEvaluationBuilder.build();
       certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
-      final var answer = certificateWithMessages.messages().get(0).answer();
+      final var answer = certificateWithMessages.messages().getFirst().answer();
       assertEquals(new Author(AJLA_DOKTOR.name().fullName()), answer.author());
     }
 
@@ -2540,7 +2541,7 @@ class CertificateTest {
     void shallBuildAnswerWithAuthoredStaff() {
       final var actionEvaluation = actionEvaluationBuilder.build();
       certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
-      final var answer = certificateWithMessages.messages().get(0).answer();
+      final var answer = certificateWithMessages.messages().getFirst().answer();
       assertNotNull(answer.authoredStaff());
     }
 
@@ -2549,7 +2550,7 @@ class CertificateTest {
       final var expectedReference = message.reference();
       final var actionEvaluation = actionEvaluationBuilder.build();
       certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
-      final var answer = certificateWithMessages.messages().get(0).answer();
+      final var answer = certificateWithMessages.messages().getFirst().answer();
       assertEquals(expectedReference, answer.reference());
     }
 
@@ -2571,7 +2572,7 @@ class CertificateTest {
           .build();
       final var actionEvaluation = actionEvaluationBuilder.build();
       certificateWithMessages.answerComplement(actionEvaluation, new Content(CONTENT));
-      assertNull(certificateWithMessages.messages().get(0).answer());
+      assertNull(certificateWithMessages.messages().getFirst().answer());
       assertNull(certificateWithMessages.messages().get(1).answer());
     }
   }
@@ -2765,7 +2766,7 @@ class CertificateTest {
 
     @Test
     void shallIncludeUnitContactInfo() {
-      certificate.prefill(XML, prefillProcessor, ALFA_ALLERGIMOTTAGNINGEN);
+      certificate.prefill(XML, prefillProcessor);
       assertTrue(certificate.elementData().contains(CONTACT_INFO));
     }
 
@@ -2776,7 +2777,36 @@ class CertificateTest {
       doReturn(Set.of(TEXT, DATE)).when(prefillProcessor)
           .prefill(certificate.certificateModel(), XML, CERTIFICATE_ID);
 
-      certificate.prefill(XML, prefillProcessor, ALFA_ALLERGIMOTTAGNINGEN);
+      certificate.prefill(XML, prefillProcessor);
+      assertTrue(expectedElementData.containsAll(certificate.elementData()));
+    }
+
+    @Test
+    void shouldPrefillCertificateAndFilterOnIncludeWhenRenewing() {
+      certificate = certificateBuilder.parent(
+              Relation.builder()
+                  .type(RelationType.RENEW)
+                  .build()
+          )
+          .build();
+      when(certificateModel.elementSpecification(TEXT.id()))
+          .thenReturn(
+              ElementSpecification.builder()
+                  .includeWhenRenewing(false)
+                  .build()
+          );
+      when(certificateModel.elementSpecification(DATE.id()))
+          .thenReturn(
+              ElementSpecification.builder()
+                  .includeWhenRenewing(true)
+                  .build()
+          );
+      final var expectedElementData = List.of(DATE, CONTACT_INFO);
+
+      doReturn(Set.of(TEXT, DATE)).when(prefillProcessor)
+          .prefill(certificate.certificateModel(), XML, CERTIFICATE_ID);
+
+      certificate.prefill(XML, prefillProcessor);
       assertTrue(expectedElementData.containsAll(certificate.elementData()));
     }
   }

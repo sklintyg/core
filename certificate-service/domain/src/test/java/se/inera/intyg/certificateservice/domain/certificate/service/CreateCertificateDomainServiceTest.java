@@ -135,7 +135,7 @@ class CreateCertificateDomainServiceTest {
     void shallPrefill() {
       createCertificateDomainService.create(CERTIFICATE_MODEL_ID, ACTION_EVALUATION,
           EXTERNAL_REFERENCE, XML);
-      verify(certificate).prefill(XML, prefillProcessor, ACTION_EVALUATION.subUnit());
+      verify(certificate).prefill(XML, prefillProcessor);
     }
 
     @Test

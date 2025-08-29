@@ -20,7 +20,6 @@ import se.inera.intyg.certificateservice.domain.message.model.Content;
 import se.inera.intyg.certificateservice.domain.message.model.Forwarded;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
-import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationResult;
 
 @Getter
@@ -34,41 +33,42 @@ public class PlaceholderCertificate implements Certificate {
   private CertificateMetaData certificateMetaData;
 
   @Override
-  public List<CertificateAction> actions(Optional<ActionEvaluation> actionEvaluation) {
-    return List.of();
+  public List<CertificateAction> actions(final Optional<ActionEvaluation> actionEvaluation) {
+    throw new IllegalStateException("Cannot get actions for a placeholder certificate");
   }
 
   @Override
-  public List<CertificateAction> actionsInclude(Optional<ActionEvaluation> actionEvaluation) {
-    return List.of();
+  public List<CertificateAction> actionsInclude(final Optional<ActionEvaluation> actionEvaluation) {
+    throw new IllegalStateException("Cannot get included actions for a placeholder certificate");
   }
 
   @Override
-  public boolean allowTo(CertificateActionType certificateActionType,
-      Optional<ActionEvaluation> actionEvaluation) {
-    return false;
+  public boolean allowTo(final CertificateActionType certificateActionType,
+      final Optional<ActionEvaluation> actionEvaluation) {
+    throw new IllegalStateException(
+        "Cannot check if action is allowed for a placeholder certificate");
   }
 
   @Override
-  public List<String> reasonNotAllowed(CertificateActionType certificateActionType,
-      Optional<ActionEvaluation> actionEvaluation) {
-    return List.of();
+  public List<String> reasonNotAllowed(final CertificateActionType certificateActionType,
+      final Optional<ActionEvaluation> actionEvaluation) {
+    throw new IllegalStateException("Cannot get reason not allowed for a placeholder certificate");
   }
 
   @Override
-  public void updateMetadata(ActionEvaluation actionEvaluation) {
-
+  public void updateMetadata(final ActionEvaluation actionEvaluation) {
+    throw new IllegalStateException("Cannot update metadata for a placeholder certificate");
   }
 
   @Override
-  public void updateData(List<ElementData> newData, Revision revision,
-      ActionEvaluation actionEvaluation) {
-
+  public void updateData(final List<ElementData> newData, final Revision revision,
+      final ActionEvaluation actionEvaluation) {
+    throw new IllegalStateException("Cannot update data for a placeholder certificate");
   }
 
   @Override
-  public void delete(Revision revision, ActionEvaluation actionEvaluation) {
-
+  public void delete(final Revision revision, final ActionEvaluation actionEvaluation) {
+    throw new IllegalStateException("Cannot delete a placeholder certificate");
   }
 
   @Override
@@ -87,45 +87,42 @@ public class PlaceholderCertificate implements Certificate {
   }
 
   @Override
-  public void sign(XmlGenerator xmlGenerator, Revision revision,
-      ActionEvaluation actionEvaluation) {
-
+  public void sign(final XmlGenerator xmlGenerator, final Revision revision,
+      final ActionEvaluation actionEvaluation) {
+    throw new IllegalStateException("Cannot sign a placeholder certificate");
   }
 
   @Override
-  public void sign(XmlGenerator xmlGenerator, Signature signature, Revision revision,
-      ActionEvaluation actionEvaluation) {
-
+  public void sign(final XmlGenerator xmlGenerator, final Signature signature,
+      final Revision revision,
+      final ActionEvaluation actionEvaluation) {
+    throw new IllegalStateException("Cannot sign a placeholder certificate");
   }
 
   @Override
-  public void send(ActionEvaluation actionEvaluation) {
-
+  public void send(final ActionEvaluation actionEvaluation) {
+    throw new IllegalStateException("Cannot send a placeholder certificate");
   }
 
   @Override
   public void sendByCitizen() {
-
+    throw new IllegalStateException("Cannot send a placeholder certificate by citizen");
   }
 
   @Override
-  public void revoke(ActionEvaluation actionEvaluation, RevokedInformation revokedInformation) {
-
+  public void revoke(final ActionEvaluation actionEvaluation,
+      final RevokedInformation revokedInformation) {
+    throw new IllegalStateException("Cannot revoke a placeholder certificate");
   }
 
   @Override
-  public void readyForSign(ActionEvaluation actionEvaluation) {
-
+  public void readyForSign(final ActionEvaluation actionEvaluation) {
+    throw new IllegalStateException("Cannot set ready for sign for a placeholder certificate");
   }
 
   @Override
-  public void externalReference(ExternalReference externalReference) {
-
-  }
-
-  @Override
-  public void parent(Relation relation) {
-
+  public void externalReference(final ExternalReference externalReference) {
+    throw new IllegalStateException("Cannot set external reference for a placeholder certificate");
   }
 
   @Override
@@ -150,142 +147,147 @@ public class PlaceholderCertificate implements Certificate {
 
   @Override
   public boolean isSendActiveForCitizen() {
-    return false;
+    throw new IllegalStateException(
+        "Cannot check if send is active for citizen on a placeholder certificate");
   }
 
   @Override
   public boolean isCertificateIssuedOnPatient(PersonId citizen) {
-    return false;
+    throw new IllegalStateException(
+        "Cannot check if certificate is issued on patient for a placeholder certificate");
   }
 
   @Override
   public Optional<Relation> latestChildRelation(RelationType relationType) {
-    return Optional.empty();
+    throw new IllegalStateException(
+        "Cannot get latest child relation for a placeholder certificate");
   }
 
   @Override
   public boolean hasParent(RelationType... relationType) {
-    return false;
+    throw new IllegalStateException("Cannot check parent relation for a placeholder certificate");
   }
 
   @Override
   public List<Message> messages(MessageType type) {
-    return List.of();
+    throw new IllegalStateException("Cannot get messages by type for a placeholder certificate");
   }
 
   @Override
   public void answerComplement(ActionEvaluation actionEvaluation, Content content) {
-
+    throw new IllegalStateException("Cannot answer complement for a placeholder certificate");
   }
 
   @Override
   public void forwardMessages() {
-
+    throw new IllegalStateException("Cannot forward messages for a placeholder certificate");
   }
 
   @Override
   public void forward() {
-
+    throw new IllegalStateException("Cannot forward for a placeholder certificate");
   }
 
   @Override
   public void lock() {
-
+    throw new IllegalStateException("Cannot lock a placeholder certificate");
   }
 
   @Override
   public boolean isWithinCareUnit(ActionEvaluation actionEvaluation) {
-    return false;
+    throw new IllegalStateException("Cannot check care unit for a placeholder certificate");
   }
 
   @Override
   public boolean isWithinCareProvider(ActionEvaluation actionEvaluation) {
-    return false;
+    throw new IllegalStateException("Cannot check care provider for a placeholder certificate");
   }
 
   @Override
   public Optional<ElementValueUnitContactInformation> unitContactInformation() {
-    return Optional.empty();
+    throw new IllegalStateException(
+        "Cannot get unit contact information for a placeholder certificate");
   }
 
   @Override
-  public void prefill(Xml prefillXml, PrefillProcessor prefillProcessor, SubUnit subUnit) {
-
+  public void prefill(Xml prefillXml, PrefillProcessor prefillProcessor) {
+    throw new IllegalStateException("Cannot prefill a placeholder certificate");
   }
 
   @Override
   public CertificateModel certificateModel() {
-    return null;
+    throw new IllegalStateException("Cannot get certificate model for a placeholder certificate");
   }
 
   @Override
   public LocalDateTime signed() {
-    return null;
+    throw new IllegalStateException("Cannot get signed date for a placeholder certificate");
   }
 
   @Override
   public LocalDateTime modified() {
-    return null;
+    throw new IllegalStateException("Cannot get modified date for a placeholder certificate");
   }
 
   @Override
   public LocalDateTime locked() {
-    return null;
+    throw new IllegalStateException("Cannot get locked date for a placeholder certificate");
   }
 
   @Override
   public ReadyForSign readyForSign() {
-    return null;
+    throw new IllegalStateException("Cannot get ready for sign for a placeholder certificate");
   }
 
   @Override
   public List<ElementData> elementData() {
-    return List.of();
+    throw new IllegalStateException("Cannot get element data for a placeholder certificate");
   }
 
   @Override
   public Revision revision() {
-    return null;
+    throw new IllegalStateException("Cannot get revision for a placeholder certificate");
   }
 
   @Override
   public Xml xml() {
-    return null;
+    throw new IllegalStateException("Cannot get XML for a placeholder certificate");
   }
 
   @Override
   public Sent sent() {
-    return null;
+    throw new IllegalStateException("Cannot get sent information for a placeholder certificate");
   }
 
   @Override
   public Revoked revoked() {
-    return null;
+    throw new IllegalStateException("Cannot get revoked information for a placeholder certificate");
   }
 
   @Override
   public ExternalReference externalReference() {
-    return null;
+    throw new IllegalStateException("Cannot get external reference for a placeholder certificate");
   }
 
   @Override
   public Relation parent() {
-    return null;
+    throw new IllegalStateException("Cannot get parent relation for a placeholder certificate");
   }
 
   @Override
   public List<Relation> children() {
-    return List.of();
+    throw new IllegalStateException("Cannot get children relations for a placeholder certificate");
   }
 
   @Override
   public List<Message> messages() {
-    return List.of();
+    throw new IllegalStateException("Cannot get messages for a placeholder certificate");
   }
 
   @Override
   public Forwarded forwarded() {
-    return null;
+    throw new IllegalStateException(
+        "Cannot get forwarded information for a placeholder certificate");
   }
 
   @Override

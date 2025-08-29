@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.application.certificate.service.valida
 import static se.inera.intyg.certificateservice.application.common.validator.ValidationUtil.validateCertificateId;
 import static se.inera.intyg.certificateservice.application.common.validator.ValidationUtil.validateCertificateModelId;
 import static se.inera.intyg.certificateservice.application.common.validator.ValidationUtil.validatePatient;
+import static se.inera.intyg.certificateservice.application.common.validator.ValidationUtil.validatePrefillXml;
 import static se.inera.intyg.certificateservice.application.common.validator.ValidationUtil.validateUnit;
 import static se.inera.intyg.certificateservice.application.common.validator.ValidationUtil.validateUnitExtended;
 import static se.inera.intyg.certificateservice.application.common.validator.ValidationUtil.validateUser;
@@ -22,6 +23,7 @@ public class RenewExternalCertificateRequestValidator {
     validatePatient(renewCertificateRequest.getPatient());
     validateCertificateId(certificateId);
     validateCertificateModelId(renewCertificateRequest.getCertificateModelId());
+    validatePrefillXml(renewCertificateRequest.getPrefillXml());
     if (renewCertificateRequest.getStatus() == null) {
       throw new IllegalArgumentException("Required parameter missing: status");
     }

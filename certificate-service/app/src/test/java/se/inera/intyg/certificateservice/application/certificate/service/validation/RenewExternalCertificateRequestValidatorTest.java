@@ -18,6 +18,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.PrefillXmlDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.RenewExternalCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
@@ -43,6 +44,7 @@ class RenewExternalCertificateRequestValidatorTest {
         .externalReference(EXTERNAL_REF)
         .status(CertificateStatusTypeDTO.SIGNED)
         .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
+        .prefillXml(new PrefillXmlDTO("XML"))
         .certificateModelId(
             CertificateModelIdDTO.builder()
                 .type("type")
@@ -60,7 +62,7 @@ class RenewExternalCertificateRequestValidatorTest {
   class UserValidation {
 
     @Test
-    void shallThrowIfUserIsNull() {
+    void shouldThrowIfUserIsNull() {
       final var request = requestBuilder
           .user(null)
           .build();
@@ -72,7 +74,7 @@ class RenewExternalCertificateRequestValidatorTest {
     }
 
     @Test
-    void shallThrowIfIdIsNull() {
+    void shouldThrowIfIdIsNull() {
       final var request = requestBuilder
           .user(
               ajlaDoktorDtoBuilder()
@@ -88,7 +90,7 @@ class RenewExternalCertificateRequestValidatorTest {
     }
 
     @Test
-    void shallThrowIfIdIsEmpty() {
+    void shouldThrowIfIdIsEmpty() {
       final var request = requestBuilder
           .user(
               ajlaDoktorDtoBuilder()
@@ -104,7 +106,7 @@ class RenewExternalCertificateRequestValidatorTest {
     }
 
     @Test
-    void shallThrowIfFirstNameIsNull() {
+    void shouldThrowIfFirstNameIsNull() {
       final var request = requestBuilder
           .user(
               ajlaDoktorDtoBuilder()
@@ -121,7 +123,7 @@ class RenewExternalCertificateRequestValidatorTest {
     }
 
     @Test
-    void shallThrowIfFirstNameIsEmpty() {
+    void shouldThrowIfFirstNameIsEmpty() {
       final var request = requestBuilder
           .user(
               ajlaDoktorDtoBuilder()
@@ -138,7 +140,7 @@ class RenewExternalCertificateRequestValidatorTest {
     }
 
     @Test
-    void shallThrowIfLastNameIsNull() {
+    void shouldThrowIfLastNameIsNull() {
       final var request = requestBuilder
           .user(
               ajlaDoktorDtoBuilder()
@@ -155,7 +157,7 @@ class RenewExternalCertificateRequestValidatorTest {
     }
 
     @Test
-    void shallThrowIfLastNameIsEmpty() {
+    void shouldThrowIfLastNameIsEmpty() {
       final var request = requestBuilder
           .user(
               ajlaDoktorDtoBuilder()
@@ -172,7 +174,7 @@ class RenewExternalCertificateRequestValidatorTest {
     }
 
     @Test
-    void shallThrowIfRoleIsNull() {
+    void shouldThrowIfRoleIsNull() {
       final var request = requestBuilder
           .user(
               ajlaDoktorDtoBuilder()
@@ -188,7 +190,7 @@ class RenewExternalCertificateRequestValidatorTest {
     }
 
     @Test
-    void shallThrowIfBlockedIsNull() {
+    void shouldThrowIfBlockedIsNull() {
       final var request = requestBuilder
           .user(
               ajlaDoktorDtoBuilder()
@@ -205,7 +207,7 @@ class RenewExternalCertificateRequestValidatorTest {
     }
 
     @Test
-    void shallThrowIfAgreementIsNull() {
+    void shouldThrowIfAgreementIsNull() {
       final var request = requestBuilder
           .user(
               ajlaDoktorDtoBuilder()
@@ -222,7 +224,7 @@ class RenewExternalCertificateRequestValidatorTest {
     }
 
     @Test
-    void shallThrowIfAllowCopyIsNull() {
+    void shouldThrowIfAllowCopyIsNull() {
       final var request = requestBuilder
           .user(
               ajlaDoktorDtoBuilder()
@@ -239,7 +241,7 @@ class RenewExternalCertificateRequestValidatorTest {
     }
 
     @Test
-    void shallThrowIfHealthCareProfessionalLicenceIsNull() {
+    void shouldThrowIfHealthCareProfessionalLicenceIsNull() {
       final var request = requestBuilder
           .user(
               ajlaDoktorDtoBuilder()
@@ -260,7 +262,7 @@ class RenewExternalCertificateRequestValidatorTest {
   class UnitValidation {
 
     @Test
-    void shallThrowIfUnitIsNull() {
+    void shouldThrowIfUnitIsNull() {
       final var request = requestBuilder
           .unit(null)
           .build();
@@ -273,7 +275,7 @@ class RenewExternalCertificateRequestValidatorTest {
     }
 
     @Test
-    void shallThrowIfIdIsNull() {
+    void shouldThrowIfIdIsNull() {
       final var request = requestBuilder
           .unit(
               alfaAllergimottagningenDtoBuilder()
@@ -290,7 +292,7 @@ class RenewExternalCertificateRequestValidatorTest {
     }
 
     @Test
-    void shallThrowIfIdIsEmpty() {
+    void shouldThrowIfIdIsEmpty() {
       final var request = requestBuilder
           .unit(
               alfaAllergimottagningenDtoBuilder()
@@ -307,7 +309,7 @@ class RenewExternalCertificateRequestValidatorTest {
     }
 
     @Test
-    void shallThrowIfWorkplaceCodeIsNull() {
+    void shouldThrowIfWorkplaceCodeIsNull() {
       final var request = requestBuilder
           .unit(
               alfaAllergimottagningenDtoBuilder()
@@ -324,7 +326,7 @@ class RenewExternalCertificateRequestValidatorTest {
     }
 
     @Test
-    void shallThrowIfIsInactiveIsNull() {
+    void shouldThrowIfIsInactiveIsNull() {
       final var request = requestBuilder
           .unit(
               alfaAllergimottagningenDtoBuilder()
@@ -345,7 +347,7 @@ class RenewExternalCertificateRequestValidatorTest {
   class CareUnitValidation {
 
     @Test
-    void shallThrowIfCareUnitIsNull() {
+    void shouldThrowIfCareUnitIsNull() {
       final var request = requestBuilder
           .careUnit(null)
           .build();
@@ -358,7 +360,7 @@ class RenewExternalCertificateRequestValidatorTest {
     }
 
     @Test
-    void shallThrowIfIdIsNull() {
+    void shouldThrowIfIdIsNull() {
       final var request = requestBuilder
           .careUnit(
               alfaMedicincentrumDtoBuilder()
@@ -375,7 +377,7 @@ class RenewExternalCertificateRequestValidatorTest {
     }
 
     @Test
-    void shallThrowIfIdIsEmpty() {
+    void shouldThrowIfIdIsEmpty() {
       final var request = requestBuilder
           .careUnit(
               alfaMedicincentrumDtoBuilder()
@@ -396,7 +398,7 @@ class RenewExternalCertificateRequestValidatorTest {
   class CareProviderValidation {
 
     @Test
-    void shallThrowIfCareProviderIsNull() {
+    void shouldThrowIfCareProviderIsNull() {
       final var request = requestBuilder
           .careProvider(null)
           .build();
@@ -409,7 +411,7 @@ class RenewExternalCertificateRequestValidatorTest {
     }
 
     @Test
-    void shallThrowIfIdIsNull() {
+    void shouldThrowIfIdIsNull() {
       final var request = requestBuilder
           .careProvider(
               alfaRegionenDtoBuilder()
@@ -426,7 +428,7 @@ class RenewExternalCertificateRequestValidatorTest {
     }
 
     @Test
-    void shallThrowIfIdIsEmpty() {
+    void shouldThrowIfIdIsEmpty() {
       final var request = requestBuilder
           .careProvider(
               alfaRegionenDtoBuilder()
@@ -447,7 +449,7 @@ class RenewExternalCertificateRequestValidatorTest {
   class PatientValidation {
 
     @Test
-    void shallThrowIfPatientIsNull() {
+    void shouldThrowIfPatientIsNull() {
       final var request = requestBuilder
           .patient(null)
           .build();
@@ -460,7 +462,7 @@ class RenewExternalCertificateRequestValidatorTest {
     }
 
     @Test
-    void shallThrowIfIdIsNull() {
+    void shouldThrowIfIdIsNull() {
       final var request = requestBuilder
           .patient(
               athenaReactAnderssonDtoBuilder()
@@ -477,7 +479,7 @@ class RenewExternalCertificateRequestValidatorTest {
     }
 
     @Test
-    void shallThrowIfPatientIdIsNull() {
+    void shouldThrowIfPatientIdIsNull() {
       final var request = requestBuilder
           .patient(
               athenaReactAnderssonDtoBuilder()
@@ -498,7 +500,7 @@ class RenewExternalCertificateRequestValidatorTest {
     }
 
     @Test
-    void shallThrowIfPatientIdIsEmpty() {
+    void shouldThrowIfPatientIdIsEmpty() {
       final var request = requestBuilder
           .patient(
               athenaReactAnderssonDtoBuilder()
@@ -520,7 +522,7 @@ class RenewExternalCertificateRequestValidatorTest {
     }
 
     @Test
-    void shallThrowIfPatientIdTypeIsNull() {
+    void shouldThrowIfPatientIdTypeIsNull() {
       final var request = requestBuilder
           .patient(
               athenaReactAnderssonDtoBuilder()
@@ -541,7 +543,7 @@ class RenewExternalCertificateRequestValidatorTest {
     }
 
     @Test
-    void shallThrowIfTestIndicatedIsNull() {
+    void shouldThrowIfTestIndicatedIsNull() {
       final var request = requestBuilder
           .patient(
               athenaReactAnderssonDtoBuilder()
@@ -558,7 +560,7 @@ class RenewExternalCertificateRequestValidatorTest {
     }
 
     @Test
-    void shallThrowIfDeceasedIsNull() {
+    void shouldThrowIfDeceasedIsNull() {
       final var request = requestBuilder
           .patient(
               athenaReactAnderssonDtoBuilder()
@@ -575,7 +577,7 @@ class RenewExternalCertificateRequestValidatorTest {
     }
 
     @Test
-    void shallThrowIfProtectedPersonIsNull() {
+    void shouldThrowIfProtectedPersonIsNull() {
       final var request = requestBuilder
           .patient(
               athenaReactAnderssonDtoBuilder()
@@ -596,7 +598,7 @@ class RenewExternalCertificateRequestValidatorTest {
   class CertificateIdValidation {
 
     @Test
-    void shallThrowIfCertificateIdIsNull() {
+    void shouldThrowIfCertificateIdIsNull() {
       final var request = requestBuilder.build();
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
           () -> validator.validate(request, null));
@@ -606,7 +608,7 @@ class RenewExternalCertificateRequestValidatorTest {
     }
 
     @Test
-    void shallThrowIfCertificateIdIsEmpty() {
+    void shouldThrowIfCertificateIdIsEmpty() {
       final var request = requestBuilder.build();
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
           () -> validator.validate(request, ""));
@@ -620,7 +622,7 @@ class RenewExternalCertificateRequestValidatorTest {
   class CertificateModelIdValidaiton {
 
     @Test
-    void shallThrowIfCertificateModelIdIsNull() {
+    void shouldThrowIfCertificateModelIdIsNull() {
       final var request = requestBuilder
           .certificateModelId(null)
           .build();
@@ -633,7 +635,7 @@ class RenewExternalCertificateRequestValidatorTest {
     }
 
     @Test
-    void shallThrowIfCertificateModelIdVersionIsNull() {
+    void shouldThrowIfCertificateModelIdVersionIsNull() {
       final var request = requestBuilder
           .certificateModelId(
               CertificateModelIdDTO.builder()
@@ -650,7 +652,7 @@ class RenewExternalCertificateRequestValidatorTest {
     }
 
     @Test
-    void shallThrowIfCertificateModelIdVersionIsEmpty() {
+    void shouldThrowIfCertificateModelIdVersionIsEmpty() {
       final var request = requestBuilder
           .certificateModelId(
               CertificateModelIdDTO.builder()
@@ -668,7 +670,7 @@ class RenewExternalCertificateRequestValidatorTest {
     }
 
     @Test
-    void shallThrowIfCertificateModelIdTypeIsNull() {
+    void shouldThrowIfCertificateModelIdTypeIsNull() {
       final var request = requestBuilder
           .certificateModelId(
               CertificateModelIdDTO.builder()
@@ -685,7 +687,7 @@ class RenewExternalCertificateRequestValidatorTest {
     }
 
     @Test
-    void shallThrowIfCertificateModelIdTypeIsEmpty() {
+    void shouldThrowIfCertificateModelIdTypeIsEmpty() {
       final var request = requestBuilder
           .certificateModelId(
               CertificateModelIdDTO.builder()
@@ -704,7 +706,7 @@ class RenewExternalCertificateRequestValidatorTest {
   }
 
   @Test
-  void shallThrowIfStatusIsMissing() {
+  void shouldThrowIfStatusIsMissing() {
     final var request = requestBuilder
         .status(null)
         .build();
@@ -717,7 +719,7 @@ class RenewExternalCertificateRequestValidatorTest {
   }
 
   @Test
-  void shallThrowIfMissingIssuingUnit() {
+  void shouldThrowIfMissingIssuingUnit() {
     final var request = requestBuilder
         .issuingUnit(null)
         .build();
@@ -727,5 +729,35 @@ class RenewExternalCertificateRequestValidatorTest {
 
     assertEquals("Required parameter missing: IssuingUnit",
         illegalArgumentException.getMessage());
+  }
+
+  @Nested
+  class PrefillXml {
+
+    @Test
+    void shouldThrowIfPrefillXmlIsNull() {
+      final var request = requestBuilder
+          .prefillXml(null)
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> validator.validate(request, CERTIFICATE_ID));
+
+      assertEquals("Required parameter missing: PrefillXml",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shouldThrowIfPrefillXmlIsEmpty() {
+      final var request = requestBuilder
+          .prefillXml(new PrefillXmlDTO(""))
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> validator.validate(request, CERTIFICATE_ID));
+
+      assertEquals("Required parameter missing: PrefillXml",
+          illegalArgumentException.getMessage());
+    }
   }
 }

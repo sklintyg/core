@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.application.common.validator;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.PrefillXmlDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.RevokeInformationDTO;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
@@ -186,6 +187,12 @@ public class ValidationUtil {
   public static <T> void validateList(List<T> list, String parameter) {
     if (list == null || list.isEmpty()) {
       throw new IllegalArgumentException("Required parameter missing: %s".formatted(parameter));
+    }
+  }
+
+  public static void validatePrefillXml(PrefillXmlDTO prefillXmlDTO) {
+    if (prefillXmlDTO == null || prefillXmlDTO.value() == null || prefillXmlDTO.value().isBlank()) {
+      throw new IllegalArgumentException("Required parameter missing: PrefillXml");
     }
   }
 }

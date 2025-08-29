@@ -14,6 +14,7 @@ import se.inera.intyg.certificateservice.application.common.ActionEvaluationFact
 import se.inera.intyg.certificateservice.application.common.converter.ResourceLinkConverter;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 import se.inera.intyg.certificateservice.domain.certificate.service.RenewExternalCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
@@ -89,6 +90,7 @@ public class RenewExternalCertificateService {
         .certificateId(new CertificateId(certificateId))
         .certificateModelId(certificateModelId(renewExternalCertificateRequest))
         .status(toStatus(renewExternalCertificateRequest.getStatus()))
+        .prefillXml(new Xml(renewExternalCertificateRequest.getPrefillXml().value()))
         .issuingUnit(getIssuingUnit(unit))
         .build();
   }
