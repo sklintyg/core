@@ -160,18 +160,14 @@
   </iso:pattern>
 
   <iso:pattern id="q28.1-q29">
-    <iso:rule
-      context="//gn:delsvar[@id='28.1']/tp:cv/tp:code[normalize-space(.) = 'NUVARANDE_ARBETE']">
-      <iso:assert test="count(../../../gn:delsvar[@id='29.1']) = 1">
-        Om 'Typ av sysselsättning' besvarats med Nuvarande arbete, måste 'Ange yrke och
-        arbetsuppgifter' besvaras
+    <iso:rule context="//gn:delsvar[@id='28.1']/tp:cv/tp:code[normalize-space(.) = 'NUVARANDE_ARBETE']">
+      <iso:assert test="count(../../../../gn:svar[@id='29']) = 1">
+        Om 'Typ av sysselsättning' besvarats med 1, måste 'Nuvarande arbete' besvaras
       </iso:assert>
     </iso:rule>
-    <iso:rule context="//gn:delsvar[@id='29.1']">
-      <iso:assert
-        test="count(../gn:delsvar[@id='28.1']/tp:cv/tp:code[normalize-space(.) != 'NUVARANDE_ARBETE']) = 0">
-        Om 'Typ av sysselsättning' inte besvarats med Nuvarande arbete, får 'Ange yrke och
-        arbetsuppgifter' inte besvaras
+    <iso:rule context="//gn:svar[@id='29']">
+      <iso:assert test="count(//gn:delsvar[@id='28.1']/tp:cv/tp:code[normalize-space(.) = 'NUVARANDE_ARBETE']) = 1">
+        Om 'Typ av sysselsättning' inte besvarats med 1, får 'Ange yrke och arbetsuppgifter' inte besvaras
       </iso:assert>
     </iso:rule>
   </iso:pattern>
