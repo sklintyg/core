@@ -7,7 +7,6 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
@@ -57,9 +56,6 @@ public class QuestionYrkeOchArbetsuppgifter {
                     .limit(4000)
                     .build()
             )
-        )
-        .mapping(
-            new ElementMapping(QUESTION_SYSSELSATTNING_ID, NUVARANDE_ARBETE)
         )
         .shouldValidate(
             ShouldValidateFactory.codeList(

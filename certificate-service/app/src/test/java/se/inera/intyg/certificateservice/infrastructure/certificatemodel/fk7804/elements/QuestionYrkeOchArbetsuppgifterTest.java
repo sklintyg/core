@@ -18,7 +18,6 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCo
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCodeList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
@@ -72,13 +71,6 @@ class QuestionYrkeOchArbetsuppgifterTest {
             .build()
     );
     assertEquals(expectedValidations, element.validations());
-  }
-
-  @Test
-  void shouldIncludeMapping() {
-    final var element = QuestionYrkeOchArbetsuppgifter.questionYrkeOchArbetsuppgifter();
-    final var expectedMapping = new ElementMapping(QUESTION_SYSSELSATTNING_ID, NUVARANDE_ARBETE);
-    assertEquals(expectedMapping, element.mapping());
   }
 
   @Test
