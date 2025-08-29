@@ -199,9 +199,9 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
             ),
             categoryBedomning(
                 questionNedsattningArbetsformaga(
-                    messageStartDateInfo(),
-                    questionArbetsformagaLangreAnBeslutsstod()
+                    messageStartDateInfo()
                 ),
+                questionArbetsformagaLangreAnBeslutsstod(),
                 questionTransportstod(),
                 questionSvarareAtergangVidOjamnArbetstid(
                     questionMedicinskaSkalForSvarareAtergang()
