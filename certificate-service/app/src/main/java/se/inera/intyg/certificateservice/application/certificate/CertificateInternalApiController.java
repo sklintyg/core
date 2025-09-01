@@ -31,6 +31,8 @@ import se.inera.intyg.certificateservice.application.certificate.service.GetCert
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalXmlService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetTotalExportsInternalForCareProviderService;
 import se.inera.intyg.certificateservice.application.certificate.service.LockDraftsInternalService;
+import se.inera.intyg.certificateservice.application.certificate.service.PlaceholderCertificateExistsService;
+import se.inera.intyg.certificateservice.application.certificate.service.RevokePlaceholderCertificateInternalService;
 import se.inera.intyg.certificateservice.application.patient.service.GetCertificatesWithQAInternalService;
 import se.inera.intyg.certificateservice.logging.PerformanceLogging;
 
@@ -48,6 +50,8 @@ public class CertificateInternalApiController {
   private final CertificateExistsService certificateExistsService;
   private final LockDraftsInternalService lockDraftsInternalService;
   private final GetCertificatesWithQAInternalService getCertificatesWithQAInternalService;
+  private final PlaceholderCertificateExistsService placeholderCertificateExistsService;
+  private final RevokePlaceholderCertificateInternalService revokePlaceholderCertificateInternalService;
 
   @GetMapping("/{certificateId}/exists")
   @PerformanceLogging(eventAction = "internal-find-existing-certificate", eventType = EVENT_TYPE_ACCESSED)
@@ -93,19 +97,34 @@ public class CertificateInternalApiController {
   @PostMapping("/export/{careProviderId}")
   @PerformanceLogging(eventAction = "internal-retrieve-export-certificates-for-care-provider", eventType = EVENT_TYPE_ACCESSED)
   ExportInternalResponse getExportCertificatesForCareProvider(
-      @RequestBody ExportCertificateInternalRequest request, @PathVariable("careProviderId") String careProviderId) {
+      @RequestBody ExportCertificateInternalRequest request,
+      @PathVariable("careProviderId") String careProviderId) {
     return getCertificateExportsInternalForCareProviderService.get(request, careProviderId);
   }
 
   @GetMapping("/export/{careProviderId}/total")
   @PerformanceLogging(eventAction = "internal-retrieve-total-export-for-care-provider", eventType = EVENT_TYPE_ACCESSED)
-  TotalExportsInternalResponse getTotalExportsForCareProvider(@PathVariable("careProviderId") String careProviderId) {
+  TotalExportsInternalResponse getTotalExportsForCareProvider(
+      @PathVariable("careProviderId") String careProviderId) {
     return getTotalExportsInternalForCareProviderService.get(careProviderId);
   }
 
   @DeleteMapping("/erase/{careProviderId}")
   @PerformanceLogging(eventAction = "internal-erase-certificates-for-care-provider", eventType = EVENT_TYPE_DELETION)
-  void eraseCertificates( @PathVariable("careProviderId") String careProviderId) {
+  void eraseCertificates(@PathVariable("careProviderId") String careProviderId) {
     eraseCertificateInternalForCareProviderService.erase(careProviderId);
+  }
+
+  @GetMapping("/placeholder/{certificateId}/exists")
+  @PerformanceLogging(eventAction = "find-existing-placeholder-certificate", eventType = EVENT_TYPE_ACCESSED)
+  CertificateExistsResponse findExistingPlaceholderCertificate(
+      @PathVariable("certificateId") String certificateId) {
+    return placeholderCertificateExistsService.exist(certificateId);
+  }
+
+  @PostMapping("/placeholder/{certificateId}/revoke")
+  @PerformanceLogging(eventAction = "internal-revoke-placeholder-certificate", eventType = EVENT_TYPE_ACCESSED)
+  void revokePlaceholderCertificate(@PathVariable("certificateId") String certificateId) {
+    revokePlaceholderCertificateInternalService.revoke(certificateId);
   }
 }

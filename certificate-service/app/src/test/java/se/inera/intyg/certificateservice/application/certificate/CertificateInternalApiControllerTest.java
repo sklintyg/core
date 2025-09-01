@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.application.certificate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateConstants.CERTIFICATE_ID;
 
 import org.junit.jupiter.api.Test;
@@ -31,11 +32,17 @@ import se.inera.intyg.certificateservice.application.certificate.service.GetCert
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalXmlService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetTotalExportsInternalForCareProviderService;
 import se.inera.intyg.certificateservice.application.certificate.service.LockDraftsInternalService;
+import se.inera.intyg.certificateservice.application.certificate.service.PlaceholderCertificateExistsService;
+import se.inera.intyg.certificateservice.application.certificate.service.RevokePlaceholderCertificateInternalService;
 import se.inera.intyg.certificateservice.application.patient.service.GetCertificatesWithQAInternalService;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateInternalApiControllerTest {
 
+  @Mock
+  PlaceholderCertificateExistsService placeholderCertificateExistsService;
+  @Mock
+  RevokePlaceholderCertificateInternalService revokePlaceholderCertificateInternalService;
   @Mock
   private EraseCertificateInternalForCareProviderService eraseCertificateInternalForCareProviderService;
   @Mock
@@ -137,9 +144,11 @@ class CertificateInternalApiControllerTest {
     final var expectedResult = ExportInternalResponse.builder().build();
     final var internalRequest = ExportCertificateInternalRequest.builder().build();
 
-    doReturn(expectedResult).when(getCertificateExportsInternalForCareProviderService).get(internalRequest, "careProviderId");
+    doReturn(expectedResult).when(getCertificateExportsInternalForCareProviderService)
+        .get(internalRequest, "careProviderId");
 
-    final var actualResult = certificateInternalApiController.getExportCertificatesForCareProvider(internalRequest, "careProviderId");
+    final var actualResult = certificateInternalApiController.getExportCertificatesForCareProvider(
+        internalRequest, "careProviderId");
     assertEquals(expectedResult, actualResult);
   }
 
@@ -147,9 +156,11 @@ class CertificateInternalApiControllerTest {
   void shallReturnTotalExportsInternalResponse() {
     final var expectedResult = TotalExportsInternalResponse.builder().build();
 
-    doReturn(expectedResult).when(getTotalExportsInternalForCareProviderService).get("careProviderId");
+    doReturn(expectedResult).when(getTotalExportsInternalForCareProviderService)
+        .get("careProviderId");
 
-    final var actualResult = certificateInternalApiController.getTotalExportsForCareProvider("careProviderId");
+    final var actualResult = certificateInternalApiController.getTotalExportsForCareProvider(
+        "careProviderId");
     assertEquals(expectedResult, actualResult);
   }
 
@@ -157,5 +168,24 @@ class CertificateInternalApiControllerTest {
   void shallCallEraseCertificateInternalForCareProviderService() {
     certificateInternalApiController.eraseCertificates("careProviderId");
     verify(eraseCertificateInternalForCareProviderService).erase("careProviderId");
+  }
+
+  @Test
+  void shouldReturnCertificateExistsResponseForPlaceholder() {
+    final var expectedResult = CertificateExistsResponse.builder()
+        .exists(true)
+        .build();
+
+    when(placeholderCertificateExistsService.exist(CERTIFICATE_ID)).thenReturn(expectedResult);
+
+    final var actualResult = certificateInternalApiController.findExistingPlaceholderCertificate(
+        CERTIFICATE_ID);
+    assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  void shouldRevokePlaceHolderCertificate() {
+    certificateInternalApiController.revokePlaceholderCertificate(CERTIFICATE_ID);
+    verify(revokePlaceholderCertificateInternalService).revoke(CERTIFICATE_ID);
   }
 }
