@@ -623,4 +623,101 @@ class JpaCertificateRepositoryTest {
       verify(certificateEntityRepository).save(CERTIFICATE_ENTITY);
     }
   }
+
+  @Nested
+  class PlaceholderExistsTests {
+
+    @Test
+    void shouldThrowIfCertificateIdIsNull() {
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> jpaCertificateRepository.placeholderExists(null));
+
+      assertEquals("Cannot check if placeholder certificate exists since certificateId is null",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shouldReturnTrueIfPlaceholderExists() {
+      when(certificateEntityRepository.findPlaceholderByCertificateId(
+          CERTIFICATE_ID.id())).thenReturn(Optional.of(CERTIFICATE_ENTITY));
+      assertTrue(jpaCertificateRepository.placeholderExists(CERTIFICATE_ID));
+    }
+  }
+
+  @Nested
+  class GetPlaceholderByIdTests {
+
+    @Test
+    void shouldThrowIfCertificateIdIsNull() {
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> jpaCertificateRepository.getPlaceholderById(null));
+
+      assertEquals("Cannot get placeholder certificate if certificateId is null",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shouldThrowIfPlaceholderCertificateIsNotPresent() {
+      when(certificateEntityRepository.findPlaceholderByCertificateId(
+          CERTIFICATE_ID.id())).thenReturn(Optional.empty());
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> jpaCertificateRepository.getPlaceholderById(CERTIFICATE_ID));
+
+      assertEquals("CertificateId '%s' not present in repository".formatted(CERTIFICATE_ID),
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shouldReturnPlaceholderCertificateIfPresent() {
+      final var expectedResult = PlaceholderCertificate.builder().build();
+
+      when(certificateEntityRepository.findPlaceholderByCertificateId(
+          CERTIFICATE_ID.id())).thenReturn(Optional.of(CERTIFICATE_ENTITY));
+      when(placeHolderEntityMapper.toDomain(CERTIFICATE_ENTITY)).thenReturn(expectedResult);
+
+      final var actualResult = jpaCertificateRepository.getPlaceholderById(CERTIFICATE_ID);
+
+      assertEquals(expectedResult, actualResult);
+    }
+  }
+
+  @Nested
+  class SavePlaceholderCertificateTests {
+
+    private static final PlaceholderCertificate PLACEHOLDER_CERTIFICATE = PlaceholderCertificate.builder()
+        .build();
+
+    @Test
+    void shouldThrowIfCertificateIsNull() {
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> jpaCertificateRepository.save(null));
+
+      assertEquals("Unable to save, placeholderCertificate was null",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shouldSavePlaceholderCertificate() {
+      when(placeHolderEntityMapper.toEntity(PLACEHOLDER_CERTIFICATE)).thenReturn(
+          CERTIFICATE_ENTITY);
+
+      jpaCertificateRepository.save(PLACEHOLDER_CERTIFICATE);
+
+      verify(certificateEntityRepository).save(CERTIFICATE_ENTITY);
+    }
+
+    @Test
+    void shouldReturnPersistedPlaceholderCertificate() {
+      when(placeHolderEntityMapper.toEntity(PLACEHOLDER_CERTIFICATE)).thenReturn(
+          CERTIFICATE_ENTITY);
+      when(certificateEntityRepository.save(CERTIFICATE_ENTITY)).thenReturn(CERTIFICATE_ENTITY);
+      when(placeHolderEntityMapper.toDomain(CERTIFICATE_ENTITY)).thenReturn(
+          PLACEHOLDER_CERTIFICATE);
+
+      final var actualCertificate = jpaCertificateRepository.save(PLACEHOLDER_CERTIFICATE);
+
+      assertEquals(PLACEHOLDER_CERTIFICATE, actualCertificate);
+    }
+  }
 }

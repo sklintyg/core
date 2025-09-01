@@ -4,6 +4,7 @@ import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateExportPage;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.PlaceholderCertificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PlaceholderCertificateRequest;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
@@ -30,4 +31,10 @@ public interface CertificateRepository {
   CertificateExportPage getExportByCareProviderId(HsaId careProviderId, int page, int size);
 
   long deleteByCareProviderId(HsaId careProviderId);
+
+  boolean placeholderExists(CertificateId certificateId);
+
+  PlaceholderCertificate getPlaceholderById(CertificateId certificateId);
+
+  PlaceholderCertificate save(PlaceholderCertificate placeholderCertificate);
 }

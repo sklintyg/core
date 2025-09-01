@@ -112,7 +112,14 @@ public class PlaceholderCertificate implements Certificate {
   @Override
   public void revoke(final ActionEvaluation actionEvaluation,
       final RevokedInformation revokedInformation) {
-    throw new IllegalStateException("Cannot revoke a placeholder certificate");
+    if (this.status != Status.SIGNED) {
+      throw new IllegalStateException(
+          "Incorrect status '%s' - required status is '%s' or '%s' to revoke".formatted(this.status,
+              Status.SIGNED, Status.LOCKED_DRAFT)
+      );
+    }
+
+    this.status = Status.REVOKED;
   }
 
   @Override
