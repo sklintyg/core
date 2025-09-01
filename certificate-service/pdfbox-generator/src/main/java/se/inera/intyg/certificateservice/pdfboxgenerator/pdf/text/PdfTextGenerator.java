@@ -31,14 +31,22 @@ public class PdfTextGenerator {
       Color strokingColor,
       int mcid, PDStructureElement section)
       throws IOException {
-    addText(pdf, text, fontSize, matrix, strokingColor, null, null, false, mcid, section, 0, text);
+    addText(pdf, text, fontSize, matrix, strokingColor, null, null, false, mcid, section, 0, text,
+        false);
   }
 
   public void addText(PDDocument pdf, String text, float fontSize, Float offsetX, Float offsetY,
       int mcid, PDStructureElement section, int pageIndex, String actualText)
       throws IOException {
     addText(pdf, text, fontSize, null, Color.black, offsetX, offsetY, false, mcid, section,
-        pageIndex, actualText);
+        pageIndex, actualText, false);
+  }
+
+  public void addText(PDDocument pdf, String text, float fontSize, Float offsetX, Float offsetY,
+      int mcid, PDStructureElement section, int pageIndex, String actualText, boolean prependTag)
+      throws IOException {
+    addText(pdf, text, fontSize, null, Color.black, offsetX, offsetY, false, mcid, section,
+        pageIndex, actualText, prependTag);
   }
 
   private void addText(
@@ -52,7 +60,8 @@ public class PdfTextGenerator {
       boolean isBold,
       int mcid,
       PDStructureElement section,
-      int pageIndex
+      int pageIndex,
+      boolean prependTag
   ) throws IOException {
     addText(
         pdf,
@@ -66,7 +75,8 @@ public class PdfTextGenerator {
         mcid,
         section,
         pageIndex,
-        text
+        text,
+        prependTag
     );
   }
 
@@ -82,7 +92,8 @@ public class PdfTextGenerator {
       int mcid,
       PDStructureElement section,
       int pageIndex,
-      String actualText
+      String actualText,
+      boolean prependTag
   ) throws IOException {
     final var page = pdf.getPage(pageIndex);
 
@@ -108,7 +119,7 @@ public class PdfTextGenerator {
       contentStream.endMarkedContent();
       if (section != null) {
         addContentToCurrentSection(page, dictionary, section, COSName.P, StandardStructureTypes.P,
-            actualText);
+            actualText, prependTag);
       }
       contentStream.endText();
     }
@@ -141,7 +152,8 @@ public class PdfTextGenerator {
         false,
         mcid,
         getLastDivOfPage(document, pageIndex),
-        pageIndex
+        pageIndex,
+        false
     );
   }
 
@@ -159,7 +171,8 @@ public class PdfTextGenerator {
         true,
         mcid,
         getDivInQuestionSection(pdDocument, index, pageIndex),
-        pageIndex
+        pageIndex,
+        false
     );
   }
 

@@ -105,7 +105,8 @@ public class PdfAdditionalInformationTextGenerator {
         mcid,
         PdfAccessibilityUtil.getDivInQuestionSection(document, 0, pageIndex),
         pageIndex,
-        "Sida %d av %d".formatted(pageIndex + 1, nbrOfPages)
+        "Sida %d av %d".formatted(pageIndex + 1, nbrOfPages),
+        true
     );
   }
 

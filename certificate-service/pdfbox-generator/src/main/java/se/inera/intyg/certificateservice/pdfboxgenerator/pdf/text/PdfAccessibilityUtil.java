@@ -160,8 +160,7 @@ public class PdfAccessibilityUtil {
   }
 
   public static void addContentToCurrentSection(PDPage page, COSDictionary markedContentDictionary,
-      PDStructureElement currentSection, COSName name, String type, String text) {
-
+      PDStructureElement currentSection, COSName name, String type, String text, boolean prepend) {
     final var newContent = new PDStructureElement(type, currentSection);
     newContent.setActualText(text);
     newContent.setPage(page);
@@ -170,7 +169,20 @@ public class PdfAccessibilityUtil {
       final var markedContent = new PDMarkedContent(name, markedContentDictionary);
       newContent.appendKid(markedContent);
     }
-    currentSection.appendKid(newContent);
+
+    if (prepend) {
+      final var kids = currentSection.getKids();
+      kids.addFirst(newContent);
+      currentSection.setKids(kids);
+    } else {
+      currentSection.appendKid(newContent);
+    }
+  }
+
+  public static void addContentToCurrentSection(PDPage page, COSDictionary markedContentDictionary,
+      PDStructureElement currentSection, COSName name, String type, String text) {
+    addContentToCurrentSection(page, markedContentDictionary, currentSection, name, type, text,
+        false);
   }
 
   // --- Private helper functions --- //
