@@ -281,6 +281,50 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
   }
 
   @Override
+  public boolean placeholderExists(CertificateId certificateId) {
+    if (certificateId == null) {
+      throw new IllegalArgumentException(
+          "Cannot check if placeholder certificate exists since certificateId is null");
+    }
+
+    return certificateEntityRepository.findPlaceholderByCertificateId(certificateId.id())
+        .isPresent();
+  }
+
+  @Override
+  public PlaceholderCertificate getPlaceholderById(CertificateId certificateId) {
+    if (certificateId == null) {
+      throw new IllegalArgumentException(
+          "Cannot get placeholder certificate if certificateId is null");
+    }
+
+    final var certificateEntity = certificateEntityRepository.findPlaceholderByCertificateId(
+            certificateId.id())
+        .orElseThrow(() ->
+            new IllegalArgumentException(
+                "CertificateId '%s' not present in repository".formatted(certificateId)
+            )
+        );
+
+    return placeholderCertificateEntityMapper.toDomain(certificateEntity);
+  }
+
+  @Override
+  public PlaceholderCertificate save(PlaceholderCertificate placeholderCertificate) {
+    if (placeholderCertificate == null) {
+      throw new IllegalArgumentException(
+          "Unable to save, placeholderCertificate was null"
+      );
+    }
+
+    final var certificateEntity = certificateEntityRepository.save(
+        placeholderCertificateEntityMapper.toEntity(placeholderCertificate)
+    );
+
+    return placeholderCertificateEntityMapper.toDomain(certificateEntity);
+  }
+
+  @Override
   public Certificate insert(Certificate certificate) {
     final var savedEntity = certificateEntityRepository.save(
         certificateEntityMapper.toEntity(certificate)
