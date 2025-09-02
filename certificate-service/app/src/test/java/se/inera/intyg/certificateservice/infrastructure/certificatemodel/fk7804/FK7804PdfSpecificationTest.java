@@ -75,6 +75,6 @@ class FK7804PdfSpecificationTest {
   @Test
   void shallIncludePdfMcid() {
     final var pdfSpecification = FK7804PdfSpecification.create();
-    assertEquals(100, pdfSpecification.pdfMcid().value());
+    assertEquals(150, pdfSpecification.pdfMcid().value());
   }
 }
