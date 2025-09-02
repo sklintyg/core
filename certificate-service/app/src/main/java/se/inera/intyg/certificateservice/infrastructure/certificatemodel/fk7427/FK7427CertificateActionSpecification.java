@@ -72,6 +72,9 @@ public class FK7427CertificateActionSpecification {
             .certificateActionType(CertificateActionType.CANNOT_COMPLEMENT)
             .build(),
         CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.FORWARD_MESSAGE)
+            .build(),
+        CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.HANDLE_COMPLEMENT)
             .build(),
         CertificateActionSpecification.builder()

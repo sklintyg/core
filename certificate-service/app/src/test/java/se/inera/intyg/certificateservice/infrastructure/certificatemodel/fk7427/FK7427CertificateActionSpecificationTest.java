@@ -280,4 +280,16 @@ class FK7427CertificateActionSpecificationTest {
             expectedSpecification::equals),
         "Expected type: %s".formatted(expectedSpecification));
   }
+
+  @Test
+  void shouldIncludeCertificateActionForwardMessage() {
+    final var expectedType = CertificateActionType.FORWARD_MESSAGE;
+
+    final var actionSpecifications = FK7427CertificateActionSpecification.create();
+
+    assertTrue(actionSpecifications.stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
 }
