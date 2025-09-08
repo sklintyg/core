@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.domain.certificate.model;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import lombok.Builder;
@@ -288,7 +289,7 @@ public class PlaceholderCertificate implements Certificate {
 
   @Override
   public List<Message> messages() {
-    throw new IllegalStateException("Cannot get messages for a placeholder certificate");
+    return Collections.emptyList();
   }
 
   @Override
