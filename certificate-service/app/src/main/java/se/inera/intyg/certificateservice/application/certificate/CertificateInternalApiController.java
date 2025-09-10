@@ -81,6 +81,13 @@ public class CertificateInternalApiController {
     return getCertificateInternalService.get(certificateId);
   }
 
+  @PostMapping("/{certificateId}")
+  @PerformanceLogging(eventAction = "internal-retrieve-certificate", eventType = EVENT_TYPE_ACCESSED)
+  GetCertificateInternalResponse getSickLeaveCertificate(
+      @PathVariable("certificateId") String certificateId) {
+    return getSickLeaveCertificateInternalService.get(certificateId);
+  }
+
   @PostMapping("/lock")
   @PerformanceLogging(eventAction = "internal-lock-certificate", eventType = EVENT_TYPE_CHANGE)
   LockDraftsResponse lockDrafts(@RequestBody LockDraftsRequest request) {
