@@ -19,6 +19,7 @@ import se.inera.intyg.certificateservice.domain.certificate.service.GetCertifica
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateEventsOfTypeDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificatePdfDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateXmlDomainService;
+import se.inera.intyg.certificateservice.domain.certificate.service.GetSickLeaveCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.LockCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGenerator;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGeneratorProvider;
@@ -467,4 +468,9 @@ public class AppConfig {
     return RestClient.create();
   }
 
+  @Bean
+  public GetSickLeaveCertificateDomainService getSickLeaveCertificateDomainService(
+      CertificateRepository certificateRepository) {
+    return new GetSickLeaveCertificateDomainService(certificateRepository);
+  }
 }

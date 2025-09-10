@@ -11,8 +11,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetSickLeav
 @Builder
 public class GetSickLeaveCertificateInternalResponse {
 
-  boolean isAvailable;
-  SjukfallCertificate certificate;
+  boolean available;
+  SickLeaveCertificateDTO sickLeaveCertificate;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class GetSickLeaveCertificateInternalResponseBuilder {

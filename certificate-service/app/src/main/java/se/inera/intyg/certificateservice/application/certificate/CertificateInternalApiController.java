@@ -20,6 +20,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.ExportInter
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetSickLeaveCertificateInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.LockDraftsRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.LockDraftsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.TotalExportsInternalResponse;
@@ -29,6 +30,7 @@ import se.inera.intyg.certificateservice.application.certificate.service.GetCert
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalMetadataService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalXmlService;
+import se.inera.intyg.certificateservice.application.certificate.service.GetSickLeaveCertificateInternalService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetTotalExportsInternalForCareProviderService;
 import se.inera.intyg.certificateservice.application.certificate.service.LockDraftsInternalService;
 import se.inera.intyg.certificateservice.application.certificate.service.PlaceholderCertificateExistsService;
@@ -52,6 +54,7 @@ public class CertificateInternalApiController {
   private final GetCertificatesWithQAInternalService getCertificatesWithQAInternalService;
   private final PlaceholderCertificateExistsService placeholderCertificateExistsService;
   private final RevokePlaceholderCertificateInternalService revokePlaceholderCertificateInternalService;
+  private final GetSickLeaveCertificateInternalService getSickLeaveCertificateInternalService;
 
   @GetMapping("/{certificateId}/exists")
   @PerformanceLogging(eventAction = "internal-find-existing-certificate", eventType = EVENT_TYPE_ACCESSED)
@@ -81,9 +84,9 @@ public class CertificateInternalApiController {
     return getCertificateInternalService.get(certificateId);
   }
 
-  @PostMapping("/{certificateId}")
-  @PerformanceLogging(eventAction = "internal-retrieve-certificate", eventType = EVENT_TYPE_ACCESSED)
-  GetCertificateInternalResponse getSickLeaveCertificate(
+  @PostMapping("/{certificateId}/sickleave")
+  @PerformanceLogging(eventAction = "internal-retrieve-sick-leave-certificate", eventType = EVENT_TYPE_ACCESSED)
+  GetSickLeaveCertificateInternalResponse getSickLeaveCertificate(
       @PathVariable("certificateId") String certificateId) {
     return getSickLeaveCertificateInternalService.get(certificateId);
   }

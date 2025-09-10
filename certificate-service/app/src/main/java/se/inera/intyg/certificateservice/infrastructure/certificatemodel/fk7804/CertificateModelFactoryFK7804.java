@@ -137,6 +137,7 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
         .availableForCitizen(true)
         .recipient(CertificateRecipientFactory.fkassa(fkLogicalAddress))
         .schematronPath(SCHEMATRON_PATH)
+        .sickLeaveProvider(new FK7804SickLeaveProvider())
         .messageTypes(List.of(
             CertificateMessageType.builder()
                 .type(MessageType.MISSING)
