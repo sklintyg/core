@@ -18,8 +18,6 @@ public class GetSickLeaveCertificateDomainService {
       return Optional.empty();
     }
 
-    return Optional.ofNullable(
-        certificate.certificateModel().sickLeaveProvider().build(certificate)
-    );
+    return certificate.certificateModel().sickLeaveProvider().build(certificate);
   }
 }

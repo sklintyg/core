@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
 import lombok.Value;
+import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.patient.model.Name;
@@ -14,7 +15,7 @@ import se.inera.intyg.certificateservice.domain.unit.model.UnitName;
 public class SickLeaveCertificate {
 
   CertificateId id;
-  String type;
+  Code type;
   HsaId signingDoctorId;
   Name signingDoctorName;
   LocalDateTime signingDateTime;

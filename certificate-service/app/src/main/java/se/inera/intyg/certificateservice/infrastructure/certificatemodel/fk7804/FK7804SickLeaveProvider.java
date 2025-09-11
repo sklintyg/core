@@ -6,6 +6,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSysselsattning.QUESTION_SYSSELSATTNING_ID;
 
 import java.util.List;
+import java.util.Optional;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
@@ -18,10 +19,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.SickLeave
 
 public class FK7804SickLeaveProvider implements SickLeaveProvider {
 
-  private static final String LISJP = "lisjp";
-
   @Override
-  public SickLeaveCertificate build(Certificate certificate) {
+  public Optional<SickLeaveCertificate> build(Certificate certificate) {
     final var isNotSickLeaveCertificate = certificate.elementData().stream()
         .filter(elementData -> elementData.id().equals(QUESTION_SMITTBARARPENNING_ID))
         .findFirst()
@@ -31,54 +30,57 @@ public class FK7804SickLeaveProvider implements SickLeaveProvider {
         .orElse(false);
 
     if (Boolean.TRUE.equals(isNotSickLeaveCertificate)) {
-      return null;
+      return Optional.empty();
     }
 
     final var metadata = certificate.certificateMetaData();
-    return SickLeaveCertificate.builder()
-        .id(certificate.id())
-        .careGiverId(metadata.careProvider().hsaId())
-        .careUnitId(metadata.careUnit().hsaId())
-        .careUnitName(metadata.careUnit().name())
-        .type(LISJP)
-        .civicRegistrationNumber(metadata.patient().id())
-        .signingDoctorName(metadata.issuer().name())
-        .patientName(metadata.patient().name())
-        .diagnoseCode(getElementValueDiagnoses(certificate).getFirst())
-        .biDiagnoseCode1(
-            getElementValueDiagnoses(certificate).size() > 1
-                ? getElementValueDiagnoses(certificate).get(1)
-                : null
-        )
-        .biDiagnoseCode2(
-            getElementValueDiagnoses(certificate).size() > 2
-                ? getElementValueDiagnoses(certificate).get(2)
-                : null
-        )
-        .signingDoctorId(metadata.issuer().hsaId())
-        .signingDateTime(certificate.signed())
-        .deleted(certificate.revoked())
-        .workCapacities(
-            certificate.elementData().stream()
-                .filter(
-                    elementData -> elementData.id().equals(QUESTION_NEDSATTNING_ARBETSFORMAGA_ID))
-                .findFirst()
-                .map(ElementData::value)
-                .map(ElementValueDateRangeList.class::cast)
-                .map(ElementValueDateRangeList::dateRangeList)
-                .orElseThrow()
-        )
-        .employment(
-            certificate.elementData().stream()
-                .filter(
-                    elementData -> elementData.id().equals(QUESTION_SYSSELSATTNING_ID))
-                .findFirst()
-                .map(ElementData::value)
-                .map(ElementValueCodeList.class::cast)
-                .map(ElementValueCodeList::list)
-                .orElseThrow()
-        )
-        .build();
+    return Optional.of(
+        SickLeaveCertificate.builder()
+            .id(certificate.id())
+            .careGiverId(metadata.careProvider().hsaId())
+            .careUnitId(metadata.careUnit().hsaId())
+            .careUnitName(metadata.careUnit().name())
+            .type(certificate.certificateModel().type())
+            .civicRegistrationNumber(metadata.patient().id())
+            .signingDoctorName(metadata.issuer().name())
+            .patientName(metadata.patient().name())
+            .diagnoseCode(getElementValueDiagnoses(certificate).getFirst())
+            .biDiagnoseCode1(
+                getElementValueDiagnoses(certificate).size() > 1
+                    ? getElementValueDiagnoses(certificate).get(1)
+                    : null
+            )
+            .biDiagnoseCode2(
+                getElementValueDiagnoses(certificate).size() > 2
+                    ? getElementValueDiagnoses(certificate).get(2)
+                    : null
+            )
+            .signingDoctorId(metadata.issuer().hsaId())
+            .signingDateTime(certificate.signed())
+            .deleted(certificate.revoked())
+            .workCapacities(
+                certificate.elementData().stream()
+                    .filter(
+                        elementData -> elementData.id()
+                            .equals(QUESTION_NEDSATTNING_ARBETSFORMAGA_ID))
+                    .findFirst()
+                    .map(ElementData::value)
+                    .map(ElementValueDateRangeList.class::cast)
+                    .map(ElementValueDateRangeList::dateRangeList)
+                    .orElseThrow()
+            )
+            .employment(
+                certificate.elementData().stream()
+                    .filter(
+                        elementData -> elementData.id().equals(QUESTION_SYSSELSATTNING_ID))
+                    .findFirst()
+                    .map(ElementData::value)
+                    .map(ElementValueCodeList.class::cast)
+                    .map(ElementValueCodeList::list)
+                    .orElseThrow()
+            )
+            .build()
+    );
   }
 
   private static List<ElementValueDiagnosis> getElementValueDiagnoses(Certificate certificate) {
