@@ -46,6 +46,7 @@ public class CertificateModel implements Comparator<ElementId> {
   CertificateConfirmationModalProvider confirmationModalProvider;
   @With
   CertificateActionFactory certificateActionFactory;
+  SickLeaveProvider sickLeaveProvider;
 
   public List<CertificateAction> actions() {
     return certificateActionSpecifications.stream()
