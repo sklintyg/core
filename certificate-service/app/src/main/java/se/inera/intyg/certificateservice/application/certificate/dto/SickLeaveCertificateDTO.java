@@ -28,7 +28,7 @@ public class SickLeaveCertificateDTO {
   String biDiagnoseCode2;
   String employment;
   Boolean deleted;
-  List<SickLeaveCertificateWorkCapacityDTO> sickLeaveCertificateWorkCapacity;
+  List<SickLeaveCertificateWorkCapacityDTO> sjukfallCertificateWorkCapacity;
   boolean testCertificate;
 
   @JsonPOJOBuilder(withPrefix = "")

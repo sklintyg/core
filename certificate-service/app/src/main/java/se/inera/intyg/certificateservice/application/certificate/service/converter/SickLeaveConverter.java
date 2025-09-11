@@ -50,7 +50,7 @@ public class SickLeaveConverter {
         )
         .employment(employments)
         .deleted(sickLeaveCertificate.deleted() != null)
-        .sickLeaveCertificateWorkCapacity(workCapacities)
+        .sjukfallCertificateWorkCapacity(workCapacities)
         .testCertificate(false)
         .build();
   }
