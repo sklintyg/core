@@ -17,11 +17,11 @@ public class SickLeaveConverter {
       return null;
     }
 
-    final var workCapacityDto = sickLeaveCertificate.workCapacities().stream()
+    final var workCapacities = sickLeaveCertificate.workCapacities().stream()
         .map(this::mapDateRangeToWorkCapacity)
         .collect(Collectors.toList());
 
-    final var employment = sickLeaveCertificate.employment().stream()
+    final var employments = sickLeaveCertificate.employment().stream()
         .map(ElementValueCode::code)
         .filter(code -> code != null && !code.isBlank())
         .collect(Collectors.joining(","));
@@ -48,9 +48,9 @@ public class SickLeaveConverter {
                 ? sickLeaveCertificate.biDiagnoseCode2().code()
                 : null
         )
-        .employment(employment)
+        .employment(employments)
         .deleted(sickLeaveCertificate.deleted() != null)
-        .sickLeaveCertificateWorkCapacity(workCapacityDto)
+        .sickLeaveCertificateWorkCapacity(workCapacities)
         .testCertificate(false)
         .build();
   }
