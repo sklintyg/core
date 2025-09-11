@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateservice.application.certificate.service.converter;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -10,9 +9,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.application.certificate.dto.SickLeaveCertificateWorkCapacityDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
@@ -29,37 +28,37 @@ import se.inera.intyg.certificateservice.domain.unit.model.UnitName;
 
 class SickLeaveConverterTest {
 
-  private final static CertificateId CERTIFICATE_ID = new CertificateId("CERT_ID");
-  private final static Code TYPE = new Code("TYPE", "CODE_SYSTEM", "CODE_SYSTEM_NAME");
-  private final static HsaId SIGNING_DOCTOR_ID = new HsaId("DOCTOR_ID");
-  private final static Name SIGNING_DOCTOR_NAME = Name.builder().firstName("FIRST_NAME")
+  private static final CertificateId CERTIFICATE_ID = new CertificateId("CERT_ID");
+  private static final Code TYPE = new Code("TYPE", "CODE_SYSTEM", "CODE_SYSTEM_NAME");
+  private static final HsaId SIGNING_DOCTOR_ID = new HsaId("DOCTOR_ID");
+  private static final Name SIGNING_DOCTOR_NAME = Name.builder().firstName("FIRST_NAME")
       .middleName("MIDDLE_NAME").lastName("LAST_NAME").build();
-  private final static LocalDateTime SIGNING_DATE_TIME = LocalDateTime.of(2023, 1, 1, 10, 0);
-  private final static HsaId CARE_UNIT_ID = new HsaId("CU_ID");
-  private final static UnitName CARE_UNIT_NAME = new UnitName("CARE_UNIT_NAME");
-  private final static HsaId CARE_GIVER_ID = new HsaId("CG_ID");
-  private final static PersonId CIVIC_REGISTRATION_NUMBER = PersonId.builder().id("CIV_ID").build();
-  private final static Name PATIENT_NAME = Name.builder().firstName("PATIENT_NAME")
+  private static final LocalDateTime SIGNING_DATE_TIME = LocalDateTime.of(2023, 1, 1, 10, 0);
+  private static final HsaId CARE_UNIT_ID = new HsaId("CU_ID");
+  private static final UnitName CARE_UNIT_NAME = new UnitName("CARE_UNIT_NAME");
+  private static final HsaId CARE_GIVER_ID = new HsaId("CG_ID");
+  private static final PersonId CIVIC_REGISTRATION_NUMBER = PersonId.builder().id("CIV_ID").build();
+  private static final Name PATIENT_NAME = Name.builder().firstName("PATIENT_NAME")
       .lastName("PATIENT_NAME").middleName("PATIENT_MIDDLE_NAME").build();
-  private final static ElementValueDiagnosis DIAGNOSIS_CODE = ElementValueDiagnosis.builder()
+  private static final ElementValueDiagnosis DIAGNOSIS_CODE = ElementValueDiagnosis.builder()
       .code("D1").build();
-  private final static ElementValueDiagnosis BI_DIAGNOSE_CODE1 = ElementValueDiagnosis.builder()
+  private static final ElementValueDiagnosis BI_DIAGNOSE_CODE1 = ElementValueDiagnosis.builder()
       .code("B1").build();
-  private final static ElementValueDiagnosis BI_DIAGNOSE_CODE2 = ElementValueDiagnosis.builder()
+  private static final ElementValueDiagnosis BI_DIAGNOSE_CODE2 = ElementValueDiagnosis.builder()
       .code("B2").build();
-  private final static List<ElementValueCode> EMPLOYMENT = List.of(
+  private static final List<ElementValueCode> EMPLOYMENT = List.of(
       ElementValueCode.builder().code("EMP1").build(),
       ElementValueCode.builder().code("EMP2").build());
-  private final static Revoked DELETED = Revoked.builder()
+  private static final Revoked DELETED = Revoked.builder()
       .revokedBy(Staff.builder().name(SIGNING_DOCTOR_NAME).hsaId(CARE_UNIT_ID).build())
-      .revokedAt(LocalDateTime.of(2050, 01, 01, 1, 1, 0)).build();
-  private final static List<DateRange> WORK_CAPACITIES = List.of(
+      .revokedAt(LocalDateTime.of(2050, 1, 1, 1, 1, 0)).build();
+  private static final List<DateRange> WORK_CAPACITIES = List.of(
       DateRange.builder().dateRangeId(new FieldId("EN_FJARDEDEL")).from(LocalDate.of(2023, 1, 1))
           .to(LocalDate.of(2023, 1, 10)).build(),
       DateRange.builder().dateRangeId(new FieldId("HELT_NEDSATT")).from(LocalDate.of(2023, 1, 10))
           .to(LocalDate.of(2023, 1, 15)).build()
   );
-  private final static boolean TEST_CERTIFICATE = false;
+  private static final boolean TEST_CERTIFICATE = false;
 
   private SickLeaveConverter converter;
 
@@ -187,7 +186,7 @@ class SickLeaveConverterTest {
 
     final var dto = converter.convert(sickLeaveCertificate);
 
-    SickLeaveCertificateWorkCapacityDTO wc1 = dto.getSjukfallCertificateWorkCapacity().get(0);
+    final var wc1 = dto.getSjukfallCertificateWorkCapacity().getFirst();
     assertEquals(25, wc1.getCapacityPercentage());
     assertEquals("2023-01-01", wc1.getFromDate());
     assertEquals("2023-01-10", wc1.getToDate());
@@ -198,7 +197,7 @@ class SickLeaveConverterTest {
 
     final var dto = converter.convert(sickLeaveCertificate);
 
-    SickLeaveCertificateWorkCapacityDTO wc2 = dto.getSjukfallCertificateWorkCapacity().get(1);
+    final var wc2 = dto.getSjukfallCertificateWorkCapacity().get(1);
 
     assertAll(
         () -> assertEquals(100, wc2.getCapacityPercentage()),
@@ -240,6 +239,6 @@ class SickLeaveConverterTest {
 
     final var dto = converter.convert(sickLeaveCertificate);
 
-    assertTrue(dto.getDeleted());
+    Assertions.assertTrue(dto.getDeleted());
   }
 }
