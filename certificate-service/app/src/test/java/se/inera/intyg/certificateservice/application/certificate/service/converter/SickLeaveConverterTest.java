@@ -37,7 +37,8 @@ class SickLeaveConverterTest {
   private static final HsaId CARE_UNIT_ID = new HsaId("CU_ID");
   private static final UnitName CARE_UNIT_NAME = new UnitName("CARE_UNIT_NAME");
   private static final HsaId CARE_GIVER_ID = new HsaId("CG_ID");
-  private static final PersonId CIVIC_REGISTRATION_NUMBER = PersonId.builder().id("CIV_ID").build();
+  private static final PersonId CIVIC_REGISTRATION_NUMBER = PersonId.builder().id("191212121212")
+      .build();
   private static final Name PATIENT_NAME = Name.builder().firstName("PATIENT_NAME")
       .lastName("PATIENT_NAME").middleName("PATIENT_MIDDLE_NAME").build();
   private static final ElementValueDiagnosis DIAGNOSIS_CODE = ElementValueDiagnosis.builder()
@@ -140,7 +141,7 @@ class SickLeaveConverterTest {
 
     final var dto = converter.convert(sickLeaveCertificate);
 
-    assertEquals("CIV_ID", dto.getCivicRegistrationNumber());
+    assertEquals("19121212-1212", dto.getCivicRegistrationNumber());
     assertEquals("PATIENT_NAME PATIENT_MIDDLE_NAME PATIENT_NAME", dto.getPatientName());
   }
 

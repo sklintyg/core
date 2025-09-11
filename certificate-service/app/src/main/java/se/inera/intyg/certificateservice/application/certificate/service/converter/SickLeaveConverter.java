@@ -36,7 +36,7 @@ public class SickLeaveConverter {
         .careUnitId(sickLeaveCertificate.careUnitId().id())
         .careUnitName(sickLeaveCertificate.careUnitName().name())
         .careGiverId(sickLeaveCertificate.careGiverId().id())
-        .civicRegistrationNumber(sickLeaveCertificate.civicRegistrationNumber().id())
+        .civicRegistrationNumber(sickLeaveCertificate.civicRegistrationNumber().idWithDash())
         .patientName(sickLeaveCertificate.patientName().fullName())
         .diagnoseCode(sickLeaveCertificate.diagnoseCode().code())
         .biDiagnoseCode1(
