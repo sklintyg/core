@@ -71,22 +71,22 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
   private static final String NAME = "Läkarutlåtande för merkostnadsersättning";
   private static final String DESCRIPTION = """
       <b className="iu-fw-heading">Vem kan få merkostnadsersättning?</b>
-            
+      
       En person kan ha rätt till merkostnadsersättning för kostnader som beror på att hen fått en varaktig funktionsnedsättning som kan antas finnas i minst ett år. Funktionsnedsättningen ska ha uppstått innan hen fyllde 66 år. Om personen är född 1957 eller tidigare kan hen även få ersättning för kostnader som beror på att hen fått en funktionsnedsättning innan hen fyllde 65 år. För att få merkostnadsersättning ska merkostnaderna uppgå till minst 25 procent av ett prisbasbelopp per år.
-            
+      
       Den som anses vara blind eller gravt hörselskadad kan få en garanterad nivå av merkostnadsersättning utan att ha några merkostnader.
       """;
   private static final String DETAILED_DESCRIPTION = """
        <b className="iu-fw-heading">Vem kan få merkostnadsersättning?</b>
-            
+      
        En person kan ha rätt till merkostnadsersättning för kostnader som beror på att hen har en funktionsnedsättning. Funktionsnedsättningen ska antas finnas i minst ett år.
-            
+      
        Personen måste ha fått sin funktionsnedsättning innan hen fyllde 66 år. Om personen är född 1957 eller tidigare måste hen ha fått sin funktionsnedsättning innan hen fyllde 65 år.
-            
+      
        För att ha rätt till merkostnadsersättning ska merkostnaderna uppgå till minst 25 procent av ett prisbasbelopp per år.
-            
+      
        Merkostnader delas in sju olika kategorier:
-       <ul><li>hälsa, vård och kost,</li><li>slitage och rengöring,</li><li>resor,</li><li>hjälpmedel</li><li>hjälp i den dagliga livsföringen</li><li>boende, och</li><li>övriga ändamål</li></ul>
+       <ul><li>hälsa, vård och kost</li><li>slitage och rengöring</li><li>resor</li><li>hjälpmedel</li><li>hjälp i den dagliga livsföringen</li><li>boende</li><li>övriga ändamål</li></ul>
        Den som anses vara blind eller gravt hörselskadad kan få en garanterad nivå av merkostnadsersättning utan att ha några merkostnader.
       """;
   private static final String PREAMBLE_TEXT =

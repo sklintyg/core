@@ -83,7 +83,7 @@ public class CertificateModelFactoryFK3221 implements CertificateModelFactory {
       Merkostnadsersättning kan beviljas om föräldern har merkostnader som beror på barnets funktionsnedsättning. Funktionsnedsättningen ska antas finnas i minst 6 månader. För att få merkostnadsersättning ska merkostnaderna uppgå till minst 25 procent av ett prisbasbelopp per år.
       
        Merkostnader delas in sju olika kategorier:
-       <ul><li>hälsa, vård och kost,</li><li>slitage och rengöring,</li><li>resor,</li><li>hjälpmedel</li><li>hjälp i den dagliga livsföringen</li><li>boende, och</li><li>övriga ändamål</li></ul>
+       <ul><li>hälsa, vård och kost</li><li>slitage och rengöring</li><li>resor</li><li>hjälpmedel</li><li>hjälp i den dagliga livsföringen</li><li>boende</li><li>övriga ändamål</li></ul>
       """;
 
   public static final CertificateModelId FK3221_V1_0 = CertificateModelId.builder()
