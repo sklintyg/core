@@ -156,9 +156,4 @@ class QuestionSjukvardandeInsatsEgenvardInsatserTest {
 
     assertEquals(expected, element.pdfConfiguration());
   }
-
-  @Test
-  void shallNotIncludeWhenRenewing() {
-    assertFalse(questionSjukvardandeInsatsEgenvardInsatser().includeWhenRenewing());
-  }
 }

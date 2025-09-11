@@ -29,7 +29,6 @@ public class QuestionSjukvardandeInsatsHSL {
       ElementSpecification... children) {
     return ElementSpecification.builder()
         .id(QUESTION_SJUKVARDANDE_INSATS_HSL_ID)
-        .includeWhenRenewing(false)
         .configuration(
             ElementConfigurationRadioBoolean.builder()
                 .id(QUESTION_SJUKVARDANDE_INSATS_HSL_FIELD_ID)

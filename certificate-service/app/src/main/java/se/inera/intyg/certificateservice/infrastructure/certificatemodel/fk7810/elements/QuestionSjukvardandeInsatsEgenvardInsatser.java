@@ -34,7 +34,6 @@ public class QuestionSjukvardandeInsatsEgenvardInsatser {
   public static ElementSpecification questionSjukvardandeInsatsEgenvardInsatser() {
     return ElementSpecification.builder()
         .id(QUESTION_SJUKVARDANDE_INSATS_EGENVARD_INSATSER_ID)
-        .includeWhenRenewing(false)
         .configuration(
             ElementConfigurationTextArea.builder()
                 .id(QUESTION_SJUKVARDANDE_INSATS_EGENVARD_INSATSER_FIELD_ID)
