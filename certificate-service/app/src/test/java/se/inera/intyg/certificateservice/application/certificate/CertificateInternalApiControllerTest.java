@@ -21,8 +21,10 @@ import se.inera.intyg.certificateservice.application.certificate.dto.ExportInter
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetSickLeaveCertificateInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.LockDraftsRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.LockDraftsResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.SickLeaveCertificateDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.TotalExportsInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.service.CertificateExistsService;
 import se.inera.intyg.certificateservice.application.certificate.service.EraseCertificateInternalForCareProviderService;
@@ -30,6 +32,7 @@ import se.inera.intyg.certificateservice.application.certificate.service.GetCert
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalMetadataService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalXmlService;
+import se.inera.intyg.certificateservice.application.certificate.service.GetSickLeaveCertificateInternalService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetTotalExportsInternalForCareProviderService;
 import se.inera.intyg.certificateservice.application.certificate.service.LockDraftsInternalService;
 import se.inera.intyg.certificateservice.application.certificate.service.PlaceholderCertificateExistsService;
@@ -59,6 +62,8 @@ class CertificateInternalApiControllerTest {
   private GetCertificateInternalMetadataService getCertificateInternalMetadataService;
   @Mock
   private GetCertificateInternalService getCertificateInternalService;
+  @Mock
+  private GetSickLeaveCertificateInternalService getSickLeaveCertificateInternalService;
   @Mock
   private GetCertificateInternalXmlService getCertificateInternalXmlService;
   @InjectMocks
@@ -115,6 +120,20 @@ class CertificateInternalApiControllerTest {
     doReturn(expectedResult).when(getCertificateInternalService).get(CERTIFICATE_ID);
 
     final var actualResult = certificateInternalApiController.getCertificate(CERTIFICATE_ID);
+
+    assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  void shallReturnGetSickLeaveCertificateResponse() {
+    final var expectedResult = GetSickLeaveCertificateInternalResponse.builder()
+        .sickLeaveCertificate(SickLeaveCertificateDTO.builder().build())
+        .build();
+
+    doReturn(expectedResult).when(getSickLeaveCertificateInternalService).get(CERTIFICATE_ID);
+
+    final var actualResult = certificateInternalApiController.getSickLeaveCertificate(
+        CERTIFICATE_ID);
 
     assertEquals(expectedResult, actualResult);
   }
