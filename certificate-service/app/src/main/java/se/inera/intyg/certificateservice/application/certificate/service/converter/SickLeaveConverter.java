@@ -8,6 +8,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.SickLeaveCe
 import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.certificate.model.SickLeaveCertificate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
 @Component
 public class SickLeaveConverter {
@@ -59,9 +60,22 @@ public class SickLeaveConverter {
     final var from = dateRange.from().format(DateTimeFormatter.ISO_LOCAL_DATE);
     final var to = dateRange.to().format(DateTimeFormatter.ISO_LOCAL_DATE);
     return SickLeaveCertificateWorkCapacityDTO.builder()
-        .capacityPercentage(null)
+        .capacityPercentage(toCapacityPercentage(dateRange.dateRangeId()))
         .fromDate(from)
         .toDate(to)
         .build();
+  }
+
+  private int toCapacityPercentage(FieldId fieldId) {
+    return switch (SickLeaveWorkcapacity.valueOf(fieldId.value())) {
+      case EN_FJARDEDEL -> 25;
+      case HALFTEN -> 50;
+      case TRE_FJARDEDEL -> 75;
+      case HELT_NEDSATT -> 100;
+    };
+  }
+
+  enum SickLeaveWorkcapacity {
+    HELT_NEDSATT, TRE_FJARDEDEL, HALFTEN, EN_FJARDEDEL
   }
 }
