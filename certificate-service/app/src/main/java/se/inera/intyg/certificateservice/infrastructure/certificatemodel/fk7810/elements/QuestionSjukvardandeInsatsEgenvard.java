@@ -31,7 +31,6 @@ public class QuestionSjukvardandeInsatsEgenvard {
       ElementSpecification... children) {
     return ElementSpecification.builder()
         .id(QUESTION_SJUKVARDANDE_INSATS_EGENVARD_ID)
-        .includeWhenRenewing(false)
         .configuration(
             ElementConfigurationRadioBoolean.builder()
                 .id(QUESTION_SJUKVARDANDE_INSATS_EGENVARD_FIELD_ID)
