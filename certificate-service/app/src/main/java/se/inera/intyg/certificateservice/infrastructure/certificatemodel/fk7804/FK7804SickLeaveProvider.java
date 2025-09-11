@@ -36,6 +36,7 @@ public class FK7804SickLeaveProvider implements SickLeaveProvider {
 
     final var metadata = certificate.certificateMetaData();
     return SickLeaveCertificate.builder()
+        .id(certificate.id())
         .careGiverId(metadata.careProvider().hsaId())
         .careUnitId(metadata.careUnit().hsaId())
         .careUnitName(metadata.careUnit().name())
