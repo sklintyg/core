@@ -22,7 +22,7 @@ public class FK7804SickLeaveProvider implements SickLeaveProvider {
 
   @Override
   public SickLeaveCertificate build(Certificate certificate) {
-    final var invalidSickLeave = certificate.elementData().stream()
+    final var isNotSickLeaveCertificate = certificate.elementData().stream()
         .filter(elementData -> elementData.id().equals(QUESTION_SMITTBARARPENNING_ID))
         .findFirst()
         .map(ElementData::value)
@@ -30,7 +30,7 @@ public class FK7804SickLeaveProvider implements SickLeaveProvider {
         .map(ElementValueBoolean::value)
         .orElse(false);
 
-    if (Boolean.TRUE.equals(invalidSickLeave)) {
+    if (Boolean.TRUE.equals(isNotSickLeaveCertificate)) {
       return null;
     }
 
