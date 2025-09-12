@@ -119,7 +119,7 @@ public abstract class GetCertificateIT extends BaseIntegrationIT {
   }
 
   @ParameterizedTest
-  @DisplayName("Om intyget är utfärdat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
+  @DisplayName("Om intyget är utfärdat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras om användaren har fel roll")
   @MethodSource("rolesNoAccessToProtectedPerson")
   void shallReturn403IfPatientIsProtectedPerson(UserDTO userDTO) {
     final var testCertificates = testabilityApi.addCertificates(
@@ -131,6 +131,26 @@ public abstract class GetCertificateIT extends BaseIntegrationIT {
     final var response = api.getCertificate(
         customGetCertificateRequest()
             .user(userDTO)
+            .build(),
+        certificateId(testCertificates)
+    );
+
+    assertEquals(403, response.getStatusCode().value());
+  }
+
+
+  @Test
+  @DisplayName("Om intyget är utfärdat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras om användaren har rätt roll med är inloggad på fel enhet")
+  void shallReturn403IfPatientIsProtectedPersonAndUserHasCorrectRoleButWrongUnit() {
+    final var testCertificates = testabilityApi.addCertificates(
+        customTestabilityCertificateRequest(type(), typeVersion())
+            .patient(ANONYMA_REACT_ATTILA_DTO)
+            .build()
+    );
+
+    final var response = api.getCertificate(
+        customGetCertificateRequest()
+            .unit(ALFA_MEDICINCENTRUM_DTO)
             .build(),
         certificateId(testCertificates)
     );

@@ -5,6 +5,8 @@ import java.util.Optional;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
+import se.inera.intyg.certificateservice.domain.unit.model.IssuingUnit;
+import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 
 public class ActionRuleProtectedPerson implements ActionRule {
 
@@ -24,9 +26,11 @@ public class ActionRuleProtectedPerson implements ActionRule {
     return actionEvaluation.filter(
         evaluation ->
             certificate.filter(value ->
-                    ifPatientIsProtectedUserMustHaveAllowedRole(
+                    ifPatientIsProtectedUserMustHaveAllowedRoleAndBeOnIssuingUnit(
                         evaluation.user().role(),
-                        value.certificateMetaData().patient()
+                        value.certificateMetaData().patient(),
+                        value.certificateMetaData().issuingUnit(),
+                        evaluation.subUnit()
                     )
                 )
                 .isPresent()
@@ -53,5 +57,14 @@ public class ActionRuleProtectedPerson implements ActionRule {
 
   private boolean ifPatientIsProtectedUserMustHaveAllowedRole(Role role, Patient patient) {
     return !patient.protectedPerson().value() || allowedRoles.contains(role);
+  }
+
+  private boolean ifPatientIsProtectedUserMustHaveAllowedRoleAndBeOnIssuingUnit(Role role,
+      Patient patient, IssuingUnit issuingUnit, SubUnit subUnit) {
+    if (!patient.protectedPerson().value()) {
+      return true;
+    }
+
+    return allowedRoles.contains(role) && issuingUnit.hsaId().equals(subUnit.hsaId());
   }
 }

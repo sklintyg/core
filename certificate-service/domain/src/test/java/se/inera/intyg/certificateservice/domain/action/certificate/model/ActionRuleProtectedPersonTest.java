@@ -10,11 +10,13 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ANONYMA_REACT_ATTILA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_HUDMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ALVA_VARDADMINISTRATOR;
 
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
@@ -28,74 +30,111 @@ class ActionRuleProtectedPersonTest {
     actionRuleProtectedPerson = new ActionRuleProtectedPerson(List.of(Role.DOCTOR));
   }
 
-  @Test
-  void shallReturnTrueIfPatientIsProtectedAndUserIsWithinAllowedRoles() {
-    final var actionEvaluation = actionEvaluationBuilder()
-        .patient(ANONYMA_REACT_ATTILA)
-        .build();
+  @Nested
+  class CertificateNotPresentTests {
 
-    assertTrue(
-        actionRuleProtectedPerson.evaluate(Optional.empty(), Optional.of(actionEvaluation))
-    );
+    @Test
+    void shallReturnTrueIfPatientIsProtectedAndUserIsWithinAllowedRoles() {
+      final var actionEvaluation = actionEvaluationBuilder()
+          .patient(ANONYMA_REACT_ATTILA)
+          .build();
+
+      assertTrue(
+          actionRuleProtectedPerson.evaluate(Optional.empty(), Optional.of(actionEvaluation))
+      );
+    }
+
+    @Test
+    void shallReturnFalseIfPatientIsProtectedAndUserIsNotWithinAllowedRoles() {
+      final var actionEvaluation = actionEvaluationBuilder()
+          .patient(ANONYMA_REACT_ATTILA)
+          .user(ALVA_VARDADMINISTRATOR)
+          .build();
+
+      assertFalse(
+          actionRuleProtectedPerson.evaluate(Optional.empty(), Optional.of(actionEvaluation)));
+    }
   }
 
-  @Test
-  void shallReturnFalseIfPatientIsProtectedAndUserIsNotWithinAllowedRoles() {
-    final var actionEvaluation = actionEvaluationBuilder()
-        .patient(ANONYMA_REACT_ATTILA)
-        .user(ALVA_VARDADMINISTRATOR)
-        .build();
+  @Nested
+  class CertificatePresentTests {
 
-    assertFalse(
-        actionRuleProtectedPerson.evaluate(Optional.empty(), Optional.of(actionEvaluation)));
+    @Test
+    void shallReturnTrueIfPatientOnCertificateIsProtectedAndUserIsWithinAllowedRolesAndSameUnit() {
+      final var actionEvaluation = actionEvaluationBuilder()
+          .patient(ANONYMA_REACT_ATTILA)
+          .build();
+
+      final var certificate = fk7210CertificateBuilder()
+          .certificateMetaData(
+              CertificateMetaData.builder()
+                  .issuer(AJLA_DOKTOR)
+                  .patient(ANONYMA_REACT_ATTILA)
+                  .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
+                  .careUnit(ALFA_MEDICINCENTRUM)
+                  .careProvider(ALFA_REGIONEN)
+                  .build()
+          )
+          .build();
+
+      assertTrue(
+          actionRuleProtectedPerson.evaluate(Optional.of(certificate),
+              Optional.of(actionEvaluation))
+      );
+    }
+
+    @Test
+    void shallReturnFalseIfPatientOnCertificateIsProtectedAndUserIsNotWithinAllowedRoles() {
+      final var actionEvaluation = actionEvaluationBuilder()
+          .patient(ANONYMA_REACT_ATTILA)
+          .user(ALVA_VARDADMINISTRATOR)
+          .build();
+
+      final var certificate = fk7210CertificateBuilder()
+          .certificateMetaData(
+              CertificateMetaData.builder()
+                  .issuer(AJLA_DOKTOR)
+                  .patient(ANONYMA_REACT_ATTILA)
+                  .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
+                  .careUnit(ALFA_MEDICINCENTRUM)
+                  .careProvider(ALFA_REGIONEN)
+                  .build()
+          )
+          .build();
+
+      assertFalse(
+          actionRuleProtectedPerson.evaluate(Optional.of(certificate),
+              Optional.of(actionEvaluation))
+      );
+    }
+
+    @Test
+    void shallReturnFalseIfPatientOnCertificateIsProtectedAndUserIsWithinAllowedRolesButOtherUnit() {
+      final var actionEvaluation = actionEvaluationBuilder()
+          .patient(ANONYMA_REACT_ATTILA)
+          .subUnit(ALFA_HUDMOTTAGNINGEN)
+          .build();
+
+      final var certificate = fk7210CertificateBuilder()
+          .certificateMetaData(
+              CertificateMetaData.builder()
+                  .issuer(AJLA_DOKTOR)
+                  .patient(ANONYMA_REACT_ATTILA)
+                  .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
+                  .careUnit(ALFA_MEDICINCENTRUM)
+                  .careProvider(ALFA_REGIONEN)
+                  .build()
+          )
+          .build();
+
+      assertFalse(
+          actionRuleProtectedPerson.evaluate(Optional.of(certificate),
+              Optional.of(actionEvaluation))
+      );
+    }
+
   }
 
-  @Test
-  void shallReturnTrueIfPatientOnCertificateIsProtectedAndUserIsWithinAllowedRoles() {
-    final var actionEvaluation = actionEvaluationBuilder()
-        .patient(ANONYMA_REACT_ATTILA)
-        .build();
-
-    final var certificate = fk7210CertificateBuilder()
-        .certificateMetaData(
-            CertificateMetaData.builder()
-                .issuer(AJLA_DOKTOR)
-                .patient(ANONYMA_REACT_ATTILA)
-                .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
-                .careUnit(ALFA_MEDICINCENTRUM)
-                .careProvider(ALFA_REGIONEN)
-                .build()
-        )
-        .build();
-
-    assertTrue(
-        actionRuleProtectedPerson.evaluate(Optional.of(certificate), Optional.of(actionEvaluation))
-    );
-  }
-
-  @Test
-  void shallReturnFalseIfPatientOnCertificateIsProtectedAndUserIsNotWithinAllowedRoles() {
-    final var actionEvaluation = actionEvaluationBuilder()
-        .patient(ANONYMA_REACT_ATTILA)
-        .user(ALVA_VARDADMINISTRATOR)
-        .build();
-
-    final var certificate = fk7210CertificateBuilder()
-        .certificateMetaData(
-            CertificateMetaData.builder()
-                .issuer(AJLA_DOKTOR)
-                .patient(ANONYMA_REACT_ATTILA)
-                .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
-                .careUnit(ALFA_MEDICINCENTRUM)
-                .careProvider(ALFA_REGIONEN)
-                .build()
-        )
-        .build();
-
-    assertFalse(
-        actionRuleProtectedPerson.evaluate(Optional.of(certificate), Optional.of(actionEvaluation))
-    );
-  }
 
   @Test
   void shallReturnErrorMessage() {
