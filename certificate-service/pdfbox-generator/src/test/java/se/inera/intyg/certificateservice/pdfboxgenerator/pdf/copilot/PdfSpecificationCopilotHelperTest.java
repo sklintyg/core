@@ -83,7 +83,7 @@ class PdfSpecificationCopilotHelperTest {
   @Disabled
   @Test
   void shouldCreateStructureFileForPdf() {
-    final var certificateType = FK_7472;
+    final var certificateType = FK_7804;
     final var classloader = getClass().getClassLoader();
     final var inputStream = classloader.getResourceAsStream(
         String.format("%s/pdf/%s_%s.pdf", certificateType, certificateType,

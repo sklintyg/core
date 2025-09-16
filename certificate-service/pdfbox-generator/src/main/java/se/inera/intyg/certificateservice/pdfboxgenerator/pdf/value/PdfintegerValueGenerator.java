@@ -29,6 +29,7 @@ public class PdfintegerValueGenerator implements PdfElementValue<ElementValueInt
         PdfField.builder()
             .id(pdfConfiguration.pdfFieldId().id())
             .value(elementValueInteger.value().toString())
+            .offset(pdfConfiguration.offset())
             .build()
     );
   }

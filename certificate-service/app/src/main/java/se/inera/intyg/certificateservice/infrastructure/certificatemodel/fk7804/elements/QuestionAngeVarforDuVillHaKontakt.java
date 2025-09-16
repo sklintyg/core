@@ -42,7 +42,7 @@ public class QuestionAngeVarforDuVillHaKontakt {
                     new PdfFieldId("form1[0].Sida4[0].flt_txtForsakringskassanKontaktar[0]"))
                 .overflowSheetFieldId(
                     new PdfFieldId("form1[0].#subform[4].flt_txtFortsattningsblad[0]"))
-                .maxLength(PDF_TEXT_FIELD_ROW_LENGTH)
+                .maxLength(PDF_TEXT_FIELD_ROW_LENGTH * 2)
                 .build()
         )
         .rules(

@@ -16,4 +16,5 @@ public class PdfField {
   @Builder.Default
   Boolean append = false;
   String appearance;
+  Integer offset;
 }

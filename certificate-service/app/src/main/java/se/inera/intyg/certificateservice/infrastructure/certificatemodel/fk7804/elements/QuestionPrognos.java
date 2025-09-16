@@ -77,8 +77,8 @@ public class QuestionPrognos {
                     new FieldId(CodeSystemKvFkmu0006.STOR_SANNOLIKHET.code()), new PdfFieldId("1"),
                     new FieldId(CodeSystemKvFkmu0006.ATER_X_ANTAL_MANADER.code()),
                     new PdfFieldId("2"),
-                    new FieldId(CodeSystemKvFkmu0006.SANNOLIKT_INTE.code()), new PdfFieldId("4"),
-                    new FieldId(CodeSystemKvFkmu0006.PROGNOS_OKLAR.code()), new PdfFieldId("3")
+                    new FieldId(CodeSystemKvFkmu0006.SANNOLIKT_INTE.code()), new PdfFieldId("3"),
+                    new FieldId(CodeSystemKvFkmu0006.PROGNOS_OKLAR.code()), new PdfFieldId("4")
                 ))
                 .build()
         )

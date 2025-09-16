@@ -142,6 +142,7 @@ class QuestionAntalManaderTest {
   void shouldContainCorrectPdfConfiguration() {
     final var expected = PdfConfigurationText.builder()
         .pdfFieldId(new PdfFieldId("form1[0].Sida3[0].flt_numManadManader[0]"))
+        .offset(-8)
         .build();
 
     final var elementSpecification = QuestionAntalManader.questionAntalManader();

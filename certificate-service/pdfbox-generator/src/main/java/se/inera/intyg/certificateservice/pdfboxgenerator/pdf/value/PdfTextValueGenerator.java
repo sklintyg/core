@@ -37,6 +37,7 @@ public class PdfTextValueGenerator implements PdfElementValue<ElementValueText> 
         PdfField.builder()
             .id(pdfConfiguration.pdfFieldId().id())
             .value(elementValueText.text())
+            .offset(pdfConfiguration.offset())
             .build()
     );
   }
