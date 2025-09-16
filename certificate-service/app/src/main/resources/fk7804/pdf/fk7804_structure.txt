@@ -6,7 +6,7 @@ Name: Personnummer
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].ksr_AvstangningSmittskyddslagen[0]
-Name: Punkt 1. Smittbärarpenning. Avstängning enligt smittskyddslagen på grund av smitta. (Fortsätt till frågorna "Diagnos" och "Nedsättning av arbetsförmåga").  
+Name: Punkt 1. Smittbärarpenning. Förhållningsregler enligt smittskyddslagen på grund av smitta. (Fortsätt till frågorna "Diagnos" och "Nedsättning av arbetsförmåga").
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDCheckBox
 
 Field ID: form1[0].#subform[0].ksr_FysisktVardmote[0]
@@ -239,13 +239,13 @@ Field ID: form1[0].Sida3[0].RadioButtonList4[0]
 Name: RadioButtonList4
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDRadioButton
 For radio boolean assume first option is true and second option is false. Use the options as field ids. Options:
-1
-2
-4
 3
+4
+2
+1
 
 Field ID: form1[0].Sida3[0].flt_numManadManader[0]
-Name: Månad eller månader
+Name: Månad eller månader. Fältet ska endast fyllas i om du kryssat i Patienten förväntas kunna återgå helt i nuvarande sysselsättning efter månad/månader.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].Sida3[0].flt_txtAlternativFyra[0]

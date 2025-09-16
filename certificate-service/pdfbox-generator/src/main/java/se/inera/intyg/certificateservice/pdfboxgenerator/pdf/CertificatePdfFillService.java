@@ -171,7 +171,7 @@ public class CertificatePdfFillService {
 
         if (parts.partTwo() != null) {
           var part2 = new PdfField(appendedFieldsMutable.get(count).getId(),
-              parts.partTwo(), true, null);
+              parts.partTwo(), true, null, 0);
           appendedFieldsMutable.add(count + 1, part2);
           count++;
         }
@@ -387,9 +387,9 @@ public class CertificatePdfFillService {
         textField.setDefaultAppearance(field.getAppearance());
       }
 
-      if ((extractedField instanceof PDVariableText textField) && !append) {
+      if (((extractedField instanceof PDVariableText textField) && !append)) {
         final var textAppearance = new TextFieldAppearance(textField);
-        textAppearance.adjustFieldHeight();
+        textAppearance.adjustFieldHeight(field.getOffset());
       }
 
       extractedField.setValue(field.getValue());

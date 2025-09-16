@@ -10,4 +10,6 @@ public class PdfConfigurationText implements PdfConfiguration {
   PdfFieldId pdfFieldId;
   Integer maxLength;
   PdfFieldId overflowSheetFieldId;
+  @Builder.Default
+  Integer offset = 0;
 }

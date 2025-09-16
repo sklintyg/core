@@ -13,6 +13,10 @@ public class TextFieldAppearance {
   }
 
   public void adjustFieldHeight() {
+    adjustFieldHeight(0);
+  }
+
+  public void adjustFieldHeight(Integer offset) {
     final var fontSize = getFontSize();
     for (PDAnnotationWidget widget : field.getWidgets()) {
       final var rec = widget.getRectangle();
@@ -20,7 +24,7 @@ public class TextFieldAppearance {
       widget.setRectangle(new PDRectangle(rec.getLowerLeftX(),
           rec.getLowerLeftY(),
           rec.getWidth(),
-          rec.getHeight() + Math.round(fontSize) - 1));
+          rec.getHeight() + Math.round(fontSize) - 1 + (offset != null ? offset : 0)));
     }
   }
 

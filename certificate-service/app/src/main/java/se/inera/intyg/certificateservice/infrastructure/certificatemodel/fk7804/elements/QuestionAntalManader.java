@@ -42,6 +42,7 @@ public class QuestionAntalManader {
         .pdfConfiguration(
             PdfConfigurationText.builder()
                 .pdfFieldId(new PdfFieldId("form1[0].Sida3[0].flt_numManadManader[0]"))
+                .offset(-8)
                 .build()
         )
         .rules(
