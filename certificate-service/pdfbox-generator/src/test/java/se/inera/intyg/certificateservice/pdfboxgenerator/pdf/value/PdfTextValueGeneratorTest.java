@@ -40,6 +40,7 @@ class PdfTextValueGeneratorTest {
           PdfField.builder()
               .id(FIELD_ID)
               .value(VALUE)
+              .offset(0)
               .build()
       );
 
@@ -88,6 +89,7 @@ class PdfTextValueGeneratorTest {
           PdfField.builder()
               .id(FIELD_ID)
               .value(VALUE)
+              .offset(10)
               .build()
       );
 
@@ -102,6 +104,7 @@ class PdfTextValueGeneratorTest {
                   .pdfFieldId(new PdfFieldId(FIELD_ID))
                   .maxLength(100)
                   .overflowSheetFieldId(OVERFLOW_SHEET_ID)
+                  .offset(10)
                   .build()
           )
           .build();

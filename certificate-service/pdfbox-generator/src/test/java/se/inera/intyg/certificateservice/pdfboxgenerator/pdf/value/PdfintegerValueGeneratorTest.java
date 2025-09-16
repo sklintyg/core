@@ -29,6 +29,7 @@ class PdfintegerValueGeneratorTest {
         PdfField.builder()
             .id(FIELD_ID)
             .value(VALUE.toString())
+            .offset(10)
             .build()
     );
 
@@ -36,6 +37,7 @@ class PdfintegerValueGeneratorTest {
         .pdfConfiguration(
             PdfConfigurationText.builder()
                 .pdfFieldId(new PdfFieldId(FIELD_ID))
+                .offset(10)
                 .build()
         )
         .build();
