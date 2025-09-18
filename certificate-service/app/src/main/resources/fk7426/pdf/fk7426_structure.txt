@@ -54,23 +54,23 @@ Name: Punkt 2. Barnets diagnos. Totalt tre. Det här är diagnos ett.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].flt_txtDiaKod1[0]
-Name: null
+Name: Diagnoskod enligt ICD-10 SE. Diagnos ett. Siffra ett. 
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].flt_txtDiaKod2[0]
-Name: null
+Name: Diagnos ett. Siffra två. 
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].flt_txtDiaKod3[0]
-Name: null
+Name: Diagnos ett. Siffra tre. 
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].flt_txtDiaKod4[0]
-Name: null
+Name: Diagnos ett. Siffra fyra. 
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].flt_txtDiaKod5[0]
-Name: null
+Name: Diagnos ett. Siffra fem. 
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].flt_txtAngeFunktionsnedsattning2[0]
@@ -78,23 +78,23 @@ Name: Det här är diagnos två.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].flt_txtDiaKod6[0]
-Name: null
+Name: Diagnos två. Siffra ett. 
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].flt_txtDiaKod7[0]
-Name: null
+Name: Diagnos två. Siffra två. 
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].flt_txtDiaKod8[0]
-Name: null
+Name: Diagnos två. Siffra tre. 
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].flt_txtDiaKod9[0]
-Name: null
+Name: Diagnos två. Siffra fyra. 
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].flt_txtDiaKod10[0]
-Name: null
+Name: Diagnos två. Siffra fem. 
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].flt_txtAngeFunktionsnedsattning3[0]
@@ -102,23 +102,23 @@ Name: Det här är diagnos tre
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].flt_txtDiaKod11[0]
-Name: null
+Name: Diagnos tre. Siffra ett. 
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].flt_txtDiaKod12[0]
-Name: null
+Name: Diagnos två. Siffra två. 
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].flt_txtDiaKod13[0]
-Name: null
+Name: Diagnos tre. Siffra tre. 
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].flt_txtDiaKod14[0]
-Name: null
+Name: Diagnos tre. Siffra fyra. 
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].flt_txtDiaKod15[0]
-Name: null
+Name: Diagnos två. Siffra fem. 
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[0].flt_txtFlerradig[0]
@@ -151,10 +151,6 @@ Name: Planerade medicinska behandlingar/åtgärder. Ange vad syftet är och om m
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 //Page index 2
-Field ID: form1[0].#subform[3].flt_txtMotiveraBedömn[0]
-Name: Punkt 6.a Motivera bedömningen av perioden som du anser att det finns ett påtagligt hot mot barnets liv. 
-Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
-
 Field ID: form1[0].#subform[3].flt_txtBarnPersonNr[2]
 Name: Personnumret har kopierats från personnummerfältet du tidigare har fyllt i.
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
@@ -165,6 +161,10 @@ Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[3].flt_datumTillMed[0]
 Name: Till och med. Datum - skriv in eller välj kalendern med nedåtpilen
+Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
+
+Field ID: form1[0].#subform[3].flt_txtMotiveraBedömn[0]
+Name: Punkt 6.a Motivera bedömningen av perioden som du anser att det finns ett påtagligt hot mot barnets liv. 
 Field Type: class org.apache.pdfbox.pdmodel.interactive.form.PDTextField
 
 Field ID: form1[0].#subform[3].ksr_Ja_1[0]
