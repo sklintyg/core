@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateprintservice.pdfgenerator.api.value.ElementValueLabeledList;
+import se.inera.intyg.certificateprintservice.pdfgenerator.api.value.ElementValueLabeledText;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.value.ElementValueList;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.value.ElementValueTable;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.value.ElementValueText;
@@ -66,4 +68,36 @@ class ElementValueConverterTest {
         , result.toString());
   }
 
+  @Test
+  void shouldReturnValueForLabeledList() {
+    final var result = ElementValueConverter.html(
+        ElementValueLabeledList.builder()
+            .list(List.of(
+                ElementValueLabeledText.builder()
+                    .label("Label 1")
+                    .text("Example text for value")
+                    .build(),
+                ElementValueLabeledText.builder()
+                    .label("Label 2")
+                    .text("Example 2")
+                    .build()
+            ))
+            .build()
+    );
+
+    assertEquals(
+        """
+            <div class="mx-[5mm] mb-2">
+             <div class="mb-2">
+              <p class="font-bold italic block">Label 1</p>
+              <p class="text-sm px-[5mm]">Example text for value</p>
+             </div>
+             <div class="mb-2">
+              <p class="font-bold italic block">Label 2</p>
+              <p class="text-sm px-[5mm]">Example 2</p>
+             </div>
+            </div>""",
+        result.toString()
+    );
+  }
 }

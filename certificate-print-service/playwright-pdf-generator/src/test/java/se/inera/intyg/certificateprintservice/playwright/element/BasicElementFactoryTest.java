@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateprintservice.pdfgenerator.api.value.ElementValueLabeledList;
+import se.inera.intyg.certificateprintservice.pdfgenerator.api.value.ElementValueLabeledText;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.value.ElementValueTable;
 
 class BasicElementFactoryTest {
@@ -34,6 +36,37 @@ class BasicElementFactoryTest {
   void shouldReturnParagraphWithContent() {
     assertEquals("<p class=\"text-sm italic px-[5mm]\">answer</p>",
         BasicElementFactory.p("answer").toString());
+  }
 
+  @Test
+  void shouldReturnLabeledList() {
+    final var result = BasicElementFactory.labeledList(
+        ElementValueLabeledList.builder()
+            .list(List.of(
+                ElementValueLabeledText
+                    .builder()
+                    .label("L1")
+                    .text("T1")
+                    .build(),
+                ElementValueLabeledText
+                    .builder()
+                    .label("L2")
+                    .text("T2")
+                    .build()
+            ))
+            .build()
+    );
+
+    assertEquals("""
+        <div class="mx-[5mm] mb-2">
+         <div class="mb-2">
+          <p class="font-bold italic block">L1</p>
+          <p class="text-sm px-[5mm]">T1</p>
+         </div>
+         <div class="mb-2">
+          <p class="font-bold italic block">L2</p>
+          <p class="text-sm px-[5mm]">T2</p>
+         </div>
+        </div>""", result.toString());
   }
 }

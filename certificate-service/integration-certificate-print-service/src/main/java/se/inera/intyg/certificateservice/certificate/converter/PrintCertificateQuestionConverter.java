@@ -3,12 +3,15 @@ package se.inera.intyg.certificateservice.certificate.converter;
 import java.util.Optional;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.certificate.dto.ElementSimplifiedValueDTO;
+import se.inera.intyg.certificateservice.certificate.dto.ElementSimplifiedValueLabeledListDTO;
+import se.inera.intyg.certificateservice.certificate.dto.ElementSimplifiedValueLabeledTextDTO;
 import se.inera.intyg.certificateservice.certificate.dto.ElementSimplifiedValueListDTO;
 import se.inera.intyg.certificateservice.certificate.dto.ElementSimplifiedValueTableDTO;
 import se.inera.intyg.certificateservice.certificate.dto.ElementSimplifiedValueTextDTO;
 import se.inera.intyg.certificateservice.certificate.dto.PrintCertificateQuestionDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValue;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueLabeledList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueTable;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
@@ -63,6 +66,20 @@ public class PrintCertificateQuestionConverter {
       return ElementSimplifiedValueTableDTO.builder()
           .headings(valueTable.headings())
           .values(valueTable.values())
+          .build();
+    }
+
+    if (elementSimplifiedValue instanceof ElementSimplifiedValueLabeledList valueLabeledList) {
+      return ElementSimplifiedValueLabeledListDTO.builder()
+          .list(
+              valueLabeledList.list().stream()
+                  .map(labeledText -> ElementSimplifiedValueLabeledTextDTO.builder()
+                      .label(labeledText.label())
+                      .text(labeledText.text())
+                      .build()
+                  )
+                  .toList()
+          )
           .build();
     }
 

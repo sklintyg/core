@@ -2,9 +2,13 @@ package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValue;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueLabeledList;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueLabeledText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
@@ -40,5 +44,28 @@ public class ElementConfigurationCheckboxMultipleDate implements ElementConfigur
             )
         )
         .code();
+  }
+
+  @Override
+  public Optional<ElementSimplifiedValue> simplified(ElementValue value) {
+    if (!(value instanceof ElementValueDateList elementValue)) {
+      throw new IllegalStateException("Wrong value type");
+    }
+    if (elementValue.isEmpty()) {
+      return Optional.empty();
+    }
+    return Optional.of(ElementSimplifiedValueLabeledList.builder()
+        .list(elementValue.dateList().stream()
+            .map(date ->
+                ElementSimplifiedValueLabeledText.builder()
+                    .text(date.date() != null ? date.date().toString() : null)
+                    .label(dates.stream()
+                        .filter(config -> config.id().value().equals(date.dateId().value()))
+                        .findFirst().orElseThrow(() -> new IllegalStateException(
+                            "No matching label found for id: " + date.dateId())).label()
+                    ).build()
+            )
+            .toList())
+        .build());
   }
 }
