@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
 import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValue;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueTable;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
@@ -60,5 +62,33 @@ public class ElementConfigurationCheckboxDateRangeList implements ElementConfigu
             )
         )
         .code();
+  }
+
+  @Override
+  public Optional<ElementSimplifiedValue> simplified(ElementValue value) {
+    if (!(value instanceof ElementValueDateRangeList elementValue)) {
+      throw new IllegalStateException("Wrong value type");
+    }
+    if (elementValue.isEmpty()) {
+      return Optional.empty();
+    }
+    return Optional.of(
+        ElementSimplifiedValueTable.builder()
+            .headings(List.of("Nedsättningsgrad", "Från och med", "Till och med"))
+            .values(elementValue.dateRangeList().stream()
+                .map(dateRange -> List.of(
+                    dateRanges.stream()
+                        .filter(
+                            config -> config.id().value().equals(dateRange.dateRangeId().value()))
+                        .findFirst()
+                        .orElseThrow(
+                            () -> new IllegalStateException("No matching date range code")).code()
+                        .displayName(),
+                    dateRange.from() != null ? dateRange.from().toString() : "",
+                    dateRange.to() != null ? dateRange.to().toString() : ""
+                ))
+                .toList())
+            .build()
+    );
   }
 }

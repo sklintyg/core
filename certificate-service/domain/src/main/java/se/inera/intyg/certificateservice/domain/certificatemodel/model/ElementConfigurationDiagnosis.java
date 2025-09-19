@@ -2,9 +2,12 @@ package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValue;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueTable;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
 
@@ -39,5 +42,28 @@ public class ElementConfigurationDiagnosis implements ElementConfiguration {
         .findFirst()
         .map(ElementDiagnosisTerminology::codeSystem)
         .orElseThrow(() -> new IllegalStateException("No code system found for id: " + id));
+  }
+
+  @Override
+  public Optional<ElementSimplifiedValue> simplified(ElementValue value) {
+    if (!(value instanceof ElementValueDiagnosisList elementValue)) {
+      throw new IllegalStateException("Wrong value type");
+    }
+
+    if (elementValue.isEmpty()) {
+      return Optional.empty();
+    }
+
+    return Optional.of(
+        ElementSimplifiedValueTable.builder()
+            .headings(List.of("Diagnoskod enligt ICD-10 SE", ""))
+            .values(elementValue.diagnoses().stream()
+                .map(diagnosis -> List.of(
+                    diagnosis.code() != null ? diagnosis.code() : "",
+                    diagnosis.description() != null ? diagnosis.description() : ""
+                ))
+                .toList())
+            .build()
+    );
   }
 }

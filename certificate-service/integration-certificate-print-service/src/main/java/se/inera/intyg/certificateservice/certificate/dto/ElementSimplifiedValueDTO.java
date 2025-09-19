@@ -10,7 +10,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonSubTypes({
     @Type(value = ElementSimplifiedValueTextDTO.class, name = "TEXT"),
     @Type(value = ElementSimplifiedValueListDTO.class, name = "LIST"),
-    @Type(value = ElementSimplifiedValueTableDTO.class, name = "TABLE")
+    @Type(value = ElementSimplifiedValueTableDTO.class, name = "TABLE"),
+    @Type(value = ElementSimplifiedValueLabeledTextDTO.class, name = "LABELED_LIST")
 })
 
 public interface ElementSimplifiedValueDTO {

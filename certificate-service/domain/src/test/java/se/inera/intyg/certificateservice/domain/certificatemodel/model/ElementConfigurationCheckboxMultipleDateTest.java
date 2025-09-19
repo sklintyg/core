@@ -3,9 +3,13 @@ package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueLabeledList;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueLabeledText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
@@ -79,6 +83,72 @@ class ElementConfigurationCheckboxMultipleDateTest {
 
     assertThrows(IllegalArgumentException.class,
         () -> configuration.code(dateValue)
+    );
+  }
+
+  @Test
+  void shouldReturnSimplifiedValueAsEmptyOptionalIfValueIsEmpty() {
+    final var config = ElementConfigurationCheckboxMultipleDate.builder().build();
+    final var value = ElementValueDateList.builder().dateList(List.of()).build();
+
+    final var result = config.simplified(value);
+
+    assertEquals(Optional.empty(), result);
+  }
+
+  @Test
+  void shouldReturnSimplifiedValue() {
+    final var date1 = LocalDate.now();
+    final var date2 = LocalDate.now().plusDays(1);
+
+    final var configuration = ElementConfigurationCheckboxMultipleDate.builder()
+        .id(new FieldId(FIELD_ID))
+        .dates(
+            List.of(
+                CheckboxDate.builder()
+                    .id(new FieldId(DATE_FIELD_ID))
+                    .label(LABEL)
+                    .code(new Code(CODE, CODE_SYSTEM, DISPLAY_NAME))
+                    .build(),
+                CheckboxDate.builder()
+                    .id(new FieldId(DATE_FIELD_ID_TWO))
+                    .label(LABEL_TWO)
+                    .code(new Code(CODE_TWO, CODE_SYSTEM, DISPLAY_NAME_TWO))
+                    .build()
+            )
+        )
+        .build();
+
+    final var dateValueOne = ElementValueDate.builder()
+        .dateId(new FieldId(DATE_FIELD_ID))
+        .date(date1)
+        .build();
+    final var dateValueTwo = ElementValueDate.builder()
+        .dateId(new FieldId(DATE_FIELD_ID_TWO))
+        .date(date2)
+        .build();
+    final var value = ElementValueDateList.builder()
+        .dateList(List.of(dateValueOne, dateValueTwo))
+        .build();
+
+    final var result = configuration.simplified(value);
+
+    assertEquals(Optional.of(
+            ElementSimplifiedValueLabeledList.builder()
+                .list(
+                    List.of(
+                        ElementSimplifiedValueLabeledText.builder()
+                            .label(LABEL)
+                            .text(date1.toString())
+                            .build(),
+                        ElementSimplifiedValueLabeledText.builder()
+                            .label(LABEL_TWO)
+                            .text(date2.toString())
+                            .build()
+                    )
+                )
+                .build()),
+        result
     );
   }
 }

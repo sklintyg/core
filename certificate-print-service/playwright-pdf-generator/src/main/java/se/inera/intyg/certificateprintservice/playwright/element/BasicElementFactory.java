@@ -7,6 +7,7 @@ import javax.swing.text.html.HTML.Tag;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.jsoup.nodes.Element;
+import se.inera.intyg.certificateprintservice.pdfgenerator.api.value.ElementValueLabeledList;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.value.ElementValueTable;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -42,6 +43,26 @@ public class BasicElementFactory {
       trHeader.appendChild(th);
     }
     return trHeader;
+  }
+
+  public static Element labeledList(ElementValueLabeledList list) {
+    final var container = element(Tag.DIV)
+        .addClass("mx-[5mm] mb-2");
+    list.getList().stream()
+        .map(entry -> {
+          final var div = element(Tag.DIV).addClass("mb-2");
+          final var label = element(Tag.P)
+              .addClass("font-bold italic block");
+          label.appendText(entry.getLabel());
+          div.appendChild(label);
+          final var value = element(Tag.P)
+              .addClass("text-sm px-[5mm]")
+              .appendText(entry.getText());
+          div.appendChild(value);
+          return div;
+        })
+        .forEach(container::appendChild);
+    return container;
   }
 
   public static Element p(String text) {
