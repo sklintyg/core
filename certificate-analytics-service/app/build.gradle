@@ -1,0 +1,59 @@
+plugins {
+    alias(libs.plugins.org.springframework.boot)
+}
+
+def applicationDir = "${rootProject.projectDir}/devops/dev"
+
+dependencies {
+    implementation project(":logging")
+
+    implementation "co.elastic.logging:logback-ecs-encoder"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
+    implementation "org.springframework.boot:spring-boot-starter-security"
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation 'org.springframework.security:spring-security-saml2-service-provider'
+    implementation "org.springframework.boot:spring-boot-starter-data-redis"
+    implementation "org.springframework.session:spring-session-data-redis"
+    implementation "net.javacrumbs.shedlock:shedlock-spring"
+    implementation "net.javacrumbs.shedlock:shedlock-provider-redis-spring"
+
+    compileOnly "org.projectlombok:lombok"
+
+    annotationProcessor "org.projectlombok:lombok"
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+    testImplementation "org.springframework.security:spring-security-test"
+}
+
+testing.suites {
+    test { useJUnitJupiter() }
+}
+
+bootRun {
+    systemProperty("spring.profiles.active", "testability,dev")
+    systemProperty("application.dir", "${applicationDir}")
+    systemProperty("spring.config.additional-location", "file:${applicationDir}/config/")
+}
+
+tasks.register("appRunDebug") {
+    println("######## Running in Debug mode ########")
+    doFirst {
+        bootRun.configure {
+            jvmArgs = [
+                    "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8841",
+                    "-Dlogging.config=${applicationDir}/config/logback-spring.xml",]
+        }
+    }
+    finalizedBy("bootRun")
+}
+
+tasks.register("appRun") {
+    println("######## Running in normal mode ########")
+    doFirst {
+        bootRun.configure {
+            jvmArgs = ["-Dlogging.config=${applicationDir}/config/logback-spring.xml"]
+        }
+    }
+    finalizedBy("bootRun")
+}
