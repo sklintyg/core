@@ -17,6 +17,10 @@ dependencies {
     implementation "org.springframework.session:spring-session-data-redis"
     implementation "net.javacrumbs.shedlock:shedlock-spring"
     implementation "net.javacrumbs.shedlock:shedlock-provider-redis-spring"
+    implementation 'com.fasterxml.jackson.core:jackson-annotations'
+    implementation 'org.liquibase:liquibase-core'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-activemq'
 
     compileOnly "org.projectlombok:lombok"
 
@@ -31,8 +35,8 @@ testing.suites {
 }
 
 bootRun {
-    systemProperty("spring.profiles.active", "testability,dev")
     systemProperty("application.dir", "${applicationDir}")
+    systemProperty("spring.profiles.active", "testability,dev")
     systemProperty("spring.config.additional-location", "file:${applicationDir}/config/")
 }
 
