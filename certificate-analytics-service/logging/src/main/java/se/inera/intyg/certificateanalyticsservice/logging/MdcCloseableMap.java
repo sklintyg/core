@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateanalyticsservice.logging;
 
-import static se.inera.intyg.minaintyg.logging.MdcLogConstants.EVENT_CATEGORY;
-import static se.inera.intyg.minaintyg.logging.MdcLogConstants.EVENT_CATEGORY_PROCESS;
+import static se.inera.intyg.certificateanalyticsservice.logging.MdcLogConstants.EVENT_CATEGORY;
+import static se.inera.intyg.certificateanalyticsservice.logging.MdcLogConstants.EVENT_CATEGORY_PROCESS;
 
 import java.io.Closeable;
 import java.util.Collections;

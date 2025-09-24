@@ -1,8 +1,8 @@
 package se.inera.intyg.certificateanalyticsservice.logging;
 
-import static se.inera.intyg.minaintyg.logging.MdcLogConstants.SESSION_ID_KEY;
-import static se.inera.intyg.minaintyg.logging.MdcLogConstants.SPAN_ID_KEY;
-import static se.inera.intyg.minaintyg.logging.MdcLogConstants.TRACE_ID_KEY;
+import static se.inera.intyg.certificateanalyticsservice.logging.MdcLogConstants.SESSION_ID_KEY;
+import static se.inera.intyg.certificateanalyticsservice.logging.MdcLogConstants.SPAN_ID_KEY;
+import static se.inera.intyg.certificateanalyticsservice.logging.MdcLogConstants.TRACE_ID_KEY;
 
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;

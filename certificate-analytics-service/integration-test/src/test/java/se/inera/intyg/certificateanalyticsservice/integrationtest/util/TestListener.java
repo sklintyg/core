@@ -19,7 +19,7 @@ public class TestListener {
 
   @JmsListener(destination = "${certificate.event.queue.name}")
   public void log(TextMessage message) {
-    log.info("Certificate event received: {}", message);
+    log.info("Message event received: {}", message);
     messages.add(message);
   }
 

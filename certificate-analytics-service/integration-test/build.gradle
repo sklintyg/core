@@ -12,7 +12,7 @@ dependencies {
     testImplementation "org.mock-server:mockserver-client-java"
     testImplementation "org.testcontainers:activemq"
     testImplementation 'org.springframework.boot:spring-boot-starter-activemq'
-    testImplementation "org.testcontainers:mysql"
+    //testImplementation "org.testcontainers:mysql"
     testImplementation "org.testcontainers:activemq"
     testImplementation 'org.testcontainers:mockserver'
     testImplementation "org.mock-server:mockserver-client-java"

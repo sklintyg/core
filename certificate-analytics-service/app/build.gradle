@@ -12,11 +12,6 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-security"
     implementation "org.springframework.boot:spring-boot-starter-web"
     implementation "org.springframework.boot:spring-boot-starter-actuator"
-    implementation 'org.springframework.security:spring-security-saml2-service-provider'
-    implementation "org.springframework.boot:spring-boot-starter-data-redis"
-    implementation "org.springframework.session:spring-session-data-redis"
-    implementation "net.javacrumbs.shedlock:shedlock-spring"
-    implementation "net.javacrumbs.shedlock:shedlock-provider-redis-spring"
     implementation 'com.fasterxml.jackson.core:jackson-annotations'
     implementation 'org.liquibase:liquibase-core'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
