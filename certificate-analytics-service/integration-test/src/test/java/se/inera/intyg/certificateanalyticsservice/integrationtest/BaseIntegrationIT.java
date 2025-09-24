@@ -17,7 +17,7 @@ import se.inera.intyg.certificateanalyticsservice.integrationtest.util.TestListe
 public abstract class BaseIntegrationIT {
 
   @Autowired
-  protected static final TestListener testListener = new TestListener();
+  protected TestListener testListener;
 
   @BeforeEach
   void setUp() {
