@@ -13,6 +13,5 @@ dependencyResolutionManagement {
 rootProject.name = 'certificate-analytics-service'
 
 include 'app'
-include 'logging'
 include 'integration-test'
 

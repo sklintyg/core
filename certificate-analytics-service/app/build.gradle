@@ -5,7 +5,6 @@ plugins {
 def applicationDir = "${rootProject.projectDir}/devops/dev"
 
 dependencies {
-    implementation project(":logging")
 
     implementation "co.elastic.logging:logback-ecs-encoder"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
@@ -42,8 +41,7 @@ tasks.register("appRunDebug") {
     doFirst {
         bootRun.configure {
             jvmArgs = [
-                    "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8841",
-                    "-Dlogging.config=${applicationDir}/config/logback-spring.xml",]
+                    "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=18051"]
         }
     }
     finalizedBy("bootRun")
@@ -51,10 +49,5 @@ tasks.register("appRunDebug") {
 
 tasks.register("appRun") {
     println("######## Running in normal mode ########")
-    doFirst {
-        bootRun.configure {
-            jvmArgs = ["-Dlogging.config=${applicationDir}/config/logback-spring.xml"]
-        }
-    }
     finalizedBy("bootRun")
 }

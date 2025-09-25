@@ -104,6 +104,5 @@ reporting {
 
     dependencies {
         testReportAggregation project(':app')
-        testReportAggregation project(':logging')
     }
 }
