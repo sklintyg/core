@@ -1,7 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements;
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionGrundForMedicinsktUnderlag.QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionGrundForMedicinsktUnderlag.UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
@@ -22,6 +21,7 @@ public class QuestionAnnanGrundForMedicinsktUnderlag {
       "1.3");
   public static final FieldId QUESTION_ANNAN_GRUND_FOR_MEDICINSKT_UNDERLAG_FIELD_ID = new FieldId(
       "1.3");
+  private static final FieldId ANNAT_FIELD_ID = new FieldId(CodeSystemKvFkmu0001.ANNAT.code());
 
   private QuestionAnnanGrundForMedicinsktUnderlag() {
     throw new IllegalStateException("Utility class");
@@ -47,7 +47,7 @@ public class QuestionAnnanGrundForMedicinsktUnderlag {
                     (short) 50),
                 CertificateElementRuleFactory.show(
                     QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID,
-                    new FieldId("ANNAT")
+                    ANNAT_FIELD_ID
                 )
             )
         )
@@ -70,7 +70,7 @@ public class QuestionAnnanGrundForMedicinsktUnderlag {
                 .filter(data -> data.id().equals(QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID))
                 .map(element -> (ElementValueDateList) element.value())
                 .anyMatch(value -> value.dateList().stream().anyMatch(
-                    valueDate -> valueDate.dateId().equals(UTLATANDE_BASERAT_PA_ANNAT_FIELD_ID))
+                    valueDate -> valueDate.dateId().equals(ANNAT_FIELD_ID))
                 )
         )
         .pdfConfiguration(

@@ -120,7 +120,7 @@ class QuestionAnnanGrundForMedicinsktUnderlagTest {
                       .dateList(
                           List.of(
                               ElementValueDate.builder()
-                                  .dateId(new FieldId("annat"))
+                                  .dateId(new FieldId("ANNAT"))
                                   .build()
                           )
                       )
