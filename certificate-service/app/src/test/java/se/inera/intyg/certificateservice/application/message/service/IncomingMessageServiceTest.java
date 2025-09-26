@@ -8,7 +8,6 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataInc
 import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.INCOMING_COMPLEMENT_MESSAGE;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.INCOMING_QUESTION_MESSAGE;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.INCOMING_REMINDER_MESSAGE;
-import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.incomingComplementMessageBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.ANSWER;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.COMPLEMENT_MESSAGE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.CONTACT_MESSAGE;
@@ -21,7 +20,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.message.dto.IncomingMessageRequest;
-import se.inera.intyg.certificateservice.application.message.dto.MessageTypeDTO;
 import se.inera.intyg.certificateservice.application.message.service.converter.MessageConverter;
 import se.inera.intyg.certificateservice.application.message.service.validator.IncomingMessageValidator;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
@@ -92,16 +90,5 @@ class IncomingMessageServiceTest {
         .convert(INCOMING_QUESTION_MESSAGE);
     incomingMessageService.receive(INCOMING_QUESTION_MESSAGE);
     verify(receiveQuestionMessageDomainService).receive(CONTACT_MESSAGE);
-  }
-
-  @Test
-  void shallThrowExceptionIfMessageTypeIsNotHandled() {
-    final var notHandledMessage = incomingComplementMessageBuilder()
-        .type(MessageTypeDTO.AVSTMN)
-        .build();
-
-    assertThrows(IllegalArgumentException.class,
-        () -> incomingMessageService.receive(notHandledMessage)
-    );
   }
 }

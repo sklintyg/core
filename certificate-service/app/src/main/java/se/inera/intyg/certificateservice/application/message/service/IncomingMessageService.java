@@ -35,7 +35,7 @@ public class IncomingMessageService {
           new MessageId(incomingMessageRequest.getReminderMessageId()),
           messageConverter.convertReminder(incomingMessageRequest)
       );
-      case KONTKT, OVRIGT -> {
+      default -> {
         if (isAnswer(incomingMessageRequest)) {
           receiveAnswerMessageDomainService.receive(
               new MessageId(incomingMessageRequest.getAnswerMessageId()),
@@ -47,9 +47,6 @@ public class IncomingMessageService {
           );
         }
       }
-      default -> throw new IllegalArgumentException(
-          "Message type '%s' is not supported!".formatted(incomingMessageRequest.getType())
-      );
     }
   }
 
