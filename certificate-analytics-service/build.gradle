@@ -9,9 +9,7 @@ plugins {
 
 ext {
     intygBomVersion = System.properties['intygBomVersion'] ?: '0.0.1-SNAPSHOT'
-
     ineraMavenRepository = 'https://nexus.drift.inera.se/repository/it-public/'
-
     nvdMirror = 'https://vulnz-nvd-mirror-devtest.intyg.nordicmedtest.se'
 }
 
@@ -33,11 +31,11 @@ allprojects {
 }
 
 dependencyCheck {
-    formats = List.of("HTML", "JSON")
-
-    nvd {
-        datafeedUrl = "${nvdMirror}"
-    }
+    nvd.setDatafeedUrl(nvdMirror)
+    analyzers.setAssemblyEnabled(false)
+    analyzers.setNodeEnabled(false)
+    analyzers.ossIndex.setUsername(project.properties.get('ossIndexUsername'))
+    analyzers.ossIndex.setPassword(project.properties.get('ossIndexPassword'))
 }
 
 subprojects {
