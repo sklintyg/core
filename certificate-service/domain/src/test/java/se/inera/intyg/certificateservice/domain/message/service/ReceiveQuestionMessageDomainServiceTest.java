@@ -5,10 +5,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.COMPLEMENT_MESSAGE;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.complementMessageBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7810_CERTIFICATE_MODEL;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.fk7810certificateModelBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.CONTACT_MESSAGE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.contactMessageBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -50,7 +53,7 @@ class ReceiveQuestionMessageDomainServiceTest {
     doReturn(CERTIFICATE_ID).when(certificate).id();
 
     assertThrows(CertificateActionForbidden.class,
-        () -> receiveQuestionMessageDomainService.receive(COMPLEMENT_MESSAGE)
+        () -> receiveQuestionMessageDomainService.receive(CONTACT_MESSAGE)
     );
   }
 
@@ -62,23 +65,45 @@ class ReceiveQuestionMessageDomainServiceTest {
     doReturn(false).when(certificate).isCertificateIssuedOnPatient(ATHENA_REACT_ANDERSSON.id());
 
     assertThrows(CertificateActionForbidden.class,
-        () -> receiveQuestionMessageDomainService.receive(COMPLEMENT_MESSAGE)
+        () -> receiveQuestionMessageDomainService.receive(CONTACT_MESSAGE)
     );
   }
 
+  @Test
+  void shallThrowExceptionIfMessageTypeNotAllowed() {
+    doReturn(true).when(certificate)
+        .allowTo(CertificateActionType.RECEIVE_QUESTION, Optional.empty());
+    doReturn(true).when(certificate).isCertificateIssuedOnPatient(ATHENA_REACT_ANDERSSON.id());
+    doReturn(
+        fk7810certificateModelBuilder()
+            .messageTypes(List.of())
+            .build())
+        .when(certificate)
+        .certificateModel();
+    doReturn(CERTIFICATE_ID).when(certificate).id();
+
+    assertThrows(CertificateActionForbidden.class,
+        () -> receiveQuestionMessageDomainService.receive(CONTACT_MESSAGE)
+    );
+
+  }
+
   @Nested
-  class ComplementMessageAllowed {
+  class ContactMessageAllowed {
 
     @BeforeEach
     void setUp() {
       doReturn(true).when(certificate)
           .allowTo(CertificateActionType.RECEIVE_QUESTION, Optional.empty());
       doReturn(true).when(certificate).isCertificateIssuedOnPatient(ATHENA_REACT_ANDERSSON.id());
+      doReturn(FK7810_CERTIFICATE_MODEL)
+          .when(certificate)
+          .certificateModel();
     }
 
     @Test
     void shallStoreReceivedMessage() {
-      final var expectedMessage = complementMessageBuilder().build();
+      final var expectedMessage = contactMessageBuilder().build();
       receiveQuestionMessageDomainService.receive(expectedMessage);
 
       verify(messageRepository).save(expectedMessage);
@@ -86,12 +111,11 @@ class ReceiveQuestionMessageDomainServiceTest {
 
     @Test
     void shallReturnSavedMessage() {
-      final var expectedMessage = complementMessageBuilder().build();
+      final var expectedMessage = contactMessageBuilder().build();
 
-      doReturn(expectedMessage).when(messageRepository).save(COMPLEMENT_MESSAGE);
+      doReturn(expectedMessage).when(messageRepository).save(CONTACT_MESSAGE);
 
-      final var actualMessage = receiveQuestionMessageDomainService.receive(COMPLEMENT_MESSAGE
-      );
+      final var actualMessage = receiveQuestionMessageDomainService.receive(CONTACT_MESSAGE);
 
       assertEquals(expectedMessage, actualMessage);
     }

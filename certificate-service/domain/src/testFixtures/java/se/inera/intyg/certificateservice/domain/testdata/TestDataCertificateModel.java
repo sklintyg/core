@@ -31,9 +31,13 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpeci
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecification.FK7809_PDF_SPECIFICATION;
 
 import java.util.Collections;
+import java.util.List;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateMessageType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
+import se.inera.intyg.certificateservice.domain.message.model.MessageType;
+import se.inera.intyg.certificateservice.domain.message.model.Subject;
 
 public class TestDataCertificateModel {
 
@@ -188,7 +192,15 @@ public class TestDataCertificateModel {
         .availableForCitizen(true)
         .schematronPath(TestDataCertificateModelConstants.FK7810_SCHEMATRON_PATH)
         .recipient(TestDataCertificateModelConstants.FK_RECIPIENT)
-        .certificateActionFactory(new CertificateActionFactory(null));
+        .certificateActionFactory(new CertificateActionFactory(null))
+        .messageTypes(
+            List.of(
+                CertificateMessageType.builder()
+                    .type(MessageType.CONTACT)
+                    .subject(new Subject(MessageType.CONTACT.displayName()))
+                    .build()
+            )
+        );
   }
 
   public static CertificateModel.CertificateModelBuilder fk7804certificateModelBuilder() {

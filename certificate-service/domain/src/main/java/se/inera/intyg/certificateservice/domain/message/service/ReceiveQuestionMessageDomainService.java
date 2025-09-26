@@ -33,6 +33,19 @@ public class ReceiveQuestionMessageDomainService {
       );
     }
 
+    final var isAllowedMessageType = certificate.certificateModel().messageTypes().stream()
+        .anyMatch(type -> type.type().equals(message.type()));
+    if (!isAllowedMessageType) {
+      throw new CertificateActionForbidden(
+          "Not allowed to receive message of type %s on certificate for %s"
+              .formatted(message.type(), certificate.id().id()),
+          List.of(
+              "Message type %s not allowed on certificate model %s"
+                  .formatted(message.type(), certificate.certificateModel().id())
+          )
+      );
+    }
+
     return messageRepository.save(message);
   }
 }
