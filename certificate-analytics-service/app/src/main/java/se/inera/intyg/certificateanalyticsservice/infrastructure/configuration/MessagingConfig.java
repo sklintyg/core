@@ -11,7 +11,7 @@ import org.springframework.jms.annotation.EnableJms;
 @EnableJms
 public class MessagingConfig {
 
-  @Value("${certificate.event.queue.name}")
+  @Value("${certificate.analytics.message.queue.name}")
   private String eventQueueName;
 
   @Bean

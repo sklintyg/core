@@ -1,0 +1,26 @@
+package se.inera.intyg.certificateanalyticsservice.application.messages.model.v1;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import lombok.Builder;
+import lombok.Value;
+import se.inera.intyg.certificateanalyticsservice.application.messages.model.CertificateAnalyticsMessage;
+import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsEventMessageV1.CertificateAnalyticsEventMessageV1Builder;
+
+@Value
+@Builder
+@JsonDeserialize(builder = CertificateAnalyticsEventMessageV1Builder.class)
+public class CertificateAnalyticsEventMessageV1 implements CertificateAnalyticsMessage {
+
+  String messageId;
+  String type;
+  String schemaVersion;
+
+  CertificateAnalyticsEventCertificateV1 certificate;
+  CertificateAnalyticsEventV1 event;
+
+  @JsonPOJOBuilder(withPrefix = "")
+  public static class CertificateAnalyticsEventMessageV1Builder {
+
+  }
+}
