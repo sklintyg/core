@@ -6,6 +6,7 @@ import org.springframework.jms.annotation.JmsListener;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.logging.MdcCloseableMap;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.logging.MdcHelper;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.logging.MdcLogConstants;
@@ -17,6 +18,7 @@ public class AnalyticsMessageListener {
 
   private final AnalyticsMessageService analyticsMessageService;
 
+  @Transactional
   @JmsListener(destination = "${certificate.analytics.message.queue.name}")
   public void onMessage(
       @Payload String body,
