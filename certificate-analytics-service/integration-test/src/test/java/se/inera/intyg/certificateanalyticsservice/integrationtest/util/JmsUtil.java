@@ -5,11 +5,10 @@ import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessag
 import jakarta.jms.Message;
 import java.time.Duration;
 import java.util.function.Predicate;
-import org.slf4j.MDC;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessagePostProcessor;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsEventMessageV1;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.logging.MdcLogConstants;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.logging.MdcHelper;
 
 public class JmsUtil {
 
@@ -69,7 +68,7 @@ public class JmsUtil {
     return msg -> {
       msg.setStringProperty("messageId", message.getMessageId());
       msg.setStringProperty("sessionId", message.getEvent().getSessionId());
-      msg.setStringProperty("traceId", MDC.get(MdcLogConstants.TRACE_ID_KEY));
+      msg.setStringProperty("traceId", MdcHelper.traceId());
       msg.setStringProperty("_type", message.getType());
       msg.setStringProperty("schemaVersion", message.getSchemaVersion());
       msg.setStringProperty("contentType", "application/json");

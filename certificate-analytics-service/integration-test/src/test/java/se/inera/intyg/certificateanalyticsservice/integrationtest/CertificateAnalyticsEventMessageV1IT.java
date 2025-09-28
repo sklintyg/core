@@ -85,7 +85,7 @@ class CertificateAnalyticsEventMessageV1IT {
   }
 
   @Test
-  void shallMoveToDLQAfterMaximumRedeliveries() {
+  void shallMoveToDlqAfterMaximumRedeliveries() {
     final var message = TestDataMessages.draftMessageBuilder().build();
 
     testabilityUtil.togglePermanentFailure(true);
@@ -98,7 +98,7 @@ class CertificateAnalyticsEventMessageV1IT {
   }
 
   @Test
-  void shallMoveToDLQIfMessageCannotBeParsed() {
+  void shallMoveToDlqIfMessageCannotBeParsed() {
     final var message = TestDataMessages.draftMessageBuilder().build();
 
     jmsUtil.publishUnparsableMessage(message);
