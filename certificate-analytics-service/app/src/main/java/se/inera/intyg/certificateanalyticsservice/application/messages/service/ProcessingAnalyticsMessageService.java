@@ -18,5 +18,6 @@ public class ProcessingAnalyticsMessageService implements AnalyticsMessageServic
     final var converter = analyticsMessageConverterProvider.converter(type, schemaVersion);
     final var message = converter.convert(body);
     analyticMessageRepository.store(message);
+    log.info("Processed and stored message with id '{}'", message.getMessageId());
   }
 }

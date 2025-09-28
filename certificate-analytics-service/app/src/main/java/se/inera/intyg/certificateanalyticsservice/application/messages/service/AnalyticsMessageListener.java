@@ -25,7 +25,8 @@ public class AnalyticsMessageListener {
       @Header(name = "_type") String type,
       @Header(name = "schemaVersion", required = false) String schemaVersion,
       @Header(name = "sessionId", required = false) String sessionId,
-      @Header(name = "traceId", required = false) String traceId
+      @Header(name = "traceId", required = false) String traceId,
+      @Header(name = "messageId", required = false) String messageId
   ) {
     try {
       MDC.put(MdcLogConstants.TRACE_ID_KEY, traceId == null ? MdcHelper.traceId() : traceId);
@@ -34,7 +35,7 @@ public class AnalyticsMessageListener {
 
       analyticsMessageService.process(body, type, schemaVersion);
     } catch (Exception e) {
-      log.error("Error processing analytics message", e);
+      log.error("Error processing analytics message with id '{}'", messageId, e);
       throw e;
     } finally {
       MDC.clear();
