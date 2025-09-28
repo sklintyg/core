@@ -11,7 +11,7 @@ the developer has not missed some of these rules.
 - Use `LocalDateTime.now(ZoneId.systemDefault())` for consistent timestamp generation.
 - Use static imports for constants and utility methods to improve readability.
 - Use builder patterns for constructing complex objects to enhance clarity and maintainability.
-- Use streams insteads of loops for collections to improve readability and reduce boilerplate code.
+- Use streams instead of loops for collections to improve readability and reduce boilerplate code.
 
 ## Controller Design Principles
 
@@ -47,6 +47,8 @@ the developer has not missed some of these rules.
 
 - Ensure exception messages are descriptive and provide relevant context (e.g., IDs, reasons).
 - Avoid exposing sensitive information in error messages or logs.
+- Error handling should follow fail fast principle, if we can not proceed with a request, we should
+  throw an exception as early as possible
 
 ## Security Principles
 

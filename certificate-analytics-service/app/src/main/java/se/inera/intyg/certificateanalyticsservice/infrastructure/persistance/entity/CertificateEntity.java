@@ -1,0 +1,53 @@
+package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Table(name = "certificate")
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class CertificateEntity {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "certificate_key")
+  private Integer certificateKey;
+
+  @Column(name = "certificate_id", nullable = false, length = 36)
+  private String certificateId;
+
+  @Column(name = "certificate_type", nullable = false, length = 20)
+  private String certificateType;
+
+  @Column(name = "certificate_type_version", nullable = false, length = 20)
+  private String certificateTypeVersion;
+
+  @Column(name = "staff_key")
+  private Integer staffKey;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "care_provider_key")
+  private CareProviderEntity careProvider;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "unit_key")
+  private UnitEntity unit;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "patient_key")
+  private PatientEntity patient;
+}

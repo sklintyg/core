@@ -3,4 +3,198 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+  <changeSet id="1-create-analytics-schema" author="mh">
+    <createTable tableName="event_type">
+      <column name="event_type_key" type="INT">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="event_type" type="VARCHAR(20)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="device">
+      <column name="device_key" type="INT">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="device" type="VARCHAR(20)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="unit">
+      <column name="unit_key" type="INT">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="hsa_id" type="VARCHAR(20)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="role">
+      <column name="role_key" type="INT">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="VARCHAR(20)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="user">
+      <column name="user_key" type="INT">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="user_id" type="VARCHAR(20)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="care_provider">
+      <column name="provider_key" type="INT">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="hsa_id" type="VARCHAR(20)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="session">
+      <column name="session_key" type="INT">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="session_id" type="VARCHAR(20)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="time">
+      <column name="date_key" type="INT">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="date" type="TIMESTAMP">
+        <constraints nullable="false"/>
+      </column>
+      <column name="day" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="month" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="year" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="hour" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="minute" type="INT">
+        <constraints nullable="false"/>
+      </column>
+      <column name="second" type="INT">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="origin">
+      <column name="origin_key" type="INT">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="origin" type="VARCHAR(20)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="certificate_type">
+      <column name="certificate_type_key" type="INT">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="certificate_type" type="VARCHAR(20)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="patient">
+      <column name="patient_key" type="INT">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="patient_id" type="VARCHAR(20)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="certificate">
+      <column name="certificate_key" type="INT">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="certificate_id" type="VARCHAR(36)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="certificate_type" type="VARCHAR(20)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="certificate_type_version" type="VARCHAR(20)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="staff_key" type="INT"/>
+      <column name="care_provider_key" type="INT"/>
+      <column name="unit_key" type="INT"/>
+      <column name="patient_key" type="INT"/>
+    </createTable>
+    <addForeignKeyConstraint baseTableName="certificate" baseColumnNames="care_provider_key"
+      referencedTableName="care_provider" referencedColumnNames="provider_key"
+      constraintName="fk_certificate_care_provider"/>
+    <addForeignKeyConstraint baseTableName="certificate" baseColumnNames="unit_key"
+      referencedTableName="unit" referencedColumnNames="unit_key"
+      constraintName="fk_certificate_unit"/>
+    <addForeignKeyConstraint baseTableName="certificate" baseColumnNames="patient_key"
+      referencedTableName="patient" referencedColumnNames="patient_key"
+      constraintName="fk_certificate_patient"/>
+
+    <createTable tableName="event">
+      <column name="event_key" type="INT">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="certificate_key" type="INT"/>
+      <column name="unit_key" type="INT"/>
+      <column name="provider_key" type="INT"/>
+      <column name="user_key" type="INT"/>
+      <column name="session_key" type="INT"/>
+      <column name="time_key" type="INT"/>
+      <column name="origin_key" type="INT"/>
+      <column name="device_key" type="INT"/>
+      <column name="event_type_key" type="INT"/>
+      <column name="role_key" type="INT"/>
+    </createTable>
+    <addForeignKeyConstraint baseTableName="event" baseColumnNames="certificate_key"
+      referencedTableName="certificate" referencedColumnNames="certificate_key"
+      constraintName="fk_event_certificate"/>
+    <addForeignKeyConstraint baseTableName="event" baseColumnNames="unit_key"
+      referencedTableName="unit" referencedColumnNames="unit_key"
+      constraintName="fk_event_unit"/>
+    <addForeignKeyConstraint baseTableName="event" baseColumnNames="provider_key"
+      referencedTableName="care_provider" referencedColumnNames="provider_key"
+      constraintName="fk_event_provider"/>
+    <addForeignKeyConstraint baseTableName="event" baseColumnNames="user_key"
+      referencedTableName="user" referencedColumnNames="user_key"
+      constraintName="fk_event_user"/>
+    <addForeignKeyConstraint baseTableName="event" baseColumnNames="session_key"
+      referencedTableName="session" referencedColumnNames="session_key"
+      constraintName="fk_event_session"/>
+    <addForeignKeyConstraint baseTableName="event" baseColumnNames="time_key"
+      referencedTableName="time" referencedColumnNames="date_key"
+      constraintName="fk_event_time"/>
+    <addForeignKeyConstraint baseTableName="event" baseColumnNames="origin_key"
+      referencedTableName="origin" referencedColumnNames="origin_key"
+      constraintName="fk_event_origin"/>
+    <addForeignKeyConstraint baseTableName="event" baseColumnNames="device_key"
+      referencedTableName="device" referencedColumnNames="device_key"
+      constraintName="fk_event_device"/>
+    <addForeignKeyConstraint baseTableName="event" baseColumnNames="event_type_key"
+      referencedTableName="event_type" referencedColumnNames="event_type_key"
+      constraintName="fk_event_event_type"/>
+    <addForeignKeyConstraint baseTableName="event" baseColumnNames="role_key"
+      referencedTableName="role" referencedColumnNames="role_key"
+      constraintName="fk_event_role"/>
+  </changeSet>
+
 </databaseChangeLog>
