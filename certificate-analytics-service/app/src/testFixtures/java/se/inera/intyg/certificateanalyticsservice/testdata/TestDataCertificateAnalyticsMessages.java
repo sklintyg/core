@@ -79,6 +79,4 @@ public class TestDataCertificateAnalyticsMessages {
         .sessionId(SESSION_ID)
         .build();
   }
-
-  // Add more test data methods for edge cases if needed
 }
