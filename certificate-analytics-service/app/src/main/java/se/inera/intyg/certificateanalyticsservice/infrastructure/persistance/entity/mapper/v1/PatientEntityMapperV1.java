@@ -1,8 +1,8 @@
-package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper;
+package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.v1;
 
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.PatientEntity;
 
-public class PatientEntityMapper {
+public class PatientEntityMapperV1 {
 
   public static PatientEntity map(String patientId) {
     return PatientEntity.builder()

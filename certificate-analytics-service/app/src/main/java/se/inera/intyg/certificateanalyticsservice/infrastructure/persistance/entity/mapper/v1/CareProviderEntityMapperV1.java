@@ -1,12 +1,12 @@
-package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper;
+package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.v1;
 
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CareProviderEntity;
 
-public class CareProviderEntityMapper {
+public class CareProviderEntityMapperV1 {
 
   public static CareProviderEntity map(String careProviderId) {
     return CareProviderEntity.builder()
-        .careProviderId(careProviderId)
+        .hsaId(careProviderId)
         .build();
   }
 }

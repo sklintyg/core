@@ -1,8 +1,8 @@
-package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper;
+package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.v1;
 
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventTypeEntity;
 
-public class EventTypeEntityMapper {
+public class EventTypeEntityMapperV1 {
 
   public static EventTypeEntity map(String eventType) {
     return EventTypeEntity.builder()
