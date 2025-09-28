@@ -41,7 +41,7 @@ sonar {
 }
 
 dependencyCheck {
-    formats(List.of("HTML", "JSON"))
+    formats = ['HTML', 'JSON']
     nvd.setDatafeedUrl(nvdMirror)
     analyzers.setAssemblyEnabled(false)
     analyzers.setNodeEnabled(false)
