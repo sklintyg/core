@@ -17,4 +17,15 @@ public class AnalyticMessageRepository {
   public void store(CertificateAnalyticsMessage message) {
     messages.add(message);
   }
+
+  public CertificateAnalyticsMessage findByMessageId(String messageId) {
+    return messages.stream()
+        .filter(message -> message.getMessageId().equals(messageId))
+        .findFirst()
+        .orElseThrow(() -> new IllegalStateException("No message found with id: " + messageId));
+  }
+
+  public void clear() {
+    messages.clear();
+  }
 }
