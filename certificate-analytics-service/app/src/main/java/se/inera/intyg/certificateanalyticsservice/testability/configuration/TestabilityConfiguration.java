@@ -15,7 +15,7 @@ public class TestabilityConfiguration {
   public static final String TESTABILITY_PROFILE = "testability";
 
   @Bean
-  SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
         .csrf(csrf ->
             csrf.ignoringRequestMatchers("/testability/**")
@@ -23,7 +23,7 @@ public class TestabilityConfiguration {
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/testability/**").permitAll()
             .requestMatchers("/actuator/health/**").permitAll()
-            .anyRequest().authenticated()
+            .anyRequest().denyAll()
         );
     return http.build();
   }
