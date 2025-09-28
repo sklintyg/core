@@ -22,7 +22,7 @@ public class TestabilityConfiguration {
         )
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/testability/**").permitAll()
-            .requestMatchers("/actuator/health/**", "/actuator/info").permitAll()
+            .requestMatchers("/actuator/health/**").permitAll()
             .anyRequest().authenticated()
         );
     return http.build();
