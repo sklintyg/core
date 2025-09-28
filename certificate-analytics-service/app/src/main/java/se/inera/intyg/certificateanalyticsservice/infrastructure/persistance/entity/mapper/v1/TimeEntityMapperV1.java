@@ -8,6 +8,12 @@ public class TimeEntityMapperV1 {
   public static TimeEntity map(LocalDateTime timestamp) {
     return TimeEntity.builder()
         .date(timestamp)
+        .year(timestamp.getYear())
+        .month(timestamp.getMonthValue())
+        .day(timestamp.getDayOfMonth())
+        .hour(timestamp.getHour())
+        .minute(timestamp.getMinute())
+        .second(timestamp.getSecond())
         .build();
   }
 }
