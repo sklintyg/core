@@ -6,15 +6,14 @@ def applicationDir = "${rootProject.projectDir}/devops/dev"
 
 dependencies {
 
-    implementation "co.elastic.logging:logback-ecs-encoder"
+    implementation 'com.fasterxml.jackson.core:jackson-annotations'
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
+    implementation 'org.liquibase:liquibase-core'
+    implementation 'org.springframework.boot:spring-boot-starter-activemq'
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation "org.springframework.boot:spring-boot-starter-security"
     implementation "org.springframework.boot:spring-boot-starter-web"
-    implementation "org.springframework.boot:spring-boot-starter-actuator"
-    implementation 'com.fasterxml.jackson.core:jackson-annotations'
-    implementation 'org.liquibase:liquibase-core'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-activemq'
 
     compileOnly "org.projectlombok:lombok"
 
@@ -24,6 +23,9 @@ dependencies {
 
     testImplementation "org.springframework.boot:spring-boot-starter-test"
     testImplementation "org.springframework.security:spring-security-test"
+
+    testFixturesImplementation 'com.fasterxml.jackson.core:jackson-databind'
+    testFixturesImplementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
 }
 
 testing.suites {
