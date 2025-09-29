@@ -36,7 +36,7 @@
       <column name="role_key" type="INT">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="name" type="VARCHAR(20)">
+      <column name="role" type="VARCHAR(20)">
         <constraints nullable="false"/>
       </column>
     </createTable>

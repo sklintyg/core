@@ -12,6 +12,7 @@ class OriginEntityMapperV1Test {
   void shouldMapOriginCorrectly() {
     final var expected = OriginEntity.builder()
         .origin(TestDataConstants.ORIGIN)
+        .originKey(1)
         .build();
     final var result = OriginEntityMapperV1.map(TestDataConstants.ORIGIN);
     assertEquals(expected, result);
