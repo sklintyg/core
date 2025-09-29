@@ -106,7 +106,14 @@
         <constraints nullable="false"/>
       </column>
     </createTable>
-
+    <createTable tableName="patient">
+      <column name="key" type="bigint unsigned auto_increment">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="patient_id" type="varchar(22)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+    </createTable>
     <createTable tableName="certificate">
       <column name="key" type="bigint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
@@ -133,16 +140,6 @@
     <addForeignKeyConstraint baseTableName="certificate" baseColumnNames="patient_key"
       referencedTableName="patient" referencedColumnNames="key"
       constraintName="fk_certificate_patient"/>
-
-    <createTable tableName="patient">
-      <column name="key" type="bigint unsigned auto_increment">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-      <column name="patient_id" type="varchar(22)">
-        <constraints nullable="false" unique="true"/>
-      </column>
-    </createTable>
-
     <createTable tableName="event">
       <column name="key" type="bigint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
