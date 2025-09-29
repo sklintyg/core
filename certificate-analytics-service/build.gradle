@@ -52,6 +52,7 @@ dependencyCheck {
 subprojects {
     apply plugin: 'java'
     apply plugin: 'jacoco'
+    apply plugin: 'java-test-fixtures'
 
     java {
         sourceCompatibility = javaVersion
@@ -69,6 +70,7 @@ subprojects {
         annotationProcessor platform("se.inera.intyg.bom:platform:${intygBomVersion}")
         testImplementation platform("se.inera.intyg.bom:platform:${intygBomVersion}")
         testAnnotationProcessor platform("se.inera.intyg.bom:platform:${intygBomVersion}")
+        testFixturesImplementation platform("se.inera.intyg.bom:platform:${intygBomVersion}")
     }
 
     jacocoTestReport {
