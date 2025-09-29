@@ -22,8 +22,8 @@ public class TimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "date_key")
-  private Integer dateKey;
+  @Column(name = "key")
+  private Long key;
 
   @Column(name = "date", nullable = false)
   private LocalDateTime date;

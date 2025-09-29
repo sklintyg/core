@@ -25,27 +25,27 @@ public class EventEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "event_key")
-  private Integer eventKey;
+  @Column(name = "key")
+  private Long key;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "certificate_key")
+  @JoinColumn(name = "certificate_key", referencedColumnName = "key")
   private CertificateEntity certificate;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "unit_key")
+  @JoinColumn(name = "unit_key", referencedColumnName = "key")
   private UnitEntity unit;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "provider_key")
+  @JoinColumn(name = "provider_key", referencedColumnName = "key")
   private CareProviderEntity careProvider;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_key")
+  @JoinColumn(name = "user_key", referencedColumnName = "key")
   private UserEntity user;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "session_key")
+  @JoinColumn(name = "session_key", referencedColumnName = "key")
   private SessionEntity session;
 
   @OneToOne(fetch = FetchType.LAZY)
@@ -53,14 +53,14 @@ public class EventEntity {
   private TimeEntity time;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "origin_key")
+  @JoinColumn(name = "origin_key", referencedColumnName = "key")
   private OriginEntity origin;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "event_type_key")
+  @JoinColumn(name = "event_type_key", referencedColumnName = "key")
   private EventTypeEntity eventType;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "role_key")
+  @JoinColumn(name = "role_key", referencedColumnName = "key")
   private RoleEntity role;
 }

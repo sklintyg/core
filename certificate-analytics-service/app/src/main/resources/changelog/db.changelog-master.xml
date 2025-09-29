@@ -6,174 +6,174 @@
 
   <changeSet id="1-create-analytics-schema" author="mh">
     <createTable tableName="event_type">
-      <column name="event_type_key" type="INT">
+      <column name="key" type="bigint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="event_type" type="VARCHAR(20)">
+      <column name="event_type" type="varchar(20)">
         <constraints nullable="false"/>
       </column>
     </createTable>
 
     <createTable tableName="unit">
-      <column name="unit_key" type="INT">
+      <column name="key" type="bigint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="hsa_id" type="VARCHAR(20)">
+      <column name="hsa_id" type="varchar(20)">
         <constraints nullable="false"/>
       </column>
     </createTable>
 
     <createTable tableName="role">
-      <column name="role_key" type="INT">
+      <column name="key" type="bigint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="role" type="VARCHAR(20)">
+      <column name="role" type="varchar(20)">
         <constraints nullable="false"/>
       </column>
     </createTable>
 
     <createTable tableName="user">
-      <column name="user_key" type="INT">
+      <column name="key" type="bigint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="user_id" type="VARCHAR(20)">
+      <column name="user_id" type="varchar(20)">
         <constraints nullable="false"/>
       </column>
     </createTable>
 
     <createTable tableName="care_provider">
-      <column name="care_provider_key" type="INT">
+      <column name="key" type="bigint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="hsa_id" type="VARCHAR(20)">
+      <column name="hsa_id" type="varchar(20)">
         <constraints nullable="false"/>
       </column>
     </createTable>
 
     <createTable tableName="session">
-      <column name="session_key" type="INT">
+      <column name="key" type="bigint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="session_id" type="VARCHAR(20)">
+      <column name="session_id" type="varchar(20)">
         <constraints nullable="false"/>
       </column>
     </createTable>
 
     <createTable tableName="time">
-      <column name="date_key" type="INT">
+      <column name="key" type="bigint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="date" type="TIMESTAMP">
+      <column name="date" type="timestamp">
         <constraints nullable="false"/>
       </column>
-      <column name="day" type="INT">
+      <column name="day" type="int">
         <constraints nullable="false"/>
       </column>
-      <column name="month" type="INT">
+      <column name="month" type="int">
         <constraints nullable="false"/>
       </column>
-      <column name="year" type="INT">
+      <column name="year" type="int">
         <constraints nullable="false"/>
       </column>
-      <column name="hour" type="INT">
+      <column name="hour" type="int">
         <constraints nullable="false"/>
       </column>
-      <column name="minute" type="INT">
+      <column name="minute" type="int">
         <constraints nullable="false"/>
       </column>
-      <column name="second" type="INT">
+      <column name="second" type="int">
         <constraints nullable="false"/>
       </column>
     </createTable>
 
     <createTable tableName="origin">
-      <column name="origin_key" type="INT">
+      <column name="key" type="bigint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="origin" type="VARCHAR(20)">
+      <column name="origin" type="varchar(20)">
         <constraints nullable="false"/>
       </column>
     </createTable>
 
     <createTable tableName="certificate_type">
-      <column name="certificate_type_key" type="INT">
+      <column name="key" type="bigint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="certificate_type" type="VARCHAR(20)">
+      <column name="certificate_type" type="varchar(20)">
         <constraints nullable="false"/>
       </column>
-      <column name="certificate_type_version" type="VARCHAR(20)">
+      <column name="certificate_type_version" type="varchar(20)">
         <constraints nullable="false"/>
       </column>
     </createTable>
 
     <createTable tableName="certificate">
-      <column name="certificate_key" type="INT">
+      <column name="key" type="bigint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="certificate_id" type="VARCHAR(36)">
+      <column name="certificate_id" type="varchar(36)">
         <constraints nullable="false"/>
       </column>
-      <column name="certificate_type_key" type="INT">
+      <column name="certificate_type_key" type="bigint unsigned">
         <constraints nullable="false"/>
       </column>
-      <column name="care_provider_key" type="INT"/>
-      <column name="unit_key" type="INT"/>
-      <column name="patient_key" type="INT"/>
+      <column name="care_provider_key" type="bigint unsigned"/>
+      <column name="unit_key" type="bigint unsigned"/>
+      <column name="patient_key" type="bigint unsigned"/>
     </createTable>
     <addForeignKeyConstraint baseTableName="dim_certificate" baseColumnNames="certificate_type_key"
-      referencedTableName="dim_certificate_type" referencedColumnNames="certificate_type_key"
+      referencedTableName="dim_certificate_type" referencedColumnNames="key"
       constraintName="fk_certificate_certificate_type"/>
     <addForeignKeyConstraint baseTableName="dim_certificate" baseColumnNames="care_provider_key"
-      referencedTableName="care_provider" referencedColumnNames="care_provider_key"
+      referencedTableName="care_provider" referencedColumnNames="key"
       constraintName="fk_certificate_care_provider"/>
     <addForeignKeyConstraint baseTableName="dim_certificate" baseColumnNames="unit_key"
-      referencedTableName="unit" referencedColumnNames="unit_key"
+      referencedTableName="unit" referencedColumnNames="key"
       constraintName="fk_certificate_unit"/>
     <addForeignKeyConstraint baseTableName="dim_certificate" baseColumnNames="patient_key"
-      referencedTableName="patient" referencedColumnNames="patient_key"
+      referencedTableName="patient" referencedColumnNames="key"
       constraintName="fk_certificate_patient"/>
 
     <createTable tableName="event">
-      <column name="event_key" type="INT">
+      <column name="key" type="bigint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="certificate_key" type="INT"/>
-      <column name="unit_key" type="INT"/>
-      <column name="provider_key" type="INT"/>
-      <column name="user_key" type="INT"/>
-      <column name="session_key" type="INT"/>
-      <column name="time_key" type="INT"/>
-      <column name="origin_key" type="INT"/>
-      <column name="event_type_key" type="INT"/>
-      <column name="role_key" type="INT"/>
+      <column name="certificate_key" type="bigint unsigned"/>
+      <column name="unit_key" type="bigint unsigned"/>
+      <column name="provider_key" type="bigint unsigned"/>
+      <column name="user_key" type="bigint unsigned"/>
+      <column name="session_key" type="bigint unsigned"/>
+      <column name="time_key" type="bigint unsigned"/>
+      <column name="origin_key" type="bigint unsigned"/>
+      <column name="event_type_key" type="bigint unsigned"/>
+      <column name="role_key" type="bigint unsigned"/>
     </createTable>
     <addForeignKeyConstraint baseTableName="event" baseColumnNames="certificate_key"
-      referencedTableName="dim_certificate" referencedColumnNames="certificate_key"
+      referencedTableName="dim_certificate" referencedColumnNames="key"
       constraintName="fk_event_certificate"/>
     <addForeignKeyConstraint baseTableName="event" baseColumnNames="unit_key"
-      referencedTableName="unit" referencedColumnNames="unit_key"
+      referencedTableName="unit" referencedColumnNames="key"
       constraintName="fk_event_unit"/>
     <addForeignKeyConstraint baseTableName="event" baseColumnNames="provider_key"
-      referencedTableName="care_provider" referencedColumnNames="provider_key"
+      referencedTableName="care_provider" referencedColumnNames="key"
       constraintName="fk_event_provider"/>
     <addForeignKeyConstraint baseTableName="event" baseColumnNames="user_key"
-      referencedTableName="user" referencedColumnNames="user_key"
+      referencedTableName="user" referencedColumnNames="key"
       constraintName="fk_event_user"/>
     <addForeignKeyConstraint baseTableName="event" baseColumnNames="session_key"
-      referencedTableName="session" referencedColumnNames="session_key"
+      referencedTableName="session" referencedColumnNames="key"
       constraintName="fk_event_session"/>
     <addForeignKeyConstraint baseTableName="event" baseColumnNames="time_key"
-      referencedTableName="time" referencedColumnNames="date_key"
+      referencedTableName="time" referencedColumnNames="key"
       constraintName="fk_event_time"/>
     <addForeignKeyConstraint baseTableName="event" baseColumnNames="origin_key"
-      referencedTableName="origin" referencedColumnNames="origin_key"
+      referencedTableName="origin" referencedColumnNames="key"
       constraintName="fk_event_origin"/>
     <addForeignKeyConstraint baseTableName="event" baseColumnNames="event_type_key"
-      referencedTableName="event_type" referencedColumnNames="event_type_key"
+      referencedTableName="event_type" referencedColumnNames="key"
       constraintName="fk_event_event_type"/>
     <addForeignKeyConstraint baseTableName="event" baseColumnNames="role_key"
-      referencedTableName="role" referencedColumnNames="role_key"
+      referencedTableName="role" referencedColumnNames="key"
       constraintName="fk_event_role"/>
   </changeSet>
 

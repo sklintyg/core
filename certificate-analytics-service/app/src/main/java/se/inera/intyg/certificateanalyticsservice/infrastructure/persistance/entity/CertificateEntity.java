@@ -24,25 +24,25 @@ public class CertificateEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "certificate_key")
-  private Integer certificateKey;
+  @Column(name = "key")
+  private Long key;
 
   @Column(name = "certificate_id", nullable = false, length = 36)
   private String certificateId;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "certificate_type_key", nullable = false)
+  @JoinColumn(name = "certificate_type_key", nullable = false, referencedColumnName = "key")
   private CertificateTypeEntity certificateType;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "care_provider_key")
+  @JoinColumn(name = "care_provider_key", referencedColumnName = "key")
   private CareProviderEntity careProvider;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "unit_key")
+  @JoinColumn(name = "unit_key", referencedColumnName = "key")
   private UnitEntity unit;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "patient_key")
+  @JoinColumn(name = "patient_key", referencedColumnName = "key")
   private PatientEntity patient;
 }

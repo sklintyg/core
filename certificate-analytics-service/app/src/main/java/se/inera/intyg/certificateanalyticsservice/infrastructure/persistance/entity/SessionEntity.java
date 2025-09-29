@@ -21,8 +21,8 @@ public class SessionEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "session_key")
-  private Integer sessionKey;
+  @Column(name = "key")
+  private Long key;
 
   @Column(name = "session_id", nullable = false, length = 20)
   private String sessionId;

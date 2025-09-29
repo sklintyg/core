@@ -21,8 +21,8 @@ public class CareProviderEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "care_provider_key")
-  private Integer careProviderKey;
+  @Column(name = "key")
+  private Long key;
 
   @Column(name = "hsa_id", nullable = false, length = 20)
   private String hsaId;

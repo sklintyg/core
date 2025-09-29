@@ -21,8 +21,8 @@ public class UnitEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "unit_key")
-  private Integer unitKey;
+  @Column(name = "key")
+  private Long key;
 
   @Column(name = "hsa_id", nullable = false, length = 20)
   private String hsaId;

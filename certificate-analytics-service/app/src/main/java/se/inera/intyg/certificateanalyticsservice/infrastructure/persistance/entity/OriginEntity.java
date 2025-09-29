@@ -21,8 +21,8 @@ public class OriginEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "origin_key")
-  private Integer originKey;
+  @Column(name = "key")
+  private Long key;
 
   @Column(name = "origin", nullable = false, length = 20)
   private String origin;

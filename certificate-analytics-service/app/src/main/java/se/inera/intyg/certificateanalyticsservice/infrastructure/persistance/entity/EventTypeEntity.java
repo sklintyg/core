@@ -21,8 +21,8 @@ public class EventTypeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "event_type_key")
-  private Integer eventTypeKey;
+  @Column(name = "key")
+  private Long key;
 
   @Column(name = "event_type", nullable = false, length = 20)
   private String eventType;
