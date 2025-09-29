@@ -120,9 +120,6 @@ public class AG7804CertificateActionSpecification {
                 Role.CARE_ADMIN))
             .build(),
         CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.QUESTIONS_NOT_AVAILABLE)
-            .build(),
-        CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE_FROM_LIST)
             .build(),
         CertificateActionSpecification.builder()
