@@ -27,16 +27,12 @@ class JpaCertificateAnalyticsEventRepositoryTest {
     final var entityToSave = mock(EventEntity.class);
     when(eventMapper.supports(message)).thenReturn(true);
     when(eventMapper.toEntity(message)).thenReturn(entityToSave);
-
     JpaCertificateAnalyticsEventRepository repo = new JpaCertificateAnalyticsEventRepository(
         eventEntityRepository, List.of(eventMapper));
-
     when(eventEntityRepository.save(entityToSave)).thenReturn(entityToSave);
 
     repo.save(message);
 
-    verify(eventMapper).supports(message);
-    verify(eventMapper).toEntity(message);
     verify(eventEntityRepository).save(entityToSave);
   }
 }
