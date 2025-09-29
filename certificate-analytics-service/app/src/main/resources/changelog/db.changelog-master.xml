@@ -121,16 +121,16 @@
       <column name="unit_key" type="bigint unsigned"/>
       <column name="patient_key" type="bigint unsigned"/>
     </createTable>
-    <addForeignKeyConstraint baseTableName="dim_certificate" baseColumnNames="certificate_type_key"
-      referencedTableName="dim_certificate_type" referencedColumnNames="key"
+    <addForeignKeyConstraint baseTableName="certificate" baseColumnNames="certificate_type_key"
+      referencedTableName="certificate_type" referencedColumnNames="key"
       constraintName="fk_certificate_certificate_type"/>
-    <addForeignKeyConstraint baseTableName="dim_certificate" baseColumnNames="care_provider_key"
+    <addForeignKeyConstraint baseTableName="certificate" baseColumnNames="care_provider_key"
       referencedTableName="care_provider" referencedColumnNames="key"
       constraintName="fk_certificate_care_provider"/>
-    <addForeignKeyConstraint baseTableName="dim_certificate" baseColumnNames="unit_key"
+    <addForeignKeyConstraint baseTableName="certificate" baseColumnNames="unit_key"
       referencedTableName="unit" referencedColumnNames="key"
       constraintName="fk_certificate_unit"/>
-    <addForeignKeyConstraint baseTableName="dim_certificate" baseColumnNames="patient_key"
+    <addForeignKeyConstraint baseTableName="certificate" baseColumnNames="patient_key"
       referencedTableName="patient" referencedColumnNames="key"
       constraintName="fk_certificate_patient"/>
 
@@ -149,7 +149,7 @@
       <column name="role_key" type="bigint unsigned"/>
     </createTable>
     <addForeignKeyConstraint baseTableName="event" baseColumnNames="certificate_key"
-      referencedTableName="dim_certificate" referencedColumnNames="key"
+      referencedTableName="certificate" referencedColumnNames="key"
       constraintName="fk_event_certificate"/>
     <addForeignKeyConstraint baseTableName="event" baseColumnNames="unit_key"
       referencedTableName="unit" referencedColumnNames="key"
