@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elemets;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -44,4 +44,5 @@ class CategorySysselsattningTest {
         .build();
     assertTrue(element.rules().contains(expectedHideRule));
   }
+
 }

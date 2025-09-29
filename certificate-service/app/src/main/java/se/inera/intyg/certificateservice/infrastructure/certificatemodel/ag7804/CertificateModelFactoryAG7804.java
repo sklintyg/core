@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elemets.CategoryGrundForMedicinsktUnderlag.categoryGrundForMedicinsktUnderlag;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elemets.CategorySmittbararpenning.categorySmittbararpenning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elemets.CategorySysselsattning.categorySysselsattning;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -41,11 +42,11 @@ public class CertificateModelFactoryAG7804 implements CertificateModelFactory {
       <p><b>Utfärdare</b><br/>Läkarintyget får utfärdas av läkare eller tandläkare. I intyget omfattar begreppet läkare båda professionerna. Det är inte möjligt att delegera rätten att utfärda läkarintyget till annan profession, till exempel sjuksköterska eller fysioterapeut. Se även Socialstyrelsens föreskrifter om intyg (HSLF-FS 2018:54).</p>
       <p><b>Syften med läkarintyget</b></p>
       <ul>
-        <li><p><b>Rätt till frånvaro.</b> Att ge arbetstagaren rätt att vara frånvarande från arbetet på grund av sjukdom/skada. Arbetstagaren är skyldig att vid sjukdom/skada lämna in ett medicinskt underlag som styrker dels att frånvaron beror på sjukdom, dels att sjukdomen sätter ned arbetsförmågan i arbetstagarens arbetsuppgifter. Om läkarintyget inte ger tillräcklig information kan frånvaron anses vara olovlig och medföra att intyget behöver kompletteras.</p></li>
-        <li><p><b>Arbetsgivarens rehabiliteringsansvar.</b> Läkarintyget ska ge arbetsgivaren tillräcklig information om arbetstagarens medicinska hinder för att utföra sina ordinarie arbetsuppgifter. Arbetsgivare har enligt socialförsäkringsbalken, arbetsmiljölagen och arbetsdomstolens rättspraxis ett omfattande och långtgående rehabiliteringsansvar och ska genom skäliga stöd och anpassningar på arbetsplatsen underlätta för sjuka eller skadade att komma tillbaka i arbete.</p></li>
-        <li><p><b>Plan för återgång i arbete.</b> Sedan 2018 har arbetsgivare en skyldighet enligt 30 kap. 6 § socialförsäkringsbalken att ta fram en plan för återgång i arbete när en arbetstagare förväntas vara sjuk under en längre tid. Planen ska kontinuerligt följas upp och revideras vid behov. Planen är främst ett stöd för rehabiliteringsarbetet på arbetsplatsen och ska underlätta en tidig återgång i arbete. Läkarintyget ger grundläggande medicinsk information om patientens möjligheter att återgå i arbete och är en förutsättning för att arbetsgivaren tillsammans med sin arbetstagare ska kunna upprätta en plan för återgång i arbete.</p></li>
-        <li><p><b>Sjukpenningtillägg.</b> Att ge arbetstagaren rätt till kompletterande sjukpenningtillägg. De flesta kollektivavtal på svensk arbetsmarknad ger arbetstagare rätt till sjukpenningtillägg vid sjukdom.</p></li>
-        <li><p><b>Läkarintyg från och med dag 1 i sjuklöneperioden</b> Läkarintyget kan användas från och med dag 1 i sjuklöneperioden, ett så kallat förstadagsintyg. Arbetsgivaren får om det finns särskilda skäl för det begära att arbetstagaren genom intyg av läkare styrker nedsättning av arbetsförmågan tidigare än dag 8 i sjuklöneperioden.</p></li>
+        <li><b>Rätt till frånvaro.</b> Att ge arbetstagaren rätt att vara frånvarande från arbetet på grund av sjukdom/skada. Arbetstagaren är skyldig att vid sjukdom/skada lämna in ett medicinskt underlag som styrker dels att frånvaron beror på sjukdom, dels att sjukdomen sätter ned arbetsförmågan i arbetstagarens arbetsuppgifter. Om läkarintyget inte ger tillräcklig information kan frånvaron anses vara olovlig och medföra att intyget behöver kompletteras.</li>
+        <li><b>Arbetsgivarens rehabiliteringsansvar.</b> Läkarintyget ska ge arbetsgivaren tillräcklig information om arbetstagarens medicinska hinder för att utföra sina ordinarie arbetsuppgifter. Arbetsgivare har enligt socialförsäkringsbalken, arbetsmiljölagen och arbetsdomstolens rättspraxis ett omfattande och långtgående rehabiliteringsansvar och ska genom skäliga stöd och anpassningar på arbetsplatsen underlätta för sjuka eller skadade att komma tillbaka i arbete.</li>
+        <li><b>Plan för återgång i arbete.</b> Sedan 2018 har arbetsgivare en skyldighet enligt 30 kap. 6 § socialförsäkringsbalken att ta fram en plan för återgång i arbete när en arbetstagare förväntas vara sjuk under en längre tid. Planen ska kontinuerligt följas upp och revideras vid behov. Planen är främst ett stöd för rehabiliteringsarbetet på arbetsplatsen och ska underlätta en tidig återgång i arbete. Läkarintyget ger grundläggande medicinsk information om patientens möjligheter att återgå i arbete och är en förutsättning för att arbetsgivaren tillsammans med sin arbetstagare ska kunna upprätta en plan för återgång i arbete.</li>
+        <li><b>Sjukpenningtillägg.</b> Att ge arbetstagaren rätt till kompletterande sjukpenningtillägg. De flesta kollektivavtal på svensk arbetsmarknad ger arbetstagare rätt till sjukpenningtillägg vid sjukdom.</li>
+        <li><b>Läkarintyg från och med dag 1 i sjuklöneperioden</b> Läkarintyget kan användas från och med dag 1 i sjuklöneperioden, ett så kallat förstadagsintyg. Arbetsgivaren får om det finns särskilda skäl för det begära att arbetstagaren genom intyg av läkare styrker nedsättning av arbetsförmågan tidigare än dag 8 i sjuklöneperioden.</li>
       </ul>
       <p><b>Innehåll i läkarintyget</b></p> 
       <p>Läkarintyg om arbetsförmåga - arbetsgivaren skapas från Försäkringskassans läkarintyg för sjukpenning (FK 7804) och ska innehålla motsvarande information.  Patienten kan dock välja om hen vill delge arbetsgivaren information om vilken eller vilka diagnoser som föreligger.  Övrig information i intyget är obligatorisk.</p>
@@ -84,7 +85,8 @@ public class CertificateModelFactoryAG7804 implements CertificateModelFactory {
         .messageActionSpecifications(AG7804MessageActionSpecification.create())
         .elementSpecifications(List.of(
             categorySmittbararpenning(),
-            categoryGrundForMedicinsktUnderlag()
+            categoryGrundForMedicinsktUnderlag(),
+            categorySysselsattning()
         ))
         .certificateActionFactory(certificateActionFactory)
         .build();
