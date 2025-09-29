@@ -24,6 +24,6 @@ public class UnitEntity {
   @Column(name = "`key`")
   private Long key;
 
-  @Column(name = "hsa_id", nullable = false, length = 20)
+  @Column(name = "hsa_id", nullable = false, length = 22)
   private String hsaId;
 }

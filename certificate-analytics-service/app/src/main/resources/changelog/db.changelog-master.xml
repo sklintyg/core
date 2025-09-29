@@ -18,7 +18,7 @@
       <column name="key" type="bigint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="hsa_id" type="varchar(20)">
+      <column name="hsa_id" type="varchar(22)">
         <constraints nullable="false" unique="true"/>
       </column>
     </createTable>
@@ -36,7 +36,7 @@
       <column name="key" type="bigint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="user_id" type="varchar(20)">
+      <column name="user_id" type="varchar(22)">
         <constraints nullable="false" unique="true"/>
       </column>
     </createTable>
@@ -45,7 +45,7 @@
       <column name="key" type="bigint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="hsa_id" type="varchar(20)">
+      <column name="hsa_id" type="varchar(22)">
         <constraints nullable="false" unique="true"/>
       </column>
     </createTable>
@@ -54,7 +54,7 @@
       <column name="key" type="bigint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="session_id" type="varchar(20)">
+      <column name="session_id" type="varchar(22)">
         <constraints nullable="false" unique="true"/>
       </column>
     </createTable>
@@ -111,7 +111,7 @@
       <column name="key" type="bigint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="certificate_id" type="varchar(36)">
+      <column name="certificate_id" type="varchar(22)">
         <constraints nullable="false" unique="true"/>
       </column>
       <column name="certificate_type_key" type="bigint unsigned">

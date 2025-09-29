@@ -27,7 +27,7 @@ public class CertificateEntity {
   @Column(name = "`key`")
   private Long key;
 
-  @Column(name = "certificate_id", nullable = false, length = 36)
+  @Column(name = "certificate_id", nullable = false, length = 22)
   private String certificateId;
 
   @ManyToOne(fetch = FetchType.LAZY)

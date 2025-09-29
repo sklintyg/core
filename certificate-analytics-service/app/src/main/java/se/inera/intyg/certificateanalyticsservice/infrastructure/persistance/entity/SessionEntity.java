@@ -24,6 +24,6 @@ public class SessionEntity {
   @Column(name = "`key`")
   private Long key;
 
-  @Column(name = "session_id", nullable = false, length = 20)
+  @Column(name = "session_id", nullable = false, length = 22)
   private String sessionId;
 }

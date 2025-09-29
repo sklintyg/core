@@ -24,6 +24,6 @@ public class UserEntity {
   @Column(name = "`key`")
   private Long key;
 
-  @Column(name = "user_id", nullable = false, length = 20)
+  @Column(name = "user_id", nullable = false, length = 22)
   private String userId;
 }
