@@ -16,7 +16,6 @@ import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConsta
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CareProviderEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CertificateEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CertificateTypeEntity;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.DeviceEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventTypeEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.OriginEntity;
@@ -77,7 +76,6 @@ public class TestDataEntities {
         .session(sessionEntity())
         .time(timeEntity())
         .origin(originEntity())
-        .device(deviceEntity())
         .eventType(eventTypeEntity())
         .role(roleEntity())
         .build();
@@ -112,10 +110,6 @@ public class TestDataEntities {
         .originKey(1)
         .origin(ORIGIN)
         .build();
-  }
-
-  public static DeviceEntity deviceEntity() {
-    return DeviceEntity.builder().build();
   }
 
   public static EventTypeEntity eventTypeEntity() {

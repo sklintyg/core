@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CareProviderEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CertificateEntity;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.DeviceEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventTypeEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.OriginEntity;
@@ -20,7 +19,6 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.ent
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.UnitEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.UserEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CareProviderRepository;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.DeviceRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.EventTypeRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.OriginRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.RoleRepository;
@@ -46,8 +44,6 @@ class EventMapperV1Test {
   @Mock
   private OriginRepository originRepository;
   @Mock
-  private DeviceRepository deviceRepository;
-  @Mock
   private EventTypeRepository eventTypeRepository;
   @Mock
   private RoleRepository roleRepository;
@@ -66,7 +62,6 @@ class EventMapperV1Test {
     final var expectedUser = mock(UserEntity.class);
     final var expectedSession = mock(SessionEntity.class);
     final var expectedOrigin = mock(OriginEntity.class);
-    final var expectedDevice = mock(DeviceEntity.class);
     final var expectedEventType = mock(EventTypeEntity.class);
     final var expectedRole = mock(RoleEntity.class);
 
@@ -77,7 +72,6 @@ class EventMapperV1Test {
     when(userRepository.findOrCreate(eventMsg.getStaffId())).thenReturn(expectedUser);
     when(sessionRepository.findOrCreate(eventMsg.getSessionId())).thenReturn(expectedSession);
     when(originRepository.findOrCreate(eventMsg.getOrigin())).thenReturn(expectedOrigin);
-    when(deviceRepository.findOrCreate(null)).thenReturn(expectedDevice);
     when(eventTypeRepository.findOrCreate(eventMsg.getMessageType())).thenReturn(expectedEventType);
     when(roleRepository.findOrCreate(eventMsg.getRole())).thenReturn(expectedRole);
 
@@ -89,7 +83,6 @@ class EventMapperV1Test {
         .session(expectedSession)
         .time(TestDataEntities.timeEntity())
         .origin(expectedOrigin)
-        .device(expectedDevice)
         .eventType(expectedEventType)
         .role(expectedRole)
         .build();

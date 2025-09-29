@@ -14,15 +14,6 @@
       </column>
     </createTable>
 
-    <createTable tableName="device">
-      <column name="device_key" type="INT">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-      <column name="device" type="VARCHAR(20)">
-        <constraints nullable="false"/>
-      </column>
-    </createTable>
-
     <createTable tableName="unit">
       <column name="unit_key" type="INT">
         <constraints primaryKey="true" nullable="false"/>
@@ -154,7 +145,6 @@
       <column name="session_key" type="INT"/>
       <column name="time_key" type="INT"/>
       <column name="origin_key" type="INT"/>
-      <column name="device_key" type="INT"/>
       <column name="event_type_key" type="INT"/>
       <column name="role_key" type="INT"/>
     </createTable>
@@ -179,9 +169,6 @@
     <addForeignKeyConstraint baseTableName="event" baseColumnNames="origin_key"
       referencedTableName="origin" referencedColumnNames="origin_key"
       constraintName="fk_event_origin"/>
-    <addForeignKeyConstraint baseTableName="event" baseColumnNames="device_key"
-      referencedTableName="device" referencedColumnNames="device_key"
-      constraintName="fk_event_device"/>
     <addForeignKeyConstraint baseTableName="event" baseColumnNames="event_type_key"
       referencedTableName="event_type" referencedColumnNames="event_type_key"
       constraintName="fk_event_event_type"/>

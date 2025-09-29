@@ -57,10 +57,6 @@ public class EventEntity {
   private OriginEntity origin;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "device_key")
-  private DeviceEntity device;
-
-  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "event_type_key")
   private EventTypeEntity eventType;
 
