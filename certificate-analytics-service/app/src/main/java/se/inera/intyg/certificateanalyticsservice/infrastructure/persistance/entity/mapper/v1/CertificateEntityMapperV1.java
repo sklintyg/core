@@ -6,6 +6,7 @@ import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CertificateEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CareProviderRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CertificateEntityRepository;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CertificateTypeRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.PatientRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.UnitRepository;
 
@@ -17,12 +18,16 @@ public class CertificateEntityMapperV1 {
   private final UnitRepository unitRepository;
   private final PatientRepository patientRepository;
   private final CertificateEntityRepository certificateEntityRepository;
+  private final CertificateTypeRepository certificateTypeRepository;
 
   public CertificateEntity map(CertificateAnalyticsEventCertificateV1 certificate) {
     return certificateEntityRepository.findByCertificateId(certificate.getId())
         .orElseGet(() -> CertificateEntity.builder()
             .certificateId(certificate.getId())
-            .certificateType(CertificateTypeEntityMapperV1.map(certificate))
+            .certificateType(
+                certificateTypeRepository.findOrCreate(
+                    certificate.getType(), certificate.getTypeVersion())
+            )
             .patient(patientRepository.findOrCreate(certificate.getPatientId()))
             .unit(unitRepository.findOrCreate(certificate.getUnitId()))
             .careProvider(careProviderRepository.findOrCreate(certificate.getCareProviderId()))
