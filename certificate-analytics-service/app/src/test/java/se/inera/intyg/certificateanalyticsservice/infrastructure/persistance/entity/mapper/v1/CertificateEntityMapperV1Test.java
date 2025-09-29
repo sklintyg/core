@@ -14,12 +14,10 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.ent
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CertificateEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.PatientEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.UnitEntity;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.UserEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CareProviderRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CertificateEntityRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.PatientRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.UnitRepository;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.UserRepository;
 import se.inera.intyg.certificateanalyticsservice.testdata.TestDataEntities;
 import se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessages;
 
@@ -33,8 +31,6 @@ class CertificateEntityMapperV1Test {
   @Mock
   private UnitRepository unitRepository;
   @Mock
-  private UserRepository userRepository;
-  @Mock
   private PatientRepository patientRepository;
   @Mock
   private CertificateEntityRepository certificateEntityRepository;
@@ -44,7 +40,6 @@ class CertificateEntityMapperV1Test {
     final var certificateMsg = TestDataMessages.certificate();
     final var expectedCareProvider = mock(CareProviderEntity.class);
     final var expectedUnit = mock(UnitEntity.class);
-    final var expectedUser = mock(UserEntity.class);
     final var expectedPatient = mock(PatientEntity.class);
     final var expectedCertificateType = TestDataEntities.certificateEntity().getCertificateType();
 
@@ -53,13 +48,11 @@ class CertificateEntityMapperV1Test {
     when(careProviderRepository.findOrCreate(certificateMsg.getCareProviderId())).thenReturn(
         expectedCareProvider);
     when(unitRepository.findOrCreate(certificateMsg.getUnitId())).thenReturn(expectedUnit);
-    when(userRepository.findOrCreate(certificateMsg.getStaffId())).thenReturn(expectedUser);
     when(patientRepository.findOrCreate(certificateMsg.getPatientId())).thenReturn(expectedPatient);
 
     final var expected = CertificateEntity.builder()
         .certificateId(certificateMsg.getId())
         .certificateType(expectedCertificateType)
-        .staff(expectedUser)
         .patient(expectedPatient)
         .unit(expectedUnit)
         .careProvider(expectedCareProvider)

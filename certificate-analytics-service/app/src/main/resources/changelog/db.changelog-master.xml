@@ -126,7 +126,6 @@
       <column name="certificate_type_key" type="INT">
         <constraints nullable="false"/>
       </column>
-      <column name="staff_key" type="INT"/>
       <column name="care_provider_key" type="INT"/>
       <column name="unit_key" type="INT"/>
       <column name="patient_key" type="INT"/>

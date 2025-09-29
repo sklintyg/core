@@ -11,9 +11,8 @@ public class UserRepository {
 
   private final UserEntityRepository userEntityRepository;
 
-  public UserEntity findOrCreate(String staffId) {
-    return userEntityRepository.findByUserId(staffId)
-        .orElseGet(() -> userEntityRepository.save(UserEntityMapperV1.map(staffId)));
+  public UserEntity findOrCreate(String userId) {
+    return userEntityRepository.findByUserId(userId)
+        .orElseGet(() -> userEntityRepository.save(UserEntityMapperV1.map(userId)));
   }
 }
-

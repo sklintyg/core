@@ -8,7 +8,6 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.rep
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CertificateEntityRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.PatientRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.UnitRepository;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.UserRepository;
 
 @Component
 @RequiredArgsConstructor
@@ -16,7 +15,6 @@ public class CertificateEntityMapperV1 {
 
   private final CareProviderRepository careProviderRepository;
   private final UnitRepository unitRepository;
-  private final UserRepository userRepository;
   private final PatientRepository patientRepository;
   private final CertificateEntityRepository certificateEntityRepository;
 
@@ -25,7 +23,6 @@ public class CertificateEntityMapperV1 {
         .orElseGet(() -> CertificateEntity.builder()
             .certificateId(certificate.getId())
             .certificateType(CertificateTypeEntityMapperV1.map(certificate))
-            .staff(userRepository.findOrCreate(certificate.getStaffId()))
             .patient(patientRepository.findOrCreate(certificate.getPatientId()))
             .unit(unitRepository.findOrCreate(certificate.getUnitId()))
             .careProvider(careProviderRepository.findOrCreate(certificate.getCareProviderId()))

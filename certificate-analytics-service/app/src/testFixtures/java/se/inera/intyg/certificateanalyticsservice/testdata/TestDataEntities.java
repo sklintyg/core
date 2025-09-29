@@ -47,7 +47,6 @@ public class TestDataEntities {
         .patient(patientEntity())
         .unit(unitEntity())
         .careProvider(careProviderEntity())
-        .staff(userEntity())
         .build();
   }
 

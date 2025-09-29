@@ -18,7 +18,6 @@ public class CertificateAnalyticsEventCertificateV1 implements Serializable {
   String patientId;
   String unitId;
   String careProviderId;
-  String staffId;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class CertificateAnalyticsEventCertificateV1Builder {

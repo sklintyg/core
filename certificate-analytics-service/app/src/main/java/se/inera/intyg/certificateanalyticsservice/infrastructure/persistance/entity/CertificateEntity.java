@@ -35,10 +35,6 @@ public class CertificateEntity {
   private CertificateTypeEntity certificateType;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "staff_key")
-  private UserEntity staff;
-
-  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "care_provider_key")
   private CareProviderEntity careProvider;
 
