@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804;
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategoryAktivitetsbegransning.categoryAktivitetsbegransning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategoryBedomning.categoryBedomning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategoryDiagnos.categoryDiagnos;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategoryFunktionsnedsattning.categoryFunktionsnedsattning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategoryGrundForMedicinsktUnderlag.categoryGrundForMedicinsktUnderlag;
@@ -94,7 +95,8 @@ public class CertificateModelFactoryAG7804 implements CertificateModelFactory {
             categoryDiagnos(),
             categoryFunktionsnedsattning(),
             categoryAktivitetsbegransning(),
-            categoryMedicinskBehandling()
+            categoryMedicinskBehandling(),
+            categoryBedomning()
         ))
         .certificateActionFactory(certificateActionFactory)
         .build();
