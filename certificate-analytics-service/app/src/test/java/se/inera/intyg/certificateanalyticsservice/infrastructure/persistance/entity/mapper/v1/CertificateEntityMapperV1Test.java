@@ -11,8 +11,11 @@ class CertificateEntityMapperV1Test {
   @Test
   void shouldMapCertificateCorrectly() {
     final var expected = TestDataEntities.certificateEntity();
-    final var certificateV1 = TestDataCertificateAnalyticsMessages.certificate();
-    final var result = CertificateEntityMapperV1.map(certificateV1);
+
+    final var result = CertificateEntityMapperV1.map(
+        TestDataCertificateAnalyticsMessages.certificate()
+    );
+
     assertEquals(expected, result);
   }
 }

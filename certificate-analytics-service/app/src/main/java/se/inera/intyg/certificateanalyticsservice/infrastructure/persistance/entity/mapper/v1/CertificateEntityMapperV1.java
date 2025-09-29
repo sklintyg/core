@@ -9,6 +9,7 @@ public class CertificateEntityMapperV1 {
     return CertificateEntity.builder()
         .certificateId(certificate.getId())
         .certificateType(CertificateTypeEntityMapperV1.map(certificate))
+        .staff(UserEntityMapperV1.map(certificate.getStaffId()))
         .patient(PatientEntityMapperV1.map(certificate.getPatientId()))
         .unit(UnitEntityMapperV1.map(certificate.getUnitId()))
         .careProvider(CareProviderEntityMapperV1.map(certificate.getCareProviderId()))

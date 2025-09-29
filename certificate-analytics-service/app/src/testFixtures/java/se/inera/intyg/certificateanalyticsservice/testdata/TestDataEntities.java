@@ -26,9 +26,6 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.ent
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.TimeEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.UnitEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.UserEntity;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.v1.CareProviderEntityMapperV1;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.v1.PatientEntityMapperV1;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.v1.UnitEntityMapperV1;
 
 public class TestDataEntities {
 
@@ -47,9 +44,10 @@ public class TestDataEntities {
     return CertificateEntity.builder()
         .certificateId(CERTIFICATE_ID)
         .certificateType(certificateTypeEntity())
-        .patient(PatientEntityMapperV1.map(PATIENT_ID))
-        .unit(UnitEntityMapperV1.map(UNIT_ID))
-        .careProvider(CareProviderEntityMapperV1.map(CARE_PROVIDER_ID))
+        .patient(patientEntity())
+        .unit(unitEntity())
+        .careProvider(careProviderEntity())
+        .staff(userEntity())
         .build();
   }
 

@@ -64,6 +64,7 @@ public class TestDataCertificateAnalyticsMessages {
         .patientId(PATIENT_ID)
         .unitId(UNIT_ID)
         .careProviderId(CARE_PROVIDER_ID)
+        .staffId(STAFF_ID)
         .build();
   }
 
