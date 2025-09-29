@@ -14,7 +14,7 @@ import se.inera.intyg.certificateanalyticsservice.application.messages.model.Ana
 import se.inera.intyg.certificateanalyticsservice.application.messages.repository.AnalyticMessageRepository;
 
 @ExtendWith(MockitoExtension.class)
-class AnalyticsMessageServiceTest {
+class ProcessingAnalyticsMessageServiceTest {
 
   @Mock
   private AnalyticsMessageConverterProvider analyticsMessageConverterProvider;
@@ -23,18 +23,19 @@ class AnalyticsMessageServiceTest {
   @Mock
   private AnalyticsMessageConverter analyticsMessageConverter;
   @InjectMocks
-  private AnalyticsMessageService analyticsMessageService;
+  private ProcessingAnalyticsMessageService processingAnalyticsMessageService;
 
   @Test
   void shallPersistProcessedMessage() {
     final var message = draftMessageBuilder().build();
     final var messageAsJson = toJson(message);
-    
+
     when(analyticsMessageConverterProvider.converter(message.getType(),
         message.getSchemaVersion())).thenReturn(analyticsMessageConverter);
     when(analyticsMessageConverter.convert(messageAsJson)).thenReturn(message);
 
-    analyticsMessageService.process(messageAsJson, message.getType(), message.getSchemaVersion());
+    processingAnalyticsMessageService.process(messageAsJson, message.getType(),
+        message.getSchemaVersion());
 
     verify(analyticMessageRepository).store(message);
   }
