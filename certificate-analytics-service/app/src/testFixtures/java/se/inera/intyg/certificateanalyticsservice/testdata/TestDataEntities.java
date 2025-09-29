@@ -110,6 +110,7 @@ public class TestDataEntities {
 
   public static OriginEntity originEntity() {
     return OriginEntity.builder()
+        .originKey(1)
         .origin(ORIGIN)
         .build();
   }

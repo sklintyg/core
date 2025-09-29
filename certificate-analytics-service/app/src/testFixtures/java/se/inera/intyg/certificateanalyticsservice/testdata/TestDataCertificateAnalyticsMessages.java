@@ -78,6 +78,7 @@ public class TestDataCertificateAnalyticsMessages {
         .careProviderId(CARE_PROVIDER_ID)
         .origin(ORIGIN)
         .sessionId(SESSION_ID)
+        .messageType(eventType.name())
         .build();
   }
 }
