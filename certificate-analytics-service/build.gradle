@@ -30,7 +30,18 @@ allprojects {
     }
 }
 
+sonar {
+    properties {
+        property "sonar.projectKey", "intyg-certificate-analytics-service"
+        property "sonar.projectName", "intyg-certificate-analytics-service"
+        property "sonar.dependencyCheck.jsonReportPath", "${layout.buildDirectory.get()}/reports/dependency-check-report.json" as String
+        property "sonar.dependencyCheck.htmlReportPath", "${layout.buildDirectory.get()}/reports/dependency-check-report.html" as String
+        property "sonar.exclusions", "**/integration/api/**/*,**/testability/**,**/dto/**/*,**/integrationtest/**"
+    }
+}
+
 dependencyCheck {
+    formats = ['HTML', 'JSON']
     nvd.setDatafeedUrl(nvdMirror)
     analyzers.setAssemblyEnabled(false)
     analyzers.setNodeEnabled(false)
@@ -77,16 +88,6 @@ subprojects {
                         "**/integrationtest/**",
                 ])
             }))
-        }
-    }
-
-    sonar {
-        properties {
-            property "sonar.projectKey", "intyg-certificate-analytics-service"
-            property "sonar.projectName", "intyg-certificate-analytics-service"
-            property "sonar.dependencyCheck.htmlReportPath", "${layout.buildDirectory}/reports/dependency-check-report.html"
-            property "sonar.dependencyCheck.jsonReportPath", "${layout.buildDirectory}/reports/dependency-check-report.json"
-            property "sonar.exclusions", "**/integration/api/**/*,**/testability/**,**/dto/**/*,**/integrationtest/**"
         }
     }
 
