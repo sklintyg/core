@@ -27,7 +27,7 @@ public class CertificateModelFactoryAG7804 implements CertificateModelFactory {
 
   private static final String AG_7804 = "ag7804";
   private static final String VERSION = "2.0";
-  private static final String NAME = "Läkarintyg om arbetsförmåga – arbetsgivaren 2.0";
+  private static final String NAME = "Läkarintyg om arbetsförmåga – arbetsgivaren";
   private static final String DESCRIPTION = """
       Läkarintyg om arbetsförmåga – arbetsgivaren skapas från Försäkringskassans läkarintyg för sjukpenning (FK 7804) och används i följande situationer:
       <ul>
