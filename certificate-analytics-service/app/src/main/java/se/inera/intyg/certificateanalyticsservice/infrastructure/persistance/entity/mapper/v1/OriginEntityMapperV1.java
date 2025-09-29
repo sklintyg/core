@@ -8,7 +8,6 @@ public class OriginEntityMapperV1 {
   public static OriginEntity map(String origin) {
     final var type = OriginType.valueOf(origin);
     return OriginEntity.builder()
-        .originKey(type.getKey())
         .origin(origin)
         .build();
   }

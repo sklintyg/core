@@ -7,7 +7,6 @@ import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConsta
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.ORIGIN;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.PATIENT_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.ROLE;
-import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.ROLE_KEY;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.SESSION_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.STAFF_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.TIMESTAMP;
@@ -107,21 +106,18 @@ public class TestDataEntities {
 
   public static OriginEntity originEntity() {
     return OriginEntity.builder()
-        .originKey(1)
         .origin(ORIGIN)
         .build();
   }
 
   public static EventTypeEntity eventTypeEntity() {
     return EventTypeEntity.builder()
-        .eventTypeKey(1)
         .eventType("CREATED")
         .build();
   }
 
   public static RoleEntity roleEntity() {
     return RoleEntity.builder()
-        .roleKey(ROLE_KEY)
         .role(ROLE)
         .build();
   }

@@ -11,7 +11,6 @@ class EventTypeEntityMapperV1Test {
   @Test
   void shouldMapEventTypeCorrectly() {
     final var expected = EventTypeEntity.builder()
-        .eventTypeKey(EventType.CREATED.getKey())
         .eventType(EventType.CREATED.name())
         .build();
     final var result = EventTypeEntityMapperV1.map(EventType.CREATED.name());

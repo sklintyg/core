@@ -13,7 +13,6 @@ class RoleEntityMapperV1Test {
   void shouldMapRoleCorrectly() {
     final var expected = RoleEntity.builder()
         .role(RoleType.DOCTOR.name())
-        .roleKey(RoleType.DOCTOR.getKey())
         .build();
     final var result = RoleEntityMapperV1.map(TestDataConstants.ROLE);
     assertEquals(expected, result);

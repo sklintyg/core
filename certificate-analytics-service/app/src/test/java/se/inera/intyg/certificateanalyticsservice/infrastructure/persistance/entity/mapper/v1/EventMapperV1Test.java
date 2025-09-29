@@ -52,7 +52,7 @@ class EventMapperV1Test {
 
   @Test
   void shouldMapCreatedEventMessageCorrectly() {
-    final var message = TestDataMessages.createdEventMessage();
+    final var message = TestDataMessages.CREATED_EVENT_MESSAGE;
     final var certificateMsg = message.getCertificate();
     final var eventMsg = message.getEvent();
 

@@ -9,7 +9,6 @@ public class RoleEntityMapperV1 {
     final var type = RoleType.valueOf(role);
 
     return RoleEntity.builder()
-        .roleKey(type.getKey())
         .role(role)
         .build();
   }

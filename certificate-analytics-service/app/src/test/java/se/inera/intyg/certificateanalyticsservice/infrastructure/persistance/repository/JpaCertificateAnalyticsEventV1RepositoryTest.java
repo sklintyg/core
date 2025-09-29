@@ -26,8 +26,8 @@ class JpaCertificateAnalyticsEventV1RepositoryTest {
 
   @Test
   void shouldMapAndSaveCreatedEventMessage() {
-    final var message = TestDataMessages.createdEventMessage();
-    final var entityToSave = eventMapperV1.toEntity(TestDataMessages.createdEventMessage());
+    final var message = TestDataMessages.CREATED_EVENT_MESSAGE;
+    final var entityToSave = eventMapperV1.toEntity(TestDataMessages.CREATED_EVENT_MESSAGE);
     when(eventEntityRepository.save(entityToSave)).thenReturn(mock(EventEntity.class));
 
     jpaCertificateAnalyticsEventV1Repository.save(message);

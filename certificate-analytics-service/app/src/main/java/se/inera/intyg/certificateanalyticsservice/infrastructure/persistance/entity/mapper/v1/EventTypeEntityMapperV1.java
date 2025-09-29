@@ -9,7 +9,6 @@ public class EventTypeEntityMapperV1 {
     final var type = EventType.valueOf(eventType);
 
     return EventTypeEntity.builder()
-        .eventTypeKey(type.getKey())
         .eventType(type.name())
         .build();
   }

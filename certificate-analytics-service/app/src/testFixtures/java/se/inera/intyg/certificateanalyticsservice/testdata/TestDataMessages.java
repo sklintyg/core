@@ -53,35 +53,23 @@ public class TestDataMessages {
     }
   }
 
-  public static CertificateAnalyticsEventMessageV1 createdEventMessage() {
-    return CertificateAnalyticsEventMessageV1.builder()
-        .messageId(MESSAGE_ID_CREATED)
-        .type("certificate.analytics.event")
-        .schemaVersion("v1")
-        .certificate(certificate())
-        .event(event(EventType.CREATED))
-        .build();
-  }
+  public static final CertificateAnalyticsEventMessageV1 CREATED_EVENT_MESSAGE = draftMessageBuilder()
+      .messageId(MESSAGE_ID_CREATED)
+      .event(eventBuilder().messageType("CREATED").timestamp(TIMESTAMP).build())
+      .certificate(certificateBuilder().id(CERTIFICATE_ID).build())
+      .build();
 
-  public static CertificateAnalyticsEventMessageV1 sentEventMessage() {
-    return CertificateAnalyticsEventMessageV1.builder()
-        .messageId(MESSAGE_ID_SENT)
-        .type("certificate.analytics.event")
-        .schemaVersion("v1")
-        .certificate(certificate())
-        .event(event(EventType.SENT))
-        .build();
-  }
+  public static final CertificateAnalyticsEventMessageV1 SENT_EVENT_MESSAGE = draftMessageBuilder()
+      .messageId(MESSAGE_ID_SENT)
+      .event(eventBuilder().messageType("SENT").timestamp(TIMESTAMP).build())
+      .certificate(certificateBuilder().id(CERTIFICATE_ID).build())
+      .build();
 
-  public static CertificateAnalyticsEventMessageV1 signedEventMessage() {
-    return CertificateAnalyticsEventMessageV1.builder()
-        .messageId(MESSAGE_ID_SIGNED)
-        .type("certificate.analytics.event")
-        .schemaVersion("v1")
-        .certificate(certificate())
-        .event(event(EventType.SIGNED))
-        .build();
-  }
+  public static final CertificateAnalyticsEventMessageV1 SIGNED_EVENT_MESSAGE = draftMessageBuilder()
+      .messageId(MESSAGE_ID_SIGNED)
+      .event(eventBuilder().messageType("SIGNED").timestamp(TIMESTAMP).build())
+      .certificate(certificateBuilder().id(CERTIFICATE_ID).build())
+      .build();
 
   public static CertificateAnalyticsEventCertificateV1 certificate() {
     return CertificateAnalyticsEventCertificateV1.builder()
@@ -127,21 +115,21 @@ public class TestDataMessages {
   private static CertificateAnalyticsEventCertificateV1Builder certificateBuilder() {
     return CertificateAnalyticsEventCertificateV1.builder()
         .id(UUID.randomUUID().toString())
-        .unitId("TSTNMT2321000156-ALMC")
-        .careProviderId("TSTNMT2321000156-ALFA")
-        .patientId("19401130-6125")
-        .type("fk7210")
-        .typeVersion("v1");
+        .unitId(UNIT_ID)
+        .careProviderId(CARE_PROVIDER_ID)
+        .patientId(PATIENT_ID)
+        .type(CERTIFICATE_TYPE)
+        .typeVersion(CERTIFICATE_TYPE_VERSION);
   }
 
   private static CertificateAnalyticsEventV1Builder eventBuilder() {
     return CertificateAnalyticsEventV1.builder()
         .timestamp(LocalDateTime.now())
-        .staffId("TSTNMT2321000156-DRAA")
-        .role("LAKARE")
-        .unitId("TSTNMT2321000156-ALMC")
-        .careProviderId("TSTNMT2321000156-ALFA")
+        .staffId(STAFF_ID)
+        .role(ROLE)
+        .unitId(UNIT_ID)
+        .careProviderId(CARE_PROVIDER_ID)
         .sessionId(UUID.randomUUID().toString())
-        .origin("NORMAL");
+        .origin(ORIGIN);
   }
 }
