@@ -10,7 +10,6 @@ import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConsta
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.ORIGIN;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.PATIENT_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.ROLE;
-import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.SESSION_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.STAFF_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.TIMESTAMP;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.UNIT_ID;
@@ -22,7 +21,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.time.LocalDateTime;
 import java.util.UUID;
-import se.inera.intyg.certificateanalyticsservice.application.messages.model.common.EventType;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsEventCertificateV1;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsEventCertificateV1.CertificateAnalyticsEventCertificateV1Builder;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsEventMessageV1;
@@ -79,20 +77,6 @@ public class TestDataMessages {
         .patientId(PATIENT_ID)
         .unitId(UNIT_ID)
         .careProviderId(CARE_PROVIDER_ID)
-        .build();
-  }
-
-  public static CertificateAnalyticsEventV1 event(EventType eventType) {
-    return CertificateAnalyticsEventV1.builder()
-        .timestamp(TIMESTAMP)
-        .messageType(eventType.name())
-        .staffId(STAFF_ID)
-        .role(ROLE)
-        .unitId(UNIT_ID)
-        .careProviderId(CARE_PROVIDER_ID)
-        .origin(ORIGIN)
-        .sessionId(SESSION_ID)
-        .messageType(eventType.name())
         .build();
   }
 
