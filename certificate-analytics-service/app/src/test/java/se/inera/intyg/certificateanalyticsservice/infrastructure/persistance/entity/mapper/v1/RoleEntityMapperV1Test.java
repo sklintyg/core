@@ -3,7 +3,6 @@ package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.en
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateanalyticsservice.application.messages.model.common.RoleType;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.RoleEntity;
 import se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants;
 
@@ -12,9 +11,11 @@ class RoleEntityMapperV1Test {
   @Test
   void shouldMapRoleCorrectly() {
     final var expected = RoleEntity.builder()
-        .role(RoleType.DOCTOR.name())
+        .role(TestDataConstants.ROLE)
         .build();
+
     final var result = RoleEntityMapperV1.map(TestDataConstants.ROLE);
+
     assertEquals(expected, result);
   }
 }
