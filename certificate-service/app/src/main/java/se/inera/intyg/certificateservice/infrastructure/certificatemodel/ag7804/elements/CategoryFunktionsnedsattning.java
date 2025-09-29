@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elemets;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements;
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSmittbararpenning.QUESTION_SMITTBARARPENNING_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSmittbararpenning.QUESTION_SMITTBARARPENNING_ID;
@@ -9,21 +9,31 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
-public class CategoryGrundForMedicinsktUnderlag {
+public class CategoryFunktionsnedsattning {
 
-  public static final ElementId CATEGORY_ID = new ElementId("KAT_2");
+  public static final ElementId CATEGORY_ID = new ElementId("KAT_5");
 
-  private CategoryGrundForMedicinsktUnderlag() {
+  private CategoryFunktionsnedsattning() {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification categoryGrundForMedicinsktUnderlag(
+  public static ElementSpecification categoryFunktionsnedsattning(
       ElementSpecification... children) {
     return ElementSpecification.builder()
         .id(CATEGORY_ID)
         .configuration(
             ElementConfigurationCategory.builder()
-                .name("Grund för medicinskt underlag")
+                .name("Funktionsnedsättning")
+                .description(
+                    """
+                        Funktionsnedsättning definieras enligt Internationell klassifikation av funktionstillstånd, funktionshinder och hälsa (ICF) som en betydande avvikelse eller förlust i kroppsfunktion och kan vara fysisk, psykisk eller kognitiv. Se även Socialstyrelsens försäkringsmedicinska kunskapsstöd.
+                        
+                        Om din bedömning baseras på annat än dina egna observationer och undersökningsfynd, exempelvis testresultat och
+                        anamnesuppgifter beskriv hur du bedömer uppgifterna.
+                        
+                        Om uppgifterna är hämtade från någon annan inom hälso- och sjukvården, beskriv från vem och när de noterats.
+                        """
+                )
                 .build()
         )
         .rules(List.of(

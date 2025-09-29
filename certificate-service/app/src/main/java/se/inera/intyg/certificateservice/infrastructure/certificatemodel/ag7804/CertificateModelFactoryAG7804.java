@@ -1,8 +1,11 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elemets.CategoryGrundForMedicinsktUnderlag.categoryGrundForMedicinsktUnderlag;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elemets.CategorySmittbararpenning.categorySmittbararpenning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elemets.CategorySysselsattning.categorySysselsattning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategoryAktivitetsbegransning.categoryAktivitetsbegransning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategoryDiagnos.categoryDiagnos;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategoryFunktionsnedsattning.categoryFunktionsnedsattning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategoryGrundForMedicinsktUnderlag.categoryGrundForMedicinsktUnderlag;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategorySmittbararpenning.categorySmittbararpenning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategorySysselsattning.categorySysselsattning;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -86,7 +89,10 @@ public class CertificateModelFactoryAG7804 implements CertificateModelFactory {
         .elementSpecifications(List.of(
             categorySmittbararpenning(),
             categoryGrundForMedicinsktUnderlag(),
-            categorySysselsattning()
+            categorySysselsattning(),
+            categoryDiagnos(),
+            categoryFunktionsnedsattning(),
+            categoryAktivitetsbegransning()
         ))
         .certificateActionFactory(certificateActionFactory)
         .build();

@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elemets;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
