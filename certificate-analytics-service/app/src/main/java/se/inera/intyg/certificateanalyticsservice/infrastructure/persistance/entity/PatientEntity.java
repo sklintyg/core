@@ -21,8 +21,8 @@ public class PatientEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "patient_key")
-  private Integer patientKey;
+  @Column(name = "`key`")
+  private Long key;
 
   @Column(name = "patient_id", nullable = false, length = 20, unique = true)
   private String patientId;
