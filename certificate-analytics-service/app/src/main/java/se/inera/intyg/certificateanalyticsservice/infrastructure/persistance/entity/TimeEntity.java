@@ -22,7 +22,7 @@ public class TimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "key")
+  @Column(name = "`key`")
   private Long key;
 
   @Column(name = "date", nullable = false)

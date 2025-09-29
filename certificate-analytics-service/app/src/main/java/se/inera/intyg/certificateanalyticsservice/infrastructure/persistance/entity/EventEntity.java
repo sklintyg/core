@@ -25,7 +25,7 @@ public class EventEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "key")
+  @Column(name = "`key`")
   private Long key;
 
   @ManyToOne(fetch = FetchType.LAZY)

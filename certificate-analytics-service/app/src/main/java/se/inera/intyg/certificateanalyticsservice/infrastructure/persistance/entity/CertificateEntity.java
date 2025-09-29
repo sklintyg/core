@@ -24,7 +24,7 @@ public class CertificateEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "key")
+  @Column(name = "`key`")
   private Long key;
 
   @Column(name = "certificate_id", nullable = false, length = 36)
