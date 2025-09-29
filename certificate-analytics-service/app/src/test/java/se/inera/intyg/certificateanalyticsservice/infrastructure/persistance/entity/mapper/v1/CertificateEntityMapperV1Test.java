@@ -20,8 +20,8 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.rep
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.PatientRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.UnitRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.UserRepository;
-import se.inera.intyg.certificateanalyticsservice.testdata.TestDataCertificateAnalyticsMessages;
 import se.inera.intyg.certificateanalyticsservice.testdata.TestDataEntities;
+import se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessages;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateEntityMapperV1Test {
@@ -41,7 +41,7 @@ class CertificateEntityMapperV1Test {
 
   @Test
   void shouldMapCertificateCorrectly() {
-    final var certificateMsg = TestDataCertificateAnalyticsMessages.certificate();
+    final var certificateMsg = TestDataMessages.certificate();
     final var expectedCareProvider = mock(CareProviderEntity.class);
     final var expectedUnit = mock(UnitEntity.class);
     final var expectedUser = mock(UserEntity.class);

@@ -11,7 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.v1.EventMapperV1;
-import se.inera.intyg.certificateanalyticsservice.testdata.TestDataCertificateAnalyticsMessages;
+import se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessages;
 
 @ExtendWith(MockitoExtension.class)
 class JpaCertificateAnalyticsEventV1RepositoryTest {
@@ -26,9 +26,9 @@ class JpaCertificateAnalyticsEventV1RepositoryTest {
 
   @Test
   void shouldMapAndSaveCreatedEventMessage() {
-    final var message = TestDataCertificateAnalyticsMessages.createdEventMessage();
+    final var message = TestDataMessages.createdEventMessage();
     final var entityToSave = eventMapperV1.toEntity(
-        TestDataCertificateAnalyticsMessages.createdEventMessage());
+        TestDataMessages.createdEventMessage());
     final var savedEntity = mock(EventEntity.class);
     when(eventEntityRepository.save(entityToSave)).thenReturn(savedEntity);
 
@@ -37,4 +37,3 @@ class JpaCertificateAnalyticsEventV1RepositoryTest {
     assertEquals(savedEntity, result);
   }
 }
-

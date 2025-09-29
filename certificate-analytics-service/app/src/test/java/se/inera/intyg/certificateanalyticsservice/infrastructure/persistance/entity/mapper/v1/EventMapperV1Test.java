@@ -27,8 +27,8 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.rep
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.SessionRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.UnitRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.UserRepository;
-import se.inera.intyg.certificateanalyticsservice.testdata.TestDataCertificateAnalyticsMessages;
 import se.inera.intyg.certificateanalyticsservice.testdata.TestDataEntities;
+import se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessages;
 
 @ExtendWith(MockitoExtension.class)
 class EventMapperV1Test {
@@ -56,7 +56,7 @@ class EventMapperV1Test {
 
   @Test
   void shouldMapCreatedEventMessageCorrectly() {
-    final var message = TestDataCertificateAnalyticsMessages.createdEventMessage();
+    final var message = TestDataMessages.createdEventMessage();
     final var certificateMsg = message.getCertificate();
     final var eventMsg = message.getEvent();
 
