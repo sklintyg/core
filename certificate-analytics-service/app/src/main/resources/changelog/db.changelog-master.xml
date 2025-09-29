@@ -19,7 +19,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="hsa_id" type="varchar(20)">
-        <constraints nullable="false"/>
+        <constraints nullable="false" unique="true"/>
       </column>
     </createTable>
 
@@ -28,7 +28,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="role" type="varchar(20)">
-        <constraints nullable="false"/>
+        <constraints nullable="false" unique="true"/>
       </column>
     </createTable>
 
@@ -37,7 +37,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="user_id" type="varchar(20)">
-        <constraints nullable="false"/>
+        <constraints nullable="false" unique="true"/>
       </column>
     </createTable>
 
@@ -46,7 +46,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="hsa_id" type="varchar(20)">
-        <constraints nullable="false"/>
+        <constraints nullable="false" unique="true"/>
       </column>
     </createTable>
 
@@ -55,7 +55,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="session_id" type="varchar(20)">
-        <constraints nullable="false"/>
+        <constraints nullable="false" unique="true"/>
       </column>
     </createTable>
 
@@ -91,7 +91,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="origin" type="varchar(20)">
-        <constraints nullable="false"/>
+        <constraints nullable="false" unique="true"/>
       </column>
     </createTable>
 
@@ -112,7 +112,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="certificate_id" type="varchar(36)">
-        <constraints nullable="false"/>
+        <constraints nullable="false" unique="true"/>
       </column>
       <column name="certificate_type_key" type="bigint unsigned">
         <constraints nullable="false"/>
