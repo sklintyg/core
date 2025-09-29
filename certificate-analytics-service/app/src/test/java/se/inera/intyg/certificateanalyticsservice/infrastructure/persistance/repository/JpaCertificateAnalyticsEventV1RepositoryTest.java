@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
@@ -27,13 +27,11 @@ class JpaCertificateAnalyticsEventV1RepositoryTest {
   @Test
   void shouldMapAndSaveCreatedEventMessage() {
     final var message = TestDataMessages.createdEventMessage();
-    final var entityToSave = eventMapperV1.toEntity(
-        TestDataMessages.createdEventMessage());
-    final var savedEntity = mock(EventEntity.class);
-    when(eventEntityRepository.save(entityToSave)).thenReturn(savedEntity);
+    final var entityToSave = eventMapperV1.toEntity(TestDataMessages.createdEventMessage());
+    when(eventEntityRepository.save(entityToSave)).thenReturn(mock(EventEntity.class));
 
-    final var result = jpaCertificateAnalyticsEventV1Repository.save(message);
+    jpaCertificateAnalyticsEventV1Repository.save(message);
 
-    assertEquals(savedEntity, result);
+    verify(eventEntityRepository).save(entityToSave);
   }
 }
