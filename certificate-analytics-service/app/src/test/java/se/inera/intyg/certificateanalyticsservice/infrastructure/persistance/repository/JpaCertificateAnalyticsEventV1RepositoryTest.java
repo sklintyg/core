@@ -18,6 +18,8 @@ class JpaCertificateAnalyticsEventV1RepositoryTest {
 
   @Mock
   private EventEntityRepository eventEntityRepository;
+  @Mock
+  private EventMapperV1 eventMapperV1;
 
   @InjectMocks
   private JpaCertificateAnalyticsEventV1Repository jpaCertificateAnalyticsEventV1Repository;
@@ -25,7 +27,7 @@ class JpaCertificateAnalyticsEventV1RepositoryTest {
   @Test
   void shouldMapAndSaveCreatedEventMessage() {
     final var message = TestDataCertificateAnalyticsMessages.createdEventMessage();
-    final var entityToSave = EventMapperV1.toEntity(
+    final var entityToSave = eventMapperV1.toEntity(
         TestDataCertificateAnalyticsMessages.createdEventMessage());
     final var savedEntity = mock(EventEntity.class);
     when(eventEntityRepository.save(entityToSave)).thenReturn(savedEntity);

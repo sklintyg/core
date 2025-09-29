@@ -12,10 +12,11 @@ public class JpaCertificateAnalyticsEventV1Repository implements
     CertificateAnalyticsMessageRepository {
 
   private final EventEntityRepository eventEntityRepository;
+  private final EventMapperV1 eventMapperV1;
 
   public EventEntity save(CertificateAnalyticsMessage message) {
     if (message instanceof CertificateAnalyticsEventMessageV1 v1Message) {
-      final var entity = EventMapperV1.toEntity(v1Message);
+      final var entity = eventMapperV1.toEntity(v1Message);
       return eventEntityRepository.save(entity);
     } else {
       throw new IllegalArgumentException(
