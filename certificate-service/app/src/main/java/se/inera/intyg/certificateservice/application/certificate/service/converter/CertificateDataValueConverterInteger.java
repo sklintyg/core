@@ -36,6 +36,7 @@ public class CertificateDataValueConverterInteger implements CertificateDataValu
     return CertificateDataValueInteger.builder()
         .id(elementConfiguration.id().value())
         .value(elementValue != null ? ((ElementValueInteger) elementValue).value() : null)
+        .unitOfMeasurement(elementConfiguration.unitOfMeasurement())
         .build();
   }
 }
