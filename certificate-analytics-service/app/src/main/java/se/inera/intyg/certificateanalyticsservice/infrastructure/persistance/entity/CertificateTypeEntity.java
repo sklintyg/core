@@ -26,4 +26,8 @@ public class CertificateTypeEntity {
 
   @Column(name = "certificate_type", nullable = false, length = 20)
   private String certificateType;
+
+  @Column(name = "certificate_type_version", nullable = false, length = 20)
+  private String certificateTypeVersion;
 }
+

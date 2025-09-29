@@ -30,11 +30,9 @@ public class CertificateEntity {
   @Column(name = "certificate_id", nullable = false, length = 36)
   private String certificateId;
 
-  @Column(name = "certificate_type", nullable = false, length = 20)
-  private String certificateType;
-
-  @Column(name = "certificate_type_version", nullable = false, length = 20)
-  private String certificateTypeVersion;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "certificate_type_key", nullable = false)
+  private CertificateTypeEntity certificateType;
 
   @Column(name = "staff_key")
   private Integer staffKey;

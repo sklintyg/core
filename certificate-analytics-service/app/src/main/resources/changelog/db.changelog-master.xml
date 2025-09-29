@@ -51,7 +51,7 @@
     </createTable>
 
     <createTable tableName="care_provider">
-      <column name="provider_key" type="INT">
+      <column name="care_provider_key" type="INT">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="hsa_id" type="VARCHAR(20)">
@@ -111,14 +111,8 @@
       <column name="certificate_type" type="VARCHAR(20)">
         <constraints nullable="false"/>
       </column>
-    </createTable>
-
-    <createTable tableName="patient">
-      <column name="patient_key" type="INT">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-      <column name="patient_id" type="VARCHAR(20)">
-        <constraints nullable="false" unique="true"/>
+      <column name="certificate_type_version" type="VARCHAR(20)">
+        <constraints nullable="false"/>
       </column>
     </createTable>
 
@@ -129,10 +123,7 @@
       <column name="certificate_id" type="VARCHAR(36)">
         <constraints nullable="false"/>
       </column>
-      <column name="certificate_type" type="VARCHAR(20)">
-        <constraints nullable="false"/>
-      </column>
-      <column name="certificate_type_version" type="VARCHAR(20)">
+      <column name="certificate_type_key" type="INT">
         <constraints nullable="false"/>
       </column>
       <column name="staff_key" type="INT"/>
@@ -140,13 +131,16 @@
       <column name="unit_key" type="INT"/>
       <column name="patient_key" type="INT"/>
     </createTable>
-    <addForeignKeyConstraint baseTableName="certificate" baseColumnNames="care_provider_key"
-      referencedTableName="care_provider" referencedColumnNames="provider_key"
+    <addForeignKeyConstraint baseTableName="dim_certificate" baseColumnNames="certificate_type_key"
+      referencedTableName="dim_certificate_type" referencedColumnNames="certificate_type_key"
+      constraintName="fk_certificate_certificate_type"/>
+    <addForeignKeyConstraint baseTableName="dim_certificate" baseColumnNames="care_provider_key"
+      referencedTableName="care_provider" referencedColumnNames="care_provider_key"
       constraintName="fk_certificate_care_provider"/>
-    <addForeignKeyConstraint baseTableName="certificate" baseColumnNames="unit_key"
+    <addForeignKeyConstraint baseTableName="dim_certificate" baseColumnNames="unit_key"
       referencedTableName="unit" referencedColumnNames="unit_key"
       constraintName="fk_certificate_unit"/>
-    <addForeignKeyConstraint baseTableName="certificate" baseColumnNames="patient_key"
+    <addForeignKeyConstraint baseTableName="dim_certificate" baseColumnNames="patient_key"
       referencedTableName="patient" referencedColumnNames="patient_key"
       constraintName="fk_certificate_patient"/>
 
@@ -166,7 +160,7 @@
       <column name="role_key" type="INT"/>
     </createTable>
     <addForeignKeyConstraint baseTableName="event" baseColumnNames="certificate_key"
-      referencedTableName="certificate" referencedColumnNames="certificate_key"
+      referencedTableName="dim_certificate" referencedColumnNames="certificate_key"
       constraintName="fk_event_certificate"/>
     <addForeignKeyConstraint baseTableName="event" baseColumnNames="unit_key"
       referencedTableName="unit" referencedColumnNames="unit_key"

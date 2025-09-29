@@ -6,13 +6,14 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateanalyticsservice.testdata.TestDataCertificateAnalyticsMessages;
 import se.inera.intyg.certificateanalyticsservice.testdata.TestDataEntities;
 
-class CertificateEntityMapperV1Test {
+class CertificateTypeEntityMapperV1Test {
 
   @Test
-  void shouldMapCertificateCorrectly() {
-    final var expected = TestDataEntities.certificateEntity();
+  void shouldMapCertificateTypeCorrectly() {
+    final var expected = TestDataEntities.certificateTypeEntity();
     final var certificateV1 = TestDataCertificateAnalyticsMessages.certificate();
-    final var result = CertificateEntityMapperV1.map(certificateV1);
+    final var result = CertificateTypeEntityMapperV1.map(certificateV1);
     assertEquals(expected, result);
   }
 }
+

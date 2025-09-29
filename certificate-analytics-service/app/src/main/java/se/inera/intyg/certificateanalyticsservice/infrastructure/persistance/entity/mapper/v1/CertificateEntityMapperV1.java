@@ -8,8 +8,7 @@ public class CertificateEntityMapperV1 {
   public static CertificateEntity map(CertificateAnalyticsEventCertificateV1 certificate) {
     return CertificateEntity.builder()
         .certificateId(certificate.getId())
-        .certificateType(certificate.getType())
-        .certificateTypeVersion(certificate.getTypeVersion())
+        .certificateType(CertificateTypeEntityMapperV1.map(certificate))
         .patient(PatientEntityMapperV1.map(certificate.getPatientId()))
         .unit(UnitEntityMapperV1.map(certificate.getUnitId()))
         .careProvider(CareProviderEntityMapperV1.map(certificate.getCareProviderId()))

@@ -15,6 +15,7 @@ import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConsta
 
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CareProviderEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CertificateEntity;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CertificateTypeEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.DeviceEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventTypeEntity;
@@ -25,6 +26,9 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.ent
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.TimeEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.UnitEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.UserEntity;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.v1.CareProviderEntityMapperV1;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.v1.PatientEntityMapperV1;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.v1.UnitEntityMapperV1;
 
 public class TestDataEntities {
 
@@ -32,14 +36,20 @@ public class TestDataEntities {
     throw new IllegalStateException("Utility class");
   }
 
+  public static CertificateTypeEntity certificateTypeEntity() {
+    return CertificateTypeEntity.builder()
+        .certificateType(CERTIFICATE_TYPE)
+        .certificateTypeVersion(CERTIFICATE_TYPE_VERSION)
+        .build();
+  }
+
   public static CertificateEntity certificateEntity() {
     return CertificateEntity.builder()
         .certificateId(CERTIFICATE_ID)
-        .certificateType(CERTIFICATE_TYPE)
-        .certificateTypeVersion(CERTIFICATE_TYPE_VERSION)
-        .careProvider(careProviderEntity())
-        .unit(unitEntity())
-        .patient(patientEntity())
+        .certificateType(certificateTypeEntity())
+        .patient(PatientEntityMapperV1.map(PATIENT_ID))
+        .unit(UnitEntityMapperV1.map(UNIT_ID))
+        .careProvider(CareProviderEntityMapperV1.map(CARE_PROVIDER_ID))
         .build();
   }
 
