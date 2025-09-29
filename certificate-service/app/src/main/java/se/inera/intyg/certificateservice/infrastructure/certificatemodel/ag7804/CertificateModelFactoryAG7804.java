@@ -6,6 +6,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategoryGrundForMedicinsktUnderlag.categoryGrundForMedicinsktUnderlag;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategorySmittbararpenning.categorySmittbararpenning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategorySysselsattning.categorySysselsattning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elemets.CategoryMedicinskBehandling.categoryMedicinskBehandling;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -92,7 +93,8 @@ public class CertificateModelFactoryAG7804 implements CertificateModelFactory {
             categorySysselsattning(),
             categoryDiagnos(),
             categoryFunktionsnedsattning(),
-            categoryAktivitetsbegransning()
+            categoryAktivitetsbegransning(),
+            categoryMedicinskBehandling()
         ))
         .certificateActionFactory(certificateActionFactory)
         .build();
