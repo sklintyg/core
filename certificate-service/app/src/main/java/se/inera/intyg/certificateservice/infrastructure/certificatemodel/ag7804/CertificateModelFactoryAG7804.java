@@ -6,24 +6,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateMessageType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
-import se.inera.intyg.certificateservice.domain.common.model.CertificateLink;
-import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
-import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
-import se.inera.intyg.certificateservice.domain.message.model.MessageType;
-import se.inera.intyg.certificateservice.domain.message.model.Subject;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.FK7804CertificateActionSpecification;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.FK7804CertificateSummaryProvider;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.FK7804MessageActionSpecification;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.FK7804PdfSpecification;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.FK7804SickLeaveProvider;
 
 @Component
 @RequiredArgsConstructor
@@ -67,14 +56,7 @@ public class CertificateModelFactoryAG7804 implements CertificateModelFactory {
       </ul>
       """;
 
-  public static final String LINK_FK_ID = "LINK_FK";
-  private static final String PREAMBLE_TEXT = """
-      Det här är ditt intyg. Intyget innehåller all information som vården fyllt i. Du kan inte ändra något i ditt intyg. Har du frågor kontaktar du den som skrivit ditt intyg. Om du vill ansöka om sjukpenning, gör du det på {LINK_FK}.
-      """;
-  public static final String URL_FK = "https://www.forsakringskassan.se/";
-  public static final String FK_NAME = "Försäkringskassan";
-
-  public static final CertificateModelId FK7804_V2_0 = CertificateModelId.builder()
+  public static final CertificateModelId AG7804_V2_0 = CertificateModelId.builder()
       .type(new CertificateType(AG_7804))
       .version(new CertificateVersion(VERSION))
       .build();
@@ -82,10 +64,10 @@ public class CertificateModelFactoryAG7804 implements CertificateModelFactory {
   @Override
   public CertificateModel create() {
     return CertificateModel.builder()
-        .id(FK7804_V2_0)
+        .id(AG7804_V2_0)
         .type(
             new Code(
-                "LISJP",
+                "AG7804",
                 "b64ea353-e8f6-4832-b563-fc7d46f29548",
                 NAME
             )
@@ -95,43 +77,11 @@ public class CertificateModelFactoryAG7804 implements CertificateModelFactory {
         .detailedDescription(DETAILED_DESCRIPTION.replaceAll("\\R", ""))
         .activeFrom(activeFrom)
         .availableForCitizen(true)
-        .sickLeaveProvider(new FK7804SickLeaveProvider())
-        .messageTypes(List.of(
-            CertificateMessageType.builder()
-                .type(MessageType.MISSING)
-                .subject(new Subject(MessageType.MISSING.displayName()))
-                .build(),
-            CertificateMessageType.builder()
-                .type(MessageType.COORDINATION)
-                .subject(new Subject(MessageType.COORDINATION.displayName()))
-                .build(),
-            CertificateMessageType.builder()
-                .type(MessageType.CONTACT)
-                .subject(new Subject(MessageType.CONTACT.displayName()))
-                .build(),
-            CertificateMessageType.builder()
-                .type(MessageType.OTHER)
-                .subject(new Subject(MessageType.OTHER.displayName()))
-                .build()
-        ))
-        .texts(
-            List.of(
-                CertificateText.builder()
-                    .text(PREAMBLE_TEXT)
-                    .type(CertificateTextType.PREAMBLE_TEXT)
-                    .links(List.of(CertificateLink.builder()
-                        .url(URL_FK)
-                        .id(LINK_FK_ID)
-                        .name(FK_NAME)
-                        .build()))
-                    .build()
-            )
-        )
-        .summaryProvider(new FK7804CertificateSummaryProvider())
-        .certificateActionSpecifications(FK7804CertificateActionSpecification.create())
-        .messageActionSpecifications(FK7804MessageActionSpecification.create())
+        .sickLeaveProvider(new AG7804SickLeaveProvider())
+        .summaryProvider(new AG7804CertificateSummaryProvider())
+        .certificateActionSpecifications(AG7804CertificateActionSpecification.create())
+        .messageActionSpecifications(AG7804MessageActionSpecification.create())
         .elementSpecifications(List.of())
-        .pdfSpecification(FK7804PdfSpecification.create())
         .certificateActionFactory(certificateActionFactory)
         .build();
   }
