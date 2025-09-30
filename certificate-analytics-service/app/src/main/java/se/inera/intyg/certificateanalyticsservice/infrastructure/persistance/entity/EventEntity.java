@@ -8,8 +8,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -48,9 +48,8 @@ public class EventEntity {
   @JoinColumn(name = "session_key", referencedColumnName = "key")
   private SessionEntity session;
 
-  @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "time_key")
-  private TimeEntity time;
+  @Column(name = "timestamp", nullable = false)
+  private LocalDateTime timestamp;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "origin_key", referencedColumnName = "key")

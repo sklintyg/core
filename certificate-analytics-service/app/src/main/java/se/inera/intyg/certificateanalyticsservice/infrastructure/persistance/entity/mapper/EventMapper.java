@@ -33,7 +33,7 @@ public class EventMapper {
         .careProvider(careProviderRepository.findOrCreate(message.getCertificateCareProviderId()))
         .user(userRepository.findOrCreate(message.getEventStaffId()))
         .session(sessionRepository.findOrCreate(message.getEventSessionId()))
-        .time(TimeEntityMapper.map(message.getEventTimestamp()))
+        .timestamp(message.getEventTimestamp())
         .origin(originRepository.findOrCreate(message.getEventOrigin()))
         .eventType(eventTypeRepository.findOrCreate(message.getEventMessageType()))
         .role(roleRepository.findOrCreate(message.getEventRole()))

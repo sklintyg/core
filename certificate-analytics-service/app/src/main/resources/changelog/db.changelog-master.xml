@@ -59,49 +59,6 @@
       </column>
     </createTable>
 
-    <createTable tableName="time">
-      <column name="key" type="bigint unsigned auto_increment">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-      <column name="date" type="timestamp">
-        <constraints nullable="false"/>
-      </column>
-      <column name="day" type="int">
-        <constraints nullable="false"/>
-      </column>
-      <column name="month" type="int">
-        <constraints nullable="false"/>
-      </column>
-      <column name="year" type="int">
-        <constraints nullable="false"/>
-      </column>
-      <column name="hour" type="int">
-        <constraints nullable="false"/>
-      </column>
-      <column name="minute" type="int">
-        <constraints nullable="false"/>
-      </column>
-      <column name="second" type="int">
-        <constraints nullable="false"/>
-      </column>
-    </createTable>
-    <createIndex tableName="time" indexName="idx_time_date">
-      <column name="date"/>
-    </createIndex>
-    <createIndex tableName="time" indexName="idx_time_year_month_day">
-      <column name="year"/>
-      <column name="month"/>
-      <column name="day"/>
-    </createIndex>
-    <createIndex tableName="time" indexName="idx_time_full">
-      <column name="year"/>
-      <column name="month"/>
-      <column name="day"/>
-      <column name="hour"/>
-      <column name="minute"/>
-      <column name="second"/>
-    </createIndex>
-
     <createTable tableName="origin">
       <column name="key" type="bigint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
@@ -176,7 +133,7 @@
       <column name="provider_key" type="bigint unsigned"/>
       <column name="user_key" type="bigint unsigned"/>
       <column name="session_key" type="bigint unsigned"/>
-      <column name="time_key" type="bigint unsigned">
+      <column name="timestamp" type="timestamp">
         <constraints nullable="false"/>
       </column>
       <column name="origin_key" type="bigint unsigned"/>
@@ -200,9 +157,6 @@
     <addForeignKeyConstraint baseTableName="event" baseColumnNames="session_key"
       referencedTableName="session" referencedColumnNames="key"
       constraintName="fk_event_session"/>
-    <addForeignKeyConstraint baseTableName="event" baseColumnNames="time_key"
-      referencedTableName="time" referencedColumnNames="key"
-      constraintName="fk_event_time"/>
     <addForeignKeyConstraint baseTableName="event" baseColumnNames="origin_key"
       referencedTableName="origin" referencedColumnNames="key"
       constraintName="fk_event_origin"/>

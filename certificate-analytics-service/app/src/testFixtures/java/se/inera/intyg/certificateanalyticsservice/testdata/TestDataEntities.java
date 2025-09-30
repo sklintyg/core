@@ -21,7 +21,6 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.ent
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.PatientEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.RoleEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.SessionEntity;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.TimeEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.UnitEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.UserEntity;
 
@@ -73,7 +72,7 @@ public class TestDataEntities {
         .careProvider(careProviderEntity())
         .user(userEntity())
         .session(sessionEntity())
-        .time(timeEntity())
+        .timestamp(TIMESTAMP)
         .origin(originEntity())
         .eventType(eventTypeEntity())
         .role(roleEntity())
@@ -89,18 +88,6 @@ public class TestDataEntities {
   public static SessionEntity sessionEntity() {
     return SessionEntity.builder()
         .sessionId(SESSION_ID)
-        .build();
-  }
-
-  public static TimeEntity timeEntity() {
-    return TimeEntity.builder()
-        .date(TIMESTAMP)
-        .year(TIMESTAMP.getYear())
-        .month(TIMESTAMP.getMonthValue())
-        .day(TIMESTAMP.getDayOfMonth())
-        .hour(TIMESTAMP.getHour())
-        .minute(TIMESTAMP.getMinute())
-        .second(TIMESTAMP.getSecond())
         .build();
   }
 
