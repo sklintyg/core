@@ -18,41 +18,41 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class CertificateAnalyticsEventV1ConverterTest {
+class CertificateAnalyticsEventV1ParserTest {
 
   @Mock
   private ObjectMapper objectMapper;
 
   @InjectMocks
-  private CertificateAnalyticsEventV1Converter converter;
+  private CertificateAnalyticsEventV1Parser parser;
 
   @Test
   void shallSupportCertificateAnalyticMessageOfSchemaVersionV1() {
-    final var canConvert = converter.canConvert("certificate.analytics.event", "v1");
+    final var canConvert = parser.canParse("certificate.analytics.event", "v1");
     assertTrue(canConvert, "Should support certificate.analytics.event of version v1");
   }
 
   @Test
   void shallNotSupportCertificateAnalyticMessageOfDifferentSchemaVersion() {
-    final var actual = converter.canConvert("certificate.analytics.event", "diffVersion");
+    final var actual = parser.canParse("certificate.analytics.event", "diffVersion");
     assertFalse(actual, "Should not support certificate.analytics.event of different version");
   }
 
   @Test
   void shallNotSupportDifferentMessageOfSchemaVersionV1() {
-    final var actual = converter.canConvert("diff.message", "v1");
+    final var actual = parser.canParse("diff.message", "v1");
     assertFalse(actual, "Should not support different message of version v1");
   }
 
   @Test
-  void shallReturnConvertedEvent() throws JsonProcessingException {
+  void shallReturnParsedEvent() throws JsonProcessingException {
     final var excepted = draftMessageBuilder().build();
     final var messageAsJson = toJson(excepted);
 
     when(objectMapper.readValue(messageAsJson, CertificateAnalyticsEventMessageV1.class))
         .thenReturn(excepted);
 
-    final var actual = converter.convert(messageAsJson);
+    final var actual = parser.parse(messageAsJson);
 
     assertEquals(excepted, actual);
   }
@@ -66,6 +66,6 @@ class CertificateAnalyticsEventV1ConverterTest {
     when(objectMapper.readValue(messageAsJson, CertificateAnalyticsEventMessageV1.class))
         .thenThrow(JsonProcessingException.class);
 
-    assertThrows(UncheckedIOException.class, () -> converter.convert(messageAsJson));
+    assertThrows(UncheckedIOException.class, () -> parser.parse(messageAsJson));
   }
 }

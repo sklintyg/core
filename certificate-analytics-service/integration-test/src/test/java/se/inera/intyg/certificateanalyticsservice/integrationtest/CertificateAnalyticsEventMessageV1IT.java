@@ -3,6 +3,8 @@ package se.inera.intyg.certificateanalyticsservice.integrationtest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateanalyticsservice.testability.configuration.TestabilityConfiguration.TESTABILITY_PROFILE;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessages.draftMessageBuilder;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataPseudonymized.draftPseudonymizedMessageBuilder;
 
 import java.time.Duration;
 import org.junit.jupiter.api.BeforeAll;
@@ -19,7 +21,6 @@ import org.springframework.test.context.ActiveProfiles;
 import se.inera.intyg.certificateanalyticsservice.integrationtest.util.Containers;
 import se.inera.intyg.certificateanalyticsservice.integrationtest.util.JmsUtil;
 import se.inera.intyg.certificateanalyticsservice.integrationtest.util.TestabilityUtil;
-import se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessages;
 
 @ActiveProfiles({"integration-test", TESTABILITY_PROFILE})
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -56,12 +57,13 @@ class CertificateAnalyticsEventMessageV1IT {
 
   @Test
   void shallProcessAndPersistMessage() {
-    final var expected = TestDataMessages.draftMessageBuilder().build();
+    final var expected = draftPseudonymizedMessageBuilder().build();
+    final var message = draftMessageBuilder().build();
 
-    jmsUtil.publishMessage(expected);
+    jmsUtil.publishMessage(message);
 
     final var actual = testabilityUtil.awaitProcessed(
-        expected.getMessageId(),
+        message.getMessageId(),
         Duration.ofSeconds(5)
     );
 
@@ -70,14 +72,15 @@ class CertificateAnalyticsEventMessageV1IT {
 
   @Test
   void shallProcessAndPersistMessageThroughRedelivery() {
-    final var expected = TestDataMessages.draftMessageBuilder().build();
+    final var expected = draftPseudonymizedMessageBuilder().build();
+    final var message = draftMessageBuilder().build();
 
     testabilityUtil.toggleTemporaryFailure(2);
 
-    jmsUtil.publishMessage(expected);
+    jmsUtil.publishMessage(message);
 
     final var actual = testabilityUtil.awaitProcessed(
-        expected.getMessageId(),
+        message.getMessageId(),
         Duration.ofSeconds(5)
     );
 
@@ -86,7 +89,7 @@ class CertificateAnalyticsEventMessageV1IT {
 
   @Test
   void shallMoveToDlqAfterMaximumRedeliveries() {
-    final var message = TestDataMessages.draftMessageBuilder().build();
+    final var message = draftMessageBuilder().build();
 
     testabilityUtil.togglePermanentFailure(true);
 
@@ -99,7 +102,7 @@ class CertificateAnalyticsEventMessageV1IT {
 
   @Test
   void shallMoveToDlqIfMessageCannotBeParsed() {
-    final var message = TestDataMessages.draftMessageBuilder().build();
+    final var message = draftMessageBuilder().build();
 
     jmsUtil.publishUnparsableMessage(message);
 
