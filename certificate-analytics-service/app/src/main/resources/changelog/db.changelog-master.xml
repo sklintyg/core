@@ -9,7 +9,7 @@
       <column name="key" type="bigint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="event_type" type="varchar(20)">
+      <column name="event_type" type="varchar(32)">
         <constraints nullable="false" unique="true"/>
       </column>
     </createTable>

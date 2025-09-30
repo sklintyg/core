@@ -24,6 +24,6 @@ public class EventTypeEntity {
   @Column(name = "`key`")
   private Long key;
 
-  @Column(name = "event_type", nullable = false, length = 20)
+  @Column(name = "event_type", nullable = false, length = 32)
   private String eventType;
 }
