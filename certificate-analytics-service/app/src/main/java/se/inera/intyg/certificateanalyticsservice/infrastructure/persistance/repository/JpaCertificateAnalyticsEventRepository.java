@@ -25,4 +25,13 @@ public class JpaCertificateAnalyticsEventRepository implements
         .map(eventMapper::toDomain)
         .orElse(null);
   }
+
+  @Override
+  public void clear() {
+    throw new UnsupportedOperationException("clear() is only supported in testability profile");
+  }
+
+  protected EventEntityRepository getEventEntityRepository() {
+    return eventEntityRepository;
+  }
 }

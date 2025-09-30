@@ -7,4 +7,6 @@ public interface CertificateAnalyticsMessageRepository {
   void save(PseudonymizedAnalyticsMessage message);
 
   PseudonymizedAnalyticsMessage findByMessageId(String messageId);
+
+  void clear();
 }
