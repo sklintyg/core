@@ -1,43 +1,36 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategoryMedicinskBehandling.categoryMedicinskBehandling;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategoryKontakt.categoryKontakt;
 
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 
-class CategoryMedicinskBehandlingTest {
+class CategoryKontaktTest {
 
-  private static final ElementId ELEMENT_ID = new ElementId("KAT_7");
+  private static final ElementId ELEMENT_ID = new ElementId("KAT_12");
 
   @Test
   void shallIncludeId() {
-    final var element = categoryMedicinskBehandling();
+    final var element = categoryKontakt();
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
   void shallIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationCategory.builder()
-        .name("Medicinsk behandling")
-        .description(
-            """
-                Här beskriver du de medicinska behandlingar/åtgärder som kan påverka arbetsförmågan, vad de förväntas leda till, och en (preliminär) tidplan för åtgärderna.
-                
-                Om olika åtgärder behöver ske i viss ordning är det bra om du beskriver detta.
-                """
-        )
+        .name("Kontakt")
         .build();
 
-    final var element = categoryMedicinskBehandling();
+    final var element = categoryKontakt();
 
     assertEquals(expectedConfiguration, element.elementSpecification(ELEMENT_ID).configuration());
   }
 
 //  @Test
 //  void shallIncludeRules() {
-//    final var element = categoryMedicinskBehandling();
+//    final var element = categoryKontakt();
 //    final var expectedRules = List.of(
 //        ElementRuleExpression.builder()
 //            .id(QUESTION_SMITTBARARPENNING_ID)
@@ -47,5 +40,4 @@ class CategoryMedicinskBehandlingTest {
 //    );
 //    assertEquals(expectedRules, element.rules());
 //  }
-
 }

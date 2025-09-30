@@ -1,13 +1,18 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804;
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategoryAktivitetsbegransning.categoryAktivitetsbegransning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategoryAtgarderSomKanFramjaAttergang.categoryAtgarderSomKanFramjaAttergang;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategoryBedomning.categoryBedomning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategoryDiagnos.categoryDiagnos;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategoryFunktionsnedsattning.categoryFunktionsnedsattning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategoryGrundForMedicinsktUnderlag.categoryGrundForMedicinsktUnderlag;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategoryKontakt.categoryKontakt;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategoryMedicinskBehandling.categoryMedicinskBehandling;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategoryOvrigt.categoryOvrigt;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategoryPrognos.categoryPrognos;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategorySmittbararpenning.categorySmittbararpenning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategorySysselsattning.categorySysselsattning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elemets.CategoryMedicinskBehandling.categoryMedicinskBehandling;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.elements.ElementUnitContactInformation.issuingUnitContactInfo;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -53,7 +58,7 @@ public class CertificateModelFactoryAG7804 implements CertificateModelFactory {
         <li><b>Sjukpenningtillägg.</b> Att ge arbetstagaren rätt till kompletterande sjukpenningtillägg. De flesta kollektivavtal på svensk arbetsmarknad ger arbetstagare rätt till sjukpenningtillägg vid sjukdom.</li>
         <li><b>Läkarintyg från och med dag 1 i sjuklöneperioden</b> Läkarintyget kan användas från och med dag 1 i sjuklöneperioden, ett så kallat förstadagsintyg. Arbetsgivaren får om det finns särskilda skäl för det begära att arbetstagaren genom intyg av läkare styrker nedsättning av arbetsförmågan tidigare än dag 8 i sjuklöneperioden.</li>
       </ul>
-      <p><b>Innehåll i läkarintyget</b></p> 
+      <p><b>Innehåll i läkarintyget</b></p>
       <p>Läkarintyg om arbetsförmåga - arbetsgivaren skapas från Försäkringskassans läkarintyg för sjukpenning (FK 7804) och ska innehålla motsvarande information.  Patienten kan dock välja om hen vill delge arbetsgivaren information om vilken eller vilka diagnoser som föreligger.  Övrig information i intyget är obligatorisk.</p>
       <p><b>När ska Läkarintyg om arbetsförmåga – arbetsgivaren användas?</b></p>
       <ul>
@@ -96,7 +101,12 @@ public class CertificateModelFactoryAG7804 implements CertificateModelFactory {
             categoryFunktionsnedsattning(),
             categoryAktivitetsbegransning(),
             categoryMedicinskBehandling(),
-            categoryBedomning()
+            categoryBedomning(),
+            categoryPrognos(),
+            categoryAtgarderSomKanFramjaAttergang(),
+            categoryOvrigt(),
+            categoryKontakt(),
+            issuingUnitContactInfo()
         ))
         .certificateActionFactory(certificateActionFactory)
         .build();
