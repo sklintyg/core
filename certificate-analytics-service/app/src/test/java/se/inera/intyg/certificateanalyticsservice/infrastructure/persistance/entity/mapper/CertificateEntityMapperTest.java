@@ -39,12 +39,19 @@ class CertificateEntityMapperTest {
   private CertificateEntityRepository certificateEntityRepository;
 
   @Test
-  void shouldMapCertificateCorrectly() {
+  void shouldMapCertificateCorrectlyWhenCreatingNewEntity() {
     final var message = TestDataPseudonymized.draftPseudonymizedMessageBuilder().build();
     final var expectedCareProvider = mock(CareProviderEntity.class);
     final var expectedUnit = mock(UnitEntity.class);
     final var expectedPatient = mock(PatientEntity.class);
     final var expectedCertificateType = mock(CertificateTypeEntity.class);
+    final var newEntity = CertificateEntity.builder()
+        .certificateId(message.getCertificateId())
+        .certificateType(expectedCertificateType)
+        .patient(expectedPatient)
+        .unit(expectedUnit)
+        .careProvider(expectedCareProvider)
+        .build();
 
     when(certificateEntityRepository.findByCertificateId(message.getCertificateId())).thenReturn(
         Optional.empty());
@@ -54,19 +61,22 @@ class CertificateEntityMapperTest {
     when(patientRepository.findOrCreate(message.getCertificatePatientId())).thenReturn(
         expectedPatient);
     when(certificateTypeRepository.findOrCreate(message.getCertificateType(),
-        message.getCertificateTypeVersion())).thenReturn(
-        expectedCertificateType);
-
-    final var expected = CertificateEntity.builder()
-        .certificateId(message.getCertificateId())
-        .certificateType(expectedCertificateType)
-        .patient(expectedPatient)
-        .unit(expectedUnit)
-        .careProvider(expectedCareProvider)
-        .build();
+        message.getCertificateTypeVersion())).thenReturn(expectedCertificateType);
+    when(certificateEntityRepository.save(newEntity)).thenReturn(newEntity);
 
     final var result = certificateEntityMapper.map(message);
 
-    assertEquals(expected, result);
+    assertEquals(newEntity, result);
+  }
+
+  @Test
+  void shouldReturnExistingCertificateEntityWhenFound() {
+    final var message = TestDataPseudonymized.draftPseudonymizedMessageBuilder().build();
+    final var existingEntity = mock(CertificateEntity.class);
+    when(certificateEntityRepository.findByCertificateId(message.getCertificateId())).thenReturn(
+        Optional.of(existingEntity));
+
+    final var result = certificateEntityMapper.map(message);
+    assertEquals(existingEntity, result);
   }
 }

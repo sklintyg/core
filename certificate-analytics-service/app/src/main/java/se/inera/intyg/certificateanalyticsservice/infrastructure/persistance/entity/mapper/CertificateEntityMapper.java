@@ -22,7 +22,7 @@ public class CertificateEntityMapper {
 
   public CertificateEntity map(PseudonymizedAnalyticsMessage message) {
     return certificateEntityRepository.findByCertificateId(message.getCertificateId())
-        .orElseGet(() -> CertificateEntity.builder()
+        .orElseGet(() -> certificateEntityRepository.save(CertificateEntity.builder()
             .certificateId(message.getCertificateId())
             .certificateType(
                 certificateTypeRepository.findOrCreate(
@@ -32,6 +32,7 @@ public class CertificateEntityMapper {
             .unit(unitRepository.findOrCreate(message.getCertificateUnitId()))
             .careProvider(
                 careProviderRepository.findOrCreate(message.getCertificateCareProviderId()))
-            .build());
+            .build()
+        ));
   }
 }
