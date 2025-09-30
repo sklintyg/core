@@ -85,6 +85,22 @@
         <constraints nullable="false"/>
       </column>
     </createTable>
+    <createIndex tableName="time" indexName="idx_time_date">
+      <column name="date"/>
+    </createIndex>
+    <createIndex tableName="time" indexName="idx_time_year_month_day">
+      <column name="year"/>
+      <column name="month"/>
+      <column name="day"/>
+    </createIndex>
+    <createIndex tableName="time" indexName="idx_time_full">
+      <column name="year"/>
+      <column name="month"/>
+      <column name="day"/>
+      <column name="hour"/>
+      <column name="minute"/>
+      <column name="second"/>
+    </createIndex>
 
     <createTable tableName="origin">
       <column name="key" type="bigint unsigned auto_increment">
