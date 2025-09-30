@@ -7,7 +7,8 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateanalyticsservice.application.messages.repository.AnalyticMessageRepository;
-import se.inera.intyg.certificateanalyticsservice.application.messages.service.AnalyticsMessageConverterProvider;
+import se.inera.intyg.certificateanalyticsservice.application.messages.service.AnalyticMessagePseudonymizerProvider;
+import se.inera.intyg.certificateanalyticsservice.application.messages.service.AnalyticsMessageParserProvider;
 import se.inera.intyg.certificateanalyticsservice.application.messages.service.ProcessingAnalyticsMessageService;
 
 @Primary
@@ -19,9 +20,13 @@ public class TestabilityAnalyticsMessageService extends ProcessingAnalyticsMessa
   private volatile boolean permanentFailure = false;
 
   public TestabilityAnalyticsMessageService(
-      AnalyticsMessageConverterProvider analyticsMessageConverterProvider,
+      AnalyticsMessageParserProvider analyticsMessageParserProvider,
+      AnalyticMessagePseudonymizerProvider analyticsMessagePseudonymizerProvider,
       AnalyticMessageRepository analyticMessageRepository) {
-    super(analyticsMessageConverterProvider, analyticMessageRepository);
+    super(analyticsMessageParserProvider,
+        analyticsMessagePseudonymizerProvider,
+        analyticMessageRepository
+    );
   }
 
   @Override

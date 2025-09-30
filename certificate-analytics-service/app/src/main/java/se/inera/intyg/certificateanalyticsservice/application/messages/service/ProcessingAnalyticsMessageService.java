@@ -10,14 +10,16 @@ import se.inera.intyg.certificateanalyticsservice.application.messages.repositor
 @Slf4j
 public class ProcessingAnalyticsMessageService implements AnalyticsMessageService {
 
-  private final AnalyticsMessageConverterProvider analyticsMessageConverterProvider;
+  private final AnalyticsMessageParserProvider analyticsMessageParserProvider;
+  private final AnalyticMessagePseudonymizerProvider analyticMessagePseudonymizerProvider;
   private final AnalyticMessageRepository analyticMessageRepository;
 
   @Override
   public void process(String body, String type, String schemaVersion) {
-    final var converter = analyticsMessageConverterProvider.converter(type, schemaVersion);
-    final var message = converter.convert(body);
-    analyticMessageRepository.store(message);
-    log.info("Processed and stored message with id '{}'", message.getMessageId());
+    final var message = analyticsMessageParserProvider.parser(type, schemaVersion).parse(body);
+    final var pseudonymizedMessage = analyticMessagePseudonymizerProvider.pseudonymizer(message)
+        .pseudonymize(message);
+    analyticMessageRepository.store(pseudonymizedMessage);
+    log.info("Processed, pseudonymized and stored message with id '{}'", message.getMessageId());
   }
 }

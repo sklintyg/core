@@ -9,8 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsEventMessageV1;
+import se.inera.intyg.certificateanalyticsservice.application.messages.model.PseudonymizedAnalyticsMessage;
 import se.inera.intyg.certificateanalyticsservice.application.messages.repository.AnalyticMessageRepository;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.pseudonymization.PseudonymizationTokenGenerator;
 
 @Slf4j
 @Profile(TESTABILITY_PROFILE)
@@ -21,16 +22,16 @@ public class TestabilityMessageController {
 
   private final TestabilityAnalyticsMessageService testabilityAnalyticsMessageService;
   private final AnalyticMessageRepository analyticMessageRepository;
+  private final PseudonymizationTokenGenerator pseudonymizationTokenGenerator;
 
   @GetMapping("/messages/v1/{messageId}")
-  public CertificateAnalyticsEventMessageV1 getTestabilityMessageV1(
+  public PseudonymizedAnalyticsMessage getMessage(
       @PathVariable String messageId) {
-    log.info("Testability get message V1 with id {}", messageId);
-    final var messages = analyticMessageRepository.findByMessageId(messageId);
-    if (messages instanceof CertificateAnalyticsEventMessageV1 messageV1) {
-      return messageV1;
-    }
-    throw new IllegalStateException("Message with id " + messageId + " is not of type V1");
+    final var pseudonymizedMessageId = pseudonymizationTokenGenerator.messageId(messageId);
+    log.info("Testability get message with id '{}' that is pseudonymized to '{}'",
+        messageId, pseudonymizedMessageId
+    );
+    return analyticMessageRepository.findByMessageId(pseudonymizedMessageId);
   }
 
   @GetMapping("/messages/reset")

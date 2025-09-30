@@ -22,12 +22,14 @@ class CertificateDataValueConverterIntegerTest {
   private static final Integer TEST_VALUE = 42;
   private static final FieldId FIELD_ID = new FieldId("intCode");
   private static final String NAME = "NAME";
+  private static final String UNIT_OF_MEASUREMENT = "unitOfMeasurement";
   private final CertificateDataValueConverterInteger converter =
       new CertificateDataValueConverterInteger();
   private final ElementConfigurationInteger elementConfigurationInteger =
       ElementConfigurationInteger.builder()
           .id(FIELD_ID)
           .name(NAME)
+          .unitOfMeasurement(UNIT_OF_MEASUREMENT)
           .build();
 
   @Test
@@ -106,6 +108,20 @@ class CertificateDataValueConverterIntegerTest {
   }
 
   @Test
+  void shallSetUnitOfMeassurementFromConfiguration() {
+    final var configuration = ElementSpecification.builder()
+        .configuration(elementConfigurationInteger)
+        .build();
+
+    final var elementValueInteger = ElementValueInteger.builder().build();
+
+    final var result = converter.convert(configuration, elementValueInteger);
+
+    assertEquals(UNIT_OF_MEASUREMENT,
+        ((CertificateDataValueInteger) result).getUnitOfMeasurement());
+  }
+
+  @Test
   void shallSetCorrectValueForIntegerValue() {
     final var configuration = ElementSpecification.builder()
         .id(new ElementId(ELEMENT_ID))
@@ -136,4 +152,3 @@ class CertificateDataValueConverterIntegerTest {
         "If no value is provided value should be null");
   }
 }
-

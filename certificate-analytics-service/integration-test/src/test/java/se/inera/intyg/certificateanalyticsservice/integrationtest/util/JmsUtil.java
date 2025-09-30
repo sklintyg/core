@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateanalyticsservice.integrationtest.util;
 
+import static org.awaitility.Awaitility.await;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessages.toJson;
 
 import jakarta.jms.Message;
@@ -36,21 +37,11 @@ public class JmsUtil {
   }
 
   public boolean awaitProcessedToDlq(String messageId, Duration timeout) {
-    final var deadline = System.nanoTime() + timeout.toNanos();
-    while (System.nanoTime() < deadline) {
-      final var resp = dlqContains(messageId);
-
-      if (resp) {
-        return true;
-      }
-
-      try {
-        Thread.sleep(200);
-      } catch (InterruptedException e) {
-        throw new RuntimeException(e);
-      }
-    }
-    return false;
+    await()
+        .atMost(timeout)
+        .pollInterval(Duration.ofMillis(200))
+        .until(() -> dlqContains(messageId));
+    return true;
   }
 
   private void purgeQueue(String queueName) {

@@ -5,22 +5,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.UncheckedIOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import se.inera.intyg.certificateanalyticsservice.application.messages.model.AnalyticsMessageConverter;
+import se.inera.intyg.certificateanalyticsservice.application.messages.model.AnalyticsMessageParser;
 
 @Component
 @RequiredArgsConstructor
-public class CertificateAnalyticsEventV1Converter implements AnalyticsMessageConverter {
+public class CertificateAnalyticsEventV1Parser implements AnalyticsMessageParser {
 
   private static final String TYPE = "certificate.analytics.event";
   private static final String SCHEMA_VERSION = "v1";
 
   private final ObjectMapper objectMapper;
 
-  public boolean canConvert(String type, String schemaVersion) {
+  public boolean canParse(String type, String schemaVersion) {
     return TYPE.equals(type) && SCHEMA_VERSION.equals(schemaVersion);
   }
 
-  public CertificateAnalyticsEventMessageV1 convert(String message) {
+  public CertificateAnalyticsEventMessageV1 parse(String message) {
     try {
       return objectMapper.readValue(message, CertificateAnalyticsEventMessageV1.class);
     } catch (JsonProcessingException e) {

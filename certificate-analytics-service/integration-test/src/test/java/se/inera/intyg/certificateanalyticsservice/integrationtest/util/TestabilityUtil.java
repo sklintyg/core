@@ -1,8 +1,10 @@
 package se.inera.intyg.certificateanalyticsservice.integrationtest.util;
 
+import static org.awaitility.Awaitility.await;
+
 import java.time.Duration;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsEventMessageV1;
+import se.inera.intyg.certificateanalyticsservice.application.messages.model.PseudonymizedAnalyticsMessage;
 
 public class TestabilityUtil {
 
@@ -14,25 +16,23 @@ public class TestabilityUtil {
     this.port = port;
   }
 
-  public CertificateAnalyticsEventMessageV1 awaitProcessed(String messageId, Duration timeout) {
-    final var deadline = System.nanoTime() + timeout.toNanos();
-    while (System.nanoTime() < deadline) {
-      final var resp = restTemplate.getForEntity(
-          "http://localhost:%s/testability/messages/v1/%s".formatted(port, messageId),
-          CertificateAnalyticsEventMessageV1.class
-      );
+  public PseudonymizedAnalyticsMessage awaitProcessed(String messageId, Duration timeout) {
+    await()
+        .atMost(timeout)
+        .pollInterval(Duration.ofMillis(200))
+        .until(() -> {
+              final var resp = restTemplate.getForEntity(
+                  "http://localhost:%s/testability/messages/v1/%s".formatted(port, messageId),
+                  PseudonymizedAnalyticsMessage.class
+              );
+              return resp.getStatusCode().is2xxSuccessful() && resp.getBody() != null;
+            }
+        );
 
-      if (resp.getStatusCode().is2xxSuccessful() && resp.getBody() != null) {
-        return resp.getBody();
-      }
-
-      try {
-        Thread.sleep(200);
-      } catch (InterruptedException e) {
-        throw new RuntimeException(e);
-      }
-    }
-    throw new AssertionError("Message " + messageId + " was not processed within " + timeout);
+    return restTemplate.getForEntity(
+        "http://localhost:%s/testability/messages/v1/%s".formatted(port, messageId),
+        PseudonymizedAnalyticsMessage.class
+    ).getBody();
   }
 
   public void reset() {
