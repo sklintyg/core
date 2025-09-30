@@ -2,7 +2,6 @@ package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.en
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,38 +27,38 @@ public class EventEntity {
   @Column(name = "`key`")
   private Long key;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "certificate_key", referencedColumnName = "key")
   private CertificateEntity certificate;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "unit_key", referencedColumnName = "key")
   private UnitEntity unit;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "provider_key", referencedColumnName = "key")
   private CareProviderEntity careProvider;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "user_key", referencedColumnName = "key")
   private UserEntity user;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "session_key", referencedColumnName = "key")
   private SessionEntity session;
 
   @Column(name = "timestamp", nullable = false)
   private LocalDateTime timestamp;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "origin_key", referencedColumnName = "key")
   private OriginEntity origin;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "event_type_key", referencedColumnName = "key")
   private EventTypeEntity eventType;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "role_key", referencedColumnName = "key")
   private RoleEntity role;
 

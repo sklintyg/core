@@ -2,7 +2,6 @@ package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.en
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,19 +29,19 @@ public class CertificateEntity {
   @Column(name = "certificate_id", nullable = false, length = 22)
   private String certificateId;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "certificate_type_key", nullable = false, referencedColumnName = "key")
   private CertificateTypeEntity certificateType;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "care_provider_key", referencedColumnName = "key")
   private CareProviderEntity careProvider;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "unit_key", referencedColumnName = "key")
   private UnitEntity unit;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "patient_key", referencedColumnName = "key")
   private PatientEntity patient;
 }

@@ -7,7 +7,7 @@ public final class TestDataConstants {
   public static final String MESSAGE_ID_CREATED = "msg-created-001";
   public static final String MESSAGE_ID_SENT = "msg-sent-001";
   public static final String MESSAGE_ID_SIGNED = "msg-signed-001";
-  public static final String CERTIFICATE_ID = "93d07174-ab81-4b84-a9fd-886a22fd80e4";
+  public static final String CERTIFICATE_ID = "78a0a279-1197-4cc7-bf6a-899cb5034053";
   public static final String CERTIFICATE_TYPE = "fk7210";
   public static final String CERTIFICATE_TYPE_VERSION = "1.0";
   public static final String UNIT_ID = "TSTNMT2321000156-ALMC";
@@ -15,7 +15,7 @@ public final class TestDataConstants {
   public static final String STAFF_ID = "IlXi3vfzsRwLaNRjpqYxOQ";
   public static final String ROLE = "LAKARE";
   public static final String ORIGIN = "NORMAL";
-  public static final String SESSION_ID = "ZWFjYTkxNzgtNWM1Mi00NDQxLTkxMGItNTM1MTJlM2M2YmI2";
+  public static final String SESSION_ID = "2d02bc34-41f1-42b7-9964-d0659bf369c8";
   public static final LocalDateTime TIMESTAMP = LocalDateTime.of(2025, 9, 29, 17, 49, 58,
       616648000);
   public static final String SCHEMA_VERSION = "v1";
