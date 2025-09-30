@@ -3,6 +3,7 @@ package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.en
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_MESSAGE_ID;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +26,8 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.rep
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.SessionRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.UnitRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.UserRepository;
+import se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants;
+import se.inera.intyg.certificateanalyticsservice.testdata.TestDataEntities;
 import se.inera.intyg.certificateanalyticsservice.testdata.TestDataPseudonymized;
 
 @ExtendWith(MockitoExtension.class)
@@ -89,5 +92,26 @@ class EventMapperTest {
 
     assertEquals(expected, result);
     assertEquals(message.getMessageId(), result.getMessageId());
+  }
+
+  @Test
+  void shouldMapEventEntityToDomainCorrectly() {
+    final var entity = EventEntity.builder()
+        .certificate(TestDataEntities.certificateEntity())
+        .unit(TestDataEntities.unitEntity())
+        .careProvider(TestDataEntities.careProviderEntity())
+        .user(TestDataEntities.userEntity())
+        .session(TestDataEntities.sessionEntity())
+        .timestamp(TestDataConstants.TIMESTAMP)
+        .origin(TestDataEntities.originEntity())
+        .eventType(TestDataEntities.eventTypeEntity())
+        .role(TestDataEntities.roleEntity())
+        .messageId(HASHED_MESSAGE_ID)
+        .build();
+
+    final var expected = TestDataPseudonymized.draftPseudonymizedMessageBuilder().build();
+    final var result = eventMapper.toDomain(entity);
+
+    assertEquals(expected, result);
   }
 }

@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
-import se.inera.intyg.certificateanalyticsservice.application.messages.repository.AnalyticMessageRepository;
+import se.inera.intyg.certificateanalyticsservice.application.messages.repository.CertificateAnalyticsMessageRepository;
 import se.inera.intyg.certificateanalyticsservice.application.messages.service.AnalyticMessagePseudonymizerProvider;
 import se.inera.intyg.certificateanalyticsservice.application.messages.service.AnalyticsMessageParserProvider;
 import se.inera.intyg.certificateanalyticsservice.application.messages.service.ProcessingAnalyticsMessageService;
@@ -22,7 +22,7 @@ public class TestabilityAnalyticsMessageService extends ProcessingAnalyticsMessa
   public TestabilityAnalyticsMessageService(
       AnalyticsMessageParserProvider analyticsMessageParserProvider,
       AnalyticMessagePseudonymizerProvider analyticsMessagePseudonymizerProvider,
-      AnalyticMessageRepository analyticMessageRepository) {
+      CertificateAnalyticsMessageRepository analyticMessageRepository) {
     super(analyticsMessageParserProvider,
         analyticsMessagePseudonymizerProvider,
         analyticMessageRepository

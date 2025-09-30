@@ -40,4 +40,26 @@ public class EventMapper {
         .messageId(message.getMessageId())
         .build();
   }
+
+  public PseudonymizedAnalyticsMessage toDomain(EventEntity entity) {
+    return PseudonymizedAnalyticsMessage.builder()
+        .messageId(entity.getMessageId())
+        .eventTimestamp(entity.getTimestamp())
+        .eventMessageType(entity.getEventType().getEventType())
+        .eventStaffId(entity.getUser() != null ? entity.getUser().getUserId() : null)
+        .eventRole(entity.getRole() != null ? entity.getRole().getRole() : null)
+        .eventUnitId(entity.getUnit() != null ? entity.getUnit().getHsaId() : null)
+        .eventCareProviderId(
+            entity.getCareProvider() != null ? entity.getCareProvider().getHsaId() : null)
+        .eventOrigin(entity.getOrigin() != null ? entity.getOrigin().getOrigin() : null)
+        .eventSessionId(entity.getSession() != null ? entity.getSession().getSessionId() : null)
+        .certificateId(entity.getCertificate().getCertificateId())
+        .certificateType(entity.getCertificate().getCertificateType().getCertificateType())
+        .certificateTypeVersion(
+            entity.getCertificate().getCertificateType().getCertificateTypeVersion())
+        .certificatePatientId(entity.getCertificate().getPatient().getPatientId())
+        .certificateUnitId(entity.getCertificate().getUnit().getHsaId())
+        .certificateCareProviderId(entity.getCertificate().getCareProvider().getHsaId())
+        .build();
+  }
 }

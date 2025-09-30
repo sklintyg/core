@@ -18,4 +18,11 @@ public class JpaCertificateAnalyticsEventRepository implements
     final var entity = eventMapper.toEntity(message);
     eventEntityRepository.save(entity);
   }
+
+  @Override
+  public PseudonymizedAnalyticsMessage findByMessageId(String messageId) {
+    return eventEntityRepository.findByMessageId(messageId)
+        .map(eventMapper::toDomain)
+        .orElse(null);
+  }
 }

@@ -1,13 +1,11 @@
 package se.inera.intyg.certificateanalyticsservice.testdata;
 
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CARE_PROVIDER_ID;
-import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CERTIFICATE_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CERTIFICATE_TYPE;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CERTIFICATE_TYPE_VERSION;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.ORIGIN;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.PATIENT_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.ROLE;
-import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.SESSION_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.STAFF_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.TIMESTAMP;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.UNIT_ID;
@@ -39,7 +37,7 @@ public class TestDataEntities {
 
   public static CertificateEntity certificateEntity() {
     return CertificateEntity.builder()
-        .certificateId(CERTIFICATE_ID)
+        .certificateId(TestDataConstants.HASHED_CERTIFICATE_ID)
         .certificateType(certificateTypeEntity())
         .patient(patientEntity())
         .unit(unitEntity())
@@ -76,6 +74,7 @@ public class TestDataEntities {
         .origin(originEntity())
         .eventType(eventTypeEntity())
         .role(roleEntity())
+        .messageId(TestDataConstants.HASHED_MESSAGE_ID)
         .build();
   }
 
@@ -87,7 +86,7 @@ public class TestDataEntities {
 
   public static SessionEntity sessionEntity() {
     return SessionEntity.builder()
-        .sessionId(SESSION_ID)
+        .sessionId(TestDataConstants.HASHED_SESSION_ID)
         .build();
   }
 
@@ -99,7 +98,7 @@ public class TestDataEntities {
 
   public static EventTypeEntity eventTypeEntity() {
     return EventTypeEntity.builder()
-        .eventType("CREATED")
+        .eventType(TestDataConstants.TYPE_ANALYTICS_EVENT)
         .build();
   }
 

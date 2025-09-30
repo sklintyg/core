@@ -3,7 +3,7 @@ package se.inera.intyg.certificateanalyticsservice.application.messages.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import se.inera.intyg.certificateanalyticsservice.application.messages.repository.AnalyticMessageRepository;
+import se.inera.intyg.certificateanalyticsservice.application.messages.repository.CertificateAnalyticsMessageRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -12,14 +12,14 @@ public class ProcessingAnalyticsMessageService implements AnalyticsMessageServic
 
   private final AnalyticsMessageParserProvider analyticsMessageParserProvider;
   private final AnalyticMessagePseudonymizerProvider analyticMessagePseudonymizerProvider;
-  private final AnalyticMessageRepository analyticMessageRepository;
+  private final CertificateAnalyticsMessageRepository certificateAnalyticsMessageRepository;
 
   @Override
   public void process(String body, String type, String schemaVersion) {
     final var message = analyticsMessageParserProvider.parser(type, schemaVersion).parse(body);
     final var pseudonymizedMessage = analyticMessagePseudonymizerProvider.pseudonymizer(message)
         .pseudonymize(message);
-    analyticMessageRepository.store(pseudonymizedMessage);
+    certificateAnalyticsMessageRepository.save(pseudonymizedMessage);
     log.info("Processed, pseudonymized and stored message with id '{}'", message.getMessageId());
   }
 }

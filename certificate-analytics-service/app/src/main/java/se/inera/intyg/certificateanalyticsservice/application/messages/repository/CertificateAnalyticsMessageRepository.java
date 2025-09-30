@@ -5,4 +5,6 @@ import se.inera.intyg.certificateanalyticsservice.application.messages.model.Pse
 public interface CertificateAnalyticsMessageRepository {
 
   void save(PseudonymizedAnalyticsMessage message);
+
+  PseudonymizedAnalyticsMessage findByMessageId(String messageId);
 }
