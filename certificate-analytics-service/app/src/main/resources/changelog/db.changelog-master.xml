@@ -10,7 +10,7 @@
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="event_type" type="varchar(20)">
-        <constraints nullable="false"/>
+        <constraints nullable="false" unique="true"/>
       </column>
     </createTable>
 
@@ -18,7 +18,7 @@
       <column name="key" type="bigint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="hsa_id" type="varchar(22)">
+      <column name="hsa_id" type="varchar(64)">
         <constraints nullable="false" unique="true"/>
       </column>
     </createTable>
@@ -27,7 +27,7 @@
       <column name="key" type="bigint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="role" type="varchar(20)">
+      <column name="role" type="varchar(32)">
         <constraints nullable="false" unique="true"/>
       </column>
     </createTable>
@@ -45,7 +45,7 @@
       <column name="key" type="bigint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="hsa_id" type="varchar(22)">
+      <column name="hsa_id" type="varchar(64)">
         <constraints nullable="false" unique="true"/>
       </column>
     </createTable>
@@ -99,13 +99,16 @@
       <column name="key" type="bigint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="certificate_type" type="varchar(20)">
+      <column name="certificate_type" type="varchar(24)">
         <constraints nullable="false"/>
       </column>
-      <column name="certificate_type_version" type="varchar(20)">
+      <column name="certificate_type_version" type="varchar(24)">
         <constraints nullable="false"/>
       </column>
     </createTable>
+    <addUniqueConstraint tableName="certificate_type"
+      columnNames="certificate_type,certificate_type_version"
+      constraintName="uk_certificate_type_type_version"/>
     <createTable tableName="patient">
       <column name="key" type="bigint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
@@ -124,9 +127,15 @@
       <column name="certificate_type_key" type="bigint unsigned">
         <constraints nullable="false"/>
       </column>
-      <column name="care_provider_key" type="bigint unsigned"/>
-      <column name="unit_key" type="bigint unsigned"/>
-      <column name="patient_key" type="bigint unsigned"/>
+      <column name="care_provider_key" type="bigint unsigned">
+        <constraints nullable="false"/>
+      </column>
+      <column name="unit_key" type="bigint unsigned">
+        <constraints nullable="false"/>
+      </column>
+      <column name="patient_key" type="bigint unsigned">
+        <constraints nullable="false"/>
+      </column>
     </createTable>
     <addForeignKeyConstraint baseTableName="certificate" baseColumnNames="certificate_type_key"
       referencedTableName="certificate_type" referencedColumnNames="key"
@@ -144,14 +153,20 @@
       <column name="key" type="bigint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="certificate_key" type="bigint unsigned"/>
+      <column name="certificate_key" type="bigint unsigned">
+        <constraints nullable="false"/>
+      </column>
       <column name="unit_key" type="bigint unsigned"/>
       <column name="provider_key" type="bigint unsigned"/>
       <column name="user_key" type="bigint unsigned"/>
       <column name="session_key" type="bigint unsigned"/>
-      <column name="time_key" type="bigint unsigned"/>
+      <column name="time_key" type="bigint unsigned">
+        <constraints nullable="false"/>
+      </column>
       <column name="origin_key" type="bigint unsigned"/>
-      <column name="event_type_key" type="bigint unsigned"/>
+      <column name="event_type_key" type="bigint unsigned">
+        <constraints nullable="false"/>
+      </column>
       <column name="role_key" type="bigint unsigned"/>
     </createTable>
     <addForeignKeyConstraint baseTableName="event" baseColumnNames="certificate_key"
