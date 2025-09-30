@@ -1,10 +1,12 @@
 package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.v1;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.CertificateAnalyticsMessage;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsEventMessageV1;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventEntity;
 
+@Component
 @RequiredArgsConstructor
 public class EventMapperCertificateAnalyticsEventMessageV1 implements EventMapper {
 
