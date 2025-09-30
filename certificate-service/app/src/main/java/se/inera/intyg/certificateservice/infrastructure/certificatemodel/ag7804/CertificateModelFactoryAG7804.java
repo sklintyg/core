@@ -13,10 +13,12 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategorySmittbararpenning.categorySmittbararpenning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategorySysselsattning.categorySysselsattning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.MessageNedsattningArbetsformagaStartDateInfo.messageStartDateInfo;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionAngeVarforDuVillHaKontakt.questionAngeVarforDuVillHaKontakt;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionAntalManader.questionAntalManader;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionArbetsformagaLangreAnBeslutsstod.questionArbetsformagaLangreAnBeslutsstod;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionAtgarderSomKanFramjaAtergang.questionAtgarderSomKanFramjaAtergang;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionGrundForBedomning.questionGrundForBedomning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionKontakt.questionKontakt;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionMedicinskaSkalForSvarareAtergang.questionMedicinskaSkalForSvarareAtergang;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionNedsattningArbetsformaga.questionNedsattningArbetsformaga;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionOvrigt.questionOvrigt;
@@ -137,7 +139,11 @@ public class CertificateModelFactoryAG7804 implements CertificateModelFactory {
             categoryOvrigt(
                 questionOvrigt()
             ),
-            categoryKontakt(),
+            categoryKontakt(
+                questionKontakt(
+                    questionAngeVarforDuVillHaKontakt()
+                )
+            ),
             issuingUnitContactInfo()
         ))
         .certificateActionFactory(certificateActionFactory)
