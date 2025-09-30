@@ -16,13 +16,12 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionTransportstod;
 
 class QuestionTransportstodTest {
 
   @Test
   void shouldIncludeId() {
-    final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionTransportstod.questionTransportstod();
+    final var element = QuestionTransportstod.questionTransportstod();
     assertEquals(new ElementId("34"), element.id());
   }
 
@@ -38,7 +37,7 @@ class QuestionTransportstodTest {
         .selectedText("Ja")
         .unselectedText("Ej angivet")
         .build();
-    final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionTransportstod.questionTransportstod();
+    final var element = QuestionTransportstod.questionTransportstod();
     assertEquals(expected, element.configuration());
   }
 
@@ -49,7 +48,7 @@ class QuestionTransportstodTest {
             .mandatory(false)
             .build()
     );
-    final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionTransportstod.questionTransportstod();
+    final var element = QuestionTransportstod.questionTransportstod();
     assertEquals(expected, element.validations());
   }
 
@@ -70,7 +69,7 @@ class QuestionTransportstodTest {
 
 //  @Test
 //  void shouldHaveCorrectPdfConfiguration() {
-//    final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionTransportstod.questionTransportstod();
+//    final var element = QuestionTransportstod.questionTransportstod();
 //    final var expected = PdfConfigurationBoolean.builder()
 //        .checkboxTrue(new PdfFieldId("form1[0].Sida3[0].ksr_Resor[0]"))
 //        .build();
@@ -93,7 +92,7 @@ class QuestionTransportstodTest {
               .build()
       );
 
-      final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionTransportstod.questionTransportstod();
+      final var element = QuestionTransportstod.questionTransportstod();
 
       final var shouldValidate = element.elementSpecification(new ElementId("34")).shouldValidate();
 
@@ -113,7 +112,7 @@ class QuestionTransportstodTest {
               .build()
       );
 
-      final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionTransportstod.questionTransportstod();
+      final var element = QuestionTransportstod.questionTransportstod();
 
       final var shouldValidate = element.elementSpecification(new ElementId("34")).shouldValidate();
 

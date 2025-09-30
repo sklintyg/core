@@ -13,7 +13,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateRangeList;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0003;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionNedsattningArbetsformaga;
 
 class QuestionNedsattningArbetsformagaTest {
 
@@ -21,7 +20,7 @@ class QuestionNedsattningArbetsformagaTest {
 
   @Test
   void shallIncludeId() {
-    final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionNedsattningArbetsformaga.questionNedsattningArbetsformaga();
+    final var element = QuestionNedsattningArbetsformaga.questionNedsattningArbetsformaga();
     assertEquals(ELEMENT_ID, element.id());
   }
 
@@ -59,7 +58,7 @@ class QuestionNedsattningArbetsformagaTest {
             "Utgångspunkten är att patientens arbetsförmåga ska bedömas i förhållande till patientens normala arbetstid.")
         .build();
 
-    final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionNedsattningArbetsformaga.questionNedsattningArbetsformaga();
+    final var element = QuestionNedsattningArbetsformaga.questionNedsattningArbetsformaga();
 
     assertEquals(expectedConfiguration, element.configuration());
   }
@@ -78,7 +77,7 @@ class QuestionNedsattningArbetsformagaTest {
             .build()
     );
 
-    final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionNedsattningArbetsformaga.questionNedsattningArbetsformaga();
+    final var element = QuestionNedsattningArbetsformaga.questionNedsattningArbetsformaga();
 
     assertEquals(expectedRules, element.rules());
   }
@@ -91,7 +90,7 @@ class QuestionNedsattningArbetsformagaTest {
             .build()
     );
 
-    final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionNedsattningArbetsformaga.questionNedsattningArbetsformaga();
+    final var element = QuestionNedsattningArbetsformaga.questionNedsattningArbetsformaga();
 
     assertEquals(expectedValidations, element.validations());
   }

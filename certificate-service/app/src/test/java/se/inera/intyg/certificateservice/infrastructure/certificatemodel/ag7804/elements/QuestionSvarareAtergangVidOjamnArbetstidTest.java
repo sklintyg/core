@@ -1,6 +1,8 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionNedsattningArbetsformaga.QUESTION_NEDSATTNING_ARBETSFORMAGA_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionSvarareAtergangVidOjamnArbetstid.QUESTION_SVARARE_ATERGANG_VID_OJAMN_ARBETSTID_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionSvarareAtergangVidOjamnArbetstid.QUESTION_SVARARE_ATERGANG_VID_OJAMN_ARBETSTID_ID;
@@ -20,13 +22,12 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0003;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSvarareAtergangVidOjamnArbetstid;
 
 class QuestionSvarareAtergangVidOjamnArbetstidTest {
 
   @Test
   void shouldIncludeId() {
-    final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSvarareAtergangVidOjamnArbetstid.questionSvarareAtergangVidOjamnArbetstid();
+    final var element = QuestionSvarareAtergangVidOjamnArbetstid.questionSvarareAtergangVidOjamnArbetstid();
     assertEquals(QUESTION_SVARARE_ATERGANG_VID_OJAMN_ARBETSTID_ID, element.id());
   }
 
@@ -47,14 +48,14 @@ class QuestionSvarareAtergangVidOjamnArbetstidTest {
         )
         .build();
 
-    final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSvarareAtergangVidOjamnArbetstid.questionSvarareAtergangVidOjamnArbetstid();
+    final var element = QuestionSvarareAtergangVidOjamnArbetstid.questionSvarareAtergangVidOjamnArbetstid();
 
     assertEquals(expectedConfiguration, element.configuration());
   }
 
   @Test
   void shouldIncludeRules() {
-    final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSvarareAtergangVidOjamnArbetstid.questionSvarareAtergangVidOjamnArbetstid();
+    final var element = QuestionSvarareAtergangVidOjamnArbetstid.questionSvarareAtergangVidOjamnArbetstid();
 
     final var expectedRules = List.of(
         ElementRuleExpression.builder()
@@ -84,7 +85,7 @@ class QuestionSvarareAtergangVidOjamnArbetstidTest {
 
   @Test
   void shouldIncludeValidation() {
-    final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSvarareAtergangVidOjamnArbetstid.questionSvarareAtergangVidOjamnArbetstid();
+    final var element = QuestionSvarareAtergangVidOjamnArbetstid.questionSvarareAtergangVidOjamnArbetstid();
 
     final var expectedValidations = List.of(
         ElementValidationBoolean.builder()
@@ -126,9 +127,9 @@ class QuestionSvarareAtergangVidOjamnArbetstidTest {
                   .build())
               .build()
       );
-      final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSvarareAtergangVidOjamnArbetstid.questionSvarareAtergangVidOjamnArbetstid();
+      final var element = QuestionSvarareAtergangVidOjamnArbetstid.questionSvarareAtergangVidOjamnArbetstid();
       final var shouldValidate = element.shouldValidate();
-      org.junit.jupiter.api.Assertions.assertTrue(shouldValidate.test(elementData));
+      assertTrue(shouldValidate.test(elementData));
     }
 
     @Test
@@ -148,9 +149,9 @@ class QuestionSvarareAtergangVidOjamnArbetstidTest {
                   .build())
               .build()
       );
-      final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSvarareAtergangVidOjamnArbetstid.questionSvarareAtergangVidOjamnArbetstid();
+      final var element = QuestionSvarareAtergangVidOjamnArbetstid.questionSvarareAtergangVidOjamnArbetstid();
       final var shouldValidate = element.shouldValidate();
-      org.junit.jupiter.api.Assertions.assertTrue(shouldValidate.test(elementData));
+      assertTrue(shouldValidate.test(elementData));
     }
 
     @Test
@@ -170,9 +171,9 @@ class QuestionSvarareAtergangVidOjamnArbetstidTest {
                   .build())
               .build()
       );
-      final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSvarareAtergangVidOjamnArbetstid.questionSvarareAtergangVidOjamnArbetstid();
+      final var element = QuestionSvarareAtergangVidOjamnArbetstid.questionSvarareAtergangVidOjamnArbetstid();
       final var shouldValidate = element.shouldValidate();
-      org.junit.jupiter.api.Assertions.assertTrue(shouldValidate.test(elementData));
+      assertTrue(shouldValidate.test(elementData));
     }
 
     @Test
@@ -191,9 +192,9 @@ class QuestionSvarareAtergangVidOjamnArbetstidTest {
                   .build())
               .build()
       );
-      final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSvarareAtergangVidOjamnArbetstid.questionSvarareAtergangVidOjamnArbetstid();
+      final var element = QuestionSvarareAtergangVidOjamnArbetstid.questionSvarareAtergangVidOjamnArbetstid();
       final var shouldValidate = element.shouldValidate();
-      org.junit.jupiter.api.Assertions.assertFalse(shouldValidate.test(elementData));
+      assertFalse(shouldValidate.test(elementData));
     }
 
     @Test
@@ -212,9 +213,9 @@ class QuestionSvarareAtergangVidOjamnArbetstidTest {
                   .build())
               .build()
       );
-      final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSvarareAtergangVidOjamnArbetstid.questionSvarareAtergangVidOjamnArbetstid();
+      final var element = QuestionSvarareAtergangVidOjamnArbetstid.questionSvarareAtergangVidOjamnArbetstid();
       final var shouldValidate = element.shouldValidate();
-      org.junit.jupiter.api.Assertions.assertFalse(shouldValidate.test(elementData));
+      assertFalse(shouldValidate.test(elementData));
     }
 
     @Test
@@ -229,7 +230,7 @@ class QuestionSvarareAtergangVidOjamnArbetstidTest {
       );
       final var element = QuestionSvarareAtergangVidOjamnArbetstid.questionSvarareAtergangVidOjamnArbetstid();
       final var shouldValidate = element.shouldValidate();
-      org.junit.jupiter.api.Assertions.assertFalse(shouldValidate.test(elementData));
+      assertFalse(shouldValidate.test(elementData));
     }
   }
 

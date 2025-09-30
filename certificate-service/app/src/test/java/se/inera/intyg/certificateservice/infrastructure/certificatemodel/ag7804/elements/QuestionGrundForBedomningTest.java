@@ -8,7 +8,7 @@ import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
@@ -18,27 +18,26 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0006;
 
-class QuestionMedicinskaSkalForSvarareAtergangTest {
+class QuestionGrundForBedomningTest {
 
-  private static final ElementId ELEMENT_ID = new ElementId("33.2");
+  private static final ElementId ELEMENT_ID = new ElementId("39.2");
+  private static final FieldId FIELD_ID = new FieldId("39.2");
 
   @Test
   void shouldIncludeId() {
-    final var element = QuestionMedicinskaSkalForSvarareAtergang.questionMedicinskaSkalForSvarareAtergang();
+    final var element = QuestionGrundForBedomning.questionGrundForBedomning();
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
   void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationTextArea.builder()
-        .name(
-            "Beskriv de medicinska skälen till att möjligheterna till återgång i arbete försämras")
-        .id(new FieldId("33.2"))
+        .id(FIELD_ID)
+        .name("Beskriv vad som ligger till grund för bedömningen")
         .build();
-
-    final var element = QuestionMedicinskaSkalForSvarareAtergang.questionMedicinskaSkalForSvarareAtergang();
-
+    final var element = QuestionGrundForBedomning.questionGrundForBedomning();
     assertEquals(expectedConfiguration, element.configuration());
   }
 
@@ -48,21 +47,22 @@ class QuestionMedicinskaSkalForSvarareAtergangTest {
         ElementRuleExpression.builder()
             .type(ElementRuleType.MANDATORY)
             .id(ELEMENT_ID)
-            .expression(new RuleExpression("$33.2"))
+            .expression(new RuleExpression("$" + ELEMENT_ID.id()))
             .build(),
         ElementRuleLimit.builder()
-            .id(ELEMENT_ID)
             .type(ElementRuleType.TEXT_LIMIT)
+            .id(ELEMENT_ID)
             .limit(new RuleLimit((short) 4000))
             .build(),
         ElementRuleExpression.builder()
-            .id(new ElementId("33"))
             .type(ElementRuleType.SHOW)
-            .expression(new RuleExpression("$33.1"))
+            .id(new ElementId("39"))
+            .expression(new RuleExpression(
+                "$" + CodeSystemKvFkmu0006.PROGNOS_OKLAR.code()))
             .build()
     );
 
-    final var element = QuestionMedicinskaSkalForSvarareAtergang.questionMedicinskaSkalForSvarareAtergang();
+    final var element = QuestionGrundForBedomning.questionGrundForBedomning();
 
     assertEquals(expectedRules, element.rules());
   }
@@ -75,65 +75,61 @@ class QuestionMedicinskaSkalForSvarareAtergangTest {
             .limit(4000)
             .build()
     );
-
-    final var element = QuestionMedicinskaSkalForSvarareAtergang.questionMedicinskaSkalForSvarareAtergang();
-
+    final var element = QuestionGrundForBedomning.questionGrundForBedomning();
     assertEquals(expectedValidations, element.validations());
   }
 
 //  @Test
 //  void shouldHaveCorrectPdfConfiguration() {
-//    final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionMedicinskaSkalForSvarareAtergang.questionMedicinskaSkalForSvarareAtergang();
+//    final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionGrundForBedomning.questionGrundForBedomning();
 //    final var expected = PdfConfigurationText.builder()
-//        .pdfFieldId(new PdfFieldId("form1[0].Sida3[0].flt_txtBeskrivMedicinskaSkal[0]"))
+//        .pdfFieldId(new PdfFieldId("form1[0].Sida3[0].flt_txtAlternativFyra[0]"))
 //        .overflowSheetFieldId(new PdfFieldId("form1[0].#subform[4].flt_txtFortsattningsblad[0]"))
-//        .maxLength(3 * PDF_TEXT_FIELD_ROW_LENGTH)
+//        .maxLength(PDF_TEXT_FIELD_ROW_LENGTH * 2)
 //        .build();
 //    assertEquals(expected, element.pdfConfiguration());
 //  }
+
+  @Test
+  void shouldNotIncludeWhenRenewing() {
+    final var element = QuestionGrundForBedomning.questionGrundForBedomning();
+    assertFalse(element.includeWhenRenewing());
+  }
 
   @Nested
   class ShouldValidate {
 
     @Test
-    void shouldReturnTrueIfBooleanIsTrue() {
-      final var element = QuestionMedicinskaSkalForSvarareAtergang.questionMedicinskaSkalForSvarareAtergang();
-      final var shouldValidate = element.elementSpecification(new ElementId("33.2"))
-          .shouldValidate();
+    void shouldReturnTrueIfPrognosOklart() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("33"))
-              .value(ElementValueBoolean.builder().value(true).build())
+              .id(new ElementId("39"))
+              .value(
+                  ElementValueCode.builder()
+                      .codeId(new FieldId(CodeSystemKvFkmu0006.PROGNOS_OKLAR.code()))
+                      .build()
+              )
               .build()
       );
+      final var element = QuestionGrundForBedomning.questionGrundForBedomning();
+      final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
       assertTrue(shouldValidate.test(elementData));
     }
 
     @Test
-    void shouldReturnFalseIfBooleanIsFalse() {
-      final var element = QuestionMedicinskaSkalForSvarareAtergang.questionMedicinskaSkalForSvarareAtergang();
-      final var shouldValidate = element.elementSpecification(new ElementId("33.2"))
-          .shouldValidate();
+    void shouldReturnFalseIfNotPrognosOklart() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("33"))
-              .value(ElementValueBoolean.builder().value(false).build())
+              .id(new ElementId("39"))
+              .value(
+                  ElementValueCode.builder()
+                      .codeId(new FieldId("OTHER_CODE"))
+                      .build()
+              )
               .build()
       );
-      assertFalse(shouldValidate.test(elementData));
-    }
-
-    @Test
-    void shouldReturnFalseIfElementMissing() {
-      final var element = QuestionMedicinskaSkalForSvarareAtergang.questionMedicinskaSkalForSvarareAtergang();
-      final var shouldValidate = element.elementSpecification(new ElementId("33.2"))
-          .shouldValidate();
-      final var elementData = List.of(
-          ElementData.builder()
-              .id(new ElementId("not33"))
-              .value(ElementValueBoolean.builder().value(true).build())
-              .build()
-      );
+      final var element = QuestionGrundForBedomning.questionGrundForBedomning();
+      final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
       assertFalse(shouldValidate.test(elementData));
     }
   }

@@ -10,35 +10,43 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
 
-public class QuestionArbetsformagaLangreAnBeslutsstod {
+public class QuestionAtgarderSomKanFramjaAtergang {
 
-  public static final ElementId QUESTION_ARBETFORMAGA_LANGRE_ID = new ElementId("37");
-  private static final FieldId QUESTION_ARBETFORMAGA_LANGRE_FIELD_ID = new FieldId("37.1");
+  public static final ElementId QUESTION_ATGARDER_ID = new ElementId(
+      "44");
+  private static final FieldId QUESTION_ATGARDER_FIELD_ID = new FieldId("44.1");
 
-  private QuestionArbetsformagaLangreAnBeslutsstod() {
+  private QuestionAtgarderSomKanFramjaAtergang() {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionArbetsformagaLangreAnBeslutsstod() {
+  public static ElementSpecification questionAtgarderSomKanFramjaAtergang() {
     return ElementSpecification.builder()
-        .id(QUESTION_ARBETFORMAGA_LANGRE_ID)
+        .id(QUESTION_ATGARDER_ID)
         .configuration(
             ElementConfigurationTextArea.builder()
+                .id(QUESTION_ATGARDER_FIELD_ID)
                 .name(
-                    "Patientens arbetsförmåga bedöms nedsatt längre tid än den som Socialstyrelsens försäkringsmedicinska beslutsstöd anger, därför att")
+                    "Här kan du beskriva andra åtgärder än åtgärder inom hälso- och sjukvården som kan främja återgången i arbete")
+                .label(
+                    "Beskriv gärna hur åtgärderna kan främja återgången i arbete eller annan aktuell sysselsättning.")
                 .description("""
-                    <ul><li>Om sjukdomen inte följer förväntat förlopp ska det framgå på vilket sätt.</li><li>Om det inträffar komplikationer som gör att det tar längre tid att återfå arbetsförmågan ska du beskriva detta.</li><li>Om sjukskrivningslängden påverkas av flera sjukdomar, så kallad samsjuklighet, ska du beskriva detta.</li></ul>
+                    Åtgärderna kan exempelvis handla om att patienten har en regelbunden kontakt med arbetsplatsen. Det kan också vara arbetsanpassning, som anpassning av arbetstider, arbetsuppgifter eller arbetsplatsen.
+                    
+                    Du kan även föreslå att patienten får arbetsträna vilket innebär att vara på en arbetsplats och delta
+                    i verksamheten utan krav på produktivitet.\s
+                    
+                    Tänk på att det är Försäkringskassan eller Arbetsförmedlingen som beslutar om arbetsträning. De föreslagna åtgärderna är exempel på möjliga åtgärder och det kan finnas flera åtgärder som är lämpliga.
                     """)
-                .id(QUESTION_ARBETFORMAGA_LANGRE_FIELD_ID)
                 .build()
         )
         .rules(
             List.of(
                 CertificateElementRuleFactory.limit(
-                    QUESTION_ARBETFORMAGA_LANGRE_ID,
-                    (short) 4000
-                ),
+                    QUESTION_ATGARDER_ID,
+                    (short) 4000),
                 CertificateElementRuleFactory.hide(
                     QUESTION_SMITTBARARPENNING_ID,
                     QUESTION_SMITTBARARPENNING_FIELD_ID
@@ -53,6 +61,7 @@ public class QuestionArbetsformagaLangreAnBeslutsstod {
                     .build()
             )
         )
+        .shouldValidate(ShouldValidateFactory.checkboxBoolean(QUESTION_SMITTBARARPENNING_ID, false))
         .build();
   }
 }

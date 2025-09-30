@@ -11,7 +11,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.MessageLevel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.MessageNedsattningArbetsformagaStartDateInfo;
 
 class MessageNedsattningArbetsformagaStartDateInfoTest {
 
@@ -19,7 +18,7 @@ class MessageNedsattningArbetsformagaStartDateInfoTest {
 
   @Test
   void shallIncludeId() {
-    final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.MessageNedsattningArbetsformagaStartDateInfo.messageStartDateInfo();
+    final var element = MessageNedsattningArbetsformagaStartDateInfo.messageStartDateInfo();
     assertEquals(ELEMENT_ID, element.id());
   }
 
@@ -34,7 +33,7 @@ class MessageNedsattningArbetsformagaStartDateInfoTest {
                 .build()
         )
         .build();
-    final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.MessageNedsattningArbetsformagaStartDateInfo.messageStartDateInfo();
+    final var element = MessageNedsattningArbetsformagaStartDateInfo.messageStartDateInfo();
     assertEquals(expectedConfiguration, element.configuration());
   }
 

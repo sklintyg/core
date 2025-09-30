@@ -13,7 +13,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionArbetsformagaLangreAnBeslutsstod;
 
 class QuestionArbetsformagaLangreAnBeslutsstodTest {
 
@@ -32,7 +31,7 @@ class QuestionArbetsformagaLangreAnBeslutsstodTest {
 
   @Test
   void shouldIncludeId() {
-    final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionArbetsformagaLangreAnBeslutsstod.questionArbetsformagaLangreAnBeslutsstod();
+    final var element = QuestionArbetsformagaLangreAnBeslutsstod.questionArbetsformagaLangreAnBeslutsstod();
     assertEquals(ELEMENT_ID, element.id());
   }
 
@@ -47,7 +46,7 @@ class QuestionArbetsformagaLangreAnBeslutsstodTest {
             """)
         .build();
 
-    final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionArbetsformagaLangreAnBeslutsstod.questionArbetsformagaLangreAnBeslutsstod();
+    final var element = QuestionArbetsformagaLangreAnBeslutsstod.questionArbetsformagaLangreAnBeslutsstod();
 
     assertEquals(expectedConfiguration, element.configuration());
   }
@@ -67,7 +66,7 @@ class QuestionArbetsformagaLangreAnBeslutsstodTest {
             .build()
     );
 
-    final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionArbetsformagaLangreAnBeslutsstod.questionArbetsformagaLangreAnBeslutsstod();
+    final var element = QuestionArbetsformagaLangreAnBeslutsstod.questionArbetsformagaLangreAnBeslutsstod();
 
     assertEquals(expectedRules, element.rules());
   }

@@ -1,7 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionSvarareAtergangVidOjamnArbetstid.QUESTION_SVARARE_ATERGANG_VID_OJAMN_ARBETSTID_FIELD_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionSvarareAtergangVidOjamnArbetstid.QUESTION_SVARARE_ATERGANG_VID_OJAMN_ARBETSTID_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionPrognos.QUESTION_PROGNOS_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
@@ -12,39 +11,40 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0006;
 
-public class QuestionMedicinskaSkalForSvarareAtergang {
+public class QuestionGrundForBedomning {
 
-  public static final ElementId QUESTION_MEDICINSKA_SKAL_ID = new ElementId("33.2");
-  private static final FieldId QUESTION_MEDICINSKA_SKAL_FIELD_ID = new FieldId("33.2");
+  public static final ElementId QUESTION_GRUND_FOR_BEDOMNING_ID = new ElementId(
+      "39.2");
+  private static final FieldId QUESTION_GRUND_FOR_BEDOMNING_FIELD_ID = new FieldId("39.2");
 
-  private QuestionMedicinskaSkalForSvarareAtergang() {
+  private QuestionGrundForBedomning() {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionMedicinskaSkalForSvarareAtergang() {
+  public static ElementSpecification questionGrundForBedomning() {
     return ElementSpecification.builder()
-        .id(QUESTION_MEDICINSKA_SKAL_ID)
+        .id(QUESTION_GRUND_FOR_BEDOMNING_ID)
+        .includeWhenRenewing(false)
         .configuration(
             ElementConfigurationTextArea.builder()
+                .id(QUESTION_GRUND_FOR_BEDOMNING_FIELD_ID)
                 .name(
-                    "Beskriv de medicinska skälen till att möjligheterna till återgång i arbete försämras")
-                .id(QUESTION_MEDICINSKA_SKAL_FIELD_ID)
+                    "Beskriv vad som ligger till grund för bedömningen")
                 .build()
         )
         .rules(
             List.of(
                 CertificateElementRuleFactory.mandatory(
-                    QUESTION_MEDICINSKA_SKAL_ID,
-                    QUESTION_MEDICINSKA_SKAL_FIELD_ID
+                    QUESTION_GRUND_FOR_BEDOMNING_ID,
+                    QUESTION_GRUND_FOR_BEDOMNING_FIELD_ID
                 ),
                 CertificateElementRuleFactory.limit(
-                    QUESTION_MEDICINSKA_SKAL_ID,
-                    (short) 4000
-                ),
+                    QUESTION_GRUND_FOR_BEDOMNING_ID,
+                    (short) 4000),
                 CertificateElementRuleFactory.show(
-                    QUESTION_SVARARE_ATERGANG_VID_OJAMN_ARBETSTID_ID,
-                    QUESTION_SVARARE_ATERGANG_VID_OJAMN_ARBETSTID_FIELD_ID
+                    QUESTION_PROGNOS_ID, new FieldId(CodeSystemKvFkmu0006.PROGNOS_OKLAR.code())
                 )
             )
         )
@@ -56,10 +56,10 @@ public class QuestionMedicinskaSkalForSvarareAtergang {
                     .build()
             )
         )
-        .shouldValidate(
-            ShouldValidateFactory.valueBoolean(QUESTION_SVARARE_ATERGANG_VID_OJAMN_ARBETSTID_ID,
-                true))
-        .mapping(new ElementMapping(QUESTION_SVARARE_ATERGANG_VID_OJAMN_ARBETSTID_ID, null))
+        .shouldValidate(ShouldValidateFactory.codes(QUESTION_PROGNOS_ID,
+            List.of(new FieldId(CodeSystemKvFkmu0006.PROGNOS_OKLAR.code()))))
+        .mapping(new ElementMapping(QUESTION_PROGNOS_ID, CodeSystemKvFkmu0006.PROGNOS_OKLAR))
         .build();
   }
+
 }
