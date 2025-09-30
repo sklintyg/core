@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import java.io.UncheckedIOException;
 import java.time.LocalDateTime;
-import java.util.UUID;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsEventCertificateV1;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsEventCertificateV1.CertificateAnalyticsEventCertificateV1Builder;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsEventMessageV1;
@@ -33,13 +33,13 @@ public class TestDataMessages {
     try {
       return OBJECT_MAPPER.writeValueAsString(message);
     } catch (JsonProcessingException e) {
-      throw new RuntimeException(e);
+      throw new UncheckedIOException(e);
     }
   }
 
   public static CertificateAnalyticsEventMessageV1Builder draftMessageBuilder() {
     return CertificateAnalyticsEventMessageV1.builder()
-        .messageId(UUID.randomUUID().toString())
+        .messageId("50d64e86-9226-4795-aadd-c00c084c030d")
         .type("certificate.analytics.event")
         .schemaVersion("v1")
         .certificate(
@@ -55,22 +55,22 @@ public class TestDataMessages {
 
   private static CertificateAnalyticsEventCertificateV1Builder certificateBuilder() {
     return CertificateAnalyticsEventCertificateV1.builder()
-        .id(UUID.randomUUID().toString())
+        .id("78a0a279-1197-4cc7-bf6a-899cb5034053")
         .unitId("TSTNMT2321000156-ALMC")
         .careProviderId("TSTNMT2321000156-ALFA")
         .patientId("19401130-6125")
         .type("fk7210")
-        .typeVersion("v1");
+        .typeVersion("1.0");
   }
 
   private static CertificateAnalyticsEventV1Builder eventBuilder() {
     return CertificateAnalyticsEventV1.builder()
-        .timestamp(LocalDateTime.now())
+        .timestamp(LocalDateTime.parse("2025-09-29T17:49:58.616648"))
         .staffId("TSTNMT2321000156-DRAA")
         .role("LAKARE")
         .unitId("TSTNMT2321000156-ALMC")
         .careProviderId("TSTNMT2321000156-ALFA")
-        .sessionId(UUID.randomUUID().toString())
+        .sessionId("2d02bc34-41f1-42b7-9964-d0659bf369c8")
         .origin("NORMAL");
   }
 }

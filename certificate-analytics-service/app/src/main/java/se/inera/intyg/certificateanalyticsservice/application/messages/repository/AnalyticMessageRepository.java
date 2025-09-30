@@ -3,7 +3,7 @@ package se.inera.intyg.certificateanalyticsservice.application.messages.reposito
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Repository;
-import se.inera.intyg.certificateanalyticsservice.application.messages.model.CertificateAnalyticsMessage;
+import se.inera.intyg.certificateanalyticsservice.application.messages.model.PseudonymizedAnalyticsMessage;
 
 /**
  * This is just a stub repository for storing messages in memory. It will be replaced later with a
@@ -12,13 +12,13 @@ import se.inera.intyg.certificateanalyticsservice.application.messages.model.Cer
 @Repository
 public class AnalyticMessageRepository {
 
-  private final List<CertificateAnalyticsMessage> messages = new ArrayList<>();
+  private final List<PseudonymizedAnalyticsMessage> messages = new ArrayList<>();
 
-  public void store(CertificateAnalyticsMessage message) {
+  public void store(PseudonymizedAnalyticsMessage message) {
     messages.add(message);
   }
 
-  public CertificateAnalyticsMessage findByMessageId(String messageId) {
+  public PseudonymizedAnalyticsMessage findByMessageId(String messageId) {
     return messages.stream()
         .filter(message -> message.getMessageId().equals(messageId))
         .findFirst()
