@@ -4,9 +4,9 @@ import java.time.LocalDateTime;
 
 public final class TestDataConstants {
 
-  public static final String MESSAGE_ID_CREATED = "msg-created-001";
-  public static final String MESSAGE_ID_SENT = "msg-sent-001";
-  public static final String MESSAGE_ID_SIGNED = "msg-signed-001";
+  public static final String MESSAGE_ID_CREATED = "50d64e86-9226-4795-aadd-c00c084c030d";
+  public static final String MESSAGE_ID_SENT = "50d64e86-9226-4795-aadd-c00c084c030d";
+  public static final String MESSAGE_ID_SIGNED = "50d64e86-9226-4795-aadd-c00c084c030d";
   public static final String CERTIFICATE_ID = "78a0a279-1197-4cc7-bf6a-899cb5034053";
   public static final String CERTIFICATE_TYPE = "fk7210";
   public static final String CERTIFICATE_TYPE_VERSION = "1.0";
