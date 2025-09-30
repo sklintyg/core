@@ -62,4 +62,7 @@ public class EventEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "role_key", referencedColumnName = "key")
   private RoleEntity role;
+
+  @Column(name = "message_id", unique = true, nullable = false, length = 22)
+  private String messageId;
 }

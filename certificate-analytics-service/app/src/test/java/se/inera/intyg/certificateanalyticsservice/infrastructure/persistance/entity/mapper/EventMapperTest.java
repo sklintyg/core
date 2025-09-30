@@ -25,7 +25,6 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.rep
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.SessionRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.UnitRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.UserRepository;
-import se.inera.intyg.certificateanalyticsservice.testdata.TestDataEntities;
 import se.inera.intyg.certificateanalyticsservice.testdata.TestDataPseudonymized;
 
 @ExtendWith(MockitoExtension.class)
@@ -79,14 +78,16 @@ class EventMapperTest {
         .careProvider(expectedCareProvider)
         .user(expectedUser)
         .session(expectedSession)
-        .time(TestDataEntities.timeEntity())
+        .timestamp(message.getEventTimestamp())
         .origin(expectedOrigin)
         .eventType(expectedEventType)
         .role(expectedRole)
+        .messageId(message.getMessageId())
         .build();
 
     final var result = eventMapper.toEntity(message);
 
     assertEquals(expected, result);
+    assertEquals(message.getMessageId(), result.getMessageId());
   }
 }

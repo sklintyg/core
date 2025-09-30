@@ -141,6 +141,9 @@
         <constraints nullable="false"/>
       </column>
       <column name="role_key" type="bigint unsigned"/>
+      <column name="message_id" type="varchar(22)">
+        <constraints nullable="false" unique="true"/>
+      </column>
     </createTable>
     <addForeignKeyConstraint baseTableName="event" baseColumnNames="certificate_key"
       referencedTableName="certificate" referencedColumnNames="key"

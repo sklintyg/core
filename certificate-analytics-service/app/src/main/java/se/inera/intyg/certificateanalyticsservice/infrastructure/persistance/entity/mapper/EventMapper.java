@@ -37,6 +37,7 @@ public class EventMapper {
         .origin(originRepository.findOrCreate(message.getEventOrigin()))
         .eventType(eventTypeRepository.findOrCreate(message.getEventMessageType()))
         .role(roleRepository.findOrCreate(message.getEventRole()))
+        .messageId(message.getMessageId())
         .build();
   }
 }
