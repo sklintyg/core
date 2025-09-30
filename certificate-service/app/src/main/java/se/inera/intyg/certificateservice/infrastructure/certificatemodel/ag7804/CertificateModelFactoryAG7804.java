@@ -12,6 +12,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategoryPrognos.categoryPrognos;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategorySmittbararpenning.categorySmittbararpenning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategorySysselsattning.categorySysselsattning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionSmittbararpenning.questionSmittbararpenning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.elements.ElementUnitContactInformation.issuingUnitContactInfo;
 
 import java.time.LocalDateTime;
@@ -94,7 +95,9 @@ public class CertificateModelFactoryAG7804 implements CertificateModelFactory {
         .certificateActionSpecifications(AG7804CertificateActionSpecification.create())
         .messageActionSpecifications(AG7804MessageActionSpecification.create())
         .elementSpecifications(List.of(
-            categorySmittbararpenning(),
+            categorySmittbararpenning(
+                questionSmittbararpenning()
+            ),
             categoryGrundForMedicinsktUnderlag(),
             categorySysselsattning(),
             categoryDiagnos(),
