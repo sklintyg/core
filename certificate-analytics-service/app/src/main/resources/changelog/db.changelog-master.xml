@@ -133,7 +133,7 @@
       <column name="provider_key" type="bigint unsigned"/>
       <column name="user_key" type="bigint unsigned"/>
       <column name="session_key" type="bigint unsigned"/>
-      <column name="timestamp" type="timestamp">
+      <column name="timestamp" type="timestamp(6)">
         <constraints nullable="false"/>
       </column>
       <column name="origin_key" type="bigint unsigned"/>

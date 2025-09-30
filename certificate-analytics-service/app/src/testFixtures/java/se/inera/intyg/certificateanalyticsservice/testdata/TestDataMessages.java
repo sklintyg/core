@@ -9,8 +9,6 @@ import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConsta
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.EVENT_TYPE_DRAFT_CREATED;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.EVENT_TYPE_SENT;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.EVENT_TYPE_SIGNED;
-import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_CERTIFICATE_ID;
-import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_MESSAGE_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.MESSAGE_ID_CREATED;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.MESSAGE_ID_SENT;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.MESSAGE_ID_SIGNED;
@@ -105,12 +103,12 @@ public class TestDataMessages {
 
   public static CertificateAnalyticsEventMessageV1Builder draftMessageBuilder() {
     return CertificateAnalyticsEventMessageV1.builder()
-        .messageId(HASHED_MESSAGE_ID)
+        .messageId(MESSAGE_ID_CREATED)
         .type(TYPE_ANALYTICS_EVENT)
         .schemaVersion(SCHEMA_VERSION)
         .certificate(
             certificateBuilder()
-                .id(HASHED_CERTIFICATE_ID)
+                .id(CERTIFICATE_ID)
                 .unitId(UNIT_ID)
                 .careProviderId(CARE_PROVIDER_ID)
                 .patientId(PATIENT_ID)
@@ -134,7 +132,7 @@ public class TestDataMessages {
 
   private static CertificateAnalyticsEventCertificateV1Builder certificateBuilder() {
     return CertificateAnalyticsEventCertificateV1.builder()
-        .id(HASHED_CERTIFICATE_ID)
+        .id(CERTIFICATE_ID)
         .unitId(UNIT_ID)
         .careProviderId(CARE_PROVIDER_ID)
         .patientId(PATIENT_ID)
