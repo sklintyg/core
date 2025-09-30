@@ -13,7 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CertificateTypeEntity;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.v1.CertificateTypeEntityMapperV1;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.CertificateTypeEntityMapper;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateTypeRepositoryTest {
@@ -25,7 +25,7 @@ class CertificateTypeRepositoryTest {
 
   @Test
   void shouldCreateNewCertificateTypeEntityIfNotExists() {
-    final var typeEntity = CertificateTypeEntityMapperV1.map(CERTIFICATE_TYPE,
+    final var typeEntity = CertificateTypeEntityMapper.map(CERTIFICATE_TYPE,
         CERTIFICATE_TYPE_VERSION);
     final var savedTypeEntity = mock(CertificateTypeEntity.class);
     when(certificateTypeEntityRepository.findByCertificateTypeAndCertificateTypeVersion(

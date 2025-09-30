@@ -1,8 +1,8 @@
-package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.v1;
+package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper;
 
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.OriginEntity;
 
-public class OriginEntityMapperV1 {
+public class OriginEntityMapper {
 
   public static OriginEntity map(String origin) {
     return OriginEntity.builder()

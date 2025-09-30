@@ -1,8 +1,8 @@
-package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.v1;
+package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper;
 
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CertificateTypeEntity;
 
-public class CertificateTypeEntityMapperV1 {
+public class CertificateTypeEntityMapper {
 
   public static CertificateTypeEntity map(String type, String version) {
     return CertificateTypeEntity.builder()

@@ -3,7 +3,7 @@ package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.re
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.RoleEntity;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.v1.RoleEntityMapperV1;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.RoleEntityMapper;
 
 @Repository
 @RequiredArgsConstructor
@@ -13,7 +13,6 @@ public class RoleRepository {
 
   public RoleEntity findOrCreate(String role) {
     return roleEntityRepository.findByRole(role)
-        .orElseGet(() -> roleEntityRepository.save(RoleEntityMapperV1.map(role)));
+        .orElseGet(() -> roleEntityRepository.save(RoleEntityMapper.map(role)));
   }
 }
-

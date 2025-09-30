@@ -1,8 +1,8 @@
-package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.v1;
+package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper;
 
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.UnitEntity;
 
-public class UnitEntityMapperV1 {
+public class UnitEntityMapper {
 
   public static UnitEntity map(String unitId) {
     return UnitEntity.builder()

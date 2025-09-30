@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.v1;
+package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.UnitEntity;
 import se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants;
 
-class UnitEntityMapperV1Test {
+class UnitEntityMapperTest {
 
   @Test
   void shouldMapUnitIdCorrectly() {
@@ -14,7 +14,7 @@ class UnitEntityMapperV1Test {
         .hsaId(TestDataConstants.UNIT_ID)
         .build();
 
-    final var result = UnitEntityMapperV1.map(TestDataConstants.UNIT_ID);
+    final var result = UnitEntityMapper.map(TestDataConstants.UNIT_ID);
 
     assertEquals(expected, result);
   }

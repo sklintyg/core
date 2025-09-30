@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.v1;
+package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -26,13 +26,13 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.rep
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.UnitRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.UserRepository;
 import se.inera.intyg.certificateanalyticsservice.testdata.TestDataEntities;
-import se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessages;
+import se.inera.intyg.certificateanalyticsservice.testdata.TestDataPseudonymized;
 
 @ExtendWith(MockitoExtension.class)
-class EventMapperV1Test {
+class EventMapperTest {
 
   @InjectMocks
-  private EventMapperV1 eventMapperV1;
+  private EventMapper eventMapper;
   @Mock
   private UnitRepository unitRepository;
   @Mock
@@ -48,13 +48,11 @@ class EventMapperV1Test {
   @Mock
   private RoleRepository roleRepository;
   @Mock
-  private CertificateEntityMapperV1 certificateEntityMapperV1;
+  private CertificateEntityMapper certificateEntityMapper;
 
   @Test
-  void shouldMapCreatedEventMessageCorrectly() {
-    final var message = TestDataMessages.CREATED_EVENT_MESSAGE;
-    final var certificateMsg = message.getCertificate();
-    final var eventMsg = message.getEvent();
+  void shouldMapPseudonymizedAnalyticsMessageCorrectly() {
+    final var message = TestDataPseudonymized.draftPseudonymizedMessageBuilder().build();
 
     final var expectedCertificate = mock(CertificateEntity.class);
     final var expectedUnit = mock(UnitEntity.class);
@@ -65,16 +63,16 @@ class EventMapperV1Test {
     final var expectedEventType = mock(EventTypeEntity.class);
     final var expectedRole = mock(RoleEntity.class);
 
-    when(certificateEntityMapperV1.map(certificateMsg)).thenReturn(expectedCertificate);
-    when(unitRepository.findOrCreate(certificateMsg.getUnitId())).thenReturn(expectedUnit);
-    when(careProviderRepository.findOrCreate(certificateMsg.getCareProviderId())).thenReturn(
+    when(certificateEntityMapper.map(message)).thenReturn(expectedCertificate);
+    when(unitRepository.findOrCreate(message.getCertificateUnitId())).thenReturn(expectedUnit);
+    when(careProviderRepository.findOrCreate(message.getCertificateCareProviderId())).thenReturn(
         expectedCareProvider);
-    when(userRepository.findOrCreate(eventMsg.getStaffId())).thenReturn(expectedUser);
-    when(sessionRepository.findOrCreate(eventMsg.getSessionId())).thenReturn(expectedSession);
-    when(originRepository.findOrCreate(eventMsg.getOrigin())).thenReturn(expectedOrigin);
-    when(eventTypeRepository.findOrCreate(eventMsg.getMessageType())).thenReturn(expectedEventType);
-    when(roleRepository.findOrCreate(eventMsg.getRole())).thenReturn(expectedRole);
-
+    when(userRepository.findOrCreate(message.getEventStaffId())).thenReturn(expectedUser);
+    when(sessionRepository.findOrCreate(message.getEventSessionId())).thenReturn(expectedSession);
+    when(originRepository.findOrCreate(message.getEventOrigin())).thenReturn(expectedOrigin);
+    when(eventTypeRepository.findOrCreate(message.getEventMessageType())).thenReturn(
+        expectedEventType);
+    when(roleRepository.findOrCreate(message.getEventRole())).thenReturn(expectedRole);
     final var expected = EventEntity.builder()
         .certificate(expectedCertificate)
         .unit(expectedUnit)
@@ -87,7 +85,7 @@ class EventMapperV1Test {
         .role(expectedRole)
         .build();
 
-    final var result = eventMapperV1.toEntity(message);
+    final var result = eventMapper.toEntity(message);
 
     assertEquals(expected, result);
   }

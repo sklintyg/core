@@ -1,8 +1,8 @@
 package se.inera.intyg.certificateanalyticsservice.application.messages.repository;
 
-import se.inera.intyg.certificateanalyticsservice.application.messages.model.CertificateAnalyticsMessage;
+import se.inera.intyg.certificateanalyticsservice.application.messages.model.PseudonymizedAnalyticsMessage;
 
 public interface CertificateAnalyticsMessageRepository {
 
-  void save(CertificateAnalyticsMessage message);
+  void save(PseudonymizedAnalyticsMessage message);
 }

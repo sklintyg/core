@@ -1,8 +1,8 @@
-package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.v1;
+package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper;
 
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.SessionEntity;
 
-public class SessionEntityMapperV1 {
+public class SessionEntityMapper {
 
   public static SessionEntity map(String sessionId) {
     return SessionEntity.builder()

@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.v1;
+package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -20,13 +20,13 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.rep
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CertificateTypeRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.PatientRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.UnitRepository;
-import se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessages;
+import se.inera.intyg.certificateanalyticsservice.testdata.TestDataPseudonymized;
 
 @ExtendWith(MockitoExtension.class)
-class CertificateEntityMapperV1Test {
+class CertificateEntityMapperTest {
 
   @InjectMocks
-  private CertificateEntityMapperV1 certificateEntityMapperV1;
+  private CertificateEntityMapper certificateEntityMapper;
   @Mock
   private CareProviderRepository careProviderRepository;
   @Mock
@@ -40,31 +40,32 @@ class CertificateEntityMapperV1Test {
 
   @Test
   void shouldMapCertificateCorrectly() {
-    final var message = TestDataMessages.certificate();
+    final var message = TestDataPseudonymized.draftPseudonymizedMessageBuilder().build();
     final var expectedCareProvider = mock(CareProviderEntity.class);
     final var expectedUnit = mock(UnitEntity.class);
     final var expectedPatient = mock(PatientEntity.class);
     final var expectedCertificateType = mock(CertificateTypeEntity.class);
 
-    when(certificateEntityRepository.findByCertificateId(message.getId())).thenReturn(
+    when(certificateEntityRepository.findByCertificateId(message.getCertificateId())).thenReturn(
         Optional.empty());
-    when(careProviderRepository.findOrCreate(message.getCareProviderId())).thenReturn(
+    when(careProviderRepository.findOrCreate(message.getCertificateCareProviderId())).thenReturn(
         expectedCareProvider);
-    when(unitRepository.findOrCreate(message.getUnitId())).thenReturn(expectedUnit);
-    when(patientRepository.findOrCreate(message.getPatientId())).thenReturn(expectedPatient);
-    when(certificateTypeRepository.findOrCreate(message.getType(),
-        message.getTypeVersion())).thenReturn(
+    when(unitRepository.findOrCreate(message.getCertificateUnitId())).thenReturn(expectedUnit);
+    when(patientRepository.findOrCreate(message.getCertificatePatientId())).thenReturn(
+        expectedPatient);
+    when(certificateTypeRepository.findOrCreate(message.getCertificateType(),
+        message.getCertificateTypeVersion())).thenReturn(
         expectedCertificateType);
 
     final var expected = CertificateEntity.builder()
-        .certificateId(message.getId())
+        .certificateId(message.getCertificateId())
         .certificateType(expectedCertificateType)
         .patient(expectedPatient)
         .unit(expectedUnit)
         .careProvider(expectedCareProvider)
         .build();
 
-    final var result = certificateEntityMapperV1.map(message);
+    final var result = certificateEntityMapper.map(message);
 
     assertEquals(expected, result);
   }

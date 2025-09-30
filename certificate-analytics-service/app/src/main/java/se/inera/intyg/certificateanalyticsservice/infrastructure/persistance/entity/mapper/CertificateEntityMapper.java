@@ -1,8 +1,8 @@
-package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.v1;
+package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsEventCertificateV1;
+import se.inera.intyg.certificateanalyticsservice.application.messages.model.PseudonymizedAnalyticsMessage;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CertificateEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CareProviderRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CertificateEntityRepository;
@@ -12,7 +12,7 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.rep
 
 @Component
 @RequiredArgsConstructor
-public class CertificateEntityMapperV1 {
+public class CertificateEntityMapper {
 
   private final CareProviderRepository careProviderRepository;
   private final UnitRepository unitRepository;
@@ -20,17 +20,18 @@ public class CertificateEntityMapperV1 {
   private final CertificateEntityRepository certificateEntityRepository;
   private final CertificateTypeRepository certificateTypeRepository;
 
-  public CertificateEntity map(CertificateAnalyticsEventCertificateV1 certificate) {
-    return certificateEntityRepository.findByCertificateId(certificate.getId())
+  public CertificateEntity map(PseudonymizedAnalyticsMessage message) {
+    return certificateEntityRepository.findByCertificateId(message.getCertificateId())
         .orElseGet(() -> CertificateEntity.builder()
-            .certificateId(certificate.getId())
+            .certificateId(message.getCertificateId())
             .certificateType(
                 certificateTypeRepository.findOrCreate(
-                    certificate.getType(), certificate.getTypeVersion())
+                    message.getCertificateType(), message.getCertificateTypeVersion())
             )
-            .patient(patientRepository.findOrCreate(certificate.getPatientId()))
-            .unit(unitRepository.findOrCreate(certificate.getUnitId()))
-            .careProvider(careProviderRepository.findOrCreate(certificate.getCareProviderId()))
+            .patient(patientRepository.findOrCreate(message.getCertificatePatientId()))
+            .unit(unitRepository.findOrCreate(message.getCertificateUnitId()))
+            .careProvider(
+                careProviderRepository.findOrCreate(message.getCertificateCareProviderId()))
             .build());
   }
 }

@@ -3,7 +3,7 @@ package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.re
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.PatientEntity;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.v1.PatientEntityMapperV1;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.PatientEntityMapper;
 
 @Repository
 @RequiredArgsConstructor
@@ -13,7 +13,6 @@ public class PatientRepository {
 
   public PatientEntity findOrCreate(String patientId) {
     return patientEntityRepository.findByPatientId(patientId)
-        .orElseGet(() -> patientEntityRepository.save(PatientEntityMapperV1.map(patientId)));
+        .orElseGet(() -> patientEntityRepository.save(PatientEntityMapper.map(patientId)));
   }
 }
-

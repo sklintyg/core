@@ -3,7 +3,7 @@ package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.re
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CertificateTypeEntity;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.v1.CertificateTypeEntityMapperV1;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.CertificateTypeEntityMapper;
 
 @Repository
 @RequiredArgsConstructor
@@ -14,7 +14,6 @@ public class CertificateTypeRepository {
   public CertificateTypeEntity findOrCreate(String type, String version) {
     return certificateTypeEntityRepository.findByCertificateTypeAndCertificateTypeVersion(type,
         version).orElseGet(() -> certificateTypeEntityRepository.save(
-        CertificateTypeEntityMapperV1.map(type, version)));
+        CertificateTypeEntityMapper.map(type, version)));
   }
 }
-

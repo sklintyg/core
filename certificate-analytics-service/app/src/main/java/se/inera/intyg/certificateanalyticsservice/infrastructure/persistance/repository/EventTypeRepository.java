@@ -3,7 +3,7 @@ package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.re
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventTypeEntity;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.v1.EventTypeEntityMapperV1;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.EventTypeEntityMapper;
 
 @Repository
 @RequiredArgsConstructor
@@ -13,7 +13,6 @@ public class EventTypeRepository {
 
   public EventTypeEntity findOrCreate(String eventType) {
     return eventTypeEntityRepository.findByEventType(eventType)
-        .orElseGet(() -> eventTypeEntityRepository.save(EventTypeEntityMapperV1.map(eventType)));
+        .orElseGet(() -> eventTypeEntityRepository.save(EventTypeEntityMapper.map(eventType)));
   }
 }
-

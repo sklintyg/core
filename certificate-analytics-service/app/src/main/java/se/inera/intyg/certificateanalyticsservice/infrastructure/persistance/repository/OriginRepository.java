@@ -3,7 +3,7 @@ package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.re
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.OriginEntity;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.v1.OriginEntityMapperV1;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.OriginEntityMapper;
 
 @Repository
 @RequiredArgsConstructor
@@ -13,7 +13,6 @@ public class OriginRepository {
 
   public OriginEntity findOrCreate(String origin) {
     return originEntityRepository.findByOrigin(origin)
-        .orElseGet(() -> originEntityRepository.save(OriginEntityMapperV1.map(origin)));
+        .orElseGet(() -> originEntityRepository.save(OriginEntityMapper.map(origin)));
   }
 }
-

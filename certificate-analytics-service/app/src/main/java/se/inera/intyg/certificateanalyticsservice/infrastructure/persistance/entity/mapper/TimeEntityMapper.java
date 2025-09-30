@@ -1,9 +1,9 @@
-package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.v1;
+package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper;
 
 import java.time.LocalDateTime;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.TimeEntity;
 
-public class TimeEntityMapperV1 {
+public class TimeEntityMapper {
 
   public static TimeEntity map(LocalDateTime timestamp) {
     return TimeEntity.builder()

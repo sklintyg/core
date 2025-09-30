@@ -3,7 +3,7 @@ package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.re
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.UnitEntity;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.v1.UnitEntityMapperV1;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.UnitEntityMapper;
 
 @Repository
 @RequiredArgsConstructor
@@ -13,6 +13,6 @@ public class UnitRepository {
 
   public UnitEntity findOrCreate(String hsaId) {
     return unitEntityRepository.findByHsaId(hsaId)
-        .orElseGet(() -> unitEntityRepository.save(UnitEntityMapperV1.map(hsaId)));
+        .orElseGet(() -> unitEntityRepository.save(UnitEntityMapper.map(hsaId)));
   }
 }

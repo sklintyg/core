@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.v1;
+package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.TimeEntity;
 import se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants;
 
-class TimeEntityMapperV1Test {
+class TimeEntityMapperTest {
 
   @Test
   void shouldMapTimestampCorrectly() {
@@ -20,7 +20,7 @@ class TimeEntityMapperV1Test {
         .minute(ts.getMinute())
         .second(ts.getSecond())
         .build();
-    final var result = TimeEntityMapperV1.map(ts);
+    final var result = TimeEntityMapper.map(ts);
     assertEquals(expected, result);
   }
 }
