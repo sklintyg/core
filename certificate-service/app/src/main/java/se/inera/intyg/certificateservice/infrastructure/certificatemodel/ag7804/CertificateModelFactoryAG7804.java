@@ -12,7 +12,13 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategoryPrognos.categoryPrognos;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategorySmittbararpenning.categorySmittbararpenning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategorySysselsattning.categorySysselsattning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.MessageNedsattningArbetsformagaStartDateInfo.messageStartDateInfo;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionArbetsformagaLangreAnBeslutsstod.questionArbetsformagaLangreAnBeslutsstod;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionMedicinskaSkalForSvarareAtergang.questionMedicinskaSkalForSvarareAtergang;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionNedsattningArbetsformaga.questionNedsattningArbetsformaga;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionSmittbararpenning.questionSmittbararpenning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionSvarareAtergangVidOjamnArbetstid.questionSvarareAtergangVidOjamnArbetstid;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionTransportstod.questionTransportstod;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.elements.ElementUnitContactInformation.issuingUnitContactInfo;
 
 import java.time.LocalDateTime;
@@ -103,8 +109,17 @@ public class CertificateModelFactoryAG7804 implements CertificateModelFactory {
             categoryDiagnos(),
             categoryFunktionsnedsattning(),
             categoryAktivitetsbegransning(),
-            categoryMedicinskBehandling(),
-            categoryBedomning(),
+            categoryMedicinskBehandling(), //FIXME
+            categoryBedomning(
+                questionNedsattningArbetsformaga(
+                    messageStartDateInfo()
+                ),
+                questionArbetsformagaLangreAnBeslutsstod(),
+                questionTransportstod(),
+                questionSvarareAtergangVidOjamnArbetstid(
+                    questionMedicinskaSkalForSvarareAtergang()
+                )
+            ),
             categoryPrognos(),
             categoryAtgarderSomKanFramjaAttergang(),
             categoryOvrigt(),
