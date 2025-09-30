@@ -3,10 +3,10 @@ package se.inera.intyg.certificateanalyticsservice.testdata;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CARE_PROVIDER_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CERTIFICATE_TYPE;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CERTIFICATE_TYPE_VERSION;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_PATIENT_ID;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_STAFF_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.ORIGIN;
-import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.PATIENT_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.ROLE;
-import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.STAFF_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.TIMESTAMP;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.UNIT_ID;
 
@@ -47,7 +47,7 @@ public class TestDataEntities {
 
   public static PatientEntity patientEntity() {
     return PatientEntity.builder()
-        .patientId(PATIENT_ID)
+        .patientId(HASHED_PATIENT_ID)
         .build();
   }
 
@@ -80,7 +80,7 @@ public class TestDataEntities {
 
   public static UserEntity userEntity() {
     return UserEntity.builder()
-        .userId(STAFF_ID)
+        .userId(HASHED_STAFF_ID)
         .build();
   }
 
