@@ -1,5 +1,8 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionFormedlaInfoOmDiagnosTillAG.FORMEDLA_DIAGNOSIS_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionFormedlaInfoOmDiagnosTillAG.QUESTION_FORMEDLA_DIAGNOS_ID;
+
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificate.model.CustomMapperId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDiagnosis;
@@ -44,7 +47,9 @@ public class QuestionDiagnos {
                 .build()
         )
         .rules(List.of(
-            CertificateElementRuleFactory.mandatoryExist(QUESTION_DIAGNOS_ID, DIAGNOS_1)
+            CertificateElementRuleFactory.mandatoryExist(QUESTION_DIAGNOS_ID, DIAGNOS_1),
+            CertificateElementRuleFactory.show(QUESTION_FORMEDLA_DIAGNOS_ID,
+                FORMEDLA_DIAGNOSIS_FIELD_ID)
         ))
         .validations(List.of(
             ElementValidationDiagnosis.builder()
