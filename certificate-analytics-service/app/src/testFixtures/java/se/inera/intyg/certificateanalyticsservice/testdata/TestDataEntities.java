@@ -98,7 +98,7 @@ public class TestDataEntities {
 
   public static EventTypeEntity eventTypeEntity() {
     return EventTypeEntity.builder()
-        .eventType(TestDataConstants.TYPE_ANALYTICS_EVENT)
+        .eventType(TestDataConstants.EVENT_TYPE_DRAFT_CREATED)
         .build();
   }
 

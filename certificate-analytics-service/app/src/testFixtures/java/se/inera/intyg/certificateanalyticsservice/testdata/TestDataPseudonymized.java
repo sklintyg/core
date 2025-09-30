@@ -4,6 +4,7 @@ import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConsta
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CERTIFICATE_TYPE;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CERTIFICATE_TYPE_VERSION;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.EVENT_TIMESTAMP;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.EVENT_TYPE_DRAFT_CREATED;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_CERTIFICATE_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_MESSAGE_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_PATIENT_ID;
@@ -11,7 +12,6 @@ import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConsta
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_STAFF_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.ORIGIN;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.ROLE;
-import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.TYPE_ANALYTICS_EVENT;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.UNIT_ID;
 
 import java.time.LocalDateTime;
@@ -28,7 +28,7 @@ public class TestDataPseudonymized {
     return PseudonymizedAnalyticsMessage.builder()
         .messageId(HASHED_MESSAGE_ID)
         .eventTimestamp(LocalDateTime.parse(EVENT_TIMESTAMP))
-        .eventMessageType(TYPE_ANALYTICS_EVENT)
+        .eventMessageType(EVENT_TYPE_DRAFT_CREATED)
         .eventStaffId(HASHED_STAFF_ID)
         .eventRole(ROLE)
         .eventUnitId(UNIT_ID)

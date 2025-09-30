@@ -7,15 +7,15 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.EventMapper;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.EventEntityRepository;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.JpaCertificateAnalyticsEventRepository;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.JpaAnalyticsEventRepository;
 
 @Primary
 @Repository
 @Profile(TESTABILITY_PROFILE)
-public class TestabilityCertificateAnalyticsMessageRepository extends
-    JpaCertificateAnalyticsEventRepository {
+public class TestabilityAnalyticsMessageRepository extends
+    JpaAnalyticsEventRepository {
 
-  public TestabilityCertificateAnalyticsMessageRepository(
+  public TestabilityAnalyticsMessageRepository(
       EventEntityRepository eventEntityRepository,
       EventMapper eventMapper) {
     super(eventEntityRepository, eventMapper);

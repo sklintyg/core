@@ -13,7 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.AnalyticsMessageParser;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.AnalyticsMessagePseudonymizer;
-import se.inera.intyg.certificateanalyticsservice.application.messages.repository.CertificateAnalyticsMessageRepository;
+import se.inera.intyg.certificateanalyticsservice.application.messages.repository.AnalyticsMessageRepository;
 
 @ExtendWith(MockitoExtension.class)
 class ProcessingAnalyticsMessageServiceTest {
@@ -23,7 +23,7 @@ class ProcessingAnalyticsMessageServiceTest {
   @Mock
   private AnalyticsMessageParserProvider analyticsMessageParserProvider;
   @Mock
-  private CertificateAnalyticsMessageRepository certificateAnalyticsMessageRepository;
+  private AnalyticsMessageRepository analyticsMessageRepository;
   @Mock
   private AnalyticsMessagePseudonymizer analyticsMessagePseudonymizer;
   @Mock
@@ -50,6 +50,6 @@ class ProcessingAnalyticsMessageServiceTest {
         message.getSchemaVersion()
     );
 
-    verify(certificateAnalyticsMessageRepository).save(pseudonymizedMessage);
+    verify(analyticsMessageRepository).save(pseudonymizedMessage);
   }
 }

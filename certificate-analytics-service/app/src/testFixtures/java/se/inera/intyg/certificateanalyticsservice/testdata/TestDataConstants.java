@@ -21,9 +21,6 @@ public final class TestDataConstants {
       616648000);
   public static final String SCHEMA_VERSION = "v1";
   public static final String TYPE_ANALYTICS_EVENT = "certificate.analytics.event";
-  public static final String EVENT_TYPE_CREATED = "CREATED";
-  public static final String EVENT_TYPE_SENT = "SENT";
-  public static final String EVENT_TYPE_SIGNED = "SIGNED";
   public static final String EVENT_TYPE_DRAFT_CREATED = "DRAFT_CREATED";
   public static final String HASHED_MESSAGE_ID = "M-P4rHB5bMLzQQrCTlprRA";
   public static final String HASHED_CERTIFICATE_ID = "Xsg4sVYtNq_zMGU_wWrJgw";

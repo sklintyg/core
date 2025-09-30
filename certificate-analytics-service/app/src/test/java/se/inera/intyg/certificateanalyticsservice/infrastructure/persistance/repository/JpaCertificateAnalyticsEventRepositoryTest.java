@@ -21,7 +21,7 @@ class JpaCertificateAnalyticsEventRepositoryTest {
   @Mock
   private EventMapper eventMapper;
   @InjectMocks
-  private JpaCertificateAnalyticsEventRepository jpaCertificateAnalyticsEventRepository;
+  private JpaAnalyticsEventRepository jpaCertificateAnalyticsEventRepository;
 
   @Test
   void shouldMapAndSaveCreatedEventMessage() {

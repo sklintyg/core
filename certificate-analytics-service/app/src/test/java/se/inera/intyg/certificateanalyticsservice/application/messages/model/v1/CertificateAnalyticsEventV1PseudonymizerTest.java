@@ -144,7 +144,7 @@ class CertificateAnalyticsEventV1PseudonymizerTest {
   @Test
   void shallReturnEventMessageType() {
     final var message = draftMessageBuilder().build();
-    final var expected = message.getType();
+    final var expected = message.getEvent().getMessageType();
 
     final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
 
