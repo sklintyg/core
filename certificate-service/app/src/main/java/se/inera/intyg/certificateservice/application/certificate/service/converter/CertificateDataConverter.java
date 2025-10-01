@@ -210,7 +210,9 @@ public class CertificateDataConverter {
     return specification -> !certificate.isDraft()
         && specification.configuration().type().equals(CATEGORY)
         && specification.children().stream()
-        .noneMatch(child -> elementIdElementValueMap.containsKey(child.id()));
+        .noneMatch(child -> elementIdElementValueMap.containsKey(child.id()))
+        && specification.children().stream()
+        .noneMatch(child -> child.getVisibilityConfiguration().isPresent());
   }
 
   private static Predicate<ElementSpecification> removeQuestionIfNotDraftWithoutElementValue(
@@ -218,7 +220,8 @@ public class CertificateDataConverter {
       Certificate certificate) {
     return specification -> !certificate.isDraft()
         && !specification.configuration().type().equals(CATEGORY)
-        && !elementIdElementValueMap.containsKey(specification.id());
+        && !elementIdElementValueMap.containsKey(specification.id())
+        && specification.getVisibilityConfiguration().isEmpty();
   }
 
   private Stream<Map.Entry<String, String>> mapChildrenToParents(ElementSpecification parent,
