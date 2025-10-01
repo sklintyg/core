@@ -10,13 +10,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 
 class CertificateModelFactoryAG7804Test {
@@ -141,21 +145,21 @@ class CertificateModelFactoryAG7804Test {
     assertEquals(certificateActionFactory, certificateModel.certificateActionFactory());
   }
 
-//  @Nested
-//  class CertificateSpecifications {
-//
-//    @ParameterizedTest
-//    @ValueSource(strings = {
-//        "KAT_1", "KAT_2", "KAT_3", "KAT_4", "KAT_5", "KAT_6", "KAT_7", "KAT_8", "KAT_9", "KAT_10",
-//        "KAT_11", "KAT_12", "UNIT_CONTACT_INFORMATION", "27", "1", "1.3", "28", "29", "19", "32",
-//        "37", "34", "33", "33.2", "6", "44", "25", "39", "39.2", "39.4", "26", "26.2"
-//    })
-//    void shouldIncludeCategories(String id) {
-//      final var elementId = new ElementId(id);
-//      final var certificateModel = certificateModelFactoryAG7804.create();
-//
-//      assertTrue(certificateModel.elementSpecificationExists(elementId),
-//          "Expected elementId: '%s' to exist in elementSpecifications".formatted(elementId));
-//    }
-//  }
+  @Nested
+  class CertificateSpecifications {
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+        "KAT_1", "KAT_2", "KAT_3", "KAT_4", "KAT_5", "KAT_6", "KAT_7", "KAT_8", "KAT_9", "KAT_10",
+        "KAT_11", "KAT_12", "UNIT_CONTACT_INFORMATION", "27", "1", "1.3", "28", "29", "19", "32",
+        "37", "34", "33", "33.2", "6", "44", "25", "39", "39.2", "39.4", "26", "26.2", "100"
+    })
+    void shouldIncludeCategories(String id) {
+      final var elementId = new ElementId(id);
+      final var certificateModel = certificateModelFactoryAG7804.create();
+
+      assertTrue(certificateModel.elementSpecificationExists(elementId),
+          "Expected elementId: '%s' to exist in elementSpecifications".formatted(elementId));
+    }
+  }
 }
