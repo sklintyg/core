@@ -29,24 +29,15 @@ public class CertificateDataValidationAutoFillConverter implements
     return CertificateDataValidationAutoFill.builder()
         .questionId(elementRuleAutofill.id().id())
         .expression(elementRuleAutofill.expression().value())
-        .fillValue(convertAutoFillValue(elementRuleAutofill.fillValue()))
+        .fillValue(convertToAutoFillValue(elementRuleAutofill.fillValue()))
         .build();
   }
 
-  private CertificateDataValue convertAutoFillValue(ElementValueBoolean valueBoolean) {
-
-    if (valueBoolean == null) {
-      throw new IllegalStateException("Auto fill value is null");
-    }
-
-    if (!valueBoolean.type().equals("boolean")) {
-      throw new IllegalStateException(
-          "Invalid value type. Type was '%s'".formatted(valueBoolean.type()));
-    }
+  private CertificateDataValue convertToAutoFillValue(ElementValueBoolean valueBoolean) {
 
     return CertificateDataValueBoolean.builder()
-        .id(valueBoolean.id())
-        .selected(valueBoolean.selected())
+        .id(valueBoolean.booleanId().value())
+        .selected(valueBoolean.value())
         .build();
   }
 }

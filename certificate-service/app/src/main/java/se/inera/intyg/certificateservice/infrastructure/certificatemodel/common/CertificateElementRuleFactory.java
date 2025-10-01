@@ -19,15 +19,14 @@ public class CertificateElementRuleFactory {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementRule autofill(ElementId id, FieldId fieldId) {
+  public static ElementRule autofill(ElementId id, FieldId fieldId,
+      FieldId toSetFieldId) {
     return ElementRuleAutofill.builder()
         .id(id)
         .type(ElementRuleType.AUTO_FILL)
         .expression(new RuleExpression(singleExpression(fieldId.value())))
         .fillValue(ElementValueBoolean.builder()
-            .id(id.id())
-            .booleanId(fieldId)
-            .selected(true)
+            .booleanId(toSetFieldId)
             .value(true)
             .build()
         )

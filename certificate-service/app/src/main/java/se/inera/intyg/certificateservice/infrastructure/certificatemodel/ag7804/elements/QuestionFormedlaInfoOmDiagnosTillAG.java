@@ -45,7 +45,8 @@ public class QuestionFormedlaInfoOmDiagnosTillAG {
                 ),
                 CertificateElementRuleFactory.autofill(
                     QUESTION_SMITTBARARPENNING_ID,
-                    QUESTION_SMITTBARARPENNING_FIELD_ID
+                    QUESTION_SMITTBARARPENNING_FIELD_ID,
+                    FORMEDLA_DIAGNOSIS_FIELD_ID
                 )
             )
         )

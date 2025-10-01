@@ -4,7 +4,4 @@ public interface ElementValue {
 
   boolean isEmpty();
 
-  default String type() {
-    return this.getClass().getTypeName();
-  }
 }
