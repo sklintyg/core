@@ -12,6 +12,9 @@ public class OriginRepository {
   private final OriginEntityRepository originEntityRepository;
 
   public OriginEntity findOrCreate(String origin) {
+    if (origin == null || origin.isBlank()) {
+      return null;
+    }
     return originEntityRepository.findByOrigin(origin)
         .orElseGet(() -> originEntityRepository.save(OriginEntityMapper.map(origin)));
   }

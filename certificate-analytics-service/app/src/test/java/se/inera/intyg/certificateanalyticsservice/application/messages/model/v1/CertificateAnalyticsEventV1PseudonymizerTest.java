@@ -169,12 +169,12 @@ class CertificateAnalyticsEventV1PseudonymizerTest {
     final var expected = "pseudonymized-staff-id";
     final var message = draftMessageBuilder().build();
 
-    when(pseudonymizationTokenGenerator.staffId(message.getEvent().getStaffId()))
+    when(pseudonymizationTokenGenerator.staffId(message.getEvent().getUserId()))
         .thenReturn(expected);
 
     final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
 
-    assertEquals(expected, actual.getEventStaffId());
+    assertEquals(expected, actual.getEventUserId());
   }
 
   @Test

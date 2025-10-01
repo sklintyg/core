@@ -29,9 +29,9 @@ public class EventMapper {
     final var certificateEntity = certificateEntityMapper.map(message);
     return EventEntity.builder()
         .certificate(certificateEntity)
-        .unit(unitRepository.findOrCreate(message.getCertificateUnitId()))
-        .careProvider(careProviderRepository.findOrCreate(message.getCertificateCareProviderId()))
-        .user(userRepository.findOrCreate(message.getEventStaffId()))
+        .unit(unitRepository.findOrCreate(message.getEventUnitId()))
+        .careProvider(careProviderRepository.findOrCreate(message.getEventCareProviderId()))
+        .user(userRepository.findOrCreate(message.getEventUserId()))
         .session(sessionRepository.findOrCreate(message.getEventSessionId()))
         .timestamp(message.getEventTimestamp())
         .origin(originRepository.findOrCreate(message.getEventOrigin()))
@@ -46,7 +46,7 @@ public class EventMapper {
         .messageId(entity.getMessageId())
         .eventTimestamp(entity.getTimestamp())
         .eventMessageType(entity.getEventType().getEventType())
-        .eventStaffId(entity.getUser() != null ? entity.getUser().getUserId() : null)
+        .eventUserId(entity.getUser() != null ? entity.getUser().getUserId() : null)
         .eventRole(entity.getRole() != null ? entity.getRole().getRole() : null)
         .eventUnitId(entity.getUnit() != null ? entity.getUnit().getHsaId() : null)
         .eventCareProviderId(

@@ -12,6 +12,9 @@ public class CareProviderRepository {
   private final CareProviderEntityRepository careProviderEntityRepository;
 
   public CareProviderEntity findOrCreate(String hsaId) {
+    if (hsaId == null || hsaId.isBlank()) {
+      return null;
+    }
     return careProviderEntityRepository.findByHsaId(hsaId)
         .orElseGet(() -> careProviderEntityRepository.save(CareProviderEntityMapper.map(hsaId)));
   }

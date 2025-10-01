@@ -69,7 +69,7 @@ class EventMapperTest {
     when(unitRepository.findOrCreate(message.getCertificateUnitId())).thenReturn(expectedUnit);
     when(careProviderRepository.findOrCreate(message.getCertificateCareProviderId())).thenReturn(
         expectedCareProvider);
-    when(userRepository.findOrCreate(message.getEventStaffId())).thenReturn(expectedUser);
+    when(userRepository.findOrCreate(message.getEventUserId())).thenReturn(expectedUser);
     when(sessionRepository.findOrCreate(message.getEventSessionId())).thenReturn(expectedSession);
     when(originRepository.findOrCreate(message.getEventOrigin())).thenReturn(expectedOrigin);
     when(eventTypeRepository.findOrCreate(message.getEventMessageType())).thenReturn(

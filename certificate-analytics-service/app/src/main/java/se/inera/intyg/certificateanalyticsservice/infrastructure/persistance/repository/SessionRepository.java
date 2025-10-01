@@ -12,6 +12,9 @@ public class SessionRepository {
   private final SessionEntityRepository sessionEntityRepository;
 
   public SessionEntity findOrCreate(String sessionId) {
+    if (sessionId == null || sessionId.isBlank()) {
+      return null;
+    }
     return sessionEntityRepository.findBySessionId(sessionId)
         .orElseGet(() -> sessionEntityRepository.save(SessionEntityMapper.map(sessionId)));
   }

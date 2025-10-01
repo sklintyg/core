@@ -15,7 +15,7 @@ public class CertificateAnalyticsEventV1 implements Serializable {
 
   LocalDateTime timestamp;
   String messageType;
-  String staffId;
+  String userId;
   String role;
   String unitId;
   String careProviderId;
