@@ -4,7 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleAutofill;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
@@ -25,6 +27,29 @@ class CertificateElementRuleFactoryTest {
     final var response = CertificateElementRuleFactory.mandatory(
         new ElementId("ID"),
         new FieldId("FIELD")
+    );
+
+    assertEquals(expected, response);
+  }
+
+  @Test
+  void shouldReturnAutoFillRule() {
+    final var fieldToFill = new FieldId("FIELDTOFILL");
+    final var elementToFill = ElementValueBoolean.builder()
+        .booleanId(fieldToFill)
+        .value(true)
+        .build();
+    final var expected = ElementRuleAutofill.builder()
+        .id(new ElementId("ID"))
+        .type(ElementRuleType.AUTO_FILL)
+        .expression(new RuleExpression("$FIELD"))
+        .fillValue(elementToFill)
+        .build();
+
+    final var response = CertificateElementRuleFactory.autofill(
+        new ElementId("ID"),
+        new FieldId("FIELD"),
+        fieldToFill
     );
 
     assertEquals(expected, response);
@@ -93,6 +118,7 @@ class CertificateElementRuleFactoryTest {
 
     assertEquals(expected, response);
   }
+
 
   @Test
   void shouldReturnMandatoryOrExistRuleForSeveralFields() {

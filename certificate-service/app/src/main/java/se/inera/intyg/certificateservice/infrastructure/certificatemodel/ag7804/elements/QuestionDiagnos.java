@@ -49,6 +49,8 @@ public class QuestionDiagnos {
         .rules(List.of(
             CertificateElementRuleFactory.mandatoryExist(QUESTION_DIAGNOS_ID, DIAGNOS_1),
             CertificateElementRuleFactory.show(QUESTION_FORMEDLA_DIAGNOS_ID,
+                FORMEDLA_DIAGNOSIS_FIELD_ID),
+            CertificateElementRuleFactory.showEmpty(QUESTION_FORMEDLA_DIAGNOS_ID,
                 FORMEDLA_DIAGNOSIS_FIELD_ID)
         ))
         .validations(List.of(

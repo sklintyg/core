@@ -67,6 +67,19 @@ public class CertificateElementRuleFactory {
         .build();
   }
 
+  public static ElementRule showEmpty(ElementId id, FieldId fieldId) {
+    return ElementRuleExpression.builder()
+        .type(ElementRuleType.SHOW)
+        .id(id)
+        .expression(
+            new RuleExpression(
+                empty(singleExpression(fieldId.value())
+                )
+            )
+        )
+        .build();
+  }
+
   public static ElementRule hide(ElementId id, RuleExpression ruleExpression) {
     return ElementRuleExpression.builder()
         .type(ElementRuleType.HIDE)
@@ -94,6 +107,10 @@ public class CertificateElementRuleFactory {
 
   public static String notEmpty(String expression) {
     return "!empty(" + expression + ")";
+  }
+
+  public static String empty(String expression) {
+    return "empty(" + expression + ")";
   }
 
   public static ElementRule mandatory(ElementId id, List<FieldId> fieldIds) {
