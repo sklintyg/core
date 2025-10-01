@@ -1,11 +1,20 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionDiagnos.questionDiagnos;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionFormedlaInfoOmDiagnosTillAG.FORMEDLA_DIAGNOSIS_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionFormedlaInfoOmDiagnosTillAG.QUESTION_FORMEDLA_DIAGNOS_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.empty;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.singleExpression;
 
 import java.util.List;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDiagnosisListItem;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDiagnosisTerminology;
@@ -71,6 +80,30 @@ class QuestionDiagnosTest {
                     "exists($huvuddiagnos)"
                 )
             )
+            .build(),
+        ElementRuleExpression.builder()
+            .type(ElementRuleType.SHOW)
+            .id(QUESTION_FORMEDLA_DIAGNOS_ID)
+            .expression(new RuleExpression("$%s".formatted(FORMEDLA_DIAGNOSIS_FIELD_ID.value())))
+            .build(),
+        ElementRuleExpression.builder()
+            .type(ElementRuleType.SHOW)
+            .id(QUESTION_FORMEDLA_DIAGNOS_ID)
+            .expression(
+                new RuleExpression(
+                    empty(singleExpression(FORMEDLA_DIAGNOSIS_FIELD_ID.value())
+                    )
+                )
+            )
+            .build(),
+        ElementRuleExpression.builder()
+            .id(QUESTION_FORMEDLA_DIAGNOS_ID)
+            .type(ElementRuleType.DISABLE)
+            .expression(
+                new RuleExpression(
+                    empty(singleExpression(FORMEDLA_DIAGNOSIS_FIELD_ID.value()))
+                )
+            )
             .build()
     );
 
@@ -100,6 +133,52 @@ class QuestionDiagnosTest {
         diagnosisCodeRepository);
 
     assertEquals(expectedValidations, element.validations());
+  }
+
+  @Nested
+  class ShouldValidate {
+
+    @Test
+    void shouldReturnTrueIfBooleanIsTrue() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId(QUESTION_FORMEDLA_DIAGNOS_ID.id()))
+              .value(ElementValueBoolean.builder().value(true).build())
+              .build()
+      );
+      final var element = questionDiagnos(
+          diagnosisCodeRepository);
+      final var shouldValidate = element.shouldValidate();
+      assertTrue(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shouldReturnFalseIfBooleanIsFalse() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId(QUESTION_FORMEDLA_DIAGNOS_ID.id()))
+              .value(ElementValueBoolean.builder().value(false).build())
+              .build()
+      );
+      final var element = questionDiagnos(
+          diagnosisCodeRepository);
+      final var shouldValidate = element.shouldValidate();
+      assertFalse(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shouldReturnFalseIfElementIsMissing() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId("999999"))
+              .value(ElementValueBoolean.builder().value(true).build())
+              .build()
+      );
+      final var element = questionDiagnos(
+          diagnosisCodeRepository);
+      final var shouldValidate = element.shouldValidate();
+      assertFalse(shouldValidate.test(elementData));
+    }
   }
 
 //  @Test
