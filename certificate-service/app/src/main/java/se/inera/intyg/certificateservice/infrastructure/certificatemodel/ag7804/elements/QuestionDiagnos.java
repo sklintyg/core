@@ -51,6 +51,8 @@ public class QuestionDiagnos {
             CertificateElementRuleFactory.show(QUESTION_FORMEDLA_DIAGNOS_ID,
                 FORMEDLA_DIAGNOSIS_FIELD_ID),
             CertificateElementRuleFactory.showEmpty(QUESTION_FORMEDLA_DIAGNOS_ID,
+                FORMEDLA_DIAGNOSIS_FIELD_ID),
+            CertificateElementRuleFactory.disableEmptyElement(QUESTION_FORMEDLA_DIAGNOS_ID,
                 FORMEDLA_DIAGNOSIS_FIELD_ID)
         ))
         .validations(List.of(

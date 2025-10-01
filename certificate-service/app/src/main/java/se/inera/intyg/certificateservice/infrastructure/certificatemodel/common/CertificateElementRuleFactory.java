@@ -210,6 +210,19 @@ public class CertificateElementRuleFactory {
         .build();
   }
 
+  public static ElementRule disableEmptyElement(ElementId id, FieldId fieldId) {
+    return ElementRuleExpression.builder()
+        .id(id)
+        .type(ElementRuleType.DISABLE)
+        .expression(
+            new RuleExpression(
+                empty(singleExpression(fieldId.value()))
+            )
+        )
+        .build();
+  }
+
+
   public static ElementRule disableSubElements(ElementId id, List<FieldId> elementsForExpression,
       List<FieldId> elementsToDisable) {
     return ElementRuleExpression.builder()
