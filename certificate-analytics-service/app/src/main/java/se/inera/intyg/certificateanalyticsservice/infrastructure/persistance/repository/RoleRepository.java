@@ -12,6 +12,9 @@ public class RoleRepository {
   private final RoleEntityRepository roleEntityRepository;
 
   public RoleEntity findOrCreate(String role) {
+    if (role == null || role.isBlank()) {
+      return null;
+    }
     return roleEntityRepository.findByRole(role)
         .orElseGet(() -> roleEntityRepository.save(RoleEntityMapper.map(role)));
   }

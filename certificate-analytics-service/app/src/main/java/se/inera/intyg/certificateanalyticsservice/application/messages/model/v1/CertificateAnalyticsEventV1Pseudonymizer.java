@@ -32,9 +32,9 @@ public class CertificateAnalyticsEventV1Pseudonymizer implements AnalyticsMessag
         )
         .eventTimestamp(messageV1.getEvent().getTimestamp())
         .eventMessageType(messageV1.getEvent().getMessageType())
-        .eventStaffId(
+        .eventUserId(
             pseudonymizationTokenGenerator.staffId(
-                messageV1.getEvent().getStaffId()
+                messageV1.getEvent().getUserId()
             )
         )
         .eventRole(messageV1.getEvent().getRole())

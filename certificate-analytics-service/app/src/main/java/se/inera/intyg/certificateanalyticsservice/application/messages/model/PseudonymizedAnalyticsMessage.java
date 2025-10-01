@@ -12,7 +12,7 @@ public class PseudonymizedAnalyticsMessage {
 
   LocalDateTime eventTimestamp;
   String eventMessageType;
-  String eventStaffId;
+  String eventUserId;
   String eventRole;
   String eventUnitId;
   String eventCareProviderId;

@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -43,6 +44,16 @@ class SessionRepositoryTest {
     final var result = sessionRepository.findOrCreate(sessionId);
 
     assertEquals(entity, result);
+  }
+
+  @Test
+  void shouldReturnNullIfSessionIsNull() {
+    assertNull(sessionRepository.findOrCreate(null));
+  }
+
+  @Test
+  void shouldReturnNullIfSessionIsEmpty() {
+    assertNull(sessionRepository.findOrCreate(" "));
   }
 }
 

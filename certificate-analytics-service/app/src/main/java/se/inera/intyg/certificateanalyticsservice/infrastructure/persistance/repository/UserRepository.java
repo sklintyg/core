@@ -12,6 +12,9 @@ public class UserRepository {
   private final UserEntityRepository userEntityRepository;
 
   public UserEntity findOrCreate(String userId) {
+    if (userId == null || userId.isBlank()) {
+      return null;
+    }
     return userEntityRepository.findByUserId(userId)
         .orElseGet(() -> userEntityRepository.save(UserEntityMapper.map(userId)));
   }

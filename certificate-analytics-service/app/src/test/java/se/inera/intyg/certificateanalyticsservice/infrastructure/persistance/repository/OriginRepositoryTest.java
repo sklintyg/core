@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -42,6 +43,16 @@ class OriginRepositoryTest {
     final var result = originRepository.findOrCreate(origin);
 
     assertEquals(entity, result);
+  }
+
+  @Test
+  void shouldReturnNullIfOriginIsNull() {
+    assertNull(originRepository.findOrCreate(null));
+  }
+
+  @Test
+  void shouldReturnNullIfOriginIsEmpty() {
+    assertNull(originRepository.findOrCreate(" "));
   }
 }
 

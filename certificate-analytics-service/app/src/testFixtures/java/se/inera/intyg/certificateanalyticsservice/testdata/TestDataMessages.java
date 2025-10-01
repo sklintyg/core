@@ -73,7 +73,7 @@ public class TestDataMessages {
             eventBuilder()
                 .messageType(EVENT_TYPE_DRAFT_CREATED)
                 .timestamp(LocalDateTime.parse(EVENT_TIMESTAMP))
-                .staffId(STAFF_ID)
+                .userId(STAFF_ID)
                 .role(ROLE)
                 .unitId(UNIT_ID)
                 .careProviderId(CARE_PROVIDER_ID)
@@ -96,7 +96,7 @@ public class TestDataMessages {
   private static CertificateAnalyticsEventV1Builder eventBuilder() {
     return CertificateAnalyticsEventV1.builder()
         .timestamp(LocalDateTime.parse(EVENT_TIMESTAMP))
-        .staffId(STAFF_ID)
+        .userId(STAFF_ID)
         .role(ROLE)
         .unitId(UNIT_ID)
         .careProviderId(CARE_PROVIDER_ID)

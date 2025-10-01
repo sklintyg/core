@@ -29,7 +29,7 @@ public class TestDataPseudonymized {
         .messageId(HASHED_MESSAGE_ID)
         .eventTimestamp(LocalDateTime.parse(EVENT_TIMESTAMP))
         .eventMessageType(EVENT_TYPE_DRAFT_CREATED)
-        .eventStaffId(HASHED_STAFF_ID)
+        .eventUserId(HASHED_STAFF_ID)
         .eventRole(ROLE)
         .eventUnitId(UNIT_ID)
         .eventCareProviderId(CARE_PROVIDER_ID)

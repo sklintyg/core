@@ -12,6 +12,9 @@ public class UnitRepository {
   private final UnitEntityRepository unitEntityRepository;
 
   public UnitEntity findOrCreate(String hsaId) {
+    if (hsaId == null || hsaId.isBlank()) {
+      return null;
+    }
     return unitEntityRepository.findByHsaId(hsaId)
         .orElseGet(() -> unitEntityRepository.save(UnitEntityMapper.map(hsaId)));
   }
