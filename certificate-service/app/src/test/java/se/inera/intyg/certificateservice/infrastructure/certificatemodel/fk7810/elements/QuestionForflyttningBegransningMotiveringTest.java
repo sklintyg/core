@@ -5,6 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.FK7810PdfSpecification.OVERFLOW_SHEET_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.FK7810PdfSpecification.PDF_TEXT_FIELD_LENGTH;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAktivitetsbegransning.AKTIVITETSBAGRENSNINGAR_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAktivitetsbegransning.AKTIVITETSBAGRENSNINGAR_MOVEMENT_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionForflyttningBegransningMotivering.AKTIVITETSBEGRANSNING_MOTIVERING_FORFLYTTNING_BEGRANSNING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionForflyttningBegransningMotivering.questionForflyttningBegransningMotivering;
 
 import java.util.List;
@@ -18,6 +21,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementVisibilityConfigurationsCheckboxMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
@@ -159,5 +163,18 @@ class QuestionForflyttningBegransningMotiveringTest {
 
       assertFalse(shouldValidate.test(elementData));
     }
+  }
+
+  @Test
+  void shallIncludeVisibilityConfiguration() {
+    final var expectedVisibilityConfiguration = ElementVisibilityConfigurationsCheckboxMultipleCode.builder()
+        .parentId(AKTIVITETSBAGRENSNINGAR_ID)
+        .questionId(AKTIVITETSBEGRANSNING_MOTIVERING_FORFLYTTNING_BEGRANSNING_ID)
+        .parentFieldId(AKTIVITETSBAGRENSNINGAR_MOVEMENT_ID)
+        .build();
+
+    final var element = questionForflyttningBegransningMotivering();
+
+    assertEquals(element.visibilityConfiguration(), expectedVisibilityConfiguration);
   }
 }

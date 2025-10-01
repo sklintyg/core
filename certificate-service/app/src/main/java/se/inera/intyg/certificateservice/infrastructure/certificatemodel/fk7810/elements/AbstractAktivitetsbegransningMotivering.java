@@ -9,6 +9,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementVisibilityConfigurationsCheckboxMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
@@ -28,6 +29,13 @@ public abstract class AbstractAktivitetsbegransningMotivering {
       String label, String description, PdfFieldId pdfFieldId) {
     return ElementSpecification.builder()
         .id(questionId)
+        .visibilityConfiguration(
+            ElementVisibilityConfigurationsCheckboxMultipleCode.builder()
+                .parentId(AKTIVITETSBAGRENSNINGAR_ID)
+                .questionId(questionId)
+                .parentFieldId(parentFieldId)
+                .build()
+        )
         .configuration(
             ElementConfigurationTextArea.builder()
                 .id(questionFieldId)

@@ -5,7 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.FK7810PdfSpecification.OVERFLOW_SHEET_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.FK7810PdfSpecification.PDF_TEXT_FIELD_LENGTH;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAndningsFunktionMotivering.FUNKTIONSNEDSATTNING_MOTIVERING_ANDNINGS_FUNKTION_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAndningsFunktionMotivering.questionAndningsFunktionMotivering;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_ANDNINGS_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_ID;
 
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -18,6 +21,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementVisibilityConfigurationsCheckboxMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
@@ -167,4 +171,16 @@ class QuestionAndningsFunktionMotiveringTest {
     }
   }
 
+  @Test
+  void shallIncludeVisibilityConfiguration() {
+    final var expectedVisibilityConfiguration = ElementVisibilityConfigurationsCheckboxMultipleCode.builder()
+        .parentId(FUNKTIONSNEDSATTNING_ID)
+        .questionId(FUNKTIONSNEDSATTNING_MOTIVERING_ANDNINGS_FUNKTION_ID)
+        .parentFieldId(FUNKTIONSNEDSATTNING_ANDNINGS_ID)
+        .build();
+
+    final var element = questionAndningsFunktionMotivering();
+
+    assertEquals(element.visibilityConfiguration(), expectedVisibilityConfiguration);
+  }
 }

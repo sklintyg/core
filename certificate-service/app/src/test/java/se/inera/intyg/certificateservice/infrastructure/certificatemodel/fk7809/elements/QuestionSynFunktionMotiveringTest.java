@@ -3,6 +3,9 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_SYNFUNKTION_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionSynfunktionMotivering.FUNKTIONSNEDSATTNING_MOTIVERING_SYNFUNKTION_ID;
 
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -15,6 +18,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementVisibilityConfigurationsCheckboxMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
@@ -41,7 +45,7 @@ class QuestionSynFunktionMotiveringTest {
         .description(
             """
                 Synfunktion handlar om förmågan att förnimma närvaro av ljus och synintryckets form, storlek, utformning och färg. För att Försäkringskassan ska kunna bedöma om det finns rätt till garanterad nivå av merkostnadsersättning är följande information viktig.
-                                            
+                
                 Beskriv nedsättningen av synen:
                 <ul>
                 <li>synskärpa på långt håll med bästa korrektion</li><li>synfält – du kan skicka in en kopia av perimetri eller beskriva synfältet på annat sätt till exempel enligt Donders metod.</li><li>andra synfunktioner som till exempel förmåga till samsyn, dubbelseende, nystagmus, mörkerseende, färgseende, kontrastseende, bländningskänslighet och perception.</li></ul>                                          
@@ -164,5 +168,18 @@ class QuestionSynFunktionMotiveringTest {
 
       assertFalse(shouldValidate.test(elementData));
     }
+  }
+
+  @Test
+  void shallIncludeVisibilityConfiguration() {
+    final var expectedVisibilityConfiguration = ElementVisibilityConfigurationsCheckboxMultipleCode.builder()
+        .parentId(FUNKTIONSNEDSATTNING_ID)
+        .questionId(FUNKTIONSNEDSATTNING_MOTIVERING_SYNFUNKTION_ID)
+        .parentFieldId(FUNKTIONSNEDSATTNING_SYNFUNKTION_ID)
+        .build();
+
+    final var element = QuestionSynfunktionMotivering.questionSynfunktionMotivering();
+
+    assertEquals(element.visibilityConfiguration(), expectedVisibilityConfiguration);
   }
 }
