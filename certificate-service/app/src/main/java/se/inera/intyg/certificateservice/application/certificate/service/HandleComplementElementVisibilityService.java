@@ -29,7 +29,7 @@ public class HandleComplementElementVisibilityService {
             () -> new IllegalStateException("Complement element visibility service not found")
         );
 
-    elementVisibility.handle(dataElementMap, certificate, visibilityConfiguration);
+    elementVisibility.handle(dataElementMap, visibilityConfiguration);
   }
 
   private static boolean elementIsVisible(Certificate certificate, ElementId elementId) {

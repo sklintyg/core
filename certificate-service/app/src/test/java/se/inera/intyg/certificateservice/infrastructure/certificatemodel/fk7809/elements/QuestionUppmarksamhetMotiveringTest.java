@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_UPPMAKRMSAHET_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionUppmarksamhetMotivering.FUNKTIONSNEDSATTNING_MOTIVERING_UPPMAKRMSAHET_ID;
 
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -165,7 +164,6 @@ class QuestionUppmarksamhetMotiveringTest {
   void shallIncludeVisibilityConfiguration() {
     final var expectedVisibilityConfiguration = ElementVisibilityConfigurationsCheckboxMultipleCode.builder()
         .parentId(FUNKTIONSNEDSATTNING_ID)
-        .questionId(FUNKTIONSNEDSATTNING_MOTIVERING_UPPMAKRMSAHET_ID)
         .parentFieldId(FUNKTIONSNEDSATTNING_UPPMAKRMSAHET_ID)
         .build();
 

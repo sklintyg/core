@@ -7,7 +7,6 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.FK7810PdfSpecification.PDF_TEXT_FIELD_LENGTH;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAktivitetsbegransning.AKTIVITETSBAGRENSNINGAR_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionAktivitetsbegransning.AKTIVITETSBAGRENSNINGAR_MOVEMENT_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionForflyttningBegransningMotivering.AKTIVITETSBEGRANSNING_MOTIVERING_FORFLYTTNING_BEGRANSNING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionForflyttningBegransningMotivering.questionForflyttningBegransningMotivering;
 
 import java.util.List;
@@ -169,7 +168,6 @@ class QuestionForflyttningBegransningMotiveringTest {
   void shallIncludeVisibilityConfiguration() {
     final var expectedVisibilityConfiguration = ElementVisibilityConfigurationsCheckboxMultipleCode.builder()
         .parentId(AKTIVITETSBAGRENSNINGAR_ID)
-        .questionId(AKTIVITETSBEGRANSNING_MOTIVERING_FORFLYTTNING_BEGRANSNING_ID)
         .parentFieldId(AKTIVITETSBAGRENSNINGAR_MOVEMENT_ID)
         .build();
 

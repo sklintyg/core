@@ -8,7 +8,6 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.AbstractFunktionsnedsattningMotivering.GENERAL_LABEL_FUNKTIONSNEDSATTNING;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_KOORDINATION_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionKoordinationMotivering.FUNKTIONSNEDSATTNING_MOTIVERING_KOORDINATION_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionKoordinationMotivering.questionKoordinationMotivering;
 
 import java.util.List;
@@ -170,7 +169,6 @@ class QuestionKoordinationMotiveringTest {
   void shallIncludeVisibilityConfiguration() {
     final var expectedVisibilityConfiguration = ElementVisibilityConfigurationsCheckboxMultipleCode.builder()
         .parentId(FUNKTIONSNEDSATTNING_ID)
-        .questionId(FUNKTIONSNEDSATTNING_MOTIVERING_KOORDINATION_ID)
         .parentFieldId(FUNKTIONSNEDSATTNING_KOORDINATION_ID)
         .build();
 

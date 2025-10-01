@@ -30,7 +30,6 @@ public abstract class AbstractFunktionsnedsattningMotivering {
         .visibilityConfiguration(
             ElementVisibilityConfigurationsCheckboxMultipleCode.builder()
                 .parentId(FUNKTIONSNEDSATTNING_ID)
-                .questionId(questionId)
                 .parentFieldId(parentFieldId)
                 .build()
         )

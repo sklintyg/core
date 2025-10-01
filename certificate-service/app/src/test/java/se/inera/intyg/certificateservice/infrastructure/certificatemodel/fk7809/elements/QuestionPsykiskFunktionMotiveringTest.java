@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_PSYKISK_FUNKTION_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionPsykiskFunktionMotivering.FUNKTIONSNEDSATTNING_MOTIVERING_PSYKISK_FUNKTION_ID;
 
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -170,7 +169,6 @@ class QuestionPsykiskFunktionMotiveringTest {
   void shallIncludeVisibilityConfiguration() {
     final var expectedVisibilityConfiguration = ElementVisibilityConfigurationsCheckboxMultipleCode.builder()
         .parentId(FUNKTIONSNEDSATTNING_ID)
-        .questionId(FUNKTIONSNEDSATTNING_MOTIVERING_PSYKISK_FUNKTION_ID)
         .parentFieldId(FUNKTIONSNEDSATTNING_PSYKISK_FUNKTION_ID)
         .build();
 

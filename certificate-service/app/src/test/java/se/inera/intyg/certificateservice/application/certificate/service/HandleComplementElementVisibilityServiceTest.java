@@ -165,7 +165,7 @@ class HandleComplementElementVisibilityServiceTest {
     handleComplementElementVisibilityService.handle(COMPLEMENT_ID, DATA_ELEMENT_MAP, certificate,
         VISIBILITY_CONFIGURATION);
 
-    verify(complementElementVisibilityCheckboxMultipleCode).handle(DATA_ELEMENT_MAP, certificate,
+    verify(complementElementVisibilityCheckboxMultipleCode).handle(DATA_ELEMENT_MAP,
         VISIBILITY_CONFIGURATION);
   }
 }

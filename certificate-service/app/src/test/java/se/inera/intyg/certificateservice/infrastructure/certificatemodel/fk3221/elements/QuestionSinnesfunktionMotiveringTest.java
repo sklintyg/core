@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.FK3221PdfSpecification.PDF_TEXT_FIELD_LENGTH;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionSinnesfunktionMotivering.FUNKTIONSNEDSATTNING_MOTIVERING_SINNESFUNKTION_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionSinnesfunktionMotivering.questionSinnesfunktionMotivering;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_SINNESFUNKTION_ID;
 
@@ -171,7 +170,6 @@ class QuestionSinnesfunktionMotiveringTest {
   void shallIncludeVisibilityConfiguration() {
     final var expectedVisibilityConfiguration = ElementVisibilityConfigurationsCheckboxMultipleCode.builder()
         .parentId(FUNKTIONSNEDSATTNING_ID)
-        .questionId(FUNKTIONSNEDSATTNING_MOTIVERING_SINNESFUNKTION_ID)
         .parentFieldId(FUNKTIONSNEDSATTNING_SINNESFUNKTION_ID)
         .build();
 

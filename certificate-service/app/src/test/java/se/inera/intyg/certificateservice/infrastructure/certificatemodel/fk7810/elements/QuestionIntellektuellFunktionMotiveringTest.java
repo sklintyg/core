@@ -18,6 +18,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementVisibilityConfigurationsCheckboxMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
@@ -107,14 +108,12 @@ class QuestionIntellektuellFunktionMotiveringTest {
   @Test
   void shallIncludeVisibilityConfiguration() {
     final var expectedVisibilityConfiguration =
-        se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementVisibilityConfigurationsCheckboxMultipleCode.builder()
-            .parentId(
-                se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_ID)
-            .questionId(
-                QuestionIntellektuellFunktionMotivering.FUNKTIONSNEDSATTNING_MOTIVERING_INTELLEKTUELL_FUNKTION_ID)
+        ElementVisibilityConfigurationsCheckboxMultipleCode.builder()
+            .parentId(QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_ID)
             .parentFieldId(
-                se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7810.elements.QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_INTELLEKTUELL_FUNKTION_ID)
+                QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_INTELLEKTUELL_FUNKTION_ID)
             .build();
+
     final var element = questionIntellektuellFunktionMotivering();
     assertEquals(expectedVisibilityConfiguration, element.visibilityConfiguration());
   }

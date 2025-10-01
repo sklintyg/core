@@ -32,7 +32,6 @@ public abstract class AbstractAktivitetsbegransningMotivering {
         .visibilityConfiguration(
             ElementVisibilityConfigurationsCheckboxMultipleCode.builder()
                 .parentId(AKTIVITETSBAGRENSNINGAR_ID)
-                .questionId(questionId)
                 .parentFieldId(parentFieldId)
                 .build()
         )
