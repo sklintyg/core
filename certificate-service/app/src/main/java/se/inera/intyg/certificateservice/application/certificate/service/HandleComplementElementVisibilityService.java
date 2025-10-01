@@ -26,8 +26,8 @@ public class HandleComplementElementVisibilityService {
         .filter(visibilityService -> visibilityService.supports(visibilityConfiguration))
         .findFirst()
         .orElseThrow(() -> new IllegalStateException(
-            "No ComplementElementVisibility found for visibility configuration: %s".formatted(
-                visibilityConfiguration.getClass().getSimpleName())));
+            "No ComplementElementVisibility found for visibility configuration: %s"
+                .formatted(visibilityConfiguration.type())));
 
     service.handle(dataElementMap, visibilityConfiguration);
   }
