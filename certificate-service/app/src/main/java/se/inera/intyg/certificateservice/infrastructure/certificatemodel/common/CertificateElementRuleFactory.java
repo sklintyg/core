@@ -2,8 +2,10 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.common
 
 import java.util.Arrays;
 import java.util.List;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRule;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleAutofill;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
@@ -15,6 +17,21 @@ public class CertificateElementRuleFactory {
 
   private CertificateElementRuleFactory() {
     throw new IllegalStateException("Utility class");
+  }
+
+  public static ElementRule autofill(ElementId id, FieldId fieldId) {
+    return ElementRuleAutofill.builder()
+        .id(id)
+        .type(ElementRuleType.AUTO_FILL)
+        .expression(new RuleExpression(singleExpression(fieldId.value())))
+        .fillValue(ElementValueBoolean.builder()
+            .id(id.id())
+            .booleanId(fieldId)
+            .selected(true)
+            .value(true)
+            .build()
+        )
+        .build();
   }
 
   public static ElementRule mandatory(ElementId id, FieldId fieldId) {

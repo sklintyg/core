@@ -1,5 +1,8 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionSmittbararpenning.QUESTION_SMITTBARARPENNING_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionSmittbararpenning.QUESTION_SMITTBARARPENNING_ID;
+
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -39,6 +42,10 @@ public class QuestionFormedlaInfoOmDiagnosTillAG {
                     List.of(
                         FORMEDLA_DIAGNOSIS_FIELD_ID
                     )
+                ),
+                CertificateElementRuleFactory.autofill(
+                    QUESTION_SMITTBARARPENNING_ID,
+                    QUESTION_SMITTBARARPENNING_FIELD_ID
                 )
             )
         )

@@ -17,4 +17,13 @@ public class ElementValueBoolean implements ElementValue {
   public boolean isEmpty() {
     return value == null;
   }
+
+  @Override
+  public String type() {
+    return "boolean";
+  }
+
+  String id;
+  Boolean selected;
+
 }
