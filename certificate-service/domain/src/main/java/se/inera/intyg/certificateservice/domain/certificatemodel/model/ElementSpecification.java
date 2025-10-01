@@ -32,6 +32,7 @@ public class ElementSpecification {
   boolean includeInXml = Boolean.TRUE;
   @Builder.Default
   boolean includeForCitizen = Boolean.TRUE;
+  ElementVisibilityConfiguration visibilityConfiguration;
 
   public boolean exists(ElementId id) {
     if (id().equals(id)) {
@@ -122,5 +123,9 @@ public class ElementSpecification {
 
   public Optional<ElementMapping> getMapping() {
     return Optional.ofNullable(mapping);
+  }
+
+  public Optional<ElementVisibilityConfiguration> getVisibilityConfiguration() {
+    return Optional.ofNullable(visibilityConfiguration);
   }
 }
