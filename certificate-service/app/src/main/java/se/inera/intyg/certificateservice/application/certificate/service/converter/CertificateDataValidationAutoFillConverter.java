@@ -35,6 +35,10 @@ public class CertificateDataValidationAutoFillConverter implements
 
   private CertificateDataValue convertToAutoFillValue(ElementValueBoolean valueBoolean) {
 
+    if (valueBoolean == null) {
+      throw new IllegalStateException("Fill value is missing");
+    }
+
     return CertificateDataValueBoolean.builder()
         .id(valueBoolean.booleanId().value())
         .selected(valueBoolean.value())
