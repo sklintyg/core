@@ -22,14 +22,14 @@ public class HandleComplementElementVisibilityService {
       return;
     }
 
-    final var elementVisibility = complementElementVisibility.stream()
+    final var service = complementElementVisibility.stream()
         .filter(visibilityService -> visibilityService.supports(visibilityConfiguration))
         .findFirst()
-        .orElseThrow(
-            () -> new IllegalStateException("Complement element visibility service not found")
-        );
+        .orElseThrow(() -> new IllegalStateException(
+            "No ComplementElementVisibility found for visibility configuration: %s".formatted(
+                visibilityConfiguration.getClass().getSimpleName())));
 
-    elementVisibility.handle(dataElementMap, visibilityConfiguration);
+    service.handle(dataElementMap, visibilityConfiguration);
   }
 
   private static boolean elementIsVisible(Certificate certificate, ElementId elementId) {
