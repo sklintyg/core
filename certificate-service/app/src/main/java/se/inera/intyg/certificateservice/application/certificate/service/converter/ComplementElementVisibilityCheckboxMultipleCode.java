@@ -30,7 +30,7 @@ public class ComplementElementVisibilityCheckboxMultipleCode implements
     }
 
     final var certificateDataElement = dataElementMap.get(
-        visibilityConfigurationsCodeList.parentId().id()
+        visibilityConfigurationsCodeList.elementId().id()
     );
     final var value = (CertificateDataValueCodeList) certificateDataElement.getValue();
     final var certificateDataValueCodes = new ArrayList<>(value.getList());
@@ -48,7 +48,7 @@ public class ComplementElementVisibilityCheckboxMultipleCode implements
     );
 
     dataElementMap.put(
-        visibilityConfigurationsCodeList.parentId().id(),
+        visibilityConfigurationsCodeList.elementId().id(),
         certificateDataElementWithUpdatedValue
     );
   }
@@ -56,8 +56,8 @@ public class ComplementElementVisibilityCheckboxMultipleCode implements
   private static CertificateDataValueCode certificateDataValueCode(
       ElementVisibilityConfigurationsCheckboxMultipleCode visibilityConfigurationsCodeList) {
     return CertificateDataValueCode.builder()
-        .id(visibilityConfigurationsCodeList.parentFieldId().value())
-        .code(visibilityConfigurationsCodeList.parentFieldId().value())
+        .id(visibilityConfigurationsCodeList.fieldId().value())
+        .code(visibilityConfigurationsCodeList.fieldId().value())
         .build();
   }
 }

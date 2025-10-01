@@ -171,8 +171,8 @@ class QuestionUppmarksamhetMotiveringTest {
   @Test
   void shallIncludeVisibilityConfiguration() {
     final var expectedVisibilityConfiguration = ElementVisibilityConfigurationsCheckboxMultipleCode.builder()
-        .parentId(FUNKTIONSNEDSATTNING_ID)
-        .parentFieldId(FUNKTIONSNEDSATTNING_UPPMAKRMSAHET_ID)
+        .elementId(FUNKTIONSNEDSATTNING_ID)
+        .fieldId(FUNKTIONSNEDSATTNING_UPPMAKRMSAHET_ID)
         .build();
 
     final var element = questionUppmarksamhetMotivering();

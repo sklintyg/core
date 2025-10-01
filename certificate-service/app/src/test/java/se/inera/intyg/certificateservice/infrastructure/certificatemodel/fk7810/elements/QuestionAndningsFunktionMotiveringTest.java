@@ -173,8 +173,8 @@ class QuestionAndningsFunktionMotiveringTest {
   @Test
   void shallIncludeVisibilityConfiguration() {
     final var expectedVisibilityConfiguration = ElementVisibilityConfigurationsCheckboxMultipleCode.builder()
-        .parentId(FUNKTIONSNEDSATTNING_ID)
-        .parentFieldId(FUNKTIONSNEDSATTNING_ANDNINGS_ID)
+        .elementId(FUNKTIONSNEDSATTNING_ID)
+        .fieldId(FUNKTIONSNEDSATTNING_ANDNINGS_ID)
         .build();
 
     final var element = questionAndningsFunktionMotivering();

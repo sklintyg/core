@@ -168,8 +168,8 @@ class QuestionPersonligVardBegransningMotiveringTest {
   @Test
   void shallIncludeVisibilityConfiguration() {
     final var expectedVisibilityConfiguration = ElementVisibilityConfigurationsCheckboxMultipleCode.builder()
-        .parentId(AKTIVITETSBAGRENSNINGAR_ID)
-        .parentFieldId(AKTIVITETSBAGRENSNINGAR_PERSONAL_CARE_ID)
+        .elementId(AKTIVITETSBAGRENSNINGAR_ID)
+        .fieldId(AKTIVITETSBAGRENSNINGAR_PERSONAL_CARE_ID)
         .build();
 
     final var element = questionPersonligVardBegransningMotivering();

@@ -167,8 +167,8 @@ class QuestionLarandeBegransningMotiveringTest {
   @Test
   void shallIncludeVisibilityConfiguration() {
     final var expectedVisibilityConfiguration = ElementVisibilityConfigurationsCheckboxMultipleCode.builder()
-        .parentId(AKTIVITETSBAGRENSNINGAR_ID)
-        .parentFieldId(AKTIVITETSBAGRENSNINGAR_LARANDE_ID)
+        .elementId(AKTIVITETSBAGRENSNINGAR_ID)
+        .fieldId(AKTIVITETSBAGRENSNINGAR_LARANDE_ID)
         .build();
 
     final var element = questionLarandeBegransningMotivering();

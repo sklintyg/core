@@ -9,6 +9,6 @@ public class ElementVisibilityConfigurationsCheckboxMultipleCode implements
     ElementVisibilityConfiguration {
 
   ElementType type = ElementType.CHECKBOX_MULTIPLE_CODE;
-  ElementId parentId;
-  FieldId parentFieldId;
+  ElementId elementId;
+  FieldId fieldId;
 }

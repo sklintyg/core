@@ -109,8 +109,8 @@ class QuestionIntellektuellFunktionMotiveringTest {
   void shallIncludeVisibilityConfiguration() {
     final var expectedVisibilityConfiguration =
         ElementVisibilityConfigurationsCheckboxMultipleCode.builder()
-            .parentId(QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_ID)
-            .parentFieldId(
+            .elementId(QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_ID)
+            .fieldId(
                 QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_INTELLEKTUELL_FUNKTION_ID)
             .build();
 

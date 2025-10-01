@@ -173,8 +173,8 @@ class QuestionHorselFunktionMotiveringTest {
   @Test
   void shallIncludeVisibilityConfiguration() {
     final var expectedVisibilityConfiguration = ElementVisibilityConfigurationsCheckboxMultipleCode.builder()
-        .parentId(FUNKTIONSNEDSATTNING_ID)
-        .parentFieldId(FUNKTIONSNEDSATTNING_HORSELFUNKTION_ID)
+        .elementId(FUNKTIONSNEDSATTNING_ID)
+        .fieldId(FUNKTIONSNEDSATTNING_HORSELFUNKTION_ID)
         .build();
 
     final var element = QuestionHorselFunktionMotivering.questionHorselFunktionMotivering();

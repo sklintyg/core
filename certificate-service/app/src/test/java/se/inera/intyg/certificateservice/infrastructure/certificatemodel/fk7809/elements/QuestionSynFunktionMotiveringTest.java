@@ -172,8 +172,8 @@ class QuestionSynFunktionMotiveringTest {
   @Test
   void shallIncludeVisibilityConfiguration() {
     final var expectedVisibilityConfiguration = ElementVisibilityConfigurationsCheckboxMultipleCode.builder()
-        .parentId(FUNKTIONSNEDSATTNING_ID)
-        .parentFieldId(FUNKTIONSNEDSATTNING_SYNFUNKTION_ID)
+        .elementId(FUNKTIONSNEDSATTNING_ID)
+        .fieldId(FUNKTIONSNEDSATTNING_SYNFUNKTION_ID)
         .build();
 
     final var element = QuestionSynfunktionMotivering.questionSynfunktionMotivering();

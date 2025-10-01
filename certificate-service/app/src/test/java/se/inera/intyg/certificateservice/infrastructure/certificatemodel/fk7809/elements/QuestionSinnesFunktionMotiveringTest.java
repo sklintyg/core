@@ -163,8 +163,8 @@ class QuestionSinnesFunktionMotiveringTest {
   @Test
   void shallIncludeVisibilityConfiguration() {
     final var expectedVisibilityConfiguration = ElementVisibilityConfigurationsCheckboxMultipleCode.builder()
-        .parentId(FUNKTIONSNEDSATTNING_ID)
-        .parentFieldId(FUNKTIONSNEDSATTNING_SINNESFUNKTION_ID)
+        .elementId(FUNKTIONSNEDSATTNING_ID)
+        .fieldId(FUNKTIONSNEDSATTNING_SINNESFUNKTION_ID)
         .build();
 
     final var element = QuestionSinnesfunktionMotivering.questionSinnesfunktionMotivering();

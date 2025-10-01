@@ -50,8 +50,8 @@ class ComplementElementVisibilityCheckboxMultipleCodeTest {
           .build();
 
       final var visibilityConfigurations = ElementVisibilityConfigurationsCheckboxMultipleCode.builder()
-          .parentId(PARENT_ELEMENT_ID)
-          .parentFieldId(PARENT_FIELD_ID)
+          .elementId(PARENT_ELEMENT_ID)
+          .fieldId(PARENT_FIELD_ID)
           .build();
 
       final var certificateDataElement = CertificateDataElement.builder()
@@ -95,8 +95,8 @@ class ComplementElementVisibilityCheckboxMultipleCodeTest {
       );
 
       final var visibilityConfigurations = ElementVisibilityConfigurationsCheckboxMultipleCode.builder()
-          .parentId(PARENT_ELEMENT_ID)
-          .parentFieldId(PARENT_FIELD_ID)
+          .elementId(PARENT_ELEMENT_ID)
+          .fieldId(PARENT_FIELD_ID)
           .build();
 
       final var certificateDataElement = CertificateDataElement.builder()

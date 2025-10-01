@@ -167,8 +167,8 @@ class QuestionForflyttningBegransningMotiveringTest {
   @Test
   void shallIncludeVisibilityConfiguration() {
     final var expectedVisibilityConfiguration = ElementVisibilityConfigurationsCheckboxMultipleCode.builder()
-        .parentId(AKTIVITETSBAGRENSNINGAR_ID)
-        .parentFieldId(AKTIVITETSBAGRENSNINGAR_MOVEMENT_ID)
+        .elementId(AKTIVITETSBAGRENSNINGAR_ID)
+        .fieldId(AKTIVITETSBAGRENSNINGAR_MOVEMENT_ID)
         .build();
 
     final var element = questionForflyttningBegransningMotivering();

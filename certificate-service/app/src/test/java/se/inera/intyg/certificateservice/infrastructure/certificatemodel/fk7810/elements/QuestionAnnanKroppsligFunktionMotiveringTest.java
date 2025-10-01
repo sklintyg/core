@@ -166,8 +166,8 @@ class QuestionAnnanKroppsligFunktionMotiveringTest {
   @Test
   void shallIncludeVisibilityConfiguration() {
     final var expectedVisibilityConfiguration = ElementVisibilityConfigurationsCheckboxMultipleCode.builder()
-        .parentId(FUNKTIONSNEDSATTNING_ID)
-        .parentFieldId(FUNKTIONSNEDSATTNING_ANNAN_KROPPSILIG_FUNKTION_ID)
+        .elementId(FUNKTIONSNEDSATTNING_ID)
+        .fieldId(FUNKTIONSNEDSATTNING_ANNAN_KROPPSILIG_FUNKTION_ID)
         .build();
 
     final var element = questionAnnanKroppsligFunktionMotivering();
