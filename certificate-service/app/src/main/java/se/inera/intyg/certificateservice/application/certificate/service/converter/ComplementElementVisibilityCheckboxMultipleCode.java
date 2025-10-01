@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.application.certificate.service;
+package se.inera.intyg.certificateservice.application.certificate.service.converter;
 
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementType.CHECKBOX_MULTIPLE_CODE;
 

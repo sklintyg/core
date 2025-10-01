@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueCode;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueCodeList;
+import se.inera.intyg.certificateservice.application.certificate.service.converter.ComplementElementVisibilityCheckboxMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementVisibilityConfigurationsCheckboxMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;

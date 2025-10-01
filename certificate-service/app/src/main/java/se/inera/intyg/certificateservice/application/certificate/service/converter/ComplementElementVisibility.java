@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.application.certificate.service;
+package se.inera.intyg.certificateservice.application.certificate.service.converter;
 
 import java.util.Map;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
