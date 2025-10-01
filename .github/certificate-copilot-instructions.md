@@ -1,9 +1,6 @@
-# Certificate PDF Generation Mapping Documentation
+# Certificate Creation Documentation
 
-This document describes how the certificate model connects to PDF generation, based on the actual
-code and model structure.
-
-## How the Model Connects to PDF Generation
+This document describes how a new certificate model is created.
 
 ### 1. CertificateModel and ElementSpecification
 

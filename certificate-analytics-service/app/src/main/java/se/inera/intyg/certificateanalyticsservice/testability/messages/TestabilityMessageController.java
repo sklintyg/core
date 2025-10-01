@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.PseudonymizedAnalyticsMessage;
-import se.inera.intyg.certificateanalyticsservice.application.messages.repository.AnalyticMessageRepository;
+import se.inera.intyg.certificateanalyticsservice.application.messages.repository.AnalyticsMessageRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.pseudonymization.PseudonymizationTokenGenerator;
 
 @Slf4j
@@ -21,7 +21,7 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.pseudonymizatio
 public class TestabilityMessageController {
 
   private final TestabilityAnalyticsMessageService testabilityAnalyticsMessageService;
-  private final AnalyticMessageRepository analyticMessageRepository;
+  private final AnalyticsMessageRepository analyticsMessageRepository;
   private final PseudonymizationTokenGenerator pseudonymizationTokenGenerator;
 
   @GetMapping("/messages/v1/{messageId}")
@@ -31,13 +31,13 @@ public class TestabilityMessageController {
     log.info("Testability get message with id '{}' that is pseudonymized to '{}'",
         messageId, pseudonymizedMessageId
     );
-    return analyticMessageRepository.findByMessageId(pseudonymizedMessageId);
+    return analyticsMessageRepository.findByMessageId(pseudonymizedMessageId);
   }
 
   @GetMapping("/messages/reset")
   public void reset() {
     log.info("Testability reset");
-    analyticMessageRepository.clear();
+    analyticsMessageRepository.clear();
     testabilityAnalyticsMessageService.reset();
   }
 
