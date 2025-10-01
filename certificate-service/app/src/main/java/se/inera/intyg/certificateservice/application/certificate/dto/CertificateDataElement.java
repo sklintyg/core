@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.Value;
+import lombok.With;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement.CertificateDataElementBuilder;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.CertificateDataConfig;
 import se.inera.intyg.certificateservice.application.certificate.dto.validation.CertificateDataValidation;
@@ -20,6 +21,7 @@ public class CertificateDataElement {
   String parent;
   int index;
   CertificateDataConfig config;
+  @With
   CertificateDataValue value;
   CertificateDataValidation[] validation;
   ValidationError[] validationError;
