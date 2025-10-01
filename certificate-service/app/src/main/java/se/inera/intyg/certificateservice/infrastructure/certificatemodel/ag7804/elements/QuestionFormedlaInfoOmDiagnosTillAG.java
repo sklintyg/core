@@ -47,6 +47,10 @@ public class QuestionFormedlaInfoOmDiagnosTillAG {
                     QUESTION_SMITTBARARPENNING_ID,
                     QUESTION_SMITTBARARPENNING_FIELD_ID,
                     FORMEDLA_DIAGNOSIS_FIELD_ID
+                ),
+                CertificateElementRuleFactory.disableElement(
+                    QUESTION_SMITTBARARPENNING_ID,
+                    QUESTION_SMITTBARARPENNING_FIELD_ID
                 )
             )
         )

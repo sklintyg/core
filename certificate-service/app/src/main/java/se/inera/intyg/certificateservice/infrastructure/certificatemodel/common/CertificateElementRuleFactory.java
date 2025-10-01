@@ -181,6 +181,18 @@ public class CertificateElementRuleFactory {
         .build();
   }
 
+  public static ElementRule disableElement(ElementId id, FieldId fieldId) {
+    return ElementRuleExpression.builder()
+        .id(id)
+        .type(ElementRuleType.DISABLE)
+        .expression(
+            new RuleExpression(
+                singleExpression(fieldId.value())
+            )
+        )
+        .build();
+  }
+
   public static ElementRule disableSubElements(ElementId id, List<FieldId> elementsForExpression,
       List<FieldId> elementsToDisable) {
     return ElementRuleExpression.builder()
