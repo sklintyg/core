@@ -188,6 +188,47 @@
     <addForeignKeyConstraint baseTableName="event" baseColumnNames="recipient_key"
       referencedTableName="recipient" referencedColumnNames="key"
       constraintName="fk_event_recipient"/>
+
+    <createTable tableName="certificate_relation">
+      <column name="key" type="bigint unsigned auto_increment">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="parent_certificate_key" type="bigint unsigned">
+        <constraints nullable="false"/>
+      </column>
+      <column name="child_certificate_key" type="bigint unsigned">
+        <constraints nullable="false"/>
+      </column>
+      <column name="certificate_relation_type_key" type="bigint unsigned">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="certificate_relation_type">
+      <column name="key" type="bigint unsigned auto_increment">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="relation_type" type="varchar(64)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseTableName="certificate_relation"
+      baseColumnNames="parent_certificate_key"
+      referencedTableName="certificate" referencedColumnNames="key"
+      constraintName="fk_certificate_relation_parent_certificate"/>
+    <addForeignKeyConstraint baseTableName="certificate_relation"
+      baseColumnNames="child_certificate_key"
+      referencedTableName="certificate" referencedColumnNames="key"
+      constraintName="fk_certificate_relation_child_certificate"/>
+    <addForeignKeyConstraint baseTableName="certificate_relation"
+      baseColumnNames="certificate_relation_type_key"
+      referencedTableName="certificate_relation_type" referencedColumnNames="key"
+      constraintName="fk_certificate_relation_type"/>
+
+    <addUniqueConstraint tableName="certificate_relation"
+      columnNames="parent_certificate_key,child_certificate_key"
+      constraintName="uk_certificate_relation_parent_child"/>
   </changeSet>
 
 </databaseChangeLog>
