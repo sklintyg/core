@@ -264,7 +264,7 @@ public class FK7809ActiveIT {
     }
 
     @Test
-    @DisplayName("Tidigare dold fråga ska bli synlig efter komplettering om en kompletteringsbegärn finns på frågan")
+    @DisplayName("Tidigare dold fråga ska bli synlig efter komplettering om en kompletteringsbegäran finns på frågan")
     void shallDisplayPreviouslyHiddenQuestionOnCertificateIfItHasComplement() {
       final var testCertificates = testabilityApi.addCertificates(
           defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
