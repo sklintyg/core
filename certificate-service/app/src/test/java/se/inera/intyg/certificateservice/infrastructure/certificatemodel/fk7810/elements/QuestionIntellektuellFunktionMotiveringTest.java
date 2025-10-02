@@ -18,6 +18,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementVisibilityConfigurationsCheckboxMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
@@ -102,6 +103,19 @@ class QuestionIntellektuellFunktionMotiveringTest {
     final var element = questionIntellektuellFunktionMotivering();
 
     assertEquals(expected, element.pdfConfiguration());
+  }
+
+  @Test
+  void shallIncludeVisibilityConfiguration() {
+    final var expectedVisibilityConfiguration =
+        ElementVisibilityConfigurationsCheckboxMultipleCode.builder()
+            .elementId(QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_ID)
+            .fieldId(
+                QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_INTELLEKTUELL_FUNKTION_ID)
+            .build();
+
+    final var element = questionIntellektuellFunktionMotivering();
+    assertEquals(expectedVisibilityConfiguration, element.visibilityConfiguration());
   }
 
   @Nested

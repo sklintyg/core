@@ -1,13 +1,14 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements;
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.FK3221PdfSpecification.PDF_TEXT_FIELD_LENGTH;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCodeList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementVisibilityConfigurationsCheckboxMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
@@ -27,6 +28,12 @@ public abstract class AbstractFunktionsnedsattningMotivering {
       String label, String description, PdfFieldId pdfFieldId) {
     return ElementSpecification.builder()
         .id(questionId)
+        .visibilityConfiguration(
+            ElementVisibilityConfigurationsCheckboxMultipleCode.builder()
+                .elementId(FUNKTIONSNEDSATTNING_ID)
+                .fieldId(parentFieldId)
+                .build()
+        )
         .configuration(
             ElementConfigurationTextArea.builder()
                 .id(questionFieldId)

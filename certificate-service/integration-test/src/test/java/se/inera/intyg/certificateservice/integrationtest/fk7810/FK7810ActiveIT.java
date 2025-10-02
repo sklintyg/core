@@ -1,16 +1,29 @@
 package se.inera.intyg.certificateservice.integrationtest.fk7810;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO.SIGNED;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ALVA_VARDADMINISTRATOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ANNA_SJUKSKOTERSKA_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.BERTIL_BARNMORSKA_DTO;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.incomingComplementDTOBuilder;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.incomingComplementMessageBuilder;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionPrognos.QUESTION_PROGNOS_ID;
 import static se.inera.intyg.certificateservice.integrationtest.fk7810.FK7810Constants.CODE;
 import static se.inera.intyg.certificateservice.integrationtest.fk7810.FK7810Constants.CODE_SYSTEM;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultComplementCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultSendCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultTestablilityCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateId;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.provider.Arguments;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -121,6 +134,8 @@ public class FK7810ActiveIT {
   @DisplayName(TYPE + "Kompletteringsbegäran")
   class Complement extends ComplementIT {
 
+    private static final String FUNKTIONSNEDSATTNING_MOTIVERING_KOMMUNIKATION_SOCIAL_INTERAKTION_ID = "9";
+
     @Override
     protected String type() {
       return CERTIFICATE_TYPE;
@@ -134,6 +149,39 @@ public class FK7810ActiveIT {
     @Override
     protected String questionId() {
       return ELEMENT_ID.id();
+    }
+
+    @Test
+    @DisplayName("Tidigare dold fråga ska bli synlig efter komplettering om en kompletteringsbegäran finns på frågan")
+    void shallDisplayPreviouslyHiddenQuestionOnCertificateIfItHasComplement() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(certificateId(testCertificates))
+              .complements(List.of(incomingComplementDTOBuilder()
+                  .questionId(FUNKTIONSNEDSATTNING_MOTIVERING_KOMMUNIKATION_SOCIAL_INTERAKTION_ID)
+                  .build()))
+              .build()
+      );
+
+      final var response = api.complementCertificate(
+          defaultComplementCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      final var certificate = Objects.requireNonNull(response.getBody()).getCertificate();
+      assertEquals(200, response.getStatusCode().value());
+      assertNotNull(certificate);
+      assertTrue(certificate.getData()
+          .containsKey(FUNKTIONSNEDSATTNING_MOTIVERING_KOMMUNIKATION_SOCIAL_INTERAKTION_ID));
     }
   }
 

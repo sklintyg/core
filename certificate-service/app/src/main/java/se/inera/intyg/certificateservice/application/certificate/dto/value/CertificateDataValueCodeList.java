@@ -6,6 +6,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
+import lombok.With;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueCodeList.CertificateDataValueCodeListBuilder;
 
 @JsonDeserialize(builder = CertificateDataValueCodeListBuilder.class)
@@ -15,6 +16,7 @@ public class CertificateDataValueCodeList implements CertificateDataValue {
 
   @Getter(onMethod = @__(@Override))
   CertificateDataValueType type = CertificateDataValueType.CODE_LIST;
+  @With
   List<CertificateDataValueCode> list;
   String id;
 
