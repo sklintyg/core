@@ -1,6 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionNedsattningArbetsformaga.QUESTION_NEDSATTNING_ARBETSFORMAGA_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionNedsattningArbetsformaga.QUESTION_NEDSATTNING_ARBETSFORMAGA_ID;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
