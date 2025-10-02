@@ -47,6 +47,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
+import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
@@ -91,6 +93,10 @@ public class CertificateModelFactoryAG7804 implements CertificateModelFactory {
       </ul>
       """;
 
+  private static final String PREAMBLE_TEXT = """
+      Det här är ditt intyg. Intyget innehåller all information som vården fyllt i. Du kan inte ändra något i ditt intyg. Har du frågor kontaktar du den som skrivit ditt intyg. Det här intyget behöver du skriva ut och skicka själv.
+      """;
+
   public static final CertificateModelId AG7804_V2_0 = CertificateModelId.builder()
       .type(new CertificateType(AG_7804))
       .version(new CertificateVersion(VERSION))
@@ -112,7 +118,12 @@ public class CertificateModelFactoryAG7804 implements CertificateModelFactory {
         .detailedDescription(DETAILED_DESCRIPTION.replaceAll("\\R", ""))
         .activeFrom(activeFrom)
         .availableForCitizen(true)
-        .sickLeaveProvider(new AG7804SickLeaveProvider())
+        .texts(List.of(
+            CertificateText.builder()
+                .text(PREAMBLE_TEXT)
+                .type(CertificateTextType.PREAMBLE_TEXT)
+                .build()
+        ))
         .summaryProvider(new AG7804CertificateSummaryProvider())
         .certificateActionSpecifications(AG7804CertificateActionSpecification.create())
         .messageActionSpecifications(AG7804MessageActionSpecification.create())
