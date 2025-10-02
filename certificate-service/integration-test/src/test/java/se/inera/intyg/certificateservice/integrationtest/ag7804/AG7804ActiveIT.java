@@ -17,12 +17,8 @@ import org.springframework.test.context.DynamicPropertySource;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.integrationtest.AccessLevelsDeepIntegrationIT;
 import se.inera.intyg.certificateservice.integrationtest.AccessLevelsSVODIT;
-import se.inera.intyg.certificateservice.integrationtest.AdministrativeMessagesIT;
-import se.inera.intyg.certificateservice.integrationtest.AnswerComplementIT;
 import se.inera.intyg.certificateservice.integrationtest.CertificateReadyForSignIT;
 import se.inera.intyg.certificateservice.integrationtest.CertificatesWithQAForCareIT;
-import se.inera.intyg.certificateservice.integrationtest.ComplementIT;
-import se.inera.intyg.certificateservice.integrationtest.ComplementMessagesIT;
 import se.inera.intyg.certificateservice.integrationtest.CreateCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.DeleteCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ExistsCertificateExternalTypeInfoIT;
@@ -31,22 +27,17 @@ import se.inera.intyg.certificateservice.integrationtest.ExistsCertificateTypeIn
 import se.inera.intyg.certificateservice.integrationtest.ForwardCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateEventsIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.GetCertificatePdfIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateTypeInfoIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCertificateXmlIT;
 import se.inera.intyg.certificateservice.integrationtest.GetPatientCertificatesIT;
 import se.inera.intyg.certificateservice.integrationtest.GetUnitCertificatesIT;
 import se.inera.intyg.certificateservice.integrationtest.GetUnitCertificatesInfoIT;
 import se.inera.intyg.certificateservice.integrationtest.GetUnitCertificatesWhenSignedIT;
-import se.inera.intyg.certificateservice.integrationtest.InternalApiIT;
-import se.inera.intyg.certificateservice.integrationtest.InternalApiMessagesIT;
 import se.inera.intyg.certificateservice.integrationtest.MessageExistsIT;
 import se.inera.intyg.certificateservice.integrationtest.RenewCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.RenewExternalCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ReplaceCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.RevokeCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.SendCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.SendCitizenCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.SignCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.UnitStatisticsIT;
 import se.inera.intyg.certificateservice.integrationtest.UpdateCertificateIT;
@@ -56,7 +47,6 @@ import se.inera.intyg.certificateservice.integrationtest.ValidateCertificateIT;
 public class AG7804ActiveIT {
 
   private static final String CERTIFICATE_TYPE = AG7804Constants.AG7804;
-  private static final String RECIPIENT = "FKASSA";
   private static final String ACTIVE_VERSION = AG7804Constants.VERSION;
   private static final String WRONG_VERSION = AG7804Constants.WRONG_VERSION;
   private static final String TYPE = AG7804Constants.TYPE;
@@ -96,46 +86,6 @@ public class AG7804ActiveIT {
     @Override
     protected String typeVersion() {
       return ACTIVE_VERSION;
-    }
-  }
-
-  @Nested
-  @DisplayName(TYPE + "Besvara kompletteringsbegäran med meddelande")
-  class AnswerComplement extends AnswerComplementIT {
-
-    @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected String questionId() {
-      return ELEMENT_ID.id();
-    }
-  }
-
-  @Nested
-  @DisplayName(TYPE + "Kompletteringsbegäran")
-  class Complement extends ComplementIT {
-
-    @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected String questionId() {
-      return ELEMENT_ID.id();
     }
   }
 
@@ -383,41 +333,6 @@ public class AG7804ActiveIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Intern api")
-  class InternalApi extends InternalApiIT {
-
-    @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-  }
-
-  @Nested
-  @DisplayName(TYPE + "Intern api ärendekommunikation")
-  class InternalApiMessages extends InternalApiMessagesIT {
-
-    @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected String questionId() {
-      return ELEMENT_ID.id();
-    }
-  }
-
-  @Nested
   @DisplayName(TYPE + "Finns meddelandet i tjänsten")
   class MessagesExists extends MessageExistsIT {
 
@@ -434,34 +349,6 @@ public class AG7804ActiveIT {
     @Override
     protected String questionId() {
       return ELEMENT_ID.id();
-    }
-  }
-
-  @Nested
-  @DisplayName(TYPE + "Hantering av kompletteringsfrågor för intyg")
-  class ComplementMessages extends ComplementMessagesIT {
-
-    @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected String questionId() {
-      return ELEMENT_ID.id();
-    }
-
-    protected static Stream<Arguments> rolesNoAccessToProtectedPerson() {
-      return Stream.of(
-          Arguments.of(ALVA_VARDADMINISTRATOR_DTO),
-          Arguments.of(BERTIL_BARNMORSKA_DTO),
-          Arguments.of(ANNA_SJUKSKOTERSKA_DTO)
-      );
     }
   }
 
@@ -498,26 +385,6 @@ public class AG7804ActiveIT {
   @Nested
   @DisplayName(TYPE + "Makulera")
   class RevokeCertificate extends RevokeCertificateIT {
-
-    @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-  }
-
-  @Nested
-  @DisplayName(TYPE + "Skicka")
-  class SendCertificate extends SendCertificateIT {
-
-    @Override
-    protected String recipient() {
-      return RECIPIENT;
-    }
 
     @Override
     protected String type() {
@@ -719,66 +586,6 @@ public class AG7804ActiveIT {
     @Override
     protected String code() {
       return CODE;
-    }
-  }
-
-  @Nested
-  @DisplayName(TYPE + "Skicka intyg som invånare från 1177 Intyg")
-  class IncludeSendCitizenCertificateIT extends SendCitizenCertificateIT {
-
-
-    @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected boolean availableForCitizen() {
-      return true;
-    }
-  }
-
-  @Nested
-  @DisplayName(TYPE + "Hämta intygspdf")
-  class GetCertificatePdf extends GetCertificatePdfIT {
-
-    @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    protected static Stream<Arguments> rolesNoAccessToProtectedPerson() {
-      return Stream.of(
-          Arguments.of(ALVA_VARDADMINISTRATOR_DTO),
-          Arguments.of(BERTIL_BARNMORSKA_DTO),
-          Arguments.of(ANNA_SJUKSKOTERSKA_DTO)
-      );
-    }
-  }
-
-
-  @Nested
-  @DisplayName(TYPE + "Administrativ ärendekommunikation")
-  class AdministrativeMessages extends AdministrativeMessagesIT {
-
-    @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
     }
   }
 
