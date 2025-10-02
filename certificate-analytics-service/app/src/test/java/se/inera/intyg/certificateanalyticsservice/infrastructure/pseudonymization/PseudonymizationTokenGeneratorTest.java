@@ -66,6 +66,16 @@ class PseudonymizationTokenGeneratorTest {
     }
 
     @Test
+    void shallGeneratePseudonymizedParentCertificateIdThatIsTheSameOverTime() {
+      final var expected = "3CMu4xpRBVNUVQ9ARZKY8Q";
+      final var parentCertificateId = "parentCertificateId";
+
+      final var actual = pseudonymizationTokenGenerator.parentCertificateId(parentCertificateId);
+
+      assertEquals(expected, actual);
+    }
+
+    @Test
     void shallGeneratePseudonymizedSessionIdThatIsTheSameOverTime() {
       final var expected = "nTxVe__MOq5J6sbFWhRweg";
       final var sessionId = "sessionId";
@@ -125,6 +135,18 @@ class PseudonymizationTokenGeneratorTest {
     }
 
     @Test
+    void shallGenerateSamePseudonymizedParentCertificateIdFromSameValue() {
+      final var parentCertificateId = "parentCertificateId";
+
+      final var parentCertificateIdOne = pseudonymizationTokenGenerator.parentCertificateId(
+          parentCertificateId);
+      final var parentCertificateIdTwo = pseudonymizationTokenGenerator.parentCertificateId(
+          parentCertificateId);
+
+      assertEquals(parentCertificateIdOne, parentCertificateIdTwo);
+    }
+
+    @Test
     void shallGenerateSamePseudonymizedSessionIdFromSameValue() {
       final var sessionId = "sessionId";
 
@@ -178,6 +200,26 @@ class PseudonymizationTokenGeneratorTest {
           "Tokens for same value across types should be unique: %s".formatted(tokens)
       );
     }
+
+    @Test
+    void shallGenerateSameTokenForSameValueForCertificateIdTypes() {
+      final var value = "samevalue";
+
+      final var certificateIdToken = pseudonymizationTokenGenerator.certificateId(value);
+      final var parentCertificateIdToken = pseudonymizationTokenGenerator.parentCertificateId(
+          value);
+
+      final var tokens = List.of(
+          certificateIdToken,
+          parentCertificateIdToken
+      );
+
+      final var uniqueTokens = tokens.stream().distinct().count();
+
+      assertEquals(1, uniqueTokens,
+          "Tokens for same value across certificateId types should be same: %s".formatted(tokens)
+      );
+    }
   }
 
   /**
@@ -220,6 +262,19 @@ class PseudonymizationTokenGeneratorTest {
       final var certificateIdTwo = pseudonymizationTokenGenerator.certificateId(certificateId);
 
       assertNotEquals(certificateIdOne, certificateIdTwo);
+    }
+
+    @Test
+    void shallGenerateDifferentPseudonymizedParentCertificateIdFromSameValueButDifferentContext() {
+      final var parentCertificateId = "parentCertificateId";
+
+      final var parentCertificateIdOne = pseudonymizationTokenGenerator.parentCertificateId(
+          parentCertificateId);
+      ReflectionTestUtils.setField(pseudonymizationTokenGenerator, "context", "analytics-dev");
+      final var parentCertificateIdTwo = pseudonymizationTokenGenerator.parentCertificateId(
+          parentCertificateId);
+
+      assertNotEquals(parentCertificateIdOne, parentCertificateIdTwo);
     }
 
     @Test

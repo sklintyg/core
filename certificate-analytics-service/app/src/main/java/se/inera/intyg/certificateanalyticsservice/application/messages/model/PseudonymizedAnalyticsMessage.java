@@ -25,5 +25,9 @@ public class PseudonymizedAnalyticsMessage {
   String certificatePatientId;
   String certificateUnitId;
   String certificateCareProviderId;
+  String certificateRelationParentId;
+  String certificateRelationParentType;
+
+  String recipientId;
 
 }

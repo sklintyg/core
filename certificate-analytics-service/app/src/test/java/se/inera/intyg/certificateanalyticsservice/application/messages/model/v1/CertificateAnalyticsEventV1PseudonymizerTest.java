@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessages.draftMessageBuilder;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessages.replaceMessageBuilder;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessages.sentMessageBuilder;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -132,6 +134,30 @@ class CertificateAnalyticsEventV1PseudonymizerTest {
   }
 
   @Test
+  void shallReturnPseudonymizedCertificateRelationParentId() {
+    final var expected = "pseudonymized-certificate-id";
+    final var message = replaceMessageBuilder().build();
+
+    when(pseudonymizationTokenGenerator.parentCertificateId(
+        message.getCertificate().getParent().getId()))
+        .thenReturn(expected);
+
+    final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
+
+    assertEquals(expected, actual.getCertificateRelationParentId());
+  }
+
+  @Test
+  void shallReturnPseudonymizedCertificateRelationParentType() {
+    final var message = replaceMessageBuilder().build();
+    final var expected = message.getCertificate().getParent().getType();
+
+    final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
+
+    assertEquals(expected, actual.getCertificateRelationParentType());
+  }
+
+  @Test
   void shallReturnEventTimeStamp() {
     final var message = draftMessageBuilder().build();
     final var expected = message.getEvent().getTimestamp();
@@ -215,5 +241,15 @@ class CertificateAnalyticsEventV1PseudonymizerTest {
     final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
 
     assertEquals(expected, actual.getEventOrigin());
+  }
+
+  @Test
+  void shallReturnRecipient() {
+    final var message = sentMessageBuilder().build();
+    final var expected = message.getRecipient().getId();
+
+    final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
+
+    assertEquals(expected, actual.getRecipientId());
   }
 }

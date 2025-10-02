@@ -15,6 +15,7 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.ent
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventTypeEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.OriginEntity;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.RecipientEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.RoleEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.SessionEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.UnitEntity;
@@ -22,6 +23,7 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.ent
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CareProviderRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.EventTypeRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.OriginRepository;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.RecipientRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.RoleRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.SessionRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.UnitRepository;
@@ -50,11 +52,13 @@ class EventMapperTest {
   @Mock
   private RoleRepository roleRepository;
   @Mock
+  private RecipientRepository recipientRepository;
+  @Mock
   private CertificateEntityMapper certificateEntityMapper;
 
   @Test
   void shouldMapPseudonymizedAnalyticsMessageCorrectly() {
-    final var message = TestDataPseudonymized.draftPseudonymizedMessageBuilder().build();
+    final var message = TestDataPseudonymized.sentPseudonymizedMessageBuilder().build();
 
     final var expectedCertificate = mock(CertificateEntity.class);
     final var expectedUnit = mock(UnitEntity.class);
@@ -64,6 +68,7 @@ class EventMapperTest {
     final var expectedOrigin = mock(OriginEntity.class);
     final var expectedEventType = mock(EventTypeEntity.class);
     final var expectedRole = mock(RoleEntity.class);
+    final var expectedRecipient = mock(RecipientEntity.class);
 
     when(certificateEntityMapper.map(message)).thenReturn(expectedCertificate);
     when(unitRepository.findOrCreate(message.getCertificateUnitId())).thenReturn(expectedUnit);
@@ -75,6 +80,8 @@ class EventMapperTest {
     when(eventTypeRepository.findOrCreate(message.getEventMessageType())).thenReturn(
         expectedEventType);
     when(roleRepository.findOrCreate(message.getEventRole())).thenReturn(expectedRole);
+    when(recipientRepository.findOrCreate(message.getRecipientId())).thenReturn(expectedRecipient);
+
     final var expected = EventEntity.builder()
         .certificate(expectedCertificate)
         .unit(expectedUnit)
@@ -85,6 +92,7 @@ class EventMapperTest {
         .origin(expectedOrigin)
         .eventType(expectedEventType)
         .role(expectedRole)
+        .recipient(expectedRecipient)
         .messageId(message.getMessageId())
         .build();
 

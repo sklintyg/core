@@ -4,8 +4,9 @@ import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConsta
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CERTIFICATE_TYPE;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CERTIFICATE_TYPE_VERSION;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_PATIENT_ID;
-import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_STAFF_ID;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_USER_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.ORIGIN;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.RECIPIENT;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.ROLE;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.TIMESTAMP;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.UNIT_ID;
@@ -17,6 +18,7 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.ent
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventTypeEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.OriginEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.PatientEntity;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.RecipientEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.RoleEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.SessionEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.UnitEntity;
@@ -80,7 +82,7 @@ public class TestDataEntities {
 
   public static UserEntity userEntity() {
     return UserEntity.builder()
-        .userId(HASHED_STAFF_ID)
+        .userId(HASHED_USER_ID)
         .build();
   }
 
@@ -105,6 +107,12 @@ public class TestDataEntities {
   public static RoleEntity roleEntity() {
     return RoleEntity.builder()
         .role(ROLE)
+        .build();
+  }
+
+  public static RecipientEntity recipientEntity() {
+    return RecipientEntity.builder()
+        .recipient(RECIPIENT)
         .build();
   }
 }

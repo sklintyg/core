@@ -7,6 +7,7 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.ent
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CareProviderRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.EventTypeRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.OriginRepository;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.RecipientRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.RoleRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.SessionRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.UnitRepository;
@@ -24,6 +25,7 @@ public class EventMapper {
   private final EventTypeRepository eventTypeRepository;
   private final RoleRepository roleRepository;
   private final CertificateEntityMapper certificateEntityMapper;
+  private final RecipientRepository recipientRepository;
 
   public EventEntity toEntity(PseudonymizedAnalyticsMessage message) {
     final var certificateEntity = certificateEntityMapper.map(message);
@@ -37,6 +39,7 @@ public class EventMapper {
         .origin(originRepository.findOrCreate(message.getEventOrigin()))
         .eventType(eventTypeRepository.findOrCreate(message.getEventMessageType()))
         .role(roleRepository.findOrCreate(message.getEventRole()))
+        .recipient(recipientRepository.findOrCreate(message.getRecipientId()))
         .messageId(message.getMessageId())
         .build();
   }

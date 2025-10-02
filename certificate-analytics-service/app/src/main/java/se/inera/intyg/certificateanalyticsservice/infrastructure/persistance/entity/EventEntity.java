@@ -62,6 +62,10 @@ public class EventEntity {
   @JoinColumn(name = "role_key", referencedColumnName = "key")
   private RoleEntity role;
 
+  @ManyToOne
+  @JoinColumn(name = "recipient_key", referencedColumnName = "key")
+  private RecipientEntity recipient;
+
   @Column(name = "message_id", unique = true, nullable = false, length = 22)
   private String messageId;
 }

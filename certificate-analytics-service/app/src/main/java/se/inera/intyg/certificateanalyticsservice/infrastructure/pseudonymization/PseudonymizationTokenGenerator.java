@@ -55,6 +55,13 @@ public class PseudonymizationTokenGenerator {
     );
   }
 
+  public String parentCertificateId(String certificateId) {
+    return certificateId == null ? null : token(
+        FIELD_CERTIFICATE_ID,
+        normalize(certificateId)
+    );
+  }
+
   public String patientId(String patientId) {
     return patientId == null ? null : token(
         FIELD_PATIENT_ID,

@@ -60,6 +60,28 @@ public class CertificateAnalyticsEventV1Pseudonymizer implements AnalyticsMessag
         )
         .certificateUnitId(messageV1.getCertificate().getUnitId())
         .certificateCareProviderId(messageV1.getCertificate().getCareProviderId())
+        .certificateRelationParentId(
+            missingParent(messageV1.getCertificate()) ? null :
+                pseudonymizationTokenGenerator.parentCertificateId(
+                    messageV1.getCertificate().getParent().getId()
+                )
+        )
+        .certificateRelationParentType(
+            missingParent(messageV1.getCertificate()) ? null :
+                messageV1.getCertificate().getParent().getType()
+        )
+        .recipientId(
+            missingRecipient(messageV1) ? null :
+                messageV1.getRecipient().getId()
+        )
         .build();
+  }
+
+  private boolean missingParent(CertificateAnalyticsEventCertificateV1 certificate) {
+    return certificate.getParent() == null || certificate.getParent().getId() == null;
+  }
+
+  private boolean missingRecipient(CertificateAnalyticsEventMessageV1 message) {
+    return message.getRecipient() == null || message.getRecipient().getId() == null;
   }
 }
