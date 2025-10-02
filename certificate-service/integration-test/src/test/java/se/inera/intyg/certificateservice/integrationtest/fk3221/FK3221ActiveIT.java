@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.integrationtest.fk3221;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO.SIGNED;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
@@ -14,6 +16,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.integrationtest.fk3221.FK3221Constants.CODE;
 import static se.inera.intyg.certificateservice.integrationtest.fk3221.FK3221Constants.CODE_SYSTEM;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customUpdateCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultComplementCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetCertificateMessageRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultRenewCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultSendCertificateRequest;
@@ -143,6 +146,8 @@ public class FK3221ActiveIT {
   @DisplayName(TYPE + "Kompletteringsbegäran")
   class Complement extends ComplementIT {
 
+    private static final String FUNKTIONSNEDSATTNING_MOTIVERING_KOMMUNIKATION_SOCIAL_INTERAKTION_ID = "9";
+
     @Override
     protected String type() {
       return CERTIFICATE_TYPE;
@@ -219,6 +224,39 @@ public class FK3221ActiveIT {
       assertTrue(questions(messagesForCertificate.getBody()).getFirst().isHandled(),
           "Expected that complement message was handled, but it was not!"
       );
+    }
+
+    @Test
+    @DisplayName("Tidigare dold fråga ska bli synlig efter komplettering om en kompletteringsbegärn finns på frågan")
+    void shallDisplayPreviouslyHiddenQuestionOnCertificateIfItHasComplement() {
+      final var testCertificates = testabilityApi.addCertificates(
+          defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
+      );
+
+      api.sendCertificate(
+          defaultSendCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      api.receiveMessage(
+          incomingComplementMessageBuilder()
+              .certificateId(certificateId(testCertificates))
+              .complements(List.of(incomingComplementDTOBuilder()
+                  .questionId(FUNKTIONSNEDSATTNING_MOTIVERING_KOMMUNIKATION_SOCIAL_INTERAKTION_ID)
+                  .build()))
+              .build()
+      );
+
+      final var response = api.complementCertificate(
+          defaultComplementCertificateRequest(),
+          certificateId(testCertificates)
+      );
+
+      final var certificate = Objects.requireNonNull(response.getBody()).getCertificate();
+      assertEquals(200, response.getStatusCode().value());
+      assertNotNull(certificate);
+      assertTrue(certificate.getData()
+          .containsKey(FUNKTIONSNEDSATTNING_MOTIVERING_KOMMUNIKATION_SOCIAL_INTERAKTION_ID));
     }
   }
 
