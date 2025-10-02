@@ -56,6 +56,54 @@ class CertificateElementRuleFactoryTest {
   }
 
   @Test
+  void shouldReturnShowEmptyRule() {
+    final var expected = ElementRuleExpression.builder()
+        .id(new ElementId("ID"))
+        .type(ElementRuleType.SHOW)
+        .expression(new RuleExpression("empty($FIELD)"))
+        .build();
+
+    final var response = CertificateElementRuleFactory.showEmpty(
+        new ElementId("ID"),
+        new FieldId("FIELD")
+    );
+
+    assertEquals(expected, response);
+  }
+
+  @Test
+  void shouldReturnDisableElementRule() {
+    final var expected = ElementRuleExpression.builder()
+        .id(new ElementId("ID"))
+        .type(ElementRuleType.DISABLE)
+        .expression(new RuleExpression("$FIELD"))
+        .build();
+
+    final var response = CertificateElementRuleFactory.disableElement(
+        new ElementId("ID"),
+        new FieldId("FIELD")
+    );
+
+    assertEquals(expected, response);
+  }
+
+  @Test
+  void shouldReturnDisableEmptyElementRule() {
+    final var expected = ElementRuleExpression.builder()
+        .id(new ElementId("ID"))
+        .type(ElementRuleType.DISABLE)
+        .expression(new RuleExpression("empty($FIELD)"))
+        .build();
+
+    final var response = CertificateElementRuleFactory.disableEmptyElement(
+        new ElementId("ID"),
+        new FieldId("FIELD")
+    );
+
+    assertEquals(expected, response);
+  }
+
+  @Test
   void shouldReturnShowRule() {
     final var expected = ElementRuleExpression.builder()
         .id(new ElementId("ID"))

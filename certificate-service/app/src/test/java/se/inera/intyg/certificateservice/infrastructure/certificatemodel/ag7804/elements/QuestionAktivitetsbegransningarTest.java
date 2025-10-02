@@ -23,7 +23,7 @@ class QuestionAktivitetsbegransningarTest {
 
   @Test
   void shouldIncludeId() {
-    final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionAktivitetsbegransningar.questionAktivitetsbegransningar();
+    final var element = QuestionAktivitetsbegransningar.questionAktivitetsbegransningar();
     assertEquals(QUESTION_AKTIVITETSBEGRANSNING_ID, element.id());
   }
 
@@ -41,14 +41,14 @@ class QuestionAktivitetsbegransningarTest {
         .icfCodesPropertyName(IcfCodesPropertyType.AKTIVITETSBEGRANSNINGAR)
         .build();
 
-    final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionAktivitetsbegransningar.questionAktivitetsbegransningar();
+    final var element = QuestionAktivitetsbegransningar.questionAktivitetsbegransningar();
 
     assertEquals(expectedConfiguration, element.configuration());
   }
 
   @Test
   void shouldIncludeRules() {
-    final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionAktivitetsbegransningar.questionAktivitetsbegransningar();
+    final var element = QuestionAktivitetsbegransningar.questionAktivitetsbegransningar();
     final var expectedRules = List.of(
         ElementRuleExpression.builder()
             .id(QUESTION_AKTIVITETSBEGRANSNING_ID)
@@ -70,7 +70,7 @@ class QuestionAktivitetsbegransningarTest {
 
   @Test
   void shouldIncludeValidation() {
-    final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionAktivitetsbegransningar.questionAktivitetsbegransningar();
+    final var element = QuestionAktivitetsbegransningar.questionAktivitetsbegransningar();
     final var expectedValidations = List.of(
         ElementValidationIcfValue.builder()
             .mandatory(true)
@@ -106,7 +106,7 @@ class QuestionAktivitetsbegransningarTest {
               .value(ElementValueBoolean.builder().value(false).build())
               .build()
       );
-      final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionAktivitetsbegransningar.questionAktivitetsbegransningar();
+      final var element = QuestionAktivitetsbegransningar.questionAktivitetsbegransningar();
       final var shouldValidate = element.shouldValidate();
       assertTrue(shouldValidate.test(elementData));
     }
@@ -119,7 +119,7 @@ class QuestionAktivitetsbegransningarTest {
               .value(ElementValueBoolean.builder().value(true).build())
               .build()
       );
-      final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionAktivitetsbegransningar.questionAktivitetsbegransningar();
+      final var element = QuestionAktivitetsbegransningar.questionAktivitetsbegransningar();
       final var shouldValidate = element.shouldValidate();
       assertTrue(shouldValidate.test(elementData));
     }
