@@ -129,16 +129,6 @@ class CertificateModelFactoryAG7804Test {
   }
 
   @Test
-  void shouldIncludeMessageActionSpecifications() {
-    final var certificateModel = certificateModelFactoryAG7804.create();
-
-    assertAll(
-        () -> assertNotNull(certificateModel.messageActionSpecifications()),
-        () -> assertFalse(certificateModel.messageActionSpecifications().isEmpty())
-    );
-  }
-
-  @Test
   void shouldIncludeCertificateActionFactory() {
     final var certificateModel = certificateModelFactoryAG7804.create();
 

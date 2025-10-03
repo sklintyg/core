@@ -33,7 +33,6 @@ import se.inera.intyg.certificateservice.integrationtest.GetPatientCertificatesI
 import se.inera.intyg.certificateservice.integrationtest.GetUnitCertificatesIT;
 import se.inera.intyg.certificateservice.integrationtest.GetUnitCertificatesInfoIT;
 import se.inera.intyg.certificateservice.integrationtest.GetUnitCertificatesWhenSignedIT;
-import se.inera.intyg.certificateservice.integrationtest.MessageExistsIT;
 import se.inera.intyg.certificateservice.integrationtest.RenewCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.RenewExternalCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ReplaceCertificateIT;
@@ -329,26 +328,6 @@ public class AG7804ActiveIT {
     @Override
     protected String typeVersion() {
       return ACTIVE_VERSION;
-    }
-  }
-
-  @Nested
-  @DisplayName(TYPE + "Finns meddelandet i tjänsten")
-  class MessagesExists extends MessageExistsIT {
-
-    @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected String questionId() {
-      return ELEMENT_ID.id();
     }
   }
 

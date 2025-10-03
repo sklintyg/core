@@ -11,13 +11,12 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationIcf;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.IcfCodesPropertyType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
-import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationIcfValue;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 
 class QuestionFunktionsnedsattningarTest {
 
@@ -29,16 +28,10 @@ class QuestionFunktionsnedsattningarTest {
 
   @Test
   void shouldIncludeConfiguration() {
-    final var expectedConfiguration = ElementConfigurationIcf.builder()
+    final var expectedConfiguration = ElementConfigurationTextArea.builder()
         .id(QUESTION_FUNKTIONSNEDSATTNINGAR_FIELD_ID)
         .name(
             "Ange vilken/vilka funktionsnedsättningar patienten har till följd av sjukdom och om möjligt svårighetsgrad. Ange även vad din bedömning av funktionsnedsättningar baseras på. Beskriv relevanta undersökningsfynd, testresultat, utredningssvar eller andra uppgifter (exempelvis anamnesuppgifter) och hur du bedömer dem.")
-        .modalLabel("Välj enbart de problem som påverkar patienten.")
-        .collectionsLabel(
-            "Problem som påverkar patientens möjlighet att utföra sin sysselsättning:")
-        .placeholder(
-            "Vad grundar sig bedömningen på? På vilka sätt och i vilken utsträckning är patienten påverkad?")
-        .icfCodesPropertyName(IcfCodesPropertyType.FUNKTIONSNEDSATTNINGAR)
         .build();
 
     final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionFunktionsnedsattningar.questionFunktionsnedsattningar();
@@ -72,11 +65,12 @@ class QuestionFunktionsnedsattningarTest {
   void shouldIncludeValidation() {
     final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionFunktionsnedsattningar.questionFunktionsnedsattningar();
     final var expectedValidations = List.of(
-        ElementValidationIcfValue.builder()
+        ElementValidationText.builder()
             .mandatory(true)
             .limit(4000)
             .build()
     );
+
     assertEquals(expectedValidations, element.validations());
   }
 

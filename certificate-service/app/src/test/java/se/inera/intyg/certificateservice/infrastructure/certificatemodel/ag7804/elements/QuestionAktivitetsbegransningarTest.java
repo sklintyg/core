@@ -11,13 +11,12 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationIcf;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.IcfCodesPropertyType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
-import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationIcfValue;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 
 class QuestionAktivitetsbegransningarTest {
 
@@ -29,16 +28,10 @@ class QuestionAktivitetsbegransningarTest {
 
   @Test
   void shouldIncludeConfiguration() {
-    final var expectedConfiguration = ElementConfigurationIcf.builder()
+    final var expectedConfiguration = ElementConfigurationTextArea.builder()
         .id(QUESTION_AKTIVITETSBEGRANSNING_FIELD_ID)
         .name(
             "Beskriv vad du bedömer att patienten har svårt att göra på grund av sin sjukdom. Ange exempel på sådana begränsningar relaterade till de arbetsuppgifter eller annan sysselsättning som du bedömer arbetsförmågan i förhållande till. Ange om möjligt svårighetsgrad.")
-        .modalLabel("Välj enbart de svårigheter som påverkar patientens sysselsättning.")
-        .collectionsLabel(
-            "Svårigheter som påverkar patientens sysselsättning:")
-        .placeholder(
-            "Hur begränsar ovanstående patientens sysselsättning och i vilken utsträckning?")
-        .icfCodesPropertyName(IcfCodesPropertyType.AKTIVITETSBEGRANSNINGAR)
         .build();
 
     final var element = QuestionAktivitetsbegransningar.questionAktivitetsbegransningar();
@@ -72,7 +65,7 @@ class QuestionAktivitetsbegransningarTest {
   void shouldIncludeValidation() {
     final var element = QuestionAktivitetsbegransningar.questionAktivitetsbegransningar();
     final var expectedValidations = List.of(
-        ElementValidationIcfValue.builder()
+        ElementValidationText.builder()
             .mandatory(true)
             .limit(4000)
             .build()
