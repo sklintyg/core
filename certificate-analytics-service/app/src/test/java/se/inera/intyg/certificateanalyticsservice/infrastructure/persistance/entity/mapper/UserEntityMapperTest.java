@@ -11,9 +11,9 @@ class UserEntityMapperTest {
   @Test
   void shouldMapStaffIdCorrectly() {
     final var expected = UserEntity.builder()
-        .userId(TestDataConstants.STAFF_ID)
+        .userId(TestDataConstants.USER_ID)
         .build();
-    final var result = UserEntityMapper.map(TestDataConstants.STAFF_ID);
+    final var result = UserEntityMapper.map(TestDataConstants.USER_ID);
     assertEquals(expected, result);
   }
 }

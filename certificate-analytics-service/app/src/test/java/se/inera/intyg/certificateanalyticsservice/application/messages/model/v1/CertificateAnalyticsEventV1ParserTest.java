@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessages.draftMessageBuilder;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessages.replaceMessageBuilder;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessages.toJson;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -46,7 +47,7 @@ class CertificateAnalyticsEventV1ParserTest {
 
   @Test
   void shallReturnParsedEvent() throws JsonProcessingException {
-    final var excepted = draftMessageBuilder().build();
+    final var excepted = replaceMessageBuilder().build();
     final var messageAsJson = toJson(excepted);
 
     when(objectMapper.readValue(messageAsJson, CertificateAnalyticsEventMessageV1.class))

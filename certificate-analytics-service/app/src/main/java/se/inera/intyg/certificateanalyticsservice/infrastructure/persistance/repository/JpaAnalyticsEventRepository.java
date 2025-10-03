@@ -2,6 +2,7 @@ package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.re
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.PseudonymizedAnalyticsMessage;
 import se.inera.intyg.certificateanalyticsservice.application.messages.repository.AnalyticsMessageRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper.EventMapper;
@@ -19,6 +20,7 @@ public class JpaAnalyticsEventRepository implements AnalyticsMessageRepository {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public PseudonymizedAnalyticsMessage findByMessageId(String messageId) {
     return eventEntityRepository.findByMessageId(messageId)
         .map(eventMapper::toDomain)

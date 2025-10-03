@@ -19,6 +19,8 @@ public class CertificateAnalyticsEventCertificateV1 implements Serializable {
   String unitId;
   String careProviderId;
 
+  CertificateAnalyticsEventCertificateRelationV1 parent;
+
   @JsonPOJOBuilder(withPrefix = "")
   public static class CertificateAnalyticsEventCertificateV1Builder {
 

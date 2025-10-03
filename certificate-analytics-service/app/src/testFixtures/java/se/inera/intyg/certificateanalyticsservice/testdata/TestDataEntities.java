@@ -3,20 +3,27 @@ package se.inera.intyg.certificateanalyticsservice.testdata;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CARE_PROVIDER_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CERTIFICATE_TYPE;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CERTIFICATE_TYPE_VERSION;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_CERTIFICATE_PARENT_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_PATIENT_ID;
-import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_STAFF_ID;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_USER_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.ORIGIN;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.RECIPIENT;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.ROLE;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.TIMESTAMP;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.UNIT_ID;
 
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CareProviderEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CertificateEntity;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CertificateEntity.CertificateEntityBuilder;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CertificateRelationEntity;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CertificateRelationTypeEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CertificateTypeEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventEntity;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventEntity.EventEntityBuilder;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventTypeEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.OriginEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.PatientEntity;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.RecipientEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.RoleEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.SessionEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.UnitEntity;
@@ -28,6 +35,21 @@ public class TestDataEntities {
     throw new IllegalStateException("Utility class");
   }
 
+  public static EventEntityBuilder sentEventEntityBuilder() {
+    return EventEntity.builder()
+        .certificate(certificateEntity().build())
+        .messageId(TestDataConstants.HASHED_MESSAGE_ID)
+        .timestamp(TIMESTAMP)
+        .eventType(eventTypeEntity())
+        .role(roleEntity())
+        .unit(unitEntity())
+        .careProvider(careProviderEntity())
+        .user(userEntity())
+        .session(sessionEntity())
+        .origin(originEntity())
+        .recipient(recipientEntity());
+  }
+
   public static CertificateTypeEntity certificateTypeEntity() {
     return CertificateTypeEntity.builder()
         .certificateType(CERTIFICATE_TYPE)
@@ -35,14 +57,13 @@ public class TestDataEntities {
         .build();
   }
 
-  public static CertificateEntity certificateEntity() {
+  public static CertificateEntityBuilder certificateEntity() {
     return CertificateEntity.builder()
         .certificateId(TestDataConstants.HASHED_CERTIFICATE_ID)
         .certificateType(certificateTypeEntity())
         .patient(patientEntity())
         .unit(unitEntity())
-        .careProvider(careProviderEntity())
-        .build();
+        .careProvider(careProviderEntity());
   }
 
   public static PatientEntity patientEntity() {
@@ -63,24 +84,9 @@ public class TestDataEntities {
         .build();
   }
 
-  public static EventEntity createdEventEntity() {
-    return EventEntity.builder()
-        .certificate(certificateEntity())
-        .unit(unitEntity())
-        .careProvider(careProviderEntity())
-        .user(userEntity())
-        .session(sessionEntity())
-        .timestamp(TIMESTAMP)
-        .origin(originEntity())
-        .eventType(eventTypeEntity())
-        .role(roleEntity())
-        .messageId(TestDataConstants.HASHED_MESSAGE_ID)
-        .build();
-  }
-
   public static UserEntity userEntity() {
     return UserEntity.builder()
-        .userId(HASHED_STAFF_ID)
+        .userId(HASHED_USER_ID)
         .build();
   }
 
@@ -98,13 +104,35 @@ public class TestDataEntities {
 
   public static EventTypeEntity eventTypeEntity() {
     return EventTypeEntity.builder()
-        .eventType(TestDataConstants.EVENT_TYPE_DRAFT_CREATED)
+        .eventType(TestDataConstants.EVENT_TYPE_CERTIFICATE_SENT)
         .build();
   }
 
   public static RoleEntity roleEntity() {
     return RoleEntity.builder()
         .role(ROLE)
+        .build();
+  }
+
+  public static RecipientEntity recipientEntity() {
+    return RecipientEntity.builder()
+        .recipient(RECIPIENT)
+        .build();
+  }
+
+  public static CertificateRelationEntity certificateRelationEntity() {
+    return CertificateRelationEntity.builder()
+        .parentCertificate(
+            certificateEntity()
+                .certificateId(HASHED_CERTIFICATE_PARENT_ID)
+                .build()
+        )
+        .childCertificate(certificateEntity().build())
+        .relationType(
+            CertificateRelationTypeEntity.builder()
+                .relationType(TestDataConstants.CERTIFICATE_PARENT_TYPE)
+                .build()
+        )
         .build();
   }
 }
