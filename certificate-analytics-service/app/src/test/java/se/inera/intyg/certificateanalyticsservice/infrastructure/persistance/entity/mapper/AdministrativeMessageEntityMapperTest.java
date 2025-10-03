@@ -39,7 +39,8 @@ class AdministrativeMessageEntityMapperTest {
         .build();
 
     when(
-        administrativeMessageIdRepository.findOrCreate(TestDataConstants.ADMINISTRATIVE_MESSAGE_ID))
+        administrativeMessageIdRepository.findOrCreate(
+            TestDataConstants.HASHED_ADMINISTRATIVE_MESSAGE_ID))
         .thenReturn(TestDataEntities.administrativeMessageIdEntity());
     when(administrativeMessageTypeRepository.findOrCreate(
         TestDataConstants.ADMINISTRATIVE_MESSAGE_TYPE))
@@ -53,8 +54,8 @@ class AdministrativeMessageEntityMapperTest {
 
     final var expected = AdministrativeMessageEntity.builder()
         .administrativeMessageId(TestDataEntities.administrativeMessageIdEntity())
-        .answerId(TestDataConstants.ADMINISTRATIVE_MESSAGE_ANSWER_ID)
-        .reminderId(TestDataConstants.ADMINISTRATIVE_MESSAGE_REMINDER_ID)
+        .answerId(TestDataConstants.HASHED_ADMINISTRATIVE_ANSWER_ID)
+        .reminderId(TestDataConstants.HASHED_ADMINISTRATIVE_REMINDER_ID)
         .messageType(TestDataEntities.administrativeMessageTypeEntity())
         .sent(message.getAdministrativeMessageSent())
         .lastDateToAnswer(message.getAdministrativeMessageLastDateToAnswer())

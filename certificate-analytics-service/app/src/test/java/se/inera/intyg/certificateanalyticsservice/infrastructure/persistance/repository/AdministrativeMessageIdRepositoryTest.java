@@ -25,7 +25,7 @@ class AdministrativeMessageIdRepositoryTest {
 
   @Test
   void shouldCreateNewAdministrativeMessageIdEntityIfNotExists() {
-    final var administrativeMessageId = TestDataConstants.ADMINISTRATIVE_MESSAGE_ID;
+    final var administrativeMessageId = TestDataConstants.HASHED_ADMINISTRATIVE_MESSAGE_ID;
     final var expectedEntity = TestDataEntities.administrativeMessageIdEntity();
     final var savedEntity = mock(AdministrativeMessageIdEntity.class);
     when(administrativeMessageIdEntityRepository.findByAdministrativeMessageId(
@@ -39,7 +39,7 @@ class AdministrativeMessageIdRepositoryTest {
 
   @Test
   void shouldFindExistingAdministrativeMessageIdEntity() {
-    final var administrativeMessageId = TestDataConstants.ADMINISTRATIVE_MESSAGE_ID;
+    final var administrativeMessageId = TestDataConstants.HASHED_ADMINISTRATIVE_MESSAGE_ID;
     final var entity = mock(AdministrativeMessageIdEntity.class);
     when(administrativeMessageIdEntityRepository.findByAdministrativeMessageId(
         administrativeMessageId)).thenReturn(Optional.of(entity));
