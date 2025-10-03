@@ -91,22 +91,15 @@ public class EventMapper {
     if (entity.getAdministrativeMessage() != null) {
       final var administrativeMessage = entity.getAdministrativeMessage();
       domainBuilder
-          .administrativeMessageId(
-              administrativeMessage.getAdministrativeMessageId().getAdministrativeMessageId())
+          .administrativeMessageId(administrativeMessage.getAdministrativeMessageId())
           .administrativeMessageAnswerId(administrativeMessage.getAnswerId())
           .administrativeMessageReminderId(administrativeMessage.getReminderId())
-          .administrativeMessageType(
-              administrativeMessage.getMessageType() != null
-                  ? administrativeMessage.getMessageType().getType() : null)
+          .administrativeMessageType(administrativeMessage.getMessageType().getType())
           .administrativeMessageSent(administrativeMessage.getSent())
           .administrativeMessageLastDateToAnswer(administrativeMessage.getLastDateToAnswer())
           .administrativeMessageQuestionId(administrativeMessage.getQuestionId())
-          .administrativeMessageSender(
-              administrativeMessage.getSender() != null ? administrativeMessage.getSender()
-                  .getSender() : null)
-          .administrativeMessageRecipient(
-              administrativeMessage.getRecipient() != null ? administrativeMessage.getRecipient()
-                  .getRecipient() : null);
+          .administrativeMessageSender(administrativeMessage.getSender().getSender())
+          .administrativeMessageRecipient(administrativeMessage.getRecipient().getRecipient());
     }
 
     return domainBuilder.build();

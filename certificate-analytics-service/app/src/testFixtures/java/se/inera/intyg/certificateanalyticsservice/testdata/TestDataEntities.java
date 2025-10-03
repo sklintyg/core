@@ -3,6 +3,8 @@ package se.inera.intyg.certificateanalyticsservice.testdata;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CARE_PROVIDER_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CERTIFICATE_TYPE;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CERTIFICATE_TYPE_VERSION;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_ADMINISTRATIVE_ANSWER_ID;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_ADMINISTRATIVE_REMINDER_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_CERTIFICATE_PARENT_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_PATIENT_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_USER_ID;
@@ -13,7 +15,6 @@ import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConsta
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.UNIT_ID;
 
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.AdministrativeMessageEntity;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.AdministrativeMessageIdEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.AdministrativeMessageRecipientEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.AdministrativeMessageSenderEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.AdministrativeMessageTypeEntity;
@@ -157,12 +158,6 @@ public class TestDataEntities {
         .build();
   }
 
-  public static AdministrativeMessageIdEntity administrativeMessageIdEntity() {
-    return AdministrativeMessageIdEntity.builder()
-        .administrativeMessageId(TestDataConstants.HASHED_ADMINISTRATIVE_MESSAGE_ID)
-        .build();
-  }
-
   public static AdministrativeMessageTypeEntity administrativeMessageTypeEntity() {
     return AdministrativeMessageTypeEntity.builder()
         .type(TestDataConstants.ADMINISTRATIVE_MESSAGE_TYPE)
@@ -183,15 +178,16 @@ public class TestDataEntities {
 
   public static AdministrativeMessageEntity administrativeMessageEntity() {
     return AdministrativeMessageEntity.builder()
-        .administrativeMessageId(administrativeMessageIdEntity())
-        .answerId(TestDataConstants.HASHED_ADMINISTRATIVE_ANSWER_ID)
-        .reminderId(TestDataConstants.HASHED_ADMINISTRATIVE_REMINDER_ID)
+        .administrativeMessageId(TestDataConstants.HASHED_ADMINISTRATIVE_MESSAGE_ID)
+        .answerId(HASHED_ADMINISTRATIVE_ANSWER_ID)
+        .reminderId(HASHED_ADMINISTRATIVE_REMINDER_ID)
         .messageType(administrativeMessageTypeEntity())
         .sent(TestDataConstants.TIMESTAMP)
         .lastDateToAnswer(TestDataConstants.TIMESTAMP.toLocalDate())
         .questionId(java.util.List.of(
             TestDataConstants.ADMINISTRATIVE_MESSAGE_QUESTION_ID_1,
-            TestDataConstants.ADMINISTRATIVE_MESSAGE_QUESTION_ID_2))
+            TestDataConstants.ADMINISTRATIVE_MESSAGE_QUESTION_ID_2)
+        )
         .sender(administrativeMessageSenderEntity())
         .recipient(administrativeMessageRecipientEntity())
         .build();

@@ -32,9 +32,8 @@ public class AdministrativeMessageEntity {
   @Column(name = "`key`")
   private Long key;
 
-  @ManyToOne
-  @JoinColumn(name = "administrative_message_id_key", referencedColumnName = "key", nullable = false)
-  private AdministrativeMessageIdEntity administrativeMessageId;
+  @Column(name = "administrative_message_id", length = 22, nullable = false)
+  private String administrativeMessageId;
 
   @Column(name = "answer_id", length = 22)
   private String answerId;

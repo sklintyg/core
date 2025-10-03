@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.PseudonymizedAnalyticsMessage;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.AdministrativeMessageEntity;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.AdministrativeMessageIdRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.AdministrativeMessageRecipientRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.AdministrativeMessageSenderRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.AdministrativeMessageTypeRepository;
@@ -25,8 +24,6 @@ class AdministrativeMessageEntityMapperTest {
   @InjectMocks
   private AdministrativeMessageEntityMapper administrativeMessageEntityMapper;
   @Mock
-  private AdministrativeMessageIdRepository administrativeMessageIdRepository;
-  @Mock
   private AdministrativeMessageTypeRepository administrativeMessageTypeRepository;
   @Mock
   private AdministrativeMessageSenderRepository administrativeMessageSenderRepository;
@@ -38,10 +35,6 @@ class AdministrativeMessageEntityMapperTest {
     final var message = TestDataPseudonymized.administrativeMessagePseudonymizedMessageBuilder()
         .build();
 
-    when(
-        administrativeMessageIdRepository.findOrCreate(
-            TestDataConstants.HASHED_ADMINISTRATIVE_MESSAGE_ID))
-        .thenReturn(TestDataEntities.administrativeMessageIdEntity());
     when(administrativeMessageTypeRepository.findOrCreate(
         TestDataConstants.ADMINISTRATIVE_MESSAGE_TYPE))
         .thenReturn(TestDataEntities.administrativeMessageTypeEntity());
@@ -53,7 +46,7 @@ class AdministrativeMessageEntityMapperTest {
         .thenReturn(TestDataEntities.administrativeMessageRecipientEntity());
 
     final var expected = AdministrativeMessageEntity.builder()
-        .administrativeMessageId(TestDataEntities.administrativeMessageIdEntity())
+        .administrativeMessageId(TestDataConstants.HASHED_ADMINISTRATIVE_MESSAGE_ID)
         .answerId(TestDataConstants.HASHED_ADMINISTRATIVE_ANSWER_ID)
         .reminderId(TestDataConstants.HASHED_ADMINISTRATIVE_REMINDER_ID)
         .messageType(TestDataEntities.administrativeMessageTypeEntity())
