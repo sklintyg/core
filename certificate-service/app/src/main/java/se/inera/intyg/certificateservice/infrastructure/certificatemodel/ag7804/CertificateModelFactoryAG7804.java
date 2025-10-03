@@ -126,7 +126,7 @@ public class CertificateModelFactoryAG7804 implements CertificateModelFactory {
         ))
         .summaryProvider(new AG7804CertificateSummaryProvider())
         .certificateActionSpecifications(AG7804CertificateActionSpecification.create())
-        .messageActionSpecifications(AG7804MessageActionSpecification.create())
+        .messageActionSpecifications(List.of())
         .elementSpecifications(List.of(
             categorySmittbararpenning(
                 questionSmittbararpenning()
