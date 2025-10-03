@@ -107,4 +107,30 @@ public class StaffEntityMapper {
         .blocked(new Blocked(false))
         .build();
   }
+
+	public static boolean hasChanges(StaffEntity entity, Staff staff) {
+		if (!entity.getFirstName().equals(staff.name().firstName())) return true;
+		if (!entity.getMiddleName().equals(staff.name().middleName())) return true;
+		if (!entity.getLastName().equals(staff.name().lastName())) return true;
+		if (!entity.getRole().getRole().equals(staff.role().name())) return true;
+
+		// Compare lists (simplest way: compare sizes and content)
+		if (!entity.getPaTitles().stream()
+				.map(PaTitleEmbeddable::getCode)
+				.toList()
+				.equals(staff.paTitles().stream().map(PaTitle::code).toList())) return true;
+
+		if (!entity.getSpecialities().stream()
+				.map(SpecialityEmbeddable::getSpeciality)
+				.toList()
+				.equals(staff.specialities().stream().map(Speciality::value).toList())) return true;
+
+		if (!entity.getHealthcareProfessionalLicences().stream()
+				.map(HealthcareProfessionalLicenceEmbeddable::getHealthcareProfessionalLicence)
+				.toList()
+				.equals(staff.healthCareProfessionalLicence().stream().map(HealthCareProfessionalLicence::value).toList())) return true;
+
+		return false;
+	}
+
 }
