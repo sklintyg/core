@@ -74,6 +74,48 @@ public class CertificateAnalyticsEventV1Pseudonymizer implements AnalyticsMessag
             missingRecipient(messageV1) ? null :
                 messageV1.getRecipient().getId()
         )
+        .administrativeMessageId(
+            missingAdministrativeMessage(messageV1) ? null :
+                pseudonymizationTokenGenerator.administrativeMessageId(
+                    messageV1.getAdministrativeMessage().getId()
+                )
+        )
+        .administrativeMessageAnswerId(
+            missingAdministrativeMessage(messageV1) ? null :
+                pseudonymizationTokenGenerator.administrativeMessageAnswerId(
+                    messageV1.getAdministrativeMessage().getAnswerId()
+                )
+        )
+        .administrativeMessageReminderId(
+            missingAdministrativeMessage(messageV1) ? null :
+                pseudonymizationTokenGenerator.administrativeMessageReminderId(
+                    messageV1.getAdministrativeMessage().getReminderId()
+                )
+        )
+        .administrativeMessageType(
+            missingAdministrativeMessage(messageV1) ? null :
+                messageV1.getAdministrativeMessage().getType()
+        )
+        .administrativeMessageSent(
+            missingAdministrativeMessage(messageV1) ? null :
+                messageV1.getAdministrativeMessage().getSent()
+        )
+        .administrativeMessageLastDateToAnswer(
+            missingAdministrativeMessage(messageV1) ? null :
+                messageV1.getAdministrativeMessage().getLastDateToAnswer()
+        )
+        .administrativeMessageQuestionId(
+            missingAdministrativeMessage(messageV1) ? null :
+                messageV1.getAdministrativeMessage().getQuestionId()
+        )
+        .administrativeMessageSender(
+            missingAdministrativeMessage(messageV1) ? null :
+                messageV1.getAdministrativeMessage().getSender()
+        )
+        .administrativeMessageRecipient(
+            missingAdministrativeMessage(messageV1) ? null :
+                messageV1.getAdministrativeMessage().getRecipient()
+        )
         .build();
   }
 
@@ -83,5 +125,10 @@ public class CertificateAnalyticsEventV1Pseudonymizer implements AnalyticsMessag
 
   private boolean missingRecipient(CertificateAnalyticsEventMessageV1 message) {
     return message.getRecipient() == null || message.getRecipient().getId() == null;
+  }
+
+  private boolean missingAdministrativeMessage(CertificateAnalyticsEventMessageV1 message) {
+    return message.getAdministrativeMessage() == null
+        || message.getAdministrativeMessage().getId() == null;
   }
 }

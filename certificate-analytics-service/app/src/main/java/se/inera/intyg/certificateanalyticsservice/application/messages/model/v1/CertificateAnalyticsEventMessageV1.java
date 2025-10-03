@@ -19,6 +19,7 @@ public class CertificateAnalyticsEventMessageV1 implements CertificateAnalyticsM
   CertificateAnalyticsEventCertificateV1 certificate;
   CertificateAnalyticsEventV1 event;
   CertificateAnalyticsEventRecipientV1 recipient;
+  CertificateAnalyticsAdministrativeMessageV1 administrativeMessage;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class CertificateAnalyticsEventMessageV1Builder {

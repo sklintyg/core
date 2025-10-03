@@ -32,6 +32,10 @@ public class EventEntity {
   private CertificateEntity certificate;
 
   @ManyToOne
+  @JoinColumn(name = "administrative_message_key", referencedColumnName = "key")
+  private AdministrativeMessageEntity administrativeMessage;
+
+  @ManyToOne
   @JoinColumn(name = "unit_key", referencedColumnName = "key")
   private UnitEntity unit;
 

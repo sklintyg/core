@@ -1,5 +1,13 @@
 package se.inera.intyg.certificateanalyticsservice.testdata;
 
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.ADMINISTRATIVE_MESSAGE_ANSWER_ID;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.ADMINISTRATIVE_MESSAGE_ID;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.ADMINISTRATIVE_MESSAGE_QUESTION_ID_1;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.ADMINISTRATIVE_MESSAGE_QUESTION_ID_2;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.ADMINISTRATIVE_MESSAGE_RECIPIENT;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.ADMINISTRATIVE_MESSAGE_REMINDER_ID;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.ADMINISTRATIVE_MESSAGE_SENDER;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.ADMINISTRATIVE_MESSAGE_TYPE;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CARE_PROVIDER_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CERTIFICATE_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CERTIFICATE_PARENT_ID;
@@ -27,6 +35,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.UncheckedIOException;
 import java.time.LocalDateTime;
+import java.util.List;
+import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsAdministrativeMessageV1;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsEventCertificateRelationV1;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsEventCertificateRelationV1.CertificateAnalyticsEventCertificateRelationV1Builder;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsEventCertificateV1;
@@ -159,6 +169,56 @@ public class TestDataMessages {
                 .careProviderId(CARE_PROVIDER_ID)
                 .sessionId(SESSION_ID)
                 .origin(ORIGIN)
+                .build()
+        );
+  }
+
+  public static CertificateAnalyticsEventMessageV1Builder receivedQuestionMessageBuilder() {
+    return CertificateAnalyticsEventMessageV1.builder()
+        .messageId(MESSAGE_ID_CREATED)
+        .type(TYPE_ANALYTICS_EVENT)
+        .schemaVersion(SCHEMA_VERSION)
+        .certificate(
+            certificateBuilder()
+                .id(CERTIFICATE_ID)
+                .unitId(UNIT_ID)
+                .careProviderId(CARE_PROVIDER_ID)
+                .patientId(PATIENT_ID)
+                .type(CERTIFICATE_TYPE)
+                .typeVersion(CERTIFICATE_TYPE_VERSION)
+                .build()
+        )
+        .event(
+            eventBuilder()
+                .messageType("QUESTION_RECEIVED")
+                .timestamp(LocalDateTime.parse(EVENT_TIMESTAMP))
+                .userId(USER_ID)
+                .role(ROLE)
+                .unitId(UNIT_ID)
+                .careProviderId(CARE_PROVIDER_ID)
+                .sessionId(SESSION_ID)
+                .origin(ORIGIN)
+                .build()
+        )
+        .recipient(
+            CertificateAnalyticsEventRecipientV1.builder()
+                .id(RECIPIENT)
+                .build()
+        )
+        .administrativeMessage(
+            CertificateAnalyticsAdministrativeMessageV1.builder()
+                .id(ADMINISTRATIVE_MESSAGE_ID)
+                .type(ADMINISTRATIVE_MESSAGE_TYPE)
+                .sender(ADMINISTRATIVE_MESSAGE_SENDER)
+                .recipient(ADMINISTRATIVE_MESSAGE_RECIPIENT)
+                .questionId(
+                    List.of(
+                        ADMINISTRATIVE_MESSAGE_QUESTION_ID_1,
+                        ADMINISTRATIVE_MESSAGE_QUESTION_ID_2
+                    )
+                )
+                .answerId(ADMINISTRATIVE_MESSAGE_ANSWER_ID)
+                .reminderId(ADMINISTRATIVE_MESSAGE_REMINDER_ID)
                 .build()
         );
   }

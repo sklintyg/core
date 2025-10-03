@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.PseudonymizedAnalyticsMessage;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventEntity;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.AdministrativeMessageRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CareProviderRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CertificateRelationEntityRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.EventTypeRepository;
@@ -28,11 +29,14 @@ public class EventMapper {
   private final CertificateEntityMapper certificateEntityMapper;
   private final RecipientRepository recipientRepository;
   private final CertificateRelationEntityRepository certificateRelationEntityRepository;
+  private final AdministrativeMessageRepository administrativeMessageRepository;
 
   public EventEntity toEntity(PseudonymizedAnalyticsMessage message) {
     final var certificateEntity = certificateEntityMapper.map(message);
+
     return EventEntity.builder()
         .certificate(certificateEntity)
+        .administrativeMessage(administrativeMessageRepository.findOrCreate(message))
         .unit(unitRepository.findOrCreate(message.getEventUnitId()))
         .careProvider(careProviderRepository.findOrCreate(message.getEventCareProviderId()))
         .user(userRepository.findOrCreate(message.getEventUserId()))
@@ -58,14 +62,14 @@ public class EventMapper {
             entity.getCareProvider() != null ? entity.getCareProvider().getHsaId() : null)
         .eventOrigin(entity.getOrigin() != null ? entity.getOrigin().getOrigin() : null)
         .eventSessionId(entity.getSession() != null ? entity.getSession().getSessionId() : null)
+        .recipientId(entity.getRecipient() != null ? entity.getRecipient().getRecipient() : null)
         .certificateId(entity.getCertificate().getCertificateId())
         .certificateType(entity.getCertificate().getCertificateType().getCertificateType())
         .certificateTypeVersion(
             entity.getCertificate().getCertificateType().getCertificateTypeVersion())
         .certificatePatientId(entity.getCertificate().getPatient().getPatientId())
         .certificateUnitId(entity.getCertificate().getUnit().getHsaId())
-        .certificateCareProviderId(entity.getCertificate().getCareProvider().getHsaId())
-        .recipientId(entity.getRecipient() != null ? entity.getRecipient().getRecipient() : null);
+        .certificateCareProviderId(entity.getCertificate().getCareProvider().getHsaId());
 
     final var relation = certificateRelationEntityRepository
         .findAll().stream()
@@ -84,6 +88,18 @@ public class EventMapper {
       );
     }
 
+    if (entity.getAdministrativeMessage() != null) {
+      final var administrativeMessage = entity.getAdministrativeMessage();
+      domainBuilder
+          .administrativeMessageId(administrativeMessage.getAdministrativeMessageId())
+          .administrativeMessageType(administrativeMessage.getMessageType().getType())
+          .administrativeMessageSent(administrativeMessage.getSent())
+          .administrativeMessageLastDateToAnswer(administrativeMessage.getLastDateToAnswer())
+          .administrativeMessageQuestionId(administrativeMessage.getQuestionId())
+          .administrativeMessageSender(administrativeMessage.getSender().getSender())
+          .administrativeMessageRecipient(administrativeMessage.getRecipient().getRecipient());
+    }
+
     return domainBuilder.build();
-  }
+  } // TODO: Map relations back to domain
 }
