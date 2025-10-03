@@ -136,18 +136,6 @@ class QuestionAntalManaderTest {
     }
   }
 
-//  @Test
-//  void shouldContainCorrectPdfConfiguration() {
-//    final var expected = PdfConfigurationText.builder()
-//        .pdfFieldId(new PdfFieldId("form1[0].Sida3[0].flt_numManadManader[0]"))
-//        .offset(-8)
-//        .build();
-//
-//    final var elementSpecification = se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionAntalManader.questionAntalManader();
-//
-//    assertEquals(expected, elementSpecification.pdfConfiguration());
-//  }
-
   @Test
   void shouldNotIncludeWhenRenewing() {
     final var element = QuestionAntalManader.questionAntalManader();

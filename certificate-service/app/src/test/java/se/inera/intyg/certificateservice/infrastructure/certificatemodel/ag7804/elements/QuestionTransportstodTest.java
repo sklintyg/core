@@ -67,15 +67,6 @@ class QuestionTransportstodTest {
     assertEquals(expectedRules, element.rules());
   }
 
-//  @Test
-//  void shouldHaveCorrectPdfConfiguration() {
-//    final var element = QuestionTransportstod.questionTransportstod();
-//    final var expected = PdfConfigurationBoolean.builder()
-//        .checkboxTrue(new PdfFieldId("form1[0].Sida3[0].ksr_Resor[0]"))
-//        .build();
-//    assertEquals(expected, element.pdfConfiguration());
-//  }
-
   @Nested
   class ShouldValidate {
 

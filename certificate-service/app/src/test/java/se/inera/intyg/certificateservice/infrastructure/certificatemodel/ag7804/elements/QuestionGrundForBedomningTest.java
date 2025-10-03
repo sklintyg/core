@@ -79,17 +79,6 @@ class QuestionGrundForBedomningTest {
     assertEquals(expectedValidations, element.validations());
   }
 
-//  @Test
-//  void shouldHaveCorrectPdfConfiguration() {
-//    final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionGrundForBedomning.questionGrundForBedomning();
-//    final var expected = PdfConfigurationText.builder()
-//        .pdfFieldId(new PdfFieldId("form1[0].Sida3[0].flt_txtAlternativFyra[0]"))
-//        .overflowSheetFieldId(new PdfFieldId("form1[0].#subform[4].flt_txtFortsattningsblad[0]"))
-//        .maxLength(PDF_TEXT_FIELD_ROW_LENGTH * 2)
-//        .build();
-//    assertEquals(expected, element.pdfConfiguration());
-//  }
-
   @Test
   void shouldNotIncludeWhenRenewing() {
     final var element = QuestionGrundForBedomning.questionGrundForBedomning();

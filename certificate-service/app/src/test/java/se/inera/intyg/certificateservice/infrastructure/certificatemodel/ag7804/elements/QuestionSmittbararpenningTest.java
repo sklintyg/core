@@ -40,13 +40,4 @@ class QuestionSmittbararpenningTest {
     final var element = questionSmittbararpenning();
     assertEquals(expected, element.validations());
   }
-
-//  @Test
-//  void shouldHaveCorrectPdfConfiguration() {
-//    final var expected = PdfConfigurationBoolean.builder()
-//        .checkboxTrue(new PdfFieldId("form1[0].#subform[0].ksr_AvstangningSmittskyddslagen[0]"))
-//        .build();
-//    assertEquals(expected, questionSmittbararpenning().pdfConfiguration());
-//  }
-
 }

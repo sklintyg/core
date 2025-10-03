@@ -180,42 +180,4 @@ class QuestionDiagnosTest {
       assertFalse(shouldValidate.test(elementData));
     }
   }
-
-//  @Test
-//  void shouldHaveCorrectPdfConfiguration() {
-//    final var expected = PdfConfigurationDiagnoses.builder()
-//        .diagnoses(Map.of(
-//            DIAGNOS_1, PdfConfigurationDiagnosis.builder()
-//                .pdfNameFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtDiagnoser[0]"))
-//                .pdfCodeFieldIds(List.of(
-//                    new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod1[0]"),
-//                    new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod2[0]"),
-//                    new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod3[0]"),
-//                    new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod4[0]"),
-//                    new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod5[0]")
-//                ))
-//                .build(),
-//            DIAGNOS_2, PdfConfigurationDiagnosis.builder()
-//                .pdfNameFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtDiagnoser2[0]"))
-//                .pdfCodeFieldIds(List.of(
-//                    new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod6[0]"),
-//                    new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod7[0]"),
-//                    new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod8[0]"),
-//                    new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod9[0]"),
-//                    new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod10[0]")
-//                ))
-//                .build(),
-//            DIAGNOS_3, PdfConfigurationDiagnosis.builder()
-//                .pdfNameFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtDiagnoser3[0]"))
-//                .pdfCodeFieldIds(List.of(
-//                    new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod11[0]"),
-//                    new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod12[0]"),
-//                    new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod13[0]"),
-//                    new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod14[0]"),
-//                    new PdfFieldId("form1[0].#subform[0].flt_txtDiaKod15[0]")
-//                ))
-//                .build()
-//        )).build();
-//    assertEquals(expected, questionDiagnos(diagnosisCodeRepository).pdfConfiguration());
-//  }
 }

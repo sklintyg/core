@@ -160,42 +160,6 @@ class QuestionGrundForMedicinsktUnderlagTest {
     assertEquals(expectedValidations, element.validations());
   }
 
-//  @Test
-//  void shouldHaveCorrectPdfConfiguration() {
-//    final var element = questionGrundForMedicinsktUnderlag();
-//    final var expected = PdfConfigurationDateList.builder()
-//        .dateCheckboxes(Map.of(
-//            new FieldId("FYSISKUNDERSOKNING"),
-//            PdfConfigurationDateCheckbox.builder()
-//                .checkboxFieldId(new PdfFieldId("form1[0].#subform[0].ksr_FysisktVardmote[0]"))
-//                .dateFieldId(new PdfFieldId("form1[0].#subform[0].flt_datumPatient[0]"))
-//                .build(),
-//            new FieldId("DIGITALUNDERSOKNING"),
-//            PdfConfigurationDateCheckbox.builder()
-//                .checkboxFieldId(new PdfFieldId("form1[0].#subform[0].ksr_DigitalVardmote[0]"))
-//                .dateFieldId(new PdfFieldId("form1[0].#subform[0].flt_datumDigitaltVardmöte[0]"))
-//                .build(),
-//            new FieldId("TELEFONKONTAKT"),
-//            PdfConfigurationDateCheckbox.builder()
-//                .checkboxFieldId(
-//                    new PdfFieldId("form1[0].#subform[0].ksr_TelefonkontaktPatienten[0]"))
-//                .dateFieldId(new PdfFieldId("form1[0].#subform[0].flt_datumTelefonkontakt[0]"))
-//                .build(),
-//            new FieldId("JOURNALUPPGIFTER"),
-//            PdfConfigurationDateCheckbox.builder()
-//                .checkboxFieldId(new PdfFieldId("form1[0].#subform[0].ksr_Journaluppgifter[0]"))
-//                .dateFieldId(new PdfFieldId("form1[0].#subform[0].flt_datumJournaluppgifter[0]"))
-//                .build(),
-//            new FieldId("ANNAT"),
-//            PdfConfigurationDateCheckbox.builder()
-//                .checkboxFieldId(new PdfFieldId("form1[0].#subform[0].ksr_Annat[0]"))
-//                .dateFieldId(new PdfFieldId("form1[0].#subform[0].flt_datumAnnat[0]"))
-//                .build()
-//        ))
-//        .build();
-//    assertEquals(expected, element.pdfConfiguration());
-//  }
-
   @Test
   void shouldNotIncludeWhenRenewing() {
     final var element = questionGrundForMedicinsktUnderlag();

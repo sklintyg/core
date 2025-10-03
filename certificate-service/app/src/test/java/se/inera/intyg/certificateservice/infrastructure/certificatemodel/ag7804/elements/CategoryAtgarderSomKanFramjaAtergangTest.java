@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategoryKontakt.categoryKontakt;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategoryAtgarderSomKanFramjaAtergang.categoryAtgarderSomKanFramjaAttergang;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionSmittbararpenning.QUESTION_SMITTBARARPENNING_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionSmittbararpenning.QUESTION_SMITTBARARPENNING_ID;
 
@@ -13,30 +13,30 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 
-class CategoryKontaktTest {
+class CategoryAtgarderSomKanFramjaAtergangTest {
 
-  private static final ElementId ELEMENT_ID = new ElementId("KAT_12");
+  private static final ElementId ELEMENT_ID = new ElementId("KAT_10");
 
   @Test
   void shallIncludeId() {
-    final var element = categoryKontakt();
+    final var element = categoryAtgarderSomKanFramjaAttergang();
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
   void shallIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationCategory.builder()
-        .name("Kontakt")
+        .name("Åtgärder som kan främja återgången i arbete")
         .build();
 
-    final var element = categoryKontakt();
+    final var element = categoryAtgarderSomKanFramjaAttergang();
 
     assertEquals(expectedConfiguration, element.elementSpecification(ELEMENT_ID).configuration());
   }
 
   @Test
   void shallIncludeRules() {
-    final var element = categoryKontakt();
+    final var element = categoryAtgarderSomKanFramjaAttergang();
     final var expectedRules = List.of(
         ElementRuleExpression.builder()
             .id(QUESTION_SMITTBARARPENNING_ID)

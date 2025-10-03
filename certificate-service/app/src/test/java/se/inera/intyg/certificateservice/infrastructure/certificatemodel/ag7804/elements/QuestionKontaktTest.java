@@ -49,15 +49,6 @@ class QuestionKontaktTest {
     assertEquals(expectedValidations, element.validations());
   }
 
-//  @Test
-//  void shouldHaveCorrectPdfConfiguration() {
-//    final var element = QuestionKontakt.questionKontakt();
-//    final var expected = PdfConfigurationBoolean.builder()
-//        .checkboxTrue(new PdfFieldId("form1[0].Sida4[0].ksr_ForsakringskassanKontakar[0]"))
-//        .build();
-//    assertEquals(expected, element.pdfConfiguration());
-//  }
-
   @Nested
   class ShouldValidate {
 

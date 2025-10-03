@@ -93,18 +93,6 @@ class QuestionAnnanGrundForMedicinsktUnderlagTest {
     assertEquals(expectedValidations, element.validations());
   }
 
-//  @Test
-//  void shouldHaveCorrectPdfConfiguration() {
-//    final var expected = PdfConfigurationText.builder()
-//        .pdfFieldId(new PdfFieldId("form1[0].#subform[0].flt_txtAnnatAngeVad[0]"))
-//        .overflowSheetFieldId(new PdfFieldId("form1[0].#subform[4].flt_txtFortsattningsblad[0]"))
-//        .build();
-//
-//    final var element = questionAnnanGrundForMedicinsktUnderlag();
-//
-//    assertEquals(expected, element.pdfConfiguration());
-//  }
-
   @Nested
   class ShouldValidate {
 

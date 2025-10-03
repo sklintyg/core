@@ -80,20 +80,6 @@ class QuestionFunktionsnedsattningarTest {
     assertEquals(expectedValidations, element.validations());
   }
 
-//  @Test
-//  void shouldIncludePdfConfiguration() {
-//    final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionFunktionsnedsattningar.questionFunktionsnedsattningar();
-//
-//    final var expectedPdfConfiguration = PdfConfigurationText.builder()
-//        .pdfFieldId(new PdfFieldId("form1[0].Sida2[0].flt_txtBeskrivUndersokningsfynd[0]"))
-//        .overflowSheetFieldId(
-//            new PdfFieldId("form1[0].#subform[4].flt_txtFortsattningsblad[0]"))
-//        .maxLength(11 * PDF_TEXT_FIELD_ROW_LENGTH)
-//        .build();
-//
-//    assertEquals(expectedPdfConfiguration, element.pdfConfiguration());
-//  }
-
   @Nested
   class ShouldValidate {
 

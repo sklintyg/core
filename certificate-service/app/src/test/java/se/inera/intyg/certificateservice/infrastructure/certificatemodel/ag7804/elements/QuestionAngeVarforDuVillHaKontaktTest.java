@@ -135,19 +135,6 @@ class QuestionAngeVarforDuVillHaKontaktTest {
     }
   }
 
-//  @Test
-//  void shouldContainCorrectPdfConfiguration() {
-//    final var expected = PdfConfigurationText.builder()
-//        .pdfFieldId(new PdfFieldId("form1[0].Sida4[0].flt_txtForsakringskassanKontaktar[0]"))
-//        .overflowSheetFieldId(new PdfFieldId("form1[0].#subform[4].flt_txtFortsattningsblad[0]"))
-//        .maxLength(106)
-//        .build();
-//
-//    final var elementSpecification = QuestionAngeVarforDuVillHaKontakt.questionAngeVarforDuVillHaKontakt();
-//
-//    assertEquals(expected, elementSpecification.pdfConfiguration());
-//  }
-
   @Test
   void shouldNotIncludeWhenRenewing() {
     final var elementSpecification = QuestionAngeVarforDuVillHaKontakt.questionAngeVarforDuVillHaKontakt();

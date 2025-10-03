@@ -18,17 +18,6 @@ class QuestionArbetsformagaLangreAnBeslutsstodTest {
 
   private static final ElementId ELEMENT_ID = new ElementId("37");
 
-//  @Test
-//  void shouldContainCorrectPdfConfiguration() {
-//    final var elementSpecification = se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionArbetsformagaLangreAnBeslutsstod.questionArbetsformagaLangreAnBeslutsstod();
-//    final var expected = PdfConfigurationText.builder()
-//        .pdfFieldId(new PdfFieldId("form1[0].Sida3[0].flt_txtArbetsförmaga[0]"))
-//        .overflowSheetFieldId(new PdfFieldId("form1[0].#subform[4].flt_txtFortsattningsblad[0]"))
-//        .maxLength(3 * FK7804PdfSpecification.PDF_TEXT_FIELD_ROW_LENGTH)
-//        .build();
-//    assertEquals(expected, elementSpecification.pdfConfiguration());
-//  }
-
   @Test
   void shouldIncludeId() {
     final var element = QuestionArbetsformagaLangreAnBeslutsstod.questionArbetsformagaLangreAnBeslutsstod();

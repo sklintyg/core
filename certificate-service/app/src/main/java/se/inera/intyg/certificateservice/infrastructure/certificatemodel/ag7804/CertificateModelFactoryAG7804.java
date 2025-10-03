@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804;
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategoryAktivitetsbegransning.categoryAktivitetsbegransning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategoryAtgarderSomKanFramjaAttergang.categoryAtgarderSomKanFramjaAttergang;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategoryAtgarderSomKanFramjaAtergang.categoryAtgarderSomKanFramjaAttergang;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategoryBedomning.categoryBedomning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategoryDiagnos.categoryDiagnos;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.CategoryFunktionsnedsattning.categoryFunktionsnedsattning;

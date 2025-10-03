@@ -97,22 +97,6 @@ class QuestionSysselsattningTest {
     assertEquals(expectedValidations, element.validations());
   }
 
-//  @Test
-//  void shouldHaveCorrectPdfConfiguration() {
-//    final var expected = PdfConfigurationCode.builder()
-//        .codes(Map.of(
-//            new FieldId(NUVARANDE_ARBETE.code()),
-//            new PdfFieldId("form1[0].#subform[0].ksr_NuvarandeArbete[0]"),
-//            new FieldId(ARBETSSOKANDE.code()),
-//            new PdfFieldId("form1[0].#subform[0].ksr_Arbetssokande[0]"),
-//            new FieldId(FORALDRALEDIG.code()),
-//            new PdfFieldId("form1[0].#subform[0].ksr_Foraldraledighet[0]"),
-//            new FieldId(STUDIER.code()), new PdfFieldId("form1[0].#subform[0].ksr_Studier[0]")
-//        ))
-//        .build();
-//    assertEquals(expected, questionSysselsattning().pdfConfiguration());
-//  }
-
   @Nested
   class ShouldValidate {
 

@@ -96,17 +96,6 @@ class QuestionSvarareAtergangVidOjamnArbetstidTest {
     assertEquals(expectedValidations, element.validations());
   }
 
-//  @Test
-//  void shouldHaveCorrectPdfConfiguration() {
-//    final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSvarareAtergangVidOjamnArbetstid.questionSvarareAtergangVidOjamnArbetstid();
-//    final var expected = PdfConfigurationRadioBoolean.builder()
-//        .pdfFieldId(new PdfFieldId("form1[0].Sida3[0].RadioButtonList2[0]"))
-//        .optionFalse(new PdfRadioOption("1"))
-//        .optionTrue(new PdfRadioOption("2"))
-//        .build();
-//    assertEquals(expected, element.pdfConfiguration());
-//  }
-
   @Nested
   class ShouldValidate {
 

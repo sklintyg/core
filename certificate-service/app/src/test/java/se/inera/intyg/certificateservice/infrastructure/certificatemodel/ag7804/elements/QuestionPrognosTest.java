@@ -159,21 +159,6 @@ class QuestionPrognosTest {
     }
   }
 
-//  @Test
-//  void shouldContainCorrectPdfConfiguration() {
-//    final var elementSpecification = QuestionPrognos.questionPrognos();
-//    final var expected = PdfConfigurationRadioCode.builder()
-//        .radioGroupFieldId(new PdfFieldId("form1[0].Sida3[0].RadioButtonList4[0]"))
-//        .codes(Map.of(
-//            new FieldId(CodeSystemKvFkmu0006.STOR_SANNOLIKHET.code()), new PdfFieldId("1"),
-//            new FieldId(CodeSystemKvFkmu0006.ATER_X_ANTAL_MANADER.code()), new PdfFieldId("2"),
-//            new FieldId(CodeSystemKvFkmu0006.SANNOLIKT_INTE.code()), new PdfFieldId("3"),
-//            new FieldId(CodeSystemKvFkmu0006.PROGNOS_OKLAR.code()), new PdfFieldId("4")
-//        ))
-//        .build();
-//    assertEquals(expected, elementSpecification.pdfConfiguration());
-//  }
-
   @Test
   void shouldNotIncludeWhenRenewing() {
     final var element = QuestionPrognos.questionPrognos();

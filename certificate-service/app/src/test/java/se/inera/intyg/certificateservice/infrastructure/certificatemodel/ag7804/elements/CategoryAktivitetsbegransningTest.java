@@ -32,17 +32,4 @@ class CategoryAktivitetsbegransningTest {
 
     assertEquals(expectedConfiguration, element.elementSpecification(ELEMENT_ID).configuration());
   }
-
-//  @Test
-//  void shallIncludeRules() {
-//    final var element = categoryAktivitetsbegransning();
-//    final var expectedRules = List.of(
-//        ElementRuleExpression.builder()
-//            .id(QUESTION_SMITTBARARPENNING_ID)
-//            .type(ElementRuleType.HIDE)
-//            .expression(new RuleExpression("$" + QUESTION_SMITTBARARPENNING_FIELD_ID.value()))
-//            .build()
-//    );
-//    assertEquals(expectedRules, element.rules());
-//  }
 }
