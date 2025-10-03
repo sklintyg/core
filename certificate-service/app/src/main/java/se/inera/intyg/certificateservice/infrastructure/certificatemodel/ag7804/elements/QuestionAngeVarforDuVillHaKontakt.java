@@ -30,7 +30,8 @@ public class QuestionAngeVarforDuVillHaKontakt {
         .configuration(
             ElementConfigurationTextArea.builder()
                 .id(QUESTION_VARFOR_KONTAKT_FIELD_ID)
-                .name("Ange gärna varför du vill ha kontakt")
+                .name(
+                    "Ange varför du vill ha kontakt och vem som i första hand ska kontaktas samt kontaktuppgifter")
                 .build()
         )
         .rules(
