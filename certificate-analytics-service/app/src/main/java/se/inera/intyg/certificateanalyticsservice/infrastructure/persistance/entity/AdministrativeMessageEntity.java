@@ -36,10 +36,10 @@ public class AdministrativeMessageEntity {
   @JoinColumn(name = "administrative_message_id_key", referencedColumnName = "key", nullable = false)
   private AdministrativeMessageIdEntity administrativeMessageId;
 
-  @Column(name = "answer_id", length = 64)
+  @Column(name = "answer_id", length = 22)
   private String answerId;
 
-  @Column(name = "reminder_id", length = 64)
+  @Column(name = "reminder_id", length = 22)
   private String reminderId;
 
   @ManyToOne
@@ -57,7 +57,7 @@ public class AdministrativeMessageEntity {
       name = "administrative_message_question",
       joinColumns = @JoinColumn(name = "administrative_message_key")
   )
-  @Column(name = "question_id", length = 64)
+  @Column(name = "question_id", length = 5)
   private List<String> questionId;
 
   @ManyToOne

@@ -24,6 +24,6 @@ public class AdministrativeMessageTypeEntity {
   @Column(name = "`key`")
   private Byte key;
 
-  @Column(name = "type", nullable = false, unique = true, length = 64)
+  @Column(name = "type", nullable = false, unique = true, length = 24)
   private String type;
 }

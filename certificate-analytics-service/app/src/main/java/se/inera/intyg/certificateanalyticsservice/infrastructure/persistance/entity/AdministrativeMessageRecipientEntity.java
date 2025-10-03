@@ -24,6 +24,6 @@ public class AdministrativeMessageRecipientEntity {
   @Column(name = "`key`")
   private Byte key;
 
-  @Column(name = "recipient", nullable = false, unique = true, length = 128)
+  @Column(name = "recipient", nullable = false, unique = true, length = 32)
   private String recipient;
 }
