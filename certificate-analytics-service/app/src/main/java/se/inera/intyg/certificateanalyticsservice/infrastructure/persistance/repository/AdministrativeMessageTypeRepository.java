@@ -12,9 +12,6 @@ public class AdministrativeMessageTypeRepository {
   private final AdministrativeMessageTypeEntityRepository administrativeMessageTypeEntityRepository;
 
   public AdministrativeMessageTypeEntity findOrCreate(String type) {
-    if (type == null || type.isBlank()) {
-      return null;
-    }
     return administrativeMessageTypeEntityRepository.findByType(type)
         .orElseGet(() -> administrativeMessageTypeEntityRepository.save(
             AdministrativeMessageTypeEntityMapper.map(type)));

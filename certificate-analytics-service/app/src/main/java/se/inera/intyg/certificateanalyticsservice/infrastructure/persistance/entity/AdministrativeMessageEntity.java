@@ -32,20 +32,20 @@ public class AdministrativeMessageEntity {
   @Column(name = "`key`")
   private Long key;
 
-  @Column(name = "administrative_message_id", length = 22, nullable = false)
+  @Column(name = "administrative_message_id", length = 22, nullable = false, unique = true)
   private String administrativeMessageId;
 
-  @Column(name = "answer_id", length = 22)
+  @Column(name = "answer_id", length = 22, unique = true)
   private String answerId;
 
-  @Column(name = "reminder_id", length = 22)
+  @Column(name = "reminder_id", length = 22, unique = true)
   private String reminderId;
 
   @ManyToOne
   @JoinColumn(name = "administrative_message_type_key", referencedColumnName = "key", nullable = false)
   private AdministrativeMessageTypeEntity messageType;
 
-  @Column(name = "sent")
+  @Column(name = "sent", nullable = false)
   private LocalDateTime sent;
 
   @Column(name = "last_date_to_answer")
@@ -53,7 +53,7 @@ public class AdministrativeMessageEntity {
 
   @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(
-      name = "administrative_message_question",
+      name = "administrative_message_question_id",
       joinColumns = @JoinColumn(name = "administrative_message_key")
   )
   @Column(name = "question_id", length = 5)

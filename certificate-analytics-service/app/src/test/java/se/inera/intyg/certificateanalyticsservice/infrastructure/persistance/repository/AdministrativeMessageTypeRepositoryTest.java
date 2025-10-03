@@ -1,7 +1,6 @@
 package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -46,15 +45,5 @@ class AdministrativeMessageTypeRepositoryTest {
     final var result = administrativeMessageTypeRepository.findOrCreate(type);
 
     assertEquals(entity, result);
-  }
-
-  @Test
-  void shouldReturnNullIfTypeIsNull() {
-    assertNull(administrativeMessageTypeRepository.findOrCreate(null));
-  }
-
-  @Test
-  void shouldReturnNullIfTypeIsEmpty() {
-    assertNull(administrativeMessageTypeRepository.findOrCreate(" "));
   }
 }
