@@ -5,8 +5,6 @@ import java.time.LocalDateTime;
 public final class TestDataConstants {
 
   public static final String MESSAGE_ID_CREATED = "50d64e86-9226-4795-aadd-c00c084c030d";
-  public static final String MESSAGE_ID_SENT = "50d64e86-9226-4795-aadd-c00c084c030d";
-  public static final String MESSAGE_ID_SIGNED = "50d64e86-9226-4795-aadd-c00c084c030d";
   public static final String CERTIFICATE_ID = "78a0a279-1197-4cc7-bf6a-899cb5034053";
   public static final String CERTIFICATE_TYPE = "fk7210";
   public static final String CERTIFICATE_TYPE_VERSION = "1.0";
@@ -33,6 +31,17 @@ public final class TestDataConstants {
   public static final String EVENT_TIMESTAMP = "2025-09-29T17:49:58.616648";
   public static final String HASHED_SESSION_ID = "GRmmGqqMdm6mFSy9ZCfT5w";
   public static final String HASHED_USER_ID = "IlXi3vfzsRwLaNRjpqYxOQ";
+
+  public static final String ADMINISTRATIVE_MESSAGE_ID = "administrativeMessageId";
+  public static final String ADMINISTRATIVE_MESSAGE_ANSWER_ID = "answer-67890";
+  public static final String ADMINISTRATIVE_MESSAGE_REMINDER_ID = "reminder-54321";
+  public static final String ADMINISTRATIVE_MESSAGE_TYPE = "QUESTION";
+  public static final String ADMINISTRATIVE_MESSAGE_SENDER = "FORSAKRINGSKASSAN";
+  public static final String ADMINISTRATIVE_MESSAGE_RECIPIENT = "LAKARE";
+  public static final String ADMINISTRATIVE_MESSAGE_QUESTION_ID_1 = "question-1";
+  public static final String ADMINISTRATIVE_MESSAGE_QUESTION_ID_2 = "question-2";
+
+  public static final String HASHED_ADMINISTRATIVE_MESSAGE_ID = "kmAFflTHZGGU6IA2YwRb2Q";
 
   private TestDataConstants() {
   }

@@ -22,6 +22,9 @@ public class PseudonymizationTokenGenerator {
   private static final String FIELD_SESSION_ID = "sessionId";
   private static final String FIELD_CERTIFICATE_ID = "certificateId";
   private static final String FIELD_PATIENT_ID = "patientId";
+  private static final String FIELD_ADMINISTRATIVE_MESSAGE_ID = "administrativeMessageId";
+  private static final String FIELD_ADMINISTRATIVE_MESSAGE_ANSWER_ID = "administrativeMessageAnswerId";
+  private static final String FIELD_ADMINISTRATIVE_MESSAGE_REMINDER_ID = "administrativeMessageReminderId";
 
   private static final String HMAC_SHA_256 = "HmacSHA256";
   private static final String INPUT_TEMPLATE = "%s|%s|%s";
@@ -66,6 +69,27 @@ public class PseudonymizationTokenGenerator {
     return patientId == null ? null : token(
         FIELD_PATIENT_ID,
         normalize(patientId)
+    );
+  }
+
+  public String administrativeMessageId(String administrativeMessageId) {
+    return administrativeMessageId == null ? null : token(
+        FIELD_ADMINISTRATIVE_MESSAGE_ID,
+        normalize(administrativeMessageId)
+    );
+  }
+
+  public String administrativeMessageAnswerId(String administrativeMessageAnswerId) {
+    return administrativeMessageAnswerId == null ? null : token(
+        FIELD_ADMINISTRATIVE_MESSAGE_ANSWER_ID,
+        normalize(administrativeMessageAnswerId)
+    );
+  }
+
+  public String administrativeMessageReminderId(String administrativeMessageReminderId) {
+    return administrativeMessageReminderId == null ? null : token(
+        FIELD_ADMINISTRATIVE_MESSAGE_REMINDER_ID,
+        normalize(administrativeMessageReminderId)
     );
   }
 

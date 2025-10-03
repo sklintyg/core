@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.util.ReflectionTestUtils;
+import se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants;
 
 @ExtendWith(SpringExtension.class)
 class PseudonymizationTokenGeneratorTest {
@@ -94,6 +95,15 @@ class PseudonymizationTokenGeneratorTest {
 
       assertEquals(expected, actual);
     }
+
+    @Test
+    void shallGeneratePseudonymizedAdministrativeMessageIdThatIsTheSameOverTime() {
+
+      final var actual = pseudonymizationTokenGenerator.administrativeMessageId(
+          TestDataConstants.ADMINISTRATIVE_MESSAGE_ID);
+
+      assertEquals(TestDataConstants.HASHED_ADMINISTRATIVE_MESSAGE_ID, actual);
+    }
   }
 
   /**
@@ -165,6 +175,18 @@ class PseudonymizationTokenGeneratorTest {
 
       assertEquals(patientIdOne, patientIdTwo);
     }
+
+    @Test
+    void shallGenerateSamePseudonymizedAdministrativeMessageIdFromSameValue() {
+      final var administrativeMessageId = "administrativeMessageId";
+
+      final var administrativeMessageIdOne = pseudonymizationTokenGenerator.administrativeMessageId(
+          administrativeMessageId);
+      final var administrativeMessageIdTwo = pseudonymizationTokenGenerator.administrativeMessageId(
+          administrativeMessageId);
+
+      assertEquals(administrativeMessageIdOne, administrativeMessageIdTwo);
+    }
   }
 
   /**
@@ -185,13 +207,16 @@ class PseudonymizationTokenGeneratorTest {
       final var sessionIdToken = pseudonymizationTokenGenerator.sessionId(value);
       final var certificateIdToken = pseudonymizationTokenGenerator.certificateId(value);
       final var patientIdToken = pseudonymizationTokenGenerator.patientId(value);
+      final var administrativeMessageIdToken = pseudonymizationTokenGenerator.administrativeMessageId(
+          value);
 
       final var tokens = List.of(
           messageIdToken,
           staffIdToken,
           sessionIdToken,
           certificateIdToken,
-          patientIdToken
+          patientIdToken,
+          administrativeMessageIdToken
       );
 
       final var uniqueTokens = tokens.stream().distinct().count();
@@ -297,6 +322,19 @@ class PseudonymizationTokenGeneratorTest {
       final var patientIdTwo = pseudonymizationTokenGenerator.patientId(patientId);
 
       assertNotEquals(patientIdOne, patientIdTwo);
+    }
+
+    @Test
+    void shallGenerateDifferentPseudonymizedAdministrativeMessageIdFromSameValueButDifferentContext() {
+      final var administrativeMessageId = "administrativeMessageId";
+
+      final var administrativeMessageIdOne = pseudonymizationTokenGenerator.administrativeMessageId(
+          administrativeMessageId);
+      ReflectionTestUtils.setField(pseudonymizationTokenGenerator, "context", "analytics-dev");
+      final var administrativeMessageIdTwo = pseudonymizationTokenGenerator.administrativeMessageId(
+          administrativeMessageId);
+
+      assertNotEquals(administrativeMessageIdOne, administrativeMessageIdTwo);
     }
   }
 }

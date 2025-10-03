@@ -27,12 +27,16 @@ public class EventMapper {
   private final RoleRepository roleRepository;
   private final CertificateEntityMapper certificateEntityMapper;
   private final RecipientRepository recipientRepository;
+  private final AdministrativeMessageEntityMapper administrativeMessageEntityMapper;
   private final CertificateRelationEntityRepository certificateRelationEntityRepository;
 
   public EventEntity toEntity(PseudonymizedAnalyticsMessage message) {
     final var certificateEntity = certificateEntityMapper.map(message);
+    final var administrativeMessageEntity = administrativeMessageEntityMapper.map(message);
+
     return EventEntity.builder()
         .certificate(certificateEntity)
+        .administrativeMessage(administrativeMessageEntity.orElse(null))
         .unit(unitRepository.findOrCreate(message.getEventUnitId()))
         .careProvider(careProviderRepository.findOrCreate(message.getEventCareProviderId()))
         .user(userRepository.findOrCreate(message.getEventUserId()))
@@ -58,14 +62,14 @@ public class EventMapper {
             entity.getCareProvider() != null ? entity.getCareProvider().getHsaId() : null)
         .eventOrigin(entity.getOrigin() != null ? entity.getOrigin().getOrigin() : null)
         .eventSessionId(entity.getSession() != null ? entity.getSession().getSessionId() : null)
+        .recipientId(entity.getRecipient() != null ? entity.getRecipient().getRecipient() : null)
         .certificateId(entity.getCertificate().getCertificateId())
         .certificateType(entity.getCertificate().getCertificateType().getCertificateType())
         .certificateTypeVersion(
             entity.getCertificate().getCertificateType().getCertificateTypeVersion())
         .certificatePatientId(entity.getCertificate().getPatient().getPatientId())
         .certificateUnitId(entity.getCertificate().getUnit().getHsaId())
-        .certificateCareProviderId(entity.getCertificate().getCareProvider().getHsaId())
-        .recipientId(entity.getRecipient() != null ? entity.getRecipient().getRecipient() : null);
+        .certificateCareProviderId(entity.getCertificate().getCareProvider().getHsaId());
 
     final var relation = certificateRelationEntityRepository
         .findAll().stream()
@@ -82,6 +86,27 @@ public class EventMapper {
       domainBuilder.certificateRelationParentType(
           relation.get().getRelationType().getRelationType()
       );
+    }
+
+    if (entity.getAdministrativeMessage() != null) {
+      final var administrativeMessage = entity.getAdministrativeMessage();
+      domainBuilder
+          .administrativeMessageId(
+              administrativeMessage.getAdministrativeMessageId().getAdministrativeMessageId())
+          .administrativeMessageAnswerId(administrativeMessage.getAnswerId())
+          .administrativeMessageReminderId(administrativeMessage.getReminderId())
+          .administrativeMessageType(
+              administrativeMessage.getMessageType() != null
+                  ? administrativeMessage.getMessageType().getType() : null)
+          .administrativeMessageSent(administrativeMessage.getSent())
+          .administrativeMessageLastDateToAnswer(administrativeMessage.getLastDateToAnswer())
+          .administrativeMessageQuestionId(administrativeMessage.getQuestionId())
+          .administrativeMessageSender(
+              administrativeMessage.getSender() != null ? administrativeMessage.getSender()
+                  .getSender() : null)
+          .administrativeMessageRecipient(
+              administrativeMessage.getRecipient() != null ? administrativeMessage.getRecipient()
+                  .getRecipient() : null);
     }
 
     return domainBuilder.build();

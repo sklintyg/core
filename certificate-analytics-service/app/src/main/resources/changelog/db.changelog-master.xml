@@ -6,7 +6,7 @@
 
   <changeSet id="1-create-analytics-schema" author="mh">
     <createTable tableName="event_type">
-      <column name="key" type="bigint unsigned auto_increment">
+      <column name="key" type="tinyint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="event_type" type="varchar(128)">
@@ -24,7 +24,7 @@
     </createTable>
 
     <createTable tableName="role">
-      <column name="key" type="bigint unsigned auto_increment">
+      <column name="key" type="tinyint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="role" type="varchar(32)">
@@ -60,7 +60,7 @@
     </createTable>
 
     <createTable tableName="origin">
-      <column name="key" type="bigint unsigned auto_increment">
+      <column name="key" type="tinyint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="origin" type="varchar(20)">
@@ -128,7 +128,7 @@
       constraintName="fk_certificate_patient"/>
 
     <createTable tableName="recipient">
-      <column name="key" type="bigint unsigned auto_increment">
+      <column name="key" type="tinyint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="recipient" type="varchar(32)">
@@ -143,19 +143,20 @@
       <column name="timestamp" type="timestamp(6)">
         <constraints nullable="false"/>
       </column>
-      <column name="event_type_key" type="bigint unsigned">
+      <column name="event_type_key" type="tinyint unsigned">
         <constraints nullable="false"/>
       </column>
       <column name="certificate_key" type="bigint unsigned">
         <constraints nullable="false"/>
       </column>
+      <column name="administrative_message_key" type="bigint unsigned"/>
       <column name="user_key" type="bigint unsigned"/>
-      <column name="role_key" type="bigint unsigned"/>
-      <column name="origin_key" type="bigint unsigned"/>
+      <column name="role_key" type="tinyint unsigned"/>
+      <column name="origin_key" type="tinyint unsigned"/>
       <column name="session_key" type="bigint unsigned"/>
       <column name="unit_key" type="bigint unsigned"/>
       <column name="provider_key" type="bigint unsigned"/>
-      <column name="recipient_key" type="bigint unsigned"/>
+      <column name="recipient_key" type="tinyint unsigned"/>
       <column name="message_id" type="varchar(22)">
         <constraints nullable="false" unique="true"/>
       </column>
@@ -188,6 +189,9 @@
     <addForeignKeyConstraint baseTableName="event" baseColumnNames="recipient_key"
       referencedTableName="recipient" referencedColumnNames="key"
       constraintName="fk_event_recipient"/>
+    <addForeignKeyConstraint baseTableName="event" baseColumnNames="administrative_message_key"
+      referencedTableName="administrative_message" referencedColumnNames="key"
+      constraintName="fk_event_administrative_message"/>
 
     <createTable tableName="certificate_relation">
       <column name="key" type="bigint unsigned auto_increment">
@@ -229,6 +233,98 @@
     <addUniqueConstraint tableName="certificate_relation"
       columnNames="parent_certificate_key,child_certificate_key"
       constraintName="uk_certificate_relation_parent_child"/>
+
+    <createTable tableName="administrative_message_sender">
+      <column name="key" type="tinyint unsigned auto_increment">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="sender" type="varchar(128)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="administrative_message_recipient">
+      <column name="key" type="tinyint unsigned auto_increment">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="recipient" type="varchar(128)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="administrative_message_id">
+      <column name="key" type="bigint unsigned auto_increment">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="administrative_message_id" type="varchar(22)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="administrative_message_type">
+      <column name="key" type="tinyint unsigned auto_increment">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="type" type="varchar(64)">
+        <constraints nullable="false" unique="true"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="administrative_message">
+      <column name="key" type="bigint unsigned auto_increment">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="administrative_message_id_key" type="bigint unsigned">
+        <constraints nullable="false"/>
+      </column>
+      <column name="answer_id" type="varchar(64)"/>
+      <column name="reminder_id" type="varchar(64)"/>
+      <column name="administrative_message_type_key" type="tinyint unsigned">
+        <constraints nullable="false"/>
+      </column>
+      <column name="sent" type="timestamp(6)"/>
+      <column name="last_date_to_answer" type="date"/>
+      <column name="administrative_message_sender_key" type="tinyint unsigned">
+        <constraints nullable="false"/>
+      </column>
+      <column name="administrative_message_recipient_key" type="tinyint unsigned">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="administrative_message_question">
+      <column name="administrative_message_key" type="bigint unsigned">
+        <constraints nullable="false"/>
+      </column>
+      <column name="question_id" type="varchar(64)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseTableName="administrative_message"
+      baseColumnNames="administrative_message_id_key"
+      referencedTableName="administrative_message_id" referencedColumnNames="key"
+      constraintName="fk_administrative_message_id"/>
+    <addForeignKeyConstraint baseTableName="administrative_message"
+      baseColumnNames="administrative_message_type_key"
+      referencedTableName="administrative_message_type" referencedColumnNames="key"
+      constraintName="fk_administrative_message_type"/>
+    <addForeignKeyConstraint baseTableName="administrative_message"
+      baseColumnNames="administrative_message_sender_key"
+      referencedTableName="administrative_message_sender" referencedColumnNames="key"
+      constraintName="fk_administrative_message_sender"/>
+    <addForeignKeyConstraint baseTableName="administrative_message"
+      baseColumnNames="administrative_message_recipient_key"
+      referencedTableName="administrative_message_recipient" referencedColumnNames="key"
+      constraintName="fk_administrative_message_recipient"/>
+    <addForeignKeyConstraint baseTableName="administrative_message_question"
+      baseColumnNames="administrative_message_key"
+      referencedTableName="administrative_message" referencedColumnNames="key"
+      constraintName="fk_administrative_message_question_message"/>
+
+    <addUniqueConstraint tableName="administrative_message_question"
+      columnNames="administrative_message_key,question_id"
+      constraintName="uk_administrative_message_question"/>
   </changeSet>
 
 </databaseChangeLog>

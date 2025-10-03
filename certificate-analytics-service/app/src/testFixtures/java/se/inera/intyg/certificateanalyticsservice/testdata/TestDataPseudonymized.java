@@ -68,4 +68,35 @@ public class TestDataPseudonymized {
         .certificateRelationParentType(CERTIFICATE_PARENT_TYPE)
         .recipientId(RECIPIENT);
   }
+
+  public static PseudonymizedAnalyticsMessageBuilder administrativeMessagePseudonymizedMessageBuilder() {
+    return PseudonymizedAnalyticsMessage.builder()
+        .messageId(TestDataConstants.HASHED_MESSAGE_ID)
+        .eventTimestamp(LocalDateTime.parse(EVENT_TIMESTAMP))
+        .eventMessageType(EVENT_TYPE_CERTIFICATE_SENT)
+        .eventUserId(HASHED_USER_ID)
+        .eventRole(ROLE)
+        .eventUnitId(UNIT_ID)
+        .eventCareProviderId(CARE_PROVIDER_ID)
+        .eventOrigin(ORIGIN)
+        .eventSessionId(HASHED_SESSION_ID)
+        .certificateId(HASHED_CERTIFICATE_ID)
+        .certificateType(CERTIFICATE_TYPE)
+        .certificateTypeVersion(CERTIFICATE_TYPE_VERSION)
+        .certificatePatientId(HASHED_PATIENT_ID)
+        .certificateUnitId(UNIT_ID)
+        .certificateCareProviderId(CARE_PROVIDER_ID)
+        .recipientId(RECIPIENT)
+        .administrativeMessageId(TestDataConstants.ADMINISTRATIVE_MESSAGE_ID)
+        .administrativeMessageAnswerId(TestDataConstants.ADMINISTRATIVE_MESSAGE_ANSWER_ID)
+        .administrativeMessageReminderId(TestDataConstants.ADMINISTRATIVE_MESSAGE_REMINDER_ID)
+        .administrativeMessageType(TestDataConstants.ADMINISTRATIVE_MESSAGE_TYPE)
+        .administrativeMessageSent(LocalDateTime.parse(EVENT_TIMESTAMP))
+        .administrativeMessageLastDateToAnswer(LocalDateTime.parse(EVENT_TIMESTAMP).toLocalDate())
+        .administrativeMessageQuestionId(java.util.List.of(
+            TestDataConstants.ADMINISTRATIVE_MESSAGE_QUESTION_ID_1,
+            TestDataConstants.ADMINISTRATIVE_MESSAGE_QUESTION_ID_2))
+        .administrativeMessageSender(TestDataConstants.ADMINISTRATIVE_MESSAGE_SENDER)
+        .administrativeMessageRecipient(TestDataConstants.ADMINISTRATIVE_MESSAGE_RECIPIENT);
+  }
 }

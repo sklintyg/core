@@ -12,6 +12,11 @@ import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConsta
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.TIMESTAMP;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.UNIT_ID;
 
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.AdministrativeMessageEntity;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.AdministrativeMessageIdEntity;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.AdministrativeMessageRecipientEntity;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.AdministrativeMessageSenderEntity;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.AdministrativeMessageTypeEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CareProviderEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CertificateEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CertificateEntity.CertificateEntityBuilder;
@@ -38,6 +43,22 @@ public class TestDataEntities {
   public static EventEntityBuilder sentEventEntityBuilder() {
     return EventEntity.builder()
         .certificate(certificateEntity().build())
+        .messageId(TestDataConstants.HASHED_MESSAGE_ID)
+        .timestamp(TIMESTAMP)
+        .eventType(eventTypeEntity())
+        .role(roleEntity())
+        .unit(unitEntity())
+        .careProvider(careProviderEntity())
+        .user(userEntity())
+        .session(sessionEntity())
+        .origin(originEntity())
+        .recipient(recipientEntity());
+  }
+
+  public static EventEntityBuilder administrativeMessageEventEntityBuilder() {
+    return EventEntity.builder()
+        .certificate(certificateEntity().build())
+        .administrativeMessage(administrativeMessageEntity())
         .messageId(TestDataConstants.HASHED_MESSAGE_ID)
         .timestamp(TIMESTAMP)
         .eventType(eventTypeEntity())
@@ -133,6 +154,46 @@ public class TestDataEntities {
                 .relationType(TestDataConstants.CERTIFICATE_PARENT_TYPE)
                 .build()
         )
+        .build();
+  }
+
+  public static AdministrativeMessageIdEntity administrativeMessageIdEntity() {
+    return AdministrativeMessageIdEntity.builder()
+        .administrativeMessageId(TestDataConstants.ADMINISTRATIVE_MESSAGE_ID)
+        .build();
+  }
+
+  public static AdministrativeMessageTypeEntity administrativeMessageTypeEntity() {
+    return AdministrativeMessageTypeEntity.builder()
+        .type(TestDataConstants.ADMINISTRATIVE_MESSAGE_TYPE)
+        .build();
+  }
+
+  public static AdministrativeMessageSenderEntity administrativeMessageSenderEntity() {
+    return AdministrativeMessageSenderEntity.builder()
+        .sender(TestDataConstants.ADMINISTRATIVE_MESSAGE_SENDER)
+        .build();
+  }
+
+  public static AdministrativeMessageRecipientEntity administrativeMessageRecipientEntity() {
+    return AdministrativeMessageRecipientEntity.builder()
+        .recipient(TestDataConstants.ADMINISTRATIVE_MESSAGE_RECIPIENT)
+        .build();
+  }
+
+  public static AdministrativeMessageEntity administrativeMessageEntity() {
+    return AdministrativeMessageEntity.builder()
+        .administrativeMessageId(administrativeMessageIdEntity())
+        .answerId(TestDataConstants.ADMINISTRATIVE_MESSAGE_ANSWER_ID)
+        .reminderId(TestDataConstants.ADMINISTRATIVE_MESSAGE_REMINDER_ID)
+        .messageType(administrativeMessageTypeEntity())
+        .sent(TestDataConstants.TIMESTAMP)
+        .lastDateToAnswer(TestDataConstants.TIMESTAMP.toLocalDate())
+        .questionId(java.util.List.of(
+            TestDataConstants.ADMINISTRATIVE_MESSAGE_QUESTION_ID_1,
+            TestDataConstants.ADMINISTRATIVE_MESSAGE_QUESTION_ID_2))
+        .sender(administrativeMessageSenderEntity())
+        .recipient(administrativeMessageRecipientEntity())
         .build();
   }
 }
