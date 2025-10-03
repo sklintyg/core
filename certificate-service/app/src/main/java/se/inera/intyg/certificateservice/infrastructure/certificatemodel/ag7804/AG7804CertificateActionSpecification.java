@@ -46,67 +46,6 @@ public class AG7804CertificateActionSpecification {
             .certificateActionType(CertificateActionType.RENEW)
             .build(),
         CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.MESSAGES)
-            .build(),
-        CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.MESSAGES_ADMINISTRATIVE)
-            .enabled(true)
-            .build(),
-        CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.RECEIVE_COMPLEMENT)
-            .build(),
-        CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.RECEIVE_QUESTION)
-            .build(),
-        CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.RECEIVE_ANSWER)
-            .build(),
-        CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.RECEIVE_REMINDER)
-            .build(),
-        CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.COMPLEMENT)
-            .build(),
-        CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.SEND_AFTER_COMPLEMENT)
-            .build(),
-        CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.CANNOT_COMPLEMENT)
-            .build(),
-        CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.FORWARD_MESSAGE)
-            .build(),
-        CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.HANDLE_COMPLEMENT)
-            .build(),
-        CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.CREATE_MESSAGE)
-            .build(),
-        CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.ANSWER_MESSAGE)
-            .build(),
-        CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.SAVE_MESSAGE)
-            .build(),
-        CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.DELETE_MESSAGE)
-            .build(),
-        CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.SEND_MESSAGE)
-            .build(),
-        CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.SAVE_ANSWER)
-            .build(),
-        CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.DELETE_ANSWER)
-            .build(),
-        CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.SEND_ANSWER)
-            .build(),
-        CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.HANDLE_MESSAGE)
-            .build(),
-        CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE)
             .allowedRoles(List.of(Role.CARE_ADMIN, Role.MIDWIFE, Role.NURSE))
             .build(),
@@ -121,15 +60,6 @@ public class AG7804CertificateActionSpecification {
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE_FROM_LIST)
-            .build(),
-        CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.FMB)
-            .build(),
-        CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.SRS_DRAFT)
-            .build(),
-        CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.SRS_SIGNED)
             .build()
     );
   }

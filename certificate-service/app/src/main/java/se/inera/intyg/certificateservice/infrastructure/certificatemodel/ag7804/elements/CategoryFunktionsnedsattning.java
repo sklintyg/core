@@ -28,8 +28,7 @@ public class CategoryFunktionsnedsattning {
                     """
                         Funktionsnedsättning definieras enligt Internationell klassifikation av funktionstillstånd, funktionshinder och hälsa (ICF) som en betydande avvikelse eller förlust i kroppsfunktion och kan vara fysisk, psykisk eller kognitiv. Se även Socialstyrelsens försäkringsmedicinska kunskapsstöd.
                         
-                        Om din bedömning baseras på annat än dina egna observationer och undersökningsfynd, exempelvis testresultat och
-                        anamnesuppgifter beskriv hur du bedömer uppgifterna.
+                        Om din bedömning baseras på annat än dina egna observationer och undersökningsfynd, exempelvis testresultat och anamnesuppgifter beskriv hur du bedömer uppgifterna.
                         
                         Om uppgifterna är hämtade från någon annan inom hälso- och sjukvården, beskriv från vem och när de noterats.
                         """

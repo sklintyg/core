@@ -4,12 +4,11 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionSmittbararpenning.QUESTION_SMITTBARARPENNING_ID;
 
 import java.util.List;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationIcf;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.IcfCodesPropertyType;
-import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationIcfValue;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
 
@@ -27,17 +26,10 @@ public class QuestionAktivitetsbegransningar {
     return ElementSpecification.builder()
         .id(QUESTION_AKTIVITETSBEGRANSNING_ID)
         .configuration(
-            ElementConfigurationIcf.builder()
+            ElementConfigurationTextArea.builder()
                 .id(QUESTION_AKTIVITETSBEGRANSNING_FIELD_ID)
-                .icfCodesPropertyName(
-                    IcfCodesPropertyType.AKTIVITETSBEGRANSNINGAR)
                 .name(
                     "Beskriv vad du bedömer att patienten har svårt att göra på grund av sin sjukdom. Ange exempel på sådana begränsningar relaterade till de arbetsuppgifter eller annan sysselsättning som du bedömer arbetsförmågan i förhållande till. Ange om möjligt svårighetsgrad.")
-                .modalLabel("Välj enbart de svårigheter som påverkar patientens sysselsättning.")
-                .collectionsLabel(
-                    "Svårigheter som påverkar patientens sysselsättning:")
-                .placeholder(
-                    "Hur begränsar ovanstående patientens sysselsättning och i vilken utsträckning?")
                 .build()
         )
         .rules(List.of(
@@ -51,7 +43,7 @@ public class QuestionAktivitetsbegransningar {
             )
         ))
         .validations(List.of(
-            ElementValidationIcfValue.builder()
+            ElementValidationText.builder()
                 .mandatory(true)
                 .limit(4000)
                 .build()

@@ -34,7 +34,6 @@ public class QuestionAntalManader {
                 .name("Ange antal månader")
                 .min(1)
                 .max(99)
-                .unitOfMeasurement("månader")
                 .build()
         )
         .rules(
