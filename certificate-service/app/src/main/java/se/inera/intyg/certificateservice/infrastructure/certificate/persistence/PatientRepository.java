@@ -30,7 +30,7 @@ public class PatientRepository {
 			final var existingVersions = patientVersionEntityRepository.
 					findAllByIdOrderByValidFromDesc(patient.id().idWithoutDash());
 
-			if (!existingVersions.isEmpty()) {
+			if (!existingVersions.isEmpty() && !existingVersions.contains(patientVersionEntity)) {
 				patientVersionEntity.setValidFrom(existingVersions.getFirst().getValidTo());
 			}
 			final var newPatientVersion = toEntity(patient);

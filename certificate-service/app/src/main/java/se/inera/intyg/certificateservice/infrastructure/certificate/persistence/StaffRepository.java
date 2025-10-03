@@ -76,7 +76,7 @@ public class StaffRepository {
 			final var existingVersions = staffVersionEntityRepository.
 					findAllByHsaIdOrderByValidFromDesc(staff.hsaId().id());
 
-			if (!existingVersions.isEmpty()) {
+			if (!existingVersions.isEmpty() && !existingVersions.contains(staffVersionEntity)) {
 				staffVersionEntity.setValidFrom(existingVersions.getFirst().getValidTo());
 			}
 
