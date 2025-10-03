@@ -3,9 +3,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.StaffEntityMapper.toDomain;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.StaffEntityMapper.toEntity;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -15,7 +13,6 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffEntity;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffVersionEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.StaffEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.StaffVersionEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffEntityRepository;
@@ -80,7 +77,7 @@ public class StaffRepository {
 					findAllByHsaIdOrderByValidFromDesc(staff.hsaId().id());
 
 			if (!existingVersions.isEmpty()) {
-				staffVersionEntity.setValidFrom(existingVersions.getFirst().getValidFrom());
+				staffVersionEntity.setValidFrom(existingVersions.getFirst().getValidTo());
 			}
 
 			var newStaffEntity = StaffEntityMapper.toEntity(staff);
