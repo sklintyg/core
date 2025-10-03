@@ -11,7 +11,6 @@ import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataPseudo
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,6 +27,7 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.ent
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.SessionEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.UnitEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.UserEntity;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.AdministrativeMessageRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CareProviderRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CertificateRelationEntityRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.EventTypeRepository;
@@ -64,12 +64,11 @@ class EventMapperTest {
   @Mock
   private CertificateRelationEntityRepository certificateRelationEntityRepository;
   @Mock
-  private AdministrativeMessageEntityMapper administrativeMessageEntityMapper;
+  private AdministrativeMessageRepository administrativeMessageRepository;
 
   @Test
   void shouldMapPseudonymizedAnalyticsMessageCorrectly() {
     final var message = sentPseudonymizedMessageBuilder().build();
-
     final var expectedCertificate = mock(CertificateEntity.class);
     final var expectedUnit = mock(UnitEntity.class);
     final var expectedCareProvider = mock(CareProviderEntity.class);
@@ -81,7 +80,7 @@ class EventMapperTest {
     final var expectedRecipient = mock(RecipientEntity.class);
 
     when(certificateEntityMapper.map(message)).thenReturn(expectedCertificate);
-    when(administrativeMessageEntityMapper.map(message)).thenReturn(Optional.empty());
+    when(administrativeMessageRepository.findOrCreate(message)).thenReturn(null);
     when(unitRepository.findOrCreate(message.getEventUnitId())).thenReturn(expectedUnit);
     when(careProviderRepository.findOrCreate(message.getEventCareProviderId())).thenReturn(
         expectedCareProvider);
@@ -109,16 +108,13 @@ class EventMapperTest {
         .build();
 
     final var result = eventMapper.toEntity(message);
-
     assertEquals(expected, result);
   }
 
   @Test
   void shouldMapPseudonymizedAnalyticsMessageWithAdministrativeMessageCorrectly() {
-    final var message = sentPseudonymizedMessageBuilder().build();
-
+    final var message = administrativeMessagePseudonymizedMessageBuilder().build();
     final var expectedCertificate = mock(CertificateEntity.class);
-    final var expectedAdministrativeMessage = mock(AdministrativeMessageEntity.class);
     final var expectedUnit = mock(UnitEntity.class);
     final var expectedCareProvider = mock(CareProviderEntity.class);
     final var expectedUser = mock(UserEntity.class);
@@ -127,10 +123,11 @@ class EventMapperTest {
     final var expectedEventType = mock(EventTypeEntity.class);
     final var expectedRole = mock(RoleEntity.class);
     final var expectedRecipient = mock(RecipientEntity.class);
+    final var expectedAdministrativeMessage = mock(AdministrativeMessageEntity.class);
 
     when(certificateEntityMapper.map(message)).thenReturn(expectedCertificate);
-    when(administrativeMessageEntityMapper.map(message)).thenReturn(
-        Optional.of(expectedAdministrativeMessage));
+    when(administrativeMessageRepository.findOrCreate(message)).thenReturn(
+        expectedAdministrativeMessage);
     when(unitRepository.findOrCreate(message.getEventUnitId())).thenReturn(expectedUnit);
     when(careProviderRepository.findOrCreate(message.getEventCareProviderId())).thenReturn(
         expectedCareProvider);
@@ -158,7 +155,6 @@ class EventMapperTest {
         .build();
 
     final var result = eventMapper.toEntity(message);
-
     assertEquals(expected, result);
   }
 

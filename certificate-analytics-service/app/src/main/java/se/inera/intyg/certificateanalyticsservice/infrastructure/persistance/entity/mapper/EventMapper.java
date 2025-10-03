@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.PseudonymizedAnalyticsMessage;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventEntity;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.AdministrativeMessageRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CareProviderRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CertificateRelationEntityRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.EventTypeRepository;
@@ -27,16 +28,15 @@ public class EventMapper {
   private final RoleRepository roleRepository;
   private final CertificateEntityMapper certificateEntityMapper;
   private final RecipientRepository recipientRepository;
-  private final AdministrativeMessageEntityMapper administrativeMessageEntityMapper;
   private final CertificateRelationEntityRepository certificateRelationEntityRepository;
+  private final AdministrativeMessageRepository administrativeMessageRepository;
 
   public EventEntity toEntity(PseudonymizedAnalyticsMessage message) {
     final var certificateEntity = certificateEntityMapper.map(message);
-    final var administrativeMessageEntity = administrativeMessageEntityMapper.map(message);
 
     return EventEntity.builder()
         .certificate(certificateEntity)
-        .administrativeMessage(administrativeMessageEntity.orElse(null))
+        .administrativeMessage(administrativeMessageRepository.findOrCreate(message))
         .unit(unitRepository.findOrCreate(message.getEventUnitId()))
         .careProvider(careProviderRepository.findOrCreate(message.getEventCareProviderId()))
         .user(userRepository.findOrCreate(message.getEventUserId()))
@@ -92,8 +92,6 @@ public class EventMapper {
       final var administrativeMessage = entity.getAdministrativeMessage();
       domainBuilder
           .administrativeMessageId(administrativeMessage.getAdministrativeMessageId())
-          .administrativeMessageAnswerId(administrativeMessage.getAnswerId())
-          .administrativeMessageReminderId(administrativeMessage.getReminderId())
           .administrativeMessageType(administrativeMessage.getMessageType().getType())
           .administrativeMessageSent(administrativeMessage.getSent())
           .administrativeMessageLastDateToAnswer(administrativeMessage.getLastDateToAnswer())
@@ -103,5 +101,5 @@ public class EventMapper {
     }
 
     return domainBuilder.build();
-  }
+  } // TODO: Map relations back to domain
 }

@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
@@ -47,8 +47,6 @@ class AdministrativeMessageEntityMapperTest {
 
     final var expected = AdministrativeMessageEntity.builder()
         .administrativeMessageId(TestDataConstants.HASHED_ADMINISTRATIVE_MESSAGE_ID)
-        .answerId(TestDataConstants.HASHED_ADMINISTRATIVE_ANSWER_ID)
-        .reminderId(TestDataConstants.HASHED_ADMINISTRATIVE_REMINDER_ID)
         .messageType(TestDataEntities.administrativeMessageTypeEntity())
         .sent(message.getAdministrativeMessageSent())
         .lastDateToAnswer(message.getAdministrativeMessageLastDateToAnswer())
@@ -59,17 +57,17 @@ class AdministrativeMessageEntityMapperTest {
 
     final var result = administrativeMessageEntityMapper.map(message);
 
-    assertEquals(expected, result.get());
+    assertEquals(expected, result);
   }
 
   @Test
-  void shouldReturnEmptyOptionalWhenAdministrativeMessageIdIsNull() {
+  void shouldReturnNullWhenAdministrativeMessageIdIsNull() {
     final var message = PseudonymizedAnalyticsMessage.builder()
         .administrativeMessageId(null)
         .build();
 
     final var result = administrativeMessageEntityMapper.map(message);
 
-    assertTrue(result.isEmpty());
+    assertNull(result);
   }
 }

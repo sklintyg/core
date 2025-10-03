@@ -1,6 +1,6 @@
 package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper;
 
-import java.util.Optional;
+import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.PseudonymizedAnalyticsMessage;
@@ -17,15 +17,9 @@ public class AdministrativeMessageEntityMapper {
   private final AdministrativeMessageSenderRepository administrativeMessageSenderRepository;
   private final AdministrativeMessageRecipientRepository administrativeMessageRecipientRepository;
 
-  public Optional<AdministrativeMessageEntity> map(PseudonymizedAnalyticsMessage message) {
-    if (message.getAdministrativeMessageId() == null) {
-      return Optional.empty();
-    }
-
-    return Optional.of(AdministrativeMessageEntity.builder()
+  public AdministrativeMessageEntity map(PseudonymizedAnalyticsMessage message) {
+    return AdministrativeMessageEntity.builder()
         .administrativeMessageId(message.getAdministrativeMessageId())
-        .answerId(message.getAdministrativeMessageAnswerId())
-        .reminderId(message.getAdministrativeMessageReminderId())
         .messageType(administrativeMessageTypeRepository.findOrCreate(
             message.getAdministrativeMessageType()))
         .sent(message.getAdministrativeMessageSent())
@@ -35,6 +29,7 @@ public class AdministrativeMessageEntityMapper {
             message.getAdministrativeMessageSender()))
         .recipient(administrativeMessageRecipientRepository.findOrCreate(
             message.getAdministrativeMessageRecipient()))
-        .build());
+        .relations(Collections.emptyList())
+        .build();
   }
 }

@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -10,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -34,12 +36,6 @@ public class AdministrativeMessageEntity {
 
   @Column(name = "administrative_message_id", length = 22, nullable = false, unique = true)
   private String administrativeMessageId;
-
-  @Column(name = "answer_id", length = 22, unique = true)
-  private String answerId;
-
-  @Column(name = "reminder_id", length = 22, unique = true)
-  private String reminderId;
 
   @ManyToOne
   @JoinColumn(name = "administrative_message_type_key", referencedColumnName = "key", nullable = false)
@@ -66,4 +62,7 @@ public class AdministrativeMessageEntity {
   @ManyToOne
   @JoinColumn(name = "administrative_message_recipient_key", referencedColumnName = "key", nullable = false)
   private AdministrativeMessageRecipientEntity recipient;
+
+  @OneToMany(mappedBy = "message", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<AdministrativeMessageRelationEntity> relations;
 }

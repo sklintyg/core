@@ -3,8 +3,6 @@ package se.inera.intyg.certificateanalyticsservice.testdata;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CARE_PROVIDER_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CERTIFICATE_TYPE;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CERTIFICATE_TYPE_VERSION;
-import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_ADMINISTRATIVE_ANSWER_ID;
-import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_ADMINISTRATIVE_REMINDER_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_CERTIFICATE_PARENT_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_PATIENT_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_USER_ID;
@@ -179,8 +177,6 @@ public class TestDataEntities {
   public static AdministrativeMessageEntity administrativeMessageEntity() {
     return AdministrativeMessageEntity.builder()
         .administrativeMessageId(TestDataConstants.HASHED_ADMINISTRATIVE_MESSAGE_ID)
-        .answerId(HASHED_ADMINISTRATIVE_ANSWER_ID)
-        .reminderId(HASHED_ADMINISTRATIVE_REMINDER_ID)
         .messageType(administrativeMessageTypeEntity())
         .sent(TestDataConstants.TIMESTAMP)
         .lastDateToAnswer(TestDataConstants.TIMESTAMP.toLocalDate())

@@ -88,8 +88,6 @@ public class TestDataPseudonymized {
         .certificateCareProviderId(CARE_PROVIDER_ID)
         .recipientId(RECIPIENT)
         .administrativeMessageId(TestDataConstants.HASHED_ADMINISTRATIVE_MESSAGE_ID)
-        .administrativeMessageAnswerId(TestDataConstants.HASHED_ADMINISTRATIVE_ANSWER_ID)
-        .administrativeMessageReminderId(TestDataConstants.HASHED_ADMINISTRATIVE_REMINDER_ID)
         .administrativeMessageType(TestDataConstants.ADMINISTRATIVE_MESSAGE_TYPE)
         .administrativeMessageSent(LocalDateTime.parse(EVENT_TIMESTAMP))
         .administrativeMessageLastDateToAnswer(LocalDateTime.parse(EVENT_TIMESTAMP).toLocalDate())
