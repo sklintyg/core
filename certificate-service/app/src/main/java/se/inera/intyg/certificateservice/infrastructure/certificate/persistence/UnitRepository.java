@@ -97,9 +97,9 @@ public class UnitRepository {
 
 		final var unitVersionEntity = UnitVersionEntityMapper.toEntity(unitEntity);
 		final var existingVersions = unitVersionEntityRepository
-				.findAllByHsaId(unitEntity.getHsaId());
+				.findAllByHsaIdOrderByValidFromDesc(unitEntity.getHsaId());
 
-		if (existingVersions.isEmpty() || !existingVersions.contains(unitVersionEntity)) {
+		if (!existingVersions.isEmpty() && !existingVersions.contains(unitVersionEntity)) {
 			unitVersionEntity.setValidFrom(existingVersions.getFirst().getValidTo());
 		}
 

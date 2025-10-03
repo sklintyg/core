@@ -1,18 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper;
 
-import se.inera.intyg.certificateservice.domain.common.model.HsaId;
-import se.inera.intyg.certificateservice.domain.unit.model.CareProvider;
-import se.inera.intyg.certificateservice.domain.unit.model.CareUnit;
-import se.inera.intyg.certificateservice.domain.unit.model.Inactive;
-import se.inera.intyg.certificateservice.domain.unit.model.IssuingUnit;
-import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
-import se.inera.intyg.certificateservice.domain.unit.model.UnitAddress;
-import se.inera.intyg.certificateservice.domain.unit.model.UnitContactInfo;
-import se.inera.intyg.certificateservice.domain.unit.model.UnitName;
-import se.inera.intyg.certificateservice.domain.unit.model.WorkplaceCode;
+import java.time.LocalDateTime;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitEntity;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitType;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitTypeEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitVersionEntity;
 
 public class UnitVersionEntityMapper {
@@ -32,6 +21,9 @@ public class UnitVersionEntityMapper {
 				.email(unitEntity.getEmail())
 				.workplaceCode(unitEntity.getWorkplaceCode())
 				.type(unitEntity.getType())
+				.unit(unitEntity)
+				.validTo(LocalDateTime.now())
+				.validFrom(null)
 				.build();
 	}
 }

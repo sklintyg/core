@@ -1,11 +1,13 @@
 package se.inera.intyg.certificateservice.domain.unit.model;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Value;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 
 @Value
 @Builder
+@EqualsAndHashCode(exclude = "inactive")
 public class SubUnit implements IssuingUnit {
 
   HsaId hsaId;

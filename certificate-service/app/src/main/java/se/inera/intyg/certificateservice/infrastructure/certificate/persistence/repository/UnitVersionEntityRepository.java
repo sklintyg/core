@@ -11,5 +11,5 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 public interface UnitVersionEntityRepository extends CrudRepository<UnitVersionEntity, Long>,
     JpaSpecificationExecutor<UnitVersionEntity> {
 
-	List<UnitVersionEntity> findAllByHsaId(String hsaId);
+	List<UnitVersionEntity> findAllByHsaIdOrderByValidFromDesc(String hsaId);
 }
