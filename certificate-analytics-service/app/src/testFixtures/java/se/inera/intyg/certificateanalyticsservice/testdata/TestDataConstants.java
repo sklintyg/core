@@ -28,6 +28,7 @@ public final class TestDataConstants {
   public static final String EVENT_TYPE_CERTIFICATE_SENT = "CERTIFICATE_SENT";
   public static final String HASHED_MESSAGE_ID = "M-P4rHB5bMLzQQrCTlprRA";
   public static final String HASHED_CERTIFICATE_ID = "Xsg4sVYtNq_zMGU_wWrJgw";
+  public static final String HASHED_CERTIFICATE_PARENT_ID = "VDJhjt69htHErDZl21BM7w";
   public static final String HASHED_PATIENT_ID = "v4WI46Ymy08FKdhJJFDocw";
   public static final String EVENT_TIMESTAMP = "2025-09-29T17:49:58.616648";
   public static final String HASHED_SESSION_ID = "GRmmGqqMdm6mFSy9ZCfT5w";

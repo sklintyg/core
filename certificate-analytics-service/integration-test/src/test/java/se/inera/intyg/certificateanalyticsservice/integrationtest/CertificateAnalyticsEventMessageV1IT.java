@@ -3,10 +3,16 @@ package se.inera.intyg.certificateanalyticsservice.integrationtest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateanalyticsservice.testability.configuration.TestabilityConfiguration.TESTABILITY_PROFILE;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CERTIFICATE_PARENT_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessages.draftMessageBuilder;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessages.replacedRelationBuilder;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessages.sentCertificateBuilder;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessages.sentMessageBuilder;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataPseudonymized.draftPseudonymizedMessageBuilder;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataPseudonymized.sentPseudonymizedMessageBuilder;
 
 import java.time.Duration;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,6 +65,43 @@ class CertificateAnalyticsEventMessageV1IT {
   void shallProcessAndPersistMessage() {
     final var expected = draftPseudonymizedMessageBuilder().build();
     final var message = draftMessageBuilder().build();
+
+    jmsUtil.publishMessage(message);
+
+    final var actual = testabilityUtil.awaitProcessed(
+        message.getMessageId(),
+        Duration.ofSeconds(5)
+    );
+
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  void shallProcessAndPersistMessageWithRelation() {
+    final var expected = sentPseudonymizedMessageBuilder().build();
+
+    final var firstMessage = sentMessageBuilder()
+        .messageId(UUID.randomUUID().toString())
+        .certificate(
+            sentCertificateBuilder()
+                .id(CERTIFICATE_PARENT_ID)
+                .parent(null)
+                .build()
+        )
+        .build();
+    jmsUtil.publishMessage(firstMessage);
+
+    final var message = sentMessageBuilder()
+        .certificate(
+            sentCertificateBuilder()
+                .parent(
+                    replacedRelationBuilder()
+                        .id(CERTIFICATE_PARENT_ID)
+                        .build()
+                )
+                .build()
+        )
+        .build();
 
     jmsUtil.publishMessage(message);
 

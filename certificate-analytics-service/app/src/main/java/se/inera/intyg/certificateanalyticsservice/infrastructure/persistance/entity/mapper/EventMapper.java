@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.PseudonymizedAnalyticsMessage;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CareProviderRepository;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CertificateRelationEntityRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.EventTypeRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.OriginRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.RecipientRepository;
@@ -26,6 +27,7 @@ public class EventMapper {
   private final RoleRepository roleRepository;
   private final CertificateEntityMapper certificateEntityMapper;
   private final RecipientRepository recipientRepository;
+  private final CertificateRelationEntityRepository certificateRelationEntityRepository;
 
   public EventEntity toEntity(PseudonymizedAnalyticsMessage message) {
     final var certificateEntity = certificateEntityMapper.map(message);
@@ -45,7 +47,7 @@ public class EventMapper {
   }
 
   public PseudonymizedAnalyticsMessage toDomain(EventEntity entity) {
-    return PseudonymizedAnalyticsMessage.builder()
+    final var domainBuilder = PseudonymizedAnalyticsMessage.builder()
         .messageId(entity.getMessageId())
         .eventTimestamp(entity.getTimestamp())
         .eventMessageType(entity.getEventType().getEventType())
@@ -63,6 +65,25 @@ public class EventMapper {
         .certificatePatientId(entity.getCertificate().getPatient().getPatientId())
         .certificateUnitId(entity.getCertificate().getUnit().getHsaId())
         .certificateCareProviderId(entity.getCertificate().getCareProvider().getHsaId())
-        .build();
+        .recipientId(entity.getRecipient() != null ? entity.getRecipient().getRecipient() : null);
+
+    final var relation = certificateRelationEntityRepository
+        .findAll().stream()
+        .filter(rel ->
+            rel.getChildCertificate().getCertificateId()
+                .equals(entity.getCertificate().getCertificateId())
+        )
+        .findFirst();
+
+    if (relation.isPresent()) {
+      domainBuilder.certificateRelationParentId(
+          relation.get().getParentCertificate().getCertificateId()
+      );
+      domainBuilder.certificateRelationParentType(
+          relation.get().getRelationType().getRelationType()
+      );
+    }
+
+    return domainBuilder.build();
   }
 }

@@ -24,7 +24,7 @@ public class CertificateRelationEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "key")
+  @Column(name = "`key`")
   private Long key;
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)

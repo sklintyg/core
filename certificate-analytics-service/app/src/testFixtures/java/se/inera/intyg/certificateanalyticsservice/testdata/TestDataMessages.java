@@ -28,6 +28,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.UncheckedIOException;
 import java.time.LocalDateTime;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsEventCertificateRelationV1;
+import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsEventCertificateRelationV1.CertificateAnalyticsEventCertificateRelationV1Builder;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsEventCertificateV1;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsEventCertificateV1.CertificateAnalyticsEventCertificateV1Builder;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsEventMessageV1;
@@ -66,20 +67,7 @@ public class TestDataMessages {
         .type(TYPE_ANALYTICS_EVENT)
         .schemaVersion(SCHEMA_VERSION)
         .certificate(
-            certificateBuilder()
-                .id(CERTIFICATE_ID)
-                .unitId(UNIT_ID)
-                .careProviderId(CARE_PROVIDER_ID)
-                .patientId(PATIENT_ID)
-                .type(CERTIFICATE_TYPE)
-                .typeVersion(CERTIFICATE_TYPE_VERSION)
-                .parent(
-                    CertificateAnalyticsEventCertificateRelationV1.builder()
-                        .id(CERTIFICATE_PARENT_ID)
-                        .type(CERTIFICATE_PARENT_TYPE)
-                        .build()
-                )
-                .build()
+            sentCertificateBuilder().build()
         )
         .event(
             eventBuilder()
@@ -106,20 +94,7 @@ public class TestDataMessages {
         .type(TYPE_ANALYTICS_EVENT)
         .schemaVersion(SCHEMA_VERSION)
         .certificate(
-            certificateBuilder()
-                .id(CERTIFICATE_ID)
-                .unitId(UNIT_ID)
-                .careProviderId(CARE_PROVIDER_ID)
-                .patientId(PATIENT_ID)
-                .type(CERTIFICATE_TYPE)
-                .typeVersion(CERTIFICATE_TYPE_VERSION)
-                .parent(
-                    CertificateAnalyticsEventCertificateRelationV1.builder()
-                        .id(CERTIFICATE_PARENT_ID)
-                        .type(CERTIFICATE_PARENT_TYPE)
-                        .build()
-                )
-                .build()
+            sentCertificateBuilder().build()
         )
         .event(
             eventBuilder()
@@ -138,6 +113,25 @@ public class TestDataMessages {
                 .id(RECIPIENT)
                 .build()
         );
+  }
+
+  public static CertificateAnalyticsEventCertificateV1Builder sentCertificateBuilder() {
+    return certificateBuilder()
+        .id(CERTIFICATE_ID)
+        .unitId(UNIT_ID)
+        .careProviderId(CARE_PROVIDER_ID)
+        .patientId(PATIENT_ID)
+        .type(CERTIFICATE_TYPE)
+        .typeVersion(CERTIFICATE_TYPE_VERSION)
+        .parent(
+            replacedRelationBuilder().build()
+        );
+  }
+
+  public static CertificateAnalyticsEventCertificateRelationV1Builder replacedRelationBuilder() {
+    return CertificateAnalyticsEventCertificateRelationV1.builder()
+        .id(CERTIFICATE_PARENT_ID)
+        .type(CERTIFICATE_PARENT_TYPE);
   }
 
   public static CertificateAnalyticsEventMessageV1Builder draftMessageBuilder() {
