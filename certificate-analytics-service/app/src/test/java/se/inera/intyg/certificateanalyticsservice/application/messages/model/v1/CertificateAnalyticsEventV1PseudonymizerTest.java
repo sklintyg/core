@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.CertificateAnalyticsMessage;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.pseudonymization.PseudonymizationTokenGenerator;
+import se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateAnalyticsEventV1PseudonymizerTest {
@@ -273,22 +274,28 @@ class CertificateAnalyticsEventV1PseudonymizerTest {
   void shallReturnAdministrativeMessageAnswerId() {
     final var message = receivedQuestionMessageBuilder()
         .build();
-    final var expected = message.getAdministrativeMessage().getAnswerId();
+    when(pseudonymizationTokenGenerator.administrativeMessageAnswerId(
+        message.getAdministrativeMessage().getAnswerId()))
+        .thenReturn(TestDataConstants.HASHED_ADMINISTRATIVE_ANSWER_ID);
 
     final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
 
-    assertEquals(expected, actual.getAdministrativeMessageAnswerId());
+    assertEquals(TestDataConstants.HASHED_ADMINISTRATIVE_ANSWER_ID,
+        actual.getAdministrativeMessageAnswerId());
   }
 
   @Test
   void shallReturnAdministrativeMessageReminderId() {
     final var message = receivedQuestionMessageBuilder()
         .build();
-    final var expected = message.getAdministrativeMessage().getReminderId();
+    when(pseudonymizationTokenGenerator.administrativeMessageReminderId(
+        message.getAdministrativeMessage().getReminderId()))
+        .thenReturn(TestDataConstants.HASHED_ADMINISTRATIVE_REMINDER_ID);
 
     final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
 
-    assertEquals(expected, actual.getAdministrativeMessageReminderId());
+    assertEquals(TestDataConstants.HASHED_ADMINISTRATIVE_REMINDER_ID,
+        actual.getAdministrativeMessageReminderId());
   }
 
   @Test

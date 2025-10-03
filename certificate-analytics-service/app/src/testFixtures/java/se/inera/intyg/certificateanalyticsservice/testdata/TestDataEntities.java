@@ -159,7 +159,7 @@ public class TestDataEntities {
 
   public static AdministrativeMessageIdEntity administrativeMessageIdEntity() {
     return AdministrativeMessageIdEntity.builder()
-        .administrativeMessageId(TestDataConstants.ADMINISTRATIVE_MESSAGE_ID)
+        .administrativeMessageId(TestDataConstants.HASHED_ADMINISTRATIVE_MESSAGE_ID)
         .build();
   }
 
@@ -184,8 +184,8 @@ public class TestDataEntities {
   public static AdministrativeMessageEntity administrativeMessageEntity() {
     return AdministrativeMessageEntity.builder()
         .administrativeMessageId(administrativeMessageIdEntity())
-        .answerId(TestDataConstants.ADMINISTRATIVE_MESSAGE_ANSWER_ID)
-        .reminderId(TestDataConstants.ADMINISTRATIVE_MESSAGE_REMINDER_ID)
+        .answerId(TestDataConstants.HASHED_ADMINISTRATIVE_ANSWER_ID)
+        .reminderId(TestDataConstants.HASHED_ADMINISTRATIVE_REMINDER_ID)
         .messageType(administrativeMessageTypeEntity())
         .sent(TestDataConstants.TIMESTAMP)
         .lastDateToAnswer(TestDataConstants.TIMESTAMP.toLocalDate())

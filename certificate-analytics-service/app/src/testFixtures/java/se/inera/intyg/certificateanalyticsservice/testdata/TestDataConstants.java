@@ -42,6 +42,8 @@ public final class TestDataConstants {
   public static final String ADMINISTRATIVE_MESSAGE_QUESTION_ID_2 = "question-2";
 
   public static final String HASHED_ADMINISTRATIVE_MESSAGE_ID = "kmAFflTHZGGU6IA2YwRb2Q";
+  public static final String HASHED_ADMINISTRATIVE_ANSWER_ID = "tTgiCUZXKUkKBgobOpcqAg";
+  public static final String HASHED_ADMINISTRATIVE_REMINDER_ID = "3fSirWQj30FKNfjLbcNibg";
 
   private TestDataConstants() {
   }
