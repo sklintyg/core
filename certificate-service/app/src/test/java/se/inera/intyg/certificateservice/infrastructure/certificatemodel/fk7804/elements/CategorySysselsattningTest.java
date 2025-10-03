@@ -36,7 +36,7 @@ class CategorySysselsattningTest {
 
   @Test
   void shouldIncludeHideRule() {
-    final var element = se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.CategorySysselsattning.categorySysselsattning();
+    final var element = categorySysselsattning();
     final var expectedHideRule = ElementRuleExpression.builder()
         .id(QUESTION_SMITTBARARPENNING_ID)
         .type(ElementRuleType.HIDE)
