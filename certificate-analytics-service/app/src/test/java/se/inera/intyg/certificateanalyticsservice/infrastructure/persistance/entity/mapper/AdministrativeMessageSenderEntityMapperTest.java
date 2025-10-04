@@ -11,11 +11,11 @@ class AdministrativeMessageSenderEntityMapperTest {
   @Test
   void shouldMapAdministrativeMessageSenderCorrectly() {
     final var expected = AdministrativeMessageSenderEntity.builder()
-        .sender(TestDataConstants.ADMINISTRATIVE_MESSAGE_SENDER)
+        .sender(TestDataConstants.MESSAGE_SENDER)
         .build();
 
     final var result = AdministrativeMessageSenderEntityMapper.map(
-        TestDataConstants.ADMINISTRATIVE_MESSAGE_SENDER);
+        TestDataConstants.MESSAGE_SENDER);
 
     assertEquals(expected, result);
   }

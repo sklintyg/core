@@ -30,7 +30,7 @@ import se.inera.intyg.certificateanalyticsservice.integrationtest.util.Testabili
 
 @ActiveProfiles({"integration-test", TESTABILITY_PROFILE})
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-class CertificateAnalyticsEventMessageV1IT {
+class CertificateAnalyticsMessageV1IT {
 
   @Autowired
   private TestRestTemplate restTemplate;

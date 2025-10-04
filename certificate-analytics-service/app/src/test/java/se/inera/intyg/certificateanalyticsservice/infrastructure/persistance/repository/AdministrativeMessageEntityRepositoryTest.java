@@ -29,11 +29,11 @@ class AdministrativeMessageEntityRepositoryTest {
   @Test
   @Disabled("Dont work at the moment, need to be fixed")
   void shouldCreateNewAdministrativeMessageEntityIfNotExists() {
-    final var pseudonymizedMessage = TestDataPseudonymized.administrativeMessagePseudonymizedMessageBuilder()
+    final var pseudonymizedMessage = TestDataPseudonymized.messagePseudonymizedMessageBuilder()
         .build();
     final var savedAdministrativeMessage = mock(AdministrativeMessageEntity.class);
     when(administrativeMessageEntityRepository.findByAdministrativeMessageId(
-        pseudonymizedMessage.getAdministrativeMessageId()))
+        pseudonymizedMessage.getMessageId()))
         .thenReturn(Optional.empty());
     when(administrativeMessageEntityRepository.save(
         org.mockito.ArgumentMatchers.any(AdministrativeMessageEntity.class)))
@@ -46,11 +46,11 @@ class AdministrativeMessageEntityRepositoryTest {
 
   @Test
   void shouldFindExistingAdministrativeMessageEntity() {
-    final var pseudonymizedMessage = TestDataPseudonymized.administrativeMessagePseudonymizedMessageBuilder()
+    final var pseudonymizedMessage = TestDataPseudonymized.messagePseudonymizedMessageBuilder()
         .build();
     final var entity = mock(AdministrativeMessageEntity.class);
     when(administrativeMessageEntityRepository.findByAdministrativeMessageId(
-        pseudonymizedMessage.getAdministrativeMessageId()))
+        pseudonymizedMessage.getMessageId()))
         .thenReturn(Optional.of(entity));
 
     final var result = administrativeMessageRepository.findOrCreate(pseudonymizedMessage);
@@ -60,8 +60,8 @@ class AdministrativeMessageEntityRepositoryTest {
 
   @Test
   void shouldReturnNullIfAdministrativeMessageIdIsNull() {
-    final var pseudonymizedMessage = TestDataPseudonymized.administrativeMessagePseudonymizedMessageBuilder()
-        .administrativeMessageId(null)
+    final var pseudonymizedMessage = TestDataPseudonymized.messagePseudonymizedMessageBuilder()
+        .messageId(null)
         .build();
 
     assertNull(administrativeMessageRepository.findOrCreate(pseudonymizedMessage));
@@ -69,8 +69,8 @@ class AdministrativeMessageEntityRepositoryTest {
 
   @Test
   void shouldReturnNullIfAdministrativeMessageIdIsEmpty() {
-    final var pseudonymizedMessage = TestDataPseudonymized.administrativeMessagePseudonymizedMessageBuilder()
-        .administrativeMessageId(" ")
+    final var pseudonymizedMessage = TestDataPseudonymized.messagePseudonymizedMessageBuilder()
+        .messageId(" ")
         .build();
 
     assertNull(administrativeMessageRepository.findOrCreate(pseudonymizedMessage));

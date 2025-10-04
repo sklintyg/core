@@ -158,19 +158,19 @@ public class TestDataEntities {
 
   public static AdministrativeMessageTypeEntity administrativeMessageTypeEntity() {
     return AdministrativeMessageTypeEntity.builder()
-        .type(TestDataConstants.ADMINISTRATIVE_MESSAGE_TYPE)
+        .type(TestDataConstants.MESSAGE_TYPE)
         .build();
   }
 
   public static AdministrativeMessageSenderEntity administrativeMessageSenderEntity() {
     return AdministrativeMessageSenderEntity.builder()
-        .sender(TestDataConstants.ADMINISTRATIVE_MESSAGE_SENDER)
+        .sender(TestDataConstants.MESSAGE_SENDER)
         .build();
   }
 
   public static AdministrativeMessageRecipientEntity administrativeMessageRecipientEntity() {
     return AdministrativeMessageRecipientEntity.builder()
-        .recipient(TestDataConstants.ADMINISTRATIVE_MESSAGE_RECIPIENT)
+        .recipient(TestDataConstants.MESSAGE_RECIPIENT)
         .build();
   }
 
@@ -181,8 +181,8 @@ public class TestDataEntities {
         .sent(TestDataConstants.TIMESTAMP)
         .lastDateToAnswer(TestDataConstants.TIMESTAMP.toLocalDate())
         .questionId(java.util.List.of(
-            TestDataConstants.ADMINISTRATIVE_MESSAGE_QUESTION_ID_1,
-            TestDataConstants.ADMINISTRATIVE_MESSAGE_QUESTION_ID_2)
+            TestDataConstants.MESSAGE_QUESTION_ID_1,
+            TestDataConstants.MESSAGE_QUESTION_ID_2)
         )
         .sender(administrativeMessageSenderEntity())
         .recipient(administrativeMessageRecipientEntity())

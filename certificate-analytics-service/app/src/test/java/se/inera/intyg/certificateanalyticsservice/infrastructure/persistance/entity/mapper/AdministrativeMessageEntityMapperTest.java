@@ -34,25 +34,25 @@ class AdministrativeMessageEntityMapperTest {
   @Test
   @Disabled("Dont work at the moment, need to be fixed")
   void shouldMapAdministrativeMessageEntityCorrectly() {
-    final var message = TestDataPseudonymized.administrativeMessagePseudonymizedMessageBuilder()
+    final var message = TestDataPseudonymized.messagePseudonymizedMessageBuilder()
         .build();
 
     when(administrativeMessageTypeRepository.findOrCreate(
-        TestDataConstants.ADMINISTRATIVE_MESSAGE_TYPE))
+        TestDataConstants.MESSAGE_TYPE))
         .thenReturn(TestDataEntities.administrativeMessageTypeEntity());
     when(administrativeMessageSenderRepository.findOrCreate(
-        TestDataConstants.ADMINISTRATIVE_MESSAGE_SENDER))
+        TestDataConstants.MESSAGE_SENDER))
         .thenReturn(TestDataEntities.administrativeMessageSenderEntity());
     when(administrativeMessageRecipientRepository.findOrCreate(
-        TestDataConstants.ADMINISTRATIVE_MESSAGE_RECIPIENT))
+        TestDataConstants.MESSAGE_RECIPIENT))
         .thenReturn(TestDataEntities.administrativeMessageRecipientEntity());
 
     final var expected = AdministrativeMessageEntity.builder()
         .administrativeMessageId(TestDataConstants.HASHED_ADMINISTRATIVE_MESSAGE_ID)
         .messageType(TestDataEntities.administrativeMessageTypeEntity())
-        .sent(message.getAdministrativeMessageSent())
-        .lastDateToAnswer(message.getAdministrativeMessageLastDateToAnswer())
-        .questionId(message.getAdministrativeMessageQuestionId())
+        .sent(message.getMessageSent())
+        .lastDateToAnswer(message.getMessageLastDateToAnswer())
+        .questionId(message.getMessageQuestionIds())
         .sender(TestDataEntities.administrativeMessageSenderEntity())
         .recipient(TestDataEntities.administrativeMessageRecipientEntity())
         .build();
@@ -66,7 +66,7 @@ class AdministrativeMessageEntityMapperTest {
   @Disabled("Dont work at the moment, need to be fixed")
   void shouldReturnNullWhenAdministrativeMessageIdIsNull() {
     final var message = PseudonymizedAnalyticsMessage.builder()
-        .administrativeMessageId(null)
+        .messageId(null)
         .build();
 
     final var result = administrativeMessageEntityMapper.map(message);

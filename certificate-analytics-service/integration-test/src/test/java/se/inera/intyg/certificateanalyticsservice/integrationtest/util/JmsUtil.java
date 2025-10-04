@@ -8,7 +8,7 @@ import java.time.Duration;
 import java.util.function.Predicate;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessagePostProcessor;
-import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsEventMessageV1;
+import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsMessageV1;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.logging.MdcHelper;
 
 public class JmsUtil {
@@ -28,11 +28,11 @@ public class JmsUtil {
     purgeQueue(DLQ_QUEUE_NAME);
   }
 
-  public void publishMessage(CertificateAnalyticsEventMessageV1 message) {
+  public void publishMessage(CertificateAnalyticsMessageV1 message) {
     jmsTemplate.convertAndSend(queueName, toJson(message), messagePostProcessor(message));
   }
 
-  public void publishUnparsableMessage(CertificateAnalyticsEventMessageV1 message) {
+  public void publishUnparsableMessage(CertificateAnalyticsMessageV1 message) {
     jmsTemplate.convertAndSend(queueName, "unparsableMessage", messagePostProcessor(message));
   }
 
@@ -55,7 +55,7 @@ public class JmsUtil {
   }
 
   private static MessagePostProcessor messagePostProcessor(
-      CertificateAnalyticsEventMessageV1 message) {
+      CertificateAnalyticsMessageV1 message) {
     return msg -> {
       msg.setStringProperty("messageId", message.getMessageId());
       msg.setStringProperty("sessionId", message.getEvent().getSessionId());

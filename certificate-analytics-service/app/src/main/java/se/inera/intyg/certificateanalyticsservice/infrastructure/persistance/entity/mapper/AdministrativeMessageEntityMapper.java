@@ -19,16 +19,16 @@ public class AdministrativeMessageEntityMapper {
 
   public AdministrativeMessageEntity map(PseudonymizedAnalyticsMessage message) {
     return AdministrativeMessageEntity.builder()
-        .administrativeMessageId(message.getAdministrativeMessageId())
+        .administrativeMessageId(message.getMessageId())
         .messageType(administrativeMessageTypeRepository.findOrCreate(
-            message.getAdministrativeMessageType()))
-        .sent(message.getAdministrativeMessageSent())
-        .lastDateToAnswer(message.getAdministrativeMessageLastDateToAnswer())
-        .questionId(message.getAdministrativeMessageQuestionId())
+            message.getMessageType()))
+        .sent(message.getMessageSent())
+        .lastDateToAnswer(message.getMessageLastDateToAnswer())
+        .questionId(message.getMessageQuestionIds())
         .sender(administrativeMessageSenderRepository.findOrCreate(
-            message.getAdministrativeMessageSender()))
+            message.getMessageSenderId()))
         .recipient(administrativeMessageRecipientRepository.findOrCreate(
-            message.getAdministrativeMessageRecipient()))
+            message.getMessageRecipientId()))
         .relations(Collections.emptyList())
         .build();
   }

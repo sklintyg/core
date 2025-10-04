@@ -19,6 +19,7 @@ import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConsta
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.UNIT_ID;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.PseudonymizedAnalyticsMessage;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.PseudonymizedAnalyticsMessage.PseudonymizedAnalyticsMessageBuilder;
 
@@ -30,7 +31,7 @@ public class TestDataPseudonymized {
 
   public static PseudonymizedAnalyticsMessageBuilder draftPseudonymizedMessageBuilder() {
     return PseudonymizedAnalyticsMessage.builder()
-        .messageId(HASHED_MESSAGE_ID)
+        .id(HASHED_MESSAGE_ID)
         .eventTimestamp(LocalDateTime.parse(EVENT_TIMESTAMP))
         .eventMessageType(EVENT_TYPE_DRAFT_CREATED)
         .eventUserId(HASHED_USER_ID)
@@ -49,7 +50,7 @@ public class TestDataPseudonymized {
 
   public static PseudonymizedAnalyticsMessageBuilder sentPseudonymizedMessageBuilder() {
     return PseudonymizedAnalyticsMessage.builder()
-        .messageId(HASHED_MESSAGE_ID)
+        .id(HASHED_MESSAGE_ID)
         .eventTimestamp(LocalDateTime.parse(EVENT_TIMESTAMP))
         .eventMessageType(EVENT_TYPE_CERTIFICATE_SENT)
         .eventUserId(HASHED_USER_ID)
@@ -69,9 +70,9 @@ public class TestDataPseudonymized {
         .recipientId(RECIPIENT);
   }
 
-  public static PseudonymizedAnalyticsMessageBuilder administrativeMessagePseudonymizedMessageBuilder() {
+  public static PseudonymizedAnalyticsMessageBuilder messagePseudonymizedMessageBuilder() {
     return PseudonymizedAnalyticsMessage.builder()
-        .messageId(TestDataConstants.HASHED_MESSAGE_ID)
+        .id(TestDataConstants.HASHED_MESSAGE_ID)
         .eventTimestamp(LocalDateTime.parse(EVENT_TIMESTAMP))
         .eventMessageType(EVENT_TYPE_CERTIFICATE_SENT)
         .eventUserId(HASHED_USER_ID)
@@ -87,14 +88,15 @@ public class TestDataPseudonymized {
         .certificateUnitId(UNIT_ID)
         .certificateCareProviderId(CARE_PROVIDER_ID)
         .recipientId(RECIPIENT)
-        .administrativeMessageId(TestDataConstants.HASHED_ADMINISTRATIVE_MESSAGE_ID)
-        .administrativeMessageType(TestDataConstants.ADMINISTRATIVE_MESSAGE_TYPE)
-        .administrativeMessageSent(LocalDateTime.parse(EVENT_TIMESTAMP))
-        .administrativeMessageLastDateToAnswer(LocalDateTime.parse(EVENT_TIMESTAMP).toLocalDate())
-        .administrativeMessageQuestionId(java.util.List.of(
-            TestDataConstants.ADMINISTRATIVE_MESSAGE_QUESTION_ID_1,
-            TestDataConstants.ADMINISTRATIVE_MESSAGE_QUESTION_ID_2))
-        .administrativeMessageSender(TestDataConstants.ADMINISTRATIVE_MESSAGE_SENDER)
-        .administrativeMessageRecipient(TestDataConstants.ADMINISTRATIVE_MESSAGE_RECIPIENT);
+        .messageId(TestDataConstants.HASHED_ADMINISTRATIVE_MESSAGE_ID)
+        .messageType(TestDataConstants.MESSAGE_TYPE)
+        .messageSent(LocalDateTime.parse(EVENT_TIMESTAMP))
+        .messageLastDateToAnswer(LocalDateTime.parse(EVENT_TIMESTAMP).toLocalDate())
+        .messageQuestionIds(List.of(
+            TestDataConstants.MESSAGE_QUESTION_ID_1,
+            TestDataConstants.MESSAGE_QUESTION_ID_2)
+        )
+        .messageSenderId(TestDataConstants.MESSAGE_SENDER)
+        .messageRecipientId(TestDataConstants.MESSAGE_RECIPIENT);
   }
 }

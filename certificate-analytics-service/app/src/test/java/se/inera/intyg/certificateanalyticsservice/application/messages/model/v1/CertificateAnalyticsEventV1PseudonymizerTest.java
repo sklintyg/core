@@ -61,12 +61,12 @@ class CertificateAnalyticsEventV1PseudonymizerTest {
     final var expected = "pseudonymized-message-id";
     final var message = draftMessageBuilder().build();
 
-    when(pseudonymizationTokenGenerator.messageId(message.getMessageId()))
+    when(pseudonymizationTokenGenerator.id(message.getMessageId()))
         .thenReturn(expected);
 
     final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
 
-    assertEquals(expected, actual.getMessageId());
+    assertEquals(expected, actual.getId());
   }
 
   @Test
@@ -261,106 +261,106 @@ class CertificateAnalyticsEventV1PseudonymizerTest {
     final var message = receivedQuestionMessageBuilder()
         .build();
 
-    when(pseudonymizationTokenGenerator.administrativeMessageId(
-        message.getAdministrativeMessage().getId()))
+    when(pseudonymizationTokenGenerator.messageId(
+        message.getMessage().getId()))
         .thenReturn(expected);
 
     final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
 
-    assertEquals(expected, actual.getAdministrativeMessageId());
+    assertEquals(expected, actual.getMessageId());
   }
 
   @Test
   void shallReturnAdministrativeMessageAnswerId() {
     final var message = receivedQuestionMessageBuilder()
         .build();
-    when(pseudonymizationTokenGenerator.administrativeMessageAnswerId(
-        message.getAdministrativeMessage().getAnswerId()))
+    when(pseudonymizationTokenGenerator.messageAnswerId(
+        message.getMessage().getAnswerId()))
         .thenReturn(TestDataConstants.HASHED_ADMINISTRATIVE_ANSWER_ID);
 
     final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
 
     assertEquals(TestDataConstants.HASHED_ADMINISTRATIVE_ANSWER_ID,
-        actual.getAdministrativeMessageAnswerId());
+        actual.getMessageAnswerId());
   }
 
   @Test
   void shallReturnAdministrativeMessageReminderId() {
     final var message = receivedQuestionMessageBuilder()
         .build();
-    when(pseudonymizationTokenGenerator.administrativeMessageReminderId(
-        message.getAdministrativeMessage().getReminderId()))
+    when(pseudonymizationTokenGenerator.messageReminderId(
+        message.getMessage().getReminderId()))
         .thenReturn(TestDataConstants.HASHED_ADMINISTRATIVE_REMINDER_ID);
 
     final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
 
     assertEquals(TestDataConstants.HASHED_ADMINISTRATIVE_REMINDER_ID,
-        actual.getAdministrativeMessageReminderId());
+        actual.getMessageReminderId());
   }
 
   @Test
   void shallReturnAdministrativeMessageType() {
     final var message = receivedQuestionMessageBuilder()
         .build();
-    final var expected = message.getAdministrativeMessage().getType();
+    final var expected = message.getMessage().getType();
 
     final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
 
-    assertEquals(expected, actual.getAdministrativeMessageType());
+    assertEquals(expected, actual.getMessageType());
   }
 
   @Test
   void shallReturnAdministrativeMessageSent() {
     final var message = receivedQuestionMessageBuilder()
         .build();
-    final var expected = message.getAdministrativeMessage().getSent();
+    final var expected = message.getMessage().getSent();
 
     final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
 
-    assertEquals(expected, actual.getAdministrativeMessageSent());
+    assertEquals(expected, actual.getMessageSent());
   }
 
   @Test
   void shallReturnAdministrativeMessageLastDateToAnswer() {
     final var message = receivedQuestionMessageBuilder()
         .build();
-    final var expected = message.getAdministrativeMessage().getLastDateToAnswer();
+    final var expected = message.getMessage().getLastDateToAnswer();
 
     final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
 
-    assertEquals(expected, actual.getAdministrativeMessageLastDateToAnswer());
+    assertEquals(expected, actual.getMessageLastDateToAnswer());
   }
 
   @Test
   void shallReturnAdministrativeMessageQuestionId() {
     final var message = receivedQuestionMessageBuilder()
         .build();
-    final var expected = message.getAdministrativeMessage().getQuestionId();
+    final var expected = message.getMessage().getQuestionIds();
 
     final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
 
-    assertEquals(expected, actual.getAdministrativeMessageQuestionId());
+    assertEquals(expected, actual.getMessageQuestionIds());
   }
 
   @Test
   void shallReturnAdministrativeMessageSender() {
     final var message = receivedQuestionMessageBuilder()
         .build();
-    final var expected = message.getAdministrativeMessage().getSender();
+    final var expected = message.getMessage().getSender();
 
     final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
 
-    assertEquals(expected, actual.getAdministrativeMessageSender());
+    assertEquals(expected, actual.getMessageSenderId());
   }
 
   @Test
   void shallReturnAdministrativeMessageRecipient() {
     final var message = receivedQuestionMessageBuilder()
         .build();
-    final var expected = message.getAdministrativeMessage().getRecipient();
+    final var expected = message.getMessage().getRecipient();
 
     final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
 
-    assertEquals(expected, actual.getAdministrativeMessageRecipient());
+    assertEquals(expected, actual.getMessageRecipientId());
   }
 }

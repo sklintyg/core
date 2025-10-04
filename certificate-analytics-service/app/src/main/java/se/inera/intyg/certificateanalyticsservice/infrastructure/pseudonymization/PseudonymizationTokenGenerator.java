@@ -17,7 +17,7 @@ public class PseudonymizationTokenGenerator {
   @Value("${pseudonymization.context}")
   private String context;
 
-  private static final String FIELD_MESSAGE_ID = "messageId";
+  private static final String FIELD_ID = "id";
   private static final String FIELD_STAFF_ID = "staffId";
   private static final String FIELD_SESSION_ID = "sessionId";
   private static final String FIELD_CERTIFICATE_ID = "certificateId";
@@ -30,10 +30,10 @@ public class PseudonymizationTokenGenerator {
   private static final String INPUT_TEMPLATE = "%s|%s|%s";
   private static final int TOKEN_LENGTH = 16;
 
-  public String messageId(String messageId) {
-    return messageId == null ? null : token(
-        FIELD_MESSAGE_ID,
-        normalize(messageId)
+  public String id(String id) {
+    return id == null ? null : token(
+        FIELD_ID,
+        normalize(id)
     );
   }
 
@@ -72,21 +72,23 @@ public class PseudonymizationTokenGenerator {
     );
   }
 
-  public String administrativeMessageId(String administrativeMessageId) {
+  public String messageId(String administrativeMessageId) {
     return administrativeMessageId == null ? null : token(
         FIELD_ADMINISTRATIVE_MESSAGE_ID,
         normalize(administrativeMessageId)
     );
   }
 
-  public String administrativeMessageAnswerId(String administrativeMessageAnswerId) {
+  // TODO: The field need to be the same for all ids related to messages
+  public String messageAnswerId(String administrativeMessageAnswerId) {
     return administrativeMessageAnswerId == null ? null : token(
         FIELD_ADMINISTRATIVE_MESSAGE_ANSWER_ID,
         normalize(administrativeMessageAnswerId)
     );
   }
 
-  public String administrativeMessageReminderId(String administrativeMessageReminderId) {
+  // TODO: The field need to be the same for all ids related to messages
+  public String messageReminderId(String administrativeMessageReminderId) {
     return administrativeMessageReminderId == null ? null : token(
         FIELD_ADMINISTRATIVE_MESSAGE_REMINDER_ID,
         normalize(administrativeMessageReminderId)

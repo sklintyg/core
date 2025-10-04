@@ -24,7 +24,7 @@ class AdministrativeMessageTypeRepositoryTest {
 
   @Test
   void shouldCreateNewAdministrativeMessageTypeEntityIfNotExists() {
-    final var type = TestDataConstants.ADMINISTRATIVE_MESSAGE_TYPE;
+    final var type = TestDataConstants.MESSAGE_TYPE;
     final var expectedEntity = TestDataEntities.administrativeMessageTypeEntity();
     final var savedEntity = mock(AdministrativeMessageTypeEntity.class);
     when(administrativeMessageTypeEntityRepository.findByType(type)).thenReturn(Optional.empty());
@@ -37,7 +37,7 @@ class AdministrativeMessageTypeRepositoryTest {
 
   @Test
   void shouldFindExistingAdministrativeMessageTypeEntity() {
-    final var type = TestDataConstants.ADMINISTRATIVE_MESSAGE_TYPE;
+    final var type = TestDataConstants.MESSAGE_TYPE;
     final var entity = mock(AdministrativeMessageTypeEntity.class);
     when(administrativeMessageTypeEntityRepository.findByType(type)).thenReturn(
         Optional.of(entity));

@@ -6,7 +6,7 @@ import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataEntities.administrativeMessageEventEntityBuilder;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataEntities.certificateRelationEntity;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataEntities.sentEventEntityBuilder;
-import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataPseudonymized.administrativeMessagePseudonymizedMessageBuilder;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataPseudonymized.messagePseudonymizedMessageBuilder;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataPseudonymized.sentPseudonymizedMessageBuilder;
 
 import java.util.Collections;
@@ -104,7 +104,7 @@ class EventMapperTest {
         .eventType(expectedEventType)
         .role(expectedRole)
         .recipient(expectedRecipient)
-        .messageId(message.getMessageId())
+        .messageId(message.getId())
         .build();
 
     final var result = eventMapper.toEntity(message);
@@ -113,7 +113,7 @@ class EventMapperTest {
 
   @Test
   void shouldMapPseudonymizedAnalyticsMessageWithAdministrativeMessageCorrectly() {
-    final var message = administrativeMessagePseudonymizedMessageBuilder().build();
+    final var message = messagePseudonymizedMessageBuilder().build();
     final var expectedCertificate = mock(CertificateEntity.class);
     final var expectedUnit = mock(UnitEntity.class);
     final var expectedCareProvider = mock(CareProviderEntity.class);
@@ -151,7 +151,7 @@ class EventMapperTest {
         .eventType(expectedEventType)
         .role(expectedRole)
         .recipient(expectedRecipient)
-        .messageId(message.getMessageId())
+        .messageId(message.getId())
         .build();
 
     final var result = eventMapper.toEntity(message);
@@ -170,7 +170,7 @@ class EventMapperTest {
 
   @Test
   void shouldMapEventEntityToDomainWhenAdministrativeMessageIsPresent() {
-    final var expected = administrativeMessagePseudonymizedMessageBuilder().build();
+    final var expected = messagePseudonymizedMessageBuilder().build();
     final var entity = administrativeMessageEventEntityBuilder().build();
     when(certificateRelationEntityRepository.findAll())
         .thenReturn(Collections.emptyList());

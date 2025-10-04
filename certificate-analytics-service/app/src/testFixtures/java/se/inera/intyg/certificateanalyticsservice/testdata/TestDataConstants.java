@@ -32,14 +32,14 @@ public final class TestDataConstants {
   public static final String HASHED_SESSION_ID = "GRmmGqqMdm6mFSy9ZCfT5w";
   public static final String HASHED_USER_ID = "IlXi3vfzsRwLaNRjpqYxOQ";
 
-  public static final String ADMINISTRATIVE_MESSAGE_ID = "administrativeMessageId";
-  public static final String ADMINISTRATIVE_MESSAGE_ANSWER_ID = "answer-67890";
-  public static final String ADMINISTRATIVE_MESSAGE_REMINDER_ID = "reminder-54321";
-  public static final String ADMINISTRATIVE_MESSAGE_TYPE = "QUESTION";
-  public static final String ADMINISTRATIVE_MESSAGE_SENDER = "FORSAKRINGSKASSAN";
-  public static final String ADMINISTRATIVE_MESSAGE_RECIPIENT = "LAKARE";
-  public static final String ADMINISTRATIVE_MESSAGE_QUESTION_ID_1 = "question-1";
-  public static final String ADMINISTRATIVE_MESSAGE_QUESTION_ID_2 = "question-2";
+  public static final String MESSAGE_ID = "administrativeMessageId";
+  public static final String MESSAGE_ANSWER_ID = "answer-67890";
+  public static final String MESSAGE_REMINDER_ID = "reminder-54321";
+  public static final String MESSAGE_TYPE = "QUESTION";
+  public static final String MESSAGE_SENDER = "FORSAKRINGSKASSAN";
+  public static final String MESSAGE_RECIPIENT = "LAKARE";
+  public static final String MESSAGE_QUESTION_ID_1 = "question-1";
+  public static final String MESSAGE_QUESTION_ID_2 = "question-2";
 
   public static final String HASHED_ADMINISTRATIVE_MESSAGE_ID = "kmAFflTHZGGU6IA2YwRb2Q";
   public static final String HASHED_ADMINISTRATIVE_ANSWER_ID = "tTgiCUZXKUkKBgobOpcqAg";

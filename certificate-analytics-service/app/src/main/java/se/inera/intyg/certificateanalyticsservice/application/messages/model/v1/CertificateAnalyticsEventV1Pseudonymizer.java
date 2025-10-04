@@ -15,18 +15,18 @@ public class CertificateAnalyticsEventV1Pseudonymizer implements AnalyticsMessag
 
   @Override
   public boolean canPseudonymize(CertificateAnalyticsMessage message) {
-    return message instanceof CertificateAnalyticsEventMessageV1;
+    return message instanceof CertificateAnalyticsMessageV1;
   }
 
   @Override
   public PseudonymizedAnalyticsMessage pseudonymize(CertificateAnalyticsMessage message) {
-    if (!(message instanceof CertificateAnalyticsEventMessageV1 messageV1)) {
+    if (!(message instanceof CertificateAnalyticsMessageV1 messageV1)) {
       throw new IllegalArgumentException("Invalid message type");
     }
 
     return PseudonymizedAnalyticsMessage.builder()
-        .messageId(
-            pseudonymizationTokenGenerator.messageId(
+        .id(
+            pseudonymizationTokenGenerator.id(
                 messageV1.getMessageId()
             )
         )
@@ -74,47 +74,49 @@ public class CertificateAnalyticsEventV1Pseudonymizer implements AnalyticsMessag
             missingRecipient(messageV1) ? null :
                 messageV1.getRecipient().getId()
         )
-        .administrativeMessageId(
-            missingAdministrativeMessage(messageV1) ? null :
-                pseudonymizationTokenGenerator.administrativeMessageId(
-                    messageV1.getAdministrativeMessage().getId()
+        .messageId(
+            missingMessage(messageV1) ? null :
+                pseudonymizationTokenGenerator.messageId(
+                    messageV1.getMessage().getId()
                 )
         )
-        .administrativeMessageAnswerId(
-            missingAdministrativeMessage(messageV1) ? null :
-                pseudonymizationTokenGenerator.administrativeMessageAnswerId(
-                    messageV1.getAdministrativeMessage().getAnswerId()
+        .messageAnswerId(
+            missingMessage(messageV1) ? null :
+                // TODO: A answer id will only be present in answer messages
+                pseudonymizationTokenGenerator.messageAnswerId(
+                    messageV1.getMessage().getAnswerId()
                 )
         )
-        .administrativeMessageReminderId(
-            missingAdministrativeMessage(messageV1) ? null :
-                pseudonymizationTokenGenerator.administrativeMessageReminderId(
-                    messageV1.getAdministrativeMessage().getReminderId()
+        .messageReminderId(
+            missingMessage(messageV1) ? null :
+                // TODO: A reminder id will only be present in reminder messages
+                pseudonymizationTokenGenerator.messageReminderId(
+                    messageV1.getMessage().getReminderId()
                 )
         )
-        .administrativeMessageType(
-            missingAdministrativeMessage(messageV1) ? null :
-                messageV1.getAdministrativeMessage().getType()
+        .messageType(
+            missingMessage(messageV1) ? null :
+                messageV1.getMessage().getType()
         )
-        .administrativeMessageSent(
-            missingAdministrativeMessage(messageV1) ? null :
-                messageV1.getAdministrativeMessage().getSent()
+        .messageSent(
+            missingMessage(messageV1) ? null :
+                messageV1.getMessage().getSent()
         )
-        .administrativeMessageLastDateToAnswer(
-            missingAdministrativeMessage(messageV1) ? null :
-                messageV1.getAdministrativeMessage().getLastDateToAnswer()
+        .messageLastDateToAnswer(
+            missingMessage(messageV1) ? null :
+                messageV1.getMessage().getLastDateToAnswer()
         )
-        .administrativeMessageQuestionId(
-            missingAdministrativeMessage(messageV1) ? null :
-                messageV1.getAdministrativeMessage().getQuestionId()
+        .messageQuestionIds(
+            missingMessage(messageV1) ? null :
+                messageV1.getMessage().getQuestionIds()
         )
-        .administrativeMessageSender(
-            missingAdministrativeMessage(messageV1) ? null :
-                messageV1.getAdministrativeMessage().getSender()
+        .messageSenderId(
+            missingMessage(messageV1) ? null :
+                messageV1.getMessage().getSender()
         )
-        .administrativeMessageRecipient(
-            missingAdministrativeMessage(messageV1) ? null :
-                messageV1.getAdministrativeMessage().getRecipient()
+        .messageRecipientId(
+            missingMessage(messageV1) ? null :
+                messageV1.getMessage().getRecipient()
         )
         .build();
   }
@@ -123,12 +125,11 @@ public class CertificateAnalyticsEventV1Pseudonymizer implements AnalyticsMessag
     return certificate.getParent() == null || certificate.getParent().getId() == null;
   }
 
-  private boolean missingRecipient(CertificateAnalyticsEventMessageV1 message) {
+  private boolean missingRecipient(CertificateAnalyticsMessageV1 message) {
     return message.getRecipient() == null || message.getRecipient().getId() == null;
   }
 
-  private boolean missingAdministrativeMessage(CertificateAnalyticsEventMessageV1 message) {
-    return message.getAdministrativeMessage() == null
-        || message.getAdministrativeMessage().getId() == null;
+  private boolean missingMessage(CertificateAnalyticsMessageV1 message) {
+    return message.getMessage() == null || message.getMessage().getId() == null;
   }
 }

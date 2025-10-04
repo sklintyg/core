@@ -46,13 +46,13 @@ public class EventMapper {
         .eventType(eventTypeRepository.findOrCreate(message.getEventMessageType()))
         .role(roleRepository.findOrCreate(message.getEventRole()))
         .recipient(recipientRepository.findOrCreate(message.getRecipientId()))
-        .messageId(message.getMessageId())
+        .messageId(message.getId())
         .build();
   }
 
   public PseudonymizedAnalyticsMessage toDomain(EventEntity entity) {
     final var domainBuilder = PseudonymizedAnalyticsMessage.builder()
-        .messageId(entity.getMessageId())
+        .id(entity.getMessageId())
         .eventTimestamp(entity.getTimestamp())
         .eventMessageType(entity.getEventType().getEventType())
         .eventUserId(entity.getUser() != null ? entity.getUser().getUserId() : null)
@@ -91,13 +91,13 @@ public class EventMapper {
     if (entity.getAdministrativeMessage() != null) {
       final var administrativeMessage = entity.getAdministrativeMessage();
       domainBuilder
-          .administrativeMessageId(administrativeMessage.getAdministrativeMessageId())
-          .administrativeMessageType(administrativeMessage.getMessageType().getType())
-          .administrativeMessageSent(administrativeMessage.getSent())
-          .administrativeMessageLastDateToAnswer(administrativeMessage.getLastDateToAnswer())
-          .administrativeMessageQuestionId(administrativeMessage.getQuestionId())
-          .administrativeMessageSender(administrativeMessage.getSender().getSender())
-          .administrativeMessageRecipient(administrativeMessage.getRecipient().getRecipient());
+          .messageId(administrativeMessage.getAdministrativeMessageId())
+          .messageType(administrativeMessage.getMessageType().getType())
+          .messageSent(administrativeMessage.getSent())
+          .messageLastDateToAnswer(administrativeMessage.getLastDateToAnswer())
+          .messageQuestionIds(administrativeMessage.getQuestionId())
+          .messageSenderId(administrativeMessage.getSender().getSender())
+          .messageRecipientId(administrativeMessage.getRecipient().getRecipient());
     }
 
     return domainBuilder.build();

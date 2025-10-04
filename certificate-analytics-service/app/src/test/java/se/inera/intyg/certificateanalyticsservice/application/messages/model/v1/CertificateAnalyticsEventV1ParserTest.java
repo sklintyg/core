@@ -50,7 +50,7 @@ class CertificateAnalyticsEventV1ParserTest {
     final var excepted = replaceMessageBuilder().build();
     final var messageAsJson = toJson(excepted);
 
-    when(objectMapper.readValue(messageAsJson, CertificateAnalyticsEventMessageV1.class))
+    when(objectMapper.readValue(messageAsJson, CertificateAnalyticsMessageV1.class))
         .thenReturn(excepted);
 
     final var actual = parser.parse(messageAsJson);
@@ -64,7 +64,7 @@ class CertificateAnalyticsEventV1ParserTest {
     final var excepted = draftMessageBuilder().build();
     final var messageAsJson = toJson(excepted);
 
-    when(objectMapper.readValue(messageAsJson, CertificateAnalyticsEventMessageV1.class))
+    when(objectMapper.readValue(messageAsJson, CertificateAnalyticsMessageV1.class))
         .thenThrow(JsonProcessingException.class);
 
     assertThrows(UncheckedIOException.class, () -> parser.parse(messageAsJson));

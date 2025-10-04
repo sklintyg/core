@@ -10,7 +10,7 @@ import lombok.Value;
 @Builder
 public class PseudonymizedAnalyticsMessage {
 
-  String messageId;
+  String id;
 
   LocalDateTime eventTimestamp;
   String eventMessageType;
@@ -32,14 +32,14 @@ public class PseudonymizedAnalyticsMessage {
 
   String recipientId;
 
-  String administrativeMessageId;
-  String administrativeMessageAnswerId;
-  String administrativeMessageReminderId;
-  String administrativeMessageType;
-  LocalDateTime administrativeMessageSent;
-  LocalDate administrativeMessageLastDateToAnswer;
-  List<String> administrativeMessageQuestionId;
-  String administrativeMessageSender;
-  String administrativeMessageRecipient;
+  String messageId;
+  String messageAnswerId;
+  String messageReminderId;
+  String messageType;
+  LocalDateTime messageSent;
+  LocalDate messageLastDateToAnswer;
+  List<String> messageQuestionIds;
+  String messageSenderId;
+  String messageRecipientId;
 
 }

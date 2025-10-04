@@ -38,10 +38,10 @@ class PseudonymizationTokenGeneratorTest {
 
     @Test
     void shallGeneratePseudonymizedMessageThatIsTheSameOverTime() {
-      final var expected = "kWK4wB8ZyUZThriVDvMOTQ";
-      final var messageId = "messageId";
+      final var expected = "bco7K7Z0nYQVgUuhp3HdOQ";
+      final var id = "id";
 
-      final var actual = pseudonymizationTokenGenerator.messageId(messageId);
+      final var actual = pseudonymizationTokenGenerator.id(id);
 
       assertEquals(expected, actual);
     }
@@ -99,8 +99,8 @@ class PseudonymizationTokenGeneratorTest {
     @Test
     void shallGeneratePseudonymizedAdministrativeMessageIdThatIsTheSameOverTime() {
 
-      final var actual = pseudonymizationTokenGenerator.administrativeMessageId(
-          TestDataConstants.ADMINISTRATIVE_MESSAGE_ID);
+      final var actual = pseudonymizationTokenGenerator.messageId(
+          TestDataConstants.MESSAGE_ID);
 
       assertEquals(TestDataConstants.HASHED_ADMINISTRATIVE_MESSAGE_ID, actual);
     }
@@ -118,8 +118,8 @@ class PseudonymizationTokenGeneratorTest {
     void shallGenerateSamePseudonymizedMessageIdFromSameValue() {
       final var messageId = "messageId";
 
-      final var messageIdOne = pseudonymizationTokenGenerator.messageId(messageId);
-      final var messageIdTwo = pseudonymizationTokenGenerator.messageId(messageId);
+      final var messageIdOne = pseudonymizationTokenGenerator.id(messageId);
+      final var messageIdTwo = pseudonymizationTokenGenerator.id(messageId);
 
       assertEquals(messageIdOne, messageIdTwo);
     }
@@ -180,9 +180,9 @@ class PseudonymizationTokenGeneratorTest {
     void shallGenerateSamePseudonymizedAdministrativeMessageIdFromSameValue() {
       final var administrativeMessageId = "administrativeMessageId";
 
-      final var administrativeMessageIdOne = pseudonymizationTokenGenerator.administrativeMessageId(
+      final var administrativeMessageIdOne = pseudonymizationTokenGenerator.messageId(
           administrativeMessageId);
-      final var administrativeMessageIdTwo = pseudonymizationTokenGenerator.administrativeMessageId(
+      final var administrativeMessageIdTwo = pseudonymizationTokenGenerator.messageId(
           administrativeMessageId);
 
       assertEquals(administrativeMessageIdOne, administrativeMessageIdTwo);
@@ -202,12 +202,12 @@ class PseudonymizationTokenGeneratorTest {
     void shallGenerateDifferentTokensForSameValueAcrossTypes() {
       final var value = "samevalue";
 
-      final var messageIdToken = pseudonymizationTokenGenerator.messageId(value);
+      final var messageIdToken = pseudonymizationTokenGenerator.id(value);
       final var staffIdToken = pseudonymizationTokenGenerator.staffId(value);
       final var sessionIdToken = pseudonymizationTokenGenerator.sessionId(value);
       final var certificateIdToken = pseudonymizationTokenGenerator.certificateId(value);
       final var patientIdToken = pseudonymizationTokenGenerator.patientId(value);
-      final var administrativeMessageIdToken = pseudonymizationTokenGenerator.administrativeMessageId(
+      final var administrativeMessageIdToken = pseudonymizationTokenGenerator.messageId(
           value);
 
       final var tokens = List.of(
@@ -260,9 +260,9 @@ class PseudonymizationTokenGeneratorTest {
     void shallGenerateDifferentPseudonymizedMessageIdFromSameValueButDifferentContext() {
       final var messageId = "messageId";
 
-      final var messageIdOne = pseudonymizationTokenGenerator.messageId(messageId);
+      final var messageIdOne = pseudonymizationTokenGenerator.id(messageId);
       ReflectionTestUtils.setField(pseudonymizationTokenGenerator, "context", "analytics-dev");
-      final var messageIdTwo = pseudonymizationTokenGenerator.messageId(messageId);
+      final var messageIdTwo = pseudonymizationTokenGenerator.id(messageId);
 
       assertNotEquals(messageIdOne, messageIdTwo);
     }
@@ -328,10 +328,10 @@ class PseudonymizationTokenGeneratorTest {
     void shallGenerateDifferentPseudonymizedAdministrativeMessageIdFromSameValueButDifferentContext() {
       final var administrativeMessageId = "administrativeMessageId";
 
-      final var administrativeMessageIdOne = pseudonymizationTokenGenerator.administrativeMessageId(
+      final var administrativeMessageIdOne = pseudonymizationTokenGenerator.messageId(
           administrativeMessageId);
       ReflectionTestUtils.setField(pseudonymizationTokenGenerator, "context", "analytics-dev");
-      final var administrativeMessageIdTwo = pseudonymizationTokenGenerator.administrativeMessageId(
+      final var administrativeMessageIdTwo = pseudonymizationTokenGenerator.messageId(
           administrativeMessageId);
 
       assertNotEquals(administrativeMessageIdOne, administrativeMessageIdTwo);

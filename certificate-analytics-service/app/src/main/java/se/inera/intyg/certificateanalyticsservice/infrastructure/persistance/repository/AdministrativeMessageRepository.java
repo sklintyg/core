@@ -18,13 +18,13 @@ public class AdministrativeMessageRepository {
   private final AdministrativeMessageRelationTypeRepository administrativeMessageRelationTypeRepository;
 
   public AdministrativeMessageEntity findOrCreate(PseudonymizedAnalyticsMessage message) {
-    if (message.getAdministrativeMessageId() == null || message.getAdministrativeMessageId()
+    if (message.getMessageId() == null || message.getMessageId()
         .isBlank()) {
       return null;
     }
 
     final var messageEntity = administrativeMessageEntityRepository.findByAdministrativeMessageId(
-            message.getAdministrativeMessageId())
+            message.getMessageId())
         .orElseGet(() -> administrativeMessageEntityRepository.save(
             administrativeMessageEntityMapper.map(message))
         );
@@ -36,13 +36,13 @@ public class AdministrativeMessageRepository {
 
   private void handleRelations(PseudonymizedAnalyticsMessage message,
       AdministrativeMessageEntity messageEntity) {
-    if (message.getAdministrativeMessageAnswerId() == null
-        && message.getAdministrativeMessageReminderId() == null) {
+    if (message.getMessageAnswerId() == null
+        && message.getMessageReminderId() == null) {
       return;
     }
 
     final var existing = administrativeMessageRelationEntityRepository.findByRelationId(
-        message.getAdministrativeMessageAnswerId());
+        message.getMessageAnswerId());
     if (existing.isEmpty()) {
       administrativeMessageRelationEntityRepository.save(
           getRelation(message, messageEntity)
@@ -52,13 +52,13 @@ public class AdministrativeMessageRepository {
 
   private AdministrativeMessageRelationEntity getRelation(PseudonymizedAnalyticsMessage message,
       AdministrativeMessageEntity messageEntity) {
-    final var type = message.getAdministrativeMessageAnswerId() != null ?
+    final var type = message.getMessageAnswerId() != null ?
         AdministrativeMessageRelationType.ANSWER
         : AdministrativeMessageRelationType.REMINDER;
 
-    final var id = message.getAdministrativeMessageAnswerId() != null ?
-        message.getAdministrativeMessageAnswerId()
-        : message.getAdministrativeMessageReminderId();
+    final var id = message.getMessageAnswerId() != null ?
+        message.getMessageAnswerId()
+        : message.getMessageReminderId();
 
     return AdministrativeMessageRelationEntity.builder()
         .relationId(id)

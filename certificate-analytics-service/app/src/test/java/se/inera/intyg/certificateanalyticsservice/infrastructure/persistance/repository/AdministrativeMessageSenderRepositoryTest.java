@@ -25,7 +25,7 @@ class AdministrativeMessageSenderRepositoryTest {
 
   @Test
   void shouldCreateNewAdministrativeMessageSenderEntityIfNotExists() {
-    final var sender = TestDataConstants.ADMINISTRATIVE_MESSAGE_SENDER;
+    final var sender = TestDataConstants.MESSAGE_SENDER;
     final var expectedEntity = TestDataEntities.administrativeMessageSenderEntity();
     final var savedEntity = mock(AdministrativeMessageSenderEntity.class);
     when(administrativeMessageSenderEntityRepository.findBySender(sender)).thenReturn(
@@ -39,7 +39,7 @@ class AdministrativeMessageSenderRepositoryTest {
 
   @Test
   void shouldFindExistingAdministrativeMessageSenderEntity() {
-    final var sender = TestDataConstants.ADMINISTRATIVE_MESSAGE_SENDER;
+    final var sender = TestDataConstants.MESSAGE_SENDER;
     final var entity = mock(AdministrativeMessageSenderEntity.class);
     when(administrativeMessageSenderEntityRepository.findBySender(sender)).thenReturn(
         Optional.of(entity));
