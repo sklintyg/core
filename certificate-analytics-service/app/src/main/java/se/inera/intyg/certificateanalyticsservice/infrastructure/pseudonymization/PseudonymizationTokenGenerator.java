@@ -22,9 +22,7 @@ public class PseudonymizationTokenGenerator {
   private static final String FIELD_SESSION_ID = "sessionId";
   private static final String FIELD_CERTIFICATE_ID = "certificateId";
   private static final String FIELD_PATIENT_ID = "patientId";
-  private static final String FIELD_ADMINISTRATIVE_MESSAGE_ID = "administrativeMessageId";
-  private static final String FIELD_ADMINISTRATIVE_MESSAGE_ANSWER_ID = "administrativeMessageAnswerId";
-  private static final String FIELD_ADMINISTRATIVE_MESSAGE_REMINDER_ID = "administrativeMessageReminderId";
+  private static final String FIELD_MESSAGE_ID = "messageId";
 
   private static final String HMAC_SHA_256 = "HmacSHA256";
   private static final String INPUT_TEMPLATE = "%s|%s|%s";
@@ -72,26 +70,24 @@ public class PseudonymizationTokenGenerator {
     );
   }
 
-  public String messageId(String administrativeMessageId) {
-    return administrativeMessageId == null ? null : token(
-        FIELD_ADMINISTRATIVE_MESSAGE_ID,
-        normalize(administrativeMessageId)
+  public String messageId(String messageId) {
+    return messageId == null ? null : token(
+        FIELD_MESSAGE_ID,
+        normalize(messageId)
     );
   }
 
-  // TODO: The field need to be the same for all ids related to messages
-  public String messageAnswerId(String administrativeMessageAnswerId) {
-    return administrativeMessageAnswerId == null ? null : token(
-        FIELD_ADMINISTRATIVE_MESSAGE_ANSWER_ID,
-        normalize(administrativeMessageAnswerId)
+  public String messageAnswerId(String messageAnswerId) {
+    return messageAnswerId == null ? null : token(
+        FIELD_MESSAGE_ID,
+        normalize(messageAnswerId)
     );
   }
 
-  // TODO: The field need to be the same for all ids related to messages
-  public String messageReminderId(String administrativeMessageReminderId) {
-    return administrativeMessageReminderId == null ? null : token(
-        FIELD_ADMINISTRATIVE_MESSAGE_REMINDER_ID,
-        normalize(administrativeMessageReminderId)
+  public String messageReminderId(String messageReminderId) {
+    return messageReminderId == null ? null : token(
+        FIELD_MESSAGE_ID,
+        normalize(messageReminderId)
     );
   }
 
