@@ -6,10 +6,11 @@ import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConsta
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CERTIFICATE_TYPE_VERSION;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.EVENT_TIMESTAMP;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.EVENT_TYPE_CERTIFICATE_SENT;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.EVENT_TYPE_COMPLEMENT_FROM_RECIPIENT;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.EVENT_TYPE_DRAFT_CREATED;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_CERTIFICATE_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_CERTIFICATE_PARENT_ID;
-import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_MESSAGE_ID;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_PATIENT_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_SESSION_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_USER_ID;
@@ -31,7 +32,7 @@ public class TestDataPseudonymized {
 
   public static PseudonymizedAnalyticsMessageBuilder draftPseudonymizedMessageBuilder() {
     return PseudonymizedAnalyticsMessage.builder()
-        .id(HASHED_MESSAGE_ID)
+        .id(HASHED_ID)
         .eventTimestamp(LocalDateTime.parse(EVENT_TIMESTAMP))
         .eventMessageType(EVENT_TYPE_DRAFT_CREATED)
         .eventUserId(HASHED_USER_ID)
@@ -50,7 +51,7 @@ public class TestDataPseudonymized {
 
   public static PseudonymizedAnalyticsMessageBuilder sentPseudonymizedMessageBuilder() {
     return PseudonymizedAnalyticsMessage.builder()
-        .id(HASHED_MESSAGE_ID)
+        .id(HASHED_ID)
         .eventTimestamp(LocalDateTime.parse(EVENT_TIMESTAMP))
         .eventMessageType(EVENT_TYPE_CERTIFICATE_SENT)
         .eventUserId(HASHED_USER_ID)
@@ -72,9 +73,9 @@ public class TestDataPseudonymized {
 
   public static PseudonymizedAnalyticsMessageBuilder messagePseudonymizedMessageBuilder() {
     return PseudonymizedAnalyticsMessage.builder()
-        .id(TestDataConstants.HASHED_MESSAGE_ID)
+        .id(TestDataConstants.HASHED_ID)
         .eventTimestamp(LocalDateTime.parse(EVENT_TIMESTAMP))
-        .eventMessageType(EVENT_TYPE_CERTIFICATE_SENT)
+        .eventMessageType(EVENT_TYPE_COMPLEMENT_FROM_RECIPIENT)
         .eventUserId(HASHED_USER_ID)
         .eventRole(ROLE)
         .eventUnitId(UNIT_ID)
@@ -88,10 +89,12 @@ public class TestDataPseudonymized {
         .certificateUnitId(UNIT_ID)
         .certificateCareProviderId(CARE_PROVIDER_ID)
         .recipientId(RECIPIENT)
-        .messageId(TestDataConstants.HASHED_ADMINISTRATIVE_MESSAGE_ID)
+        .messageId(TestDataConstants.HASHED_MESSAGE_ID)
+        .messageAnswerId(TestDataConstants.HASHED_MESSAGE_ANSWER_ID)
+        .messageReminderId(TestDataConstants.HASHED_MESSAGE_REMINDER_ID)
         .messageType(TestDataConstants.MESSAGE_TYPE)
-        .messageSent(LocalDateTime.parse(EVENT_TIMESTAMP))
-        .messageLastDateToAnswer(LocalDateTime.parse(EVENT_TIMESTAMP).toLocalDate())
+        .messageSent(TestDataConstants.MESSAGE_SENT)
+        .messageLastDateToAnswer(TestDataConstants.MESSAGE_LAST_DATE_TO_ANSWER)
         .messageQuestionIds(List.of(
             TestDataConstants.MESSAGE_QUESTION_ID_1,
             TestDataConstants.MESSAGE_QUESTION_ID_2)

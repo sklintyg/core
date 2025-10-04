@@ -56,7 +56,7 @@ public class MessageEntity {
       name = "message_question_id",
       joinColumns = @JoinColumn(name = "message_key")
   )
-  @Column(name = "question_id", length = 5)
+  @Column(name = "question_id")
   private List<String> questionIds;
 
   @ManyToOne

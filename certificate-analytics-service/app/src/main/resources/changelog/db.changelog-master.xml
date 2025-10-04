@@ -187,7 +187,7 @@
       <column name="message_key" type="bigint unsigned">
         <constraints nullable="false"/>
       </column>
-      <column name="question_id" type="varchar(5)">
+      <column name="question_id" type="varchar(32)">
         <constraints nullable="false"/>
       </column>
     </createTable>

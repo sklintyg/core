@@ -276,11 +276,11 @@ class CertificateAnalyticsEventV1PseudonymizerTest {
         .build();
     when(pseudonymizationTokenGenerator.messageAnswerId(
         message.getMessage().getAnswerId()))
-        .thenReturn(TestDataConstants.HASHED_ADMINISTRATIVE_ANSWER_ID);
+        .thenReturn(TestDataConstants.HASHED_MESSAGE_ANSWER_ID);
 
     final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
 
-    assertEquals(TestDataConstants.HASHED_ADMINISTRATIVE_ANSWER_ID,
+    assertEquals(TestDataConstants.HASHED_MESSAGE_ANSWER_ID,
         actual.getMessageAnswerId());
   }
 
@@ -290,11 +290,11 @@ class CertificateAnalyticsEventV1PseudonymizerTest {
         .build();
     when(pseudonymizationTokenGenerator.messageReminderId(
         message.getMessage().getReminderId()))
-        .thenReturn(TestDataConstants.HASHED_ADMINISTRATIVE_REMINDER_ID);
+        .thenReturn(TestDataConstants.HASHED_MESSAGE_REMINDER_ID);
 
     final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
 
-    assertEquals(TestDataConstants.HASHED_ADMINISTRATIVE_REMINDER_ID,
+    assertEquals(TestDataConstants.HASHED_MESSAGE_REMINDER_ID,
         actual.getMessageReminderId());
   }
 

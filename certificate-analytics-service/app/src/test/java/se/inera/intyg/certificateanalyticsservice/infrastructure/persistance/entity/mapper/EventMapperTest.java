@@ -67,7 +67,7 @@ class EventMapperTest {
 
   @Test
   void shouldMapPseudonymizedAnalyticsMessageCorrectly() {
-    final var message = sentPseudonymizedMessageBuilder().build();
+    final var message = messagePseudonymizedMessageBuilder().build();
     final var expectedCertificate = mock(CertificateEntity.class);
     final var expectedMessage = messageEntity().build();
     final var expectedUnit = mock(UnitEntity.class);

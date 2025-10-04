@@ -3,7 +3,7 @@ package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.en
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
-import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_ADMINISTRATIVE_MESSAGE_ID;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_MESSAGE_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.MESSAGE_RECIPIENT;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.MESSAGE_SENDER;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.MESSAGE_TYPE;
@@ -56,7 +56,7 @@ class MessageEntityMapperTest {
   void shallReturnExistingMessageIfAlreadyExists() {
     final var expected = messageEntity().build();
 
-    when(messageEntityRepository.findByMessageId(HASHED_ADMINISTRATIVE_MESSAGE_ID))
+    when(messageEntityRepository.findByMessageId(HASHED_MESSAGE_ID))
         .thenReturn(Optional.of(expected));
 
     final var actual = messageEntityMapper.map(messagePseudonymizedMessageBuilder().build());
@@ -67,7 +67,7 @@ class MessageEntityMapperTest {
   void shallReturnNewMessageIfNotExists() {
     final var expected = messageEntity().build();
 
-    when(messageEntityRepository.findByMessageId(HASHED_ADMINISTRATIVE_MESSAGE_ID))
+    when(messageEntityRepository.findByMessageId(HASHED_MESSAGE_ID))
         .thenReturn(Optional.empty());
     when(messageTypeRepository.findOrCreate(MESSAGE_TYPE)).thenReturn(expected.getMessageType());
     when(partyRepository.findOrCreate(MESSAGE_SENDER)).thenReturn(messageSenderPartyEntity());

@@ -41,7 +41,7 @@ public class TestDataEntities {
   public static EventEntityBuilder sentEventEntityBuilder() {
     return EventEntity.builder()
         .certificate(certificateEntity().build())
-        .messageId(TestDataConstants.HASHED_MESSAGE_ID)
+        .messageId(TestDataConstants.HASHED_ID)
         .timestamp(TIMESTAMP)
         .eventType(eventTypeEntity())
         .role(roleEntity())
@@ -57,9 +57,13 @@ public class TestDataEntities {
     return EventEntity.builder()
         .certificate(certificateEntity().build())
         .message(messageEntity().build())
-        .messageId(TestDataConstants.HASHED_MESSAGE_ID)
+        .messageId(TestDataConstants.HASHED_ID)
         .timestamp(TIMESTAMP)
-        .eventType(eventTypeEntity())
+        .eventType(
+            EventTypeEntity.builder()
+                .eventType(TestDataConstants.EVENT_TYPE_COMPLEMENT_FROM_RECIPIENT)
+                .build()
+        )
         .role(roleEntity())
         .unit(unitEntity())
         .careProvider(careProviderEntity())
@@ -175,10 +179,12 @@ public class TestDataEntities {
 
   public static MessageEntityBuilder messageEntity() {
     return MessageEntity.builder()
-        .messageId(TestDataConstants.HASHED_ADMINISTRATIVE_MESSAGE_ID)
+        .messageId(TestDataConstants.HASHED_MESSAGE_ID)
+        .messageAnswerId(TestDataConstants.HASHED_MESSAGE_ANSWER_ID)
+        .messageReminderId(TestDataConstants.HASHED_MESSAGE_REMINDER_ID)
         .messageType(messageTypeEntity())
-        .sent(TestDataConstants.TIMESTAMP)
-        .lastDateToAnswer(TestDataConstants.TIMESTAMP.toLocalDate())
+        .sent(TestDataConstants.MESSAGE_SENT)
+        .lastDateToAnswer(TestDataConstants.MESSAGE_LAST_DATE_TO_ANSWER)
         .questionIds(java.util.List.of(
             TestDataConstants.MESSAGE_QUESTION_ID_1,
             TestDataConstants.MESSAGE_QUESTION_ID_2)

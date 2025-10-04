@@ -8,15 +8,18 @@ import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConsta
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CERTIFICATE_TYPE_VERSION;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.EVENT_TIMESTAMP;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.EVENT_TYPE_CERTIFICATE_SENT;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.EVENT_TYPE_COMPLEMENT_FROM_RECIPIENT;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.EVENT_TYPE_DRAFT_CREATED;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.MESSAGE_ANSWER_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.MESSAGE_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.MESSAGE_ID_CREATED;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.MESSAGE_LAST_DATE_TO_ANSWER;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.MESSAGE_QUESTION_ID_1;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.MESSAGE_QUESTION_ID_2;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.MESSAGE_RECIPIENT;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.MESSAGE_REMINDER_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.MESSAGE_SENDER;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.MESSAGE_SENT;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.MESSAGE_TYPE;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.ORIGIN;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.PATIENT_ID;
@@ -190,7 +193,7 @@ public class TestDataMessages {
         )
         .event(
             eventBuilder()
-                .messageType("QUESTION_RECEIVED")
+                .messageType(EVENT_TYPE_COMPLEMENT_FROM_RECIPIENT)
                 .timestamp(LocalDateTime.parse(EVENT_TIMESTAMP))
                 .userId(USER_ID)
                 .role(ROLE)
@@ -208,6 +211,8 @@ public class TestDataMessages {
         .message(
             CertificateAnalyticsEventMessageV1.builder()
                 .id(MESSAGE_ID)
+                .answerId(MESSAGE_ANSWER_ID)
+                .reminderId(MESSAGE_REMINDER_ID)
                 .type(MESSAGE_TYPE)
                 .sender(MESSAGE_SENDER)
                 .recipient(MESSAGE_RECIPIENT)
@@ -217,8 +222,8 @@ public class TestDataMessages {
                         MESSAGE_QUESTION_ID_2
                     )
                 )
-                .answerId(MESSAGE_ANSWER_ID)
-                .reminderId(MESSAGE_REMINDER_ID)
+                .sent(MESSAGE_SENT)
+                .lastDateToAnswer(MESSAGE_LAST_DATE_TO_ANSWER)
                 .build()
         );
   }
