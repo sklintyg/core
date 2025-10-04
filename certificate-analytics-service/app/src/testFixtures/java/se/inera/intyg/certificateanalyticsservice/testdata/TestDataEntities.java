@@ -26,8 +26,8 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.ent
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventEntity.EventEntityBuilder;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventTypeEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.OriginEntity;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.PartyEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.PatientEntity;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.RecipientEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.RoleEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.SessionEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.UnitEntity;
@@ -51,7 +51,7 @@ public class TestDataEntities {
         .user(userEntity())
         .session(sessionEntity())
         .origin(originEntity())
-        .recipient(recipientEntity());
+        .recipient(recipientPartyEntity());
   }
 
   public static EventEntityBuilder administrativeMessageEventEntityBuilder() {
@@ -67,7 +67,7 @@ public class TestDataEntities {
         .user(userEntity())
         .session(sessionEntity())
         .origin(originEntity())
-        .recipient(recipientEntity());
+        .recipient(recipientPartyEntity());
   }
 
   public static CertificateTypeEntity certificateTypeEntity() {
@@ -134,9 +134,9 @@ public class TestDataEntities {
         .build();
   }
 
-  public static RecipientEntity recipientEntity() {
-    return RecipientEntity.builder()
-        .recipient(RECIPIENT)
+  public static PartyEntity recipientPartyEntity() {
+    return PartyEntity.builder()
+        .party(RECIPIENT)
         .build();
   }
 

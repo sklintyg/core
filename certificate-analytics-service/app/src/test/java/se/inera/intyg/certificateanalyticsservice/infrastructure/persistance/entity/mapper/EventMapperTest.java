@@ -22,7 +22,7 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.ent
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventTypeEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.OriginEntity;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.RecipientEntity;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.PartyEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.RoleEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.SessionEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.UnitEntity;
@@ -32,7 +32,7 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.rep
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CertificateRelationEntityRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.EventTypeRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.OriginRepository;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.RecipientRepository;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.PartyRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.RoleRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.SessionRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.UnitRepository;
@@ -58,7 +58,7 @@ class EventMapperTest {
   @Mock
   private RoleRepository roleRepository;
   @Mock
-  private RecipientRepository recipientRepository;
+  private PartyRepository partyRepository;
   @Mock
   private CertificateEntityMapper certificateEntityMapper;
   @Mock
@@ -77,7 +77,7 @@ class EventMapperTest {
     final var expectedOrigin = mock(OriginEntity.class);
     final var expectedEventType = mock(EventTypeEntity.class);
     final var expectedRole = mock(RoleEntity.class);
-    final var expectedRecipient = mock(RecipientEntity.class);
+    final var expectedRecipient = mock(PartyEntity.class);
 
     when(certificateEntityMapper.map(message)).thenReturn(expectedCertificate);
     when(administrativeMessageRepository.findOrCreate(message)).thenReturn(null);
@@ -90,7 +90,7 @@ class EventMapperTest {
     when(eventTypeRepository.findOrCreate(message.getEventMessageType())).thenReturn(
         expectedEventType);
     when(roleRepository.findOrCreate(message.getEventRole())).thenReturn(expectedRole);
-    when(recipientRepository.findOrCreate(message.getRecipientId())).thenReturn(expectedRecipient);
+    when(partyRepository.findOrCreate(message.getRecipientId())).thenReturn(expectedRecipient);
 
     final var expected = EventEntity.builder()
         .certificate(expectedCertificate)
@@ -122,7 +122,7 @@ class EventMapperTest {
     final var expectedOrigin = mock(OriginEntity.class);
     final var expectedEventType = mock(EventTypeEntity.class);
     final var expectedRole = mock(RoleEntity.class);
-    final var expectedRecipient = mock(RecipientEntity.class);
+    final var expectedRecipient = mock(PartyEntity.class);
     final var expectedAdministrativeMessage = mock(AdministrativeMessageEntity.class);
 
     when(certificateEntityMapper.map(message)).thenReturn(expectedCertificate);
@@ -137,7 +137,7 @@ class EventMapperTest {
     when(eventTypeRepository.findOrCreate(message.getEventMessageType())).thenReturn(
         expectedEventType);
     when(roleRepository.findOrCreate(message.getEventRole())).thenReturn(expectedRole);
-    when(recipientRepository.findOrCreate(message.getRecipientId())).thenReturn(expectedRecipient);
+    when(partyRepository.findOrCreate(message.getRecipientId())).thenReturn(expectedRecipient);
 
     final var expected = EventEntity.builder()
         .certificate(expectedCertificate)

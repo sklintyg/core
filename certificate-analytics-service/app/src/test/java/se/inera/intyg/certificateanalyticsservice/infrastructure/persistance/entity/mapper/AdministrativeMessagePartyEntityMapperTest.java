@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.AdministrativeMessageRecipientEntity;
 import se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants;
 
-class AdministrativeMessageRecipientEntityMapperTest {
+class AdministrativeMessagePartyEntityMapperTest {
 
   @Test
   void shouldMapAdministrativeMessageRecipientCorrectly() {

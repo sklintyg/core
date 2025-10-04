@@ -127,75 +127,64 @@
       referencedTableName="patient" referencedColumnNames="key"
       constraintName="fk_certificate_patient"/>
 
-    <createTable tableName="recipient">
+    <createTable tableName="party">
       <column name="key" type="tinyint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="recipient" type="varchar(32)">
+      <column name="party_id" type="varchar(32)">
         <constraints nullable="false" unique="true"/>
       </column>
     </createTable>
 
-    <createTable tableName="administrative_message_sender">
+    <createTable tableName="message_type">
       <column name="key" type="tinyint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="sender" type="varchar(32)">
+      <column name="message_type" type="varchar(24)">
         <constraints nullable="false" unique="true"/>
       </column>
     </createTable>
 
-    <createTable tableName="administrative_message_recipient">
-      <column name="key" type="tinyint unsigned auto_increment">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-      <column name="recipient" type="varchar(32)">
-        <constraints nullable="false" unique="true"/>
-      </column>
-    </createTable>
-
-    <createTable tableName="administrative_message_type">
-      <column name="key" type="tinyint unsigned auto_increment">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-      <column name="type" type="varchar(24)">
-        <constraints nullable="false" unique="true"/>
-      </column>
-    </createTable>
-
-    <createTable tableName="administrative_message">
+    <createTable tableName="message">
       <column name="key" type="bigint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="administrative_message_id" type="varchar(22)">
+      <column name="message_id" type="varchar(22)">
         <constraints nullable="false"/>
       </column>
-      <column name="answer_id" type="varchar(22)">
+      <column name="message_answer_id" type="varchar(22)">
         <constraints unique="true"/>
       </column>
-      <column name="reminder_id" type="varchar(22)">
+      <column name="message_reminder_id" type="varchar(22)">
         <constraints unique="true"/>
       </column>
-      <column name="administrative_message_type_key" type="tinyint unsigned">
+      <column name="message_type_key" type="tinyint unsigned">
         <constraints nullable="false"/>
       </column>
       <column name="sent" type="timestamp(6)">
         <constraints nullable="false"/>
       </column>
       <column name="last_date_to_answer" type="date"/>
-      <column name="administrative_message_sender_key" type="tinyint unsigned">
+      <column name="sender_party_key" type="tinyint unsigned">
         <constraints nullable="false"/>
       </column>
-      <column name="administrative_message_recipient_key" type="tinyint unsigned">
+      <column name="recipient_party_key" type="tinyint unsigned">
         <constraints nullable="false"/>
-      </column>
-      <column name="message_id" type="varchar(22)">
-        <constraints nullable="false" unique="true"/>
       </column>
     </createTable>
 
-    <createTable tableName="administrative_message_question_id">
-      <column name="administrative_message_key" type="bigint unsigned">
+    <addForeignKeyConstraint baseTableName="message" baseColumnNames="message_type_key"
+      referencedTableName="message_type" referencedColumnNames="key"
+      constraintName="fk_message_message_type"/>
+    <addForeignKeyConstraint baseTableName="message" baseColumnNames="sender_party_key"
+      referencedTableName="party" referencedColumnNames="key"
+      constraintName="fk_message_sender_party"/>
+    <addForeignKeyConstraint baseTableName="message" baseColumnNames="recipient_party_key"
+      referencedTableName="party" referencedColumnNames="key"
+      constraintName="fk_message_recipient_party"/>
+
+    <createTable tableName="message_question_id">
+      <column name="message_key" type="bigint unsigned">
         <constraints nullable="false"/>
       </column>
       <column name="question_id" type="varchar(5)">
@@ -203,14 +192,14 @@
       </column>
     </createTable>
 
-    <addForeignKeyConstraint baseTableName="administrative_message_question_id"
-      baseColumnNames="administrative_message_key"
-      referencedTableName="administrative_message" referencedColumnNames="key"
-      constraintName="fk_administrative_message_question_message"/>
+    <addForeignKeyConstraint baseTableName="message_question_id"
+      baseColumnNames="message_key"
+      referencedTableName="message" referencedColumnNames="key"
+      constraintName="fk_message_question_message"/>
 
-    <addUniqueConstraint tableName="administrative_message_question_id"
-      columnNames="administrative_message_key,question_id"
-      constraintName="uk_administrative_message_question"/>
+    <addUniqueConstraint tableName="message_question_id"
+      columnNames="message_key,question_id"
+      constraintName="uk_message_question"/>
 
     <createTable tableName="event">
       <column name="key" type="bigint unsigned auto_increment">
@@ -225,15 +214,15 @@
       <column name="certificate_key" type="bigint unsigned">
         <constraints nullable="false"/>
       </column>
-      <column name="administrative_message_key" type="bigint unsigned"/>
+      <column name="message_key" type="bigint unsigned"/>
       <column name="user_key" type="bigint unsigned"/>
       <column name="role_key" type="tinyint unsigned"/>
       <column name="origin_key" type="tinyint unsigned"/>
       <column name="session_key" type="bigint unsigned"/>
       <column name="unit_key" type="bigint unsigned"/>
       <column name="provider_key" type="bigint unsigned"/>
-      <column name="recipient_key" type="tinyint unsigned"/>
-      <column name="message_id" type="varchar(22)">
+      <column name="recipient_party_key" type="tinyint unsigned"/>
+      <column name="id" type="varchar(22)">
         <constraints nullable="false" unique="true"/>
       </column>
     </createTable>
@@ -262,12 +251,12 @@
     <addForeignKeyConstraint baseTableName="event" baseColumnNames="role_key"
       referencedTableName="role" referencedColumnNames="key"
       constraintName="fk_event_role"/>
-    <addForeignKeyConstraint baseTableName="event" baseColumnNames="recipient_key"
-      referencedTableName="recipient" referencedColumnNames="key"
-      constraintName="fk_event_recipient"/>
-    <addForeignKeyConstraint baseTableName="event" baseColumnNames="administrative_message_key"
-      referencedTableName="administrative_message" referencedColumnNames="key"
-      constraintName="fk_event_administrative_message"/>
+    <addForeignKeyConstraint baseTableName="event" baseColumnNames="recipient_party_key"
+      referencedTableName="party" referencedColumnNames="key"
+      constraintName="fk_event_recipient_party"/>
+    <addForeignKeyConstraint baseTableName="event" baseColumnNames="message_key"
+      referencedTableName="message" referencedColumnNames="key"
+      constraintName="fk_event_message"/>
 
     <createTable tableName="certificate_relation">
       <column name="key" type="bigint unsigned auto_increment">
@@ -309,39 +298,5 @@
     <addUniqueConstraint tableName="certificate_relation"
       columnNames="parent_certificate_key,child_certificate_key"
       constraintName="uk_certificate_relation_parent_child"/>
-
-    <createTable tableName="administrative_message_relation_type">
-      <column name="key" type="tinyint unsigned auto_increment">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-      <column name="relation_type" type="varchar(16)">
-        <constraints nullable="false" unique="true"/>
-      </column>
-    </createTable>
-
-    <createTable tableName="administrative_message_relation">
-      <column name="key" type="bigint unsigned auto_increment">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-      <column name="administrative_message_key" type="bigint unsigned">
-        <constraints nullable="false"/>
-      </column>
-      <column name="relation_type_key" type="tinyint unsigned">
-        <constraints nullable="false"/>
-      </column>
-      <column name="relation_id" type="varchar(64)">
-        <constraints nullable="false" unique="true"/>
-      </column>
-    </createTable>
-
-    <addForeignKeyConstraint baseTableName="administrative_message_relation"
-      baseColumnNames="administrative_message_key"
-      referencedTableName="administrative_message" referencedColumnNames="key"
-      constraintName="fk_administrative_message_relation_message"/>
-    <addForeignKeyConstraint baseTableName="administrative_message_relation"
-      baseColumnNames="relation_type_key"
-      referencedTableName="administrative_message_relation_type" referencedColumnNames="key"
-      constraintName="fk_administrative_message_relation_type"/>
   </changeSet>
-
 </databaseChangeLog>

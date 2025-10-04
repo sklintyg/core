@@ -12,18 +12,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "recipient")
+@Table(name = "party")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RecipientEntity {
+public class PartyEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "`key`")
   private Long key;
 
-  @Column(name = "recipient", nullable = false, length = 32)
-  private String recipient;
+  @Column(name = "party_id", nullable = false, length = 32)
+  private String party;
 }
