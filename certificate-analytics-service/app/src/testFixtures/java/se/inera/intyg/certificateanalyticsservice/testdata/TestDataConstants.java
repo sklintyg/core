@@ -35,9 +35,9 @@ public final class TestDataConstants {
   public static final String MESSAGE_ID = "administrativeMessageId";
   public static final String MESSAGE_ANSWER_ID = "answer-67890";
   public static final String MESSAGE_REMINDER_ID = "reminder-54321";
-  public static final String MESSAGE_TYPE = "QUESTION";
-  public static final String MESSAGE_SENDER = "FORSAKRINGSKASSAN";
-  public static final String MESSAGE_RECIPIENT = "LAKARE";
+  public static final String MESSAGE_TYPE = "KOMPLT";
+  public static final String MESSAGE_SENDER = "FKASSA";
+  public static final String MESSAGE_RECIPIENT = "HSVARD";
   public static final String MESSAGE_QUESTION_ID_1 = "question-1";
   public static final String MESSAGE_QUESTION_ID_2 = "question-2";
 

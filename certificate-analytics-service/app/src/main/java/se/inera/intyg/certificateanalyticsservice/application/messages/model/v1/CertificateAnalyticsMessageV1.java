@@ -5,11 +5,11 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.Value;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.CertificateAnalyticsMessage;
-import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsMessageV1.CertificateAnalyticsEventMessageV1Builder;
+import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsMessageV1.CertificateAnalyticsMessageV1Builder;
 
 @Value
 @Builder
-@JsonDeserialize(builder = CertificateAnalyticsEventMessageV1Builder.class)
+@JsonDeserialize(builder = CertificateAnalyticsMessageV1Builder.class)
 public class CertificateAnalyticsMessageV1 implements CertificateAnalyticsMessage {
 
   String messageId;
@@ -22,7 +22,7 @@ public class CertificateAnalyticsMessageV1 implements CertificateAnalyticsMessag
   CertificateAnalyticsEventMessageV1 message;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class CertificateAnalyticsEventMessageV1Builder {
+  public static class CertificateAnalyticsMessageV1Builder {
 
   }
 }

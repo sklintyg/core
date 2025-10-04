@@ -12,18 +12,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "administrative_message_sender")
+@Table(name = "message_type")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdministrativeMessageSenderEntity {
+public class MessageTypeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "`key`")
   private Byte key;
 
-  @Column(name = "sender", nullable = false, unique = true, length = 32)
-  private String sender;
+  @Column(name = "message_type", nullable = false, unique = true, length = 24)
+  private String type;
 }

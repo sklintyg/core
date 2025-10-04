@@ -12,10 +12,6 @@ import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConsta
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.TIMESTAMP;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.UNIT_ID;
 
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.AdministrativeMessageEntity;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.AdministrativeMessageRecipientEntity;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.AdministrativeMessageSenderEntity;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.AdministrativeMessageTypeEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CareProviderEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CertificateEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CertificateEntity.CertificateEntityBuilder;
@@ -25,6 +21,9 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.ent
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventEntity.EventEntityBuilder;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventTypeEntity;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.MessageEntity;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.MessageEntity.MessageEntityBuilder;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.MessageTypeEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.OriginEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.PartyEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.PatientEntity;
@@ -54,10 +53,10 @@ public class TestDataEntities {
         .recipient(recipientPartyEntity());
   }
 
-  public static EventEntityBuilder administrativeMessageEventEntityBuilder() {
+  public static EventEntityBuilder messageSentEventEntityBuilder() {
     return EventEntity.builder()
         .certificate(certificateEntity().build())
-        .administrativeMessage(administrativeMessageEntity())
+        .message(messageEntity().build())
         .messageId(TestDataConstants.HASHED_MESSAGE_ID)
         .timestamp(TIMESTAMP)
         .eventType(eventTypeEntity())
@@ -156,36 +155,35 @@ public class TestDataEntities {
         .build();
   }
 
-  public static AdministrativeMessageTypeEntity administrativeMessageTypeEntity() {
-    return AdministrativeMessageTypeEntity.builder()
+  public static MessageTypeEntity messageTypeEntity() {
+    return MessageTypeEntity.builder()
         .type(TestDataConstants.MESSAGE_TYPE)
         .build();
   }
 
-  public static AdministrativeMessageSenderEntity administrativeMessageSenderEntity() {
-    return AdministrativeMessageSenderEntity.builder()
-        .sender(TestDataConstants.MESSAGE_SENDER)
+  public static PartyEntity messageSenderPartyEntity() {
+    return PartyEntity.builder()
+        .party(TestDataConstants.MESSAGE_SENDER)
         .build();
   }
 
-  public static AdministrativeMessageRecipientEntity administrativeMessageRecipientEntity() {
-    return AdministrativeMessageRecipientEntity.builder()
-        .recipient(TestDataConstants.MESSAGE_RECIPIENT)
+  public static PartyEntity messageRecipientPartyEntity() {
+    return PartyEntity.builder()
+        .party(TestDataConstants.MESSAGE_RECIPIENT)
         .build();
   }
 
-  public static AdministrativeMessageEntity administrativeMessageEntity() {
-    return AdministrativeMessageEntity.builder()
-        .administrativeMessageId(TestDataConstants.HASHED_ADMINISTRATIVE_MESSAGE_ID)
-        .messageType(administrativeMessageTypeEntity())
+  public static MessageEntityBuilder messageEntity() {
+    return MessageEntity.builder()
+        .messageId(TestDataConstants.HASHED_ADMINISTRATIVE_MESSAGE_ID)
+        .messageType(messageTypeEntity())
         .sent(TestDataConstants.TIMESTAMP)
         .lastDateToAnswer(TestDataConstants.TIMESTAMP.toLocalDate())
-        .questionId(java.util.List.of(
+        .questionIds(java.util.List.of(
             TestDataConstants.MESSAGE_QUESTION_ID_1,
             TestDataConstants.MESSAGE_QUESTION_ID_2)
         )
-        .sender(administrativeMessageSenderEntity())
-        .recipient(administrativeMessageRecipientEntity())
-        .build();
+        .sender(messageSenderPartyEntity())
+        .recipient(messageRecipientPartyEntity());
   }
 }

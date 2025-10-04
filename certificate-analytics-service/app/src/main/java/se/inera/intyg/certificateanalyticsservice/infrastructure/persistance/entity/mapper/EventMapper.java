@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.PseudonymizedAnalyticsMessage;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventEntity;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.AdministrativeMessageRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CareProviderRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CertificateRelationEntityRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.EventTypeRepository;
@@ -29,14 +28,15 @@ public class EventMapper {
   private final CertificateEntityMapper certificateEntityMapper;
   private final PartyRepository partyRepository;
   private final CertificateRelationEntityRepository certificateRelationEntityRepository;
-  private final AdministrativeMessageRepository administrativeMessageRepository;
+  private final MessageEntityMapper messageEntityMapper;
 
   public EventEntity toEntity(PseudonymizedAnalyticsMessage message) {
     final var certificateEntity = certificateEntityMapper.map(message);
+    final var messageEntity = messageEntityMapper.map(message);
 
     return EventEntity.builder()
         .certificate(certificateEntity)
-        .administrativeMessage(administrativeMessageRepository.findOrCreate(message))
+        .message(messageEntity)
         .unit(unitRepository.findOrCreate(message.getEventUnitId()))
         .careProvider(careProviderRepository.findOrCreate(message.getEventCareProviderId()))
         .user(userRepository.findOrCreate(message.getEventUserId()))
@@ -88,18 +88,20 @@ public class EventMapper {
       );
     }
 
-    if (entity.getAdministrativeMessage() != null) {
-      final var administrativeMessage = entity.getAdministrativeMessage();
+    if (entity.getMessage() != null) {
+      final var message = entity.getMessage();
       domainBuilder
-          .messageId(administrativeMessage.getAdministrativeMessageId())
-          .messageType(administrativeMessage.getMessageType().getType())
-          .messageSent(administrativeMessage.getSent())
-          .messageLastDateToAnswer(administrativeMessage.getLastDateToAnswer())
-          .messageQuestionIds(administrativeMessage.getQuestionId())
-          .messageSenderId(administrativeMessage.getSender().getSender())
-          .messageRecipientId(administrativeMessage.getRecipient().getRecipient());
+          .messageId(message.getMessageId())
+          .messageAnswerId(message.getMessageAnswerId())
+          .messageReminderId(message.getMessageReminderId())
+          .messageType(message.getMessageType().getType())
+          .messageSent(message.getSent())
+          .messageLastDateToAnswer(message.getLastDateToAnswer())
+          .messageQuestionIds(message.getQuestionIds())
+          .messageSenderId(message.getSender().getParty())
+          .messageRecipientId(message.getRecipient().getParty());
     }
 
     return domainBuilder.build();
-  } // TODO: Map relations back to domain
+  }
 }

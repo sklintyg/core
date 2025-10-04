@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -11,7 +10,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,24 +20,30 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "administrative_message")
+@Table(name = "message")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdministrativeMessageEntity {
+public class MessageEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "`key`")
   private Long key;
 
-  @Column(name = "administrative_message_id", length = 22, nullable = false, unique = true)
-  private String administrativeMessageId;
+  @Column(name = "message_id", length = 22, nullable = false, unique = true)
+  private String messageId;
+
+  @Column(name = "message_answer_id", length = 22)
+  private String messageAnswerId;
+
+  @Column(name = "message_reminder_id", length = 22)
+  private String messageReminderId;
 
   @ManyToOne
-  @JoinColumn(name = "administrative_message_type_key", referencedColumnName = "key", nullable = false)
-  private AdministrativeMessageTypeEntity messageType;
+  @JoinColumn(name = "message_type_key", referencedColumnName = "key", nullable = false)
+  private MessageTypeEntity messageType;
 
   @Column(name = "sent", nullable = false)
   private LocalDateTime sent;
@@ -49,20 +53,17 @@ public class AdministrativeMessageEntity {
 
   @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(
-      name = "administrative_message_question_id",
-      joinColumns = @JoinColumn(name = "administrative_message_key")
+      name = "message_question_id",
+      joinColumns = @JoinColumn(name = "message_key")
   )
   @Column(name = "question_id", length = 5)
-  private List<String> questionId;
+  private List<String> questionIds;
 
   @ManyToOne
-  @JoinColumn(name = "administrative_message_sender_key", referencedColumnName = "key", nullable = false)
-  private AdministrativeMessageSenderEntity sender;
+  @JoinColumn(name = "sender_party_key", referencedColumnName = "key", nullable = false)
+  private PartyEntity sender;
 
   @ManyToOne
-  @JoinColumn(name = "administrative_message_recipient_key", referencedColumnName = "key", nullable = false)
-  private AdministrativeMessageRecipientEntity recipient;
-
-  @OneToMany(mappedBy = "message", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<AdministrativeMessageRelationEntity> relations;
+  @JoinColumn(name = "recipient_party_key", referencedColumnName = "key", nullable = false)
+  private PartyEntity recipient;
 }
