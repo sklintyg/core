@@ -4,6 +4,10 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.ent
 
 public class CertificateTypeEntityMapper {
 
+  private CertificateTypeEntityMapper() {
+    throw new IllegalStateException("Utility class");
+  }
+  
   public static CertificateTypeEntity map(String type, String version) {
     return CertificateTypeEntity.builder()
         .certificateType(type)

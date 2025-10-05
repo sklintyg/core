@@ -4,6 +4,10 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.ent
 
 public class UserEntityMapper {
 
+  private UserEntityMapper() {
+    throw new IllegalStateException("Utility class");
+  }
+  
   public static UserEntity map(String userId) {
     return UserEntity.builder()
         .userId(userId)

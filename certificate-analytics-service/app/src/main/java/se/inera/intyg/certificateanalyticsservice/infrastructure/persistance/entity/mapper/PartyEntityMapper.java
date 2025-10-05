@@ -4,6 +4,10 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.ent
 
 public class PartyEntityMapper {
 
+  private PartyEntityMapper() {
+    throw new IllegalStateException("Utility class");
+  }
+  
   public static PartyEntity map(String party) {
     return PartyEntity.builder()
         .party(party)

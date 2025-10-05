@@ -5,10 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateanalyticsservice.testability.configuration.TestabilityConfiguration.TESTABILITY_PROFILE;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CERTIFICATE_PARENT_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessages.draftMessageBuilder;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessages.draftPrivatePractitionerMessageBuilder;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessages.receivedQuestionMessageBuilder;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessages.replacedRelationBuilder;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessages.sentCertificateBuilder;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessages.sentMessageBuilder;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataPseudonymized.draftPrivatePractitionerPseudonymizedMessageBuilder;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataPseudonymized.draftPseudonymizedMessageBuilder;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataPseudonymized.messagePseudonymizedMessageBuilder;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataPseudonymized.sentPseudonymizedMessageBuilder;
@@ -119,6 +121,21 @@ class CertificateAnalyticsMessageV1IT {
   void shallProcessAndPersistMessageWithMessage() {
     final var expected = messagePseudonymizedMessageBuilder().build();
     final var message = receivedQuestionMessageBuilder().build();
+
+    jmsUtil.publishMessage(message);
+
+    final var actual = testabilityUtil.awaitProcessed(
+        message.getMessageId(),
+        Duration.ofSeconds(5)
+    );
+
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  void shallProcessAndPersistMessageWithPseudonymizedPrivatePractitioner() {
+    final var expected = draftPrivatePractitionerPseudonymizedMessageBuilder().build();
+    final var message = draftPrivatePractitionerMessageBuilder().build();
 
     jmsUtil.publishMessage(message);
 
