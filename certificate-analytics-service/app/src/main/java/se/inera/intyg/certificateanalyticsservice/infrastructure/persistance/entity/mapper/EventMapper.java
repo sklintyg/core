@@ -8,7 +8,7 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.rep
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CertificateRelationEntityRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.EventTypeRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.OriginRepository;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.RecipientRepository;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.PartyRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.RoleRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.SessionRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.UnitRepository;
@@ -26,13 +26,17 @@ public class EventMapper {
   private final EventTypeRepository eventTypeRepository;
   private final RoleRepository roleRepository;
   private final CertificateEntityMapper certificateEntityMapper;
-  private final RecipientRepository recipientRepository;
+  private final PartyRepository partyRepository;
   private final CertificateRelationEntityRepository certificateRelationEntityRepository;
+  private final MessageEntityMapper messageEntityMapper;
 
   public EventEntity toEntity(PseudonymizedAnalyticsMessage message) {
     final var certificateEntity = certificateEntityMapper.map(message);
+    final var messageEntity = messageEntityMapper.map(message);
+
     return EventEntity.builder()
         .certificate(certificateEntity)
+        .message(messageEntity)
         .unit(unitRepository.findOrCreate(message.getEventUnitId()))
         .careProvider(careProviderRepository.findOrCreate(message.getEventCareProviderId()))
         .user(userRepository.findOrCreate(message.getEventUserId()))
@@ -41,14 +45,14 @@ public class EventMapper {
         .origin(originRepository.findOrCreate(message.getEventOrigin()))
         .eventType(eventTypeRepository.findOrCreate(message.getEventMessageType()))
         .role(roleRepository.findOrCreate(message.getEventRole()))
-        .recipient(recipientRepository.findOrCreate(message.getRecipientId()))
-        .messageId(message.getMessageId())
+        .recipient(partyRepository.findOrCreate(message.getRecipientId()))
+        .messageId(message.getId())
         .build();
   }
 
   public PseudonymizedAnalyticsMessage toDomain(EventEntity entity) {
     final var domainBuilder = PseudonymizedAnalyticsMessage.builder()
-        .messageId(entity.getMessageId())
+        .id(entity.getMessageId())
         .eventTimestamp(entity.getTimestamp())
         .eventMessageType(entity.getEventType().getEventType())
         .eventUserId(entity.getUser() != null ? entity.getUser().getUserId() : null)
@@ -58,14 +62,14 @@ public class EventMapper {
             entity.getCareProvider() != null ? entity.getCareProvider().getHsaId() : null)
         .eventOrigin(entity.getOrigin() != null ? entity.getOrigin().getOrigin() : null)
         .eventSessionId(entity.getSession() != null ? entity.getSession().getSessionId() : null)
+        .recipientId(entity.getRecipient() != null ? entity.getRecipient().getParty() : null)
         .certificateId(entity.getCertificate().getCertificateId())
         .certificateType(entity.getCertificate().getCertificateType().getCertificateType())
         .certificateTypeVersion(
             entity.getCertificate().getCertificateType().getCertificateTypeVersion())
         .certificatePatientId(entity.getCertificate().getPatient().getPatientId())
         .certificateUnitId(entity.getCertificate().getUnit().getHsaId())
-        .certificateCareProviderId(entity.getCertificate().getCareProvider().getHsaId())
-        .recipientId(entity.getRecipient() != null ? entity.getRecipient().getRecipient() : null);
+        .certificateCareProviderId(entity.getCertificate().getCareProvider().getHsaId());
 
     final var relation = certificateRelationEntityRepository
         .findAll().stream()
@@ -82,6 +86,20 @@ public class EventMapper {
       domainBuilder.certificateRelationParentType(
           relation.get().getRelationType().getRelationType()
       );
+    }
+
+    if (entity.getMessage() != null) {
+      final var message = entity.getMessage();
+      domainBuilder
+          .messageId(message.getMessageId())
+          .messageAnswerId(message.getMessageAnswerId())
+          .messageReminderId(message.getMessageReminderId())
+          .messageType(message.getMessageType().getType())
+          .messageSent(message.getSent())
+          .messageLastDateToAnswer(message.getLastDateToAnswer())
+          .messageQuestionIds(message.getQuestionIds())
+          .messageSenderId(message.getSender().getParty())
+          .messageRecipientId(message.getRecipient().getParty());
     }
 
     return domainBuilder.build();

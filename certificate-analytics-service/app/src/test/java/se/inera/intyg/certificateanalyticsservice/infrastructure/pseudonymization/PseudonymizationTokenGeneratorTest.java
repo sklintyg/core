@@ -36,11 +36,11 @@ class PseudonymizationTokenGeneratorTest {
   class TestConsistencyOverTime {
 
     @Test
-    void shallGeneratePseudonymizedMessageThatIsTheSameOverTime() {
-      final var expected = "kWK4wB8ZyUZThriVDvMOTQ";
-      final var messageId = "messageId";
+    void shallGeneratePseudonymizedIdThatIsTheSameOverTime() {
+      final var expected = "bco7K7Z0nYQVgUuhp3HdOQ";
+      final var id = "id";
 
-      final var actual = pseudonymizationTokenGenerator.messageId(messageId);
+      final var actual = pseudonymizationTokenGenerator.id(id);
 
       assertEquals(expected, actual);
     }
@@ -94,6 +94,16 @@ class PseudonymizationTokenGeneratorTest {
 
       assertEquals(expected, actual);
     }
+
+    @Test
+    void shallGeneratePseudonymizedMessageIdThatIsTheSameOverTime() {
+      final var expected = "kWK4wB8ZyUZThriVDvMOTQ";
+      final var messageId = "messageId";
+
+      final var actual = pseudonymizationTokenGenerator.messageId(messageId);
+
+      assertEquals(expected, actual);
+    }
   }
 
   /**
@@ -105,13 +115,13 @@ class PseudonymizationTokenGeneratorTest {
   class TestConsistencyBetweenCalls {
 
     @Test
-    void shallGenerateSamePseudonymizedMessageIdFromSameValue() {
-      final var messageId = "messageId";
+    void shallGenerateSamePseudonymizedIdFromSameValue() {
+      final var id = "id";
 
-      final var messageIdOne = pseudonymizationTokenGenerator.messageId(messageId);
-      final var messageIdTwo = pseudonymizationTokenGenerator.messageId(messageId);
+      final var idOne = pseudonymizationTokenGenerator.id(id);
+      final var idTwo = pseudonymizationTokenGenerator.id(id);
 
-      assertEquals(messageIdOne, messageIdTwo);
+      assertEquals(idOne, idTwo);
     }
 
     @Test
@@ -165,6 +175,16 @@ class PseudonymizationTokenGeneratorTest {
 
       assertEquals(patientIdOne, patientIdTwo);
     }
+
+    @Test
+    void shallGenerateSamePseudonymizedMessageIdFromSameValue() {
+      final var messageId = "messageId";
+
+      final var messageIdOne = pseudonymizationTokenGenerator.messageId(messageId);
+      final var messageIdTwo = pseudonymizationTokenGenerator.messageId(messageId);
+
+      assertEquals(messageIdOne, messageIdTwo);
+    }
   }
 
   /**
@@ -180,18 +200,20 @@ class PseudonymizationTokenGeneratorTest {
     void shallGenerateDifferentTokensForSameValueAcrossTypes() {
       final var value = "samevalue";
 
-      final var messageIdToken = pseudonymizationTokenGenerator.messageId(value);
+      final var idToken = pseudonymizationTokenGenerator.id(value);
       final var staffIdToken = pseudonymizationTokenGenerator.staffId(value);
       final var sessionIdToken = pseudonymizationTokenGenerator.sessionId(value);
       final var certificateIdToken = pseudonymizationTokenGenerator.certificateId(value);
       final var patientIdToken = pseudonymizationTokenGenerator.patientId(value);
+      final var messageIdToken = pseudonymizationTokenGenerator.messageId(value);
 
       final var tokens = List.of(
-          messageIdToken,
+          idToken,
           staffIdToken,
           sessionIdToken,
           certificateIdToken,
-          patientIdToken
+          patientIdToken,
+          messageIdToken
       );
 
       final var uniqueTokens = tokens.stream().distinct().count();
@@ -220,6 +242,27 @@ class PseudonymizationTokenGeneratorTest {
           "Tokens for same value across certificateId types should be same: %s".formatted(tokens)
       );
     }
+
+    @Test
+    void shallGenerateSameTokenForSameValueForMessageIdTypes() {
+      final var value = "samevalue";
+
+      final var messageIdToken = pseudonymizationTokenGenerator.messageId(value);
+      final var messageAnswerIdToken = pseudonymizationTokenGenerator.messageAnswerId(value);
+      final var messageReminderIdToken = pseudonymizationTokenGenerator.messageReminderId(value);
+
+      final var tokens = List.of(
+          messageIdToken,
+          messageAnswerIdToken,
+          messageReminderIdToken
+      );
+
+      final var uniqueTokens = tokens.stream().distinct().count();
+
+      assertEquals(1, uniqueTokens,
+          "Tokens for same value across messageId types should be same: %s".formatted(tokens)
+      );
+    }
   }
 
   /**
@@ -232,14 +275,14 @@ class PseudonymizationTokenGeneratorTest {
   class TestUniquenessBetweenDifferentContexts {
 
     @Test
-    void shallGenerateDifferentPseudonymizedMessageIdFromSameValueButDifferentContext() {
-      final var messageId = "messageId";
+    void shallGenerateDifferentPseudonymizedIdFromSameValueButDifferentContext() {
+      final var id = "id";
 
-      final var messageIdOne = pseudonymizationTokenGenerator.messageId(messageId);
+      final var idOne = pseudonymizationTokenGenerator.id(id);
       ReflectionTestUtils.setField(pseudonymizationTokenGenerator, "context", "analytics-dev");
-      final var messageIdTwo = pseudonymizationTokenGenerator.messageId(messageId);
+      final var idTwo = pseudonymizationTokenGenerator.id(id);
 
-      assertNotEquals(messageIdOne, messageIdTwo);
+      assertNotEquals(idOne, idTwo);
     }
 
     @Test
@@ -297,6 +340,17 @@ class PseudonymizationTokenGeneratorTest {
       final var patientIdTwo = pseudonymizationTokenGenerator.patientId(patientId);
 
       assertNotEquals(patientIdOne, patientIdTwo);
+    }
+
+    @Test
+    void shallGenerateDifferentPseudonymizedMessageIdFromSameValueButDifferentContext() {
+      final var messageId = "messageId";
+
+      final var messageIdOne = pseudonymizationTokenGenerator.messageId(messageId);
+      ReflectionTestUtils.setField(pseudonymizationTokenGenerator, "context", "analytics-dev");
+      final var messageIdTwo = pseudonymizationTokenGenerator.messageId(messageId);
+
+      assertNotEquals(messageIdOne, messageIdTwo);
     }
   }
 }

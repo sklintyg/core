@@ -1,12 +1,11 @@
 package se.inera.intyg.certificateanalyticsservice.testdata;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public final class TestDataConstants {
 
   public static final String MESSAGE_ID_CREATED = "50d64e86-9226-4795-aadd-c00c084c030d";
-  public static final String MESSAGE_ID_SENT = "50d64e86-9226-4795-aadd-c00c084c030d";
-  public static final String MESSAGE_ID_SIGNED = "50d64e86-9226-4795-aadd-c00c084c030d";
   public static final String CERTIFICATE_ID = "78a0a279-1197-4cc7-bf6a-899cb5034053";
   public static final String CERTIFICATE_TYPE = "fk7210";
   public static final String CERTIFICATE_TYPE_VERSION = "1.0";
@@ -26,13 +25,29 @@ public final class TestDataConstants {
   public static final String TYPE_ANALYTICS_EVENT = "certificate.analytics.event";
   public static final String EVENT_TYPE_DRAFT_CREATED = "DRAFT_CREATED";
   public static final String EVENT_TYPE_CERTIFICATE_SENT = "CERTIFICATE_SENT";
-  public static final String HASHED_MESSAGE_ID = "M-P4rHB5bMLzQQrCTlprRA";
+  public static final String EVENT_TYPE_COMPLEMENT_FROM_RECIPIENT = "COMPLEMENT_FROM_RECIPIENT";
+  public static final String EVENT_TIMESTAMP = "2025-09-29T17:49:58.616648";
+
+  public static final String MESSAGE_ID = "message-12345";
+  public static final String MESSAGE_ANSWER_ID = "answer-67890";
+  public static final String MESSAGE_REMINDER_ID = "reminder-54321";
+  public static final String MESSAGE_TYPE = "KOMPLT";
+  public static final String MESSAGE_SENDER = "FKASSA";
+  public static final String MESSAGE_RECIPIENT = "HSVARD";
+  public static final String MESSAGE_QUESTION_ID_1 = "question-1";
+  public static final String MESSAGE_QUESTION_ID_2 = "question-2";
+  public static final LocalDateTime MESSAGE_SENT = LocalDateTime.parse("2025-10-01T10:15:30");
+  public static final LocalDate MESSAGE_LAST_DATE_TO_ANSWER = LocalDate.parse("2025-11-01");
+
+  public static final String HASHED_ID = "FVs8LGHLwIs2WP0q1A5bkA";
   public static final String HASHED_CERTIFICATE_ID = "Xsg4sVYtNq_zMGU_wWrJgw";
   public static final String HASHED_CERTIFICATE_PARENT_ID = "VDJhjt69htHErDZl21BM7w";
   public static final String HASHED_PATIENT_ID = "v4WI46Ymy08FKdhJJFDocw";
-  public static final String EVENT_TIMESTAMP = "2025-09-29T17:49:58.616648";
-  public static final String HASHED_SESSION_ID = "GRmmGqqMdm6mFSy9ZCfT5w";
   public static final String HASHED_USER_ID = "IlXi3vfzsRwLaNRjpqYxOQ";
+  public static final String HASHED_SESSION_ID = "GRmmGqqMdm6mFSy9ZCfT5w";
+  public static final String HASHED_MESSAGE_ID = "6Z8etRcPCMrOc8Q629-9LA";
+  public static final String HASHED_MESSAGE_ANSWER_ID = "xzojWDGPoK1OBj047LRK2Q";
+  public static final String HASHED_MESSAGE_REMINDER_ID = "9q_f1G8muLQuzm-4yfhcgg";
 
   private TestDataConstants() {
   }

@@ -8,8 +8,19 @@ import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConsta
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CERTIFICATE_TYPE_VERSION;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.EVENT_TIMESTAMP;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.EVENT_TYPE_CERTIFICATE_SENT;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.EVENT_TYPE_COMPLEMENT_FROM_RECIPIENT;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.EVENT_TYPE_DRAFT_CREATED;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.MESSAGE_ANSWER_ID;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.MESSAGE_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.MESSAGE_ID_CREATED;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.MESSAGE_LAST_DATE_TO_ANSWER;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.MESSAGE_QUESTION_ID_1;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.MESSAGE_QUESTION_ID_2;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.MESSAGE_RECIPIENT;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.MESSAGE_REMINDER_ID;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.MESSAGE_SENDER;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.MESSAGE_SENT;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.MESSAGE_TYPE;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.ORIGIN;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.PATIENT_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.RECIPIENT;
@@ -27,15 +38,17 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.UncheckedIOException;
 import java.time.LocalDateTime;
+import java.util.List;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsEventCertificateRelationV1;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsEventCertificateRelationV1.CertificateAnalyticsEventCertificateRelationV1Builder;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsEventCertificateV1;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsEventCertificateV1.CertificateAnalyticsEventCertificateV1Builder;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsEventMessageV1;
-import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsEventMessageV1.CertificateAnalyticsEventMessageV1Builder;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsEventRecipientV1;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsEventV1;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsEventV1.CertificateAnalyticsEventV1Builder;
+import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsMessageV1;
+import se.inera.intyg.certificateanalyticsservice.application.messages.model.v1.CertificateAnalyticsMessageV1.CertificateAnalyticsMessageV1Builder;
 
 public class TestDataMessages {
 
@@ -53,7 +66,7 @@ public class TestDataMessages {
     return om;
   }
 
-  public static String toJson(CertificateAnalyticsEventMessageV1 message) {
+  public static String toJson(CertificateAnalyticsMessageV1 message) {
     try {
       return OBJECT_MAPPER.writeValueAsString(message);
     } catch (JsonProcessingException e) {
@@ -61,8 +74,8 @@ public class TestDataMessages {
     }
   }
 
-  public static CertificateAnalyticsEventMessageV1Builder replaceMessageBuilder() {
-    return CertificateAnalyticsEventMessageV1.builder()
+  public static CertificateAnalyticsMessageV1Builder replaceMessageBuilder() {
+    return CertificateAnalyticsMessageV1.builder()
         .messageId(MESSAGE_ID_CREATED)
         .type(TYPE_ANALYTICS_EVENT)
         .schemaVersion(SCHEMA_VERSION)
@@ -88,8 +101,8 @@ public class TestDataMessages {
         );
   }
 
-  public static CertificateAnalyticsEventMessageV1Builder sentMessageBuilder() {
-    return CertificateAnalyticsEventMessageV1.builder()
+  public static CertificateAnalyticsMessageV1Builder sentMessageBuilder() {
+    return CertificateAnalyticsMessageV1.builder()
         .messageId(MESSAGE_ID_CREATED)
         .type(TYPE_ANALYTICS_EVENT)
         .schemaVersion(SCHEMA_VERSION)
@@ -134,8 +147,8 @@ public class TestDataMessages {
         .type(CERTIFICATE_PARENT_TYPE);
   }
 
-  public static CertificateAnalyticsEventMessageV1Builder draftMessageBuilder() {
-    return CertificateAnalyticsEventMessageV1.builder()
+  public static CertificateAnalyticsMessageV1Builder draftMessageBuilder() {
+    return CertificateAnalyticsMessageV1.builder()
         .messageId(MESSAGE_ID_CREATED)
         .type(TYPE_ANALYTICS_EVENT)
         .schemaVersion(SCHEMA_VERSION)
@@ -159,6 +172,58 @@ public class TestDataMessages {
                 .careProviderId(CARE_PROVIDER_ID)
                 .sessionId(SESSION_ID)
                 .origin(ORIGIN)
+                .build()
+        );
+  }
+
+  public static CertificateAnalyticsMessageV1Builder receivedQuestionMessageBuilder() {
+    return CertificateAnalyticsMessageV1.builder()
+        .messageId(MESSAGE_ID_CREATED)
+        .type(TYPE_ANALYTICS_EVENT)
+        .schemaVersion(SCHEMA_VERSION)
+        .certificate(
+            certificateBuilder()
+                .id(CERTIFICATE_ID)
+                .unitId(UNIT_ID)
+                .careProviderId(CARE_PROVIDER_ID)
+                .patientId(PATIENT_ID)
+                .type(CERTIFICATE_TYPE)
+                .typeVersion(CERTIFICATE_TYPE_VERSION)
+                .build()
+        )
+        .event(
+            eventBuilder()
+                .messageType(EVENT_TYPE_COMPLEMENT_FROM_RECIPIENT)
+                .timestamp(LocalDateTime.parse(EVENT_TIMESTAMP))
+                .userId(USER_ID)
+                .role(ROLE)
+                .unitId(UNIT_ID)
+                .careProviderId(CARE_PROVIDER_ID)
+                .sessionId(SESSION_ID)
+                .origin(ORIGIN)
+                .build()
+        )
+        .recipient(
+            CertificateAnalyticsEventRecipientV1.builder()
+                .id(RECIPIENT)
+                .build()
+        )
+        .message(
+            CertificateAnalyticsEventMessageV1.builder()
+                .id(MESSAGE_ID)
+                .answerId(MESSAGE_ANSWER_ID)
+                .reminderId(MESSAGE_REMINDER_ID)
+                .type(MESSAGE_TYPE)
+                .sender(MESSAGE_SENDER)
+                .recipient(MESSAGE_RECIPIENT)
+                .questionIds(
+                    List.of(
+                        MESSAGE_QUESTION_ID_1,
+                        MESSAGE_QUESTION_ID_2
+                    )
+                )
+                .sent(MESSAGE_SENT)
+                .lastDateToAnswer(MESSAGE_LAST_DATE_TO_ANSWER)
                 .build()
         );
   }

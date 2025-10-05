@@ -21,9 +21,12 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.ent
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventEntity.EventEntityBuilder;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventTypeEntity;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.MessageEntity;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.MessageEntity.MessageEntityBuilder;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.MessageTypeEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.OriginEntity;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.PartyEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.PatientEntity;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.RecipientEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.RoleEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.SessionEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.UnitEntity;
@@ -38,7 +41,7 @@ public class TestDataEntities {
   public static EventEntityBuilder sentEventEntityBuilder() {
     return EventEntity.builder()
         .certificate(certificateEntity().build())
-        .messageId(TestDataConstants.HASHED_MESSAGE_ID)
+        .messageId(TestDataConstants.HASHED_ID)
         .timestamp(TIMESTAMP)
         .eventType(eventTypeEntity())
         .role(roleEntity())
@@ -47,7 +50,27 @@ public class TestDataEntities {
         .user(userEntity())
         .session(sessionEntity())
         .origin(originEntity())
-        .recipient(recipientEntity());
+        .recipient(recipientPartyEntity());
+  }
+
+  public static EventEntityBuilder messageSentEventEntityBuilder() {
+    return EventEntity.builder()
+        .certificate(certificateEntity().build())
+        .message(messageEntity().build())
+        .messageId(TestDataConstants.HASHED_ID)
+        .timestamp(TIMESTAMP)
+        .eventType(
+            EventTypeEntity.builder()
+                .eventType(TestDataConstants.EVENT_TYPE_COMPLEMENT_FROM_RECIPIENT)
+                .build()
+        )
+        .role(roleEntity())
+        .unit(unitEntity())
+        .careProvider(careProviderEntity())
+        .user(userEntity())
+        .session(sessionEntity())
+        .origin(originEntity())
+        .recipient(recipientPartyEntity());
   }
 
   public static CertificateTypeEntity certificateTypeEntity() {
@@ -114,9 +137,9 @@ public class TestDataEntities {
         .build();
   }
 
-  public static RecipientEntity recipientEntity() {
-    return RecipientEntity.builder()
-        .recipient(RECIPIENT)
+  public static PartyEntity recipientPartyEntity() {
+    return PartyEntity.builder()
+        .party(RECIPIENT)
         .build();
   }
 
@@ -134,5 +157,39 @@ public class TestDataEntities {
                 .build()
         )
         .build();
+  }
+
+  public static MessageTypeEntity messageTypeEntity() {
+    return MessageTypeEntity.builder()
+        .type(TestDataConstants.MESSAGE_TYPE)
+        .build();
+  }
+
+  public static PartyEntity messageSenderPartyEntity() {
+    return PartyEntity.builder()
+        .party(TestDataConstants.MESSAGE_SENDER)
+        .build();
+  }
+
+  public static PartyEntity messageRecipientPartyEntity() {
+    return PartyEntity.builder()
+        .party(TestDataConstants.MESSAGE_RECIPIENT)
+        .build();
+  }
+
+  public static MessageEntityBuilder messageEntity() {
+    return MessageEntity.builder()
+        .messageId(TestDataConstants.HASHED_MESSAGE_ID)
+        .messageAnswerId(TestDataConstants.HASHED_MESSAGE_ANSWER_ID)
+        .messageReminderId(TestDataConstants.HASHED_MESSAGE_REMINDER_ID)
+        .messageType(messageTypeEntity())
+        .sent(TestDataConstants.MESSAGE_SENT)
+        .lastDateToAnswer(TestDataConstants.MESSAGE_LAST_DATE_TO_ANSWER)
+        .questionIds(java.util.List.of(
+            TestDataConstants.MESSAGE_QUESTION_ID_1,
+            TestDataConstants.MESSAGE_QUESTION_ID_2)
+        )
+        .sender(messageSenderPartyEntity())
+        .recipient(messageRecipientPartyEntity());
   }
 }

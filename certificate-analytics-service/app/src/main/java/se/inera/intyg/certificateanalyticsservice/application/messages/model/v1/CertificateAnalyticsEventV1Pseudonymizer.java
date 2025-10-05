@@ -15,18 +15,18 @@ public class CertificateAnalyticsEventV1Pseudonymizer implements AnalyticsMessag
 
   @Override
   public boolean canPseudonymize(CertificateAnalyticsMessage message) {
-    return message instanceof CertificateAnalyticsEventMessageV1;
+    return message instanceof CertificateAnalyticsMessageV1;
   }
 
   @Override
   public PseudonymizedAnalyticsMessage pseudonymize(CertificateAnalyticsMessage message) {
-    if (!(message instanceof CertificateAnalyticsEventMessageV1 messageV1)) {
+    if (!(message instanceof CertificateAnalyticsMessageV1 messageV1)) {
       throw new IllegalArgumentException("Invalid message type");
     }
 
     return PseudonymizedAnalyticsMessage.builder()
-        .messageId(
-            pseudonymizationTokenGenerator.messageId(
+        .id(
+            pseudonymizationTokenGenerator.id(
                 messageV1.getMessageId()
             )
         )
@@ -74,6 +74,48 @@ public class CertificateAnalyticsEventV1Pseudonymizer implements AnalyticsMessag
             missingRecipient(messageV1) ? null :
                 messageV1.getRecipient().getId()
         )
+        .messageId(
+            missingMessage(messageV1) ? null :
+                pseudonymizationTokenGenerator.messageId(
+                    messageV1.getMessage().getId()
+                )
+        )
+        .messageAnswerId(
+            missingMessage(messageV1) ? null :
+                pseudonymizationTokenGenerator.messageAnswerId(
+                    messageV1.getMessage().getAnswerId()
+                )
+        )
+        .messageReminderId(
+            missingMessage(messageV1) ? null :
+                pseudonymizationTokenGenerator.messageReminderId(
+                    messageV1.getMessage().getReminderId()
+                )
+        )
+        .messageType(
+            missingMessage(messageV1) ? null :
+                messageV1.getMessage().getType()
+        )
+        .messageSent(
+            missingMessage(messageV1) ? null :
+                messageV1.getMessage().getSent()
+        )
+        .messageLastDateToAnswer(
+            missingMessage(messageV1) ? null :
+                messageV1.getMessage().getLastDateToAnswer()
+        )
+        .messageQuestionIds(
+            missingMessage(messageV1) ? null :
+                messageV1.getMessage().getQuestionIds()
+        )
+        .messageSenderId(
+            missingMessage(messageV1) ? null :
+                messageV1.getMessage().getSender()
+        )
+        .messageRecipientId(
+            missingMessage(messageV1) ? null :
+                messageV1.getMessage().getRecipient()
+        )
         .build();
   }
 
@@ -81,7 +123,11 @@ public class CertificateAnalyticsEventV1Pseudonymizer implements AnalyticsMessag
     return certificate.getParent() == null || certificate.getParent().getId() == null;
   }
 
-  private boolean missingRecipient(CertificateAnalyticsEventMessageV1 message) {
+  private boolean missingRecipient(CertificateAnalyticsMessageV1 message) {
     return message.getRecipient() == null || message.getRecipient().getId() == null;
+  }
+
+  private boolean missingMessage(CertificateAnalyticsMessageV1 message) {
+    return message.getMessage() == null || message.getMessage().getId() == null;
   }
 }

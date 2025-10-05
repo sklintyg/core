@@ -12,18 +12,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "recipient")
+@Table(name = "message_type")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RecipientEntity {
+public class MessageTypeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "`key`")
-  private Long key;
+  private Byte key;
 
-  @Column(name = "recipient", nullable = false, length = 32)
-  private String recipient;
+  @Column(name = "message_type", nullable = false, unique = true, length = 24)
+  private String type;
 }
