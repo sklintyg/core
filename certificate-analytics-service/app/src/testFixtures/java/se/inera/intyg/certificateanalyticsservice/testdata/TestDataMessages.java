@@ -23,6 +23,8 @@ import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConsta
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.MESSAGE_TYPE;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.ORIGIN;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.PATIENT_ID;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.PRIVATE_PRACTITIONER_CARE_PROVIDER_ID;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.PRIVATE_PRACTITIONER_UNIT_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.RECIPIENT;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.ROLE;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.SCHEMA_VERSION;
@@ -83,16 +85,7 @@ public class TestDataMessages {
             sentCertificateBuilder().build()
         )
         .event(
-            eventBuilder()
-                .messageType(EVENT_TYPE_DRAFT_CREATED)
-                .timestamp(LocalDateTime.parse(EVENT_TIMESTAMP))
-                .userId(USER_ID)
-                .role(ROLE)
-                .unitId(UNIT_ID)
-                .careProviderId(CARE_PROVIDER_ID)
-                .sessionId(SESSION_ID)
-                .origin(ORIGIN)
-                .build()
+            draftEventBuilder().build()
         )
         .recipient(
             CertificateAnalyticsEventRecipientV1.builder()
@@ -147,6 +140,22 @@ public class TestDataMessages {
         .type(CERTIFICATE_PARENT_TYPE);
   }
 
+  public static CertificateAnalyticsMessageV1Builder draftPrivatePractitionerMessageBuilder() {
+    return draftMessageBuilder()
+        .event(
+            draftEventBuilder()
+                .unitId(PRIVATE_PRACTITIONER_UNIT_ID)
+                .careProviderId(PRIVATE_PRACTITIONER_CARE_PROVIDER_ID)
+                .build()
+        )
+        .certificate(
+            draftCertificateBuilder()
+                .unitId(PRIVATE_PRACTITIONER_UNIT_ID)
+                .careProviderId(PRIVATE_PRACTITIONER_CARE_PROVIDER_ID)
+                .build()
+        );
+  }
+
   public static CertificateAnalyticsMessageV1Builder draftMessageBuilder() {
     return CertificateAnalyticsMessageV1.builder()
         .messageId(MESSAGE_ID_CREATED)
@@ -163,17 +172,30 @@ public class TestDataMessages {
                 .build()
         )
         .event(
-            eventBuilder()
-                .messageType(EVENT_TYPE_DRAFT_CREATED)
-                .timestamp(LocalDateTime.parse(EVENT_TIMESTAMP))
-                .userId(USER_ID)
-                .role(ROLE)
-                .unitId(UNIT_ID)
-                .careProviderId(CARE_PROVIDER_ID)
-                .sessionId(SESSION_ID)
-                .origin(ORIGIN)
-                .build()
+            draftEventBuilder().build()
         );
+  }
+
+  public static CertificateAnalyticsEventV1Builder draftEventBuilder() {
+    return eventBuilder()
+        .messageType(EVENT_TYPE_DRAFT_CREATED)
+        .timestamp(LocalDateTime.parse(EVENT_TIMESTAMP))
+        .userId(USER_ID)
+        .role(ROLE)
+        .unitId(UNIT_ID)
+        .careProviderId(CARE_PROVIDER_ID)
+        .sessionId(SESSION_ID)
+        .origin(ORIGIN);
+  }
+
+  public static CertificateAnalyticsEventCertificateV1Builder draftCertificateBuilder() {
+    return certificateBuilder()
+        .id(CERTIFICATE_ID)
+        .unitId(UNIT_ID)
+        .careProviderId(CARE_PROVIDER_ID)
+        .patientId(PATIENT_ID)
+        .type(CERTIFICATE_TYPE)
+        .typeVersion(CERTIFICATE_TYPE_VERSION);
   }
 
   public static CertificateAnalyticsMessageV1Builder receivedQuestionMessageBuilder() {

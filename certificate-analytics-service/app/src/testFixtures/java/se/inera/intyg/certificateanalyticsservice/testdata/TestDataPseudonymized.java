@@ -12,6 +12,8 @@ import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConsta
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_CERTIFICATE_PARENT_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_PATIENT_ID;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_PRIVATE_PRACTITIONER_CARE_PROVIDER_ID;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_PRIVATE_PRACTITIONER_UNIT_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_SESSION_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.HASHED_USER_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.ORIGIN;
@@ -28,6 +30,14 @@ public class TestDataPseudonymized {
 
   private TestDataPseudonymized() {
     throw new IllegalStateException("Utility class");
+  }
+
+  public static PseudonymizedAnalyticsMessageBuilder draftPrivatePractitionerPseudonymizedMessageBuilder() {
+    return draftPseudonymizedMessageBuilder()
+        .eventUnitId(HASHED_PRIVATE_PRACTITIONER_UNIT_ID)
+        .eventCareProviderId(HASHED_PRIVATE_PRACTITIONER_CARE_PROVIDER_ID)
+        .certificateUnitId(HASHED_PRIVATE_PRACTITIONER_UNIT_ID)
+        .certificateCareProviderId(HASHED_PRIVATE_PRACTITIONER_CARE_PROVIDER_ID);
   }
 
   public static PseudonymizedAnalyticsMessageBuilder draftPseudonymizedMessageBuilder() {

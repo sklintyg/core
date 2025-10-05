@@ -13,6 +13,8 @@ public final class TestDataConstants {
   public static final String CERTIFICATE_PARENT_TYPE = "REPLACED";
   public static final String UNIT_ID = "TSTNMT2321000156-ALMC";
   public static final String CARE_PROVIDER_ID = "TSTNMT2321000156-ALFA";
+  public static final String PRIVATE_PRACTITIONER_UNIT_ID = "TSTNMT2321000156-WEBCERT99999";
+  public static final String PRIVATE_PRACTITIONER_CARE_PROVIDER_ID = "TSTNMT2321000156-WEBCERT99999";
   public static final String USER_ID = "TSTNMT2321000156-DRAA";
   public static final String PATIENT_ID = "19401130-6125";
   public static final String ROLE = "LAKARE";
@@ -44,6 +46,8 @@ public final class TestDataConstants {
   public static final String HASHED_CERTIFICATE_PARENT_ID = "VDJhjt69htHErDZl21BM7w";
   public static final String HASHED_PATIENT_ID = "v4WI46Ymy08FKdhJJFDocw";
   public static final String HASHED_USER_ID = "IlXi3vfzsRwLaNRjpqYxOQ";
+  public static final String HASHED_PRIVATE_PRACTITIONER_UNIT_ID = "xStOJ2OE_hQtBFLdsn-hFg";
+  public static final String HASHED_PRIVATE_PRACTITIONER_CARE_PROVIDER_ID = "3ULOCud84JbSZDdQ7qUDFg";
   public static final String HASHED_SESSION_ID = "GRmmGqqMdm6mFSy9ZCfT5w";
   public static final String HASHED_MESSAGE_ID = "6Z8etRcPCMrOc8Q629-9LA";
   public static final String HASHED_MESSAGE_ANSWER_ID = "xzojWDGPoK1OBj047LRK2Q";

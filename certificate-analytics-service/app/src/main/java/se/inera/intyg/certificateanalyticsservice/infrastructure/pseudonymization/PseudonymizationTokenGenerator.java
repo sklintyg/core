@@ -21,6 +21,8 @@ public class PseudonymizationTokenGenerator {
   private static final String FIELD_STAFF_ID = "staffId";
   private static final String FIELD_SESSION_ID = "sessionId";
   private static final String FIELD_CERTIFICATE_ID = "certificateId";
+  private static final String FIELD_UNIT_ID = "unitId";
+  private static final String FIELD_CARE_PROVIDER_ID = "careProviderId";
   private static final String FIELD_PATIENT_ID = "patientId";
   private static final String FIELD_MESSAGE_ID = "messageId";
 
@@ -32,6 +34,20 @@ public class PseudonymizationTokenGenerator {
     return id == null ? null : token(
         FIELD_ID,
         normalize(id)
+    );
+  }
+
+  public String eventUnitId(String eventUnitId) {
+    return eventUnitId == null ? null : token(
+        FIELD_UNIT_ID,
+        normalize(eventUnitId)
+    );
+  }
+
+  public String eventCareProviderId(String eventCareProviderId) {
+    return eventCareProviderId == null ? null : token(
+        FIELD_CARE_PROVIDER_ID,
+        normalize(eventCareProviderId)
     );
   }
 
@@ -53,6 +69,20 @@ public class PseudonymizationTokenGenerator {
     return certificateId == null ? null : token(
         FIELD_CERTIFICATE_ID,
         normalize(certificateId)
+    );
+  }
+
+  public String certificateUnitId(String certificateUnitId) {
+    return certificateUnitId == null ? null : token(
+        FIELD_UNIT_ID,
+        normalize(certificateUnitId)
+    );
+  }
+
+  public String certificateCareProviderId(String certificateCareProviderId) {
+    return certificateCareProviderId == null ? null : token(
+        FIELD_CARE_PROVIDER_ID,
+        normalize(certificateCareProviderId)
     );
   }
 

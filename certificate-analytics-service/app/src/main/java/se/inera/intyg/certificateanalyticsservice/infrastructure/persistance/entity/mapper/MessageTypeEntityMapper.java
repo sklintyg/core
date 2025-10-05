@@ -5,6 +5,7 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.ent
 public class MessageTypeEntityMapper {
 
   private MessageTypeEntityMapper() {
+    throw new IllegalStateException("Utility class");
   }
 
   public static MessageTypeEntity map(String messageType) {
