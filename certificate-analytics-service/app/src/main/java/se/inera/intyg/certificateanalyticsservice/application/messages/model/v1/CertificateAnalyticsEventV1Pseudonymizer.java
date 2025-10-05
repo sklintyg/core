@@ -82,14 +82,12 @@ public class CertificateAnalyticsEventV1Pseudonymizer implements AnalyticsMessag
         )
         .messageAnswerId(
             missingMessage(messageV1) ? null :
-                // TODO: A answer id will only be present in answer messages
                 pseudonymizationTokenGenerator.messageAnswerId(
                     messageV1.getMessage().getAnswerId()
                 )
         )
         .messageReminderId(
             missingMessage(messageV1) ? null :
-                // TODO: A reminder id will only be present in reminder messages
                 pseudonymizationTokenGenerator.messageReminderId(
                     messageV1.getMessage().getReminderId()
                 )

@@ -1,12 +1,14 @@
 package se.inera.intyg.certificateanalyticsservice.application.messages.model.v1;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessages.draftMessageBuilder;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessages.receivedQuestionMessageBuilder;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessages.replaceMessageBuilder;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessages.sentCertificateBuilder;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataMessages.sentMessageBuilder;
 
 import org.junit.jupiter.api.Test;
@@ -16,7 +18,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.CertificateAnalyticsMessage;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.pseudonymization.PseudonymizationTokenGenerator;
-import se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateAnalyticsEventV1PseudonymizerTest {
@@ -57,8 +58,8 @@ class CertificateAnalyticsEventV1PseudonymizerTest {
   }
 
   @Test
-  void shallReturnPseudonymizedMessageId() {
-    final var expected = "pseudonymized-message-id";
+  void shallReturnPseudonymizedId() {
+    final var expected = "pseudonymized-id";
     final var message = draftMessageBuilder().build();
 
     when(pseudonymizationTokenGenerator.id(message.getMessageId()))
@@ -136,6 +137,21 @@ class CertificateAnalyticsEventV1PseudonymizerTest {
   }
 
   @Test
+  void shallReturnPseudonymizedCertificateRelationParentIdAsNullIfMissing() {
+    final var message = replaceMessageBuilder()
+        .certificate(
+            sentCertificateBuilder()
+                .parent(null)
+                .build()
+        )
+        .build();
+
+    final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
+
+    assertNull(actual.getCertificateRelationParentId());
+  }
+
+  @Test
   void shallReturnPseudonymizedCertificateRelationParentId() {
     final var expected = "pseudonymized-certificate-id";
     final var message = replaceMessageBuilder().build();
@@ -147,6 +163,21 @@ class CertificateAnalyticsEventV1PseudonymizerTest {
     final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
 
     assertEquals(expected, actual.getCertificateRelationParentId());
+  }
+
+  @Test
+  void shallReturnPseudonymizedCertificateRelationParentTypeAsNullIfMissing() {
+    final var message = replaceMessageBuilder()
+        .certificate(
+            sentCertificateBuilder()
+                .parent(null)
+                .build()
+        )
+        .build();
+
+    final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
+
+    assertNull(actual.getCertificateRelationParentType());
   }
 
   @Test
@@ -256,13 +287,12 @@ class CertificateAnalyticsEventV1PseudonymizerTest {
   }
 
   @Test
-  void shallReturnPseudonymizedAdministrativeMessageId() {
-    final var expected = "pseudonymized-administrative-message-id";
+  void shallReturnPseudonymizedMessageId() {
+    final var expected = "pseudonymized-message-id";
     final var message = receivedQuestionMessageBuilder()
         .build();
 
-    when(pseudonymizationTokenGenerator.messageId(
-        message.getMessage().getId()))
+    when(pseudonymizationTokenGenerator.messageId(message.getMessage().getId()))
         .thenReturn(expected);
 
     final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
@@ -271,37 +301,36 @@ class CertificateAnalyticsEventV1PseudonymizerTest {
   }
 
   @Test
-  void shallReturnAdministrativeMessageAnswerId() {
+  void shallReturnMessageAnswerId() {
+    final var expected = "pseudonymized-message-id";
     final var message = receivedQuestionMessageBuilder()
         .build();
-    when(pseudonymizationTokenGenerator.messageAnswerId(
-        message.getMessage().getAnswerId()))
-        .thenReturn(TestDataConstants.HASHED_MESSAGE_ANSWER_ID);
+
+    when(pseudonymizationTokenGenerator.messageAnswerId(message.getMessage().getAnswerId()))
+        .thenReturn(expected);
 
     final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
 
-    assertEquals(TestDataConstants.HASHED_MESSAGE_ANSWER_ID,
-        actual.getMessageAnswerId());
+    assertEquals(expected, actual.getMessageAnswerId());
   }
 
   @Test
-  void shallReturnAdministrativeMessageReminderId() {
+  void shallReturnMessageReminderId() {
+    final var expected = "pseudonymized-message-reminder-id";
     final var message = receivedQuestionMessageBuilder()
         .build();
-    when(pseudonymizationTokenGenerator.messageReminderId(
-        message.getMessage().getReminderId()))
-        .thenReturn(TestDataConstants.HASHED_MESSAGE_REMINDER_ID);
+
+    when(pseudonymizationTokenGenerator.messageReminderId(message.getMessage().getReminderId()))
+        .thenReturn(expected);
 
     final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
 
-    assertEquals(TestDataConstants.HASHED_MESSAGE_REMINDER_ID,
-        actual.getMessageReminderId());
+    assertEquals(expected, actual.getMessageReminderId());
   }
 
   @Test
-  void shallReturnAdministrativeMessageType() {
-    final var message = receivedQuestionMessageBuilder()
-        .build();
+  void shallReturnMessageType() {
+    final var message = receivedQuestionMessageBuilder().build();
     final var expected = message.getMessage().getType();
 
     final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
@@ -310,9 +339,8 @@ class CertificateAnalyticsEventV1PseudonymizerTest {
   }
 
   @Test
-  void shallReturnAdministrativeMessageSent() {
-    final var message = receivedQuestionMessageBuilder()
-        .build();
+  void shallReturnMessageSent() {
+    final var message = receivedQuestionMessageBuilder().build();
     final var expected = message.getMessage().getSent();
 
     final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
@@ -321,9 +349,8 @@ class CertificateAnalyticsEventV1PseudonymizerTest {
   }
 
   @Test
-  void shallReturnAdministrativeMessageLastDateToAnswer() {
-    final var message = receivedQuestionMessageBuilder()
-        .build();
+  void shallReturnMessageLastDateToAnswer() {
+    final var message = receivedQuestionMessageBuilder().build();
     final var expected = message.getMessage().getLastDateToAnswer();
 
     final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
@@ -332,9 +359,8 @@ class CertificateAnalyticsEventV1PseudonymizerTest {
   }
 
   @Test
-  void shallReturnAdministrativeMessageQuestionId() {
-    final var message = receivedQuestionMessageBuilder()
-        .build();
+  void shallReturnMessageQuestionIds() {
+    final var message = receivedQuestionMessageBuilder().build();
     final var expected = message.getMessage().getQuestionIds();
 
     final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
@@ -343,9 +369,8 @@ class CertificateAnalyticsEventV1PseudonymizerTest {
   }
 
   @Test
-  void shallReturnAdministrativeMessageSender() {
-    final var message = receivedQuestionMessageBuilder()
-        .build();
+  void shallReturnMessageSender() {
+    final var message = receivedQuestionMessageBuilder().build();
     final var expected = message.getMessage().getSender();
 
     final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);
@@ -354,9 +379,8 @@ class CertificateAnalyticsEventV1PseudonymizerTest {
   }
 
   @Test
-  void shallReturnAdministrativeMessageRecipient() {
-    final var message = receivedQuestionMessageBuilder()
-        .build();
+  void shallReturnMessageRecipient() {
+    final var message = receivedQuestionMessageBuilder().build();
     final var expected = message.getMessage().getRecipient();
 
     final var actual = certificateAnalyticsEventV1Pseudonymizer.pseudonymize(message);

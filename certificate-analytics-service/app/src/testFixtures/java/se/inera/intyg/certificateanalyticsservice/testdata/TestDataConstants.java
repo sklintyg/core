@@ -28,7 +28,7 @@ public final class TestDataConstants {
   public static final String EVENT_TYPE_COMPLEMENT_FROM_RECIPIENT = "COMPLEMENT_FROM_RECIPIENT";
   public static final String EVENT_TIMESTAMP = "2025-09-29T17:49:58.616648";
 
-  public static final String MESSAGE_ID = "administrativeMessageId";
+  public static final String MESSAGE_ID = "message-12345";
   public static final String MESSAGE_ANSWER_ID = "answer-67890";
   public static final String MESSAGE_REMINDER_ID = "reminder-54321";
   public static final String MESSAGE_TYPE = "KOMPLT";
@@ -45,7 +45,7 @@ public final class TestDataConstants {
   public static final String HASHED_PATIENT_ID = "v4WI46Ymy08FKdhJJFDocw";
   public static final String HASHED_USER_ID = "IlXi3vfzsRwLaNRjpqYxOQ";
   public static final String HASHED_SESSION_ID = "GRmmGqqMdm6mFSy9ZCfT5w";
-  public static final String HASHED_MESSAGE_ID = "wcnFrMpuDHFqHV7VBan3fQ";
+  public static final String HASHED_MESSAGE_ID = "6Z8etRcPCMrOc8Q629-9LA";
   public static final String HASHED_MESSAGE_ANSWER_ID = "xzojWDGPoK1OBj047LRK2Q";
   public static final String HASHED_MESSAGE_REMINDER_ID = "9q_f1G8muLQuzm-4yfhcgg";
 
