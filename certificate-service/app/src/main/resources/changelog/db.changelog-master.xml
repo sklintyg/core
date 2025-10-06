@@ -656,4 +656,200 @@
       <column name="placeholder" defaultValue="0" type="tinyint unsigned"/>
     </addColumn>
   </changeSet>
+
+  <changeSet id="5" author="ea">
+    <createTable tableName="unit_version">
+      <column name="key" type="integer unsigned" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true" unique="true"/>
+      </column>
+      <column name="hsa_id" type="varchar(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="name" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="address" type="varchar(255)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="zip_code" type="varchar(255)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="city" type="varchar(255)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="phone_number" type="varchar(255)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="email" type="varchar(255)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="workplace_code" type="varchar(255)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="valid_from" type="datetime">
+        <constraints nullable="true"/>
+      </column>
+      <column name="valid_to" type="datetime">
+        <constraints nullable="false"/>
+      </column>
+      <column name="unit_type_key" type="tinyint unsigned">
+        <constraints nullable="false"/>
+      </column>
+      <column name="unit_key" type="integer unsigned">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="fk_unit_version_unit_type_key"
+        baseTableName="unit_version" baseColumnNames="unit_type_key"
+        referencedTableName="unit_type" referencedColumnNames="key"/>
+
+    <addForeignKeyConstraint constraintName="fk_unit_version_unit_key"
+        baseTableName="unit_version" baseColumnNames="unit_key"
+        referencedTableName="unit" referencedColumnNames="key"/>
+  </changeSet>
+
+  <changeSet id="6" author="ea">
+    <createTable tableName="staff_version">
+      <column name="key" type="integer unsigned" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true" unique="true"/>
+      </column>
+      <column name="hsa_id" type="varchar(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="first_name" type="varchar(255)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="middle_name" type="varchar(255)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="last_name" type="varchar(255)">
+        <constraints nullable="true"/>
+      </column>
+      <column name="valid_from" type="datetime">
+        <constraints nullable="true"/>
+      </column>
+      <column name="valid_to" type="datetime">
+        <constraints nullable="false"/>
+      </column>
+      <column name="staff_role_key" type="tinyint unsigned">
+        <constraints nullable="true"/>
+      </column>
+      <column name="staff_key" type="integer unsigned">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="fk_staff_version_staff_role_key"
+        baseTableName="staff_version" baseColumnNames="staff_role_key"
+        referencedTableName="staff_role" referencedColumnNames="key"/>
+
+    <addForeignKeyConstraint constraintName="fk_staff_version_staff_key"
+        baseTableName="staff_version" baseColumnNames="staff_key"
+        referencedTableName="staff" referencedColumnNames="key"/>
+
+    <!-- New versioned collection tables -->
+    <createTable tableName="staff_pa_title_version">
+      <column name="code" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="staff_version_key" type="integer unsigned">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addPrimaryKey tableName="staff_pa_title_version" columnNames="staff_version_key, code" constraintName="pk_staff_pa_title_version"/>
+    <addForeignKeyConstraint constraintName="fk_staff_pa_title_version_staff_version_key"
+        baseTableName="staff_pa_title_version" baseColumnNames="staff_version_key"
+        referencedTableName="staff_version" referencedColumnNames="key"/>
+    <createIndex indexName="idx_staff_pa_title_version_staff_version_key" tableName="staff_pa_title_version">
+      <column name="staff_version_key"/>
+    </createIndex>
+
+    <createTable tableName="staff_speciality_version">
+      <column name="speciality" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="staff_version_key" type="integer unsigned">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="fk_staff_speciality_version_staff_version_key"
+        baseTableName="staff_speciality_version" baseColumnNames="staff_version_key"
+        referencedTableName="staff_version" referencedColumnNames="key"/>
+    <createIndex indexName="idx_staff_speciality_version_staff_version_key" tableName="staff_speciality_version">
+      <column name="staff_version_key"/>
+    </createIndex>
+
+    <createTable tableName="staff_healthcare_professional_licence_version">
+      <column name="healthcare_professional_licence" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="staff_version_key" type="integer unsigned">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint constraintName="fk_staff_hc_prof_licence_version_staff_version_key"
+        baseTableName="staff_healthcare_professional_licence_version" baseColumnNames="staff_version_key"
+        referencedTableName="staff_version" referencedColumnNames="key"/>
+
+    <createIndex indexName="idx_staff_hc_prof_licence_version_staff_version_key" tableName="staff_healthcare_professional_licence_version">
+      <column name="staff_version_key"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="7" author="ea">
+    <createTable tableName="patient_version">
+      <column name="key" type="integer unsigned" autoIncrement="true">
+        <constraints nullable="false" primaryKey="true" unique="true"/>
+      </column>
+      <column name="patient_id" type="varchar(24)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="protected_person" type="tinyint unsigned">
+        <constraints nullable="false"/>
+      </column>
+      <column name="deceased" type="tinyint unsigned">
+        <constraints nullable="false"/>
+      </column>
+      <column name="test_indicated" type="tinyint unsigned">
+        <constraints nullable="false"/>
+      </column>
+      <column name="first_name" type="varchar(255)"/>
+      <column name="middle_name" type="varchar(255)"/>
+      <column name="last_name" type="varchar(255)"/>
+      <column name="valid_from" type="datetime">
+        <constraints nullable="true"/>
+      </column>
+      <column name="valid_to" type="datetime">
+        <constraints nullable="false"/>
+      </column>
+      <column name="patient_id_type_key" type="tinyint unsigned">
+        <constraints nullable="false"/>
+      </column>
+      <column name="patient_key" type="integer unsigned">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint constraintName="fk_patient_version_patient_id_type_key"
+        baseTableName="patient_version" baseColumnNames="patient_id_type_key"
+        referencedTableName="patient_id_type" referencedColumnNames="key"/>
+
+    <addForeignKeyConstraint constraintName="fk_patient_version_patient_key"
+        baseTableName="patient_version" baseColumnNames="patient_key"
+        referencedTableName="patient" referencedColumnNames="key"/>
+
+    <createIndex indexName="idx_patient_version_patient_key" tableName="patient_version">
+      <column name="patient_key"/>
+    </createIndex>
+    <createIndex indexName="idx_patient_version_patient_id" tableName="patient_version">
+      <column name="patient_id"/>
+    </createIndex>
+  </changeSet>
+
 </databaseChangeLog>
