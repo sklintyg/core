@@ -780,6 +780,32 @@ class CertificateMetadataConverterTest {
     }
 
     @Test
+    void shallNotIncludeRecipientIfRecipientIsNull() {
+      final var certificate = certificateBuilder.certificateModel(
+          CertificateModel.builder()
+              .id(
+                  CertificateModelId.builder()
+                      .type(new CertificateType(TYPE))
+                      .version(new CertificateVersion(VERSION))
+                      .build()
+              )
+              .recipient(null)
+              .elementSpecifications(
+                  List.of(
+                      ElementSpecification.builder().build()
+                  )
+              )
+              .summaryProvider(certificateSummaryProvider)
+              .confirmationModalProvider(certificateConfirmationModalProvider)
+              .availableForCitizen(true)
+              .build()
+      ).build();
+      assertNull(
+          certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getRecipient()
+      );
+    }
+
+    @Test
     void shallIncludeRecipientWithoutSentDateIfSentIsNull() {
       final var expectedCertificateRecipient = CertificateRecipientDTO.builder()
           .id(RECIPIENT.id().id())
