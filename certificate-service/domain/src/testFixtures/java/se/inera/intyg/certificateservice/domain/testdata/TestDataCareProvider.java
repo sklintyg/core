@@ -13,6 +13,7 @@ import se.inera.intyg.certificateservice.domain.unit.model.UnitName;
 public class TestDataCareProvider {
 
   public static final CareProvider ALFA_REGIONEN = alfaRegionenBuilder().build();
+	public static final CareProvider ALFA_REGIONEN_V2 = alfaRegionenV2Builder().build();
 
   public static final CareProvider BETA_REGIONEN = betaRegionenBuilder().build();
 
@@ -21,6 +22,12 @@ public class TestDataCareProvider {
         .hsaId(new HsaId(ALFA_REGIONEN_ID))
         .name(new UnitName(ALFA_REGIONEN_NAME));
   }
+
+	public static CareProviderBuilder alfaRegionenV2Builder() {
+		return CareProvider.builder()
+				.hsaId(new HsaId(ALFA_REGIONEN_ID))
+				.name(new UnitName(ALFA_REGIONEN_NAME + "_v2"));
+	}
 
   public static CareProviderBuilder betaRegionenBuilder() {
     return CareProvider.builder()

@@ -19,9 +19,11 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_WORKPLACE_CODE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ZIP_CODE;
 
+import java.time.LocalDateTime;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitType;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitTypeEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitVersionEntity;
 
 public class TestDataUnitEntity {
 
@@ -30,8 +32,12 @@ public class TestDataUnitEntity {
   }
 
   public static final UnitEntity ALFA_REGIONEN_ENTITY = alfaRegionenEntityBuilder().build();
+	public static final UnitEntity ALFA_REGIONEN_V2_ENTITY = alfaRegionenV2EntityBuilder().build();
+
   public static final UnitEntity ALFA_MEDICINCENTRUM_ENTITY = alfaMedicinCentrumEntityBuilder().build();
   public static final UnitEntity ALFA_ALLERGIMOTTAGNINGEN_ENTITY = alfaAllergimottagningenEntityBuilder().build();
+	public static final UnitVersionEntity ALFA_REGIONEN_VERSION_ENTITY = alfaRegionenVersionEntityBuilder().build();
+
 
   public static UnitEntity.UnitEntityBuilder alfaRegionenEntityBuilder() {
     return UnitEntity.builder()
@@ -44,6 +50,33 @@ public class TestDataUnitEntity {
         .hsaId(ALFA_REGIONEN_ID)
         .name(ALFA_REGIONEN_NAME);
   }
+
+	public static UnitEntity.UnitEntityBuilder alfaRegionenV2EntityBuilder() {
+		return UnitEntity.builder()
+				.type(
+						UnitTypeEntity.builder()
+								.type(UnitType.CARE_PROVIDER.name())
+								.key(UnitType.CARE_PROVIDER.getKey())
+								.build()
+				)
+				.hsaId(ALFA_REGIONEN_ID)
+				.name(ALFA_REGIONEN_NAME + "_v2");
+	}
+
+	public static UnitVersionEntity.UnitVersionEntityBuilder alfaRegionenVersionEntityBuilder() {
+		return UnitVersionEntity.builder()
+				.type(
+						UnitTypeEntity.builder()
+								.type(UnitType.CARE_PROVIDER.name())
+								.key(UnitType.CARE_PROVIDER.getKey())
+								.build()
+				)
+				.validFrom(null)
+				.validTo(LocalDateTime.of(2020, 12, 31, 23, 59, 59))
+				.hsaId(ALFA_REGIONEN_ID)
+				.unit(ALFA_REGIONEN_ENTITY)
+				.name(ALFA_REGIONEN_NAME);
+	}
 
   public static UnitEntity.UnitEntityBuilder alfaMedicinCentrumEntityBuilder() {
     return UnitEntity.builder()
