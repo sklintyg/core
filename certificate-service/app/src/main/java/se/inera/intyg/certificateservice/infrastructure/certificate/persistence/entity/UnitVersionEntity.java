@@ -44,7 +44,7 @@ public class UnitVersionEntity {
     private String workplaceCode;
     @Column(name = "valid_from")
     private LocalDateTime validFrom;
-    @Column(name = "valid_to")
+    @Column(name = "valid_to", nullable = false)
     private LocalDateTime validTo;
     @ManyToOne
     @JoinColumn(name = "unit_type_key")

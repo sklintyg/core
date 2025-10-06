@@ -1,29 +1,30 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.UnitEntityMapper.toCareProviderDomain;
-import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.UnitEntityMapper.toCareUnitDomain;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.UnitEntityMapper.toEntity;
-import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.UnitEntityMapper.toSubUnitDomain;
 
+import jakarta.persistence.OptimisticLockException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.unit.model.CareProvider;
 import se.inera.intyg.certificateservice.domain.unit.model.CareUnit;
 import se.inera.intyg.certificateservice.domain.unit.model.IssuingUnit;
 import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.Unit;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.UnitVersionEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitVersionEntityRepository;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class UnitRepository {
 
-  final UnitEntityRepository unitEntityRepository;
+  private final UnitEntityRepository unitEntityRepository;
 	private final UnitVersionEntityRepository unitVersionEntityRepository;
 
+	@Transactional
 	public UnitEntity careProvider(CareProvider careProvider) {
     return unitEntityRepository.findByHsaId(careProvider.hsaId().id())
 				.map(unitEntity -> updateUnitVersion(unitEntity, careProvider))
@@ -34,10 +35,10 @@ public class UnitRepository {
         );
   }
 
+	@Transactional
 	public UnitEntity careUnit(CareUnit careUnit) {
     return unitEntityRepository.findByHsaId(careUnit.hsaId().id())
 				.map(unitEntity -> updateUnitVersion(unitEntity, careUnit))
-
         .orElseGet(
             () -> unitEntityRepository.save(
                 toEntity(careUnit)
@@ -45,6 +46,7 @@ public class UnitRepository {
         );
   }
 
+	@Transactional
   public UnitEntity subUnit(SubUnit subUnit) {
     return unitEntityRepository.findByHsaId(subUnit.hsaId().id())
 				.map(unitEntity -> updateUnitVersion(unitEntity, subUnit))
@@ -55,6 +57,7 @@ public class UnitRepository {
         );
   }
 
+	@Transactional
   public UnitEntity issuingUnit(IssuingUnit issuingUnit) {
     if (issuingUnit instanceof CareUnit careUnit) {
       return careUnit(careUnit);
@@ -70,50 +73,65 @@ public class UnitRepository {
   }
 
 	private UnitEntity updateUnitVersion(UnitEntity unitEntity, CareProvider careProvider) {
-		if (!careProvider.equals(toCareProviderDomain(unitEntity))){
-			var newUnitEntity = toEntity(careProvider);
-			return updateUnitVersion(unitEntity, newUnitEntity);
+		var newUnitEntity = toEntity(careProvider);
+		if (!unitEntity.equals(newUnitEntity)){
+			return saveUnit(unitEntity, newUnitEntity);
 		}
 		return unitEntity;
 	}
 
 	private UnitEntity updateUnitVersion(UnitEntity unitEntity, CareUnit careUnit) {
-		if (!careUnit.equals(toCareUnitDomain(unitEntity))){
-			var newUnitEntity = toEntity(careUnit);
-			return updateUnitVersion(unitEntity, newUnitEntity);
+		var newUnitEntity = toEntity(careUnit);
+		if (!unitEntity.equals(newUnitEntity)){
+			return saveUnit(unitEntity, newUnitEntity);
 		}
 		return unitEntity;
 	}
 
 	private UnitEntity updateUnitVersion(UnitEntity unitEntity, SubUnit subUnit) {
-		if (!subUnit.equals(toSubUnitDomain(unitEntity))){
-			var newUnitEntity = toEntity(subUnit);
-			return updateUnitVersion(unitEntity, newUnitEntity);
+		var newUnitEntity = toEntity(subUnit);
+		if (!unitEntity.equals(newUnitEntity)){
+			return saveUnit(unitEntity, newUnitEntity);
 		}
 		return unitEntity;
 	}
 
-	private UnitEntity updateUnitVersion(UnitEntity unitEntity, UnitEntity newUnitEntity) {
+	private UnitEntity saveUnit(UnitEntity unitEntity, UnitEntity newUnitEntity) {
+		try {
+			copyValues(unitEntity, newUnitEntity);
+			var result = unitEntityRepository.save(unitEntity);
+			saveUnitVersion(result);
+			return result;
+
+		} catch (OptimisticLockException e) {
+			log.info("Skipped updating UnitEntity {} because it was updated concurrently", unitEntity.getHsaId());
+			return unitEntityRepository.findByHsaId(unitEntity.getHsaId())
+					.orElse(unitEntity);
+		}
+	}
+
+	private void copyValues(UnitEntity target, UnitEntity source) {
+		target.setName(source.getName());
+		target.setAddress(source.getAddress());
+		target.setZipCode(source.getZipCode());
+		target.setCity(source.getCity());
+		target.setPhoneNumber(source.getPhoneNumber());
+		target.setEmail(source.getEmail());
+		target.setWorkplaceCode(source.getWorkplaceCode());
+		target.setType(source.getType());
+	}
+
+
+	private void saveUnitVersion(UnitEntity unitEntity) {
 
 		final var unitVersionEntity = UnitVersionEntityMapper.toEntity(unitEntity);
 		final var existingVersions = unitVersionEntityRepository
 				.findAllByHsaIdOrderByValidFromDesc(unitEntity.getHsaId());
 
-		if (!existingVersions.isEmpty() && !existingVersions.contains(unitVersionEntity)) {
+		if (!existingVersions.isEmpty()) {
 			unitVersionEntity.setValidFrom(existingVersions.getFirst().getValidTo());
 		}
 
-		unitEntity.setHsaId(newUnitEntity.getHsaId());
-		unitEntity.setName(newUnitEntity.getName());
-		unitEntity.setAddress(newUnitEntity.getAddress());
-		unitEntity.setZipCode(newUnitEntity.getZipCode());
-		unitEntity.setCity(newUnitEntity.getCity());
-		unitEntity.setPhoneNumber(newUnitEntity.getPhoneNumber());
-		unitEntity.setEmail(newUnitEntity.getEmail());
-		unitEntity.setWorkplaceCode(newUnitEntity.getWorkplaceCode());
-		unitEntity.setType(newUnitEntity.getType());
-
 		unitVersionEntityRepository.save(unitVersionEntity);
-		return unitEntityRepository.save(unitEntity);
 	}
 }

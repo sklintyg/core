@@ -8,9 +8,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -19,6 +21,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(exclude = {"key", "version"})
 public class UnitEntity {
 
   @Id
@@ -44,4 +47,7 @@ public class UnitEntity {
   @ManyToOne
   @JoinColumn(name = "unit_type_key")
   private UnitTypeEntity type;
+
+	@Version
+	private Long version;
 }

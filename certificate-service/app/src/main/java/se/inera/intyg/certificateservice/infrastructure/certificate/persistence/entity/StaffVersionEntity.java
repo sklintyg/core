@@ -26,47 +26,47 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class StaffVersionEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "`key`")
-    private int key;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "`key`")
+	private int key;
 
-    @Column(name = "hsa_id")
-    private String hsaId;
+	@Column(name = "hsa_id")
+	private String hsaId;
 
-    @Column(name = "first_name")
-    private String firstName;
+	@Column(name = "first_name")
+	private String firstName;
 
-    @Column(name = "middle_name")
-    private String middleName;
+	@Column(name = "middle_name")
+	private String middleName;
 
-    @Column(name = "last_name")
-    private String lastName;
+	@Column(name = "last_name")
+	private String lastName;
 
-    @Column(name = "valid_from")
-    private LocalDateTime validFrom;
+	@Column(name = "valid_from")
+	private LocalDateTime validFrom;
 
-    @Column(name = "valid_to")
-    private LocalDateTime validTo;
+	@Column(name = "valid_to", nullable = false)
+	private LocalDateTime validTo;
 
-    @ManyToOne
-    @JoinColumn(name = "staff_role_key")
-    private StaffRoleEntity role;
+	@ManyToOne
+	@JoinColumn(name = "staff_role_key")
+	private StaffRoleEntity role;
 
-    @ManyToOne
-    @JoinColumn(name = "staff_key", referencedColumnName = "key")
-    private StaffEntity staff;
+	@ManyToOne
+	@JoinColumn(name = "staff_key", referencedColumnName = "key")
+	private StaffEntity staff;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "staff_pa_title_version", joinColumns = @JoinColumn(name = "staff_version_key"))
-    private List<PaTitleVersionEmbeddable> paTitles;
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "staff_pa_title_version", joinColumns = @JoinColumn(name = "staff_version_key"))
+	private List<PaTitleVersionEmbeddable> paTitles;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "staff_speciality_version", joinColumns = @JoinColumn(name = "staff_version_key"))
-    private List<SpecialityVersionEmbeddable> specialities;
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "staff_speciality_version", joinColumns = @JoinColumn(name = "staff_version_key"))
+	private List<SpecialityVersionEmbeddable> specialities;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "staff_healthcare_professional_licence_version", joinColumns = @JoinColumn(name = "staff_version_key"))
-    private List<HealthcareProfessionalLicenceVersionEmbeddable> healthcareProfessionalLicences;
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "staff_healthcare_professional_licence_version", joinColumns = @JoinColumn(name = "staff_version_key"))
+	private List<HealthcareProfessionalLicenceVersionEmbeddable> healthcareProfessionalLicences;
 
 }

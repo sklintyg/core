@@ -9,7 +9,6 @@ import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 
 @Value
 @Builder
-@EqualsAndHashCode(exclude = "address")
 public class Patient {
 
   PersonId id;

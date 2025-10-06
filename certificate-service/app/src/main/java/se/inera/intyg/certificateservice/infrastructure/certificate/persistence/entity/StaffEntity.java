@@ -11,10 +11,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -23,6 +25,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(exclude = {"key", "version"})
 public class StaffEntity {
 
   @Id
@@ -49,4 +52,7 @@ public class StaffEntity {
   @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(name = "staff_healthcare_professional_licence", joinColumns = @JoinColumn(name = "staff_key"))
   private List<HealthcareProfessionalLicenceEmbeddable> healthcareProfessionalLicences;
+
+	@Version
+	private Long version;
 }

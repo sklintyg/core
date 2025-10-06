@@ -7,7 +7,6 @@ import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 
 @Value
 @Builder
-@EqualsAndHashCode(exclude = "inactive")
 public class CareUnit implements IssuingUnit {
 
   HsaId hsaId;

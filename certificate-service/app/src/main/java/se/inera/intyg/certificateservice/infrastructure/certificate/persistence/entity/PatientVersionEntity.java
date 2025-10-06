@@ -42,7 +42,7 @@ public class PatientVersionEntity {
   private String lastName;
 	@Column(name = "valid_from")
 	private LocalDateTime validFrom;
-	@Column(name = "valid_to")
+	@Column(name = "valid_to", nullable = false)
 	private LocalDateTime validTo;
   @ManyToOne
   @JoinColumn(name = "patient_id_type_key")

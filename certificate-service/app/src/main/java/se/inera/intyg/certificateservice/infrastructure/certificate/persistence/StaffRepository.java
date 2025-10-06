@@ -1,13 +1,15 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.StaffEntityMapper.toDomain;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.StaffEntityMapper.toEntity;
 
+import jakarta.persistence.OptimisticLockException;
+import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
@@ -18,41 +20,40 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffVersionEntityRepository;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class StaffRepository {
 
-  private final StaffEntityRepository staffEntityRepository;
-  private final StaffVersionEntityRepository staffVersionEntityRepository;
+	private final StaffEntityRepository staffEntityRepository;
+	private final StaffVersionEntityRepository staffVersionEntityRepository;
 
-  public StaffEntity staff(Staff issuer) {
+	@Transactional
+	public StaffEntity staff(Staff issuer) {
 		return staffEntityRepository.findByHsaId(issuer.hsaId().id())
 				.map(staffEntity -> updateStaffVersion(staffEntity, issuer))
 				.orElseGet(() -> staffEntityRepository.save(toEntity(issuer)));
 	}
 
+	@Transactional
+	public Map<HsaId, StaffEntity> staffs(Certificate certificate) {
+		final var staffs = new ArrayList<Staff>();
+		staffs.add(certificate.certificateMetaData().issuer());
+		if (certificate.sent() != null && certificate.sent().sentBy() != null) {
+			staffs.add(certificate.sent().sentBy());
+		}
 
-  public Map<HsaId, StaffEntity> staffs(Certificate certificate) {
-    final var staffs = new ArrayList<Staff>();
-    staffs.add(certificate.certificateMetaData().issuer());
-    if (certificate.sent() != null && certificate.sent().sentBy() != null) {
-      staffs.add(certificate.sent().sentBy());
-    }
+		if (certificate.revoked() != null && certificate.revoked().revokedBy() != null) {
+			staffs.add(certificate.revoked().revokedBy());
+		}
 
-    if (certificate.revoked() != null && certificate.revoked().revokedBy() != null) {
-      staffs.add(certificate.revoked().revokedBy());
-    }
+		if (certificate.readyForSign() != null && certificate.readyForSign().readyForSignBy() != null) {
+			staffs.add(certificate.readyForSign().readyForSignBy());
+		}
 
-    if (certificate.readyForSign() != null && certificate.readyForSign().readyForSignBy() != null) {
-      staffs.add(certificate.readyForSign().readyForSignBy());
-    }
-
-    final var staffEntities = staffEntityRepository.findStaffEntitiesByHsaIdIn(
-        staffs.stream()
-            .map(staff -> staff.hsaId().id())
-            .distinct()
-            .toList()
-    );
+		final var staffEntities = staffEntityRepository.findStaffEntitiesByHsaIdIn(
+				staffs.stream().map(staff -> staff.hsaId().id()).distinct().toList()
+		);
 
 		final var staffEntityMap = staffEntities.stream()
 				.collect(Collectors.toMap(staff -> HsaId.create(staff.getHsaId()), Function.identity()));
@@ -67,32 +68,48 @@ public class StaffRepository {
 			}
 		});
 
-    return staffEntityMap;
-  }
+		return staffEntityMap;
+	}
 
 	private StaffEntity updateStaffVersion(StaffEntity staffEntity, Staff staff) {
-		if (!staff.equals(toDomain(staffEntity))) {
-			final var staffVersionEntity = StaffVersionEntityMapper.toEntity(staffEntity);
-			final var existingVersions = staffVersionEntityRepository.
-					findAllByHsaIdOrderByValidFromDesc(staff.hsaId().id());
-
-			if (!existingVersions.isEmpty() && !existingVersions.contains(staffVersionEntity)) {
-				staffVersionEntity.setValidFrom(existingVersions.getFirst().getValidTo());
-			}
-
-			var newStaffEntity = StaffEntityMapper.toEntity(staff);
-
-			staffEntity.setFirstName(newStaffEntity.getFirstName());
-			staffEntity.setMiddleName(newStaffEntity.getMiddleName());
-			staffEntity.setLastName(newStaffEntity.getLastName());
-			staffEntity.setRole(newStaffEntity.getRole());
-			staffEntity.setPaTitles(newStaffEntity.getPaTitles());
-			staffEntity.setSpecialities(newStaffEntity.getSpecialities());
-			staffEntity.setHealthcareProfessionalLicences(newStaffEntity.getHealthcareProfessionalLicences());
-
-			staffVersionEntityRepository.save(staffVersionEntity);
-			return staffEntityRepository.save(staffEntity);
+		var newStaffEntity = StaffEntityMapper.toEntity(staff);
+		if (!staffEntity.equals(newStaffEntity)) {
+			return saveStaffVersion(staffEntity, newStaffEntity);
 		}
 		return staffEntity;
+	}
+
+	private StaffEntity saveStaffVersion(StaffEntity staffEntity, StaffEntity newStaffEntity) {
+		try {
+			copyValues(staffEntity, newStaffEntity);
+			var result = staffEntityRepository.save(staffEntity);
+			updateStaffVersionHistory(result);
+			return result;
+		} catch (OptimisticLockException e) {
+			log.info("Skipped updating StaffEntity {} because it was updated concurrently", staffEntity.getHsaId());
+			return staffEntityRepository.findByHsaId(staffEntity.getHsaId()).orElse(staffEntity);
+		}
+	}
+
+	private void copyValues(StaffEntity target, StaffEntity source) {
+		target.setFirstName(source.getFirstName());
+		target.setMiddleName(source.getMiddleName());
+		target.setLastName(source.getLastName());
+		target.setRole(source.getRole());
+		target.setPaTitles(source.getPaTitles());
+		target.setSpecialities(source.getSpecialities());
+		target.setHealthcareProfessionalLicences(source.getHealthcareProfessionalLicences());
+	}
+
+	private void updateStaffVersionHistory(StaffEntity staffEntity) {
+		final var staffVersionEntity = StaffVersionEntityMapper.toEntity(staffEntity);
+		final var existingVersions =
+				staffVersionEntityRepository.findAllByHsaIdOrderByValidFromDesc(staffEntity.getHsaId());
+
+		if (!existingVersions.isEmpty()) {
+			staffVersionEntity.setValidFrom(existingVersions.getFirst().getValidTo());
+		}
+
+		staffVersionEntityRepository.save(staffVersionEntity);
 	}
 }
