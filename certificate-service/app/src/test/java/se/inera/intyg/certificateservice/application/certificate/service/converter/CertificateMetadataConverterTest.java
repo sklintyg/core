@@ -780,7 +780,7 @@ class CertificateMetadataConverterTest {
     }
 
     @Test
-    void shallNotIncludeRecipientIfRecipientIsNull() {
+    void shallExcludeRecipientIfRecipientIsNull() {
       final var certificate = certificateBuilder.certificateModel(
           CertificateModel.builder()
               .id(
