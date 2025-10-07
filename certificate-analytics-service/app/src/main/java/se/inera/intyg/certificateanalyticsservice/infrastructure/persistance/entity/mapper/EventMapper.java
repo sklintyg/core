@@ -64,9 +64,8 @@ public class EventMapper {
         .eventSessionId(entity.getSession() != null ? entity.getSession().getSessionId() : null)
         .recipientId(entity.getRecipient() != null ? entity.getRecipient().getParty() : null)
         .certificateId(entity.getCertificate().getCertificateId())
-        .certificateType(entity.getCertificate().getCertificateType().getCertificateType())
-        .certificateTypeVersion(
-            entity.getCertificate().getCertificateType().getCertificateTypeVersion())
+        .certificateType(entity.getCertificate().getCertificateType())
+        .certificateTypeVersion(entity.getCertificate().getCertificateTypeVersion())
         .certificatePatientId(entity.getCertificate().getPatient().getPatientId())
         .certificateUnitId(entity.getCertificate().getUnit().getHsaId())
         .certificateCareProviderId(entity.getCertificate().getCareProvider().getHsaId());

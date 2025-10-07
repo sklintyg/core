@@ -68,22 +68,6 @@
       </column>
     </createTable>
 
-    <createTable tableName="dim_certificate_type">
-      <column name="key" type="bigint unsigned auto_increment">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-      <column name="certificate_type" type="varchar(24)">
-        <constraints nullable="false"/>
-      </column>
-      <column name="certificate_type_version" type="varchar(24)">
-        <constraints nullable="false"/>
-      </column>
-    </createTable>
-
-    <addUniqueConstraint tableName="dim_certificate_type"
-      columnNames="certificate_type,certificate_type_version"
-      constraintName="uk_certificate_type_type_version"/>
-
     <createTable tableName="dim_patient">
       <column name="key" type="bigint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
@@ -100,7 +84,10 @@
       <column name="certificate_id" type="varchar(22)">
         <constraints nullable="false" unique="true"/>
       </column>
-      <column name="certificate_type_key" type="bigint unsigned">
+      <column name="certificate_type" type="varchar(24)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="certificate_type_version" type="varchar(24)">
         <constraints nullable="false"/>
       </column>
       <column name="patient_key" type="bigint unsigned">
@@ -114,9 +101,6 @@
       </column>
     </createTable>
 
-    <addForeignKeyConstraint baseTableName="dim_certificate" baseColumnNames="certificate_type_key"
-      referencedTableName="dim_certificate_type" referencedColumnNames="key"
-      constraintName="fk_certificate_certificate_type"/>
     <addForeignKeyConstraint baseTableName="dim_certificate" baseColumnNames="care_provider_key"
       referencedTableName="dim_care_provider" referencedColumnNames="key"
       constraintName="fk_certificate_care_provider"/>

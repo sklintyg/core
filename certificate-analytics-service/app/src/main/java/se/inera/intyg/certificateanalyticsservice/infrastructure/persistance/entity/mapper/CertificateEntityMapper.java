@@ -10,7 +10,6 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.rep
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CertificateEntityRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CertificateRelationEntityRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CertificateRelationTypeEntityRepository;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CertificateTypeRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.PatientRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.UnitRepository;
 
@@ -22,7 +21,6 @@ public class CertificateEntityMapper {
   private final UnitRepository unitRepository;
   private final PatientRepository patientRepository;
   private final CertificateEntityRepository certificateEntityRepository;
-  private final CertificateTypeRepository certificateTypeRepository;
   private final CertificateRelationEntityRepository certificateRelationEntityRepository;
   private final CertificateRelationTypeEntityRepository certificateRelationTypeEntityRepository;
 
@@ -32,11 +30,8 @@ public class CertificateEntityMapper {
         .orElseGet(() ->
             certificateEntityRepository.save(CertificateEntity.builder()
                 .certificateId(message.getCertificateId())
-                .certificateType(
-                    certificateTypeRepository.findOrCreate(
-                        message.getCertificateType(), message.getCertificateTypeVersion()
-                    )
-                )
+                .certificateType(message.getCertificateType())
+                .certificateTypeVersion(message.getCertificateTypeVersion())
                 .patient(patientRepository.findOrCreate(message.getCertificatePatientId()))
                 .unit(unitRepository.findOrCreate(message.getCertificateUnitId()))
                 .careProvider(

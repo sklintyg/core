@@ -17,7 +17,6 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.ent
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CertificateEntity.CertificateEntityBuilder;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CertificateRelationEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CertificateRelationTypeEntity;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CertificateTypeEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventEntity.EventEntityBuilder;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventTypeEntity;
@@ -73,17 +72,11 @@ public class TestDataEntities {
         .recipient(recipientPartyEntity());
   }
 
-  public static CertificateTypeEntity certificateTypeEntity() {
-    return CertificateTypeEntity.builder()
-        .certificateType(CERTIFICATE_TYPE)
-        .certificateTypeVersion(CERTIFICATE_TYPE_VERSION)
-        .build();
-  }
-
   public static CertificateEntityBuilder certificateEntity() {
     return CertificateEntity.builder()
         .certificateId(TestDataConstants.HASHED_CERTIFICATE_ID)
-        .certificateType(certificateTypeEntity())
+        .certificateType(CERTIFICATE_TYPE)
+        .certificateTypeVersion(CERTIFICATE_TYPE_VERSION)
         .patient(patientEntity())
         .unit(unitEntity())
         .careProvider(careProviderEntity());

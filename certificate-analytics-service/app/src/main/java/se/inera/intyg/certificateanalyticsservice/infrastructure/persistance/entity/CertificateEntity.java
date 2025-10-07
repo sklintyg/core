@@ -29,9 +29,11 @@ public class CertificateEntity {
   @Column(name = "certificate_id", nullable = false, length = 22)
   private String certificateId;
 
-  @ManyToOne
-  @JoinColumn(name = "certificate_type_key", nullable = false, referencedColumnName = "key")
-  private CertificateTypeEntity certificateType;
+  @Column(name = "certificate_type", nullable = false, length = 24)
+  private String certificateType;
+  
+  @Column(name = "certificate_type_version", nullable = false, length = 24)
+  private String certificateTypeVersion;
 
   @ManyToOne
   @JoinColumn(name = "care_provider_key", referencedColumnName = "key")

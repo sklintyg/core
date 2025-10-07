@@ -9,6 +9,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CERTIFICATE_PARENT_ID;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CERTIFICATE_PARENT_TYPE;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CERTIFICATE_TYPE;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataConstants.CERTIFICATE_TYPE_VERSION;
 
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -19,14 +21,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CareProviderEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CertificateEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CertificateRelationTypeEntity;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CertificateTypeEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.PatientEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.UnitEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CareProviderRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CertificateEntityRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CertificateRelationEntityRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CertificateRelationTypeEntityRepository;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CertificateTypeRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.PatientRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.UnitRepository;
 import se.inera.intyg.certificateanalyticsservice.testdata.TestDataPseudonymized;
@@ -43,8 +43,6 @@ class CertificateEntityMapperTest {
   @Mock
   private PatientRepository patientRepository;
   @Mock
-  private CertificateTypeRepository certificateTypeRepository;
-  @Mock
   private CertificateEntityRepository certificateEntityRepository;
   @Mock
   private CertificateRelationEntityRepository certificateRelationEntityRepository;
@@ -57,10 +55,10 @@ class CertificateEntityMapperTest {
     final var expectedCareProvider = mock(CareProviderEntity.class);
     final var expectedUnit = mock(UnitEntity.class);
     final var expectedPatient = mock(PatientEntity.class);
-    final var expectedCertificateType = mock(CertificateTypeEntity.class);
     final var newEntity = CertificateEntity.builder()
         .certificateId(message.getCertificateId())
-        .certificateType(expectedCertificateType)
+        .certificateType(CERTIFICATE_TYPE)
+        .certificateTypeVersion(CERTIFICATE_TYPE_VERSION)
         .patient(expectedPatient)
         .unit(expectedUnit)
         .careProvider(expectedCareProvider)
@@ -73,8 +71,6 @@ class CertificateEntityMapperTest {
     when(unitRepository.findOrCreate(message.getCertificateUnitId())).thenReturn(expectedUnit);
     when(patientRepository.findOrCreate(message.getCertificatePatientId())).thenReturn(
         expectedPatient);
-    when(certificateTypeRepository.findOrCreate(message.getCertificateType(),
-        message.getCertificateTypeVersion())).thenReturn(expectedCertificateType);
     when(certificateEntityRepository.save(newEntity)).thenReturn(newEntity);
 
     final var result = certificateEntityMapper.map(message);
@@ -134,7 +130,7 @@ class CertificateEntityMapperTest {
         .certificateRelationParentId(null)
         .certificateRelationParentType(null)
         .build();
-    
+
     final var newEntity = CertificateEntity.builder()
         .certificateId(message.getCertificateId())
         .build();
