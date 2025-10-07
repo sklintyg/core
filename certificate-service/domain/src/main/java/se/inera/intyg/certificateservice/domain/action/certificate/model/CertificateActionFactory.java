@@ -596,24 +596,23 @@ public class CertificateActionFactory {
           .certificateActionSpecification(actionSpecification)
           .actionRules(
               List.of(
+                  new ActionRuleWithinAccessScope(AccessScope.ALL_CARE_PROVIDERS),
+                  new ActionRuleRole(
+                      List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
+                          Role.CARE_ADMIN)
+                  ),
                   new ActionRuleStatus(List.of(Status.SIGNED)),
                   new ActionRuleUserNotBlocked(),
-                  new ActionRulePatientAlive(),
-                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
                   new ActionRuleUserAllowCopy(),
-                  new ActionRuleInactiveUnit(),
-                  new ActionRuleUserAgreement(),
+                  new ActionRuleProtectedPerson(
+                      actionSpecification.allowedRolesForProtectedPersons()
+                  ),
+                  new ActionRulePatientAlive(),
                   new ActionRuleChildRelationNoMatch(
                       List.of(RelationType.REPLACE, RelationType.COMPLEMENT),
                       List.of(Status.DRAFT, Status.REVOKED)
                   ),
-                  new ActionRuleProtectedPerson(
-                      actionSpecification.allowedRolesForProtectedPersons()
-                  ),
-                  new ActionRuleRole(
-                      List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
-                          Role.CARE_ADMIN)
-                  )
+                  new ActionRuleUserAgreement()
               )
           )
           .build();
