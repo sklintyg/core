@@ -39,8 +39,8 @@ public class QuestionKontaktBeskrivning {
                     QUESTION_KONTAKT_FIELD_ID
                 ),
                 CertificateElementRuleFactory.mandatory(
-                    QUESTION_KONTAKT_ID,
-                    QUESTION_KONTAKT_FIELD_ID
+                    QUESTION_KONTAKT_BESKRIVNING_ID,
+                    QUESTION_KONTAKT_BESKRIVNING_FIELD_ID
                 )
             )
         )

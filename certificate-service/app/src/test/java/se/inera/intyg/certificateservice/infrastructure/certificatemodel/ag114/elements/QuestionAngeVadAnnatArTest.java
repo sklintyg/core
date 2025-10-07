@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag114.elements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag114.elements.QuestionAngeVadAnnatAr.QUESTION_ANGE_VAD_ANNAT_AR_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag114.elements.QuestionAngeVadAnnatAr.QUESTION_ANGE_VAD_ANNAT_AR_ID;
@@ -111,6 +112,54 @@ class QuestionAngeVadAnnatArTest {
       final var shouldValidate = element.shouldValidate();
 
       assertTrue(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shouldReturnFalseIfCodeIsDifferentFromAnnat() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID)
+              .value(
+                  ElementValueDateList.builder()
+                      .dateListId(new FieldId("10.1"))
+                      .dateList(List.of(
+                          ElementValueDate.builder()
+                              .dateId(new FieldId("SOME_OTHER_CODE"))
+                              .build()
+                      ))
+                      .build()
+              )
+              .build()
+      );
+
+      final var element = QuestionAngeVadAnnatAr.questionAngeVadAnnatAr();
+      final var shouldValidate = element.shouldValidate();
+
+      assertFalse(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shouldReturnFalseIfCodeIsNull() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID)
+              .value(
+                  ElementValueDateList.builder()
+                      .dateListId(new FieldId("10.1"))
+                      .dateList(List.of(
+                          ElementValueDate.builder()
+                              .dateId(new FieldId("FIELD_ID"))
+                              .build()
+                      ))
+                      .build()
+              )
+              .build()
+      );
+
+      final var element = QuestionAngeVadAnnatAr.questionAngeVadAnnatAr();
+      final var shouldValidate = element.shouldValidate();
+
+      assertFalse(shouldValidate.test(elementData));
     }
   }
 }

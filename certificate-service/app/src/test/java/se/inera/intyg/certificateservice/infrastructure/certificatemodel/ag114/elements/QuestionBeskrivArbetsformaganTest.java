@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag114.elements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag114.elements.QuestionBeskrivArbetsformagan.QUESTION_BESKRIV_ARBETSFORMAGAN_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag114.elements.QuestionBeskrivArbetsformagan.QUESTION_BESKRIV_ARBETSFORMAGAN_ID;
@@ -95,6 +96,44 @@ class QuestionBeskrivArbetsformaganTest {
       final var shouldValidate = element.shouldValidate();
 
       assertTrue(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shouldReturnFalseIfParentQuestionIsFalse() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(QUESTION_FINNS_ARBETSFORMAGA_ID)
+              .value(
+                  ElementValueBoolean.builder()
+                      .value(false)
+                      .build()
+              )
+              .build()
+      );
+
+      final var element = QuestionBeskrivArbetsformagan.questionBeskrivArbetsformagan();
+      final var shouldValidate = element.shouldValidate();
+
+      assertFalse(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shouldReturnFalseIfParentQuestionIsNull() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(QUESTION_FINNS_ARBETSFORMAGA_ID)
+              .value(
+                  ElementValueBoolean.builder()
+                      .value(null)
+                      .build()
+              )
+              .build()
+      );
+
+      final var element = QuestionBeskrivArbetsformagan.questionBeskrivArbetsformagan();
+      final var shouldValidate = element.shouldValidate();
+
+      assertFalse(shouldValidate.test(elementData));
     }
   }
 }

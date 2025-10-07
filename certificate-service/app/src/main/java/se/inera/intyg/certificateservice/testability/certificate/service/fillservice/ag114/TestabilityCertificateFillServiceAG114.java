@@ -183,7 +183,6 @@ public class TestabilityCertificateFillServiceAG114 implements TestabilityCertif
           .value(
               ElementValueInteger.builder()
                   .value(25)
-                  .unitOfMeasurement("%")
                   .integerId(elementSpecification.configuration().id())
                   .build()
           )

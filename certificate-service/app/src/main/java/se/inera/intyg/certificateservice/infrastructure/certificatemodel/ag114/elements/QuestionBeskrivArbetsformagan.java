@@ -4,7 +4,6 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag114.elements.QuestionFinnsArbetsformaga.QUESTION_FINNS_ARBETSFORMAGA_ID;
 
 import java.util.List;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
@@ -12,6 +11,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
 
 public class QuestionBeskrivArbetsformagan {
 
@@ -56,10 +56,7 @@ public class QuestionBeskrivArbetsformagan {
             new ElementMapping(QUESTION_FINNS_ARBETSFORMAGA_ID, null)
         )
         .shouldValidate(
-            elementData -> elementData.stream()
-                .filter(data -> data.id().equals(QUESTION_FINNS_ARBETSFORMAGA_ID))
-                .map(element -> (ElementValueBoolean) element.value())
-                .anyMatch(value -> Boolean.TRUE.equals(value.value()))
+            ShouldValidateFactory.radioBooleans(List.of(QUESTION_FINNS_ARBETSFORMAGA_ID), true)
         )
         .build();
   }

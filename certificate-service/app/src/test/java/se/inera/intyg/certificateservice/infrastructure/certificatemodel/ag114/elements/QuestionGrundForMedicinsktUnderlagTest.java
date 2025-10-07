@@ -56,7 +56,7 @@ class QuestionGrundForMedicinsktUnderlagTest {
                 .id(new FieldId(JOURNALUPPGIFTER.code()))
                 .label("journaluppgifter från den")
                 .code(JOURNALUPPGIFTER)
-                .max(Period.ofYears(1))
+                .max(Period.ofDays(0))
                 .build(),
             CheckboxDate.builder()
                 .id(new FieldId(ANNAT.code()))

@@ -50,7 +50,7 @@ public class CertificateModelFactoryAG114 implements CertificateModelFactory {
 
   private final DiagnosisCodeRepository diagnosisCodeRepository;
 
-  private static final String AG_114 = "ag1-14";
+  private static final String AG114 = "ag1-14";
   private static final String VERSION = "2.0";
   private static final String NAME = "Läkarintyg om arbetsförmåga – sjuklöneperioden";
   private static final String DESCRIPTION = """
@@ -81,7 +81,7 @@ public class CertificateModelFactoryAG114 implements CertificateModelFactory {
       """;
 
   public static final CertificateModelId AG114_V2_0 = CertificateModelId.builder()
-      .type(new CertificateType(AG_114))
+      .type(new CertificateType(AG114))
       .version(new CertificateVersion(VERSION))
       .build();
 
@@ -91,7 +91,7 @@ public class CertificateModelFactoryAG114 implements CertificateModelFactory {
         .id(AG114_V2_0)
         .type(
             new Code(
-                "AG114",
+                "AG1-14",
                 "a1c4b3f2-d5e6-7890-b123-456789abcdef",
                 NAME
             )

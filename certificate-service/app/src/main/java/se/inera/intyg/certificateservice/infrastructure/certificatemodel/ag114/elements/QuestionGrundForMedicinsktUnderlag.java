@@ -28,36 +28,11 @@ public class QuestionGrundForMedicinsktUnderlag {
   public static ElementSpecification questionGrundForMedicinsktUnderlag(
       ElementSpecification... children) {
     final var checkboxDates = List.of(
-        CheckboxDate.builder()
-            .id(new FieldId(FYSISKUNDERSOKNING.code()))
-            .label("min undersökning vid fysiskt vårdmöte")
-            .code(FYSISKUNDERSOKNING)
-            .max(Period.ofDays(0))
-            .build(),
-        CheckboxDate.builder()
-            .id(new FieldId(DIGITALUNDERSOKNING.code()))
-            .label("min undersökning vid digitalt vårdmöte")
-            .code(DIGITALUNDERSOKNING)
-            .max(Period.ofDays(0))
-            .build(),
-        CheckboxDate.builder()
-            .id(new FieldId(TELEFONKONTAKT.code()))
-            .label("min telefonkontakt med patienten")
-            .code(TELEFONKONTAKT)
-            .max(Period.ofDays(0))
-            .build(),
-        CheckboxDate.builder()
-            .id(new FieldId(JOURNALUPPGIFTER.code()))
-            .label("journaluppgifter från den")
-            .code(JOURNALUPPGIFTER)
-            .max(Period.ofYears(1))
-            .build(),
-        CheckboxDate.builder()
-            .id(new FieldId(ANNAT.code()))
-            .label("annat")
-            .code(ANNAT)
-            .max(Period.ofDays(0))
-            .build()
+        CheckboxDate.create(FYSISKUNDERSOKNING, null, Period.ofDays(0)),
+        CheckboxDate.create(DIGITALUNDERSOKNING, null, Period.ofDays(0)),
+        CheckboxDate.create(TELEFONKONTAKT, null, Period.ofDays(0)),
+        CheckboxDate.create(JOURNALUPPGIFTER, null, Period.ofDays(0)),
+        CheckboxDate.create(ANNAT, null, Period.ofDays(0))
     );
 
     return ElementSpecification.builder()

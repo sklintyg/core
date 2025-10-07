@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag114.elements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag114.elements.QuestionKontakt.QUESTION_KONTAKT_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag114.elements.QuestionKontaktBeskrivning.QUESTION_KONTAKT_BESKRIVNING_FIELD_ID;
@@ -48,9 +49,9 @@ class QuestionKontaktBeskrivningTest {
             .expression(new RuleExpression("$9.1"))
             .build(),
         ElementRuleExpression.builder()
-            .id(QUESTION_KONTAKT_ID)
+            .id(QUESTION_KONTAKT_BESKRIVNING_ID)
             .type(ElementRuleType.MANDATORY)
-            .expression(new RuleExpression("$9.1"))
+            .expression(new RuleExpression("$9.2"))
             .build()
     );
     assertEquals(expectedRules, element.rules());
@@ -94,6 +95,44 @@ class QuestionKontaktBeskrivningTest {
       final var shouldValidate = element.shouldValidate();
 
       assertTrue(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shouldReturnFalseIfParentQuestionIsFalse() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(QUESTION_KONTAKT_ID)
+              .value(
+                  ElementValueBoolean.builder()
+                      .value(false)
+                      .build()
+              )
+              .build()
+      );
+
+      final var element = QuestionKontaktBeskrivning.questionKontaktBeskrivning();
+      final var shouldValidate = element.shouldValidate();
+
+      assertFalse(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shouldReturnFalseIfParentQuestionIsNull() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(QUESTION_KONTAKT_ID)
+              .value(
+                  ElementValueBoolean.builder()
+                      .value(null)
+                      .build()
+              )
+              .build()
+      );
+
+      final var element = QuestionKontaktBeskrivning.questionKontaktBeskrivning();
+      final var shouldValidate = element.shouldValidate();
+
+      assertFalse(shouldValidate.test(elementData));
     }
   }
 }
