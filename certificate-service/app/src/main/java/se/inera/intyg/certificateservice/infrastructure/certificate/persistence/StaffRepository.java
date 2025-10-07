@@ -15,6 +15,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffVersionEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.StaffEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.StaffVersionEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffEntityRepository;
@@ -81,9 +82,10 @@ public class StaffRepository {
 
 	private StaffEntity saveStaffVersion(StaffEntity staffEntity, StaffEntity newStaffEntity) {
 		try {
+			final var staffVersionEntity = StaffVersionEntityMapper.toEntity(staffEntity);
 			copyValues(staffEntity, newStaffEntity);
 			var result = staffEntityRepository.save(staffEntity);
-			updateStaffVersionHistory(result);
+			updateStaffVersionHistory(staffVersionEntity);
 			return result;
 		} catch (OptimisticLockException e) {
 			log.info("Skipped updating StaffEntity {} because it was updated concurrently", staffEntity.getHsaId());
@@ -101,15 +103,13 @@ public class StaffRepository {
 		target.setHealthcareProfessionalLicences(source.getHealthcareProfessionalLicences());
 	}
 
-	private void updateStaffVersionHistory(StaffEntity staffEntity) {
-		final var staffVersionEntity = StaffVersionEntityMapper.toEntity(staffEntity);
+	private void updateStaffVersionHistory(StaffVersionEntity staffVersionEntity) {
 		final var existingVersions =
-				staffVersionEntityRepository.findAllByHsaIdOrderByValidFromDesc(staffEntity.getHsaId());
+				staffVersionEntityRepository.findAllByHsaIdOrderByValidFromDesc(staffVersionEntity.getHsaId());
 
 		if (!existingVersions.isEmpty()) {
 			staffVersionEntity.setValidFrom(existingVersions.getFirst().getValidTo());
 		}
-
 		staffVersionEntityRepository.save(staffVersionEntity);
 	}
 }

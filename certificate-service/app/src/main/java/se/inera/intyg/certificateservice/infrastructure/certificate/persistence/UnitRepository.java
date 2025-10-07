@@ -12,6 +12,7 @@ import se.inera.intyg.certificateservice.domain.unit.model.CareUnit;
 import se.inera.intyg.certificateservice.domain.unit.model.IssuingUnit;
 import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitVersionEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.UnitVersionEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitVersionEntityRepository;
@@ -98,9 +99,10 @@ public class UnitRepository {
 
 	private UnitEntity saveUnit(UnitEntity unitEntity, UnitEntity newUnitEntity) {
 		try {
+			final var unitVersionEntity = UnitVersionEntityMapper.toEntity(unitEntity);
 			copyValues(unitEntity, newUnitEntity);
 			var result = unitEntityRepository.save(unitEntity);
-			saveUnitVersion(result);
+			saveUnitVersion(unitVersionEntity);
 			return result;
 
 		} catch (OptimisticLockException e) {
@@ -122,11 +124,10 @@ public class UnitRepository {
 	}
 
 
-	private void saveUnitVersion(UnitEntity unitEntity) {
+	private void saveUnitVersion(UnitVersionEntity unitVersionEntity) {
 
-		final var unitVersionEntity = UnitVersionEntityMapper.toEntity(unitEntity);
 		final var existingVersions = unitVersionEntityRepository
-				.findAllByHsaIdOrderByValidFromDesc(unitEntity.getHsaId());
+				.findAllByHsaIdOrderByValidFromDesc(unitVersionEntity.getHsaId());
 
 		if (!existingVersions.isEmpty()) {
 			unitVersionEntity.setValidFrom(existingVersions.getFirst().getValidTo());
