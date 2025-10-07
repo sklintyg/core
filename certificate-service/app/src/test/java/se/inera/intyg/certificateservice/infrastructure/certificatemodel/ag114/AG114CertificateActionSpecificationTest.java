@@ -1,8 +1,10 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag114;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
@@ -11,7 +13,7 @@ import se.inera.intyg.certificateservice.domain.common.model.Role;
 class AG114CertificateActionSpecificationTest {
 
   @Test
-  void shallIncludeCertificateActionCreate() {
+  void shouldIncludeCertificateActionCreate() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.CREATE)
         .build();
@@ -24,7 +26,7 @@ class AG114CertificateActionSpecificationTest {
   }
 
   @Test
-  void shallIncludeCertificateActionRead() {
+  void shouldIncludeCertificateActionRead() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.READ)
         .build();
@@ -37,7 +39,7 @@ class AG114CertificateActionSpecificationTest {
   }
 
   @Test
-  void shallIncludeCertificateActionUpdate() {
+  void shouldIncludeCertificateActionUpdate() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.UPDATE)
         .build();
@@ -50,7 +52,7 @@ class AG114CertificateActionSpecificationTest {
   }
 
   @Test
-  void shallIncludeCertificateActionDelete() {
+  void shouldIncludeCertificateActionDelete() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.DELETE)
         .build();
@@ -63,10 +65,10 @@ class AG114CertificateActionSpecificationTest {
   }
 
   @Test
-  void shallIncludeCertificateActionSign() {
+  void shouldIncludeCertificateActionSign() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.SIGN)
-        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
+        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.DENTIST))
         .build();
 
     final var actionSpecifications = AG114CertificateActionSpecification.create();
@@ -77,7 +79,7 @@ class AG114CertificateActionSpecificationTest {
   }
 
   @Test
-  void shallIncludeCertificateActionPrint() {
+  void shouldIncludeCertificateActionPrint() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.PRINT)
         .build();
@@ -90,10 +92,10 @@ class AG114CertificateActionSpecificationTest {
   }
 
   @Test
-  void shallIncludeCertificateActionRevoke() {
+  void shouldIncludeCertificateActionRevoke() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.REVOKE)
-        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
+        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.DENTIST))
         .build();
 
     final var actionSpecifications = AG114CertificateActionSpecification.create();
@@ -104,7 +106,7 @@ class AG114CertificateActionSpecificationTest {
   }
 
   @Test
-  void shallIncludeCertificateActionReplace() {
+  void shouldIncludeCertificateActionReplace() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.REPLACE)
         .build();
@@ -117,7 +119,7 @@ class AG114CertificateActionSpecificationTest {
   }
 
   @Test
-  void shallIncludeCertificateActionReplaceContinue() {
+  void shouldIncludeCertificateActionReplaceContinue() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.REPLACE_CONTINUE)
         .build();
@@ -130,20 +132,16 @@ class AG114CertificateActionSpecificationTest {
   }
 
   @Test
-  void shallIncludeCertificateActionRenew() {
-    final var expectedSpecification = CertificateActionSpecification.builder()
-        .certificateActionType(CertificateActionType.RENEW)
-        .build();
-
+  void shouldNotIncludeCertificateActionRenew() {
     final var actionSpecifications = AG114CertificateActionSpecification.create();
 
-    assertEquals(expectedSpecification,
-        actualSpecification(actionSpecifications, expectedSpecification.certificateActionType())
+    assertThrows(NoSuchElementException.class, () ->
+        actualSpecification(actionSpecifications, CertificateActionType.RENEW)
     );
   }
 
   @Test
-  void shallIncludeCertificateActionForwardCertificate() {
+  void shouldIncludeCertificateActionForwardCertificate() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE)
         .allowedRoles(List.of(Role.CARE_ADMIN, Role.MIDWIFE, Role.NURSE))
@@ -157,7 +155,7 @@ class AG114CertificateActionSpecificationTest {
   }
 
   @Test
-  void shallIncludeCertificateActionReadyForSign() {
+  void shouldIncludeCertificateActionReadyForSign() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.READY_FOR_SIGN)
         .allowedRoles(List.of(Role.CARE_ADMIN, Role.MIDWIFE, Role.NURSE))
@@ -171,11 +169,11 @@ class AG114CertificateActionSpecificationTest {
   }
 
   @Test
-  void shallIncludeCertificateActionListCertificateType() {
+  void shouldIncludeCertificateActionListCertificateType() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.LIST_CERTIFICATE_TYPE)
         .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
-            Role.CARE_ADMIN))
+            Role.CARE_ADMIN, Role.DENTIST))
         .build();
 
     final var actionSpecifications = AG114CertificateActionSpecification.create();
@@ -186,7 +184,7 @@ class AG114CertificateActionSpecificationTest {
   }
 
   @Test
-  void shallIncludeCertificateActionForwardCertificateFromList() {
+  void shouldIncludeCertificateActionForwardCertificateFromList() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE_FROM_LIST)
         .build();

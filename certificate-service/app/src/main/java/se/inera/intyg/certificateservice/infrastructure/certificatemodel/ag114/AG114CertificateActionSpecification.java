@@ -27,23 +27,20 @@ public class AG114CertificateActionSpecification {
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.SIGN)
-            .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
+            .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.DENTIST))
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.PRINT)
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.REVOKE)
-            .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
+            .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.DENTIST))
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.REPLACE)
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.REPLACE_CONTINUE)
-            .build(),
-        CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.RENEW)
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE)
@@ -56,7 +53,7 @@ public class AG114CertificateActionSpecification {
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.LIST_CERTIFICATE_TYPE)
             .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
-                Role.CARE_ADMIN))
+                Role.CARE_ADMIN, Role.DENTIST))
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE_FROM_LIST)
