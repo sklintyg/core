@@ -12,7 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "unit")
+@Table(name = "dim_unit")
 @Data
 @Builder
 @AllArgsConstructor

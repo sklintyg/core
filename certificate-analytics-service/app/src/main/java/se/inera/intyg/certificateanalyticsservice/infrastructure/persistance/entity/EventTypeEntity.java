@@ -12,7 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "event_type")
+@Table(name = "dim_event_type")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -12,7 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "role")
+@Table(name = "dim_role")
 @Data
 @Builder
 @AllArgsConstructor

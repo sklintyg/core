@@ -20,7 +20,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "message")
+@Table(name = "dim_message")
 @Data
 @Builder
 @AllArgsConstructor
@@ -53,7 +53,7 @@ public class MessageEntity {
 
   @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(
-      name = "message_question_id",
+      name = "dim_message_question_id",
       joinColumns = @JoinColumn(name = "message_key")
   )
   @Column(name = "question_id")

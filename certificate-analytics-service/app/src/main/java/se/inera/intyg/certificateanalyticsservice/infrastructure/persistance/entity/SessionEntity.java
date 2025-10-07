@@ -12,7 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "session")
+@Table(name = "dim_session")
 @Data
 @Builder
 @AllArgsConstructor

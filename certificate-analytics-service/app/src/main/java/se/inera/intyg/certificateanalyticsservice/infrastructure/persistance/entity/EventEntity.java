@@ -15,7 +15,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "event")
+@Table(name = "fact_event")
 @Data
 @Builder
 @AllArgsConstructor

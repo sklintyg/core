@@ -14,7 +14,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "certificate")
+@Table(name = "dim_certificate")
 @Data
 @Builder
 @AllArgsConstructor

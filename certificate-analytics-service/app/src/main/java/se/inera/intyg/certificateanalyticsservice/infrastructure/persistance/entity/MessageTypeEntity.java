@@ -12,7 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "message_type")
+@Table(name = "dim_message_type")
 @Data
 @Builder
 @AllArgsConstructor
