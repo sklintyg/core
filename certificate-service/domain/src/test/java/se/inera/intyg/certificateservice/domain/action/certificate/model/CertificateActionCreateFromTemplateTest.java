@@ -9,6 +9,15 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 
 class CertificateActionCreateFromTemplateTest {
 
+  private static final String AG7804_BODY = """
+      <div><div class="ic-alert ic-alert--status ic-alert--info">
+      <i class="ic-alert__icon ic-info-icon"></i>
+      Kom ihåg att stämma av med patienten om hen vill att du skickar Läkarintyget för sjukpenning till Försäkringskassan. Gör detta i så fall först.</div>
+      <p class='iu-pt-400'>Skapa ett Läkarintyg om arbetsförmåga - arbetsgivaren (AG7804) utifrån ett Läkarintyg för sjukpenning innebär att informationsmängder som är gemensamma för båda intygen automatiskt förifylls.
+      </p></div>
+      """;
+  private static final String AG7804_DESCRIPTION = "Skapar ett intyg till arbetsgivaren utifrån Försäkringskassans intyg.";
+  private static final String AG7804_NAME = "Skapa AG7804";
   private CertificateActionCreateFromTemplate certificateActionCreateFromTemplate;
 
   @BeforeEach
@@ -30,26 +39,19 @@ class CertificateActionCreateFromTemplateTest {
 
   @Test
   void shouldReturnName() {
-    assertEquals("Skapa AG7804", certificateActionCreateFromTemplate.getName(Optional.empty()));
+    assertEquals(AG7804_NAME, certificateActionCreateFromTemplate.getName(Optional.empty()));
   }
 
   @Test
   void shouldReturnDescription() {
-    assertEquals("Skapar ett intyg till arbetsgivaren utifrån Försäkringskassans intyg.",
-        certificateActionCreateFromTemplate.getDescription(Optional.empty()));
+    assertEquals(
+        AG7804_DESCRIPTION, certificateActionCreateFromTemplate.getDescription(Optional.empty()));
   }
 
   @Test
   void shouldReturnBody() {
     assertEquals(
-        """
-            <div><div class="ic-alert ic-alert--status ic-alert--info">
-            <i class="ic-alert__icon ic-info-icon"></i>
-            Kom ihåg att stämma av med patienten om hen vill att du skickar Läkarintyget för sjukpenning till Försäkringskassan. Gör detta i så fall först.</div>
-            <p class='iu-pt-400'>Skapa ett Läkarintyg om arbetsförmåga - arbetsgivaren (AG7804) utifrån ett Läkarintyg för sjukpenning innebär att informationsmängder som är gemensamma för båda intygen automatiskt förifylls.
-            </p></div>
-            """,
-        certificateActionCreateFromTemplate.getBody(Optional.empty(), Optional.empty())
+        AG7804_BODY, certificateActionCreateFromTemplate.getBody(Optional.empty(), Optional.empty())
     );
   }
 }
