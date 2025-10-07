@@ -14,6 +14,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALF_DOKTOR_MIDDLE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALF_DOKTOR_PA_TITLES;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALF_DOKTOR_SPECIALITIES;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.UPDATED_AJLA_DOCTOR_LAST_NAME;
 
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.HealthcareProfessionalLicenceEmbeddable;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PaTitleEmbeddable;
@@ -29,6 +30,10 @@ public class TestDataStaffEntity {
   }
 
   public static final StaffEntity AJLA_DOKTOR_ENTITY = ajlaDoctorEntityBuilder().build();
+
+	public static final StaffEntity UPDATED_AJLA_DOKTOR_ENTITY = updatedAjlaDoctorEntityBuilder().build();
+
+
   public static final StaffEntity ALF_DOKTOR_ENTITY = alfDoktorEntityBuilder().build();
 
   public static StaffEntity.StaffEntityBuilder ajlaDoctorEntityBuilder() {
@@ -70,6 +75,46 @@ public class TestDataStaffEntity {
                 .toList()
         );
   }
+
+	public static StaffEntity.StaffEntityBuilder updatedAjlaDoctorEntityBuilder() {
+		return StaffEntity.builder()
+				.hsaId(AJLA_DOCTOR_HSA_ID)
+				.firstName(AJLA_DOCTOR_FIRST_NAME)
+				.middleName(AJLA_DOCTOR_MIDDLE_NAME)
+				.lastName(UPDATED_AJLA_DOCTOR_LAST_NAME)
+				.role(
+						StaffRoleEntity.builder()
+								.role(StaffRole.DOCTOR.name())
+								.key(StaffRole.DOCTOR.getKey())
+								.build()
+				)
+				.paTitles(
+						AJLA_DOCTOR_PA_TITLES.stream()
+								.map(paTitle -> PaTitleEmbeddable.builder()
+										.code(paTitle.code())
+										.description(paTitle.description())
+										.build()
+								)
+								.toList()
+				)
+				.specialities(
+						AJLA_DOCTOR_SPECIALITIES.stream()
+								.map(speciality -> SpecialityEmbeddable.builder()
+										.speciality(speciality.value())
+										.build()
+								)
+								.toList()
+				)
+				.healthcareProfessionalLicences(
+						AJLA_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES.stream()
+								.map(
+										healthCareProfessionalLicence -> HealthcareProfessionalLicenceEmbeddable.builder()
+												.healthcareProfessionalLicence(healthCareProfessionalLicence.value())
+												.build()
+								)
+								.toList()
+				);
+	}
 
   public static StaffEntity.StaffEntityBuilder alfDoktorEntityBuilder() {
     return StaffEntity.builder()

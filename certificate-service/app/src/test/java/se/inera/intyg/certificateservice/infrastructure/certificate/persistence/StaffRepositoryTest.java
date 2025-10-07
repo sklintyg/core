@@ -1,12 +1,16 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.verify;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffEntity.AJLA_DOKTOR_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffEntity.ALF_DOKTOR_ENTITY;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffEntity.ajlaDoctorEntityBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.ALF_DOKTOR;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.UPPDATERAD_AJLA_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HSA_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALF_DOKTOR_HSA_ID;
 
@@ -14,25 +18,33 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.ReadyForSign;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revoked;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffEntityRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffVersionEntityRepository;
 
 @ExtendWith(MockitoExtension.class)
 class StaffRepositoryTest {
 
   @Mock
   private StaffEntityRepository staffEntityRepository;
+	@Mock
+	StaffVersionEntityRepository staffVersionEntityRepository;
   @InjectMocks
   private StaffRepository staffRepository;
 
-  @Test
+
+	@Test
   void shallReturnEntityFromRepositoryIfExists() {
     doReturn(Optional.of(AJLA_DOKTOR_ENTITY))
         .when(staffEntityRepository).findByHsaId(AJLA_DOCTOR_HSA_ID);
@@ -244,4 +256,80 @@ class StaffRepositoryTest {
 
     assertEquals(expectedStaffs, actualStaffs);
   }
+
+	@Nested
+	class UpdateStaffsTest {
+
+		private StaffEntity alja;
+		private StaffEntity uppdateradAlja;
+
+		@BeforeEach
+		void setup() {
+			alja = ajlaDoctorEntityBuilder().build();
+			uppdateradAlja = ajlaDoctorEntityBuilder().lastName("Doktorsson").build();
+		}
+
+		@Test
+		void shallUpdateEntitiesInStaffs() {
+			final var expectedStaffs = Map.of(
+					ALF_DOKTOR.hsaId(), ALF_DOKTOR_ENTITY,
+					AJLA_DOKTOR.hsaId(), alja
+			);
+
+			final var certificate = fk7210CertificateBuilder()
+					.readyForSign(
+							ReadyForSign.builder()
+									.readyForSignBy(ALF_DOKTOR)
+									.build()
+					)
+					.build();
+
+			doReturn(List.of(uppdateradAlja, ALF_DOKTOR_ENTITY))
+					.when(staffEntityRepository)
+					.findStaffEntitiesByHsaIdIn(List.of(AJLA_DOCTOR_HSA_ID, ALF_DOKTOR_HSA_ID));
+
+			doReturn(alja)
+					.when(staffEntityRepository)
+					.save(Mockito.any(StaffEntity.class));
+
+
+			final var actualStaffs = staffRepository.staffs(certificate);
+
+			assertEquals(expectedStaffs, actualStaffs);
+		}
+
+		@Test
+		void shallSaveOldVersionToStaffVersionEntityRepository() {
+
+			doReturn(Optional.of(alja))
+					.when(staffEntityRepository).findByHsaId(AJLA_DOCTOR_HSA_ID);
+
+			doReturn(uppdateradAlja)
+					.when(staffEntityRepository).save(Mockito.any(StaffEntity.class));
+
+			doReturn(Collections.emptyList()).when(staffVersionEntityRepository)
+					.findAllByHsaIdOrderByValidFromDesc(AJLA_DOCTOR_HSA_ID);
+			staffRepository.staff(UPPDATERAD_AJLA_DOKTOR);
+
+			verify(staffVersionEntityRepository).save(
+					argThat(savedVersion ->
+							savedVersion.getHsaId().equals(AJLA_DOCTOR_HSA_ID) &&
+							savedVersion.getLastName().equals(AJLA_DOKTOR_ENTITY.getLastName())));
+		}
+
+		@Test
+		void shallUpdateEntityIfHsaChanged() {
+			doReturn(Optional.of(alja))
+					.when(staffEntityRepository).findByHsaId(AJLA_DOCTOR_HSA_ID);
+
+			doReturn(uppdateradAlja)
+					.when(staffEntityRepository)
+					.save(Mockito.any(StaffEntity.class));
+
+			assertEquals(uppdateradAlja,
+					staffRepository.staff(UPPDATERAD_AJLA_DOKTOR)
+			);
+		}
+	}
+
 }
