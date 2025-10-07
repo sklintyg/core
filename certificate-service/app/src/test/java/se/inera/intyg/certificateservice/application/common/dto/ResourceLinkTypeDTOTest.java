@@ -10,101 +10,6 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.Certifi
 class ResourceLinkTypeDTOTest {
 
   @Nested
-  class ActionType {
-
-    @Test
-    void shallReturnCertificateActionTypeCreate() {
-      assertEquals(CertificateActionType.CREATE,
-          ResourceLinkTypeDTO.CREATE_CERTIFICATE.toCertificateActionType()
-      );
-    }
-
-    @Test
-    void shallReturnCertificateActionTypeRead() {
-      assertEquals(CertificateActionType.READ,
-          ResourceLinkTypeDTO.READ_CERTIFICATE.toCertificateActionType()
-      );
-    }
-
-    @Test
-    void shallReturnCertificateActionTypeUpdate() {
-      assertEquals(CertificateActionType.UPDATE,
-          ResourceLinkTypeDTO.EDIT_CERTIFICATE.toCertificateActionType()
-      );
-    }
-
-    @Test
-    void shallReturnCertificateActionTypeDelete() {
-      assertEquals(CertificateActionType.DELETE,
-          ResourceLinkTypeDTO.REMOVE_CERTIFICATE.toCertificateActionType()
-      );
-    }
-
-    @Test
-    void shallReturnCertificateActionTypeSign() {
-      assertEquals(CertificateActionType.SIGN,
-          ResourceLinkTypeDTO.SIGN_CERTIFICATE.toCertificateActionType()
-      );
-    }
-
-    @Test
-    void shallReturnCertificateActionTypeSend() {
-      assertEquals(CertificateActionType.SEND,
-          ResourceLinkTypeDTO.SEND_CERTIFICATE.toCertificateActionType()
-      );
-    }
-
-    @Test
-    void shallThrowExceptionForNotSupportedType() {
-      assertThrows(IllegalArgumentException.class,
-          ResourceLinkTypeDTO.SRS_FULL_VIEW::toCertificateActionType
-      );
-    }
-
-    @Test
-    void shallReturnCertificateActionTypePrint() {
-      assertEquals(CertificateActionType.PRINT,
-          ResourceLinkTypeDTO.PRINT_CERTIFICATE.toCertificateActionType()
-      );
-    }
-
-    @Test
-    void shallReturnCertificateActionTypeRevoke() {
-      assertEquals(CertificateActionType.REVOKE,
-          ResourceLinkTypeDTO.REVOKE_CERTIFICATE.toCertificateActionType()
-      );
-    }
-
-    @Test
-    void shallReturnCertificateActionTypeReplace() {
-      assertEquals(CertificateActionType.REPLACE,
-          ResourceLinkTypeDTO.REPLACE_CERTIFICATE.toCertificateActionType()
-      );
-    }
-
-    @Test
-    void shallReturnCertificateActionTypeReplaceContinue() {
-      assertEquals(CertificateActionType.REPLACE_CONTINUE,
-          ResourceLinkTypeDTO.REPLACE_CERTIFICATE_CONTINUE.toCertificateActionType()
-      );
-    }
-
-    @Test
-    void shallReturnCertificateActionTypeRenew() {
-      assertEquals(CertificateActionType.RENEW,
-          ResourceLinkTypeDTO.RENEW_CERTIFICATE.toCertificateActionType()
-      );
-    }
-
-    @Test
-    void shallReturnCertificateActionTypeReadyForSign() {
-      assertEquals(CertificateActionType.READY_FOR_SIGN,
-          ResourceLinkTypeDTO.READY_FOR_SIGN.toCertificateActionType()
-      );
-    }
-  }
-
-  @Nested
   class ResourceLinkType {
 
     @Test
@@ -309,6 +214,12 @@ class ResourceLinkTypeDTOTest {
     void shallReturnResourceLinkTypeDTOSrsMinimizedView() {
       assertEquals(ResourceLinkTypeDTO.SRS_MINIMIZED_VIEW,
           ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.SRS_SIGNED));
+    }
+
+    @Test
+    void shallReturnResourceLinkTypeDTOCreateCertificateFromTemplate() {
+      assertEquals(ResourceLinkTypeDTO.CREATE_CERTIFICATE_FROM_TEMPLATE,
+          ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.TEMPLATE));
     }
   }
 }
