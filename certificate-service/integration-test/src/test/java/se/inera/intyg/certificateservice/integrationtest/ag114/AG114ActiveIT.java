@@ -33,7 +33,6 @@ import se.inera.intyg.certificateservice.integrationtest.GetPatientCertificatesI
 import se.inera.intyg.certificateservice.integrationtest.GetUnitCertificatesIT;
 import se.inera.intyg.certificateservice.integrationtest.GetUnitCertificatesInfoIT;
 import se.inera.intyg.certificateservice.integrationtest.GetUnitCertificatesWhenSignedIT;
-import se.inera.intyg.certificateservice.integrationtest.RenewCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.RenewExternalCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ReplaceCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.RevokeCertificateIT;
@@ -318,21 +317,6 @@ class AG114ActiveIT {
   @Nested
   @DisplayName(TYPE + "Hämta signerade intyg")
   class GetUnitCertificatesWhenSigned extends GetUnitCertificatesWhenSignedIT {
-
-    @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-  }
-
-  @Nested
-  @DisplayName(TYPE + "Förnya")
-  class RenewCertificate extends RenewCertificateIT {
 
     @Override
     protected String type() {
