@@ -57,6 +57,15 @@ public class CertificateModelFactoryAG114 implements CertificateModelFactory {
       Läkarintyg om arbetsförmåga – sjuklöneperioden ska användas när patienten har en anställning och behöver ett läkarintyg i förhållande till sin arbetsgivare. Intyget används under sjuklöneperioden, det vill säga under de 14 första dagarna i sjukfallet.
       """;
 
+  private static final String PREAMBLE_TEXT = """
+      Det här är ditt intyg. Intyget innehåller all information som vården fyllt i. Du kan inte ändra något i ditt intyg. Har du frågor kontaktar du den som skrivit ditt intyg. Det här intyget behöver du skriva ut och skicka själv.
+      """;
+
+  public static final CertificateModelId AG114_V2_0 = CertificateModelId.builder()
+      .type(new CertificateType(AG114))
+      .version(new CertificateVersion(VERSION))
+      .build();
+
   private static final String DETAILED_DESCRIPTION = """
       <p><b>Utfärdare</b><br/>Läkarintyget får utfärdas av läkare eller tandläkare. I intyget omfattar begreppet läkare båda professionerna. Det är inte möjligt att delegera rätten att utfärda läkarintyget till annan profession, till exempel sjuksköterska eller fysioterapeut. Se även Socialstyrelsens föreskrifter om intyg (HSLF-FS 2018:54).</p>
       <p><b>Syften med läkarintyget</b></p>
@@ -65,6 +74,7 @@ public class CertificateModelFactoryAG114 implements CertificateModelFactory {
         <li>Med stöd av läkarintyget styrker arbetstagaren dels sin rätt till att vara frånvarande från arbetet, dels vilka arbetsuppgifter hen inte bör utföra.</li>
         <li>Läkarintyget kan ge arbetsgivaren vägledning till om det går att anpassa arbetsuppgifter för att göra det möjligt för arbetstagaren att utföra visst arbete. Informationen kan även ha betydelse för arbetsgivaren i rehabiliteringsarbetet.</li>
         <li>Läkarintyget ska endast användas till och med dag 14 i sjuklöneperioden. Om sjukfallet bedöms passera dag 14 ska istället Läkarintyg om arbetsförmåga - arbetsgivaren utfärdas och lämnas till arbetsgivare.</li>
+        <li>Läkarintyget kan användas från och med dag 1 i sjuklöneperioden, ett så kallat förstadagsintyg. Arbetsgivaren får om det finns särskilda skäl för det begära att arbetstagaren genom intyg av läkare styrker nedsättning av arbetsförmågan tidigare än dag 8 i sjuklöneperioden.</li>
       </ul>
       <p><b>Information i intyget</b></p>
       <p>Intyget ska ge följande information:</p>
@@ -74,16 +84,10 @@ public class CertificateModelFactoryAG114 implements CertificateModelFactory {
       </ul>
       <p><b>Sjuklöneperiod</b></p>
       <p>Sjuklöneperioden börjar den dag som arbetstagaren gjort en sjukanmälan till arbetsgivaren samt avhåller sig från arbete vid nedsatt arbetsförmåga på grund av sjukdom.</p>
+      <p><b>Läkarintyg från dag 15</b></p>
+      <p>Från och med dag 15 i sjukperioden beslutar Försäkringskassan om arbetstagaren har rätt till sjukpenning. För dessa fall används istället Försäkringskassans läkarintyg för sjukpenning (FK7804).</p>
+      <p>Om patienten behöver ett läkarintyg i förhållande till sin arbetsgivare ska Läkarintyg om arbetsförmåga – arbetsgivaren (AG7804) utfärdas.</p>
       """;
-
-  private static final String PREAMBLE_TEXT = """
-      Det här är ditt intyg. Intyget innehåller all information som vården fyllt i. Du kan inte ändra något i ditt intyg. Har du frågor kontaktar du den som skrivit ditt intyg. Det här intyget behöver du skriva ut och skicka själv.
-      """;
-
-  public static final CertificateModelId AG114_V2_0 = CertificateModelId.builder()
-      .type(new CertificateType(AG114))
-      .version(new CertificateVersion(VERSION))
-      .build();
 
   @Override
   public CertificateModel create() {
@@ -98,7 +102,7 @@ public class CertificateModelFactoryAG114 implements CertificateModelFactory {
         )
         .name(NAME)
         .description(DESCRIPTION)
-        .detailedDescription(DETAILED_DESCRIPTION)
+        .detailedDescription(DETAILED_DESCRIPTION.replaceAll("\\R", ""))
         .activeFrom(activeFrom)
         .availableForCitizen(true)
         .texts(List.of(

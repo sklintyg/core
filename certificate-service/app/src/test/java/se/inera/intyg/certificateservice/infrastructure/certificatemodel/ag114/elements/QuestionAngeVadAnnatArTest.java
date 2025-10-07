@@ -146,11 +146,7 @@ class QuestionAngeVadAnnatArTest {
               .value(
                   ElementValueDateList.builder()
                       .dateListId(new FieldId("10.1"))
-                      .dateList(List.of(
-                          ElementValueDate.builder()
-                              .dateId(new FieldId("FIELD_ID"))
-                              .build()
-                      ))
+                      .dateList(List.of())
                       .build()
               )
               .build()
