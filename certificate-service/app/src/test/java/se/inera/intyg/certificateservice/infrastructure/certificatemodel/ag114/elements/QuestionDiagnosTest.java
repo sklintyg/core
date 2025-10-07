@@ -31,7 +31,7 @@ class QuestionDiagnosTest {
   private static final ElementId ELEMENT_ID = new ElementId("4");
 
   @Test
-  void shallIncludeId() {
+  void shouldIncludeId() {
     final var element = QuestionDiagnos.questionDiagnos(
         diagnosisCodeRepository);
 
@@ -39,7 +39,7 @@ class QuestionDiagnosTest {
   }
 
   @Test
-  void shallIncludeConfiguration() {
+  void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationDiagnosis.builder()
         .id(new FieldId("4.1"))
         .name("Diagnos/diagnoser för sjukdom som orsakar nedsatt arbetsförmåga")
@@ -67,7 +67,7 @@ class QuestionDiagnosTest {
   }
 
   @Test
-  void shallIncludeRules() {
+  void shouldIncludeRules() {
     final var expectedRules = List.of(
         ElementRuleExpression.builder()
             .id(ELEMENT_ID)
@@ -111,7 +111,7 @@ class QuestionDiagnosTest {
   }
 
   @Test
-  void shallIncludeValidations() {
+  void shouldIncludeValidations() {
     final var expectedValidations = List.of(
         ElementValidationDiagnosis.builder()
             .mandatoryField(new FieldId("huvuddiagnos"))

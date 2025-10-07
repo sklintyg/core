@@ -12,13 +12,13 @@ class CategoryKontaktTest {
   private static final ElementId ELEMENT_ID = new ElementId("KAT_7");
 
   @Test
-  void shallIncludeId() {
+  void shouldIncludeId() {
     final var element = categoryKontakt();
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
-  void shallIncludeConfiguration() {
+  void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationCategory.builder()
         .name("Kontakt")
         .build();

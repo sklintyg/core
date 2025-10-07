@@ -141,7 +141,7 @@ class CertificateModelFactoryAG114Test {
     @ValueSource(strings = {
         "KAT_1", "KAT_2", "KAT_3", "KAT_4", "KAT_5", "KAT_6", "KAT_7",
         "UNIT_CONTACT_INFORMATION", "10", "10.3", "1", "3", "4", "5", "6", "6.2", "7", "7.2", "8",
-        "9", "9.2"
+        "9", "9.2", "messageArbetsformaga"
     })
     void shouldIncludeElementSpecifications(String id) {
       final var elementId = new ElementId(id);

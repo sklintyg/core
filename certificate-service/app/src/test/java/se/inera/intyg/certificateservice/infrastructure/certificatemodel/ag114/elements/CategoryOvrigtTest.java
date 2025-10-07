@@ -12,13 +12,13 @@ class CategoryOvrigtTest {
   private static final ElementId ELEMENT_ID = new ElementId("KAT_6");
 
   @Test
-  void shallIncludeId() {
+  void shouldIncludeId() {
     final var element = categoryOvrigt();
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
-  void shallIncludeConfiguration() {
+  void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationCategory.builder()
         .name("Övrigt")
         .build();

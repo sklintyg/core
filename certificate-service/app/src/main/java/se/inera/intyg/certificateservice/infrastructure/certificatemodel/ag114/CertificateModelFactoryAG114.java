@@ -7,6 +7,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag114.elements.CategoryKontakt.categoryKontakt;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag114.elements.CategoryOvrigt.categoryOvrigt;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag114.elements.CategorySysselsattning.categorySysselsattning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag114.elements.MessageArbetsformagaAlert.messageArbetsformagaAlert;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag114.elements.QuestionAngeVadAnnatAr.questionAngeVadAnnatAr;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag114.elements.QuestionArbetsformaga.questionArbetsformaga;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag114.elements.QuestionBeskrivArbetsformagan.questionBeskrivArbetsformagan;
@@ -130,7 +131,8 @@ public class CertificateModelFactoryAG114 implements CertificateModelFactory {
             ),
             categoryBedomning(
                 questionPeriodProcentBedomning(),
-                questionPeriodBedomning()
+                questionPeriodBedomning(),
+                messageArbetsformagaAlert()
             ),
             categoryOvrigt(
                 questionOvrigt()

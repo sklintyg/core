@@ -12,13 +12,13 @@ class CategorySysselsattningTest {
   private static final ElementId ELEMENT_ID = new ElementId("KAT_2");
 
   @Test
-  void shallIncludeId() {
+  void shouldIncludeId() {
     final var element = categorySysselsattning();
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
-  void shallIncludeConfiguration() {
+  void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationCategory.builder()
         .name("Sysselsättning")
         .build();

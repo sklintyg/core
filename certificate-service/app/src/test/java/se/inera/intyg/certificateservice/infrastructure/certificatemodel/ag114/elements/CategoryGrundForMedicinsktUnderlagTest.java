@@ -12,13 +12,13 @@ class CategoryGrundForMedicinsktUnderlagTest {
   private static final ElementId ELEMENT_ID = new ElementId("KAT_1");
 
   @Test
-  void shallIncludeId() {
+  void shouldIncludeId() {
     final var element = categoryGrundForMedicinsktUnderlag();
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
-  void shallIncludeConfiguration() {
+  void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationCategory.builder()
         .name("Grund för medicinskt underlag")
         .build();
