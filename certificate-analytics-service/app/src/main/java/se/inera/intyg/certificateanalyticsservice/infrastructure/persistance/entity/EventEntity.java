@@ -36,13 +36,17 @@ public class EventEntity {
   private MessageEntity message;
 
   @ManyToOne
+  @JoinColumn(name = "patient_key", referencedColumnName = "key")
+  private PatientEntity patient;
+
+  @ManyToOne
   @JoinColumn(name = "unit_key", referencedColumnName = "key")
   private UnitEntity unit;
 
   @ManyToOne
   @JoinColumn(name = "provider_key", referencedColumnName = "key")
   private CareProviderEntity careProvider;
-
+  
   @ManyToOne
   @JoinColumn(name = "user_key", referencedColumnName = "key")
   private UserEntity user;
@@ -69,6 +73,7 @@ public class EventEntity {
   @ManyToOne
   @JoinColumn(name = "recipient_party_key", referencedColumnName = "key")
   private PartyEntity recipient;
+
 
   @Column(name = "id", unique = true, nullable = false, length = 22)
   private String messageId;

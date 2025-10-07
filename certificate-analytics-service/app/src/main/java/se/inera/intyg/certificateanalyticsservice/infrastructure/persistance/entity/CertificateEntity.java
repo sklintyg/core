@@ -31,7 +31,7 @@ public class CertificateEntity {
 
   @Column(name = "certificate_type", nullable = false, length = 24)
   private String certificateType;
-  
+
   @Column(name = "certificate_type_version", nullable = false, length = 24)
   private String certificateTypeVersion;
 
@@ -42,8 +42,4 @@ public class CertificateEntity {
   @ManyToOne
   @JoinColumn(name = "unit_key", referencedColumnName = "key")
   private UnitEntity unit;
-
-  @ManyToOne
-  @JoinColumn(name = "patient_key", referencedColumnName = "key")
-  private PatientEntity patient;
 }

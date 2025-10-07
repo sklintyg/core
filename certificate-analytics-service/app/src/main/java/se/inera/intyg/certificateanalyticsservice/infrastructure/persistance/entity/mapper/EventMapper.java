@@ -9,6 +9,7 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.rep
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.EventTypeRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.OriginRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.PartyRepository;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.PatientRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.RoleRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.SessionRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.UnitRepository;
@@ -29,6 +30,7 @@ public class EventMapper {
   private final PartyRepository partyRepository;
   private final CertificateRelationEntityRepository certificateRelationEntityRepository;
   private final MessageEntityMapper messageEntityMapper;
+  private final PatientRepository patientRepository;
 
   public EventEntity toEntity(PseudonymizedAnalyticsMessage message) {
     final var certificateEntity = certificateEntityMapper.map(message);
@@ -39,6 +41,7 @@ public class EventMapper {
         .message(messageEntity)
         .unit(unitRepository.findOrCreate(message.getEventUnitId()))
         .careProvider(careProviderRepository.findOrCreate(message.getEventCareProviderId()))
+        .patient(patientRepository.findOrCreate(message.getCertificatePatientId()))
         .user(userRepository.findOrCreate(message.getEventUserId()))
         .session(sessionRepository.findOrCreate(message.getEventSessionId()))
         .timestamp(message.getEventTimestamp())
@@ -55,6 +58,7 @@ public class EventMapper {
         .id(entity.getMessageId())
         .eventTimestamp(entity.getTimestamp())
         .eventMessageType(entity.getEventType().getEventType())
+        .certificatePatientId(entity.getPatient().getPatientId())
         .eventUserId(entity.getUser() != null ? entity.getUser().getUserId() : null)
         .eventRole(entity.getRole() != null ? entity.getRole().getRole() : null)
         .eventUnitId(entity.getUnit() != null ? entity.getUnit().getHsaId() : null)
@@ -66,7 +70,6 @@ public class EventMapper {
         .certificateId(entity.getCertificate().getCertificateId())
         .certificateType(entity.getCertificate().getCertificateType())
         .certificateTypeVersion(entity.getCertificate().getCertificateTypeVersion())
-        .certificatePatientId(entity.getCertificate().getPatient().getPatientId())
         .certificateUnitId(entity.getCertificate().getUnit().getHsaId())
         .certificateCareProviderId(entity.getCertificate().getCareProvider().getHsaId());
 

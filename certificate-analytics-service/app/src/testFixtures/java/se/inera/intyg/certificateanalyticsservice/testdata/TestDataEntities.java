@@ -44,6 +44,7 @@ public class TestDataEntities {
         .timestamp(TIMESTAMP)
         .eventType(eventTypeEntity())
         .role(roleEntity())
+        .patient(patientEntity())
         .unit(unitEntity())
         .careProvider(careProviderEntity())
         .user(userEntity())
@@ -64,6 +65,7 @@ public class TestDataEntities {
                 .build()
         )
         .role(roleEntity())
+        .patient(patientEntity())
         .unit(unitEntity())
         .careProvider(careProviderEntity())
         .user(userEntity())
@@ -77,7 +79,6 @@ public class TestDataEntities {
         .certificateId(TestDataConstants.HASHED_CERTIFICATE_ID)
         .certificateType(CERTIFICATE_TYPE)
         .certificateTypeVersion(CERTIFICATE_TYPE_VERSION)
-        .patient(patientEntity())
         .unit(unitEntity())
         .careProvider(careProviderEntity());
   }

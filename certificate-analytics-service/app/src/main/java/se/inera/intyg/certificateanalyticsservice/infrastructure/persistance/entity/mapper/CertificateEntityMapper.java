@@ -32,7 +32,6 @@ public class CertificateEntityMapper {
                 .certificateId(message.getCertificateId())
                 .certificateType(message.getCertificateType())
                 .certificateTypeVersion(message.getCertificateTypeVersion())
-                .patient(patientRepository.findOrCreate(message.getCertificatePatientId()))
                 .unit(unitRepository.findOrCreate(message.getCertificateUnitId()))
                 .careProvider(
                     careProviderRepository.findOrCreate(message.getCertificateCareProviderId())

@@ -90,9 +90,6 @@
       <column name="certificate_type_version" type="varchar(24)">
         <constraints nullable="false"/>
       </column>
-      <column name="patient_key" type="bigint unsigned">
-        <constraints nullable="false"/>
-      </column>
       <column name="unit_key" type="bigint unsigned">
         <constraints nullable="false"/>
       </column>
@@ -107,9 +104,6 @@
     <addForeignKeyConstraint baseTableName="dim_certificate" baseColumnNames="unit_key"
       referencedTableName="dim_unit" referencedColumnNames="key"
       constraintName="fk_certificate_unit"/>
-    <addForeignKeyConstraint baseTableName="dim_certificate" baseColumnNames="patient_key"
-      referencedTableName="dim_patient" referencedColumnNames="key"
-      constraintName="fk_certificate_patient"/>
 
     <createTable tableName="dim_party">
       <column name="key" type="tinyint unsigned auto_increment">
@@ -198,6 +192,9 @@
       <column name="certificate_key" type="bigint unsigned">
         <constraints nullable="false"/>
       </column>
+      <column name="patient_key" type="bigint unsigned">
+        <constraints nullable="false"/>
+      </column>
       <column name="message_key" type="bigint unsigned"/>
       <column name="user_key" type="bigint unsigned"/>
       <column name="role_key" type="tinyint unsigned"/>
@@ -241,6 +238,10 @@
     <addForeignKeyConstraint baseTableName="fact_event" baseColumnNames="message_key"
       referencedTableName="dim_message" referencedColumnNames="key"
       constraintName="fk_event_message"/>
+    <addForeignKeyConstraint baseTableName="fact_event" baseColumnNames="patient_key"
+      referencedTableName="dim_patient" referencedColumnNames="key"
+      constraintName="fk_event_patient"/>
+    constraintName="fk_event_certificate_care_provider"/>
 
     <createTable tableName="dim_certificate_relation">
       <column name="key" type="bigint unsigned auto_increment">

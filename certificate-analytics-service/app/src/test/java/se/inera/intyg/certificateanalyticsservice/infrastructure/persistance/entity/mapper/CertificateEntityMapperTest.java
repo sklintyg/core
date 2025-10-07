@@ -21,13 +21,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CareProviderEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CertificateEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CertificateRelationTypeEntity;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.PatientEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.UnitEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CareProviderRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CertificateEntityRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CertificateRelationEntityRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CertificateRelationTypeEntityRepository;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.PatientRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.UnitRepository;
 import se.inera.intyg.certificateanalyticsservice.testdata.TestDataPseudonymized;
 
@@ -41,8 +39,6 @@ class CertificateEntityMapperTest {
   @Mock
   private UnitRepository unitRepository;
   @Mock
-  private PatientRepository patientRepository;
-  @Mock
   private CertificateEntityRepository certificateEntityRepository;
   @Mock
   private CertificateRelationEntityRepository certificateRelationEntityRepository;
@@ -54,12 +50,10 @@ class CertificateEntityMapperTest {
     final var message = TestDataPseudonymized.draftPseudonymizedMessageBuilder().build();
     final var expectedCareProvider = mock(CareProviderEntity.class);
     final var expectedUnit = mock(UnitEntity.class);
-    final var expectedPatient = mock(PatientEntity.class);
     final var newEntity = CertificateEntity.builder()
         .certificateId(message.getCertificateId())
         .certificateType(CERTIFICATE_TYPE)
         .certificateTypeVersion(CERTIFICATE_TYPE_VERSION)
-        .patient(expectedPatient)
         .unit(expectedUnit)
         .careProvider(expectedCareProvider)
         .build();
@@ -69,8 +63,6 @@ class CertificateEntityMapperTest {
     when(careProviderRepository.findOrCreate(message.getCertificateCareProviderId())).thenReturn(
         expectedCareProvider);
     when(unitRepository.findOrCreate(message.getCertificateUnitId())).thenReturn(expectedUnit);
-    when(patientRepository.findOrCreate(message.getCertificatePatientId())).thenReturn(
-        expectedPatient);
     when(certificateEntityRepository.save(newEntity)).thenReturn(newEntity);
 
     final var result = certificateEntityMapper.map(message);
