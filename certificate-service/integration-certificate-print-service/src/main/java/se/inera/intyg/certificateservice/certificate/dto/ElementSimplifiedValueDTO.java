@@ -11,7 +11,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     @Type(value = ElementSimplifiedValueTextDTO.class, name = "TEXT"),
     @Type(value = ElementSimplifiedValueListDTO.class, name = "LIST"),
     @Type(value = ElementSimplifiedValueTableDTO.class, name = "TABLE"),
-    @Type(value = ElementSimplifiedValueLabeledTextDTO.class, name = "LABELED_LIST")
+    @Type(value = ElementSimplifiedValueLabeledListDTO.class, name = "LABELED_LIST"),
+    @Type(value = ElementSimplifiedValueLabeledTextDTO.class, name = "LABELED_TEXT")
 })
 
 public interface ElementSimplifiedValueDTO {
