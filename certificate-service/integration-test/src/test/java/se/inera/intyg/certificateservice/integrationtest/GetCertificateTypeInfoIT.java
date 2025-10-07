@@ -23,6 +23,10 @@ public abstract class GetCertificateTypeInfoIT extends BaseIntegrationIT {
 
   protected abstract String type();
 
+  protected boolean canDentistsUseType() {
+    return false;
+  }
+
   @Test
   @DisplayName("Om aktiverad ska intygstypen returneras i listan av tillgängliga intygstyper")
   void shallReturnCertificateWhenActive() {
@@ -37,18 +41,25 @@ public abstract class GetCertificateTypeInfoIT extends BaseIntegrationIT {
   }
 
   @Test
-  @DisplayName("Om användaren har rollen tandläkare ska intygstypen inte returneras i listan av tillgängliga intygstyper")
-  void shallNotReturnCertificateWhenUserIsDoctor() {
+  @DisplayName("Om användaren har rollen tandläkare och inte får signera intyget ska intygstypen inte returneras i listan av tillgängliga intygstyper")
+  void shallRespectRulesIfDentistCanSignCertificateTypeWhenReturningCertificateTypeInList() {
     final var response = api.certificateTypeInfo(
         customCertificateTypeInfoRequest()
             .user(DAN_DENTIST_DTO)
             .build()
     );
 
-    assertNull(
-        certificateTypeInfo(response.getBody(), type()),
-        "Should not contain %s as user is dentist!".formatted(type())
-    );
+    if (canDentistsUseType()) {
+      assertNotNull(
+          certificateTypeInfo(response.getBody(), type()),
+          "Should contain %s as user is dentist and can use type!".formatted(type())
+      );
+    } else {
+      assertNull(
+          certificateTypeInfo(response.getBody(), type()),
+          "Should not contain %s as user is dentist!".formatted(type())
+      );
+    }
   }
 
   @Test

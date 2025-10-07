@@ -222,6 +222,11 @@ class AG114ActiveIT {
     protected String type() {
       return CERTIFICATE_TYPE;
     }
+
+    @Override
+    protected boolean canDentistsUseType() {
+      return true;
+    }
   }
 
   @Nested
