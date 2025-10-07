@@ -2810,4 +2810,190 @@ class CertificateTest {
       assertTrue(expectedElementData.containsAll(certificate.elementData()));
     }
   }
+
+  @Nested
+  class TestCreateFromTemplate {
+
+    @Test
+    void shallReturnNewCertificateWithId() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.createFromTemplate(actionEvaluation,
+          certificateModel);
+
+      assertNotNull(actualCertificate.id());
+      assertNotEquals(signedCertificate.id(), actualCertificate.id());
+    }
+
+    @Test
+    void shallReturnNewCertificateWithCreated() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.createFromTemplate(actionEvaluation,
+          certificateModel);
+
+      assertEquals(
+          LocalDateTime.now(ZoneId.systemDefault()).toLocalDate(),
+          actualCertificate.created().toLocalDate()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithRevision() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.createFromTemplate(actionEvaluation,
+          certificateModel);
+
+      assertEquals(new Revision(0), actualCertificate.revision());
+    }
+
+    @Test
+    void shallReturnNewCertificateWithProvidedModel() {
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.createFromTemplate(actionEvaluation,
+          certificateModel);
+
+      assertEquals(certificateModel, actualCertificate.certificateModel());
+    }
+
+    @Test
+    void shallReturnNewCertificateWithSamePatient() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .patient(null)
+          .build();
+
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.createFromTemplate(actionEvaluation,
+          certificateModel);
+
+      assertEquals(
+          signedCertificate.certificateMetaData().patient(),
+          actualCertificate.certificateMetaData().patient()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithNewPatient() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .patient(ALVE_REACT_ALFREDSSON)
+          .build();
+
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.createFromTemplate(actionEvaluation,
+          certificateModel);
+
+      assertEquals(
+          actionEvaluation.patient(),
+          actualCertificate.certificateMetaData().patient()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithNewSubUnit() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .subUnit(ALFA_HUDMOTTAGNINGEN)
+          .build();
+
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.createFromTemplate(actionEvaluation,
+          certificateModel);
+
+      assertEquals(
+          actionEvaluation.subUnit(),
+          actualCertificate.certificateMetaData().issuingUnit()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithNewCareUnit() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .careUnit(ALFA_VARDCENTRAL)
+          .build();
+
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.createFromTemplate(actionEvaluation,
+          certificateModel);
+
+      assertEquals(
+          actionEvaluation.careUnit(),
+          actualCertificate.certificateMetaData().careUnit()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithNewCareProvider() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .careProvider(BETA_REGIONEN)
+          .build();
+
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.createFromTemplate(actionEvaluation,
+          certificateModel);
+
+      assertEquals(
+          actionEvaluation.careProvider(),
+          actualCertificate.certificateMetaData().careProvider()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithNewStaff() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .user(ALF_DOKTOR)
+          .build();
+
+      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.createFromTemplate(actionEvaluation,
+          certificateModel);
+
+      assertEquals(
+          Staff.create(actionEvaluation.user()),
+          actualCertificate.certificateMetaData().issuer()
+      );
+    }
+
+    @Test
+    void shallReturnNewCertificateWithValuesThatShouldBeKept() {
+      final var expectedElementData = List.of(
+          CONTACT_INFO
+      );
+
+      final var actionEvaluation = actionEvaluationBuilder.build();
+      final var signedCertificate = certificateBuilder
+          .elementData(
+              List.of(DATE, CONTACT_INFO)
+          )
+          .status(Status.SIGNED)
+          .build();
+      
+      doReturn(true).when(certificateModel).elementSpecificationExists(DATE.id());
+
+      final var actualCertificate = signedCertificate.createFromTemplate(actionEvaluation,
+          certificateModel);
+
+      assertEquals(expectedElementData, actualCertificate.elementData());
+    }
+  }
 }
