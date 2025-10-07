@@ -263,7 +263,7 @@ public class CertificateController {
   }
 
   @PostMapping("/{certificateId}/template")
-  @PerformanceLogging(eventAction = "create-certificate-from-template", eventType = EVENT_TYPE_CHANGE)
+  @PerformanceLogging(eventAction = "create-certificate-from-template", eventType = EVENT_TYPE_CREATION)
   CreateCertificateFromTemplateResponse createCertificateFromTemplate(
       @RequestBody CreateCertificateFromTemplateRequest request,
       @PathVariable("certificateId") String certificateId) {

@@ -478,8 +478,9 @@ public class AppConfig {
   @Bean
   public CreateCertificateFromTemplateDomainService createCertificateFromTemplateDomainService(
       CertificateRepository certificateRepository,
+      CertificateModelRepository certificateModelRepository,
       CertificateEventDomainService certificateEventDomainService) {
     return new CreateCertificateFromTemplateDomainService(certificateRepository,
-        certificateEventDomainService);
+        certificateModelRepository, certificateEventDomainService);
   }
 }

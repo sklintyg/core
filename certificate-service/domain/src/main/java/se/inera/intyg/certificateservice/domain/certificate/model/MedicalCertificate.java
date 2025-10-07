@@ -593,4 +593,24 @@ public class MedicalCertificate implements Certificate {
       log.warn("Failed to prefill certificate.", e);
     }
   }
+
+  @Override
+  public Certificate createFromTemplate(ActionEvaluation actionEvaluation,
+      CertificateModel certificateModel) {
+    final var newCertificate = MedicalCertificate.builder()
+        .id(new CertificateId(UUID.randomUUID().toString()))
+        .created(LocalDateTime.now(ZoneId.systemDefault()))
+        .certificateModel(certificateModel)
+        .revision(new Revision(0))
+        .build();
+
+    newCertificate.certificateMetaData = this.certificateMetaData();
+    newCertificate.updateMetadata(actionEvaluation);
+
+    newCertificate.elementData = this.elementData().stream()
+        .filter(data -> !certificateModel.elementSpecificationExists(data.id()))
+        .toList();
+
+    return newCertificate;
+  }
 }

@@ -134,4 +134,7 @@ public interface Certificate {
   default boolean isPlaceholder() {
     return false;
   }
+
+  Certificate createFromTemplate(ActionEvaluation actionEvaluation,
+      CertificateModel certificateModel);
 }

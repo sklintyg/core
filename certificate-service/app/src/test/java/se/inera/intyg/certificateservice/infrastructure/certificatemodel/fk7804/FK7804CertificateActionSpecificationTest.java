@@ -499,4 +499,17 @@ class FK7804CertificateActionSpecificationTest {
             expectedSpecification::equals),
         "Expected type: %s".formatted(expectedSpecification));
   }
+
+  @Test
+  void shallIncludeCertificateActionCreateFromTemplate() {
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.CREATE_FROM_TEMPLATE)
+        .build();
+
+    final var actionSpecifications = FK7804CertificateActionSpecification.create();
+
+    assertTrue(actionSpecifications.stream().anyMatch(
+            expectedSpecification::equals),
+        "Expected type: %s".formatted(expectedSpecification));
+  }
 }

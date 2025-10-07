@@ -302,4 +302,10 @@ public class PlaceholderCertificate implements Certificate {
   public boolean isPlaceholder() {
     return true;
   }
+
+  @Override
+  public Certificate createFromTemplate(ActionEvaluation actionEvaluation,
+      CertificateModel certificateModel) {
+    throw new IllegalStateException("Cannot create from template for a placeholder certificate");
+  }
 }

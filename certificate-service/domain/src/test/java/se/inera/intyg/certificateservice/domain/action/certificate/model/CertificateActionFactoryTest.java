@@ -473,4 +473,16 @@ class CertificateActionFactoryTest {
     assert certificateAction != null;
     assertEquals(CertificateActionSrsSigned.class, certificateAction.getClass());
   }
+
+  @Test
+  void shallReturnCertificateActionTemplateFromListIfExistInSpecification() {
+    final var certificateActionSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.CREATE_FROM_TEMPLATE)
+        .build();
+
+    final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
+
+    assert certificateAction != null;
+    assertEquals(CertificateActionCreateFromTemplate.class, certificateAction.getClass());
+  }
 }

@@ -592,6 +592,31 @@ public class CertificateActionFactory {
               )
           )
           .build();
+      case CREATE_FROM_TEMPLATE -> CertificateActionCreateFromTemplate.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleStatus(List.of(Status.SIGNED)),
+                  new ActionRuleUserNotBlocked(),
+                  new ActionRulePatientAlive(),
+                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
+                  new ActionRuleUserAllowCopy(),
+                  new ActionRuleInactiveUnit(),
+                  new ActionRuleUserAgreement(),
+                  new ActionRuleChildRelationNoMatch(
+                      List.of(RelationType.REPLACE, RelationType.COMPLEMENT),
+                      List.of(Status.DRAFT, Status.REVOKED)
+                  ),
+                  new ActionRuleProtectedPerson(
+                      actionSpecification.allowedRolesForProtectedPersons()
+                  ),
+                  new ActionRuleRole(
+                      List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
+                          Role.CARE_ADMIN)
+                  )
+              )
+          )
+          .build();
     };
   }
 }
