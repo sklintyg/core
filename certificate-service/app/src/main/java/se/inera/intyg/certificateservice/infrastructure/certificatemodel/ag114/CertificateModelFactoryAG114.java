@@ -95,7 +95,7 @@ public class CertificateModelFactoryAG114 implements CertificateModelFactory {
         .id(AG114_V2_0)
         .type(
             new Code(
-                "AG1-14",
+                "AG114",
                 "a1c4b3f2-d5e6-7890-b123-456789abcdef",
                 NAME
             )
