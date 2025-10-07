@@ -32,6 +32,14 @@ public class EventEntity {
   private CertificateEntity certificate;
 
   @ManyToOne
+  @JoinColumn(name = "certificate_unit_key", referencedColumnName = "key")
+  private UnitEntity certificateUnit;
+
+  @ManyToOne
+  @JoinColumn(name = "certificate_care_provider_key", referencedColumnName = "key")
+  private CareProviderEntity certificateCareProvider;
+
+  @ManyToOne
   @JoinColumn(name = "message_key", referencedColumnName = "key")
   private MessageEntity message;
 
@@ -46,7 +54,7 @@ public class EventEntity {
   @ManyToOne
   @JoinColumn(name = "provider_key", referencedColumnName = "key")
   private CareProviderEntity careProvider;
-  
+
   @ManyToOne
   @JoinColumn(name = "user_key", referencedColumnName = "key")
   private UserEntity user;

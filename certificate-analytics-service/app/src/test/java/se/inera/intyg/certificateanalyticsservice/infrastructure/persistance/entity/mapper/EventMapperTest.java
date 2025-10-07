@@ -3,11 +3,13 @@ package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.en
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataEntities.careProviderEntity;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataEntities.certificateRelationEntity;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataEntities.messageEntity;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataEntities.messageSentEventEntityBuilder;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataEntities.patientEntity;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataEntities.sentEventEntityBuilder;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataEntities.unitEntity;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataPseudonymized.messagePseudonymizedMessageBuilder;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataPseudonymized.sentPseudonymizedMessageBuilder;
 
@@ -18,7 +20,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CareProviderEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CertificateEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventTypeEntity;
@@ -26,7 +27,6 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.ent
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.PartyEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.RoleEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.SessionEntity;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.UnitEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.UserEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CareProviderRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CertificateRelationEntityRepository;
@@ -74,8 +74,8 @@ class EventMapperTest {
     final var message = messagePseudonymizedMessageBuilder().build();
     final var expectedCertificate = mock(CertificateEntity.class);
     final var expectedMessage = messageEntity().build();
-    final var expectedUnit = mock(UnitEntity.class);
-    final var expectedCareProvider = mock(CareProviderEntity.class);
+    final var expectedUnit = unitEntity();
+    final var expectedCareProvider = careProviderEntity();
     final var expectedUser = mock(UserEntity.class);
     final var expectedSession = mock(SessionEntity.class);
     final var expectedOrigin = mock(OriginEntity.class);
@@ -83,6 +83,8 @@ class EventMapperTest {
     final var expectedRole = mock(RoleEntity.class);
     final var expectedRecipient = mock(PartyEntity.class);
     final var expectedPatient = patientEntity();
+    final var expectedCertificateUnit = unitEntity();
+    final var expectedCertificateCareProvider = careProviderEntity();
 
     when(certificateEntityMapper.map(message)).thenReturn(expectedCertificate);
     when(messageEntityMapper.map(message)).thenReturn(expectedMessage);
@@ -101,6 +103,8 @@ class EventMapperTest {
 
     final var expected = EventEntity.builder()
         .certificate(expectedCertificate)
+        .certificateUnit(expectedCertificateUnit)
+        .certificateCareProvider(expectedCertificateCareProvider)
         .message(expectedMessage)
         .patient(expectedPatient)
         .unit(expectedUnit)
@@ -123,14 +127,16 @@ class EventMapperTest {
   void shouldMapPseudonymizedAnalyticsMessageWithMessageCorrectly() {
     final var message = messagePseudonymizedMessageBuilder().build();
     final var expectedCertificate = mock(CertificateEntity.class);
-    final var expectedUnit = mock(UnitEntity.class);
-    final var expectedCareProvider = mock(CareProviderEntity.class);
+    final var expectedUnit = unitEntity();
+    final var expectedCareProvider = careProviderEntity();
     final var expectedUser = mock(UserEntity.class);
     final var expectedSession = mock(SessionEntity.class);
     final var expectedOrigin = mock(OriginEntity.class);
     final var expectedEventType = mock(EventTypeEntity.class);
     final var expectedRole = mock(RoleEntity.class);
     final var expectedRecipient = mock(PartyEntity.class);
+    final var expectedCertificateUnit = unitEntity();
+    final var expectedCertificateCareProvider = careProviderEntity();
 
     when(certificateEntityMapper.map(message)).thenReturn(expectedCertificate);
     when(unitRepository.findOrCreate(message.getEventUnitId())).thenReturn(expectedUnit);
@@ -146,6 +152,8 @@ class EventMapperTest {
 
     final var expected = EventEntity.builder()
         .certificate(expectedCertificate)
+        .certificateUnit(expectedCertificateUnit)
+        .certificateCareProvider(expectedCertificateCareProvider)
         .unit(expectedUnit)
         .careProvider(expectedCareProvider)
         .user(expectedUser)

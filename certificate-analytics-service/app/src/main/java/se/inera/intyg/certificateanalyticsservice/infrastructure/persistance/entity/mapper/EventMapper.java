@@ -41,6 +41,9 @@ public class EventMapper {
         .message(messageEntity)
         .unit(unitRepository.findOrCreate(message.getEventUnitId()))
         .careProvider(careProviderRepository.findOrCreate(message.getEventCareProviderId()))
+        .certificateUnit(unitRepository.findOrCreate(message.getCertificateUnitId()))
+        .certificateCareProvider(
+            careProviderRepository.findOrCreate(message.getCertificateCareProviderId()))
         .patient(patientRepository.findOrCreate(message.getCertificatePatientId()))
         .user(userRepository.findOrCreate(message.getEventUserId()))
         .session(sessionRepository.findOrCreate(message.getEventSessionId()))
@@ -70,8 +73,8 @@ public class EventMapper {
         .certificateId(entity.getCertificate().getCertificateId())
         .certificateType(entity.getCertificate().getCertificateType())
         .certificateTypeVersion(entity.getCertificate().getCertificateTypeVersion())
-        .certificateUnitId(entity.getCertificate().getUnit().getHsaId())
-        .certificateCareProviderId(entity.getCertificate().getCareProvider().getHsaId());
+        .certificateUnitId(entity.getCertificateUnit().getHsaId())
+        .certificateCareProviderId(entity.getCertificateCareProvider().getHsaId());
 
     final var relation = certificateRelationEntityRepository
         .findAll().stream()

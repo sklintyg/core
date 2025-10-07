@@ -40,6 +40,8 @@ public class TestDataEntities {
   public static EventEntityBuilder sentEventEntityBuilder() {
     return EventEntity.builder()
         .certificate(certificateEntity().build())
+        .certificateUnit(unitEntity())
+        .certificateCareProvider(careProviderEntity())
         .messageId(TestDataConstants.HASHED_ID)
         .timestamp(TIMESTAMP)
         .eventType(eventTypeEntity())
@@ -56,6 +58,8 @@ public class TestDataEntities {
   public static EventEntityBuilder messageSentEventEntityBuilder() {
     return EventEntity.builder()
         .certificate(certificateEntity().build())
+        .certificateUnit(unitEntity())
+        .certificateCareProvider(careProviderEntity())
         .message(messageEntity().build())
         .messageId(TestDataConstants.HASHED_ID)
         .timestamp(TIMESTAMP)
@@ -78,9 +82,7 @@ public class TestDataEntities {
     return CertificateEntity.builder()
         .certificateId(TestDataConstants.HASHED_CERTIFICATE_ID)
         .certificateType(CERTIFICATE_TYPE)
-        .certificateTypeVersion(CERTIFICATE_TYPE_VERSION)
-        .unit(unitEntity())
-        .careProvider(careProviderEntity());
+        .certificateTypeVersion(CERTIFICATE_TYPE_VERSION);
   }
 
   public static PatientEntity patientEntity() {
