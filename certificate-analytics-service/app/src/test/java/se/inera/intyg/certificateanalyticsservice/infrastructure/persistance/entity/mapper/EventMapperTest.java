@@ -7,7 +7,7 @@ import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataEntiti
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataEntities.messageEntity;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataEntities.messageSentEventEntityBuilder;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataEntities.patientEntity;
-import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataEntities.relationTypeEntity;
+import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataEntities.relationTypeEntityBuilder;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataEntities.sentEventEntityBuilder;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataEntities.unitEntity;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataPseudonymized.messagePseudonymizedMessageBuilder;
@@ -87,7 +87,7 @@ class EventMapperTest {
     final var expectedPatient = patientEntity();
     final var expectedCertificateUnit = unitEntity();
     final var expectedCertificateCareProvider = careProviderEntity();
-    final var expectedRelationType = relationTypeEntity();
+    final var expectedRelationType = relationTypeEntityBuilder().build();
 
     when(certificateEntityMapper.map(message)).thenReturn(expectedCertificate);
     when(certificateEntityRepository.findByCertificateId(message.getCertificateRelationParentId()))

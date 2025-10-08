@@ -39,6 +39,7 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.ent
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.PartyEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.PatientEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.RelationTypeEntity;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.RelationTypeEntity.RelationTypeEntityBuilder;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.RoleEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.SessionEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.UnitEntity;
@@ -58,7 +59,7 @@ public class TestDataEntities {
                 .certificateId(HASHED_CERTIFICATE_PARENT_ID)
                 .build()
         )
-        .parentRelationType(relationTypeEntity())
+        .parentRelationType(relationTypeEntityBuilder().build())
         .certificateUnit(unitEntity())
         .certificateCareProvider(careProviderEntity())
         .messageId(HASHED_ID)
@@ -147,10 +148,9 @@ public class TestDataEntities {
         .build();
   }
 
-  public static RelationTypeEntity relationTypeEntity() {
+  public static RelationTypeEntityBuilder relationTypeEntityBuilder() {
     return RelationTypeEntity.builder()
-        .relationType(CERTIFICATE_PARENT_TYPE)
-        .build();
+        .relationType(CERTIFICATE_PARENT_TYPE);
   }
 
   public static RoleEntity roleEntity() {
