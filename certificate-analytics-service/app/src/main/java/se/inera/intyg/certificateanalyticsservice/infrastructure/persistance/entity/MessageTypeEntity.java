@@ -21,7 +21,7 @@ public class MessageTypeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "`key`")
+  @Column(name = "message_type_key")
   private Byte key;
 
   @Column(name = "message_type", nullable = false, unique = true, length = 24)

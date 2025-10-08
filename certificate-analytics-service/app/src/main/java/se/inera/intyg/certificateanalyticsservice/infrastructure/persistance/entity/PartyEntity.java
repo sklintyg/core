@@ -21,7 +21,7 @@ public class PartyEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "`key`")
+  @Column(name = "party_key")
   private Long key;
 
   @Column(name = "party_id", nullable = false, length = 32)

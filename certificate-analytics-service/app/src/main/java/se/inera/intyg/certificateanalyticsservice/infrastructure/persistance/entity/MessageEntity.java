@@ -23,7 +23,7 @@ public class MessageEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "`key`")
+  @Column(name = "message_key")
   private Long key;
 
   @Column(name = "message_id", length = 22, nullable = false, unique = true)

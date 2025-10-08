@@ -21,7 +21,7 @@ public class RelationTypeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "key")
+  @Column(name = "relation_type_key")
   private Long key;
 
   @Column(name = "relation_type", nullable = false, unique = true, length = 64)
