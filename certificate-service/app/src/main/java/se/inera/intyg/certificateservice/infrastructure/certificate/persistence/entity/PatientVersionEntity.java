@@ -26,7 +26,7 @@ public class PatientVersionEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "`key`")
   private Integer key;
-  @Column(name = "patient_id", updatable = false)
+  @Column(name = "patient_id", nullable = false)
   private String id;
   @Column(name = "protected_person")
   private boolean protectedPerson;
@@ -40,15 +40,11 @@ public class PatientVersionEntity {
   private String middleName;
   @Column(name = "last_name")
   private String lastName;
-	@Column(name = "valid_from")
-	private LocalDateTime validFrom;
-	@Column(name = "valid_to", nullable = false)
-	private LocalDateTime validTo;
+  @Column(name = "valid_from")
+  private LocalDateTime validFrom;
+  @Column(name = "valid_to", nullable = false)
+  private LocalDateTime validTo;
   @ManyToOne
   @JoinColumn(name = "patient_id_type_key")
   private PatientIdTypeEntity type;
-	@ManyToOne
-	@JoinColumn(name = "patient_key", referencedColumnName = "key")
-	private PatientEntity patient;
-
 }

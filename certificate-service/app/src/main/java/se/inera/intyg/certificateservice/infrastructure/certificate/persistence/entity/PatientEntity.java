@@ -46,6 +46,16 @@ public class PatientEntity {
   @JoinColumn(name = "patient_id_type_key")
   private PatientIdTypeEntity type;
 
-	@Version
-	private Long version;
+  @Version
+  private Long version;
+
+  public void updateWith(PatientEntity source) {
+    this.firstName = source.getFirstName();
+    this.middleName = source.getMiddleName();
+    this.lastName = source.getLastName();
+    this.protectedPerson = source.isProtectedPerson();
+    this.deceased = source.isDeceased();
+    this.testIndicated = source.isTestIndicated();
+    this.type = source.getType();
+  }
 }

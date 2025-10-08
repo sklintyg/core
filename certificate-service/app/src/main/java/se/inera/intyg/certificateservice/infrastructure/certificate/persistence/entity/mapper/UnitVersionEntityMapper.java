@@ -11,19 +11,18 @@ public class UnitVersionEntityMapper {
   }
 
   public static UnitVersionEntity toEntity(UnitEntity unitEntity) {
-		return UnitVersionEntity.builder()
-				.hsaId(unitEntity.getHsaId())
-				.name(unitEntity.getName())
-				.address(unitEntity.getAddress())
-				.zipCode(unitEntity.getZipCode())
-				.city(unitEntity.getCity())
-				.phoneNumber(unitEntity.getPhoneNumber())
-				.email(unitEntity.getEmail())
-				.workplaceCode(unitEntity.getWorkplaceCode())
-				.type(unitEntity.getType())
-				.unit(unitEntity)
-				.validTo(LocalDateTime.now())
-				.validFrom(null)
-				.build();
-	}
+    return UnitVersionEntity.builder()
+        .hsaId(unitEntity.getHsaId())
+        .name(unitEntity.getName())
+        .address(unitEntity.getAddress())
+        .zipCode(unitEntity.getZipCode())
+        .city(unitEntity.getCity())
+        .phoneNumber(unitEntity.getPhoneNumber())
+        .email(unitEntity.getEmail())
+        .workplaceCode(unitEntity.getWorkplaceCode())
+        .type(unitEntity.getType())
+        .validTo(LocalDateTime.now())
+        .validFrom(null)
+        .build();
+  }
 }

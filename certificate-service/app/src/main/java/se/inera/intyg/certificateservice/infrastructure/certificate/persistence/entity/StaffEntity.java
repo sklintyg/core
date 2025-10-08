@@ -53,6 +53,17 @@ public class StaffEntity {
   @CollectionTable(name = "staff_healthcare_professional_licence", joinColumns = @JoinColumn(name = "staff_key"))
   private List<HealthcareProfessionalLicenceEmbeddable> healthcareProfessionalLicences;
 
-	@Version
-	private Long version;
+  @Version
+  private Long version;
+
+  public void updateWith(StaffEntity source) {
+    this.setFirstName(source.getFirstName());
+    this.setMiddleName(source.getMiddleName());
+    this.setLastName(source.getLastName());
+    this.setRole(source.getRole());
+    this.setPaTitles(source.getPaTitles());
+    this.setSpecialities(source.getSpecialities());
+    this.setHealthcareProfessionalLicences(source.getHealthcareProfessionalLicences());
+  }
+
 }

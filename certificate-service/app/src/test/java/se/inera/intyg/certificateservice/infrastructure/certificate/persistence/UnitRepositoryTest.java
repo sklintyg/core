@@ -18,7 +18,8 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ID;
 
-import java.util.Collections;
+import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -29,6 +30,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitVersionEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitVersionEntityRepository;
 
@@ -37,8 +39,8 @@ class UnitRepositoryTest {
 
   @Mock
   private UnitEntityRepository unitEntityRepository;
-	@Mock
-	private UnitVersionEntityRepository unitVersionEntityRepository;
+  @Mock
+  private UnitVersionEntityRepository unitVersionEntityRepository;
   @InjectMocks
   private UnitRepository unitRepository;
 
@@ -67,7 +69,6 @@ class UnitRepositoryTest {
     }
 
 
-		
   }
 
   @Nested
@@ -145,49 +146,74 @@ class UnitRepositoryTest {
     }
   }
 
-	@Nested
-	class UpdateEntitiesTest {
+  @Nested
+  class UpdateEntitiesTest {
 
-		private UnitEntity alfa;
-		private UnitEntity uppdateradAlfa;
+    private UnitEntity alfa;
+    private UnitEntity uppdateradAlfa;
 
-		@BeforeEach
-		void setup() {
-			alfa = alfaRegionenEntityBuilder().build();
-			uppdateradAlfa = updatedAlfaRegionenEntityBuilder().name("NyttNamn").build();
-		}
+    @BeforeEach
+    void setup() {
+      alfa = alfaRegionenEntityBuilder().build();
+      uppdateradAlfa = updatedAlfaRegionenEntityBuilder().name("NyttNamn").build();
+    }
 
-		@Test
-		void shallSaveOldVersionToUnitVersionEntityRepository() {
+    @Test
+    void shallSaveOldVersionToUnitVersionEntityRepository() {
 
-			doReturn(Optional.of(alfa))
-					.when(unitEntityRepository).findByHsaId(ALFA_REGIONEN_ID);
+      doReturn(Optional.of(alfa))
+          .when(unitEntityRepository).findByHsaId(ALFA_REGIONEN_ID);
 
-			doReturn(uppdateradAlfa)
-					.when(unitEntityRepository).save(Mockito.any(UnitEntity.class));
+      doReturn(uppdateradAlfa)
+          .when(unitEntityRepository).save(Mockito.any(UnitEntity.class));
 
-			doReturn(Collections.emptyList()).when(unitVersionEntityRepository)
-					.findAllByHsaIdOrderByValidFromDesc(ALFA_REGIONEN_ID);
-			unitRepository.careProvider(UPPDATERAD_ALFA_REGIONEN);
+      doReturn(Optional.empty()).when(unitVersionEntityRepository)
+          .findFirstByHsaIdOrderByValidFromDesc(ALFA_REGIONEN_ID);
+      unitRepository.careProvider(UPPDATERAD_ALFA_REGIONEN);
 
-			verify(unitVersionEntityRepository).save(
-					argThat(savedVersion ->
-							savedVersion.getHsaId().equals(ALFA_REGIONEN_ID) &&
-									savedVersion.getName().equals(ALFA_REGIONEN_ENTITY.getName())));
-		}
+      verify(unitVersionEntityRepository).save(
+          argThat(savedVersion ->
+              savedVersion.getHsaId().equals(ALFA_REGIONEN_ID) &&
+                  savedVersion.getName().equals(ALFA_REGIONEN_ENTITY.getName()) &&
+                  Objects.isNull(savedVersion.getValidFrom())));
+    }
 
-		@Test
-		void shallUpdateEntityIfHsaChanged() {
-			doReturn(Optional.of(alfa))
-					.when(unitEntityRepository).findByHsaId(ALFA_REGIONEN_ID);
+    @Test
+    void shallSetFromDateIfOldVersionExists() {
 
-			doReturn(uppdateradAlfa)
-					.when(unitEntityRepository)
-					.save(Mockito.any(UnitEntity.class));
+      doReturn(Optional.of(alfa))
+          .when(unitEntityRepository).findByHsaId(ALFA_REGIONEN_ID);
 
-			assertEquals(uppdateradAlfa,
-					unitRepository.careProvider(UPPDATERAD_ALFA_REGIONEN)
-			);
-		}
-	}
+      doReturn(uppdateradAlfa)
+          .when(unitEntityRepository).save(Mockito.any(UnitEntity.class));
+
+      final var existingVersionValidTo = LocalDateTime.of(2025, 1, 1, 0, 0);
+      doReturn(Optional.of(UnitVersionEntity.builder()
+          .validTo(existingVersionValidTo)
+          .build()))
+          .when(unitVersionEntityRepository)
+          .findFirstByHsaIdOrderByValidFromDesc(ALFA_REGIONEN_ID);
+      unitRepository.careProvider(UPPDATERAD_ALFA_REGIONEN);
+
+      verify(unitVersionEntityRepository).save(
+          argThat(savedVersion ->
+              savedVersion.getHsaId().equals(ALFA_REGIONEN_ID) &&
+                  savedVersion.getName().equals(ALFA_REGIONEN_ENTITY.getName()) &&
+                  savedVersion.getValidFrom().equals(existingVersionValidTo)));
+    }
+
+    @Test
+    void shallUpdateEntityIfHsaChanged() {
+      doReturn(Optional.of(alfa))
+          .when(unitEntityRepository).findByHsaId(ALFA_REGIONEN_ID);
+
+      doReturn(uppdateradAlfa)
+          .when(unitEntityRepository)
+          .save(Mockito.any(UnitEntity.class));
+
+      assertEquals(uppdateradAlfa,
+          unitRepository.careProvider(UPPDATERAD_ALFA_REGIONEN)
+      );
+    }
+  }
 }

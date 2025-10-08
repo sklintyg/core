@@ -23,12 +23,12 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 public class UnitRepository {
 
   private final UnitEntityRepository unitEntityRepository;
-	private final UnitVersionEntityRepository unitVersionEntityRepository;
+  private final UnitVersionEntityRepository unitVersionEntityRepository;
 
-	@Transactional
-	public UnitEntity careProvider(CareProvider careProvider) {
+  @Transactional
+  public UnitEntity careProvider(CareProvider careProvider) {
     return unitEntityRepository.findByHsaId(careProvider.hsaId().id())
-				.map(unitEntity -> updateUnitVersion(unitEntity, careProvider))
+        .map(unitEntity -> updateUnitVersion(unitEntity, careProvider))
         .orElseGet(
             () -> unitEntityRepository.save(
                 toEntity(careProvider)
@@ -36,10 +36,10 @@ public class UnitRepository {
         );
   }
 
-	@Transactional
-	public UnitEntity careUnit(CareUnit careUnit) {
+  @Transactional
+  public UnitEntity careUnit(CareUnit careUnit) {
     return unitEntityRepository.findByHsaId(careUnit.hsaId().id())
-				.map(unitEntity -> updateUnitVersion(unitEntity, careUnit))
+        .map(unitEntity -> updateUnitVersion(unitEntity, careUnit))
         .orElseGet(
             () -> unitEntityRepository.save(
                 toEntity(careUnit)
@@ -47,10 +47,10 @@ public class UnitRepository {
         );
   }
 
-	@Transactional
+  @Transactional
   public UnitEntity subUnit(SubUnit subUnit) {
     return unitEntityRepository.findByHsaId(subUnit.hsaId().id())
-				.map(unitEntity -> updateUnitVersion(unitEntity, subUnit))
+        .map(unitEntity -> updateUnitVersion(unitEntity, subUnit))
         .orElseGet(
             () -> unitEntityRepository.save(
                 toEntity(subUnit)
@@ -58,7 +58,7 @@ public class UnitRepository {
         );
   }
 
-	@Transactional
+  @Transactional
   public UnitEntity issuingUnit(IssuingUnit issuingUnit) {
     if (issuingUnit instanceof CareUnit careUnit) {
       return careUnit(careUnit);
@@ -73,66 +73,55 @@ public class UnitRepository {
     );
   }
 
-	private UnitEntity updateUnitVersion(UnitEntity unitEntity, CareProvider careProvider) {
-		var newUnitEntity = toEntity(careProvider);
-		if (!unitEntity.equals(newUnitEntity)){
-			return saveUnit(unitEntity, newUnitEntity);
-		}
-		return unitEntity;
-	}
+  private UnitEntity updateUnitVersion(UnitEntity unitEntity, CareProvider careProvider) {
+    var newUnitEntity = toEntity(careProvider);
+    if (!unitEntity.equals(newUnitEntity)) {
+      return saveUnit(unitEntity, newUnitEntity);
+    }
+    return unitEntity;
+  }
 
-	private UnitEntity updateUnitVersion(UnitEntity unitEntity, CareUnit careUnit) {
-		var newUnitEntity = toEntity(careUnit);
-		if (!unitEntity.equals(newUnitEntity)){
-			return saveUnit(unitEntity, newUnitEntity);
-		}
-		return unitEntity;
-	}
+  private UnitEntity updateUnitVersion(UnitEntity unitEntity, CareUnit careUnit) {
+    var newUnitEntity = toEntity(careUnit);
+    if (!unitEntity.equals(newUnitEntity)) {
+      return saveUnit(unitEntity, newUnitEntity);
+    }
+    return unitEntity;
+  }
 
-	private UnitEntity updateUnitVersion(UnitEntity unitEntity, SubUnit subUnit) {
-		var newUnitEntity = toEntity(subUnit);
-		if (!unitEntity.equals(newUnitEntity)){
-			return saveUnit(unitEntity, newUnitEntity);
-		}
-		return unitEntity;
-	}
+  private UnitEntity updateUnitVersion(UnitEntity unitEntity, SubUnit subUnit) {
+    var newUnitEntity = toEntity(subUnit);
+    if (!unitEntity.equals(newUnitEntity)) {
+      return saveUnit(unitEntity, newUnitEntity);
+    }
+    return unitEntity;
+  }
 
-	private UnitEntity saveUnit(UnitEntity unitEntity, UnitEntity newUnitEntity) {
-		try {
-			final var unitVersionEntity = UnitVersionEntityMapper.toEntity(unitEntity);
-			copyValues(unitEntity, newUnitEntity);
-			var result = unitEntityRepository.save(unitEntity);
-			saveUnitVersion(unitVersionEntity);
-			return result;
+  private UnitEntity saveUnit(UnitEntity unitEntity, UnitEntity newUnitEntity) {
+    try {
+      final var unitVersionEntity = UnitVersionEntityMapper.toEntity(unitEntity);
+      unitEntity.updateWith(newUnitEntity);
+      var result = unitEntityRepository.save(unitEntity);
+      saveUnitVersion(unitVersionEntity);
+      return result;
 
-		} catch (OptimisticLockException e) {
-			log.info("Skipped updating UnitEntity {} because it was updated concurrently", unitEntity.getHsaId());
-			return unitEntityRepository.findByHsaId(unitEntity.getHsaId())
-					.orElse(unitEntity);
-		}
-	}
-
-	private void copyValues(UnitEntity target, UnitEntity source) {
-		target.setName(source.getName());
-		target.setAddress(source.getAddress());
-		target.setZipCode(source.getZipCode());
-		target.setCity(source.getCity());
-		target.setPhoneNumber(source.getPhoneNumber());
-		target.setEmail(source.getEmail());
-		target.setWorkplaceCode(source.getWorkplaceCode());
-		target.setType(source.getType());
-	}
+    } catch (OptimisticLockException e) {
+      log.info("Skipped updating UnitEntity {} because it was updated concurrently",
+          unitEntity.getHsaId());
+      return unitEntityRepository.findByHsaId(unitEntity.getHsaId())
+          .orElse(unitEntity);
+    }
+  }
 
 
-	private void saveUnitVersion(UnitVersionEntity unitVersionEntity) {
+  private void saveUnitVersion(UnitVersionEntity unitVersionEntity) {
 
-		final var existingVersions = unitVersionEntityRepository
-				.findAllByHsaIdOrderByValidFromDesc(unitVersionEntity.getHsaId());
+    final var latestVersion = unitVersionEntityRepository
+        .findFirstByHsaIdOrderByValidFromDesc(unitVersionEntity.getHsaId());
 
-		if (!existingVersions.isEmpty()) {
-			unitVersionEntity.setValidFrom(existingVersions.getFirst().getValidTo());
-		}
+    latestVersion.ifPresent(
+        versionEntity -> unitVersionEntity.setValidFrom(versionEntity.getValidTo()));
 
-		unitVersionEntityRepository.save(unitVersionEntity);
-	}
+    unitVersionEntityRepository.save(unitVersionEntity);
+  }
 }

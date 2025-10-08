@@ -48,6 +48,18 @@ public class UnitEntity {
   @JoinColumn(name = "unit_type_key")
   private UnitTypeEntity type;
 
-	@Version
-	private Long version;
+  @Version
+  private Long version;
+
+  public void updateWith(UnitEntity newUnitEntity) {
+    this.setName(newUnitEntity.getName());
+    this.setAddress(newUnitEntity.getAddress());
+    this.setZipCode(newUnitEntity.getZipCode());
+    this.setCity(newUnitEntity.getCity());
+    this.setPhoneNumber(newUnitEntity.getPhoneNumber());
+    this.setEmail(newUnitEntity.getEmail());
+    this.setWorkplaceCode(newUnitEntity.getWorkplaceCode());
+    this.setType(newUnitEntity.getType());
+  }
+
 }

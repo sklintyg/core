@@ -13,7 +13,8 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_PROTECTED_PERSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_TEST_INDICATED;
 
-import java.util.Collections;
+import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -25,6 +26,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientIdTypeEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientVersionEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PersonEntityIdType;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.PatientEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.PatientVersionEntityRepository;
@@ -34,8 +36,8 @@ class PatientRepositoryTest {
 
   @Mock
   private PatientEntityRepository patientEntityRepository;
-	@Mock
-	private PatientVersionEntityRepository patientVersionEntityRepository;
+  @Mock
+  private PatientVersionEntityRepository patientVersionEntityRepository;
   @InjectMocks
   private PatientRepository patientRepository;
 
@@ -74,76 +76,100 @@ class PatientRepositoryTest {
     );
   }
 
-	@Nested
-	class UpdateEntitiesTest {
+  @Nested
+  class UpdateEntitiesTest {
 
-		private static PatientEntity PATIENT_ENTITY;
+    private static final PatientEntity PATIENT_ENTITY = PatientEntity.builder()
+        .id(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH)
+        .protectedPerson(ATHENA_REACT_ANDERSSON_PROTECTED_PERSON.value())
+        .testIndicated(ATHENA_REACT_ANDERSSON_TEST_INDICATED.value())
+        .deceased(ATHENA_REACT_ANDERSSON_DECEASED.value())
+        .type(PatientIdTypeEntity.builder()
+            .type(PersonEntityIdType.PERSONAL_IDENTITY_NUMBER.name())
+            .key(PersonEntityIdType.PERSONAL_IDENTITY_NUMBER.getKey())
+            .build())
+        .firstName(ATHENA_REACT_ANDERSSON_FIRST_NAME)
+        .middleName(ATHENA_REACT_ANDERSSON_MIDDLE_NAME)
+        .lastName(ATHENA_REACT_ANDERSSON_LAST_NAME)
+        .build();
 
-		private static PatientEntity UPDATED_PATIENT_ENTITY;
-		private static final String NEW_MIDDLE_NAME = "Angular";
+    private static PatientEntity updatedPatientEntity;
+    private static final String NEW_MIDDLE_NAME = "Angular";
 
-		@BeforeEach
-		void setup() {
-			PATIENT_ENTITY = PatientEntity.builder()
-					.id(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH)
-					.protectedPerson(ATHENA_REACT_ANDERSSON_PROTECTED_PERSON.value())
-					.testIndicated(ATHENA_REACT_ANDERSSON_TEST_INDICATED.value())
-					.deceased(ATHENA_REACT_ANDERSSON_DECEASED.value())
-					.type(PatientIdTypeEntity.builder()
-							.type(PersonEntityIdType.PERSONAL_IDENTITY_NUMBER.name())
-							.key(PersonEntityIdType.PERSONAL_IDENTITY_NUMBER.getKey())
-							.build())
-					.firstName(ATHENA_REACT_ANDERSSON_FIRST_NAME)
-					.middleName(ATHENA_REACT_ANDERSSON_MIDDLE_NAME)
-					.lastName(ATHENA_REACT_ANDERSSON_LAST_NAME)
-					.build();
+    @BeforeEach
+    void setup() {
 
-			UPDATED_PATIENT_ENTITY = PatientEntity.builder()
-					.id(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH)
-					.protectedPerson(ATHENA_REACT_ANDERSSON_PROTECTED_PERSON.value())
-					.testIndicated(ATHENA_REACT_ANDERSSON_TEST_INDICATED.value())
-					.deceased(ATHENA_REACT_ANDERSSON_DECEASED.value())
-					.type(PatientIdTypeEntity.builder()
-							.type(PersonEntityIdType.PERSONAL_IDENTITY_NUMBER.name())
-							.key(PersonEntityIdType.PERSONAL_IDENTITY_NUMBER.getKey())
-							.build())
-					.firstName(ATHENA_REACT_ANDERSSON_FIRST_NAME)
-					.middleName(NEW_MIDDLE_NAME)
-					.lastName(ATHENA_REACT_ANDERSSON_LAST_NAME)
-					.build();
-		}
+      updatedPatientEntity = PatientEntity.builder()
+          .id(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH)
+          .protectedPerson(ATHENA_REACT_ANDERSSON_PROTECTED_PERSON.value())
+          .testIndicated(ATHENA_REACT_ANDERSSON_TEST_INDICATED.value())
+          .deceased(ATHENA_REACT_ANDERSSON_DECEASED.value())
+          .type(PatientIdTypeEntity.builder()
+              .type(PersonEntityIdType.PERSONAL_IDENTITY_NUMBER.name())
+              .key(PersonEntityIdType.PERSONAL_IDENTITY_NUMBER.getKey())
+              .build())
+          .firstName(ATHENA_REACT_ANDERSSON_FIRST_NAME)
+          .middleName(NEW_MIDDLE_NAME)
+          .lastName(ATHENA_REACT_ANDERSSON_LAST_NAME)
+          .build();
+    }
 
-		@Test
-		void shallSaveOldVersionToUnitVersionEntityRepository() {
+    @Test
+    void shallSaveOldVersionToUnitVersionEntityRepository() {
 
-			doReturn(Optional.of(UPDATED_PATIENT_ENTITY))
-					.when(patientEntityRepository).findById(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH);
+      doReturn(Optional.of(updatedPatientEntity))
+          .when(patientEntityRepository).findById(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH);
 
-			doReturn(PATIENT_ENTITY)
-					.when(patientEntityRepository).save(Mockito.any(PatientEntity.class));
+      doReturn(PATIENT_ENTITY)
+          .when(patientEntityRepository).save(Mockito.any(PatientEntity.class));
 
-			doReturn(Collections.emptyList()).when(patientVersionEntityRepository)
-					.findAllByIdOrderByValidFromDesc(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH);
-			patientRepository.patient(ATHENA_REACT_ANDERSSON);
+      doReturn(Optional.empty()).when(patientVersionEntityRepository)
+          .findFirstByIdOrderByValidFromDesc(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH);
+      patientRepository.patient(ATHENA_REACT_ANDERSSON);
 
-			verify(patientVersionEntityRepository).save(
-					argThat(savedVersion ->
-							savedVersion.getId().equals(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH) &&
-									savedVersion.getMiddleName().equals(NEW_MIDDLE_NAME)));
-		}
+      verify(patientVersionEntityRepository).save(
+          argThat(savedVersion ->
+              savedVersion.getId().equals(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH) &&
+                  savedVersion.getMiddleName().equals(NEW_MIDDLE_NAME) &&
+                  Objects.isNull(savedVersion.getValidFrom())));
+    }
 
-		@Test
-		void shallUpdateEntityIfHsaChanged() {
-			doReturn(Optional.of(UPDATED_PATIENT_ENTITY))
-					.when(patientEntityRepository).findById(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH);
+    @Test
+    void shallSetFromDateIfOldVersionExists() {
 
-			doReturn(PATIENT_ENTITY)
-					.when(patientEntityRepository)
-					.save(Mockito.any(PatientEntity.class));
+      doReturn(Optional.of(updatedPatientEntity))
+          .when(patientEntityRepository).findById(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH);
 
-			assertEquals(UPDATED_PATIENT_ENTITY,
-					patientRepository.patient(ATHENA_REACT_ANDERSSON)
-			);
-		}
-	}
+      doReturn(PATIENT_ENTITY)
+          .when(patientEntityRepository).save(Mockito.any(PatientEntity.class));
+      final var existingVersionValidTo = LocalDateTime.of(2025, 1, 1, 0, 0);
+
+      doReturn(Optional.of(PatientVersionEntity.builder()
+          .validTo(existingVersionValidTo)
+          .build())).when(patientVersionEntityRepository)
+          .findFirstByIdOrderByValidFromDesc(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH);
+      patientRepository.patient(ATHENA_REACT_ANDERSSON);
+
+      verify(patientVersionEntityRepository).save(
+          argThat(savedVersion ->
+              savedVersion.getId().equals(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH) &&
+                  savedVersion.getMiddleName().equals(NEW_MIDDLE_NAME) &&
+                  savedVersion.getValidFrom().equals(existingVersionValidTo)));
+    }
+
+
+    @Test
+    void shallUpdateEntityIfHsaChanged() {
+      doReturn(Optional.of(updatedPatientEntity))
+          .when(patientEntityRepository).findById(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH);
+
+      doReturn(PATIENT_ENTITY)
+          .when(patientEntityRepository)
+          .save(Mockito.any(PatientEntity.class));
+
+      assertEquals(updatedPatientEntity,
+          patientRepository.patient(ATHENA_REACT_ANDERSSON)
+      );
+    }
+  }
 }

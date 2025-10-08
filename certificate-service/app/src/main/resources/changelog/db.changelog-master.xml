@@ -657,6 +657,7 @@
     </addColumn>
   </changeSet>
 
+  <!-- New versioned collection tables -->
   <changeSet id="5" author="ea">
     <createTable tableName="unit_version">
       <column name="key" type="integer unsigned" autoIncrement="true">
@@ -695,18 +696,11 @@
       <column name="unit_type_key" type="tinyint unsigned">
         <constraints nullable="false"/>
       </column>
-      <column name="unit_key" type="integer unsigned">
-        <constraints nullable="false"/>
-      </column>
     </createTable>
 
     <addForeignKeyConstraint constraintName="fk_unit_version_unit_type_key"
-        baseTableName="unit_version" baseColumnNames="unit_type_key"
-        referencedTableName="unit_type" referencedColumnNames="key"/>
-
-    <addForeignKeyConstraint constraintName="fk_unit_version_unit_key"
-        baseTableName="unit_version" baseColumnNames="unit_key"
-        referencedTableName="unit" referencedColumnNames="key"/>
+      baseTableName="unit_version" baseColumnNames="unit_type_key"
+      referencedTableName="unit_type" referencedColumnNames="key"/>
   </changeSet>
 
   <changeSet id="6" author="ea">
@@ -735,20 +729,12 @@
       <column name="staff_role_key" type="tinyint unsigned">
         <constraints nullable="true"/>
       </column>
-      <column name="staff_key" type="integer unsigned">
-        <constraints nullable="false"/>
-      </column>
     </createTable>
 
     <addForeignKeyConstraint constraintName="fk_staff_version_staff_role_key"
-        baseTableName="staff_version" baseColumnNames="staff_role_key"
-        referencedTableName="staff_role" referencedColumnNames="key"/>
+      baseTableName="staff_version" baseColumnNames="staff_role_key"
+      referencedTableName="staff_role" referencedColumnNames="key"/>
 
-    <addForeignKeyConstraint constraintName="fk_staff_version_staff_key"
-        baseTableName="staff_version" baseColumnNames="staff_key"
-        referencedTableName="staff" referencedColumnNames="key"/>
-
-    <!-- New versioned collection tables -->
     <createTable tableName="staff_pa_title_version">
       <column name="code" type="varchar(255)">
         <constraints nullable="false"/>
@@ -761,11 +747,13 @@
       </column>
     </createTable>
 
-    <addPrimaryKey tableName="staff_pa_title_version" columnNames="staff_version_key, code" constraintName="pk_staff_pa_title_version"/>
+    <addPrimaryKey tableName="staff_pa_title_version" columnNames="staff_version_key, code"
+      constraintName="pk_staff_pa_title_version"/>
     <addForeignKeyConstraint constraintName="fk_staff_pa_title_version_staff_version_key"
-        baseTableName="staff_pa_title_version" baseColumnNames="staff_version_key"
-        referencedTableName="staff_version" referencedColumnNames="key"/>
-    <createIndex indexName="idx_staff_pa_title_version_staff_version_key" tableName="staff_pa_title_version">
+      baseTableName="staff_pa_title_version" baseColumnNames="staff_version_key"
+      referencedTableName="staff_version" referencedColumnNames="key"/>
+    <createIndex indexName="idx_staff_pa_title_version_staff_version_key"
+      tableName="staff_pa_title_version">
       <column name="staff_version_key"/>
     </createIndex>
 
@@ -779,9 +767,10 @@
     </createTable>
 
     <addForeignKeyConstraint constraintName="fk_staff_speciality_version_staff_version_key"
-        baseTableName="staff_speciality_version" baseColumnNames="staff_version_key"
-        referencedTableName="staff_version" referencedColumnNames="key"/>
-    <createIndex indexName="idx_staff_speciality_version_staff_version_key" tableName="staff_speciality_version">
+      baseTableName="staff_speciality_version" baseColumnNames="staff_version_key"
+      referencedTableName="staff_version" referencedColumnNames="key"/>
+    <createIndex indexName="idx_staff_speciality_version_staff_version_key"
+      tableName="staff_speciality_version">
       <column name="staff_version_key"/>
     </createIndex>
 
@@ -794,10 +783,12 @@
       </column>
     </createTable>
     <addForeignKeyConstraint constraintName="fk_staff_hc_prof_licence_version_staff_version_key"
-        baseTableName="staff_healthcare_professional_licence_version" baseColumnNames="staff_version_key"
-        referencedTableName="staff_version" referencedColumnNames="key"/>
+      baseTableName="staff_healthcare_professional_licence_version"
+      baseColumnNames="staff_version_key"
+      referencedTableName="staff_version" referencedColumnNames="key"/>
 
-    <createIndex indexName="idx_staff_hc_prof_licence_version_staff_version_key" tableName="staff_healthcare_professional_licence_version">
+    <createIndex indexName="idx_staff_hc_prof_licence_version_staff_version_key"
+      tableName="staff_healthcare_professional_licence_version">
       <column name="staff_version_key"/>
     </createIndex>
   </changeSet>
@@ -831,22 +822,12 @@
       <column name="patient_id_type_key" type="tinyint unsigned">
         <constraints nullable="false"/>
       </column>
-      <column name="patient_key" type="integer unsigned">
-        <constraints nullable="false"/>
-      </column>
     </createTable>
 
     <addForeignKeyConstraint constraintName="fk_patient_version_patient_id_type_key"
-        baseTableName="patient_version" baseColumnNames="patient_id_type_key"
-        referencedTableName="patient_id_type" referencedColumnNames="key"/>
+      baseTableName="patient_version" baseColumnNames="patient_id_type_key"
+      referencedTableName="patient_id_type" referencedColumnNames="key"/>
 
-    <addForeignKeyConstraint constraintName="fk_patient_version_patient_key"
-        baseTableName="patient_version" baseColumnNames="patient_key"
-        referencedTableName="patient" referencedColumnNames="key"/>
-
-    <createIndex indexName="idx_patient_version_patient_key" tableName="patient_version">
-      <column name="patient_key"/>
-    </createIndex>
     <createIndex indexName="idx_patient_version_patient_id" tableName="patient_version">
       <column name="patient_id"/>
     </createIndex>

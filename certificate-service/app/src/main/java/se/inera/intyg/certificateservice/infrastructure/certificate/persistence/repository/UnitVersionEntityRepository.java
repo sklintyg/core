@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository;
 
-import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
@@ -11,5 +10,5 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 public interface UnitVersionEntityRepository extends CrudRepository<UnitVersionEntity, Long>,
     JpaSpecificationExecutor<UnitVersionEntity> {
 
-	List<UnitVersionEntity> findAllByHsaIdOrderByValidFromDesc(String hsaId);
+  Optional<UnitVersionEntity> findFirstByHsaIdOrderByValidFromDesc(String hsaId);
 }
