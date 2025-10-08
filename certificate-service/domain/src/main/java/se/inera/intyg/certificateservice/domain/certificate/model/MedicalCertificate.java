@@ -608,7 +608,7 @@ public class MedicalCertificate implements Certificate {
     newCertificate.updateMetadata(actionEvaluation);
 
     newCertificate.elementData = this.elementData().stream()
-        .filter(data -> !certificateModel.elementSpecificationExists(data.id()))
+        .filter(data -> certificateModel.elementSpecificationExists(data.id()))
         .toList();
 
     return newCertificate;

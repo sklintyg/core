@@ -2977,7 +2977,7 @@ class CertificateTest {
     @Test
     void shallReturnNewCertificateWithValuesThatShouldBeKept() {
       final var expectedElementData = List.of(
-          CONTACT_INFO
+          DATE
       );
 
       final var actionEvaluation = actionEvaluationBuilder.build();
@@ -2987,7 +2987,7 @@ class CertificateTest {
           )
           .status(Status.SIGNED)
           .build();
-      
+
       doReturn(true).when(certificateModel).elementSpecificationExists(DATE.id());
 
       final var actualCertificate = signedCertificate.createFromTemplate(actionEvaluation,
