@@ -10,7 +10,7 @@ public class PatientVersionEntityMapper {
     throw new IllegalStateException("Utility class");
   }
 
-  public static PatientVersionEntity toEntity(PatientEntity patientEntity) {
+  public static PatientVersionEntity toPatientVersion(PatientEntity patientEntity) {
     return PatientVersionEntity.builder()
         .id(patientEntity.getId())
         .type(patientEntity.getType())
@@ -24,5 +24,18 @@ public class PatientVersionEntityMapper {
         .testIndicated(patientEntity.isTestIndicated())
         .build();
   }
+
+	public static PatientEntity toPatient(PatientVersionEntity patientVersionEntity) {
+		return PatientEntity.builder()
+				.id(patientVersionEntity.getId())
+				.type(patientVersionEntity.getType())
+				.firstName(patientVersionEntity.getFirstName())
+				.middleName(patientVersionEntity.getMiddleName())
+				.lastName(patientVersionEntity.getLastName())
+				.protectedPerson(patientVersionEntity.isProtectedPerson())
+				.deceased(patientVersionEntity.isDeceased())
+				.testIndicated(patientVersionEntity.isTestIndicated())
+				.build();
+	}
 
 }

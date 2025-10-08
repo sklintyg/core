@@ -99,7 +99,7 @@ public class UnitRepository {
 
   private UnitEntity saveUnit(UnitEntity unitEntity, UnitEntity newUnitEntity) {
     try {
-      final var unitVersionEntity = UnitVersionEntityMapper.toEntity(unitEntity);
+      final var unitVersionEntity = UnitVersionEntityMapper.toUnitVersion(unitEntity);
       unitEntity.updateWith(newUnitEntity);
       var result = unitEntityRepository.save(unitEntity);
       saveUnitVersion(unitVersionEntity);

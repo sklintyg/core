@@ -40,7 +40,7 @@ public class PatientRepository {
   private PatientEntity savePatientVersion(PatientEntity patientEntity,
       PatientEntity newPatientEntity) {
     try {
-      final var patientVersionEntity = PatientVersionEntityMapper.toEntity(patientEntity);
+      final var patientVersionEntity = PatientVersionEntityMapper.toPatientVersion(patientEntity);
 
       patientEntity.updateWith(newPatientEntity);
       var result = patientEntityRepository.save(patientEntity);

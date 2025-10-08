@@ -10,7 +10,7 @@ public class UnitVersionEntityMapper {
     throw new IllegalStateException("Utility class");
   }
 
-  public static UnitVersionEntity toEntity(UnitEntity unitEntity) {
+  public static UnitVersionEntity toUnitVersion(UnitEntity unitEntity) {
     return UnitVersionEntity.builder()
         .hsaId(unitEntity.getHsaId())
         .name(unitEntity.getName())
@@ -25,4 +25,18 @@ public class UnitVersionEntityMapper {
         .validFrom(null)
         .build();
   }
+
+	public static UnitEntity toUnit(UnitVersionEntity unitVersionEntity) {
+		return UnitEntity.builder()
+				.hsaId(unitVersionEntity.getHsaId())
+				.name(unitVersionEntity.getName())
+				.address(unitVersionEntity.getAddress())
+				.zipCode(unitVersionEntity.getZipCode())
+				.city(unitVersionEntity.getCity())
+				.phoneNumber(unitVersionEntity.getPhoneNumber())
+				.email(unitVersionEntity.getEmail())
+				.workplaceCode(unitVersionEntity.getWorkplaceCode())
+				.type(unitVersionEntity.getType())
+				.build();
+	}
 }

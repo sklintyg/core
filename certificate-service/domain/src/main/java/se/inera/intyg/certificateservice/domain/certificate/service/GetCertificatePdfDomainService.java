@@ -28,7 +28,7 @@ public class GetCertificatePdfDomainService {
       String additionalInfoText) {
     final var start = LocalDateTime.now(ZoneId.systemDefault());
 
-    final var certificate = certificateRepository.getById(certificateId);
+    final var certificate = certificateRepository.getByIdForPrint(certificateId);
 
     if (!certificate.allowTo(CertificateActionType.PRINT, Optional.of(actionEvaluation))) {
       throw new CertificateActionForbidden(

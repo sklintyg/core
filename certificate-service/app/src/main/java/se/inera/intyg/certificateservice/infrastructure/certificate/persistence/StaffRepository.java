@@ -82,7 +82,7 @@ public class StaffRepository {
 
   private StaffEntity saveStaffVersion(StaffEntity staffEntity, StaffEntity newStaffEntity) {
     try {
-      final var staffVersionEntity = StaffVersionEntityMapper.toEntity(staffEntity);
+      final var staffVersionEntity = StaffVersionEntityMapper.toStaffVersion(staffEntity);
       staffEntity.updateWith(newStaffEntity);
       var result = staffEntityRepository.save(staffEntity);
       updateStaffVersionHistory(staffVersionEntity);
