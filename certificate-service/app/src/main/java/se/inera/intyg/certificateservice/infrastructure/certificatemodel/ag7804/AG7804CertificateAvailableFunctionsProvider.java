@@ -45,14 +45,13 @@ public class AG7804CertificateAvailableFunctionsProvider implements
   public List<AvailableFunction> of(Certificate certificate) {
     final var functions = new ArrayList<AvailableFunction>();
 
-    functions.add(
-        AvailableFunction.builder()
-            .title(SEND_CERTIFICATE_TITLE)
-            .name(SEND_CERTIFICATE_NAME)
-            .type(AvailableFunctionType.SEND_CERTIFICATE)
-            .body(SEND_CERTIFICATE_BODY)
-            .enabled(true)
-            .build());
+    functions.add(AvailableFunction.builder()
+        .title(SEND_CERTIFICATE_TITLE)
+        .name(SEND_CERTIFICATE_NAME)
+        .type(AvailableFunctionType.SEND_CERTIFICATE)
+        .body(SEND_CERTIFICATE_BODY)
+        .enabled(certificate.isSendActiveForCitizen())
+        .build());
 
     if (isSmittbararpenning(certificate)) {
       functions.add(
@@ -116,7 +115,7 @@ public class AG7804CertificateAvailableFunctionsProvider implements
   boolean isSmittbararpenning(Certificate certificate) {
     return getBooleanValue(certificate, QUESTION_SMITTBARARPENNING_ID);
   }
-  
+
   boolean isDiagnosisIncluded(Certificate certificate) {
     return getBooleanValue(certificate, QUESTION_FORMEDLA_DIAGNOS_ID);
   }

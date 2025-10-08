@@ -33,6 +33,7 @@ class AG7804CertificateAvailableFunctionsProviderTest {
     provider = new AG7804CertificateAvailableFunctionsProvider();
     certificate = mock(Certificate.class);
     when(certificate.fileName()).thenReturn("ag7804-certificate.pdf");
+    when(certificate.isSendActiveForCitizen()).thenReturn(true);
   }
 
   @Nested
