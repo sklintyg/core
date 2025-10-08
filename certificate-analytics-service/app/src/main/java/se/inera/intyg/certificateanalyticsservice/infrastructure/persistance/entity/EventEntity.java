@@ -35,6 +35,14 @@ public class EventEntity {
   private CertificateEntity certificate;
 
   @ManyToOne
+  @JoinColumn(name = "parent_relation_certificate_key", referencedColumnName = "key")
+  private CertificateEntity parentRelationCertificate;
+
+  @ManyToOne
+  @JoinColumn(name = "parent_relation_type_key", referencedColumnName = "key")
+  private RelationTypeEntity parentRelationType;
+
+  @ManyToOne
   @JoinColumn(name = "certificate_unit_key", referencedColumnName = "key")
   private UnitEntity certificateUnit;
 
@@ -88,5 +96,8 @@ public class EventEntity {
   @ManyToOne
   @JoinColumn(name = "recipient_party_key", referencedColumnName = "key")
   private PartyEntity recipient;
+
+  @Column(name = "message_complement_question_ids_count")
+  private Integer messageComplementQuestionIdsCount;
 
 }

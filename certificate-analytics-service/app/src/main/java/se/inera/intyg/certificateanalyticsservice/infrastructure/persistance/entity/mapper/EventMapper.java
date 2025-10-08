@@ -1,15 +1,19 @@
 package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.mapper;
 
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.PseudonymizedAnalyticsMessage;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventEntity;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.MessageEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CareProviderRepository;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CertificateRelationEntityRepository;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CertificateEntityRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.EventTypeRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.OriginRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.PartyRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.PatientRepository;
+import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.RelationTypeRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.RoleRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.SessionRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.UnitRepository;
@@ -28,7 +32,8 @@ public class EventMapper {
   private final RoleRepository roleRepository;
   private final CertificateEntityMapper certificateEntityMapper;
   private final PartyRepository partyRepository;
-  private final CertificateRelationEntityRepository certificateRelationEntityRepository;
+  private final CertificateEntityRepository certificateEntityRepository;
+  private final RelationTypeRepository relationTypeRepository;
   private final MessageEntityMapper messageEntityMapper;
   private final PatientRepository patientRepository;
 
@@ -38,6 +43,15 @@ public class EventMapper {
 
     return EventEntity.builder()
         .certificate(certificateEntity)
+        .parentRelationCertificate(
+            message.getCertificateRelationParentId() == null ? null :
+                certificateEntityRepository.findByCertificateId(
+                        message.getCertificateRelationParentId())
+                    .orElse(null)
+        )
+        .parentRelationType(
+            relationTypeRepository.findOrCreate(message.getCertificateRelationParentType())
+        )
         .message(messageEntity)
         .unit(unitRepository.findOrCreate(message.getEventUnitId()))
         .careProvider(careProviderRepository.findOrCreate(message.getEventCareProviderId()))
@@ -61,6 +75,10 @@ public class EventMapper {
                 partyRepository.findOrCreate(message.getMessageRecipientId())
         )
         .messageId(message.getId())
+        .messageComplementQuestionIdsCount(
+            message.getMessageQuestionIds() == null ? null :
+                message.getMessageQuestionIds().size()
+        )
         .build();
   }
 
@@ -84,25 +102,16 @@ public class EventMapper {
         .certificateId(entity.getCertificate().getCertificateId())
         .certificateType(entity.getCertificate().getCertificateType())
         .certificateTypeVersion(entity.getCertificate().getCertificateTypeVersion())
+        .certificateRelationParentId(
+            entity.getParentRelationCertificate() == null ? null :
+                entity.getParentRelationCertificate().getCertificateId()
+        )
+        .certificateRelationParentType(
+            entity.getParentRelationType() == null ? null :
+                entity.getParentRelationType().getRelationType()
+        )
         .certificateUnitId(entity.getCertificateUnit().getHsaId())
         .certificateCareProviderId(entity.getCertificateCareProvider().getHsaId());
-
-    final var relation = certificateRelationEntityRepository
-        .findAll().stream()
-        .filter(rel ->
-            rel.getChildCertificate().getCertificateId()
-                .equals(entity.getCertificate().getCertificateId())
-        )
-        .findFirst();
-
-    if (relation.isPresent()) {
-      domainBuilder.certificateRelationParentId(
-          relation.get().getParentCertificate().getCertificateId()
-      );
-      domainBuilder.certificateRelationParentType(
-          relation.get().getRelationType().getRelationType()
-      );
-    }
 
     if (entity.getMessage() != null) {
       final var message = entity.getMessage();
@@ -113,11 +122,37 @@ public class EventMapper {
           .messageType(message.getMessageType())
           .messageSent(message.getSent())
           .messageLastDateToAnswer(message.getLastDateToAnswer())
-          .messageQuestionIds(message.getQuestionIds())
+          .messageQuestionIds(getQuestionIds(message))
           .messageSenderId(entity.getSender().getParty())
           .messageRecipientId(entity.getRecipient().getParty());
     }
 
     return domainBuilder.build();
+  }
+
+  private static List<String> getQuestionIds(MessageEntity message) {
+    final var questionIds = new ArrayList<String>(7);
+    if (message.getComplementFirstQuestionId() != null) {
+      questionIds.add(message.getComplementFirstQuestionId());
+    }
+    if (message.getComplementSecondQuestionId() != null) {
+      questionIds.add(message.getComplementSecondQuestionId());
+    }
+    if (message.getComplementThirdQuestionId() != null) {
+      questionIds.add(message.getComplementThirdQuestionId());
+    }
+    if (message.getComplementFourthQuestionId() != null) {
+      questionIds.add(message.getComplementFourthQuestionId());
+    }
+    if (message.getComplementFifthQuestionId() != null) {
+      questionIds.add(message.getComplementFifthQuestionId());
+    }
+    if (message.getComplementSixthQuestionId() != null) {
+      questionIds.add(message.getComplementSixthQuestionId());
+    }
+    if (message.getComplementSeventhQuestionId() != null) {
+      questionIds.add(message.getComplementSeventhQuestionId());
+    }
+    return questionIds;
   }
 }

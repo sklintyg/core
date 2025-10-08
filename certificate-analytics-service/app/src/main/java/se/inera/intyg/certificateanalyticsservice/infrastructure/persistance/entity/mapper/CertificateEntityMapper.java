@@ -4,22 +4,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.PseudonymizedAnalyticsMessage;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CertificateEntity;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CertificateRelationEntity;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.CertificateRelationTypeEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CertificateEntityRepository;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CertificateRelationEntityRepository;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.CertificateRelationTypeEntityRepository;
 
 @Component
 @RequiredArgsConstructor
 public class CertificateEntityMapper {
 
   private final CertificateEntityRepository certificateEntityRepository;
-  private final CertificateRelationEntityRepository certificateRelationEntityRepository;
-  private final CertificateRelationTypeEntityRepository certificateRelationTypeEntityRepository;
 
   public CertificateEntity map(PseudonymizedAnalyticsMessage message) {
-    final var certificateEntity = certificateEntityRepository.findByCertificateId(
+    return certificateEntityRepository.findByCertificateId(
             message.getCertificateId())
         .orElseGet(() ->
             certificateEntityRepository.save(CertificateEntity.builder()
@@ -29,41 +23,5 @@ public class CertificateEntityMapper {
                 .build()
             )
         );
-
-    if (message.getCertificateRelationParentId() != null
-        && message.getCertificateRelationParentType() != null) {
-      certificateEntityRepository.findByCertificateId(message.getCertificateRelationParentId())
-          .ifPresent(parent -> {
-                final var relationType = certificateRelationTypeEntityRepository
-                    .findByRelationType(message.getCertificateRelationParentType())
-                    .orElseGet(() ->
-                        certificateRelationTypeEntityRepository.save(
-                            CertificateRelationTypeEntity.builder()
-                                .relationType(message.getCertificateRelationParentType())
-                                .build()
-                        )
-                    );
-
-                final var exists = certificateRelationEntityRepository
-                    .findAll().stream()
-                    .anyMatch(rel ->
-                        rel.getParentCertificate().equals(parent)
-                            && rel.getChildCertificate().equals(certificateEntity)
-                            && rel.getRelationType().equals(relationType)
-                    );
-
-                if (!exists) {
-                  certificateRelationEntityRepository.save(
-                      CertificateRelationEntity.builder()
-                          .parentCertificate(parent)
-                          .childCertificate(certificateEntity)
-                          .relationType(relationType)
-                          .build()
-                  );
-                }
-              }
-          );
-    }
-    return certificateEntity;
   }
 }

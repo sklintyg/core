@@ -1,18 +1,13 @@
 package se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity;
 
-import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -49,12 +44,25 @@ public class MessageEntity {
   @Column(name = "last_date_to_answer")
   private LocalDate lastDateToAnswer;
 
-  @ElementCollection(fetch = FetchType.EAGER)
-  @CollectionTable(
-      name = "dim_message_question_id",
-      joinColumns = @JoinColumn(name = "message_key")
-  )
-  @Column(name = "question_id")
-  private List<String> questionIds;
+  @Column(name = "complement_first_question_id", length = 32)
+  private String complementFirstQuestionId;
+
+  @Column(name = "complement_second_question_id", length = 32)
+  private String complementSecondQuestionId;
+
+  @Column(name = "complement_third_question_id", length = 32)
+  private String complementThirdQuestionId;
+
+  @Column(name = "complement_fourth_question_id", length = 32)
+  private String complementFourthQuestionId;
+
+  @Column(name = "complement_fifth_question_id", length = 32)
+  private String complementFifthQuestionId;
+
+  @Column(name = "complement_sixth_question_id", length = 32)
+  private String complementSixthQuestionId;
+
+  @Column(name = "complement_seventh_question_id", length = 32)
+  private String complementSeventhQuestionId;
 
 }

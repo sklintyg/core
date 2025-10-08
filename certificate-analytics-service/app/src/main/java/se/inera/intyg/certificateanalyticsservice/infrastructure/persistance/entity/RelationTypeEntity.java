@@ -12,12 +12,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "dim_certificate_relation_type")
+@Table(name = "dim_relation_type")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CertificateRelationTypeEntity {
+public class RelationTypeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

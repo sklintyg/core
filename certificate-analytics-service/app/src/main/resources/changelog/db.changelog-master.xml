@@ -117,29 +117,27 @@
       <column name="message_type" type="varchar(24)">
         <constraints nullable="false"/>
       </column>
+      <column name="complement_first_question_id" type="varchar(32)"/>
+      <column name="complement_second_question_id" type="varchar(32)"/>
+      <column name="complement_third_question_id" type="varchar(32)"/>
+      <column name="complement_fourth_question_id" type="varchar(32)"/>
+      <column name="complement_fifth_question_id" type="varchar(32)"/>
+      <column name="complement_sixth_question_id" type="varchar(32)"/>
+      <column name="complement_seventh_question_id" type="varchar(32)"/>
       <column name="sent" type="timestamp(6)">
         <constraints nullable="false"/>
       </column>
       <column name="last_date_to_answer" type="date"/>
     </createTable>
 
-    <createTable tableName="dim_message_question_id">
-      <column name="message_key" type="bigint unsigned">
-        <constraints nullable="false"/>
+    <createTable tableName="dim_relation_type">
+      <column name="key" type="tinyint unsigned auto_increment">
+        <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="question_id" type="varchar(32)">
-        <constraints nullable="false"/>
+      <column name="relation_type" type="varchar(64)">
+        <constraints nullable="false" unique="true"/>
       </column>
     </createTable>
-
-    <addForeignKeyConstraint baseTableName="dim_message_question_id"
-      baseColumnNames="message_key"
-      referencedTableName="dim_message" referencedColumnNames="key"
-      constraintName="fk_message_question_message"/>
-
-    <addUniqueConstraint tableName="dim_message_question_id"
-      columnNames="message_key,question_id"
-      constraintName="uk_message_question"/>
 
     <createTable tableName="fact_event">
       <column name="key" type="bigint unsigned auto_increment">
@@ -154,6 +152,8 @@
       <column name="certificate_key" type="bigint unsigned">
         <constraints nullable="false"/>
       </column>
+      <column name="parent_relation_certificate_key" type="bigint unsigned"/>
+      <column name="parent_relation_type_key" type="tinyint unsigned"/>
       <column name="certificate_unit_key" type="bigint unsigned">
         <constraints nullable="false"/>
       </column>
@@ -164,6 +164,7 @@
         <constraints nullable="false"/>
       </column>
       <column name="message_key" type="bigint unsigned"/>
+      <column name="message_complement_question_ids_count" type="tinyint unsigned"/>
       <column name="user_key" type="bigint unsigned"/>
       <column name="role_key" type="tinyint unsigned"/>
       <column name="origin_key" type="tinyint unsigned"/>
@@ -180,6 +181,13 @@
     <addForeignKeyConstraint baseTableName="fact_event" baseColumnNames="certificate_key"
       referencedTableName="dim_certificate" referencedColumnNames="key"
       constraintName="fk_event_certificate"/>
+    <addForeignKeyConstraint baseTableName="fact_event"
+      baseColumnNames="parent_relation_certificate_key"
+      referencedTableName="dim_certificate" referencedColumnNames="key"
+      constraintName="fk_event_parent_relation_certificate"/>
+    <addForeignKeyConstraint baseTableName="fact_event" baseColumnNames="parent_relation_type_key"
+      referencedTableName="dim_relation_type" referencedColumnNames="key"
+      constraintName="fk_event_parent_relation_type"/>
     <addForeignKeyConstraint baseTableName="fact_event" baseColumnNames="certificate_unit_key"
       referencedTableName="dim_unit" referencedColumnNames="key"
       constraintName="fk_event_certificate_unit"/>
@@ -220,46 +228,5 @@
     <addForeignKeyConstraint baseTableName="fact_event" baseColumnNames="patient_key"
       referencedTableName="dim_patient" referencedColumnNames="key"
       constraintName="fk_event_patient"/>
-
-    <createTable tableName="dim_certificate_relation">
-      <column name="key" type="bigint unsigned auto_increment">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-      <column name="parent_certificate_key" type="bigint unsigned">
-        <constraints nullable="false"/>
-      </column>
-      <column name="child_certificate_key" type="bigint unsigned">
-        <constraints nullable="false"/>
-      </column>
-      <column name="certificate_relation_type_key" type="bigint unsigned">
-        <constraints nullable="false"/>
-      </column>
-    </createTable>
-
-    <createTable tableName="dim_certificate_relation_type">
-      <column name="key" type="bigint unsigned auto_increment">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-      <column name="relation_type" type="varchar(64)">
-        <constraints nullable="false" unique="true"/>
-      </column>
-    </createTable>
-
-    <addForeignKeyConstraint baseTableName="dim_certificate_relation"
-      baseColumnNames="parent_certificate_key"
-      referencedTableName="dim_certificate" referencedColumnNames="key"
-      constraintName="fk_certificate_relation_parent_certificate"/>
-    <addForeignKeyConstraint baseTableName="dim_certificate_relation"
-      baseColumnNames="child_certificate_key"
-      referencedTableName="dim_certificate" referencedColumnNames="key"
-      constraintName="fk_certificate_relation_child_certificate"/>
-    <addForeignKeyConstraint baseTableName="dim_certificate_relation"
-      baseColumnNames="certificate_relation_type_key"
-      referencedTableName="dim_certificate_relation_type" referencedColumnNames="key"
-      constraintName="fk_certificate_relation_type"/>
-
-    <addUniqueConstraint tableName="dim_certificate_relation"
-      columnNames="parent_certificate_key,child_certificate_key"
-      constraintName="uk_certificate_relation_parent_child"/>
   </changeSet>
 </databaseChangeLog>
