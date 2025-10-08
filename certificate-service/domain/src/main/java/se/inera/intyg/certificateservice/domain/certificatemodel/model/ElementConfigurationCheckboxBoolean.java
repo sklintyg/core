@@ -41,7 +41,11 @@ public class ElementConfigurationCheckboxBoolean implements ElementConfiguration
     }
 
     if (elementValue.isEmpty()) {
-      return Optional.empty();
+      return Optional.of(
+          ElementSimplifiedValueText.builder()
+              .text(unselectedText)
+              .build()
+      );
     }
 
     return Optional.of(
