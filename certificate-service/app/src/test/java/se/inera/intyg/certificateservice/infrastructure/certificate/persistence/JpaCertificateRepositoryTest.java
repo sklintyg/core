@@ -105,82 +105,83 @@ class JpaCertificateRepositoryTest {
 	StaffVersionEntityRepository staffVersionEntityRepository;
 	@Mock
 	UnitVersionEntityRepository unitVersionEntityRepository;
-	@Mock
-	MessageEntityRepository messageEntityRepository;
 
   @InjectMocks
   JpaCertificateRepository jpaCertificateRepository;
 
-	@Before
-	public void setup() {
-		stubCertificateMapper();
-	}
+  private void stubDomain() {
+    when(certificateEntityMapper.toDomain(any(CertificateEntity.class)))
+        .thenAnswer(inv -> {
+          CertificateEntity ce = inv.getArgument(0);
 
-	private void stubCertificateMapper() {
-		// Stub the simplest path: toDomain(CertificateEntity)
-		when(certificateEntityMapper.toDomain(any(CertificateEntity.class)))
-				.thenAnswer(inv -> {
-					CertificateEntity ce = inv.getArgument(0);
-
-					// Build ONLY what your assertions need. Keep it minimal.
-					return MedicalCertificate.builder()
-							.id(new CertificateId(ce.getCertificateId()))
-							.created(ce.getCreated())
-							.signed(ce.getSigned())
-							.locked(ce.getLocked())
+          // Build ONLY what your assertions need. Keep it minimal.
+          return MedicalCertificate.builder()
+              .id(new CertificateId(ce.getCertificateId()))
+              .created(ce.getCreated())
+              .signed(ce.getSigned())
+              .locked(ce.getLocked())
               .modified(ce.getModified())
-							.revision(new Revision(
-									ce.getRevision() == null ? 0 : ce.getRevision()
-							))
+              .revision(new Revision(
+                  ce.getRevision() == null ? 0 : ce.getRevision()
+              ))
               .certificateModel(CONVERTED_MODEL)
-							.status(
-									ce.getStatus() != null
-											? Status.valueOf(ce.getStatus().getStatus())
-											: Status.SIGNED // fallback or DRAFT
-							)
-							.certificateMetaData(
-									CertificateMetaData.builder()
-											.issuer(ISSUED_BY)       // fill if your test asserts it
-											.careProvider(CARE_PROVIDER)
-											.careUnit(CARE_UNIT)
-											.issuingUnit(ISSUED_ON_UNIT)
-											.patient(PATIENT)
-											.creator(ISSUED_BY)
-											.build()
-							)
-							.build();
-				});
+              .status(
+                  ce.getStatus() != null
+                      ? Status.valueOf(ce.getStatus().getStatus())
+                      : Status.SIGNED
+              )
+              .certificateMetaData(
+                  CertificateMetaData.builder()
+                      .issuer(Staff.builder()
+                          .name(Name.builder()
+                              .firstName(ce.getIssuedBy().getFirstName())
+                              .middleName(ce.getIssuedBy().getMiddleName())
+                              .lastName(ce.getIssuedBy().getLastName())
+                              .build())
+                          .hsaId(new HsaId(ce.getIssuedBy().getHsaId()))
+                          .build())
+                      .careProvider(CARE_PROVIDER)
+                      .careUnit(CARE_UNIT)
+                      .issuingUnit(ISSUED_ON_UNIT)
+                      .patient(PATIENT)
+                      .creator(ISSUED_BY)
+                      .build()
+              )
+              .build();
+        });
+  }
 
-    // If the code under test ever calls the overload with includeRelations (not in your earlier snippet):
+  private void stubDomainSecondArgument() {
     when(certificateEntityMapper.toDomain(any(CertificateEntity.class), anyBoolean()))
         .thenAnswer(inv -> ((CertificateEntityMapper) inv.getMock())
-            .toDomain(inv.getArgument(0))); // delegate to the simpler stub
+            .toDomain(inv.getArgument(0)));
+  }
 
-		// If saving path calls toEntity(Certificate), stub a minimal entity:
-		when(certificateEntityMapper.toEntity(any(Certificate.class)))
-				.thenAnswer(inv -> {
-					Certificate cert = inv.getArgument(0);
-					return CertificateEntity.builder()
-							.certificateId(cert.id().id())
-							.created(cert.created())
-							.signed(cert.signed())
+  private void stubEntity(){
+    when(certificateEntityMapper.toEntity(any(Certificate.class)))
+        .thenAnswer(inv -> {
+          Certificate cert = inv.getArgument(0);
+          return CertificateEntity.builder()
+              .certificateId(cert.id().id())
+              .created(cert.created())
+              .signed(cert.signed())
               .modified(cert.modified())
-							.revision(cert.revision().value())
-							.locked(cert.locked())
-							.patient(PATIENT_ENTITY)
+              .revision(cert.revision().value())
+              .locked(cert.locked())
+              .patient(PATIENT_ENTITY)
               .certificateModel(MODEL)
-							.createdBy(ISSUED_BY_ENTITY)
-							.careProvider(CARE_PROVIDER_ENTITY)
-							.careUnit(CARE_UNIT_ENTITY)
-							.issuedBy(ISSUED_BY_ENTITY)
-							.issuedOnUnit(ISSUED_ON_UNIT_ENTITY)
-							// Provide a dummy status entity to avoid NPE in later logic
-							.status(new CertificateStatusEntity( (short)1, Status.SIGNED.name()))
+              .createdBy(ISSUED_BY_ENTITY)
+              .careProvider(CARE_PROVIDER_ENTITY)
+              .careUnit(CARE_UNIT_ENTITY)
+              .issuedBy(ISSUED_BY_ENTITY)
+              .issuedOnUnit(ISSUED_ON_UNIT_ENTITY)
+              // Provide a dummy status entity to avoid NPE in later logic
+              .status(new CertificateStatusEntity( (short)1, Status.SIGNED.name()))
               .data(DATA)
-							.placeholder(cert.isPlaceholder())
-							.build();
-				});
-	}
+              .placeholder(cert.isPlaceholder())
+              .build();
+      });
+  }
 
   private static final LocalDateTime TIMESTAMP = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
 
@@ -280,16 +281,27 @@ class JpaCertificateRepositoryTest {
 			.hsaId(new HsaId("HSA_ID"))
 			.build();
 
+  private static final Staff ISSUED_BY_OLD_NAME = Staff.builder()
+      .name(Name.builder()
+          .firstName("OLD")
+          .middleName("OLD")
+          .lastName("OLD")
+          .build())
+      .hsaId(new HsaId("HSA_ID"))
+      .build();
+
   private static final StaffEntity ISSUED_BY_ENTITY = StaffEntity.builder()
       .firstName("NAME")
       .middleName("NAME")
       .lastName("NAME")
       .hsaId("HSA_ID")
+      .paTitles(Collections.emptyList())
+      .specialities(Collections.emptyList())
       .build();
 
 	private static final StaffVersionEntity ISSUED_BY_OLD_NAME_ENTITY = StaffVersionEntity.builder()
-			.firstName("NAME")
-			.middleName("NAME")
+			.firstName("OLD")
+			.middleName("OLD")
 			.lastName("OLD")
 			.hsaId("HSA_ID")
 			.validTo(TIMESTAMP)
@@ -339,6 +351,25 @@ class JpaCertificateRepositoryTest {
       .placeholder(false)
 			.build();
 
+  private static final CertificateEntity MUTABLE_SIGNED_CERTIFICATE_ENTITY =
+      CertificateEntity.builder()
+      .revision(1L)
+      .certificateId("ID")
+      .modified(TIMESTAMP)
+      .signed(TIMESTAMP)
+      .created(TIMESTAMP)
+      .careProvider(CARE_PROVIDER_ENTITY)
+      .careUnit(CARE_UNIT_ENTITY)
+      .createdBy(ISSUED_BY_ENTITY)
+      .issuedOnUnit(ISSUED_ON_UNIT_ENTITY)
+      .issuedBy(ISSUED_BY_ENTITY)
+      .patient(PATIENT_ENTITY)
+      .certificateModel(MODEL)
+      .status(new CertificateStatusEntity(1, Status.SIGNED.name()))
+      .data(DATA)
+      .placeholder(false)
+      .build();
+
 	private static final Certificate EXPECTED_CERTIFICATE = MedicalCertificate.builder()
       .revision(new Revision(1L))
       .id(new CertificateId("ID"))
@@ -359,6 +390,27 @@ class JpaCertificateRepositoryTest {
 							.build()
 			)
 			.build();
+
+  private static final Certificate EXPECTED_CERTIFICATE_VERSIONED = MedicalCertificate.builder()
+      .revision(new Revision(1L))
+      .id(new CertificateId("ID"))
+      .status(Status.SIGNED)
+      .created(TIMESTAMP)
+      .modified(TIMESTAMP)
+      .signed(TIMESTAMP)
+      .status(Status.SIGNED)
+      .certificateModel(CONVERTED_MODEL)
+      .certificateMetaData(
+          CertificateMetaData.builder()
+              .issuer(ISSUED_BY_OLD_NAME)
+              .careProvider(CARE_PROVIDER)
+              .careUnit(CARE_UNIT)
+              .issuingUnit(ISSUED_ON_UNIT)
+              .patient(PATIENT)
+              .creator(ISSUED_BY)
+              .build()
+      )
+      .build();
 
 
   @Nested
@@ -414,7 +466,8 @@ class JpaCertificateRepositoryTest {
 
     @Test
     void shouldReturnCertificate() {
-
+      stubDomain();
+      stubEntity();
       doReturn(SIGNED_CERTIFICATE_ENTITY).when(certificateEntityRepository).save(SIGNED_CERTIFICATE_ENTITY);
 
       final var response = jpaCertificateRepository.save(EXPECTED_CERTIFICATE);
@@ -454,12 +507,13 @@ class JpaCertificateRepositoryTest {
 
     @Test
     void shouldSaveCertificateRelations() {
-      final var certificate = MedicalCertificate.builder().build();
+      stubDomain();
+      stubEntity();
 
-      doReturn(CERTIFICATE_ENTITY).when(certificateEntityRepository).save(CERTIFICATE_ENTITY);
+      doReturn(SIGNED_CERTIFICATE_ENTITY).when(certificateEntityRepository).save(SIGNED_CERTIFICATE_ENTITY);
 
-      jpaCertificateRepository.save(certificate);
-      verify(certificateRelationRepository).save(certificate, CERTIFICATE_ENTITY);
+      jpaCertificateRepository.save(EXPECTED_CERTIFICATE);
+      verify(certificateRelationRepository).save(EXPECTED_CERTIFICATE, SIGNED_CERTIFICATE_ENTITY);
     }
   }
 
@@ -482,8 +536,9 @@ class JpaCertificateRepositoryTest {
 
     @Test
     void shouldReturnCertificateFromRepository() {
+      stubDomain();
       when(certificateEntityRepository.findByCertificateId("ID"))
-          .thenReturn(Optional.of(CERTIFICATE_ENTITY));
+          .thenReturn(Optional.of(SIGNED_CERTIFICATE_ENTITY));
 
       final var response = jpaCertificateRepository.getById(new CertificateId("ID"));
 
@@ -510,47 +565,51 @@ class JpaCertificateRepositoryTest {
 
 		@Test
 		void shouldReturnCertificateFromRepository() {
-
-			when(certificateEntityRepository.findByCertificateId("ID"))
-					.thenReturn(Optional.of(CERTIFICATE_ENTITY));
-
-			final var response = jpaCertificateRepository.getByIdForPrint(new CertificateId("ID"));
-
-			assertEquals(EXPECTED_CERTIFICATE, response);
-		}
-
-		@Test
-		void shouldReturnVersionedStaffFromRepository(){
-			final var expectedCertificate = MedicalCertificate.builder().signed(LocalDateTime.now()).build();
-
+    stubDomain();
 
 			when(certificateEntityRepository.findByCertificateId("ID"))
 					.thenReturn(Optional.of(SIGNED_CERTIFICATE_ENTITY));
-			when(staffVersionEntityRepository.findCoveringTimestampOrderByMostRecent(ISSUED_BY_ENTITY.getHsaId(),
-					SIGNED_CERTIFICATE_ENTITY.getSigned())).thenReturn(List.of(ISSUED_BY_OLD_NAME_ENTITY));
-
-			final var response = jpaCertificateRepository.getByIdForPrint(new CertificateId("ID"));
-			System.out.println(response);
-			assertEquals(ISSUED_BY_OLD_NAME_ENTITY.getLastName(),
-					response.certificateMetaData().issuer().name().lastName());
-		}
-
-		@Test
-		void shouldReturnVersionedPatientFromRepository(){
-
-			when(certificateEntityRepository.findByCertificateId("ID"))
-					.thenReturn(Optional.of(CERTIFICATE_ENTITY));
 
 			final var response = jpaCertificateRepository.getByIdForPrint(new CertificateId("ID"));
 
 			assertEquals(EXPECTED_CERTIFICATE, response);
+		}
+
+    @Test
+    void shouldReturnVersionedStaffFromRepository(){
+      stubDomain();
+
+
+      when(certificateEntityRepository.findByCertificateId("ID"))
+          .thenReturn(Optional.of(MUTABLE_SIGNED_CERTIFICATE_ENTITY));
+
+      when(staffVersionEntityRepository.findCoveringTimestampOrderByMostRecent(ISSUED_BY_ENTITY.getHsaId(),
+          SIGNED_CERTIFICATE_ENTITY.getSigned())).thenReturn(List.of(ISSUED_BY_OLD_NAME_ENTITY));
+
+      final var response = jpaCertificateRepository.getByIdForPrint(new CertificateId("ID"));
+      assertEquals(EXPECTED_CERTIFICATE_VERSIONED, response);
+    }
+
+
+
+    @Test
+		void shouldReturnVersionedPatientFromRepository(){
+      stubDomain();
+
+			when(certificateEntityRepository.findByCertificateId("ID"))
+					.thenReturn(Optional.of(SIGNED_CERTIFICATE_ENTITY));
+
+			final var response = jpaCertificateRepository.getByIdForPrint(new CertificateId("ID"));
+
+			assertEquals(EXPECTED_CERTIFICATE, response);//TODO: fix
 		}
 
 		@Test
 		void shouldReturnVersionedUnitFromRepository(){
 
+      stubDomain();//TODO: fix
 			when(certificateEntityRepository.findByCertificateId("ID"))
-					.thenReturn(Optional.of(CERTIFICATE_ENTITY));
+					.thenReturn(Optional.of(SIGNED_CERTIFICATE_ENTITY));
 
 			final var response = jpaCertificateRepository.getByIdForPrint(new CertificateId("ID"));
 
@@ -578,8 +637,8 @@ class JpaCertificateRepositoryTest {
 
     @Test
     void shouldReturnCertificatesFromRepository() {
-      final var expectedCertificate = MedicalCertificate.builder().build();
-      final var expectedCertificates = List.of(expectedCertificate, expectedCertificate);
+      stubDomain();
+      final var expectedCertificates = List.of(EXPECTED_CERTIFICATE, EXPECTED_CERTIFICATE);
       final var certificate1 = new CertificateId("ID1");
       final var certificate2 = new CertificateId("ID2");
 
@@ -587,7 +646,7 @@ class JpaCertificateRepositoryTest {
 
       when(certificateEntityRepository.findCertificateEntitiesByCertificateIdIn(
           List.of("ID1", "ID2"))
-      ).thenReturn(List.of(CERTIFICATE_ENTITY, CERTIFICATE_ENTITY));
+      ).thenReturn(List.of(SIGNED_CERTIFICATE_ENTITY, SIGNED_CERTIFICATE_ENTITY));
 
       final var response = jpaCertificateRepository.getByIds(certificateIds);
 
@@ -641,7 +700,9 @@ class JpaCertificateRepositoryTest {
 
     @Test
     void shouldInsertCertificates() {
-      doReturn(CERTIFICATE_ENTITY).when(certificateEntityRepository).save(CERTIFICATE_ENTITY);
+      stubDomain();
+      stubEntity();
+      doReturn(SIGNED_CERTIFICATE_ENTITY).when(certificateEntityRepository).save(SIGNED_CERTIFICATE_ENTITY);
 
       final var actualCertificate = jpaCertificateRepository.insert(EXPECTED_CERTIFICATE);
 
@@ -650,10 +711,12 @@ class JpaCertificateRepositoryTest {
 
     @Test
     void shouldSaveCertificateRelations() {
-      doReturn(CERTIFICATE_ENTITY).when(certificateEntityRepository).save(CERTIFICATE_ENTITY);
+      stubDomain();
+      stubEntity();
+      doReturn(SIGNED_CERTIFICATE_ENTITY).when(certificateEntityRepository).save(SIGNED_CERTIFICATE_ENTITY);
 
       jpaCertificateRepository.insert(EXPECTED_CERTIFICATE);
-      verify(certificateRelationRepository).save(EXPECTED_CERTIFICATE, CERTIFICATE_ENTITY);
+      verify(certificateRelationRepository).save(EXPECTED_CERTIFICATE, SIGNED_CERTIFICATE_ENTITY);
     }
 
     @Test
@@ -686,6 +749,8 @@ class JpaCertificateRepositoryTest {
 
     @Test
     void shallReturnListOfCertificate() {
+
+      stubDomain();
 
       final var expectedCertificates = List.of(EXPECTED_CERTIFICATE);
       final var request = List.of(CERTIFICATE_ID);
