@@ -2,6 +2,11 @@
 
 This document describes how a new certificate model is created.
 
+### Important points to always follow
+
+- Do not add codes or ids that you have not gotten from the user. In that case a constant with a
+  TODO comment so the developer can fix this.
+
 ### 1. CertificateModel and ElementSpecification
 
 - The central class is `CertificateModelFactoryTYPE`, which represents a specific certificate type (
