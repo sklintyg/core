@@ -38,16 +38,7 @@ public class XmlGeneratorIcfValue implements XmlGeneratorElementValue {
     return XmlAnswerFactory.createAnswerFromString(
         data.id(),
         icfValue.id(),
-        icfValue.icfCodes().isEmpty()
-            ? icfValue.text()
-            : """
-                %s %s
-                
-                %s
-                """.formatted(
-                icfConfiguration.collectionsLabel(),
-                String.join(" - ", icfValue.icfCodes()),
-                icfValue.text()
-            ));
+        icfValue.formatIcfValueText(icfConfiguration)
+    );
   }
 }

@@ -30,7 +30,7 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionE
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
-import se.inera.intyg.certificateservice.domain.certificate.service.CreateCertificateFromTemplateDomainService;
+import se.inera.intyg.certificateservice.domain.certificate.service.CreateCertificateFromCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.user.model.User;
 
@@ -40,7 +40,7 @@ class CreateCertificateFromTemplateServiceTest {
   private static final String CERTIFICATE_ID = "certificateId";
 
   @Mock
-  private CreateCertificateFromTemplateDomainService createCertificateFromTemplateDomainService;
+  private CreateCertificateFromCertificateDomainService createCertificateFromCertificateDomainService;
   @Mock
   private CreateCertificateFromTemplateRequestValidator createCertificateFromTemplateRequestValidator;
   @Mock
@@ -88,7 +88,7 @@ class CreateCertificateFromTemplateServiceTest {
     );
 
     final var certificate = mock(MedicalCertificate.class);
-    doReturn(certificate).when(createCertificateFromTemplateDomainService).create(
+    doReturn(certificate).when(createCertificateFromCertificateDomainService).create(
         new CertificateId(CERTIFICATE_ID),
         actionEvaluation
     );

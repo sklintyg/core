@@ -11,7 +11,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Predicate;
+import java.util.function.Function;
 import java.util.stream.Stream;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -596,29 +596,26 @@ public class MedicalCertificate implements Certificate {
   }
 
   @Override
-  public Certificate createFromTemplate(ActionEvaluation actionEvaluation,
-      CertificateModel certificateModel) {
-    final var newCertificate = MedicalCertificate.builder()
-        .id(new CertificateId(UUID.randomUUID().toString()))
-        .created(LocalDateTime.now(ZoneId.systemDefault()))
-        .certificateModel(certificateModel)
-        .revision(new Revision(0))
-        .build();
+  public void fillFromCertificate(Certificate certificate) {
+    if (this.revision.value() != 0) {
+      throw new IllegalStateException(
+          "Unable to fill certificate '%s' since revision is greater than 0".formatted(
+              this.id.id())
+      );
+    }
 
-    newCertificate.certificateMetaData = this.certificateMetaData();
-    newCertificate.updateMetadata(actionEvaluation);
-
-    newCertificate.elementData = this.elementData().stream()
-        .filter(exlucudeElementsNotFoundInSpecificationOrIsDifferentType(certificateModel))
+    this.certificateMetaData = certificate.certificateMetaData();
+    this.elementData = certificate.elementData().stream()
+        .filter(data -> this.certificateModel.elementSpecificationExists(data.id()))
+        .map(convertElementDataWithModelSpecification(certificate))
+        .filter(Optional::isPresent)
+        .map(Optional::get)
         .toList();
-
-    return newCertificate;
   }
 
-  private Predicate<ElementData> exlucudeElementsNotFoundInSpecificationOrIsDifferentType(
-      CertificateModel certificateModel) {
-    return data -> certificateModel.elementSpecificationExists(data.id())
-        && certificateModel.elementSpecification(data.id()).configuration().type()
-        .equals(this.certificateModel.elementSpecification(data.id()).configuration().type());
+  private Function<ElementData, Optional<ElementData>> convertElementDataWithModelSpecification(
+      Certificate certificate) {
+    return data -> this.certificateModel.elementSpecification(data.id()).configuration()
+        .convert(data, certificate.certificateModel().elementSpecification(data.id()));
   }
 }

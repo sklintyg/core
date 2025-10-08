@@ -304,8 +304,7 @@ public class PlaceholderCertificate implements Certificate {
   }
 
   @Override
-  public Certificate createFromTemplate(ActionEvaluation actionEvaluation,
-      CertificateModel certificateModel) {
-    throw new IllegalStateException("Cannot create from template for a placeholder certificate");
+  public void fillFromCertificate(Certificate certificate) {
+    throw new IllegalStateException("Cannot fill from certificate for a placeholder certificate");
   }
 }

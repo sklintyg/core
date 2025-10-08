@@ -57,7 +57,7 @@ class CertificateActionCreateFromTemplateTest {
   private MedicalCertificate.MedicalCertificateBuilder certificateBuilder;
   private static final CertificateActionSpecification CERTIFICATE_ACTION_SPECIFICATION =
       CertificateActionSpecification.builder()
-          .certificateActionType(CertificateActionType.CREATE_FROM_TEMPLATE)
+          .certificateActionType(CertificateActionType.CREATE_FROM_CERTIFICATE)
           .build();
   @Mock
   CertificateActionConfigurationRepository certificateActionConfigurationRepository;
@@ -90,7 +90,7 @@ class CertificateActionCreateFromTemplateTest {
 
   @Test
   void shouldReturnType() {
-    assertEquals(CertificateActionType.CREATE_FROM_TEMPLATE,
+    assertEquals(CertificateActionType.CREATE_FROM_CERTIFICATE,
         certificateActionCreateFromTemplate.getType());
   }
 

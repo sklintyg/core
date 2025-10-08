@@ -10,13 +10,13 @@ import se.inera.intyg.certificateservice.application.certificate.service.validat
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
 import se.inera.intyg.certificateservice.application.common.converter.ResourceLinkConverter;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
-import se.inera.intyg.certificateservice.domain.certificate.service.CreateCertificateFromTemplateDomainService;
+import se.inera.intyg.certificateservice.domain.certificate.service.CreateCertificateFromCertificateDomainService;
 
 @Service
 @RequiredArgsConstructor
 public class CreateCertificateFromTemplateService {
 
-  private final CreateCertificateFromTemplateDomainService createCertificateFromTemplateDomainService;
+  private final CreateCertificateFromCertificateDomainService createCertificateFromCertificateDomainService;
   private final CreateCertificateFromTemplateRequestValidator createCertificateFromTemplateRequestValidator;
   private final ActionEvaluationFactory actionEvaluationFactory;
   private final CertificateConverter certificateConverter;
@@ -33,7 +33,7 @@ public class CreateCertificateFromTemplateService {
         request.getCareProvider()
     );
 
-    final var certificate = createCertificateFromTemplateDomainService.create(
+    final var certificate = createCertificateFromCertificateDomainService.create(
         new CertificateId(certificateId),
         actionEvaluation
     );

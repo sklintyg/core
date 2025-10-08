@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
@@ -27,7 +28,7 @@ import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
 
 @ExtendWith(MockitoExtension.class)
-class CreateCertificateFromTemplateDomainServiceTest {
+class CreateCertificateFromCertificateDomainServiceTest {
 
   private static final CertificateId CERTIFICATE_ID = new CertificateId("certificateId");
   private static final CertificateModelId CERTIFICATE_MODEL_ID = CertificateModelId.builder()
@@ -35,6 +36,8 @@ class CreateCertificateFromTemplateDomainServiceTest {
   private static final CertificateModel CERTIFICATE_MODEL = CertificateModel.builder()
       .templateFor(CERTIFICATE_MODEL_ID)
       .build();
+  private static final MedicalCertificate CREATED_CERTIFICATE = MedicalCertificate.builder()
+      .revision(new Revision(0)).build();
   @Mock
   CertificateRepository certificateRepository;
   @Mock
@@ -42,18 +45,19 @@ class CreateCertificateFromTemplateDomainServiceTest {
   @Mock
   CertificateEventDomainService certificateEventDomainService;
   @InjectMocks
-  CreateCertificateFromTemplateDomainService createCertificateFromTemplateDomainService;
+  CreateCertificateFromCertificateDomainService createCertificateFromCertificateDomainService;
 
   @Test
   void shouldThrowCertificateActionForbiddenIfCertificateDoesNotSupportCreateFromTemplate() {
     final var medicalCertificate = mock(MedicalCertificate.class);
 
     when(certificateRepository.getById(CERTIFICATE_ID)).thenReturn(medicalCertificate);
-    when(medicalCertificate.allowTo(CertificateActionType.CREATE_FROM_TEMPLATE,
+    when(medicalCertificate.allowTo(CertificateActionType.CREATE_FROM_CERTIFICATE,
         Optional.of(ACTION_EVALUATION))).thenReturn(false);
 
     assertThrows(CertificateActionForbidden.class,
-        () -> createCertificateFromTemplateDomainService.create(CERTIFICATE_ID, ACTION_EVALUATION));
+        () -> createCertificateFromCertificateDomainService.create(CERTIFICATE_ID,
+            ACTION_EVALUATION));
   }
 
   @Test
@@ -61,12 +65,13 @@ class CreateCertificateFromTemplateDomainServiceTest {
     final var medicalCertificate = mock(MedicalCertificate.class);
 
     when(certificateRepository.getById(CERTIFICATE_ID)).thenReturn(medicalCertificate);
-    when(medicalCertificate.allowTo(CertificateActionType.CREATE_FROM_TEMPLATE,
+    when(medicalCertificate.allowTo(CertificateActionType.CREATE_FROM_CERTIFICATE,
         Optional.of(ACTION_EVALUATION))).thenReturn(true);
     when(medicalCertificate.certificateModel()).thenReturn(CertificateModel.builder().build());
 
     final var illegalStateException = assertThrows(IllegalStateException.class,
-        () -> createCertificateFromTemplateDomainService.create(CERTIFICATE_ID, ACTION_EVALUATION));
+        () -> createCertificateFromCertificateDomainService.create(CERTIFICATE_ID,
+            ACTION_EVALUATION));
 
     assertEquals(
         "Certificate '%s' is missing required field template for".formatted(CERTIFICATE_ID.id()),
@@ -74,80 +79,93 @@ class CreateCertificateFromTemplateDomainServiceTest {
   }
 
   @Test
-  void shouldCreateCertificateFromTemplate() {
+  void shouldCreateCertificateFromProvidedModel() {
     final var medicalCertificate = mock(MedicalCertificate.class);
 
     when(certificateRepository.getById(CERTIFICATE_ID)).thenReturn(medicalCertificate);
-    when(medicalCertificate.allowTo(CertificateActionType.CREATE_FROM_TEMPLATE,
+    when(medicalCertificate.allowTo(CertificateActionType.CREATE_FROM_CERTIFICATE,
         Optional.of(ACTION_EVALUATION))).thenReturn(true);
     when(medicalCertificate.certificateModel()).thenReturn(CERTIFICATE_MODEL);
     when(certificateModelRepository.getById(CERTIFICATE_MODEL_ID)).thenReturn(CERTIFICATE_MODEL);
+    when(certificateRepository.create(CERTIFICATE_MODEL)).thenReturn(medicalCertificate);
 
-    createCertificateFromTemplateDomainService.create(CERTIFICATE_ID, ACTION_EVALUATION);
+    createCertificateFromCertificateDomainService.create(CERTIFICATE_ID, ACTION_EVALUATION);
 
-    verify(medicalCertificate).createFromTemplate(ACTION_EVALUATION, CERTIFICATE_MODEL);
+    verify(certificateRepository).create(CERTIFICATE_MODEL);
   }
 
   @Test
-  void shouldPersistCreatedCertificateFromTemplate() {
-    final var expectedCertificate = MedicalCertificate.builder().build();
+  void shouldFillCertificateWithCertificate() {
     final var medicalCertificate = mock(MedicalCertificate.class);
+    final var medicalCertificateDraft = mock(MedicalCertificate.class);
 
     when(certificateRepository.getById(CERTIFICATE_ID)).thenReturn(medicalCertificate);
-    when(medicalCertificate.allowTo(CertificateActionType.CREATE_FROM_TEMPLATE,
+    when(medicalCertificate.allowTo(CertificateActionType.CREATE_FROM_CERTIFICATE,
         Optional.of(ACTION_EVALUATION))).thenReturn(true);
     when(medicalCertificate.certificateModel()).thenReturn(CERTIFICATE_MODEL);
     when(certificateModelRepository.getById(CERTIFICATE_MODEL_ID)).thenReturn(CERTIFICATE_MODEL);
-    when(medicalCertificate.createFromTemplate(ACTION_EVALUATION, CERTIFICATE_MODEL)).thenReturn(
-        expectedCertificate);
+    when(certificateRepository.create(CERTIFICATE_MODEL)).thenReturn(medicalCertificateDraft);
 
-    createCertificateFromTemplateDomainService.create(CERTIFICATE_ID, ACTION_EVALUATION);
+    createCertificateFromCertificateDomainService.create(CERTIFICATE_ID, ACTION_EVALUATION);
 
-    verify(certificateRepository).save(expectedCertificate);
+    verify(medicalCertificateDraft).fillFromCertificate(medicalCertificate);
   }
 
   @Test
-  void shouldReturnCreatedCertificateFromTemplate() {
-    final var expectedCertificate = MedicalCertificate.builder().build();
+  void shouldPersistCreatedCertificate() {
     final var medicalCertificate = mock(MedicalCertificate.class);
 
     when(certificateRepository.getById(CERTIFICATE_ID)).thenReturn(medicalCertificate);
-    when(medicalCertificate.allowTo(CertificateActionType.CREATE_FROM_TEMPLATE,
+    when(medicalCertificate.allowTo(CertificateActionType.CREATE_FROM_CERTIFICATE,
         Optional.of(ACTION_EVALUATION))).thenReturn(true);
     when(medicalCertificate.certificateModel()).thenReturn(CERTIFICATE_MODEL);
     when(certificateModelRepository.getById(CERTIFICATE_MODEL_ID)).thenReturn(CERTIFICATE_MODEL);
-    when(medicalCertificate.createFromTemplate(ACTION_EVALUATION, CERTIFICATE_MODEL)).thenReturn(
-        expectedCertificate);
-    when(certificateRepository.save(expectedCertificate)).thenReturn(expectedCertificate);
+    when(certificateRepository.create(CERTIFICATE_MODEL)).thenReturn(CREATED_CERTIFICATE);
 
-    final var actualCertificate = createCertificateFromTemplateDomainService.create(CERTIFICATE_ID,
+    createCertificateFromCertificateDomainService.create(CERTIFICATE_ID, ACTION_EVALUATION);
+
+    verify(certificateRepository).save(CREATED_CERTIFICATE);
+  }
+
+  @Test
+  void shouldReturnCreatedCertificate() {
+    final var medicalCertificate = mock(MedicalCertificate.class);
+
+    when(certificateRepository.getById(CERTIFICATE_ID)).thenReturn(medicalCertificate);
+    when(medicalCertificate.allowTo(CertificateActionType.CREATE_FROM_CERTIFICATE,
+        Optional.of(ACTION_EVALUATION))).thenReturn(true);
+    when(medicalCertificate.certificateModel()).thenReturn(CERTIFICATE_MODEL);
+    when(certificateModelRepository.getById(CERTIFICATE_MODEL_ID)).thenReturn(CERTIFICATE_MODEL);
+    when(certificateRepository.create(CERTIFICATE_MODEL)).thenReturn(CREATED_CERTIFICATE);
+    when(certificateRepository.save(CREATED_CERTIFICATE)).thenReturn(CREATED_CERTIFICATE);
+
+    final var actualCertificate = createCertificateFromCertificateDomainService.create(
+        CERTIFICATE_ID,
         ACTION_EVALUATION);
 
-    assertEquals(expectedCertificate, actualCertificate);
+    assertEquals(CREATED_CERTIFICATE, actualCertificate);
   }
 
   @Test
   void shouldPublishEventCreateCertificateFromTemplate() {
     final var certificateEventArgumentCaptor = ArgumentCaptor.forClass(CertificateEvent.class);
-    final var expectedCertificate = MedicalCertificate.builder().build();
     final var medicalCertificate = mock(MedicalCertificate.class);
 
     when(certificateRepository.getById(CERTIFICATE_ID)).thenReturn(medicalCertificate);
-    when(medicalCertificate.allowTo(CertificateActionType.CREATE_FROM_TEMPLATE,
+    when(medicalCertificate.allowTo(CertificateActionType.CREATE_FROM_CERTIFICATE,
         Optional.of(ACTION_EVALUATION))).thenReturn(true);
     when(medicalCertificate.certificateModel()).thenReturn(CERTIFICATE_MODEL);
     when(certificateModelRepository.getById(CERTIFICATE_MODEL_ID)).thenReturn(CERTIFICATE_MODEL);
-    when(medicalCertificate.createFromTemplate(ACTION_EVALUATION, CERTIFICATE_MODEL)).thenReturn(
-        expectedCertificate);
-    when(certificateRepository.save(expectedCertificate)).thenReturn(expectedCertificate);
+    when(certificateRepository.create(CERTIFICATE_MODEL)).thenReturn(CREATED_CERTIFICATE);
+    when(certificateRepository.save(CREATED_CERTIFICATE)).thenReturn(CREATED_CERTIFICATE);
 
-    createCertificateFromTemplateDomainService.create(CERTIFICATE_ID,
+    createCertificateFromCertificateDomainService.create(CERTIFICATE_ID,
         ACTION_EVALUATION);
 
     verify(certificateEventDomainService).publish(certificateEventArgumentCaptor.capture());
 
-    assertEquals(expectedCertificate, certificateEventArgumentCaptor.getValue().certificate());
-    assertEquals(CertificateEventType.CREATE_CERTIFICATE_FROM_TEMPLATE,
+    assertEquals(CREATED_CERTIFICATE, certificateEventArgumentCaptor.getValue().certificate());
+    assertEquals(CertificateEventType.CREATE_CERTIFICATE_FROM_CERTIFICATE,
         certificateEventArgumentCaptor.getValue().type());
   }
 }

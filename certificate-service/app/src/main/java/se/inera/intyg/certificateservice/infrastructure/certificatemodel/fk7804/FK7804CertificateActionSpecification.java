@@ -141,7 +141,7 @@ public class FK7804CertificateActionSpecification {
             .certificateActionType(CertificateActionType.SRS_SIGNED)
             .build(),
         CertificateActionSpecification.builder()
-            .certificateActionType(CertificateActionType.CREATE_FROM_TEMPLATE)
+            .certificateActionType(CertificateActionType.CREATE_FROM_CERTIFICATE)
             .build()
     );
   }

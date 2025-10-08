@@ -135,6 +135,5 @@ public interface Certificate {
     return false;
   }
 
-  Certificate createFromTemplate(ActionEvaluation actionEvaluation,
-      CertificateModel certificateModel);
+  void fillFromCertificate(Certificate certificate);
 }

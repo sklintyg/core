@@ -592,7 +592,7 @@ public class CertificateActionFactory {
               )
           )
           .build();
-      case CREATE_FROM_TEMPLATE -> CertificateActionCreateFromTemplate.builder()
+      case CREATE_FROM_CERTIFICATE -> CertificateActionCreateFromTemplate.builder()
           .certificateActionSpecification(actionSpecification)
           .actionRules(
               List.of(

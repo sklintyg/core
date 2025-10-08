@@ -2813,195 +2813,66 @@ class CertificateTest {
   }
 
   @Nested
-  class TestCreateFromTemplate {
+  class TestFillFromCertificate {
 
     @Test
-    void shallReturnNewCertificateWithId() {
-      final var actionEvaluation = actionEvaluationBuilder.build();
-      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
+    void shouldThrowIfRevisionIsGreaterThanZero() {
+      final var medicalCertificate = MedicalCertificate.builder()
+          .id(CERTIFICATE_ID)
+          .revision(new Revision(1))
           .build();
 
-      final var actualCertificate = signedCertificate.createFromTemplate(actionEvaluation,
-          certificateModel);
-
-      assertNotNull(actualCertificate.id());
-      assertNotEquals(signedCertificate.id(), actualCertificate.id());
+      assertThrows(IllegalStateException.class,
+          () -> medicalCertificate.fillFromCertificate(certificate));
     }
 
     @Test
-    void shallReturnNewCertificateWithCreated() {
-      final var actionEvaluation = actionEvaluationBuilder.build();
-      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
-          .build();
+    void shouldUpdateElementDataWithDataFromProvidedCertificate() {
+      final var elementConfigurationTextArea = mock(ElementConfigurationTextArea.class);
+      final var elementId = new ElementId("elementId");
 
-      final var actualCertificate = signedCertificate.createFromTemplate(actionEvaluation,
-          certificateModel);
-
-      assertEquals(
-          LocalDateTime.now(ZoneId.systemDefault()).toLocalDate(),
-          actualCertificate.created().toLocalDate()
-      );
-    }
-
-    @Test
-    void shallReturnNewCertificateWithRevision() {
-      final var actionEvaluation = actionEvaluationBuilder.build();
-      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
-          .build();
-
-      final var actualCertificate = signedCertificate.createFromTemplate(actionEvaluation,
-          certificateModel);
-
-      assertEquals(new Revision(0), actualCertificate.revision());
-    }
-
-    @Test
-    void shallReturnNewCertificateWithProvidedModel() {
-      final var actionEvaluation = actionEvaluationBuilder.build();
-      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
-          .build();
-
-      final var actualCertificate = signedCertificate.createFromTemplate(actionEvaluation,
-          certificateModel);
-
-      assertEquals(certificateModel, actualCertificate.certificateModel());
-    }
-
-    @Test
-    void shallReturnNewCertificateWithSamePatient() {
-      final var actionEvaluation = actionEvaluationBuilder
-          .patient(null)
-          .build();
-
-      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
-          .build();
-
-      final var actualCertificate = signedCertificate.createFromTemplate(actionEvaluation,
-          certificateModel);
-
-      assertEquals(
-          signedCertificate.certificateMetaData().patient(),
-          actualCertificate.certificateMetaData().patient()
-      );
-    }
-
-    @Test
-    void shallReturnNewCertificateWithNewPatient() {
-      final var actionEvaluation = actionEvaluationBuilder
-          .patient(ALVE_REACT_ALFREDSSON)
-          .build();
-
-      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
-          .build();
-
-      final var actualCertificate = signedCertificate.createFromTemplate(actionEvaluation,
-          certificateModel);
-
-      assertEquals(
-          actionEvaluation.patient(),
-          actualCertificate.certificateMetaData().patient()
-      );
-    }
-
-    @Test
-    void shallReturnNewCertificateWithNewSubUnit() {
-      final var actionEvaluation = actionEvaluationBuilder
-          .subUnit(ALFA_HUDMOTTAGNINGEN)
-          .build();
-
-      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
-          .build();
-
-      final var actualCertificate = signedCertificate.createFromTemplate(actionEvaluation,
-          certificateModel);
-
-      assertEquals(
-          actionEvaluation.subUnit(),
-          actualCertificate.certificateMetaData().issuingUnit()
-      );
-    }
-
-    @Test
-    void shallReturnNewCertificateWithNewCareUnit() {
-      final var actionEvaluation = actionEvaluationBuilder
-          .careUnit(ALFA_VARDCENTRAL)
-          .build();
-
-      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
-          .build();
-
-      final var actualCertificate = signedCertificate.createFromTemplate(actionEvaluation,
-          certificateModel);
-
-      assertEquals(
-          actionEvaluation.careUnit(),
-          actualCertificate.certificateMetaData().careUnit()
-      );
-    }
-
-    @Test
-    void shallReturnNewCertificateWithNewCareProvider() {
-      final var actionEvaluation = actionEvaluationBuilder
-          .careProvider(BETA_REGIONEN)
-          .build();
-
-      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
-          .build();
-
-      final var actualCertificate = signedCertificate.createFromTemplate(actionEvaluation,
-          certificateModel);
-
-      assertEquals(
-          actionEvaluation.careProvider(),
-          actualCertificate.certificateMetaData().careProvider()
-      );
-    }
-
-    @Test
-    void shallReturnNewCertificateWithNewStaff() {
-      final var actionEvaluation = actionEvaluationBuilder
-          .user(ALF_DOKTOR)
-          .build();
-
-      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
-          .build();
-
-      final var actualCertificate = signedCertificate.createFromTemplate(actionEvaluation,
-          certificateModel);
-
-      assertEquals(
-          Staff.create(actionEvaluation.user()),
-          actualCertificate.certificateMetaData().issuer()
-      );
-    }
-
-    @Test
-    void shallReturnNewCertificateWithValuesThatShouldBeKept() {
-      final var expectedElementData = List.of(
-          DATE
-      );
-
-      final var actionEvaluation = actionEvaluationBuilder.build();
-      final var signedCertificate = certificateBuilder
-          .elementData(
-              List.of(DATE, CONTACT_INFO)
-          )
-          .status(Status.SIGNED)
-          .build();
-
-      final var dateSpecification = ElementSpecification.builder()
-          .configuration(
-              ElementConfigurationTextArea.builder().build()
+      final var medicalCertificate = MedicalCertificate.builder()
+          .id(CERTIFICATE_ID)
+          .revision(new Revision(0))
+          .certificateModel(
+              CertificateModel.builder()
+                  .elementSpecifications(
+                      List.of(
+                          ElementSpecification.builder()
+                              .id(elementId)
+                              .configuration(elementConfigurationTextArea)
+                              .build()
+                      )
+                  )
+                  .build()
           )
           .build();
-      
-      doReturn(true).when(certificateModel).elementSpecificationExists(DATE.id());
-      doReturn(dateSpecification).when(certificateModel).elementSpecification(DATE.id());
 
-      final var actualCertificate = signedCertificate.createFromTemplate(actionEvaluation,
-          certificateModel);
+      final var elementData = ElementData.builder()
+          .id(elementId)
+          .build();
 
-      assertEquals(expectedElementData, actualCertificate.elementData());
+      final var elementSpecification = ElementSpecification.builder()
+          .id(elementId)
+          .build();
+
+      final var originalCertificate = MedicalCertificate.builder()
+          .id(CERTIFICATE_ID)
+          .revision(new Revision(0))
+          .certificateModel(
+              CertificateModel.builder()
+                  .elementSpecifications(List.of(elementSpecification))
+                  .build()
+          )
+          .elementData(List.of(elementData))
+          .build();
+
+      when(elementConfigurationTextArea.convert(elementData, elementSpecification)).thenReturn(
+          Optional.of(elementData));
+
+      medicalCertificate.fillFromCertificate(originalCertificate);
+
+      assertEquals(List.of(elementData), medicalCertificate.elementData());
     }
   }
 }

@@ -16,7 +16,7 @@ import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
 
 @RequiredArgsConstructor
-public class CreateCertificateFromTemplateDomainService {
+public class CreateCertificateFromCertificateDomainService {
 
   private final CertificateRepository certificateRepository;
   private final CertificateModelRepository certificateModelRepository;
@@ -26,11 +26,11 @@ public class CreateCertificateFromTemplateDomainService {
     final var start = LocalDateTime.now(ZoneId.systemDefault());
 
     final var certificate = certificateRepository.getById(certificateId);
-    if (!certificate.allowTo(CertificateActionType.CREATE_FROM_TEMPLATE,
+    if (!certificate.allowTo(CertificateActionType.CREATE_FROM_CERTIFICATE,
         Optional.of(actionEvaluation))) {
       throw new CertificateActionForbidden(
           "Not allowed to create certificate from template for %s".formatted(certificateId),
-          certificate.reasonNotAllowed(CertificateActionType.CREATE_FROM_TEMPLATE,
+          certificate.reasonNotAllowed(CertificateActionType.CREATE_FROM_CERTIFICATE,
               Optional.of(actionEvaluation))
       );
     }
@@ -43,16 +43,16 @@ public class CreateCertificateFromTemplateDomainService {
             )
     );
 
-    final var certificateFromTemplate = certificate.createFromTemplate(
-        actionEvaluation,
-        certificateModel
-    );
+    final var certificateDraft = certificateRepository.create(certificateModel);
 
-    final var savedCertificate = certificateRepository.save(certificateFromTemplate);
+    certificateDraft.fillFromCertificate(certificate);
+    certificateDraft.updateMetadata(actionEvaluation);
+
+    final var savedCertificate = certificateRepository.save(certificateDraft);
 
     certificateEventDomainService.publish(
         CertificateEvent.builder()
-            .type(CertificateEventType.CREATE_CERTIFICATE_FROM_TEMPLATE)
+            .type(CertificateEventType.CREATE_CERTIFICATE_FROM_CERTIFICATE)
             .start(start)
             .end(LocalDateTime.now(ZoneId.systemDefault()))
             .certificate(savedCertificate)

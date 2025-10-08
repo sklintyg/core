@@ -217,9 +217,9 @@ class ResourceLinkTypeDTOTest {
     }
 
     @Test
-    void shallReturnResourceLinkTypeDTOCreateCertificateFromTemplate() {
+    void shallReturnResourceLinkTypeDTOCreateCertificateFromCertificate() {
       assertEquals(ResourceLinkTypeDTO.CREATE_CERTIFICATE_FROM_TEMPLATE,
-          ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.CREATE_FROM_TEMPLATE));
+          ResourceLinkTypeDTO.toResourceLinkType(CertificateActionType.CREATE_FROM_CERTIFICATE));
     }
   }
 }
