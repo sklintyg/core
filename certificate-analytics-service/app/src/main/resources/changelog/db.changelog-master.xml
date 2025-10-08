@@ -15,7 +15,7 @@
     </createTable>
 
     <createTable tableName="dim_unit">
-      <column name="unit_key" type="bigint unsigned auto_increment">
+      <column name="unit_key" type="mediumint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="hsa_id" type="varchar(64)">
@@ -33,7 +33,7 @@
     </createTable>
 
     <createTable tableName="dim_user">
-      <column name="user_key" type="bigint unsigned auto_increment">
+      <column name="user_key" type="mediumint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="user_id" type="varchar(22)">
@@ -42,7 +42,7 @@
     </createTable>
 
     <createTable tableName="dim_care_provider">
-      <column name="care_provider_key" type="bigint unsigned auto_increment">
+      <column name="care_provider_key" type="smallint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="hsa_id" type="varchar(64)">
@@ -51,7 +51,7 @@
     </createTable>
 
     <createTable tableName="dim_session">
-      <column name="session_key" type="bigint unsigned auto_increment">
+      <column name="session_key" type="int unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="session_id" type="varchar(22)">
@@ -69,7 +69,7 @@
     </createTable>
 
     <createTable tableName="dim_patient">
-      <column name="patient_key" type="bigint unsigned auto_increment">
+      <column name="patient_key" type="mediumint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="patient_id" type="varchar(22)">
@@ -78,7 +78,7 @@
     </createTable>
 
     <createTable tableName="dim_certificate">
-      <column name="certificate_key" type="bigint unsigned auto_increment">
+      <column name="certificate_key" type="int unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="certificate_id" type="varchar(22)">
@@ -102,7 +102,7 @@
     </createTable>
 
     <createTable tableName="dim_message">
-      <column name="message_key" type="bigint unsigned auto_increment">
+      <column name="message_key" type="int unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
       <column name="message_id" type="varchar(22)">
@@ -149,28 +149,28 @@
       <column name="event_type_key" type="tinyint unsigned">
         <constraints nullable="false"/>
       </column>
-      <column name="certificate_key" type="bigint unsigned">
+      <column name="certificate_key" type="int unsigned">
         <constraints nullable="false"/>
       </column>
-      <column name="parent_relation_certificate_key" type="bigint unsigned"/>
+      <column name="parent_relation_certificate_key" type="int unsigned"/>
       <column name="parent_relation_type_key" type="tinyint unsigned"/>
-      <column name="certificate_unit_key" type="bigint unsigned">
+      <column name="certificate_unit_key" type="mediumint unsigned">
         <constraints nullable="false"/>
       </column>
-      <column name="certificate_care_provider_key" type="bigint unsigned">
+      <column name="certificate_care_provider_key" type="smallint unsigned">
         <constraints nullable="false"/>
       </column>
-      <column name="patient_key" type="bigint unsigned">
+      <column name="patient_key" type="mediumint unsigned">
         <constraints nullable="false"/>
       </column>
-      <column name="message_key" type="bigint unsigned"/>
+      <column name="message_key" type="int unsigned"/>
       <column name="message_complement_question_ids_count" type="tinyint unsigned"/>
-      <column name="user_key" type="bigint unsigned"/>
+      <column name="user_key" type="mediumint unsigned"/>
       <column name="role_key" type="tinyint unsigned"/>
       <column name="origin_key" type="tinyint unsigned"/>
-      <column name="session_key" type="bigint unsigned"/>
-      <column name="unit_key" type="bigint unsigned"/>
-      <column name="care_provider_key" type="bigint unsigned"/>
+      <column name="session_key" type="int unsigned"/>
+      <column name="unit_key" type="mediumint unsigned"/>
+      <column name="care_provider_key" type="smallint unsigned"/>
       <column name="sender_party_key" type="tinyint unsigned"/>
       <column name="recipient_party_key" type="tinyint unsigned"/>
       <column name="id" type="varchar(22)">
