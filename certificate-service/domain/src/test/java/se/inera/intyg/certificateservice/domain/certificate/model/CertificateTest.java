@@ -92,6 +92,7 @@ import se.inera.intyg.certificateservice.domain.certificate.service.PrefillProce
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModificationException;
@@ -2988,7 +2989,14 @@ class CertificateTest {
           .status(Status.SIGNED)
           .build();
 
+      final var dateSpecification = ElementSpecification.builder()
+          .configuration(
+              ElementConfigurationTextArea.builder().build()
+          )
+          .build();
+      
       doReturn(true).when(certificateModel).elementSpecificationExists(DATE.id());
+      doReturn(dateSpecification).when(certificateModel).elementSpecification(DATE.id());
 
       final var actualCertificate = signedCertificate.createFromTemplate(actionEvaluation,
           certificateModel);

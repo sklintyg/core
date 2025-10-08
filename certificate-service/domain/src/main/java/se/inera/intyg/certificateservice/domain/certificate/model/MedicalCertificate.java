@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -608,11 +609,16 @@ public class MedicalCertificate implements Certificate {
     newCertificate.updateMetadata(actionEvaluation);
 
     newCertificate.elementData = this.elementData().stream()
-        .filter(data -> certificateModel.elementSpecificationExists(data.id())
-            && certificateModel.elementSpecification(data.id()).configuration().type()
-            .equals(this.certificateModel.elementSpecification(data.id()).configuration().type()))
+        .filter(exlucudeElementsNotFoundInSpecificationOrIsDifferentType(certificateModel))
         .toList();
 
     return newCertificate;
+  }
+
+  private Predicate<ElementData> exlucudeElementsNotFoundInSpecificationOrIsDifferentType(
+      CertificateModel certificateModel) {
+    return data -> certificateModel.elementSpecificationExists(data.id())
+        && certificateModel.elementSpecification(data.id()).configuration().type()
+        .equals(this.certificateModel.elementSpecification(data.id()).configuration().type());
   }
 }
