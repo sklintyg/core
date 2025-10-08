@@ -63,4 +63,24 @@ class ElementQuestionConverterTest {
         result.toString()
     );
   }
+
+  @Test
+  void shouldReturnHtmlForQuestionAndQuestionNameAsEmptyString() {
+    final var result = QuestionConverter.question(
+        Question.builder()
+            .id("ID")
+            .value(ElementValueText.builder()
+                .text("Example text for value")
+                .build()
+            )
+            .subQuestions(Collections.emptyList())
+            .build()
+        , false
+    );
+
+    assertEquals(
+        "[<h3 class=\"text-sm font-bold pt-[1mm] px-[5mm]\"></h3>, <p class=\"text-sm italic px-[5mm]\">Example text for value</p>]",
+        result.toString()
+    );
+  }
 }
