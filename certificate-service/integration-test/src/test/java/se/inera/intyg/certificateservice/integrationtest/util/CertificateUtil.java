@@ -16,6 +16,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateFromTemplateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ForwardCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse;
@@ -75,6 +76,14 @@ public class CertificateUtil {
   }
 
   public static String certificateId(RenewCertificateResponse response) {
+    final var certificate = certificate(response);
+    if (certificate == null || certificate.getMetadata() == null) {
+      return null;
+    }
+    return certificate.getMetadata().getId();
+  }
+
+  public static String certificateId(CreateCertificateFromTemplateResponse response) {
     final var certificate = certificate(response);
     if (certificate == null || certificate.getMetadata() == null) {
       return null;
@@ -192,6 +201,22 @@ public class CertificateUtil {
     return certificate.getMetadata().getVersion();
   }
 
+  public static long version(ReplaceCertificateResponse response) {
+    final var certificate = certificate(response);
+    if (certificate == null || certificate.getMetadata() == null) {
+      return 0L;
+    }
+    return certificate.getMetadata().getVersion();
+  }
+
+  public static long version(ComplementCertificateResponse response) {
+    final var certificate = certificate(response);
+    if (certificate == null || certificate.getMetadata() == null) {
+      return 0L;
+    }
+    return certificate.getMetadata().getVersion();
+  }
+
   public static CertificateDTO certificate(List<CreateCertificateResponse> responses) {
     if (responses == null || responses.size() != 1) {
       return null;
@@ -220,6 +245,14 @@ public class CertificateUtil {
     }
     return response.getCertificate();
   }
+
+  public static CertificateDTO certificate(CreateCertificateFromTemplateResponse response) {
+    if (response == null || response.getCertificate() == null) {
+      return null;
+    }
+    return response.getCertificate();
+  }
+
 
   public static CertificateDTO certificate(ComplementCertificateResponse response) {
     if (response == null || response.getCertificate() == null) {
