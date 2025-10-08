@@ -39,7 +39,7 @@ class AG7804CertificateAvailableFunctionsProviderTest {
   class SendCertificateFunction {
 
     @Test
-    void shouldAlwaysIncludeSendCertificateFunction() {
+    void shouldIncludeSendCertificateFunctionIfSmittbararAndDiagnos() {
       when(certificate.getElementDataById(QUESTION_SMITTBARARPENNING_ID))
           .thenReturn(Optional.of(ElementData.builder()
               .id(new ElementId(QUESTION_SMITTBARARPENNING_ID.id()))
@@ -63,7 +63,6 @@ class AG7804CertificateAvailableFunctionsProviderTest {
 
       final var result = provider.of(certificate);
 
-      assertEquals(1, result.size());
       assertEquals(expectedSendFunction, result.getFirst());
     }
   }
@@ -100,20 +99,21 @@ class AG7804CertificateAvailableFunctionsProviderTest {
           .title("Avstängning enligt smittskyddslagen")
           .body(
               "I intyg som gäller avstängning enligt smittskyddslagen kan"
-                  + " du inte dölja din diagnos. När du klickar på 'Skriv ut' hämtas hela intyget.")
+                  + " du inte dölja din diagnos. När du klickar på \"Skriv ut intyg\" hämtas hela intyget.")
           .enabled(true)
           .information(List.of())
           .build();
 
       final var result = provider.of(certificate);
 
-      assertEquals(2, result.size());
+      assertEquals(3, result.size());
       assertEquals(expectedSendFunction, result.getFirst());
       assertEquals(expectedAttentionFunction, result.get(1));
+      assertEquals(AvailableFunctionType.PRINT_CERTIFICATE, result.get(2).type());
     }
 
     @Test
-    void shouldNotIncludeAttentionFunctionWhenSmittbararpenningIsFalse() {
+    void shouldNotIncludeAttentionFunctionAndNormalPrintWhenSmittbararpenningIsFalse() {
       when(certificate.getElementDataById(QUESTION_SMITTBARARPENNING_ID))
           .thenReturn(Optional.of(ElementData.builder()
               .id(new ElementId(QUESTION_SMITTBARARPENNING_ID.id()))
@@ -127,12 +127,13 @@ class AG7804CertificateAvailableFunctionsProviderTest {
 
       final var result = provider.of(certificate);
 
-      assertEquals(1, result.size());
+      assertEquals(2, result.size());
       assertEquals(AvailableFunctionType.SEND_CERTIFICATE, result.getFirst().type());
+      assertEquals(AvailableFunctionType.PRINT_CERTIFICATE, result.get(1).type());
     }
 
     @Test
-    void shouldNotIncludeAttentionFunctionWhenSmittbararpenningElementMissing() {
+    void shouldNotIncludeAttentionFunctionAndNormalPrintWhenSmittbararpenningElementMissing() {
       when(certificate.getElementDataById(QUESTION_SMITTBARARPENNING_ID)).thenReturn(
           Optional.empty());
       when(certificate.getElementDataById(QUESTION_FORMEDLA_DIAGNOS_ID))
@@ -143,8 +144,9 @@ class AG7804CertificateAvailableFunctionsProviderTest {
 
       final var result = provider.of(certificate);
 
-      assertEquals(1, result.size());
+      assertEquals(2, result.size());
       assertEquals(AvailableFunctionType.SEND_CERTIFICATE, result.getFirst().type());
+      assertEquals(AvailableFunctionType.PRINT_CERTIFICATE, result.get(1).type());
     }
   }
 
@@ -152,7 +154,7 @@ class AG7804CertificateAvailableFunctionsProviderTest {
   class DiagnosisCustomizationFunction {
 
     @Test
-    void shouldIncludeCustomizePrintFunctionWhenDiagnosisIsIncluded() {
+    void shouldIncludeCustomizePrintFunctionWhenDiagnosisIsIncludedAndSmittbararFalse() {
       when(certificate.getElementDataById(QUESTION_SMITTBARARPENNING_ID))
           .thenReturn(Optional.of(ElementData.builder()
               .id(new ElementId(QUESTION_SMITTBARARPENNING_ID.id()))
@@ -209,7 +211,7 @@ class AG7804CertificateAvailableFunctionsProviderTest {
     }
 
     @Test
-    void shouldNotIncludeCustomizePrintFunctionWhenDiagnosisNotIncluded() {
+    void shouldIncludeNormalPrintFunctionWhenDiagnosisNotIncluded() {
       when(certificate.getElementDataById(QUESTION_SMITTBARARPENNING_ID))
           .thenReturn(Optional.of(ElementData.builder()
               .id(new ElementId(QUESTION_SMITTBARARPENNING_ID.id()))
@@ -223,12 +225,13 @@ class AG7804CertificateAvailableFunctionsProviderTest {
 
       final var result = provider.of(certificate);
 
-      assertEquals(1, result.size());
+      assertEquals(2, result.size());
       assertEquals(AvailableFunctionType.SEND_CERTIFICATE, result.getFirst().type());
+      assertEquals(AvailableFunctionType.PRINT_CERTIFICATE, result.get(1).type());
     }
 
     @Test
-    void shouldNotIncludeCustomizePrintFunctionWhenDiagnosisElementMissing() {
+    void shouldIncludeNormalPrintFunctionWhenDiagnosisElementMissing() {
       when(certificate.getElementDataById(QUESTION_SMITTBARARPENNING_ID))
           .thenReturn(Optional.of(ElementData.builder()
               .id(new ElementId(QUESTION_SMITTBARARPENNING_ID.id()))
@@ -239,52 +242,9 @@ class AG7804CertificateAvailableFunctionsProviderTest {
 
       final var result = provider.of(certificate);
 
-      assertEquals(1, result.size());
+      assertEquals(2, result.size());
       assertEquals(AvailableFunctionType.SEND_CERTIFICATE, result.getFirst().type());
-    }
-  }
-
-  @Nested
-  class CombinedScenarios {
-
-    @Test
-    void shouldIncludeAllFunctionsWhenAllConditionsAreMet() {
-      when(certificate.getElementDataById(QUESTION_SMITTBARARPENNING_ID))
-          .thenReturn(Optional.of(ElementData.builder()
-              .id(new ElementId(QUESTION_SMITTBARARPENNING_ID.id()))
-              .value(ElementValueBoolean.builder().value(true).build())
-              .build()));
-      when(certificate.getElementDataById(QUESTION_FORMEDLA_DIAGNOS_ID))
-          .thenReturn(Optional.of(ElementData.builder()
-              .id(new ElementId(QUESTION_FORMEDLA_DIAGNOS_ID.id()))
-              .value(ElementValueBoolean.builder().value(true).build())
-              .build()));
-
-      final var result = provider.of(certificate);
-
-      assertEquals(3, result.size());
-      assertEquals(AvailableFunctionType.SEND_CERTIFICATE, result.getFirst().type());
-      assertEquals(AvailableFunctionType.ATTENTION, result.get(1).type());
-      assertEquals(AvailableFunctionType.CUSTOMIZE_PRINT_CERTIFICATE, result.get(2).type());
-    }
-
-    @Test
-    void shouldOnlyIncludeSendWhenNoConditionsAreMet() {
-      when(certificate.getElementDataById(QUESTION_SMITTBARARPENNING_ID))
-          .thenReturn(Optional.of(ElementData.builder()
-              .id(new ElementId(QUESTION_SMITTBARARPENNING_ID.id()))
-              .value(ElementValueBoolean.builder().value(false).build())
-              .build()));
-      when(certificate.getElementDataById(QUESTION_FORMEDLA_DIAGNOS_ID))
-          .thenReturn(Optional.of(ElementData.builder()
-              .id(new ElementId(QUESTION_FORMEDLA_DIAGNOS_ID.id()))
-              .value(ElementValueBoolean.builder().value(false).build())
-              .build()));
-
-      final var result = provider.of(certificate);
-
-      assertEquals(1, result.size());
-      assertEquals(AvailableFunctionType.SEND_CERTIFICATE, result.getFirst().type());
+      assertEquals(AvailableFunctionType.PRINT_CERTIFICATE, result.get(1).type());
     }
   }
 

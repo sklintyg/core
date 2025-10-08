@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804;
 
+import static se.inera.intyg.certificateservice.application.citizen.service.converter.AvailableFunctionsFactory.AVAILABLE_FUNCTION_PRINT_NAME;
 import static se.inera.intyg.certificateservice.application.citizen.service.converter.AvailableFunctionsFactory.SEND_CERTIFICATE_BODY;
 import static se.inera.intyg.certificateservice.application.citizen.service.converter.AvailableFunctionsFactory.SEND_CERTIFICATE_NAME;
 import static se.inera.intyg.certificateservice.application.citizen.service.converter.AvailableFunctionsFactory.SEND_CERTIFICATE_TITLE;
@@ -16,6 +17,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Available
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.AvailableFunctionInformationType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.AvailableFunctionType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateAvailableFunctionsProvider;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 
 public class AG7804CertificateAvailableFunctionsProvider implements
     CertificateAvailableFunctionsProvider {
@@ -24,7 +26,7 @@ public class AG7804CertificateAvailableFunctionsProvider implements
   private static final String AVSTANGNING_SMITTSKYDD_INFO_NAME = "Presentera informationsruta";
   private static final String AVSTANGNING_SMITTSKYDD_INFO_BODY =
       "I intyg som gäller avstängning enligt smittskyddslagen kan"
-          + " du inte dölja din diagnos. När du klickar på 'Skriv ut' hämtas hela intyget.";
+          + " du inte dölja din diagnos. När du klickar på \"Skriv ut intyg\" hämtas hela intyget.";
 
   private static final String AVAILABLE_FUNCTION_CUSTOMIZE_BODY =
       "När du skriver ut ett läkarintyg du ska lämna till din arbetsgivare kan du "
@@ -64,7 +66,7 @@ public class AG7804CertificateAvailableFunctionsProvider implements
       );
     }
 
-    if (isDiagnosisIncluded(certificate)) {
+    if (isDiagnosisIncluded(certificate) && !isSmittbararpenning(certificate)) {
       functions.add(
           AvailableFunction.builder()
               .type(AvailableFunctionType.CUSTOMIZE_PRINT_CERTIFICATE)
@@ -91,34 +93,44 @@ public class AG7804CertificateAvailableFunctionsProvider implements
                   ))
               .build()
       );
+    } else {
+      functions.add(AvailableFunction.builder()
+          .name(AVAILABLE_FUNCTION_PRINT_NAME)
+          .type(AvailableFunctionType.PRINT_CERTIFICATE)
+          .information(
+              List.of(
+                  AvailableFunctionInformation.builder()
+                      .type(AvailableFunctionInformationType.FILENAME)
+                      .text(certificate.fileName())
+                      .build()
+              )
+          )
+          .enabled(true)
+          .build()
+      );
     }
 
     return functions;
   }
 
   boolean isSmittbararpenning(Certificate certificate) {
-    final var element = certificate.getElementDataById(QUESTION_SMITTBARARPENNING_ID);
-
-    if (element.isEmpty()) {
-      return false;
-    }
-
-    if (element.get().value() instanceof ElementValueBoolean booleanValue) {
-      return booleanValue.value();
-    }
-
-    throw new IllegalStateException("Element value is not of type ElementValueBoolean");
+    return getBooleanValue(certificate, QUESTION_SMITTBARARPENNING_ID);
+  }
+  
+  boolean isDiagnosisIncluded(Certificate certificate) {
+    return getBooleanValue(certificate, QUESTION_FORMEDLA_DIAGNOS_ID);
   }
 
-  boolean isDiagnosisIncluded(Certificate certificate) {
-    final var element = certificate.getElementDataById(QUESTION_FORMEDLA_DIAGNOS_ID);
+  private static boolean getBooleanValue(Certificate certificate,
+      ElementId elementId) {
+    final var element = certificate.getElementDataById(elementId);
 
     if (element.isEmpty()) {
       return false;
     }
 
     if (element.get().value() instanceof ElementValueBoolean booleanValue) {
-      return booleanValue.value();
+      return booleanValue.value() != null && booleanValue.value();
     }
 
     throw new IllegalStateException("Element value is not of type ElementValueBoolean");

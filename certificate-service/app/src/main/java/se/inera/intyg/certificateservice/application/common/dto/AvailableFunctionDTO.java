@@ -38,7 +38,7 @@ public class AvailableFunctionDTO {
             function.information() != null ?
                 function.information().stream()
                     .map(info -> InformationDTO.builder()
-                        .id(info.id().id())
+                        .id(info.id() != null ? info.id().id() : "")
                         .type(InformationType.valueOf(info.type().name()))
                         .text(info.text())
                         .build()
