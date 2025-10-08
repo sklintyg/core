@@ -14,7 +14,7 @@ public class QuestionConverter {
   public static List<Element> question(Question question, boolean isSubQuestion) {
     final var name = new Element(Tag.H3.toString())
         .addClass("text-sm font-bold")
-        .text(question.getName());
+        .text(question.getName() == null ? "" : question.getName());
 
     if (isSubQuestion) {
       name.addClass("pt-[1mm] px-[5mm] text-neutral-600");

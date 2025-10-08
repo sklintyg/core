@@ -4,40 +4,41 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 
-class ElementConfigurationTextAreaTest {
-
-  private final static String EMPTY_TEXT = "Ej angivet";
+class ElementConfigurationCheckboxBooleanTest {
 
   @Test
   void shouldReturnSimplifiedValue() {
-    final var text = "Test text for this test";
-    final var value = ElementValueText.builder()
-        .text(text)
+    final var value = ElementValueBoolean.builder()
+        .value(true)
         .build();
 
-    final var config = ElementConfigurationTextArea.builder()
+    final var config = ElementConfigurationCheckboxBoolean.builder()
+        .selectedText("Ja")
+        .unselectedText("Ej angivet")
         .build();
 
     assertEquals(
-        text,
+        config.selectedText(),
         ((ElementSimplifiedValueText) config.simplified(value).get()).text()
     );
   }
 
   @Test
   void shouldReturnEmptyOptionalForNull() {
-    final var text = "";
-    final var value = ElementValueText.builder()
-        .text(text)
+    final var text = "Ja";
+    final var value = ElementValueBoolean.builder()
+        .value(false)
         .build();
 
-    final var config = ElementConfigurationTextArea.builder()
+    final var config = ElementConfigurationCheckboxBoolean.builder()
+        .selectedText(text)
+        .unselectedText("Ej angivet")
         .build();
 
     assertEquals(
-        EMPTY_TEXT,
+        config.unselectedText(),
         ((ElementSimplifiedValueText) config.simplified(value).get()).text()
     );
   }
