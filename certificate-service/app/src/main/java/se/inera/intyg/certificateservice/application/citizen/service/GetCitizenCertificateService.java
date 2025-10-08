@@ -21,7 +21,6 @@ public class GetCitizenCertificateService {
   private final CertificateConverter certificateConverter;
   private final CitizenCertificateRequestValidator citizenCertificateRequestValidator;
   private final CertificateTextConverter certificateTextConverter;
-  private final AvailableFunctionsFactory availableFunctionsFactory;
 
 
   public GetCitizenCertificateResponse get(
@@ -46,7 +45,7 @@ public class GetCitizenCertificateService {
                 .map(certificateTextConverter::convert)
                 .toList()
         )
-        .availableFunctions(availableFunctionsFactory.get(certificate))
+        .availableFunctions(AvailableFunctionsFactory.get(certificate))
         .build();
   }
 }

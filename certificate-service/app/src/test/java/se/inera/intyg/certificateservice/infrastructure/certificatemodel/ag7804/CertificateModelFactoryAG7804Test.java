@@ -152,4 +152,11 @@ class CertificateModelFactoryAG7804Test {
           "Expected elementId: '%s' to exist in elementSpecifications".formatted(elementId));
     }
   }
+
+  @Test
+  void shouldHaveAvailableFunctionsProvider() {
+    final var certificateModel = certificateModelFactoryAG7804.create();
+
+    assertNotNull(certificateModel.availableFunctionsProvider());
+  }
 }

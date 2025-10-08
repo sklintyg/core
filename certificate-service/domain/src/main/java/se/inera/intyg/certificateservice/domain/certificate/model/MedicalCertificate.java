@@ -593,4 +593,16 @@ public class MedicalCertificate implements Certificate {
       log.warn("Failed to prefill certificate.", e);
     }
   }
+
+  @Override
+  public String fileName() {
+    return this.certificateModel.name()
+        .replace("å", "a")
+        .replace("ä", "a")
+        .replace("ö", "o")
+        .replace(" ", "_")
+        .replace("–", "")
+        .replace("__", "_")
+        .toLowerCase();
+  }
 }

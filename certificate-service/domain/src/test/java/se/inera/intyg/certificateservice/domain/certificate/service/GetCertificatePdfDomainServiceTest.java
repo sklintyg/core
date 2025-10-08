@@ -102,7 +102,8 @@ class GetCertificatePdfDomainServiceTest {
 
     @Test
     void shallReturnResponseWithPdfFromGenerator() {
-      doReturn(PDF).when(pdfGenerator).generate(certificate, ADDITIONAL_INFO_TEXT, false);
+      doReturn(PDF).when(pdfGenerator)
+          .generate(certificate, ADDITIONAL_INFO_TEXT, false, List.of());
 
       final var response = getCertificatePdfDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION,
           ADDITIONAL_INFO_TEXT);

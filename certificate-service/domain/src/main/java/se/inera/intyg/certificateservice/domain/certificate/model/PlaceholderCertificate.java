@@ -302,4 +302,9 @@ public class PlaceholderCertificate implements Certificate {
   public boolean isPlaceholder() {
     return true;
   }
+
+  @Override
+  public String fileName() {
+    throw new IllegalStateException("Cannot get file name for a placeholder certificate");
+  }
 }

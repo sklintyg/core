@@ -3,14 +3,12 @@ package se.inera.intyg.certificateservice.application.citizen.service.converter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
-import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.common.dto.AvailableFunctionDTO;
 import se.inera.intyg.certificateservice.application.common.dto.AvailableFunctionType;
 import se.inera.intyg.certificateservice.application.common.dto.InformationDTO;
 import se.inera.intyg.certificateservice.application.common.dto.InformationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 
-@Component
 public class AvailableFunctionsFactory {
 
   public static final String AVAILABLE_FUNCTION_PRINT_NAME = "Intyget kan skrivas ut";
@@ -20,7 +18,18 @@ public class AvailableFunctionsFactory {
       "Från den här sidan kan du välja att skicka ditt intyg digitalt till mottagaren. "
           + "Endast mottagare som kan ta emot digitala intyg visas nedan.";
 
-  public List<AvailableFunctionDTO> get(Certificate certificate) {
+  private AvailableFunctionsFactory() {
+    throw new IllegalStateException("Utility class");
+  }
+
+  public static List<AvailableFunctionDTO> get(Certificate certificate) {
+    if (certificate.certificateModel().availableFunctionsProvider() != null) {
+      return certificate.certificateModel().availableFunctionsProvider().of(certificate)
+          .stream()
+          .map(AvailableFunctionDTO::toDTO)
+          .toList();
+    }
+
     return Stream.of(
             getSendAvailableFunction(certificate),
             getPrintAvailableFunction(certificate)
@@ -29,7 +38,7 @@ public class AvailableFunctionsFactory {
         .toList();
   }
 
-  private Optional<AvailableFunctionDTO> getSendAvailableFunction(Certificate certificate) {
+  private static Optional<AvailableFunctionDTO> getSendAvailableFunction(Certificate certificate) {
     return certificate.isSendActiveForCitizen() ?
         Optional.of(
             AvailableFunctionDTO.builder()
@@ -51,7 +60,7 @@ public class AvailableFunctionsFactory {
         );
   }
 
-  private Optional<AvailableFunctionDTO> getPrintAvailableFunction(Certificate certificate) {
+  private static Optional<AvailableFunctionDTO> getPrintAvailableFunction(Certificate certificate) {
     return Optional.of(
         AvailableFunctionDTO.builder()
             .name(AVAILABLE_FUNCTION_PRINT_NAME)
@@ -60,24 +69,12 @@ public class AvailableFunctionsFactory {
                 List.of(
                     InformationDTO.builder()
                         .type(InformationType.FILENAME)
-                        .text(getFileName(certificate))
+                        .text(certificate.fileName())
                         .build()
                 )
             )
             .enabled(true)
             .build()
     );
-  }
-
-
-  private String getFileName(Certificate certificate) {
-    return certificate.certificateModel().name()
-        .replace("å", "a")
-        .replace("ä", "a")
-        .replace("ö", "o")
-        .replace(" ", "_")
-        .replace("–", "")
-        .replace("__", "_")
-        .toLowerCase();
   }
 }

@@ -13,6 +13,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.junit.jupiter.api.BeforeEach;
@@ -70,7 +71,7 @@ class CertificatePdfGeneratorTest {
 
     assertThrows(
         IllegalStateException.class,
-        () -> certificatePdfGenerator.generate(certificate, ADDITIONAL_INFO_TEXT, false)
+        () -> certificatePdfGenerator.generate(certificate, ADDITIONAL_INFO_TEXT, false, List.of())
     );
   }
 
@@ -80,7 +81,8 @@ class CertificatePdfGeneratorTest {
     @BeforeEach
     void setup() {
       when(
-          certificatePdfFillService.fillDocument(any(MedicalCertificate.class), anyString(), anyBoolean()))
+          certificatePdfFillService.fillDocument(any(MedicalCertificate.class), anyString(),
+              anyBoolean()))
           .thenReturn(document);
     }
 
@@ -92,7 +94,8 @@ class CertificatePdfGeneratorTest {
         final var pdf = certificatePdfGenerator.generate(
             buildFK7210Certificate(),
             ADDITIONAL_INFO_TEXT,
-            false
+            false,
+            List.of()
         );
 
         assertNotEquals(0, pdf.pdfData().length);
@@ -106,7 +109,8 @@ class CertificatePdfGeneratorTest {
         final var pdf = certificatePdfGenerator.generate(
             buildFK7210Certificate(),
             ADDITIONAL_INFO_TEXT,
-            false
+            false,
+            List.of()
         );
 
         assertEquals(expected, pdf.fileName());
@@ -121,7 +125,8 @@ class CertificatePdfGeneratorTest {
         final var pdf = certificatePdfGenerator.generate(
             buildFK7472Certificate(),
             ADDITIONAL_INFO_TEXT,
-            false
+            false,
+            List.of()
         );
 
         assertNotEquals(0, pdf.pdfData().length);
@@ -135,7 +140,8 @@ class CertificatePdfGeneratorTest {
         final var pdf = certificatePdfGenerator.generate(
             buildFK7472Certificate(),
             ADDITIONAL_INFO_TEXT,
-            false
+            false,
+            List.of()
         );
 
         assertEquals(expected, pdf.fileName());

@@ -6,6 +6,7 @@ import se.inera.intyg.certificateservice.application.citizen.dto.PrintCitizenCer
 import se.inera.intyg.certificateservice.application.citizen.dto.PrintCitizenCertificateResponse;
 import se.inera.intyg.certificateservice.application.citizen.validation.CitizenCertificateRequestValidator;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.citizen.service.PrintCitizenCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 
@@ -25,7 +26,8 @@ public class PrintCitizenCertificateService {
             .id(request.getPersonId().getId())
             .type(request.getPersonId().getType().toPersonIdType())
             .build(),
-        request.getAdditionalInfo()
+        request.getAdditionalInfo(),
+        new ElementId(request.getCustomizationId())
     );
 
     return PrintCitizenCertificateResponse.builder()

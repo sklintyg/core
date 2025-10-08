@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.certificate;
 
+import java.util.List;
 import java.util.function.Predicate;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -12,6 +13,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Pdf;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGenerator;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 
 @Component("GeneralPdfGenerator")
@@ -23,7 +25,8 @@ public class GeneralPdfGenerator implements PdfGenerator {
   private final PrintCertificateFromCertificatePrintService printCertificateFromCertificatePrintService;
 
   @Override
-  public Pdf generate(Certificate certificate, String additionalInfoText, boolean isCitizenFormat) {
+  public Pdf generate(Certificate certificate, String additionalInfoText, boolean isCitizenFormat,
+      List<ElementId> hiddenElements) {
     final var fileName = getFileName(certificate);
 
     final var request = PrintCertificateRequestDTO.builder()
@@ -32,7 +35,8 @@ public class GeneralPdfGenerator implements PdfGenerator {
             certificate.certificateModel().elementSpecifications()
                 .stream()
                 .filter(isNotContactInformation())
-                .map(element -> printCertificateCategoryConverter.convert(certificate, element))
+                .map(element -> printCertificateCategoryConverter.convert(certificate, element,
+                    hiddenElements))
                 .filter(hasQuestions())
                 .toList()
         )

@@ -8,6 +8,7 @@ import se.inera.intyg.certificateservice.certificate.dto.PrintCertificateCategor
 import se.inera.intyg.certificateservice.certificate.dto.PrintCertificateQuestionDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 
 @Component
@@ -17,7 +18,7 @@ public class PrintCertificateCategoryConverter {
   private final PrintCertificateQuestionConverter printCertificateQuestionConverter;
 
   public PrintCertificateCategoryDTO convert(Certificate certificate,
-      ElementSpecification category) {
+      ElementSpecification category, List<ElementId> hiddenElements) {
     if (!(category.configuration() instanceof ElementConfigurationCategory)) {
       throw new IllegalStateException(
           "Only category can be at top level of element specifications");
@@ -26,13 +27,14 @@ public class PrintCertificateCategoryConverter {
     return PrintCertificateCategoryDTO.builder()
         .name(category.configuration().name())
         .id(category.id().id())
-        .questions(convertChildren(certificate, category))
+        .questions(convertChildren(certificate, category, hiddenElements))
         .build();
   }
 
   private List<PrintCertificateQuestionDTO> convertChildren(Certificate certificate,
-      ElementSpecification category) {
+      ElementSpecification category, List<ElementId> hiddenElements) {
     return category.children().stream()
+        .filter(elementSpecification -> !hiddenElements.contains(elementSpecification.id()))
         .map(elementSpecification -> printCertificateQuestionConverter.convert(
             elementSpecification,
             certificate)
@@ -41,5 +43,4 @@ public class PrintCertificateCategoryConverter {
         .map(Optional::get)
         .toList();
   }
-
 }

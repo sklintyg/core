@@ -17,6 +17,7 @@ import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Pdf;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.citizen.service.PrintCitizenCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
@@ -34,7 +35,9 @@ class PrintCitizenCertificateServiceTest {
   private static final PrintCitizenCertificateRequest REQUEST = PrintCitizenCertificateRequest.builder()
       .additionalInfo(ADDITIONAL_INFO_TEXT)
       .personId(PERSON_ID_DTO)
+      .customizationId("elementId")
       .build();
+  private static final ElementId ELEMENT_ID = new ElementId("elementId");
 
   @Mock
   PrintCitizenCertificateDomainService printCitizenCertificateDomainService;
@@ -53,7 +56,8 @@ class PrintCitizenCertificateServiceTest {
                 .id(PERSON_ID_DTO.getId())
                 .type(PersonIdType.PERSONAL_IDENTITY_NUMBER)
                 .build(),
-            ADDITIONAL_INFO_TEXT
+            ADDITIONAL_INFO_TEXT,
+            ELEMENT_ID
         )
     ).thenReturn(PDF);
   }

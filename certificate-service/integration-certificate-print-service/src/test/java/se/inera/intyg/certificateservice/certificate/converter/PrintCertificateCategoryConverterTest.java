@@ -67,10 +67,11 @@ class PrintCertificateCategoryConverterTest {
           )
           .build())
       .build();
+  private static final List<ElementId> HIDDEN = List.of(new ElementId("1"));
 
   @Test
   void shouldSetName() {
-    final var response = printCertificateCategoryConverter.convert(CERTIFICATE, KAT_1);
+    final var response = printCertificateCategoryConverter.convert(CERTIFICATE, KAT_1, HIDDEN);
 
     assertEquals(
         CERTIFICATE.certificateModel().elementSpecifications().getFirst().configuration().name(),
@@ -79,10 +80,17 @@ class PrintCertificateCategoryConverterTest {
 
   @Test
   void shouldSetId() {
-    final var response = printCertificateCategoryConverter.convert(CERTIFICATE, KAT_1);
+    final var response = printCertificateCategoryConverter.convert(CERTIFICATE, KAT_1, HIDDEN);
 
     assertEquals(CERTIFICATE.certificateModel().elementSpecifications().getFirst().id().id(),
         response.getId());
+  }
+
+  @Test
+  void shouldNotConvertChildrenIfPartOfHiddenElementIds() {
+    final var response = printCertificateCategoryConverter.convert(CERTIFICATE, KAT_1,
+        List.of(QUESTION_BERAKNAT_FODELSEDATUM_ID));
+    assertEquals(List.of(), response.getQuestions());
   }
 
   @Nested
@@ -98,7 +106,7 @@ class PrintCertificateCategoryConverterTest {
 
     @Test
     void shouldSetChildren() {
-      final var response = printCertificateCategoryConverter.convert(CERTIFICATE, KAT_1);
+      final var response = printCertificateCategoryConverter.convert(CERTIFICATE, KAT_1, HIDDEN);
       assertEquals(List.of(PRINT_CERTIFICATE_QUESTION_DTO), response.getQuestions());
     }
   }
