@@ -9,7 +9,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -41,9 +40,8 @@ public class MessageEntity {
   @Column(name = "message_reminder_id", length = 22)
   private String messageReminderId;
 
-  @ManyToOne
-  @JoinColumn(name = "message_type_key", referencedColumnName = "key", nullable = false)
-  private MessageTypeEntity messageType;
+  @Column(name = "message_type", length = 24, nullable = false)
+  private String messageType;
 
   @Column(name = "sent", nullable = false)
   private LocalDateTime sent;
@@ -59,11 +57,4 @@ public class MessageEntity {
   @Column(name = "question_id")
   private List<String> questionIds;
 
-  @ManyToOne
-  @JoinColumn(name = "sender_party_key", referencedColumnName = "key", nullable = false)
-  private PartyEntity sender;
-
-  @ManyToOne
-  @JoinColumn(name = "recipient_party_key", referencedColumnName = "key", nullable = false)
-  private PartyEntity recipient;
 }

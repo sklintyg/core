@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateanalyticsservice.application.messages.model.PseudonymizedAnalyticsMessage;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.MessageEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.MessageEntityRepository;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.MessageTypeRepository;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.repository.PartyRepository;
 
 @Component
@@ -13,7 +12,6 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.rep
 public class MessageEntityMapper {
 
   private final MessageEntityRepository messageEntityRepository;
-  private final MessageTypeRepository messageTypeRepository;
   private final PartyRepository partyRepository;
 
   public MessageEntity map(PseudonymizedAnalyticsMessage pseudonymizedAnalyticsMessage) {
@@ -35,19 +33,11 @@ public class MessageEntityMapper {
     return messageEntityRepository.save(
         MessageEntity.builder()
             .messageId(pseudonymizedAnalyticsMessage.getMessageId())
-            .messageType(
-                messageTypeRepository.findOrCreate(pseudonymizedAnalyticsMessage.getMessageType())
-            )
+            .messageType(pseudonymizedAnalyticsMessage.getMessageType())
             .messageAnswerId(pseudonymizedAnalyticsMessage.getMessageAnswerId())
             .messageReminderId(pseudonymizedAnalyticsMessage.getMessageReminderId())
             .sent(pseudonymizedAnalyticsMessage.getMessageSent())
             .lastDateToAnswer(pseudonymizedAnalyticsMessage.getMessageLastDateToAnswer())
-            .sender(
-                partyRepository.findOrCreate(pseudonymizedAnalyticsMessage.getMessageSenderId())
-            )
-            .recipient(
-                partyRepository.findOrCreate(pseudonymizedAnalyticsMessage.getMessageRecipientId())
-            )
             .questionIds(pseudonymizedAnalyticsMessage.getMessageQuestionIds())
             .build()
     );

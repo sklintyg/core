@@ -98,7 +98,6 @@ public class TestDataPseudonymized {
         .certificatePatientId(HASHED_PATIENT_ID)
         .certificateUnitId(UNIT_ID)
         .certificateCareProviderId(CARE_PROVIDER_ID)
-        .recipientId(RECIPIENT)
         .messageId(TestDataConstants.HASHED_MESSAGE_ID)
         .messageAnswerId(TestDataConstants.HASHED_MESSAGE_ANSWER_ID)
         .messageReminderId(TestDataConstants.HASHED_MESSAGE_REMINDER_ID)

@@ -27,6 +27,9 @@ public class EventEntity {
   @Column(name = "`key`")
   private Long key;
 
+  @Column(name = "id", unique = true, nullable = false, length = 22)
+  private String messageId;
+
   @ManyToOne
   @JoinColumn(name = "certificate_key", referencedColumnName = "key")
   private CertificateEntity certificate;
@@ -52,7 +55,7 @@ public class EventEntity {
   private UnitEntity unit;
 
   @ManyToOne
-  @JoinColumn(name = "provider_key", referencedColumnName = "key")
+  @JoinColumn(name = "care_provider_key", referencedColumnName = "key")
   private CareProviderEntity careProvider;
 
   @ManyToOne
@@ -79,10 +82,11 @@ public class EventEntity {
   private RoleEntity role;
 
   @ManyToOne
+  @JoinColumn(name = "sender_party_key", referencedColumnName = "key")
+  private PartyEntity sender;
+
+  @ManyToOne
   @JoinColumn(name = "recipient_party_key", referencedColumnName = "key")
   private PartyEntity recipient;
 
-
-  @Column(name = "id", unique = true, nullable = false, length = 22)
-  private String messageId;
 }

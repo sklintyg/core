@@ -5,7 +5,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataEntities.careProviderEntity;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataEntities.certificateRelationEntity;
-import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataEntities.messageEntity;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataEntities.messageSentEventEntityBuilder;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataEntities.patientEntity;
 import static se.inera.intyg.certificateanalyticsservice.testdata.TestDataEntities.sentEventEntityBuilder;
@@ -71,9 +70,8 @@ class EventMapperTest {
 
   @Test
   void shouldMapPseudonymizedAnalyticsMessageCorrectly() {
-    final var message = messagePseudonymizedMessageBuilder().build();
+    final var message = sentPseudonymizedMessageBuilder().build();
     final var expectedCertificate = mock(CertificateEntity.class);
-    final var expectedMessage = messageEntity().build();
     final var expectedUnit = unitEntity();
     final var expectedCareProvider = careProviderEntity();
     final var expectedUser = mock(UserEntity.class);
@@ -87,7 +85,6 @@ class EventMapperTest {
     final var expectedCertificateCareProvider = careProviderEntity();
 
     when(certificateEntityMapper.map(message)).thenReturn(expectedCertificate);
-    when(messageEntityMapper.map(message)).thenReturn(expectedMessage);
     when(unitRepository.findOrCreate(message.getEventUnitId())).thenReturn(expectedUnit);
     when(careProviderRepository.findOrCreate(message.getEventCareProviderId())).thenReturn(
         expectedCareProvider);
@@ -105,7 +102,6 @@ class EventMapperTest {
         .certificate(expectedCertificate)
         .certificateUnit(expectedCertificateUnit)
         .certificateCareProvider(expectedCertificateCareProvider)
-        .message(expectedMessage)
         .patient(expectedPatient)
         .unit(expectedUnit)
         .careProvider(expectedCareProvider)
@@ -134,6 +130,7 @@ class EventMapperTest {
     final var expectedOrigin = mock(OriginEntity.class);
     final var expectedEventType = mock(EventTypeEntity.class);
     final var expectedRole = mock(RoleEntity.class);
+    final var expectedSender = mock(PartyEntity.class);
     final var expectedRecipient = mock(PartyEntity.class);
     final var expectedCertificateUnit = unitEntity();
     final var expectedCertificateCareProvider = careProviderEntity();
@@ -148,7 +145,9 @@ class EventMapperTest {
     when(eventTypeRepository.findOrCreate(message.getEventMessageType())).thenReturn(
         expectedEventType);
     when(roleRepository.findOrCreate(message.getEventRole())).thenReturn(expectedRole);
-    when(partyRepository.findOrCreate(message.getRecipientId())).thenReturn(expectedRecipient);
+    when(partyRepository.findOrCreate(message.getMessageSenderId())).thenReturn(expectedSender);
+    when(partyRepository.findOrCreate(message.getMessageRecipientId())).thenReturn(
+        expectedRecipient);
 
     final var expected = EventEntity.builder()
         .certificate(expectedCertificate)
@@ -162,6 +161,7 @@ class EventMapperTest {
         .origin(expectedOrigin)
         .eventType(expectedEventType)
         .role(expectedRole)
+        .sender(expectedSender)
         .recipient(expectedRecipient)
         .messageId(message.getId())
         .build();

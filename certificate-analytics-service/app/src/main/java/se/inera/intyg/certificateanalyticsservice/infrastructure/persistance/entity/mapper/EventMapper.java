@@ -51,7 +51,15 @@ public class EventMapper {
         .origin(originRepository.findOrCreate(message.getEventOrigin()))
         .eventType(eventTypeRepository.findOrCreate(message.getEventMessageType()))
         .role(roleRepository.findOrCreate(message.getEventRole()))
-        .recipient(partyRepository.findOrCreate(message.getRecipientId()))
+        .sender(
+            message.getMessageSenderId() == null ? null :
+                partyRepository.findOrCreate(message.getMessageSenderId())
+        )
+        .recipient(
+            message.getMessageSenderId() == null ?
+                partyRepository.findOrCreate(message.getRecipientId()) :
+                partyRepository.findOrCreate(message.getMessageRecipientId())
+        )
         .messageId(message.getId())
         .build();
   }
@@ -69,7 +77,10 @@ public class EventMapper {
             entity.getCareProvider() != null ? entity.getCareProvider().getHsaId() : null)
         .eventOrigin(entity.getOrigin() != null ? entity.getOrigin().getOrigin() : null)
         .eventSessionId(entity.getSession() != null ? entity.getSession().getSessionId() : null)
-        .recipientId(entity.getRecipient() != null ? entity.getRecipient().getParty() : null)
+        .recipientId(
+            entity.getMessage() != null || entity.getRecipient() == null ? null :
+                entity.getRecipient().getParty()
+        )
         .certificateId(entity.getCertificate().getCertificateId())
         .certificateType(entity.getCertificate().getCertificateType())
         .certificateTypeVersion(entity.getCertificate().getCertificateTypeVersion())
@@ -99,12 +110,12 @@ public class EventMapper {
           .messageId(message.getMessageId())
           .messageAnswerId(message.getMessageAnswerId())
           .messageReminderId(message.getMessageReminderId())
-          .messageType(message.getMessageType().getType())
+          .messageType(message.getMessageType())
           .messageSent(message.getSent())
           .messageLastDateToAnswer(message.getLastDateToAnswer())
           .messageQuestionIds(message.getQuestionIds())
-          .messageSenderId(message.getSender().getParty())
-          .messageRecipientId(message.getRecipient().getParty());
+          .messageSenderId(entity.getSender().getParty())
+          .messageRecipientId(entity.getRecipient().getParty());
     }
 
     return domainBuilder.build();

@@ -101,15 +101,6 @@
       </column>
     </createTable>
 
-    <createTable tableName="dim_message_type">
-      <column name="key" type="tinyint unsigned auto_increment">
-        <constraints primaryKey="true" nullable="false"/>
-      </column>
-      <column name="message_type" type="varchar(24)">
-        <constraints nullable="false" unique="true"/>
-      </column>
-    </createTable>
-
     <createTable tableName="dim_message">
       <column name="key" type="bigint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
@@ -123,30 +114,14 @@
       <column name="message_reminder_id" type="varchar(22)">
         <constraints unique="true"/>
       </column>
-      <column name="message_type_key" type="tinyint unsigned">
+      <column name="message_type" type="varchar(24)">
         <constraints nullable="false"/>
       </column>
       <column name="sent" type="timestamp(6)">
         <constraints nullable="false"/>
       </column>
       <column name="last_date_to_answer" type="date"/>
-      <column name="sender_party_key" type="tinyint unsigned">
-        <constraints nullable="false"/>
-      </column>
-      <column name="recipient_party_key" type="tinyint unsigned">
-        <constraints nullable="false"/>
-      </column>
     </createTable>
-
-    <addForeignKeyConstraint baseTableName="dim_message" baseColumnNames="message_type_key"
-      referencedTableName="dim_message_type" referencedColumnNames="key"
-      constraintName="fk_message_message_type"/>
-    <addForeignKeyConstraint baseTableName="dim_message" baseColumnNames="sender_party_key"
-      referencedTableName="dim_party" referencedColumnNames="key"
-      constraintName="fk_message_sender_party"/>
-    <addForeignKeyConstraint baseTableName="dim_message" baseColumnNames="recipient_party_key"
-      referencedTableName="dim_party" referencedColumnNames="key"
-      constraintName="fk_message_recipient_party"/>
 
     <createTable tableName="dim_message_question_id">
       <column name="message_key" type="bigint unsigned">
@@ -194,7 +169,8 @@
       <column name="origin_key" type="tinyint unsigned"/>
       <column name="session_key" type="bigint unsigned"/>
       <column name="unit_key" type="bigint unsigned"/>
-      <column name="provider_key" type="bigint unsigned"/>
+      <column name="care_provider_key" type="bigint unsigned"/>
+      <column name="sender_party_key" type="tinyint unsigned"/>
       <column name="recipient_party_key" type="tinyint unsigned"/>
       <column name="id" type="varchar(22)">
         <constraints nullable="false" unique="true"/>
@@ -214,7 +190,7 @@
     <addForeignKeyConstraint baseTableName="fact_event" baseColumnNames="unit_key"
       referencedTableName="dim_unit" referencedColumnNames="key"
       constraintName="fk_event_unit"/>
-    <addForeignKeyConstraint baseTableName="fact_event" baseColumnNames="provider_key"
+    <addForeignKeyConstraint baseTableName="fact_event" baseColumnNames="care_provider_key"
       referencedTableName="dim_care_provider" referencedColumnNames="key"
       constraintName="fk_event_care_provider"/>
     <addForeignKeyConstraint baseTableName="fact_event" baseColumnNames="user_key"
@@ -232,6 +208,9 @@
     <addForeignKeyConstraint baseTableName="fact_event" baseColumnNames="role_key"
       referencedTableName="dim_role" referencedColumnNames="key"
       constraintName="fk_event_role"/>
+    <addForeignKeyConstraint baseTableName="fact_event" baseColumnNames="sender_party_key"
+      referencedTableName="dim_party" referencedColumnNames="key"
+      constraintName="fk_event_sender_party"/>
     <addForeignKeyConstraint baseTableName="fact_event" baseColumnNames="recipient_party_key"
       referencedTableName="dim_party" referencedColumnNames="key"
       constraintName="fk_event_recipient_party"/>

@@ -21,8 +21,6 @@ import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.ent
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventEntity.EventEntityBuilder;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.EventTypeEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.MessageEntity;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.MessageEntity.MessageEntityBuilder;
-import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.MessageTypeEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.OriginEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.PartyEntity;
 import se.inera.intyg.certificateanalyticsservice.infrastructure.persistance.entity.PatientEntity;
@@ -75,7 +73,8 @@ public class TestDataEntities {
         .user(userEntity())
         .session(sessionEntity())
         .origin(originEntity())
-        .recipient(recipientPartyEntity());
+        .sender(messageSenderPartyEntity())
+        .recipient(messageRecipientPartyEntity());
   }
 
   public static CertificateEntityBuilder certificateEntity() {
@@ -155,12 +154,6 @@ public class TestDataEntities {
         .build();
   }
 
-  public static MessageTypeEntity messageTypeEntity() {
-    return MessageTypeEntity.builder()
-        .type(TestDataConstants.MESSAGE_TYPE)
-        .build();
-  }
-
   public static PartyEntity messageSenderPartyEntity() {
     return PartyEntity.builder()
         .party(TestDataConstants.MESSAGE_SENDER)
@@ -173,19 +166,17 @@ public class TestDataEntities {
         .build();
   }
 
-  public static MessageEntityBuilder messageEntity() {
+  public static MessageEntity.MessageEntityBuilder messageEntity() {
     return MessageEntity.builder()
         .messageId(TestDataConstants.HASHED_MESSAGE_ID)
         .messageAnswerId(TestDataConstants.HASHED_MESSAGE_ANSWER_ID)
         .messageReminderId(TestDataConstants.HASHED_MESSAGE_REMINDER_ID)
-        .messageType(messageTypeEntity())
+        .messageType(TestDataConstants.MESSAGE_TYPE)
         .sent(TestDataConstants.MESSAGE_SENT)
         .lastDateToAnswer(TestDataConstants.MESSAGE_LAST_DATE_TO_ANSWER)
         .questionIds(java.util.List.of(
             TestDataConstants.MESSAGE_QUESTION_ID_1,
             TestDataConstants.MESSAGE_QUESTION_ID_2)
-        )
-        .sender(messageSenderPartyEntity())
-        .recipient(messageRecipientPartyEntity());
+        );
   }
 }
