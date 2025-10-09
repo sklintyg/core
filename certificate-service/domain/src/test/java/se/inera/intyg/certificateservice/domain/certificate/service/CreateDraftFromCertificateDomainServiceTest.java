@@ -35,7 +35,7 @@ class CreateDraftFromCertificateDomainServiceTest {
   private static final CertificateModelId CERTIFICATE_MODEL_ID = CertificateModelId.builder()
       .build();
   private static final CertificateModel CERTIFICATE_MODEL = CertificateModel.builder()
-      .templateFor(CERTIFICATE_MODEL_ID)
+      .ableToCreateDraftForModel(CERTIFICATE_MODEL_ID)
       .build();
   private static final MedicalCertificate CREATED_CERTIFICATE = MedicalCertificate.builder()
       .revision(new Revision(0))

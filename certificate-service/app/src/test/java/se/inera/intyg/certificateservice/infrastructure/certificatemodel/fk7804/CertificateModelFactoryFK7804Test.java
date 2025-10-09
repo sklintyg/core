@@ -264,8 +264,8 @@ class CertificateModelFactoryFK7804Test {
   }
 
   @Test
-  void shouldIncludeTemplateFor() {
+  void shouldIncludeAbleToCreateDraftForModel() {
     final var certificateModel = certificateModelFactoryFK7804.create();
-    assertEquals(AG7804_V2_0, certificateModel.getTemplateFor().orElseThrow());
+    assertEquals(AG7804_V2_0, certificateModel.getAbleToCreateDraftForModel().orElseThrow());
   }
 }
