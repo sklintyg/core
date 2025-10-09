@@ -114,7 +114,6 @@ class JpaCertificateRepositoryTest {
         .thenAnswer(inv -> {
           CertificateEntity ce = inv.getArgument(0);
 
-          // Build ONLY what your assertions need. Keep it minimal.
           return MedicalCertificate.builder()
               .id(new CertificateId(ce.getCertificateId()))
               .created(ce.getCreated())
@@ -168,12 +167,6 @@ class JpaCertificateRepositoryTest {
         });
   }
 
-  private void stubDomainSecondArgument() {
-    when(certificateEntityMapper.toDomain(any(CertificateEntity.class), anyBoolean()))
-        .thenAnswer(inv -> ((CertificateEntityMapper) inv.getMock())
-            .toDomain(inv.getArgument(0)));
-  }
-
   private void stubEntity(){
     when(certificateEntityMapper.toEntity(any(Certificate.class)))
         .thenAnswer(inv -> {
@@ -192,7 +185,6 @@ class JpaCertificateRepositoryTest {
               .careUnit(CARE_UNIT_ENTITY)
               .issuedBy(ISSUED_BY_ENTITY)
               .issuedOnUnit(ISSUED_ON_UNIT_ENTITY)
-              // Provide a dummy status entity to avoid NPE in later logic
               .status(new CertificateStatusEntity( (short)1, Status.SIGNED.name()))
               .data(DATA)
               .placeholder(cert.isPlaceholder())
@@ -255,17 +247,6 @@ class JpaCertificateRepositoryTest {
       .name("NAME_ISSUED")
       .build();
 
-  private static final UnitVersionEntity ISSUED_ON_UNIT_ENTITY_OLD_NAME = UnitVersionEntity.builder()
-      .type(
-          UnitTypeEntity.builder()
-              .type(UnitType.SUB_UNIT.name())
-              .key(UnitType.SUB_UNIT.getKey())
-              .build()
-      )
-      .hsaId("HSA_ID_ISSUED")
-      .name("OLD")
-      .validTo(TIMESTAMP)
-      .build();
 
 	private static final SubUnit ISSUED_ON_UNIT = SubUnit.builder()
 			.hsaId(new HsaId("HSA_ID_ISSUED"))
@@ -291,20 +272,6 @@ class JpaCertificateRepositoryTest {
       .lastName("LAST")
       .build();
 
-  private static final PatientVersionEntity PATIENT_ENTITY_OLD_NAME = PatientVersionEntity.builder()
-      .id("ID")
-      .protectedPerson(false)
-      .testIndicated(false)
-      .deceased(false)
-      .type(PatientIdTypeEntity.builder()
-          .type(PersonIdType.PERSONAL_IDENTITY_NUMBER.name())
-          .key(1)
-          .build())
-      .firstName("OLD")
-      .middleName("OLD")
-      .lastName("OLD")
-      .validTo(TIMESTAMP)
-      .build();
 
 	private static final Patient PATIENT = Patient.builder()
 			.id(PersonId.builder()
@@ -363,13 +330,6 @@ class JpaCertificateRepositoryTest {
       .specialities(Collections.emptyList())
       .build();
 
-	private static final StaffVersionEntity ISSUED_BY_OLD_NAME_ENTITY = StaffVersionEntity.builder()
-			.firstName("OLD")
-			.middleName("OLD")
-			.lastName("OLD")
-			.hsaId("HSA_ID")
-			.validTo(TIMESTAMP)
-			.build();
 
   private static final LocalDate NOW = LocalDate.now();
   private static final String JSON =
@@ -377,9 +337,6 @@ class JpaCertificateRepositoryTest {
           + NOW.getMonthValue() + "," + NOW.getDayOfMonth() + "]}}]";
 
   private static final CertificateDataEntity DATA = new CertificateDataEntity(JSON);
-
-
-
 
   private static final CertificateEntity CERTIFICATE_ENTITY = CertificateEntity.builder()
       .revision(1L)
@@ -475,7 +432,6 @@ class JpaCertificateRepositoryTest {
               .build()
       )
       .build();
-
 
   @Nested
   class Create {
@@ -643,6 +599,13 @@ class JpaCertificateRepositoryTest {
     void shouldReturnVersionedStaffFromRepository(){
       stubDomain();
 
+       final var ISSUED_BY_OLD_NAME_ENTITY = StaffVersionEntity.builder()
+          .firstName("OLD")
+          .middleName("OLD")
+          .lastName("OLD")
+          .hsaId("HSA_ID")
+          .validTo(TIMESTAMP)
+          .build();
 
       when(certificateEntityRepository.findByCertificateId("ID"))
           .thenReturn(Optional.of(MUTABLE_SIGNED_CERTIFICATE_ENTITY));
@@ -661,6 +624,21 @@ class JpaCertificateRepositoryTest {
 		void shouldReturnVersionedPatientFromRepository(){
       stubDomain();
 
+     final var PATIENT_ENTITY_OLD_NAME = PatientVersionEntity.builder()
+        .id("ID")
+        .protectedPerson(false)
+        .testIndicated(false)
+        .deceased(false)
+        .type(PatientIdTypeEntity.builder()
+            .type(PersonIdType.PERSONAL_IDENTITY_NUMBER.name())
+            .key(1)
+            .build())
+        .firstName("OLD")
+        .middleName("OLD")
+        .lastName("OLD")
+        .validTo(TIMESTAMP)
+        .build();
+
       when(certificateEntityRepository.findByCertificateId("ID"))
           .thenReturn(Optional.of(MUTABLE_SIGNED_CERTIFICATE_ENTITY));
 
@@ -678,6 +656,17 @@ class JpaCertificateRepositoryTest {
 
       stubDomain();
 
+      final var ISSUED_ON_UNIT_ENTITY_OLD_NAME = UnitVersionEntity.builder()
+          .type(
+              UnitTypeEntity.builder()
+                  .type(UnitType.SUB_UNIT.name())
+                  .key(UnitType.SUB_UNIT.getKey())
+                  .build()
+          )
+          .hsaId("HSA_ID_ISSUED")
+          .name("OLD")
+          .validTo(TIMESTAMP)
+          .build();
 
       when(certificateEntityRepository.findByCertificateId("ID"))
           .thenReturn(Optional.of(MUTABLE_SIGNED_CERTIFICATE_ENTITY));
