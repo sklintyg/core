@@ -12,7 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "message_type")
+@Table(name = "dim_message_type")
 @Data
 @Builder
 @AllArgsConstructor
@@ -21,7 +21,7 @@ public class MessageTypeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "`key`")
+  @Column(name = "message_type_key")
   private Byte key;
 
   @Column(name = "message_type", nullable = false, unique = true, length = 24)

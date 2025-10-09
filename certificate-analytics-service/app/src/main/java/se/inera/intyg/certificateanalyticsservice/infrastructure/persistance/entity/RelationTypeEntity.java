@@ -12,16 +12,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "certificate_relation_type")
+@Table(name = "dim_relation_type")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CertificateRelationTypeEntity {
+public class RelationTypeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "key")
+  @Column(name = "relation_type_key")
   private Long key;
 
   @Column(name = "relation_type", nullable = false, unique = true, length = 64)

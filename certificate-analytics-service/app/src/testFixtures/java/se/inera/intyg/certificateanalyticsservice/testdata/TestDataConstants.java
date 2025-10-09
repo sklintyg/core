@@ -20,15 +20,14 @@ public final class TestDataConstants {
   public static final String ROLE = "LAKARE";
   public static final String ORIGIN = "NORMAL";
   public static final String SESSION_ID = "2d02bc34-41f1-42b7-9964-d0659bf369c8";
-  public static final LocalDateTime TIMESTAMP = LocalDateTime.of(2025, 9, 29, 17, 49, 58,
-      616648000);
+  public static final LocalDateTime TIMESTAMP = LocalDateTime.of(2025, 9, 29, 17, 49, 58);
   public static final String RECIPIENT = "FKASSA";
   public static final String SCHEMA_VERSION = "v1";
   public static final String TYPE_ANALYTICS_EVENT = "certificate.analytics.event";
   public static final String EVENT_TYPE_DRAFT_CREATED = "DRAFT_CREATED";
   public static final String EVENT_TYPE_CERTIFICATE_SENT = "CERTIFICATE_SENT";
   public static final String EVENT_TYPE_COMPLEMENT_FROM_RECIPIENT = "COMPLEMENT_FROM_RECIPIENT";
-  public static final String EVENT_TIMESTAMP = "2025-09-29T17:49:58.616648";
+  public static final String EVENT_TIMESTAMP = "2025-09-29T17:49:58";
 
   public static final String MESSAGE_ID = "message-12345";
   public static final String MESSAGE_ANSWER_ID = "answer-67890";
