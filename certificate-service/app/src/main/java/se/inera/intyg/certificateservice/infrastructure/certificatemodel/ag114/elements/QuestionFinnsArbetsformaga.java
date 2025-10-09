@@ -30,7 +30,7 @@ public class QuestionFinnsArbetsformaga {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatory(
+                CertificateElementRuleFactory.mandatoryExist(
                     QUESTION_FINNS_ARBETSFORMAGA_ID,
                     QUESTION_FINNS_ARBETSFORMAGA_FIELD_ID
                 )

@@ -40,7 +40,7 @@ class QuestionFinnsArbetsformagaTest {
         ElementRuleExpression.builder()
             .id(QUESTION_FINNS_ARBETSFORMAGA_ID)
             .type(ElementRuleType.MANDATORY)
-            .expression(new RuleExpression("$6.1"))
+            .expression(new RuleExpression("exists($6.1)"))
             .build()
     );
     assertEquals(expectedRules, element.rules());

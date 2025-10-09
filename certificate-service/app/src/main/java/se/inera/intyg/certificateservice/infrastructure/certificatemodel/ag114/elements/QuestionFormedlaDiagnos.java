@@ -33,7 +33,7 @@ public class QuestionFormedlaDiagnos {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.mandatory(
+                CertificateElementRuleFactory.mandatoryExist(
                     QUESTION_FORMEDLA_DIAGNOS_ID,
                     QUESTION_FORMEDLA_DIAGNOS_FIELD_ID
                 )

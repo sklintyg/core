@@ -8,7 +8,7 @@ public class AG114Constants {
   public static final String WRONG_VERSION = "wrongVersion";
   public static final String TYPE = AG114_DISPLAY_TYPE + " - ";
   public static final String CODE = "AG114";
-  public static final String CODE_SYSTEM = "a1c4b3f2-d5e6-7890-b123-456789abcdef";
+  public static final String CODE_SYSTEM = "b64ea353-e8f6-4832-b563-fc7d46f29548";
 
   private AG114Constants() {
     throw new IllegalStateException("Utility class");

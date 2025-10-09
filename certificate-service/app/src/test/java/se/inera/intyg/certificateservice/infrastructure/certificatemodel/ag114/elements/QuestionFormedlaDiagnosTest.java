@@ -42,7 +42,7 @@ class QuestionFormedlaDiagnosTest {
         ElementRuleExpression.builder()
             .id(QUESTION_FORMEDLA_DIAGNOS_ID)
             .type(ElementRuleType.MANDATORY)
-            .expression(new RuleExpression("$3.1"))
+            .expression(new RuleExpression("exists($3.1)"))
             .build()
     );
     assertEquals(expectedRules, element.rules());

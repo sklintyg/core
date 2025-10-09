@@ -65,6 +65,10 @@ This document describes how a new certificate model is created.
 | SR-006                   | Prefill question                     | ElementRuleExpression | N/A                           |
 | If max text limit is set | Text limit                           | ElementRuleLimit      | TEXT_LIMIT                    |
 
+- Make sure that you verify if mandatory or mandatoryExists is needed. For example for RadioBoolean
+  mandatoryExists is needed since both true and false are valid answers, and without exists we will
+  look for only true.
+
 ### 5. Category and question generation
 
 - You will receive a mapping from the requirements in Swedish of the question.
