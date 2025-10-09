@@ -24,8 +24,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.ComplementC
 import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
-import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateFromResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ForwardCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ForwardCertificateResponse;
@@ -623,7 +623,7 @@ public class ApiUtil {
     return response;
   }
 
-  public ResponseEntity<CreateDraftFromCertificateFromResponse> createDraftFromCertificate(
+  public ResponseEntity<CreateDraftFromCertificateResponse> createDraftFromCertificate(
       CreateDraftFromCertificateRequest request,
       String certificateId) {
     final var requestUrl = "http://localhost:%s/api/certificate/%s/draftFromCertificate".formatted(
@@ -632,7 +632,7 @@ public class ApiUtil {
     );
 
     final var response = sendRequest(request, requestUrl,
-        CreateDraftFromCertificateFromResponse.class);
+        CreateDraftFromCertificateResponse.class);
 
     if (certificateId(response.getBody()) != null) {
       certificateIds.add(certificateId);

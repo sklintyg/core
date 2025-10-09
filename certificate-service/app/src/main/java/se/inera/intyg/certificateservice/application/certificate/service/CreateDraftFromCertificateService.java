@@ -3,8 +3,8 @@ package se.inera.intyg.certificateservice.application.certificate.service;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateFromResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateConverter;
 import se.inera.intyg.certificateservice.application.certificate.service.validation.CreateDraftFromCertificateRequestValidator;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
@@ -23,7 +23,7 @@ public class CreateDraftFromCertificateService {
   private final CertificateConverter certificateConverter;
   private final ResourceLinkConverter resourceLinkConverter;
 
-  public CreateDraftFromCertificateFromResponse create(CreateDraftFromCertificateRequest request,
+  public CreateDraftFromCertificateResponse create(CreateDraftFromCertificateRequest request,
       String certificateId) {
     createDraftFromCertificateRequestValidator.validate(request, certificateId);
 
@@ -43,7 +43,7 @@ public class CreateDraftFromCertificateService {
             : null
     );
 
-    return CreateDraftFromCertificateFromResponse.builder()
+    return CreateDraftFromCertificateResponse.builder()
         .certificate(
             certificateConverter.convert(
                 certificate,

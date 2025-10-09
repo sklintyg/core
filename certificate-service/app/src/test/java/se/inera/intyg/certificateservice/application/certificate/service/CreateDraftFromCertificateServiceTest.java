@@ -19,8 +19,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
-import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateFromResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateConverter;
 import se.inera.intyg.certificateservice.application.certificate.service.validation.CreateDraftFromCertificateRequestValidator;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
@@ -72,7 +72,7 @@ class CreateDraftFromCertificateServiceTest {
     final var certificateDTO = CertificateDTO.builder()
         .links(List.of(resourceLinkDTO))
         .build();
-    final var expectedResponse = CreateDraftFromCertificateFromResponse.builder()
+    final var expectedResponse = CreateDraftFromCertificateResponse.builder()
         .certificate(
             certificateDTO
         )

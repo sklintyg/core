@@ -4,12 +4,12 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateRequest.CreateCertificateFromTemplateRequestBuilder;
+import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateRequest.CreateDraftFromCertificateRequestBuilder;
 import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 
-@JsonDeserialize(builder = CreateCertificateFromTemplateRequestBuilder.class)
+@JsonDeserialize(builder = CreateDraftFromCertificateRequestBuilder.class)
 @Value
 @Builder
 public class CreateDraftFromCertificateRequest {
@@ -22,7 +22,7 @@ public class CreateDraftFromCertificateRequest {
   String externalReference;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class CreateCertificateFromTemplateRequestBuilder {
+  public static class CreateDraftFromCertificateRequestBuilder {
 
   }
 }

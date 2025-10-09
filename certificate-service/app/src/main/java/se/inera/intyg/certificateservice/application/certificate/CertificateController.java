@@ -23,8 +23,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.ComplementC
 import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
-import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateFromResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ForwardCertificateRequest;
@@ -264,7 +264,7 @@ public class CertificateController {
 
   @PostMapping("/{certificateId}/draftFromCertificate")
   @PerformanceLogging(eventAction = "create-draft-from-certificate", eventType = EVENT_TYPE_CREATION)
-  CreateDraftFromCertificateFromResponse createCertificateFromTemplate(
+  CreateDraftFromCertificateResponse createCertificateFromTemplate(
       @RequestBody CreateDraftFromCertificateRequest request,
       @PathVariable("certificateId") String certificateId) {
     return createDraftFromCertificateService.create(request, certificateId);

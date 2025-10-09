@@ -19,8 +19,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.ComplementC
 import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
-import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateFromResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ForwardCertificateRequest;
@@ -400,7 +400,7 @@ class CertificateControllerTest {
   @Test
   void shallReturnCreateCertificateFromTemplateResponse() {
     final var request = CreateDraftFromCertificateRequest.builder().build();
-    final var expectedResult = CreateDraftFromCertificateFromResponse.builder().build();
+    final var expectedResult = CreateDraftFromCertificateResponse.builder().build();
 
     doReturn(expectedResult).when(createDraftFromCertificateService)
         .create(request, CERTIFICATE_ID);
