@@ -40,7 +40,7 @@ public class CreateDraftFromCertificateDomainService {
     final var certificateModel = certificateModelRepository.getById(
         certificate.certificateModel().getAbleToCreateDraftForModel()
             .orElseThrow(() -> new IllegalStateException(
-                "Certificate '%s' is missing required field template for".formatted(
+                "Certificate '%s' is not able to create draft for model".formatted(
                     certificateId.id()))
             )
     );
