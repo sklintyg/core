@@ -3,23 +3,20 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.StaffEntityMapper.toEntity;
 
 import jakarta.persistence.OptimisticLockException;
-import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffEntity;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffVersionEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.StaffEntityMapper;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.StaffVersionEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffEntityRepository;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffVersionEntityRepository;
 
 @Slf4j
 @Repository
@@ -27,16 +24,14 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 public class StaffRepository {
 
   private final StaffEntityRepository staffEntityRepository;
-  private final StaffVersionEntityRepository staffVersionEntityRepository;
+  private final MetadataVersionRepository metadataVersionRepository;
 
-  @Transactional
   public StaffEntity staff(Staff issuer) {
     return staffEntityRepository.findByHsaId(issuer.hsaId().id())
         .map(staffEntity -> updateStaffVersion(staffEntity, issuer))
         .orElseGet(() -> staffEntityRepository.save(toEntity(issuer)));
   }
 
-  @Transactional
   public Map<HsaId, StaffEntity> staffs(Certificate certificate) {
     final var staffs = new ArrayList<Staff>();
     staffs.add(certificate.certificateMetaData().issuer());
@@ -75,33 +70,16 @@ public class StaffRepository {
   private StaffEntity updateStaffVersion(StaffEntity staffEntity, Staff staff) {
     var newStaffEntity = StaffEntityMapper.toEntity(staff);
     if (!staffEntity.equals(newStaffEntity)) {
-      return saveStaffVersion(staffEntity, newStaffEntity);
+      try {
+        return metadataVersionRepository.saveStaffVersion(staffEntity, newStaffEntity);
+      } catch (OptimisticLockException | ObjectOptimisticLockingFailureException e) {
+        log.info("Skipped updating StaffEntity {} because it was updated concurrently",
+            staff.hsaId().id());
+        return metadataVersionRepository.getFreshStaffEntity(staff.hsaId().id());
+      }
     }
     return staffEntity;
   }
 
-  private StaffEntity saveStaffVersion(StaffEntity staffEntity, StaffEntity newStaffEntity) {
-    try {
-      final var staffVersionEntity = StaffVersionEntityMapper.toStaffVersion(staffEntity);
-      staffEntity.updateWith(newStaffEntity);
-      var result = staffEntityRepository.save(staffEntity);
-      updateStaffVersionHistory(staffVersionEntity);
-      return result;
-    } catch (OptimisticLockException e) {
-      log.info("Skipped updating StaffEntity {} because it was updated concurrently",
-          staffEntity.getHsaId());
-      return staffEntityRepository.findByHsaId(staffEntity.getHsaId()).orElse(staffEntity);
-    }
-  }
 
-  private void updateStaffVersionHistory(StaffVersionEntity staffVersionEntity) {
-    final var latestVersion =
-        staffVersionEntityRepository.findFirstByHsaIdOrderByValidFromDesc(
-            staffVersionEntity.getHsaId());
-
-    latestVersion.ifPresent(
-        versionEntity -> staffVersionEntity.setValidFrom(versionEntity.getValidTo()));
-
-    staffVersionEntityRepository.save(staffVersionEntity);
-  }
 }

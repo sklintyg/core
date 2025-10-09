@@ -3,19 +3,16 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.UnitEntityMapper.toEntity;
 
 import jakarta.persistence.OptimisticLockException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.unit.model.CareProvider;
 import se.inera.intyg.certificateservice.domain.unit.model.CareUnit;
 import se.inera.intyg.certificateservice.domain.unit.model.IssuingUnit;
 import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitEntity;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitVersionEntity;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.UnitVersionEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitEntityRepository;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitVersionEntityRepository;
 
 @Slf4j
 @Repository
@@ -23,12 +20,11 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 public class UnitRepository {
 
   private final UnitEntityRepository unitEntityRepository;
-  private final UnitVersionEntityRepository unitVersionEntityRepository;
+  private final MetadataVersionRepository metadataVersionRepository;
 
-  @Transactional
   public UnitEntity careProvider(CareProvider careProvider) {
     return unitEntityRepository.findByHsaId(careProvider.hsaId().id())
-        .map(unitEntity -> updateUnitVersion(unitEntity, careProvider))
+        .map(unitEntity -> saveUnit(unitEntity, toEntity(careProvider)))
         .orElseGet(
             () -> unitEntityRepository.save(
                 toEntity(careProvider)
@@ -36,10 +32,9 @@ public class UnitRepository {
         );
   }
 
-  @Transactional
   public UnitEntity careUnit(CareUnit careUnit) {
     return unitEntityRepository.findByHsaId(careUnit.hsaId().id())
-        .map(unitEntity -> updateUnitVersion(unitEntity, careUnit))
+        .map(unitEntity -> saveUnit(unitEntity, toEntity(careUnit)))
         .orElseGet(
             () -> unitEntityRepository.save(
                 toEntity(careUnit)
@@ -47,10 +42,9 @@ public class UnitRepository {
         );
   }
 
-  @Transactional
   public UnitEntity subUnit(SubUnit subUnit) {
     return unitEntityRepository.findByHsaId(subUnit.hsaId().id())
-        .map(unitEntity -> updateUnitVersion(unitEntity, subUnit))
+        .map(unitEntity -> saveUnit(unitEntity, toEntity(subUnit)))
         .orElseGet(
             () -> unitEntityRepository.save(
                 toEntity(subUnit)
@@ -58,7 +52,6 @@ public class UnitRepository {
         );
   }
 
-  @Transactional
   public UnitEntity issuingUnit(IssuingUnit issuingUnit) {
     if (issuingUnit instanceof CareUnit careUnit) {
       return careUnit(careUnit);
@@ -73,55 +66,17 @@ public class UnitRepository {
     );
   }
 
-  private UnitEntity updateUnitVersion(UnitEntity unitEntity, CareProvider careProvider) {
-    var newUnitEntity = toEntity(careProvider);
-    if (!unitEntity.equals(newUnitEntity)) {
-      return saveUnit(unitEntity, newUnitEntity);
-    }
-    return unitEntity;
-  }
-
-  private UnitEntity updateUnitVersion(UnitEntity unitEntity, CareUnit careUnit) {
-    var newUnitEntity = toEntity(careUnit);
-    if (!unitEntity.equals(newUnitEntity)) {
-      return saveUnit(unitEntity, newUnitEntity);
-    }
-    return unitEntity;
-  }
-
-  private UnitEntity updateUnitVersion(UnitEntity unitEntity, SubUnit subUnit) {
-    var newUnitEntity = toEntity(subUnit);
-    if (!unitEntity.equals(newUnitEntity)) {
-      return saveUnit(unitEntity, newUnitEntity);
-    }
-    return unitEntity;
-  }
-
   private UnitEntity saveUnit(UnitEntity unitEntity, UnitEntity newUnitEntity) {
-    try {
-      final var unitVersionEntity = UnitVersionEntityMapper.toUnitVersion(unitEntity);
-      unitEntity.updateWith(newUnitEntity);
-      var result = unitEntityRepository.save(unitEntity);
-      saveUnitVersion(unitVersionEntity);
-      return result;
+    if (!unitEntity.equals(newUnitEntity)) {
+      try {
+        return metadataVersionRepository.saveUnit(unitEntity, newUnitEntity);
 
-    } catch (OptimisticLockException e) {
-      log.info("Skipped updating UnitEntity {} because it was updated concurrently",
-          unitEntity.getHsaId());
-      return unitEntityRepository.findByHsaId(unitEntity.getHsaId())
-          .orElse(unitEntity);
+      } catch (OptimisticLockException | ObjectOptimisticLockingFailureException e) {
+        log.info("Skipped updating UnitEntity {} because it was updated concurrently",
+            unitEntity.getHsaId());
+        return metadataVersionRepository.getFreshUnitEntity(unitEntity.getHsaId());
+      }
     }
-  }
-
-
-  private void saveUnitVersion(UnitVersionEntity unitVersionEntity) {
-
-    final var latestVersion = unitVersionEntityRepository
-        .findFirstByHsaIdOrderByValidFromDesc(unitVersionEntity.getHsaId());
-
-    latestVersion.ifPresent(
-        versionEntity -> unitVersionEntity.setValidFrom(versionEntity.getValidTo()));
-
-    unitVersionEntityRepository.save(unitVersionEntity);
+    return unitEntity;
   }
 }
