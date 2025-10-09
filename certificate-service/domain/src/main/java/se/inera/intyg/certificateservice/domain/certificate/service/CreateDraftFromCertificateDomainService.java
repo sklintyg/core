@@ -11,6 +11,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
+import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
@@ -22,7 +23,8 @@ public class CreateDraftFromCertificateDomainService {
   private final CertificateModelRepository certificateModelRepository;
   private final CertificateEventDomainService certificateEventDomainService;
 
-  public Certificate create(CertificateId certificateId, ActionEvaluation actionEvaluation) {
+  public Certificate create(CertificateId certificateId, ActionEvaluation actionEvaluation,
+      ExternalReference externalReference) {
     final var start = LocalDateTime.now(ZoneId.systemDefault());
 
     final var certificate = certificateRepository.getById(certificateId);
@@ -47,6 +49,7 @@ public class CreateDraftFromCertificateDomainService {
 
     certificateDraft.fillFromCertificate(certificate);
     certificateDraft.updateMetadata(actionEvaluation);
+    certificateDraft.externalReference(externalReference);
 
     final var savedCertificate = certificateRepository.save(certificateDraft);
 

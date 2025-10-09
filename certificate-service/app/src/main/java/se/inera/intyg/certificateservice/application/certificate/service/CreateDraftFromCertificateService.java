@@ -11,6 +11,7 @@ import se.inera.intyg.certificateservice.application.common.ActionEvaluationFact
 import se.inera.intyg.certificateservice.application.common.converter.ResourceLinkConverter;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.service.CreateDraftFromCertificateDomainService;
+import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +28,7 @@ public class CreateDraftFromCertificateService {
     createDraftFromCertificateRequestValidator.validate(request, certificateId);
 
     final var actionEvaluation = actionEvaluationFactory.create(
+        request.getPatient(),
         request.getUser(),
         request.getUnit(),
         request.getCareUnit(),
@@ -35,7 +37,10 @@ public class CreateDraftFromCertificateService {
 
     final var certificate = createDraftFromCertificateDomainService.create(
         new CertificateId(certificateId),
-        actionEvaluation
+        actionEvaluation,
+        request.getExternalReference() != null
+            ? new ExternalReference(request.getExternalReference())
+            : null
     );
 
     return CreateDraftFromCertificateFromResponse.builder()

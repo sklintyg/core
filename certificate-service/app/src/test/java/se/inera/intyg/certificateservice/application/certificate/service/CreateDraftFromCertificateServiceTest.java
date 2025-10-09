@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ATHENA_REACT_ANDERSSON_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_ALLERGIMOTTAGNINGEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_REGIONEN_DTO;
@@ -81,6 +82,7 @@ class CreateDraftFromCertificateServiceTest {
         .user(User.builder().role(Role.DOCTOR).build())
         .build();
     doReturn(actionEvaluation).when(actionEvaluationFactory).create(
+        ATHENA_REACT_ANDERSSON_DTO,
         AJLA_DOCTOR_DTO,
         ALFA_ALLERGIMOTTAGNINGEN_DTO,
         ALFA_MEDICINCENTRUM_DTO,
@@ -90,7 +92,8 @@ class CreateDraftFromCertificateServiceTest {
     final var certificate = mock(MedicalCertificate.class);
     doReturn(certificate).when(createDraftFromCertificateDomainService).create(
         new CertificateId(CERTIFICATE_ID),
-        actionEvaluation
+        actionEvaluation,
+        null
     );
 
     final var certificateAction = mock(CertificateAction.class);
@@ -108,6 +111,7 @@ class CreateDraftFromCertificateServiceTest {
             .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
             .careUnit(ALFA_MEDICINCENTRUM_DTO)
             .careProvider(ALFA_REGIONEN_DTO)
+            .patient(ATHENA_REACT_ANDERSSON_DTO)
             .build(),
         CERTIFICATE_ID
     );
