@@ -13,10 +13,10 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.integrationtest.ag7804.AG7804Constants.CODE;
 import static se.inera.intyg.certificateservice.integrationtest.ag7804.AG7804Constants.CODE_SYSTEM;
 import static se.inera.intyg.certificateservice.integrationtest.fk7804.FK7804Constants.FK7804;
-import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customCreateCertificateFromTemplateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customCreateDraftFromCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customTestabilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultComplementCertificateRequest;
-import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCreateCertificateFromTemplateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCreateDraftFromCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultReplaceCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultSendCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultSignCertificateRequest;
@@ -630,7 +630,7 @@ public class AG7804ActiveIT {
       );
 
       final var response = api.createDraftFromCertificate(
-          defaultCreateCertificateFromTemplateRequest(),
+          defaultCreateDraftFromCertificateRequest(),
           certificateId(createCertificateResponse.getBody())
       );
 
@@ -671,7 +671,7 @@ public class AG7804ActiveIT {
       );
 
       final var response = api.createDraftFromCertificate(
-          defaultCreateCertificateFromTemplateRequest(),
+          defaultCreateDraftFromCertificateRequest(),
           certificateId(createCertificateResponse.getBody())
       );
 
@@ -692,7 +692,7 @@ public class AG7804ActiveIT {
       );
 
       final var response = api.createDraftFromCertificate(
-          defaultCreateCertificateFromTemplateRequest(),
+          defaultCreateDraftFromCertificateRequest(),
           certificateId(createCertificateResponse.getBody())
       );
 
@@ -724,7 +724,7 @@ public class AG7804ActiveIT {
       );
 
       final var response = api.createDraftFromCertificate(
-          defaultCreateCertificateFromTemplateRequest(),
+          defaultCreateDraftFromCertificateRequest(),
           certificateId(createCertificateResponse.getBody())
       );
 
@@ -771,7 +771,7 @@ public class AG7804ActiveIT {
       );
 
       final var response = api.createDraftFromCertificate(
-          defaultCreateCertificateFromTemplateRequest(),
+          defaultCreateDraftFromCertificateRequest(),
           certificateId(createCertificateResponse.getBody())
       );
 
@@ -794,7 +794,7 @@ public class AG7804ActiveIT {
       );
 
       final var response = api.createDraftFromCertificate(
-          customCreateCertificateFromTemplateRequest()
+          customCreateDraftFromCertificateRequest()
               .user(ALVA_VARDADMINISTRATOR_DTO)
               .build(),
           certificateId(createCertificateResponse.getBody())

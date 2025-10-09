@@ -268,12 +268,12 @@ public class ApiRequestUtil {
     return RenewExternalCertificateRequestBuilder.create();
   }
 
-  public static CreateDraftFromCertificateRequest defaultCreateCertificateFromTemplateRequest() {
-    return CreateCertificateFromTemplateRequestBuilder.create().build();
+  public static CreateDraftFromCertificateRequest defaultCreateDraftFromCertificateRequest() {
+    return CreateDraftFromCertificateRequestBuilder.create().build();
   }
 
-  public static CreateCertificateFromTemplateRequestBuilder customCreateCertificateFromTemplateRequest() {
-    return CreateCertificateFromTemplateRequestBuilder.create();
+  public static CreateDraftFromCertificateRequestBuilder customCreateDraftFromCertificateRequest() {
+    return CreateDraftFromCertificateRequestBuilder.create();
   }
 
   public static HandleMessageRequest defaultHandleMessageRequest() {

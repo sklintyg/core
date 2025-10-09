@@ -69,7 +69,7 @@ class CreateDraftFromCertificateDomainServiceTest {
   }
 
   @Test
-  void shouldThrowIfCertificateDoesNotContainTemplate() {
+  void shouldThrowIfCertificateDoesNotContainAbleToCreateDraftForModel() {
     final var medicalCertificate = mock(MedicalCertificate.class);
 
     when(certificateRepository.getById(CERTIFICATE_ID)).thenReturn(medicalCertificate);
@@ -86,7 +86,7 @@ class CreateDraftFromCertificateDomainServiceTest {
     );
 
     assertEquals(
-        "Certificate '%s' is missing required field template for".formatted(CERTIFICATE_ID.id()),
+        "Certificate '%s' is not able to create draft for model".formatted(CERTIFICATE_ID.id()),
         illegalStateException.getMessage());
   }
 
