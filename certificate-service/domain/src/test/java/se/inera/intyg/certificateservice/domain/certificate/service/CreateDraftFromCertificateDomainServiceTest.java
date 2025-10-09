@@ -238,7 +238,7 @@ class CreateDraftFromCertificateDomainServiceTest {
     verify(certificateEventDomainService).publish(certificateEventArgumentCaptor.capture());
 
     assertEquals(CREATED_CERTIFICATE, certificateEventArgumentCaptor.getValue().certificate());
-    assertEquals(CertificateEventType.CREATE_CERTIFICATE_FROM_CERTIFICATE,
+    assertEquals(CertificateEventType.CREATE_DRAFT_FROM_CERTIFICATE,
         certificateEventArgumentCaptor.getValue().type());
   }
 }

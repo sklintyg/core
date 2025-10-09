@@ -55,7 +55,7 @@ public class CreateDraftFromCertificateDomainService {
 
     certificateEventDomainService.publish(
         CertificateEvent.builder()
-            .type(CertificateEventType.CREATE_CERTIFICATE_FROM_CERTIFICATE)
+            .type(CertificateEventType.CREATE_DRAFT_FROM_CERTIFICATE)
             .start(start)
             .end(LocalDateTime.now(ZoneId.systemDefault()))
             .certificate(savedCertificate)
