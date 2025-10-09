@@ -22,7 +22,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -66,18 +65,19 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateStatusEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientIdTypeEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientVersionEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffVersionEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitType;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitTypeEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitVersionEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateModelEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.PlaceholderCertificateEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecificationFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateRelationRepository;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.PatientVersionEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffVersionEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitVersionEntityRepository;
@@ -142,8 +142,25 @@ class JpaCertificateRepositoryTest {
                           .build())
                       .careProvider(CARE_PROVIDER)
                       .careUnit(CARE_UNIT)
-                      .issuingUnit(ISSUED_ON_UNIT)
-                      .patient(PATIENT)
+                      .issuingUnit(SubUnit.builder()
+                          .name(new UnitName(ce.getIssuedOnUnit().getName()))
+                          .hsaId(new HsaId(ce.getIssuedOnUnit().getHsaId()))
+                          .build()
+                      )
+                      .patient(Patient.builder()
+                          .id(PersonId.builder()
+                              .id(ce.getPatient().getId())
+                              .type(PersonIdType.valueOf(ce.getPatient().getType().getType()))
+                              .build())
+                          .testIndicated(new TestIndicated(ce.getPatient().isTestIndicated()))
+                          .protectedPerson(new ProtectedPerson(ce.getPatient().isProtectedPerson()))
+                          .deceased(new Deceased(ce.getPatient().isDeceased()))
+                          .name(Name.builder()
+                              .firstName(ce.getPatient().getFirstName())
+                              .middleName(ce.getPatient().getMiddleName())
+                              .lastName(ce.getPatient().getLastName())
+                              .build())
+                          .build())
                       .creator(ISSUED_BY)
                       .build()
               )
@@ -238,10 +255,27 @@ class JpaCertificateRepositoryTest {
       .name("NAME_ISSUED")
       .build();
 
+  private static final UnitVersionEntity ISSUED_ON_UNIT_ENTITY_OLD_NAME = UnitVersionEntity.builder()
+      .type(
+          UnitTypeEntity.builder()
+              .type(UnitType.SUB_UNIT.name())
+              .key(UnitType.SUB_UNIT.getKey())
+              .build()
+      )
+      .hsaId("HSA_ID_ISSUED")
+      .name("OLD")
+      .validTo(TIMESTAMP)
+      .build();
+
 	private static final SubUnit ISSUED_ON_UNIT = SubUnit.builder()
 			.hsaId(new HsaId("HSA_ID_ISSUED"))
 			.name(new UnitName("NAME_ISSUED"))
 			.build();
+
+  private static final SubUnit ISSUED_ON_UNIT_OLD_NAME = SubUnit.builder()
+      .hsaId(new HsaId("HSA_ID_ISSUED"))
+      .name(new UnitName("OLD"))
+      .build();
 
   private static final PatientEntity PATIENT_ENTITY = PatientEntity.builder()
       .id("ID")
@@ -255,6 +289,21 @@ class JpaCertificateRepositoryTest {
       .firstName("FIRST")
       .middleName("MIDDLE")
       .lastName("LAST")
+      .build();
+
+  private static final PatientVersionEntity PATIENT_ENTITY_OLD_NAME = PatientVersionEntity.builder()
+      .id("ID")
+      .protectedPerson(false)
+      .testIndicated(false)
+      .deceased(false)
+      .type(PatientIdTypeEntity.builder()
+          .type(PersonIdType.PERSONAL_IDENTITY_NUMBER.name())
+          .key(1)
+          .build())
+      .firstName("OLD")
+      .middleName("OLD")
+      .lastName("OLD")
+      .validTo(TIMESTAMP)
       .build();
 
 	private static final Patient PATIENT = Patient.builder()
@@ -271,6 +320,21 @@ class JpaCertificateRepositoryTest {
 					.lastName("LAST")
 					.build())
 			.build();
+
+  private static final Patient PATIENT_OLD_NAME = Patient.builder()
+      .id(PersonId.builder()
+          .id("ID")
+          .type(PersonIdType.PERSONAL_IDENTITY_NUMBER)
+          .build())
+      .testIndicated(new TestIndicated(false))
+      .protectedPerson(new ProtectedPerson(false))
+      .deceased(new Deceased(false))
+      .name(Name.builder()
+          .firstName("OLD")
+          .middleName("OLD")
+          .lastName("OLD")
+          .build())
+      .build();
 
 	private static final Staff ISSUED_BY = Staff.builder()
 			.name(Name.builder()
@@ -405,8 +469,8 @@ class JpaCertificateRepositoryTest {
               .issuer(ISSUED_BY_OLD_NAME)
               .careProvider(CARE_PROVIDER)
               .careUnit(CARE_UNIT)
-              .issuingUnit(ISSUED_ON_UNIT)
-              .patient(PATIENT)
+              .issuingUnit(ISSUED_ON_UNIT_OLD_NAME)
+              .patient(PATIENT_OLD_NAME)
               .creator(ISSUED_BY)
               .build()
       )
@@ -587,7 +651,8 @@ class JpaCertificateRepositoryTest {
           SIGNED_CERTIFICATE_ENTITY.getSigned())).thenReturn(List.of(ISSUED_BY_OLD_NAME_ENTITY));
 
       final var response = jpaCertificateRepository.getByIdForPrint(new CertificateId("ID"));
-      assertEquals(EXPECTED_CERTIFICATE_VERSIONED, response);
+      assertEquals(EXPECTED_CERTIFICATE_VERSIONED.certificateMetaData().issuer(),
+          response.certificateMetaData().issuer());
     }
 
 
@@ -596,25 +661,34 @@ class JpaCertificateRepositoryTest {
 		void shouldReturnVersionedPatientFromRepository(){
       stubDomain();
 
-			when(certificateEntityRepository.findByCertificateId("ID"))
-					.thenReturn(Optional.of(SIGNED_CERTIFICATE_ENTITY));
+      when(certificateEntityRepository.findByCertificateId("ID"))
+          .thenReturn(Optional.of(MUTABLE_SIGNED_CERTIFICATE_ENTITY));
 
-			final var response = jpaCertificateRepository.getByIdForPrint(new CertificateId("ID"));
+      when(patientVersionEntityRepository
+          .findCoveringTimestampOrderByMostRecent(PATIENT.id().idWithoutDash(),
+          SIGNED_CERTIFICATE_ENTITY.getSigned())).thenReturn(List.of(PATIENT_ENTITY_OLD_NAME));
 
-			assertEquals(EXPECTED_CERTIFICATE, response);//TODO: fix
+      final var response = jpaCertificateRepository.getByIdForPrint(new CertificateId("ID"));
+      assertEquals(EXPECTED_CERTIFICATE_VERSIONED.certificateMetaData().patient(),
+          response.certificateMetaData().patient());
 		}
 
 		@Test
 		void shouldReturnVersionedUnitFromRepository(){
 
-      stubDomain();//TODO: fix
-			when(certificateEntityRepository.findByCertificateId("ID"))
-					.thenReturn(Optional.of(SIGNED_CERTIFICATE_ENTITY));
+      stubDomain();
 
-			final var response = jpaCertificateRepository.getByIdForPrint(new CertificateId("ID"));
 
-			System.out.println(response);
-			assertEquals(EXPECTED_CERTIFICATE, response);
+      when(certificateEntityRepository.findByCertificateId("ID"))
+          .thenReturn(Optional.of(MUTABLE_SIGNED_CERTIFICATE_ENTITY));
+
+      when(unitVersionEntityRepository
+          .findCoveringTimestampOrderByMostRecent(ISSUED_ON_UNIT_ENTITY.getHsaId(),
+          SIGNED_CERTIFICATE_ENTITY.getSigned())).thenReturn(List.of(ISSUED_ON_UNIT_ENTITY_OLD_NAME));
+
+      final var response = jpaCertificateRepository.getByIdForPrint(new CertificateId("ID"));
+      assertEquals(EXPECTED_CERTIFICATE_VERSIONED.certificateMetaData().issuingUnit(),
+          response.certificateMetaData().issuingUnit());
 		}
 	}
 
