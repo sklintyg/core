@@ -40,7 +40,7 @@ import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 
 @ExtendWith(MockitoExtension.class)
-class CertificateActionCreateFromTemplateTest {
+class CertificateActionCreateDraftFromCertificateTest {
 
   private static final String AG7804_BODY = """
       <div><div class="ic-alert ic-alert--status ic-alert--info">
@@ -52,12 +52,12 @@ class CertificateActionCreateFromTemplateTest {
   private static final String AG7804_DESCRIPTION = "Skapar ett intyg till arbetsgivaren utifrån Försäkringskassans intyg.";
   private static final String AG7804_NAME = "Skapa AG7804";
 
-  private CertificateActionCreateFromTemplate certificateActionCreateFromTemplate;
+  private CertificateActionCreateDraftFromCertificate certificateActionCreateDraftFromCertificate;
   private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
   private MedicalCertificate.MedicalCertificateBuilder certificateBuilder;
   private static final CertificateActionSpecification CERTIFICATE_ACTION_SPECIFICATION =
       CertificateActionSpecification.builder()
-          .certificateActionType(CertificateActionType.CREATE_FROM_CERTIFICATE)
+          .certificateActionType(CertificateActionType.CREATE_DRAFT_FROM_CERTIFICATE)
           .build();
   @Mock
   CertificateActionConfigurationRepository certificateActionConfigurationRepository;
@@ -66,7 +66,7 @@ class CertificateActionCreateFromTemplateTest {
 
   @BeforeEach
   void setUp() {
-    certificateActionCreateFromTemplate = (CertificateActionCreateFromTemplate) certificateActionFactory.create(
+    certificateActionCreateDraftFromCertificate = (CertificateActionCreateDraftFromCertificate) certificateActionFactory.create(
         CERTIFICATE_ACTION_SPECIFICATION);
 
     certificateBuilder = MedicalCertificate.builder()
@@ -90,25 +90,28 @@ class CertificateActionCreateFromTemplateTest {
 
   @Test
   void shouldReturnType() {
-    assertEquals(CertificateActionType.CREATE_FROM_CERTIFICATE,
-        certificateActionCreateFromTemplate.getType());
+    assertEquals(CertificateActionType.CREATE_DRAFT_FROM_CERTIFICATE,
+        certificateActionCreateDraftFromCertificate.getType());
   }
 
   @Test
   void shouldReturnName() {
-    assertEquals(AG7804_NAME, certificateActionCreateFromTemplate.getName(Optional.empty()));
+    assertEquals(AG7804_NAME,
+        certificateActionCreateDraftFromCertificate.getName(Optional.empty()));
   }
 
   @Test
   void shouldReturnDescription() {
     assertEquals(
-        AG7804_DESCRIPTION, certificateActionCreateFromTemplate.getDescription(Optional.empty()));
+        AG7804_DESCRIPTION,
+        certificateActionCreateDraftFromCertificate.getDescription(Optional.empty()));
   }
 
   @Test
   void shouldReturnBody() {
     assertEquals(
-        AG7804_BODY, certificateActionCreateFromTemplate.getBody(Optional.empty(), Optional.empty())
+        AG7804_BODY,
+        certificateActionCreateDraftFromCertificate.getBody(Optional.empty(), Optional.empty())
     );
   }
 
@@ -118,7 +121,8 @@ class CertificateActionCreateFromTemplateTest {
     final var actionEvaluation = actionEvaluationBuilder.build();
 
     assertFalse(
-        certificateActionCreateFromTemplate.evaluate(certificate, Optional.of(actionEvaluation)),
+        certificateActionCreateDraftFromCertificate.evaluate(certificate,
+            Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -136,7 +140,7 @@ class CertificateActionCreateFromTemplateTest {
     final var certificate = certificateBuilder.build();
 
     assertTrue(
-        certificateActionCreateFromTemplate.evaluate(Optional.of(certificate),
+        certificateActionCreateDraftFromCertificate.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
@@ -155,7 +159,7 @@ class CertificateActionCreateFromTemplateTest {
     final var certificate = certificateBuilder.build();
 
     assertTrue(
-        certificateActionCreateFromTemplate.evaluate(Optional.of(certificate),
+        certificateActionCreateDraftFromCertificate.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
@@ -174,7 +178,7 @@ class CertificateActionCreateFromTemplateTest {
     final var certificate = certificateBuilder.build();
 
     assertFalse(
-        certificateActionCreateFromTemplate.evaluate(Optional.of(certificate),
+        certificateActionCreateDraftFromCertificate.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
@@ -193,7 +197,7 @@ class CertificateActionCreateFromTemplateTest {
     final var certificate = certificateBuilder.build();
 
     assertFalse(
-        certificateActionCreateFromTemplate.evaluate(Optional.of(certificate),
+        certificateActionCreateDraftFromCertificate.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
@@ -208,7 +212,7 @@ class CertificateActionCreateFromTemplateTest {
     final var certificate = certificateBuilder.build();
 
     assertFalse(
-        certificateActionCreateFromTemplate.evaluate(Optional.of(certificate),
+        certificateActionCreateDraftFromCertificate.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
@@ -222,7 +226,7 @@ class CertificateActionCreateFromTemplateTest {
     final var certificate = certificateBuilder.build();
 
     assertTrue(
-        certificateActionCreateFromTemplate.evaluate(Optional.of(certificate),
+        certificateActionCreateDraftFromCertificate.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
@@ -237,7 +241,7 @@ class CertificateActionCreateFromTemplateTest {
         .build();
 
     assertTrue(
-        certificateActionCreateFromTemplate.evaluate(Optional.of(certificate),
+        certificateActionCreateDraftFromCertificate.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
@@ -252,7 +256,7 @@ class CertificateActionCreateFromTemplateTest {
         .build();
 
     assertFalse(
-        certificateActionCreateFromTemplate.evaluate(Optional.of(certificate),
+        certificateActionCreateDraftFromCertificate.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
@@ -267,7 +271,7 @@ class CertificateActionCreateFromTemplateTest {
         .build();
 
     assertFalse(
-        certificateActionCreateFromTemplate.evaluate(Optional.of(certificate),
+        certificateActionCreateDraftFromCertificate.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
@@ -282,7 +286,7 @@ class CertificateActionCreateFromTemplateTest {
         .build();
 
     assertFalse(
-        certificateActionCreateFromTemplate.evaluate(Optional.of(certificate),
+        certificateActionCreateDraftFromCertificate.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
@@ -301,7 +305,7 @@ class CertificateActionCreateFromTemplateTest {
     final var certificate = certificateBuilder.build();
 
     assertFalse(
-        certificateActionCreateFromTemplate.evaluate(Optional.of(certificate),
+        certificateActionCreateDraftFromCertificate.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
@@ -320,7 +324,7 @@ class CertificateActionCreateFromTemplateTest {
     final var certificate = certificateBuilder.build();
 
     assertFalse(
-        certificateActionCreateFromTemplate.evaluate(Optional.of(certificate),
+        certificateActionCreateDraftFromCertificate.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
@@ -328,7 +332,7 @@ class CertificateActionCreateFromTemplateTest {
 
   @Test
   void shallReturnReasonNotAllowedIfEvaluateReturnsFalse() {
-    final var actualResult = certificateActionCreateFromTemplate.reasonNotAllowed(
+    final var actualResult = certificateActionCreateDraftFromCertificate.reasonNotAllowed(
         Optional.of(certificateBuilder.build()), Optional.empty());
 
     assertFalse(actualResult.isEmpty());
@@ -342,7 +346,7 @@ class CertificateActionCreateFromTemplateTest {
         .status(Status.SIGNED)
         .build();
 
-    final var actualResult = certificateActionCreateFromTemplate.reasonNotAllowed(
+    final var actualResult = certificateActionCreateDraftFromCertificate.reasonNotAllowed(
         Optional.of(certificate),
         Optional.of(actionEvaluation));
 
@@ -373,7 +377,7 @@ class CertificateActionCreateFromTemplateTest {
         .build();
 
     assertFalse(
-        certificateActionCreateFromTemplate.evaluate(Optional.of(certificate),
+        certificateActionCreateDraftFromCertificate.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
@@ -393,7 +397,7 @@ class CertificateActionCreateFromTemplateTest {
         .build();
 
     assertTrue(
-        certificateActionCreateFromTemplate.evaluate(Optional.of(certificate),
+        certificateActionCreateDraftFromCertificate.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
@@ -418,7 +422,7 @@ class CertificateActionCreateFromTemplateTest {
         .build();
 
     assertFalse(
-        certificateActionCreateFromTemplate.evaluate(Optional.of(certificate),
+        certificateActionCreateDraftFromCertificate.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
@@ -443,7 +447,7 @@ class CertificateActionCreateFromTemplateTest {
         .build();
 
     assertTrue(
-        certificateActionCreateFromTemplate.evaluate(Optional.of(certificate),
+        certificateActionCreateDraftFromCertificate.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
@@ -463,7 +467,7 @@ class CertificateActionCreateFromTemplateTest {
         .build();
 
     assertTrue(
-        certificateActionCreateFromTemplate.evaluate(Optional.of(certificate),
+        certificateActionCreateDraftFromCertificate.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
@@ -488,7 +492,7 @@ class CertificateActionCreateFromTemplateTest {
         .build();
 
     assertFalse(
-        certificateActionCreateFromTemplate.evaluate(Optional.of(certificate),
+        certificateActionCreateDraftFromCertificate.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
@@ -513,7 +517,7 @@ class CertificateActionCreateFromTemplateTest {
         .build();
 
     assertTrue(
-        certificateActionCreateFromTemplate.evaluate(Optional.of(certificate),
+        certificateActionCreateDraftFromCertificate.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
@@ -532,7 +536,7 @@ class CertificateActionCreateFromTemplateTest {
     final var certificate = certificateBuilder.build();
 
     assertFalse(
-        certificateActionCreateFromTemplate.evaluate(Optional.of(certificate),
+        certificateActionCreateDraftFromCertificate.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );

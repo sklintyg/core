@@ -28,11 +28,11 @@ public class CreateDraftFromCertificateDomainService {
     final var start = LocalDateTime.now(ZoneId.systemDefault());
 
     final var certificate = certificateRepository.getById(certificateId);
-    if (!certificate.allowTo(CertificateActionType.CREATE_FROM_CERTIFICATE,
+    if (!certificate.allowTo(CertificateActionType.CREATE_DRAFT_FROM_CERTIFICATE,
         Optional.of(actionEvaluation))) {
       throw new CertificateActionForbidden(
           "Not allowed to create certificate from template for %s".formatted(certificateId),
-          certificate.reasonNotAllowed(CertificateActionType.CREATE_FROM_CERTIFICATE,
+          certificate.reasonNotAllowed(CertificateActionType.CREATE_DRAFT_FROM_CERTIFICATE,
               Optional.of(actionEvaluation))
       );
     }

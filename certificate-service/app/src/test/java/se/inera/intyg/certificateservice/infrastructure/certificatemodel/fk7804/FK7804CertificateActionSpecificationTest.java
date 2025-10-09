@@ -503,7 +503,7 @@ class FK7804CertificateActionSpecificationTest {
   @Test
   void shallIncludeCertificateActionCreateFromTemplate() {
     final var expectedSpecification = CertificateActionSpecification.builder()
-        .certificateActionType(CertificateActionType.CREATE_FROM_CERTIFICATE)
+        .certificateActionType(CertificateActionType.CREATE_DRAFT_FROM_CERTIFICATE)
         .build();
 
     final var actionSpecifications = FK7804CertificateActionSpecification.create();

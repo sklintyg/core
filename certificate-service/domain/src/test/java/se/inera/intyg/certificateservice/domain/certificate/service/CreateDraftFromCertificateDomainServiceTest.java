@@ -56,7 +56,7 @@ class CreateDraftFromCertificateDomainServiceTest {
     final var medicalCertificate = mock(MedicalCertificate.class);
 
     when(certificateRepository.getById(CERTIFICATE_ID)).thenReturn(medicalCertificate);
-    when(medicalCertificate.allowTo(CertificateActionType.CREATE_FROM_CERTIFICATE,
+    when(medicalCertificate.allowTo(CertificateActionType.CREATE_DRAFT_FROM_CERTIFICATE,
         Optional.of(ACTION_EVALUATION))).thenReturn(false);
 
     assertThrows(CertificateActionForbidden.class,
@@ -73,7 +73,7 @@ class CreateDraftFromCertificateDomainServiceTest {
     final var medicalCertificate = mock(MedicalCertificate.class);
 
     when(certificateRepository.getById(CERTIFICATE_ID)).thenReturn(medicalCertificate);
-    when(medicalCertificate.allowTo(CertificateActionType.CREATE_FROM_CERTIFICATE,
+    when(medicalCertificate.allowTo(CertificateActionType.CREATE_DRAFT_FROM_CERTIFICATE,
         Optional.of(ACTION_EVALUATION))).thenReturn(true);
     when(medicalCertificate.certificateModel()).thenReturn(CertificateModel.builder().build());
 
@@ -95,7 +95,7 @@ class CreateDraftFromCertificateDomainServiceTest {
     final var medicalCertificate = mock(MedicalCertificate.class);
 
     when(certificateRepository.getById(CERTIFICATE_ID)).thenReturn(medicalCertificate);
-    when(medicalCertificate.allowTo(CertificateActionType.CREATE_FROM_CERTIFICATE,
+    when(medicalCertificate.allowTo(CertificateActionType.CREATE_DRAFT_FROM_CERTIFICATE,
         Optional.of(ACTION_EVALUATION))).thenReturn(true);
     when(medicalCertificate.certificateModel()).thenReturn(CERTIFICATE_MODEL);
     when(certificateModelRepository.getById(CERTIFICATE_MODEL_ID)).thenReturn(CERTIFICATE_MODEL);
@@ -116,7 +116,7 @@ class CreateDraftFromCertificateDomainServiceTest {
     final var medicalCertificateDraft = mock(MedicalCertificate.class);
 
     when(certificateRepository.getById(CERTIFICATE_ID)).thenReturn(medicalCertificate);
-    when(medicalCertificate.allowTo(CertificateActionType.CREATE_FROM_CERTIFICATE,
+    when(medicalCertificate.allowTo(CertificateActionType.CREATE_DRAFT_FROM_CERTIFICATE,
         Optional.of(ACTION_EVALUATION))).thenReturn(true);
     when(medicalCertificate.certificateModel()).thenReturn(CERTIFICATE_MODEL);
     when(certificateModelRepository.getById(CERTIFICATE_MODEL_ID)).thenReturn(CERTIFICATE_MODEL);
@@ -137,7 +137,7 @@ class CreateDraftFromCertificateDomainServiceTest {
     final var medicalCertificateDraft = mock(MedicalCertificate.class);
 
     when(certificateRepository.getById(CERTIFICATE_ID)).thenReturn(medicalCertificate);
-    when(medicalCertificate.allowTo(CertificateActionType.CREATE_FROM_CERTIFICATE,
+    when(medicalCertificate.allowTo(CertificateActionType.CREATE_DRAFT_FROM_CERTIFICATE,
         Optional.of(ACTION_EVALUATION))).thenReturn(true);
     when(medicalCertificate.certificateModel()).thenReturn(CERTIFICATE_MODEL);
     when(certificateModelRepository.getById(CERTIFICATE_MODEL_ID)).thenReturn(CERTIFICATE_MODEL);
@@ -158,7 +158,7 @@ class CreateDraftFromCertificateDomainServiceTest {
     final var medicalCertificateDraft = mock(MedicalCertificate.class);
 
     when(certificateRepository.getById(CERTIFICATE_ID)).thenReturn(medicalCertificate);
-    when(medicalCertificate.allowTo(CertificateActionType.CREATE_FROM_CERTIFICATE,
+    when(medicalCertificate.allowTo(CertificateActionType.CREATE_DRAFT_FROM_CERTIFICATE,
         Optional.of(ACTION_EVALUATION))).thenReturn(true);
     when(medicalCertificate.certificateModel()).thenReturn(CERTIFICATE_MODEL);
     when(certificateModelRepository.getById(CERTIFICATE_MODEL_ID)).thenReturn(CERTIFICATE_MODEL);
@@ -179,7 +179,7 @@ class CreateDraftFromCertificateDomainServiceTest {
     final var medicalCertificateDraft = mock(MedicalCertificate.class);
 
     when(certificateRepository.getById(CERTIFICATE_ID)).thenReturn(medicalCertificate);
-    when(medicalCertificate.allowTo(CertificateActionType.CREATE_FROM_CERTIFICATE,
+    when(medicalCertificate.allowTo(CertificateActionType.CREATE_DRAFT_FROM_CERTIFICATE,
         Optional.of(ACTION_EVALUATION))).thenReturn(true);
     when(medicalCertificate.certificateModel()).thenReturn(CERTIFICATE_MODEL);
     when(certificateModelRepository.getById(CERTIFICATE_MODEL_ID)).thenReturn(CERTIFICATE_MODEL);
@@ -200,7 +200,7 @@ class CreateDraftFromCertificateDomainServiceTest {
     final var medicalCertificateDraft = mock(MedicalCertificate.class);
 
     when(certificateRepository.getById(CERTIFICATE_ID)).thenReturn(medicalCertificate);
-    when(medicalCertificate.allowTo(CertificateActionType.CREATE_FROM_CERTIFICATE,
+    when(medicalCertificate.allowTo(CertificateActionType.CREATE_DRAFT_FROM_CERTIFICATE,
         Optional.of(ACTION_EVALUATION))).thenReturn(true);
     when(medicalCertificate.certificateModel()).thenReturn(CERTIFICATE_MODEL);
     when(certificateModelRepository.getById(CERTIFICATE_MODEL_ID)).thenReturn(CERTIFICATE_MODEL);
@@ -222,7 +222,7 @@ class CreateDraftFromCertificateDomainServiceTest {
     final var medicalCertificate = mock(MedicalCertificate.class);
 
     when(certificateRepository.getById(CERTIFICATE_ID)).thenReturn(medicalCertificate);
-    when(medicalCertificate.allowTo(CertificateActionType.CREATE_FROM_CERTIFICATE,
+    when(medicalCertificate.allowTo(CertificateActionType.CREATE_DRAFT_FROM_CERTIFICATE,
         Optional.of(ACTION_EVALUATION))).thenReturn(true);
     when(medicalCertificate.certificateModel()).thenReturn(CERTIFICATE_MODEL);
     when(certificateModelRepository.getById(CERTIFICATE_MODEL_ID)).thenReturn(CERTIFICATE_MODEL);

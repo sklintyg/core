@@ -477,12 +477,12 @@ class CertificateActionFactoryTest {
   @Test
   void shallReturnCertificateActionTemplateFromListIfExistInSpecification() {
     final var certificateActionSpecification = CertificateActionSpecification.builder()
-        .certificateActionType(CertificateActionType.CREATE_FROM_CERTIFICATE)
+        .certificateActionType(CertificateActionType.CREATE_DRAFT_FROM_CERTIFICATE)
         .build();
 
     final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
 
     assert certificateAction != null;
-    assertEquals(CertificateActionCreateFromTemplate.class, certificateAction.getClass());
+    assertEquals(CertificateActionCreateDraftFromCertificate.class, certificateAction.getClass());
   }
 }
