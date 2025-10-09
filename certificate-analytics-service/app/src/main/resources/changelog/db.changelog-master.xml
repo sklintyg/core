@@ -143,7 +143,7 @@
       <column name="event_key" type="bigint unsigned auto_increment">
         <constraints primaryKey="true" nullable="false"/>
       </column>
-      <column name="timestamp" type="timestamp(6)">
+      <column name="timestamp" type="datetime">
         <constraints nullable="false"/>
       </column>
       <column name="event_type_key" type="tinyint unsigned">
