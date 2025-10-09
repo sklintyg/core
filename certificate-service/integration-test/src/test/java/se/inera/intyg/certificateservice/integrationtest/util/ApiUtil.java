@@ -22,10 +22,10 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateReadyForSignResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateResponse;
-import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateFromTemplateRequest;
-import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateFromTemplateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateFromResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ForwardCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ForwardCertificateResponse;
@@ -623,16 +623,16 @@ public class ApiUtil {
     return response;
   }
 
-  public ResponseEntity<CreateCertificateFromTemplateResponse> createCertificateFromTemplate(
-      CreateCertificateFromTemplateRequest request,
+  public ResponseEntity<CreateDraftFromCertificateFromResponse> createDraftFromCertificate(
+      CreateDraftFromCertificateRequest request,
       String certificateId) {
-    final var requestUrl = "http://localhost:%s/api/certificate/%s/template".formatted(
+    final var requestUrl = "http://localhost:%s/api/certificate/%s/draftFromCertificate".formatted(
         port,
         certificateId
     );
 
     final var response = sendRequest(request, requestUrl,
-        CreateCertificateFromTemplateResponse.class);
+        CreateDraftFromCertificateFromResponse.class);
 
     if (certificateId(response.getBody()) != null) {
       certificateIds.add(certificateId);

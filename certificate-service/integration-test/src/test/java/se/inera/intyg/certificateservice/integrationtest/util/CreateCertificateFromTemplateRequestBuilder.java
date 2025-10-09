@@ -5,7 +5,7 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_REGIONEN_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 
-import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateFromTemplateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateRequest;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 
@@ -38,8 +38,8 @@ public class CreateCertificateFromTemplateRequestBuilder {
     return this;
   }
 
-  public CreateCertificateFromTemplateRequest build() {
-    return CreateCertificateFromTemplateRequest.builder()
+  public CreateDraftFromCertificateRequest build() {
+    return CreateDraftFromCertificateRequest.builder()
         .careProvider(ALFA_REGIONEN_DTO)
         .careUnit(careUnit)
         .user(user)

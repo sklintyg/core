@@ -4,8 +4,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.AnswerCompl
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateRequest;
-import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateFromTemplateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ForwardCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateEventsRequest;
@@ -268,7 +268,7 @@ public class ApiRequestUtil {
     return RenewExternalCertificateRequestBuilder.create();
   }
 
-  public static CreateCertificateFromTemplateRequest defaultCreateCertificateFromTemplateRequest() {
+  public static CreateDraftFromCertificateRequest defaultCreateCertificateFromTemplateRequest() {
     return CreateCertificateFromTemplateRequestBuilder.create().build();
   }
 

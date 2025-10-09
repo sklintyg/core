@@ -11,7 +11,7 @@ import se.inera.intyg.certificateservice.domain.certificate.repository.Statistic
 import se.inera.intyg.certificateservice.domain.certificate.service.AnswerComplementDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.ComplementCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.CreateCertificateDomainService;
-import se.inera.intyg.certificateservice.domain.certificate.service.CreateCertificateFromCertificateDomainService;
+import se.inera.intyg.certificateservice.domain.certificate.service.CreateDraftFromCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.DeleteCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.ForwardCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.ForwardCertificateMessagesDomainService;
@@ -476,11 +476,11 @@ public class AppConfig {
   }
 
   @Bean
-  public CreateCertificateFromCertificateDomainService createCertificateFromTemplateDomainService(
+  public CreateDraftFromCertificateDomainService createCertificateFromTemplateDomainService(
       CertificateRepository certificateRepository,
       CertificateModelRepository certificateModelRepository,
       CertificateEventDomainService certificateEventDomainService) {
-    return new CreateCertificateFromCertificateDomainService(certificateRepository,
+    return new CreateDraftFromCertificateDomainService(certificateRepository,
         certificateModelRepository, certificateEventDomainService);
   }
 }

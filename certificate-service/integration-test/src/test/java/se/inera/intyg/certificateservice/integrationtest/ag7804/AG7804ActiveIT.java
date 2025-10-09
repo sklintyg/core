@@ -629,7 +629,7 @@ public class AG7804ActiveIT {
               .build()
       );
 
-      final var response = api.createCertificateFromTemplate(
+      final var response = api.createDraftFromCertificate(
           defaultCreateCertificateFromTemplateRequest(),
           certificateId(createCertificateResponse.getBody())
       );
@@ -670,7 +670,7 @@ public class AG7804ActiveIT {
               .build()
       );
 
-      final var response = api.createCertificateFromTemplate(
+      final var response = api.createDraftFromCertificate(
           defaultCreateCertificateFromTemplateRequest(),
           certificateId(createCertificateResponse.getBody())
       );
@@ -691,7 +691,7 @@ public class AG7804ActiveIT {
               .build()
       );
 
-      final var response = api.createCertificateFromTemplate(
+      final var response = api.createDraftFromCertificate(
           defaultCreateCertificateFromTemplateRequest(),
           certificateId(createCertificateResponse.getBody())
       );
@@ -723,7 +723,7 @@ public class AG7804ActiveIT {
           version(replaceCertificateResponse.getBody())
       );
 
-      final var response = api.createCertificateFromTemplate(
+      final var response = api.createDraftFromCertificate(
           defaultCreateCertificateFromTemplateRequest(),
           certificateId(createCertificateResponse.getBody())
       );
@@ -770,7 +770,7 @@ public class AG7804ActiveIT {
           version(complementCertificateResponse.getBody())
       );
 
-      final var response = api.createCertificateFromTemplate(
+      final var response = api.createDraftFromCertificate(
           defaultCreateCertificateFromTemplateRequest(),
           certificateId(createCertificateResponse.getBody())
       );
@@ -793,7 +793,7 @@ public class AG7804ActiveIT {
               .build()
       );
 
-      final var response = api.createCertificateFromTemplate(
+      final var response = api.createDraftFromCertificate(
           customCreateCertificateFromTemplateRequest()
               .user(ALVA_VARDADMINISTRATOR_DTO)
               .build(),

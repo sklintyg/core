@@ -18,10 +18,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
-import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateFromTemplateRequest;
-import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateFromTemplateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateFromResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateConverter;
-import se.inera.intyg.certificateservice.application.certificate.service.validation.CreateCertificateFromTemplateRequestValidator;
+import se.inera.intyg.certificateservice.application.certificate.service.validation.CreateDraftFromCertificateRequestValidator;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
 import se.inera.intyg.certificateservice.application.common.converter.ResourceLinkConverter;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
@@ -30,19 +30,19 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionE
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
-import se.inera.intyg.certificateservice.domain.certificate.service.CreateCertificateFromCertificateDomainService;
+import se.inera.intyg.certificateservice.domain.certificate.service.CreateDraftFromCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.user.model.User;
 
 @ExtendWith(MockitoExtension.class)
-class CreateCertificateFromTemplateServiceTest {
+class CreateDraftFromCertificateServiceTest {
 
   private static final String CERTIFICATE_ID = "certificateId";
 
   @Mock
-  private CreateCertificateFromCertificateDomainService createCertificateFromCertificateDomainService;
+  private CreateDraftFromCertificateDomainService createDraftFromCertificateDomainService;
   @Mock
-  private CreateCertificateFromTemplateRequestValidator createCertificateFromTemplateRequestValidator;
+  private CreateDraftFromCertificateRequestValidator createDraftFromCertificateRequestValidator;
   @Mock
   private ActionEvaluationFactory actionEvaluationFactory;
   @Mock
@@ -50,15 +50,15 @@ class CreateCertificateFromTemplateServiceTest {
   @Mock
   private ResourceLinkConverter resourceLinkConverter;
   @InjectMocks
-  private CreateCertificateFromTemplateService createCertificateFromTemplateService;
+  private CreateDraftFromCertificateService createDraftFromCertificateService;
 
   @Test
   void shallThrowIfRequestIsInvalid() {
-    final var request = CreateCertificateFromTemplateRequest.builder().build();
-    doThrow(IllegalArgumentException.class).when(createCertificateFromTemplateRequestValidator)
+    final var request = CreateDraftFromCertificateRequest.builder().build();
+    doThrow(IllegalArgumentException.class).when(createDraftFromCertificateRequestValidator)
         .validate(request, CERTIFICATE_ID);
     assertThrows(IllegalArgumentException.class,
-        () -> createCertificateFromTemplateService.create(request, CERTIFICATE_ID)
+        () -> createDraftFromCertificateService.create(request, CERTIFICATE_ID)
     );
   }
 
@@ -71,7 +71,7 @@ class CreateCertificateFromTemplateServiceTest {
     final var certificateDTO = CertificateDTO.builder()
         .links(List.of(resourceLinkDTO))
         .build();
-    final var expectedResponse = CreateCertificateFromTemplateResponse.builder()
+    final var expectedResponse = CreateDraftFromCertificateFromResponse.builder()
         .certificate(
             certificateDTO
         )
@@ -88,7 +88,7 @@ class CreateCertificateFromTemplateServiceTest {
     );
 
     final var certificate = mock(MedicalCertificate.class);
-    doReturn(certificate).when(createCertificateFromCertificateDomainService).create(
+    doReturn(certificate).when(createDraftFromCertificateDomainService).create(
         new CertificateId(CERTIFICATE_ID),
         actionEvaluation
     );
@@ -102,8 +102,8 @@ class CreateCertificateFromTemplateServiceTest {
     doReturn(certificateDTO).when(certificateConverter)
         .convert(certificate, List.of(resourceLinkDTO), actionEvaluation);
 
-    final var actualResult = createCertificateFromTemplateService.create(
-        CreateCertificateFromTemplateRequest.builder()
+    final var actualResult = createDraftFromCertificateService.create(
+        CreateDraftFromCertificateRequest.builder()
             .user(AJLA_DOCTOR_DTO)
             .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
             .careUnit(ALFA_MEDICINCENTRUM_DTO)

@@ -28,7 +28,7 @@ import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
 
 @ExtendWith(MockitoExtension.class)
-class CreateCertificateFromCertificateDomainServiceTest {
+class CreateDraftFromCertificateDomainServiceTest {
 
   private static final CertificateId CERTIFICATE_ID = new CertificateId("certificateId");
   private static final CertificateModelId CERTIFICATE_MODEL_ID = CertificateModelId.builder()
@@ -45,7 +45,7 @@ class CreateCertificateFromCertificateDomainServiceTest {
   @Mock
   CertificateEventDomainService certificateEventDomainService;
   @InjectMocks
-  CreateCertificateFromCertificateDomainService createCertificateFromCertificateDomainService;
+  CreateDraftFromCertificateDomainService createDraftFromCertificateDomainService;
 
   @Test
   void shouldThrowCertificateActionForbiddenIfCertificateDoesNotSupportCreateFromTemplate() {
@@ -56,7 +56,7 @@ class CreateCertificateFromCertificateDomainServiceTest {
         Optional.of(ACTION_EVALUATION))).thenReturn(false);
 
     assertThrows(CertificateActionForbidden.class,
-        () -> createCertificateFromCertificateDomainService.create(CERTIFICATE_ID,
+        () -> createDraftFromCertificateDomainService.create(CERTIFICATE_ID,
             ACTION_EVALUATION));
   }
 
@@ -70,7 +70,7 @@ class CreateCertificateFromCertificateDomainServiceTest {
     when(medicalCertificate.certificateModel()).thenReturn(CertificateModel.builder().build());
 
     final var illegalStateException = assertThrows(IllegalStateException.class,
-        () -> createCertificateFromCertificateDomainService.create(CERTIFICATE_ID,
+        () -> createDraftFromCertificateDomainService.create(CERTIFICATE_ID,
             ACTION_EVALUATION));
 
     assertEquals(
@@ -89,7 +89,7 @@ class CreateCertificateFromCertificateDomainServiceTest {
     when(certificateModelRepository.getById(CERTIFICATE_MODEL_ID)).thenReturn(CERTIFICATE_MODEL);
     when(certificateRepository.create(CERTIFICATE_MODEL)).thenReturn(medicalCertificate);
 
-    createCertificateFromCertificateDomainService.create(CERTIFICATE_ID, ACTION_EVALUATION);
+    createDraftFromCertificateDomainService.create(CERTIFICATE_ID, ACTION_EVALUATION);
 
     verify(certificateRepository).create(CERTIFICATE_MODEL);
   }
@@ -106,7 +106,7 @@ class CreateCertificateFromCertificateDomainServiceTest {
     when(certificateModelRepository.getById(CERTIFICATE_MODEL_ID)).thenReturn(CERTIFICATE_MODEL);
     when(certificateRepository.create(CERTIFICATE_MODEL)).thenReturn(medicalCertificateDraft);
 
-    createCertificateFromCertificateDomainService.create(CERTIFICATE_ID, ACTION_EVALUATION);
+    createDraftFromCertificateDomainService.create(CERTIFICATE_ID, ACTION_EVALUATION);
 
     verify(medicalCertificateDraft).fillFromCertificate(medicalCertificate);
   }
@@ -122,7 +122,7 @@ class CreateCertificateFromCertificateDomainServiceTest {
     when(certificateModelRepository.getById(CERTIFICATE_MODEL_ID)).thenReturn(CERTIFICATE_MODEL);
     when(certificateRepository.create(CERTIFICATE_MODEL)).thenReturn(CREATED_CERTIFICATE);
 
-    createCertificateFromCertificateDomainService.create(CERTIFICATE_ID, ACTION_EVALUATION);
+    createDraftFromCertificateDomainService.create(CERTIFICATE_ID, ACTION_EVALUATION);
 
     verify(certificateRepository).save(CREATED_CERTIFICATE);
   }
@@ -139,7 +139,7 @@ class CreateCertificateFromCertificateDomainServiceTest {
     when(certificateRepository.create(CERTIFICATE_MODEL)).thenReturn(CREATED_CERTIFICATE);
     when(certificateRepository.save(CREATED_CERTIFICATE)).thenReturn(CREATED_CERTIFICATE);
 
-    final var actualCertificate = createCertificateFromCertificateDomainService.create(
+    final var actualCertificate = createDraftFromCertificateDomainService.create(
         CERTIFICATE_ID,
         ACTION_EVALUATION);
 
@@ -159,7 +159,7 @@ class CreateCertificateFromCertificateDomainServiceTest {
     when(certificateRepository.create(CERTIFICATE_MODEL)).thenReturn(CREATED_CERTIFICATE);
     when(certificateRepository.save(CREATED_CERTIFICATE)).thenReturn(CREATED_CERTIFICATE);
 
-    createCertificateFromCertificateDomainService.create(CERTIFICATE_ID,
+    createDraftFromCertificateDomainService.create(CERTIFICATE_ID,
         ACTION_EVALUATION);
 
     verify(certificateEventDomainService).publish(certificateEventArgumentCaptor.capture());

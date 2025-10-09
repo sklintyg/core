@@ -16,8 +16,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateResponse;
-import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateFromTemplateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateFromResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ForwardCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalResponse;
@@ -83,7 +83,7 @@ public class CertificateUtil {
     return certificate.getMetadata().getId();
   }
 
-  public static String certificateId(CreateCertificateFromTemplateResponse response) {
+  public static String certificateId(CreateDraftFromCertificateFromResponse response) {
     final var certificate = certificate(response);
     if (certificate == null || certificate.getMetadata() == null) {
       return null;
@@ -246,7 +246,7 @@ public class CertificateUtil {
     return response.getCertificate();
   }
 
-  public static CertificateDTO certificate(CreateCertificateFromTemplateResponse response) {
+  public static CertificateDTO certificate(CreateDraftFromCertificateFromResponse response) {
     if (response == null || response.getCertificate() == null) {
       return null;
     }

@@ -17,10 +17,10 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateReadyForSignResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateResponse;
-import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateFromTemplateRequest;
-import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateFromTemplateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateFromResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ForwardCertificateRequest;
@@ -52,8 +52,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.config.Vali
 import se.inera.intyg.certificateservice.application.certificate.service.AnswerComplementService;
 import se.inera.intyg.certificateservice.application.certificate.service.CertificateExistsService;
 import se.inera.intyg.certificateservice.application.certificate.service.ComplementCertificateService;
-import se.inera.intyg.certificateservice.application.certificate.service.CreateCertificateFromTemplateService;
 import se.inera.intyg.certificateservice.application.certificate.service.CreateCertificateService;
+import se.inera.intyg.certificateservice.application.certificate.service.CreateDraftFromCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.DeleteCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.ForwardCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateEventsService;
@@ -77,7 +77,7 @@ class CertificateControllerTest {
   private static final String CERTIFICATE_ID = "certificateId";
   private static final Long VERSION = 0L;
   @Mock
-  private CreateCertificateFromTemplateService createCertificateFromTemplateService;
+  private CreateDraftFromCertificateService createDraftFromCertificateService;
   @Mock
   private AnswerComplementService answerComplementService;
   @Mock
@@ -399,10 +399,10 @@ class CertificateControllerTest {
 
   @Test
   void shallReturnCreateCertificateFromTemplateResponse() {
-    final var request = CreateCertificateFromTemplateRequest.builder().build();
-    final var expectedResult = CreateCertificateFromTemplateResponse.builder().build();
+    final var request = CreateDraftFromCertificateRequest.builder().build();
+    final var expectedResult = CreateDraftFromCertificateFromResponse.builder().build();
 
-    doReturn(expectedResult).when(createCertificateFromTemplateService)
+    doReturn(expectedResult).when(createDraftFromCertificateService)
         .create(request, CERTIFICATE_ID);
 
     final var actualResult = certificateController.createCertificateFromTemplate(request,

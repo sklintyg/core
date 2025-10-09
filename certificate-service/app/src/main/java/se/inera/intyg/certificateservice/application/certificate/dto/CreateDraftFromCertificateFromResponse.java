@@ -4,12 +4,12 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateFromTemplateResponse.CreateCertificateFromTemplateResponseBuilder;
+import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateFromResponse.CreateCertificateFromTemplateResponseBuilder;
 
 @JsonDeserialize(builder = CreateCertificateFromTemplateResponseBuilder.class)
 @Value
 @Builder
-public class CreateCertificateFromTemplateResponse {
+public class CreateDraftFromCertificateFromResponse {
 
   CertificateDTO certificate;
 

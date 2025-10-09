@@ -6,12 +6,12 @@ import static se.inera.intyg.certificateservice.application.common.validator.Val
 import static se.inera.intyg.certificateservice.application.common.validator.ValidationUtil.validateUser;
 
 import org.springframework.stereotype.Component;
-import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateFromTemplateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateRequest;
 
 @Component
-public class CreateCertificateFromTemplateRequestValidator {
+public class CreateDraftFromCertificateRequestValidator {
 
-  public void validate(CreateCertificateFromTemplateRequest request,
+  public void validate(CreateDraftFromCertificateRequest request,
       String certificateId) {
     validateUser(request.getUser());
     validateUnitExtended(request.getUnit(), "Unit");

@@ -16,7 +16,7 @@ import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
 
 @RequiredArgsConstructor
-public class CreateCertificateFromCertificateDomainService {
+public class CreateDraftFromCertificateDomainService {
 
   private final CertificateRepository certificateRepository;
   private final CertificateModelRepository certificateModelRepository;
