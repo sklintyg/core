@@ -9,10 +9,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
+import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -21,7 +21,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = {"key", "version"})
 public class PatientEntity {
 
   @Id
@@ -57,5 +56,19 @@ public class PatientEntity {
     this.deceased = source.isDeceased();
     this.testIndicated = source.isTestIndicated();
     this.type = source.getType();
+  }
+
+  public boolean hasDiff(PatientEntity other) {
+    if (other == null) {
+      return true;
+    }
+    return !(Objects.equals(this.id, other.getId())
+        && this.protectedPerson == other.isProtectedPerson()
+        && this.deceased == other.isDeceased()
+        && this.testIndicated == other.isTestIndicated()
+        && Objects.equals(this.firstName, other.getFirstName())
+        && Objects.equals(this.middleName, other.getMiddleName())
+        && Objects.equals(this.lastName, other.getLastName())
+        && Objects.equals(this.type, other.getType()));
   }
 }

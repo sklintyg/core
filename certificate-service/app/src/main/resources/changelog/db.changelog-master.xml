@@ -657,7 +657,6 @@
     </addColumn>
   </changeSet>
 
-  <!-- New versioned collection tables -->
   <changeSet id="5" author="ea">
     <createTable tableName="unit_version">
       <column name="key" type="integer unsigned" autoIncrement="true">
