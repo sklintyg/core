@@ -32,12 +32,11 @@ public class PrintCertificateCategoryConverter {
   }
 
   private List<PrintCertificateQuestionDTO> convertChildren(Certificate certificate,
-      ElementSpecification category, List<ElementId> hiddenElements) {
+      ElementSpecification category, List<ElementId> hiddenElementIds) {
     return category.children().stream()
-        .filter(elementSpecification -> !hiddenElements.contains(elementSpecification.id()))
-        .map(elementSpecification -> printCertificateQuestionConverter.convert(
-            elementSpecification,
-            certificate)
+        .map(elementSpecification -> printCertificateQuestionConverter.convert(elementSpecification,
+            certificate,
+            hiddenElementIds)
         )
         .filter(Optional::isPresent)
         .map(Optional::get)

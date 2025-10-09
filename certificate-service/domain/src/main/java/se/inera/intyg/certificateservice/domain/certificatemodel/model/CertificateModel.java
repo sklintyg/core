@@ -17,6 +17,7 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.Certifi
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.action.message.model.MessageAction;
 import se.inera.intyg.certificateservice.domain.action.message.model.MessageActionFactory;
+import se.inera.intyg.certificateservice.domain.certificate.model.HiddenElement;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
@@ -48,7 +49,8 @@ public class CertificateModel implements Comparator<ElementId> {
   CertificateActionFactory certificateActionFactory;
   SickLeaveProvider sickLeaveProvider;
   CertificateAvailableFunctionsProvider availableFunctionsProvider;
-
+  @Builder.Default
+  List<HiddenElement> hiddenElementsForPrint = Collections.emptyList();
 
   public List<CertificateAction> actions() {
     return certificateActionSpecifications.stream()

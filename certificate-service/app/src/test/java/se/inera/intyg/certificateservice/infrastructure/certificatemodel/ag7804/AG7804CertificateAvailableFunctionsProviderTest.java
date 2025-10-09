@@ -194,12 +194,12 @@ class AG7804CertificateAvailableFunctionsProviderTest {
                   .build(),
               AvailableFunctionInformation.builder()
                   .type(AvailableFunctionInformationType.OPTIONS)
-                  .text("Visa Diagnos")
+                  .text("Visa diagnos")
                   .build(),
               AvailableFunctionInformation.builder()
                   .id(QUESTION_DIAGNOS_ID)
                   .type(AvailableFunctionInformationType.OPTIONS)
-                  .text("Dölj Diagnos")
+                  .text("Dölj diagnos")
                   .build()
           ))
           .build();

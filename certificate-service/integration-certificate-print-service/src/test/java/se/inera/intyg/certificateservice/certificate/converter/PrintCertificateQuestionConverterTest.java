@@ -16,10 +16,13 @@ import se.inera.intyg.certificateservice.certificate.dto.ElementSimplifiedValueT
 import se.inera.intyg.certificateservice.certificate.dto.PrintCertificateQuestionDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
+import se.inera.intyg.certificateservice.domain.certificate.model.HiddenElement;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CheckboxDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
@@ -35,6 +38,7 @@ class PrintCertificateQuestionConverterTest {
   private static final String TEXT = "text";
 
   private static final String DESCRIPTION = "Beskrivning";
+  private static final List<ElementId> HIDDEN_ELEMENTS = List.of(new ElementId("10"));
   private static final List<CheckboxDate> checkboxDates = List.of(
       CheckboxDate.builder()
           .id(new FieldId("FieldId 1"))
@@ -94,6 +98,23 @@ class PrintCertificateQuestionConverterTest {
                           .build()
                   ).build())
           )
+          .certificateModel(
+              CertificateModel.builder()
+                  .hiddenElementsForPrint(
+                      List.of(
+                          HiddenElement.builder()
+                              .hiddenBy(new ElementId("10"))
+                              .id(new ElementId("1"))
+                              .value(
+                                  ElementSimplifiedValueText.builder()
+                                      .text("Ej angivet")
+                                      .build()
+                              )
+                              .build()
+                      )
+                  )
+                  .build()
+          )
           .build();
 
   private static final Certificate CERTIFICATE_MULTIPLE_DATES =
@@ -110,6 +131,7 @@ class PrintCertificateQuestionConverterTest {
                           .build()
                   ).build())
           )
+          .certificateModel(CertificateModel.builder().build())
           .build();
 
   private static final Certificate CERTIFICATE_EMPTY = MedicalCertificate.builder()
@@ -121,6 +143,7 @@ class PrintCertificateQuestionConverterTest {
                   .build()
           )
           .build()))
+      .certificateModel(CertificateModel.builder().build())
       .build();
 
   private final PrintCertificateQuestionConverter printCertificateQuestionConverter = new PrintCertificateQuestionConverter();
@@ -128,7 +151,7 @@ class PrintCertificateQuestionConverterTest {
   @Test
   void shouldSetName() {
     final var response = printCertificateQuestionConverter.convert(
-        ELEMENT_SPECIFICATION, CERTIFICATE
+        ELEMENT_SPECIFICATION, CERTIFICATE, List.of()
     );
 
     assertEquals("Beräknat födelsedatum", response.get().getName());
@@ -137,7 +160,7 @@ class PrintCertificateQuestionConverterTest {
   @Test
   void shouldSetId() {
     final var response = printCertificateQuestionConverter.convert(
-        ELEMENT_SPECIFICATION, CERTIFICATE
+        ELEMENT_SPECIFICATION, CERTIFICATE, List.of()
     );
 
     assertEquals("1", response.get().getId());
@@ -147,7 +170,7 @@ class PrintCertificateQuestionConverterTest {
   @Test
   void shouldReturnNullIfNoElementDate() {
     final var response = printCertificateQuestionConverter.convert(
-        ElementSpecification.builder().id(new ElementId("2")).build(), CERTIFICATE_EMPTY
+        ElementSpecification.builder().id(new ElementId("2")).build(), CERTIFICATE_EMPTY, List.of()
     );
 
     assertTrue(response.isEmpty());
@@ -160,7 +183,7 @@ class PrintCertificateQuestionConverterTest {
         .build();
 
     final var response = printCertificateQuestionConverter.convert(
-        ELEMENT_SPECIFICATION, CERTIFICATE
+        ELEMENT_SPECIFICATION, CERTIFICATE, List.of()
     );
 
     assertEquals(expected, response.get().getValue());
@@ -171,7 +194,7 @@ class PrintCertificateQuestionConverterTest {
     final var expected = Optional.empty();
 
     final var response = printCertificateQuestionConverter.convert(
-        ELEMENT_SPECIFICATION, CERTIFICATE_EMPTY
+        ELEMENT_SPECIFICATION, CERTIFICATE_EMPTY, List.of()
     );
 
     assertEquals(expected, response);
@@ -189,7 +212,7 @@ class PrintCertificateQuestionConverterTest {
         .build();
 
     final var response = printCertificateQuestionConverter.convert(
-        ELEMENT_SPECIFICATION, CERTIFICATE
+        ELEMENT_SPECIFICATION, CERTIFICATE, List.of()
     );
 
     assertEquals(expected, response.get().getSubquestions().getFirst());
@@ -205,7 +228,20 @@ class PrintCertificateQuestionConverterTest {
         .build();
 
     final var response = printCertificateQuestionConverter.convert(
-        ELEMENT_SPECIFICATION_MULTIPLE_DATES, CERTIFICATE_MULTIPLE_DATES
+        ELEMENT_SPECIFICATION_MULTIPLE_DATES, CERTIFICATE_MULTIPLE_DATES, List.of()
+    );
+
+    assertEquals(expected, response.get().getValue());
+  }
+
+  @Test
+  void shouldHideElementIfPresentInHiddenElementIds() {
+    final var expected = ElementSimplifiedValueTextDTO.builder()
+        .text("Ej angivet")
+        .build();
+
+    final var response = printCertificateQuestionConverter.convert(
+        ELEMENT_SPECIFICATION, CERTIFICATE, HIDDEN_ELEMENTS
     );
 
     assertEquals(expected, response.get().getValue());

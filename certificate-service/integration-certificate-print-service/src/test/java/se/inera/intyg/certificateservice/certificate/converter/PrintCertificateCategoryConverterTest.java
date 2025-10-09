@@ -100,7 +100,7 @@ class PrintCertificateCategoryConverterTest {
     void setUp() {
       when(printCertificateQuestionConverter.convert(
           CERTIFICATE.certificateModel().elementSpecifications().getFirst().children().getFirst(),
-          CERTIFICATE
+          CERTIFICATE, HIDDEN
       )).thenReturn(Optional.of(PRINT_CERTIFICATE_QUESTION_DTO));
     }
 

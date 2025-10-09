@@ -37,8 +37,8 @@ public class AG7804CertificateAvailableFunctionsProvider implements
           + " Det kan underlätta anpassning av din arbetssituation. Det kan också göra att du snabbare kommer tillbaka till arbetet.";
   private static final String AVAILABLE_FUNCTION_CUSTOMIZE_NAME = "Anpassa intyget för utskrift";
 
-  private static final String HIDE_DIAGNOSIS_TEXT = "Dölj Diagnos";
-  private static final String SHOW_DIAGNOSIS_TEXT = "Visa Diagnos";
+  private static final String HIDE_DIAGNOSIS_TEXT = "Dölj diagnos";
+  private static final String SHOW_DIAGNOSIS_TEXT = "Visa diagnos";
 
 
   @Override
