@@ -13,10 +13,10 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 import java.util.List;
+import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -25,7 +25,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = {"key", "version"})
 public class StaffEntity {
 
   @Id
@@ -64,6 +63,22 @@ public class StaffEntity {
     this.setPaTitles(source.getPaTitles());
     this.setSpecialities(source.getSpecialities());
     this.setHealthcareProfessionalLicences(source.getHealthcareProfessionalLicences());
+  }
+
+  public boolean hasDiff(StaffEntity other) {
+    if (other == null) {
+      return true;
+    }
+    return !(Objects.equals(this.hsaId, other.getHsaId())
+        && Objects.equals(this.firstName, other.getFirstName())
+        && Objects.equals(this.middleName, other.getMiddleName())
+        && Objects.equals(this.lastName, other.getLastName())
+        && Objects.equals(this.role, other.getRole())
+        && Objects.equals(this.paTitles, other.getPaTitles())
+        && Objects.equals(this.specialities, other.getSpecialities())
+        && Objects.equals(this.healthcareProfessionalLicences,
+        other.getHealthcareProfessionalLicences())
+    );
   }
 
 }

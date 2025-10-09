@@ -36,7 +36,6 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecificationFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateRelationRepository;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.PatientVersionEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffVersionEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitVersionEntityRepository;
@@ -55,9 +54,9 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
   private final CertificateEntitySpecificationFactory certificateEntitySpecificationFactory;
   private final CertificateRelationRepository certificateRelationRepository;
 
-	private final StaffVersionEntityRepository staffVersionEntityRepository;
-	private final UnitVersionEntityRepository unitVersionEntityRepository;
-	private final PatientVersionEntityRepository patientVersionEntityRepository;
+  private final StaffVersionEntityRepository staffVersionEntityRepository;
+  private final UnitVersionEntityRepository unitVersionEntityRepository;
+  private final PatientVersionEntityRepository patientVersionEntityRepository;
 
   @Override
   public Certificate create(CertificateModel certificateModel) {
@@ -156,44 +155,44 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
     return certificateEntityMapper.toDomain(certificateEntity);
   }
 
-	@Override
-	public Certificate getByIdForPrint(CertificateId certificateId) {
-		if (certificateId == null) {
-			throw new IllegalArgumentException("Cannot get certificate if certificateId is null");
-		}
+  @Override
+  public Certificate getByIdForPrint(CertificateId certificateId) {
+    if (certificateId == null) {
+      throw new IllegalArgumentException("Cannot get certificate if certificateId is null");
+    }
 
-		final var certificateEntity = certificateEntityRepository.findByCertificateId(
-					certificateId.id())
-				.orElseThrow(() ->
-						new IllegalArgumentException(
-								"CertificateId '%s' not present in repository".formatted(certificateId)
-						)
-				);
+    final var certificateEntity = certificateEntityRepository.findByCertificateId(
+            certificateId.id())
+        .orElseThrow(() ->
+            new IllegalArgumentException(
+                "CertificateId '%s' not present in repository".formatted(certificateId)
+            )
+        );
 
-		var signedAt = certificateEntity.getSigned();
-		if (signedAt != null) {
-        var patient = certificateEntity.getPatient();
-        patientVersionEntityRepository
-            .findCoveringTimestampOrderByMostRecent(patient.getId(), signedAt).stream()
-            .findFirst().ifPresent(patientVersionAtSigned -> certificateEntity.setPatient(
-                PatientVersionEntityMapper.toPatient(patientVersionAtSigned)));
+    final var signedAt = certificateEntity.getSigned();
+    if (signedAt != null) {
+      final var patient = certificateEntity.getPatient();
+      patientVersionEntityRepository
+          .findCoveringTimestampOrderByMostRecent(patient.getId(), signedAt).stream()
+          .findFirst().ifPresent(patientVersionAtSigned -> certificateEntity.setPatient(
+              PatientVersionEntityMapper.toPatient(patientVersionAtSigned)));
 
-        var issuedBy = certificateEntity.getIssuedBy();
-        staffVersionEntityRepository
-            .findCoveringTimestampOrderByMostRecent(issuedBy.getHsaId(), signedAt).stream()
-            .findFirst().ifPresent(staffVersionAtSigned -> certificateEntity.setIssuedBy(
-                StaffVersionEntityMapper.toStaff(staffVersionAtSigned)));
+      final var issuedBy = certificateEntity.getIssuedBy();
+      staffVersionEntityRepository
+          .findCoveringTimestampOrderByMostRecent(issuedBy.getHsaId(), signedAt).stream()
+          .findFirst().ifPresent(staffVersionAtSigned -> certificateEntity.setIssuedBy(
+              StaffVersionEntityMapper.toStaff(staffVersionAtSigned)));
 
-        var issuedOn = certificateEntity.getIssuedOnUnit();
-        unitVersionEntityRepository
-            .findCoveringTimestampOrderByMostRecent(issuedOn.getHsaId(), signedAt).stream()
-            .findFirst().ifPresent(unitVersionAtSigned -> certificateEntity.setIssuedOnUnit(
-                UnitVersionEntityMapper.toUnit(unitVersionAtSigned)));
+      final var issuedOn = certificateEntity.getIssuedOnUnit();
+      unitVersionEntityRepository
+          .findCoveringTimestampOrderByMostRecent(issuedOn.getHsaId(), signedAt).stream()
+          .findFirst().ifPresent(unitVersionAtSigned -> certificateEntity.setIssuedOnUnit(
+              UnitVersionEntityMapper.toUnit(unitVersionAtSigned)));
 
-		}
+    }
 
-		return certificateEntityMapper.toDomain(certificateEntity);
-	}
+    return certificateEntityMapper.toDomain(certificateEntity);
+  }
 
 
   @Override

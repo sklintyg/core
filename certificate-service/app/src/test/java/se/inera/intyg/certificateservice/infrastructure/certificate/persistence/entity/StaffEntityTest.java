@@ -1,0 +1,153 @@
+package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffEntity.AJLA_DOKTOR_ENTITY;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffEntity.ajlaDoctorEntityBuilder;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import org.junit.jupiter.api.Test;
+
+class StaffEntityTest {
+
+  @Test
+  void shallUpdateFields() {
+    var target = ajlaDoctorEntityBuilder().build();
+    var originalHsaId = target.getHsaId();
+    var originalKey = target.getKey();
+
+    var source = ajlaDoctorEntityBuilder()
+        .firstName("UpdatedFirst")
+        .middleName("UpdatedMiddle")
+        .lastName("UpdatedLast")
+        .role(new StaffRoleEntity())
+        .paTitles(List.of(new PaTitleEmbeddable()))
+        .specialities(List.of(new SpecialityEmbeddable()))
+        .healthcareProfessionalLicences(List.of(new HealthcareProfessionalLicenceEmbeddable()))
+        .build();
+
+    target.updateWith(source);
+
+    assertEquals("UpdatedFirst", target.getFirstName());
+    assertEquals("UpdatedMiddle", target.getMiddleName());
+    assertEquals("UpdatedLast", target.getLastName());
+    assertSame(source.getRole(), target.getRole(), "Role should be replaced");
+    assertSame(source.getPaTitles(), target.getPaTitles(),
+        "paTitles list reference should be replaced");
+    assertSame(source.getSpecialities(), target.getSpecialities(),
+        "specialities list reference should be replaced");
+    assertSame(source.getHealthcareProfessionalLicences(),
+        target.getHealthcareProfessionalLicences(),
+        "licences list reference should be replaced");
+    assertEquals(originalHsaId, target.getHsaId(), "hsaId must remain unchanged");
+    assertEquals(originalKey, target.getKey(), "key must remain unchanged");
+
+  }
+
+  @Test
+  void shallNotFindDiffWhenEntityHasSameValues() {
+    assertFalse(AJLA_DOKTOR_ENTITY.hasDiff(ajlaDoctorEntityBuilder().build()));
+  }
+
+  @Test
+  void shallFindDiffWhenEntityHasDifferentValues() {
+    assertTrue(AJLA_DOKTOR_ENTITY.hasDiff(ajlaDoctorEntityBuilder()
+        .firstName("DifferentName")
+        .build()));
+  }
+
+
+  @Test
+  void shallFindDiffWhenHsaIdDiffers() {
+    assertTrue(AJLA_DOKTOR_ENTITY.hasDiff(
+        ajlaDoctorEntityBuilder().hsaId("NEW-HSA-ID").build()), "hsaId");
+  }
+
+  @Test
+  void shallFindDiffWhenFirstNameDiffers() {
+    assertTrue(AJLA_DOKTOR_ENTITY.hasDiff(
+        ajlaDoctorEntityBuilder().firstName("DifferentFirst").build()), "firstName");
+  }
+
+  @Test
+  void shallFindDiffWhenMiddleNameDiffers() {
+    assertTrue(AJLA_DOKTOR_ENTITY.hasDiff(
+        ajlaDoctorEntityBuilder().middleName("DifferentMiddle").build()), "middleName");
+  }
+
+  @Test
+  void shallFindDiffWhenLastNameDiffers() {
+    assertTrue(AJLA_DOKTOR_ENTITY.hasDiff(
+        ajlaDoctorEntityBuilder().lastName("DifferentLast").build()), "lastName");
+  }
+
+  @Test
+  void shallFindDiffWhenRoleDiffers() {
+    assertTrue(AJLA_DOKTOR_ENTITY.hasDiff(
+        ajlaDoctorEntityBuilder().role(new StaffRoleEntity()).build()), "role");
+  }
+
+  @Test
+  void shallFindDiffWhenPaTitlesDiffer() {
+    assertTrue(AJLA_DOKTOR_ENTITY.hasDiff(
+        ajlaDoctorEntityBuilder().paTitles(List.of(new PaTitleEmbeddable())).build()), "paTitles");
+  }
+
+
+  @Test
+  void shallFindDiffWhenSpecialitiesDiffer() {
+    assertTrue(AJLA_DOKTOR_ENTITY.hasDiff(
+            ajlaDoctorEntityBuilder().specialities(List.of(new SpecialityEmbeddable())).build()),
+        "specialities");
+  }
+
+  @Test
+  void shallFindDiffWhenHealthcareProfessionalLicencesDiffer() {
+    assertTrue(AJLA_DOKTOR_ENTITY.hasDiff(
+            ajlaDoctorEntityBuilder()
+                .healthcareProfessionalLicences(List.of(new HealthcareProfessionalLicenceEmbeddable()))
+                .build()),
+        "healthcareProfessionalLicences");
+  }
+
+  @Test
+  void shallFindDiffWhenAllComparedFieldsDiffer() {
+    assertTrue(AJLA_DOKTOR_ENTITY.hasDiff(
+            ajlaDoctorEntityBuilder()
+                .hsaId("ALL-DIFF-HSA")
+                .firstName("F")
+                .middleName("M")
+                .lastName("L")
+                .role(new StaffRoleEntity())
+                .paTitles(List.of(new PaTitleEmbeddable()))
+                .specialities(List.of(new SpecialityEmbeddable()))
+                .healthcareProfessionalLicences(
+                    List.of(new HealthcareProfessionalLicenceEmbeddable()))
+                .build()),
+        "all fields changed");
+  }
+
+  @Test
+  void shallFindDiffWhenOnlyOrderChangesInList() {
+
+    final var reversePaTitles = new ArrayList<>(AJLA_DOKTOR_ENTITY.getPaTitles());
+    Collections.reverse(reversePaTitles);
+
+    var modified = ajlaDoctorEntityBuilder()
+        .paTitles(reversePaTitles)
+        .build();
+
+    assertTrue(AJLA_DOKTOR_ENTITY.hasDiff(modified),
+        "Expected diff when only list order changes");
+  }
+
+  @Test
+  void shallFindDiffWhenOtherIsNull() {
+    assertTrue(AJLA_DOKTOR_ENTITY.hasDiff(null));
+  }
+
+}
