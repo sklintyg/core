@@ -30,6 +30,8 @@ class QuestionKontaktTest {
         .name("Kontakt med arbetsgivaren")
         .label(
             "Jag önskar att arbetsgivaren kontaktar vårdenheten. Patienten har lämnat samtycke för kontakt mellan arbetsgivare och vårdgivare.")
+        .selectedText("Ja")
+        .unselectedText("Ej angivet")
         .build();
 
     final var element = QuestionKontakt.questionKontakt();

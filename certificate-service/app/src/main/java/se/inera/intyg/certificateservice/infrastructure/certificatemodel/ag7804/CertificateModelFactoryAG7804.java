@@ -52,6 +52,7 @@ import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateRecipientFactory;
 
 @Component
 @RequiredArgsConstructor
@@ -184,6 +185,7 @@ public class CertificateModelFactoryAG7804 implements CertificateModelFactory {
             issuingUnitContactInfo()
         ))
         .certificateActionFactory(certificateActionFactory)
+        .recipient(CertificateRecipientFactory.skr())
         .build();
   }
 }

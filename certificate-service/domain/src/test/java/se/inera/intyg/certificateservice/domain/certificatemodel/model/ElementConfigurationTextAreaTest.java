@@ -15,6 +15,8 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueTe
 
 class ElementConfigurationTextAreaTest {
 
+  private final static String EMPTY_TEXT = "Ej angivet";
+
   @Test
   void shouldReturnSimplifiedValue() {
     final var text = "Test text for this test";
@@ -33,10 +35,18 @@ class ElementConfigurationTextAreaTest {
 
   @Test
   void shouldReturnEmptyOptionalForNull() {
+    final var text = "";
+    final var value = ElementValueText.builder()
+        .text(text)
+        .build();
+
     final var config = ElementConfigurationTextArea.builder()
         .build();
 
-    assertTrue(config.simplified(config.emptyValue()).isEmpty());
+    assertEquals(
+        EMPTY_TEXT,
+        ((ElementSimplifiedValueText) config.simplified(value).get()).text()
+    );
   }
 
   @Nested
