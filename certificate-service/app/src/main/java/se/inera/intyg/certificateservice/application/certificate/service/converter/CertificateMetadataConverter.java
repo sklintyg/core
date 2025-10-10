@@ -198,6 +198,11 @@ public class CertificateMetadataConverter {
     if (certificate.certificateModel().recipient() == null) {
       return CertificateRecipientDTO.builder().build();
     }
+
+    if (!certificate.certificateModel().recipient().canSendElectronically()) {
+      return null;
+    }
+
     if (sent == null) {
       return CertificateRecipientDTO.builder()
           .id(certificate.certificateModel().recipient().id().id())
