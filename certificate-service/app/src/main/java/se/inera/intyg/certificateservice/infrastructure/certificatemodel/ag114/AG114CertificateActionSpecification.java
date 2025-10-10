@@ -15,15 +15,27 @@ public class AG114CertificateActionSpecification {
     return List.of(
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.CREATE)
+            .allowedRoles(
+                List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.DENTIST, Role.NURSE, Role.MIDWIFE,
+                    Role.CARE_ADMIN))
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.READ)
+            .allowedRoles(
+                List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.DENTIST, Role.NURSE, Role.MIDWIFE,
+                    Role.CARE_ADMIN))
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.UPDATE)
+            .allowedRoles(
+                List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.DENTIST, Role.NURSE, Role.MIDWIFE,
+                    Role.CARE_ADMIN))
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.DELETE)
+            .allowedRoles(
+                List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.DENTIST, Role.NURSE, Role.MIDWIFE,
+                    Role.CARE_ADMIN))
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.SIGN)
@@ -38,9 +50,13 @@ public class AG114CertificateActionSpecification {
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.REPLACE)
+            .allowedRoles(
+                List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.DENTIST, Role.NURSE, Role.MIDWIFE))
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.REPLACE_CONTINUE)
+            .allowedRoles(
+                List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.DENTIST, Role.NURSE, Role.MIDWIFE))
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE)
