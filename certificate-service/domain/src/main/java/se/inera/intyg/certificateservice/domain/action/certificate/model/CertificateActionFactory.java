@@ -612,7 +612,10 @@ public class CertificateActionFactory {
                       List.of(RelationType.REPLACE, RelationType.COMPLEMENT),
                       List.of(Status.DRAFT, Status.REVOKED)
                   ),
-                  new ActionRuleUserAgreement()
+                  new ActionRuleUserAgreement(),
+                  new ActionRuleUserHasAccessScope(
+                      List.of(AccessScope.WITHIN_CARE_UNIT)
+                  )
               )
           )
           .build();

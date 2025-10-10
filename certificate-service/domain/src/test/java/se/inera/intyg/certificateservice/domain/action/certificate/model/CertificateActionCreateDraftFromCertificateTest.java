@@ -36,6 +36,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertifi
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
+import se.inera.intyg.certificateservice.domain.common.model.AccessScope;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 
@@ -529,6 +530,25 @@ class CertificateActionCreateDraftFromCertificateTest {
         .user(
             ajlaDoctorBuilder()
                 .agreement(AGREEMENT_FALSE)
+                .build()
+        )
+        .build();
+
+    final var certificate = certificateBuilder.build();
+
+    assertFalse(
+        certificateActionCreateDraftFromCertificate.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
+        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+    );
+  }
+
+  @Test
+  void shallReturnFalseIfAccessScopeIsNotWithinCareUnit() {
+    final var actionEvaluation = actionEvaluationBuilder
+        .user(
+            ajlaDoctorBuilder()
+                .accessScope(AccessScope.WITHIN_CARE_PROVIDER)
                 .build()
         )
         .build();
