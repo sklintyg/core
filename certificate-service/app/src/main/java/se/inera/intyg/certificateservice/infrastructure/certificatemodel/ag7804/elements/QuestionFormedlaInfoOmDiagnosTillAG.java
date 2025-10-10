@@ -1,15 +1,19 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionDiagnos.QUESTION_DIAGNOS_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionSmittbararpenning.QUESTION_SMITTBARARPENNING_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionSmittbararpenning.QUESTION_SMITTBARARPENNING_ID;
 
 import java.util.List;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenPrintConfiguration;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
 
 public class QuestionFormedlaInfoOmDiagnosTillAG {
 
@@ -60,6 +64,20 @@ public class QuestionFormedlaInfoOmDiagnosTillAG {
                     .mandatory(true)
                     .build()
             )
+        )
+        .citizenPrintConfiguration(
+            CitizenPrintConfiguration.builder()
+                .hiddenBy(QUESTION_DIAGNOS_ID)
+                .shouldHide(
+                    ElementDataPredicateFactory.radioBooleans(List.of(QUESTION_FORMEDLA_DIAGNOS_ID),
+                        false)
+                )
+                .replacementValue(
+                    ElementSimplifiedValueText.builder()
+                        .text("På patientens begäran uppges inte diagnos")
+                        .build()
+                )
+                .build()
         )
         .build();
   }

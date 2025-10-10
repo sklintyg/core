@@ -610,10 +610,11 @@ public class MedicalCertificate implements Certificate {
   public Optional<ElementSimplifiedValue> simplifiedValue(ElementId elementId,
       List<ElementId> hiddenElements, boolean isCitizenFormat) {
     final var dataForElement = getElementDataById(elementId);
-    final var hiddenElement = hiddenElement(elementId, hiddenElements, isCitizenFormat);
+    final var hiddenElementValue = hasHiddenElementValue(elementId, hiddenElements,
+        isCitizenFormat);
 
-    if (hiddenElement.isPresent()) {
-      return Optional.of(hiddenElement.get().value());
+    if (hiddenElementValue.isPresent()) {
+      return hiddenElementValue;
     }
 
     if (dataForElement.isEmpty()) {
@@ -626,28 +627,27 @@ public class MedicalCertificate implements Certificate {
         .simplified(dataForElement.get().value());
   }
 
-  private Optional<HiddenElement> hiddenElement(ElementId elementId,
+  private Optional<ElementSimplifiedValue> hasHiddenElementValue(ElementId elementId,
       List<ElementId> hiddenElements, boolean isCitizenFormat) {
     if (!isCitizenFormat) {
       return Optional.empty();
     }
 
-    return certificateModel.hiddenElementsForPrint().stream()
-        .filter(hiddenElement -> hiddenElement.id().equals(elementId))
-        .filter(hiddenElement ->
-            shouldHideByCitizenChoice(hiddenElements, hiddenElement)
-                || shouldHideByValue(hiddenElement))
-        .findFirst();
-  }
+    final var elementSpecification = certificateModel.elementSpecification(elementId);
+    final var hiddenConfig = elementSpecification.citizenPrintConfiguration();
 
-  private static boolean shouldHideByCitizenChoice(List<ElementId> hiddenElements,
-      HiddenElement hiddenElement) {
-    return hiddenElements.contains(hiddenElement.hiddenBy());
-  }
+    if (hiddenConfig == null) {
+      return Optional.empty();
+    }
 
-  private boolean shouldHideByValue(HiddenElement hiddenElement) {
-    return hiddenElement.shouldHideByValue() != null
-        && hiddenElement.shouldHideByValue()
-        .test(elementData);
+    final var shouldHideByCitizenChoice = hiddenElements.contains(hiddenConfig.hiddenBy());
+    final var shouldHideByValue = hiddenConfig.shouldHide() != null
+        && hiddenConfig.shouldHide().test(elementData);
+
+    if (shouldHideByCitizenChoice || shouldHideByValue) {
+      return Optional.of(hiddenConfig.replacementValue());
+    }
+
+    return Optional.empty();
   }
 }
