@@ -626,7 +626,7 @@ public class ApiUtil {
   public ResponseEntity<CreateDraftFromCertificateResponse> createDraftFromCertificate(
       CreateDraftFromCertificateRequest request,
       String certificateId) {
-    final var requestUrl = "http://localhost:%s/api/certificate/%s/draftFromCertificate".formatted(
+    final var requestUrl = "http://localhost:%s/api/certificate/%s/draft".formatted(
         port,
         certificateId
     );

@@ -262,9 +262,9 @@ public class CertificateController {
     return setCertificateReadyForSignService.set(request, certificateId);
   }
 
-  @PostMapping("/{certificateId}/draftFromCertificate")
+  @PostMapping("/{certificateId}/draft")
   @PerformanceLogging(eventAction = "create-draft-from-certificate", eventType = EVENT_TYPE_CREATION)
-  CreateDraftFromCertificateResponse createCertificateFromTemplate(
+  CreateDraftFromCertificateResponse createDraftFromCertificate(
       @RequestBody CreateDraftFromCertificateRequest request,
       @PathVariable("certificateId") String certificateId) {
     return createDraftFromCertificateService.create(request, certificateId);

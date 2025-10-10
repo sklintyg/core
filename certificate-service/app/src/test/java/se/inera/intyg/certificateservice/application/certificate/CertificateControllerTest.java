@@ -398,14 +398,14 @@ class CertificateControllerTest {
   }
 
   @Test
-  void shallReturnCreateCertificateFromTemplateResponse() {
+  void shallReturnCreateDraftFromCertificateResponse() {
     final var request = CreateDraftFromCertificateRequest.builder().build();
     final var expectedResult = CreateDraftFromCertificateResponse.builder().build();
 
     doReturn(expectedResult).when(createDraftFromCertificateService)
         .create(request, CERTIFICATE_ID);
 
-    final var actualResult = certificateController.createCertificateFromTemplate(request,
+    final var actualResult = certificateController.createDraftFromCertificate(request,
         CERTIFICATE_ID);
     assertEquals(expectedResult, actualResult);
   }
