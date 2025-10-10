@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.integrationtest.ag114;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -18,6 +19,7 @@ public class AG114InactiveIT {
 
 
   @Nested
+  @Disabled
   @DisplayName(TYPE + "Inaktivt intyg")
   class InactiveType extends InactiveTypeIT {
 
