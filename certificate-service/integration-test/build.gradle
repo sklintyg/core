@@ -49,7 +49,7 @@ testing {
                 testTask.configure {
                     shouldRunAfter(test)
                     minHeapSize = "512m"
-                    maxHeapSize = "3g"
+                    maxHeapSize = "2g"
                 }
             }
         }
