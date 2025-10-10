@@ -23,6 +23,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.ComplementC
 import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ForwardCertificateRequest;
@@ -55,6 +57,7 @@ import se.inera.intyg.certificateservice.application.certificate.service.AnswerC
 import se.inera.intyg.certificateservice.application.certificate.service.CertificateExistsService;
 import se.inera.intyg.certificateservice.application.certificate.service.ComplementCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.CreateCertificateService;
+import se.inera.intyg.certificateservice.application.certificate.service.CreateDraftFromCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.DeleteCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.ForwardCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateEventsService;
@@ -98,6 +101,7 @@ public class CertificateController {
   private final ForwardCertificateService forwardCertificateService;
   private final GetCertificateEventsService getCertificateEventsService;
   private final SetCertificateReadyForSignService setCertificateReadyForSignService;
+  private final CreateDraftFromCertificateService createDraftFromCertificateService;
 
   @PostMapping
   @PerformanceLogging(eventAction = "create-certificate", eventType = EVENT_TYPE_CREATION)
@@ -256,5 +260,13 @@ public class CertificateController {
       @RequestBody CertificateReadyForSignRequest request,
       @PathVariable("certificateId") String certificateId) {
     return setCertificateReadyForSignService.set(request, certificateId);
+  }
+
+  @PostMapping("/{certificateId}/draft")
+  @PerformanceLogging(eventAction = "create-draft-from-certificate", eventType = EVENT_TYPE_CREATION)
+  CreateDraftFromCertificateResponse createDraftFromCertificate(
+      @RequestBody CreateDraftFromCertificateRequest request,
+      @PathVariable("certificateId") String certificateId) {
+    return createDraftFromCertificateService.create(request, certificateId);
   }
 }

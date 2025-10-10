@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Value;
 import lombok.With;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationIcf;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidator;
 
@@ -22,5 +23,21 @@ public class ElementValueIcf implements ElementValue {
   @Override
   public boolean isEmpty() {
     return !ElementValidator.isTextDefined(text);
+  }
+
+  public String formatIcfValueText(ElementConfigurationIcf elementConfigurationIcf) {
+    if (icfCodes.isEmpty()) {
+      return text;
+    }
+
+    return """
+        %s %s
+        
+        %s
+        """.formatted(
+        elementConfigurationIcf.collectionsLabel(),
+        String.join(" - ", icfCodes),
+        text
+    );
   }
 }

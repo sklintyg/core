@@ -302,4 +302,9 @@ public class PlaceholderCertificate implements Certificate {
   public boolean isPlaceholder() {
     return true;
   }
+
+  @Override
+  public void fillFromCertificate(Certificate certificate) {
+    throw new IllegalStateException("Cannot fill from certificate for a placeholder certificate");
+  }
 }

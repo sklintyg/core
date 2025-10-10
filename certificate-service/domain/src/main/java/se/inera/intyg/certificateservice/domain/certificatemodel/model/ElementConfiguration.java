@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
 import java.util.Optional;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 
@@ -34,4 +35,8 @@ public interface ElementConfiguration {
 
   FieldId id();
 
+  default Optional<ElementData> convert(ElementData elementData,
+      ElementSpecification specification) {
+    return Optional.of(elementData);
+  }
 }

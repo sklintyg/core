@@ -134,4 +134,6 @@ public interface Certificate {
   default boolean isPlaceholder() {
     return false;
   }
+
+  void fillFromCertificate(Certificate certificate);
 }
