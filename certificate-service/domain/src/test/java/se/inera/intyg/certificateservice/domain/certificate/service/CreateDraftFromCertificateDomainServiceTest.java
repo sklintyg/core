@@ -52,7 +52,7 @@ class CreateDraftFromCertificateDomainServiceTest {
   CreateDraftFromCertificateDomainService createDraftFromCertificateDomainService;
 
   @Test
-  void shouldThrowCertificateActionForbiddenIfCertificateDoesNotSupportCreateFromTemplate() {
+  void shouldThrowCertificateActionForbiddenIfCertificateDoesNotSupportCreateDraftFromCertificate() {
     final var medicalCertificate = mock(MedicalCertificate.class);
 
     when(certificateRepository.getById(CERTIFICATE_ID)).thenReturn(medicalCertificate);
@@ -217,7 +217,7 @@ class CreateDraftFromCertificateDomainServiceTest {
   }
 
   @Test
-  void shouldPublishEventCreateCertificateFromTemplate() {
+  void shouldPublishEventCreateDraftFromCertificate() {
     final var certificateEventArgumentCaptor = ArgumentCaptor.forClass(CertificateEvent.class);
     final var medicalCertificate = mock(MedicalCertificate.class);
 

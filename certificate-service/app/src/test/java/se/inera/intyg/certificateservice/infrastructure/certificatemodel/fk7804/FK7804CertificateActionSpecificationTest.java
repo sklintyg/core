@@ -501,15 +501,25 @@ class FK7804CertificateActionSpecificationTest {
   }
 
   @Test
-  void shallIncludeCertificateActionCreateFromTemplate() {
+  void shallIncludeCertificateActionCreateDraftFromCertificate() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.CREATE_DRAFT_FROM_CERTIFICATE)
+        .contentProvider(new FK7804CertificateCreateDraftFromCertificateContentProvider())
         .build();
 
     final var actionSpecifications = FK7804CertificateActionSpecification.create();
 
-    assertTrue(actionSpecifications.stream().anyMatch(
-            expectedSpecification::equals),
-        "Expected type: %s".formatted(expectedSpecification));
+    assertAll(
+        () -> assertTrue(actionSpecifications.stream().anyMatch(
+                certificateActionSpecification ->
+                    certificateActionSpecification.certificateActionType()
+                        .equals(expectedSpecification.certificateActionType())),
+            "Expected type: %s".formatted(expectedSpecification)),
+        () -> assertNotNull(actionSpecifications.stream()
+            .filter(certificateActionSpecification ->
+                certificateActionSpecification.certificateActionType()
+                    .equals(expectedSpecification.certificateActionType()))
+            .map(CertificateActionSpecification::contentProvider))
+    );
   }
 }

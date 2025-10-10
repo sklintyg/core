@@ -476,7 +476,7 @@ public class AppConfig {
   }
 
   @Bean
-  public CreateDraftFromCertificateDomainService createCertificateFromTemplateDomainService(
+  public CreateDraftFromCertificateDomainService createDraftFromCertificateDomainService(
       CertificateRepository certificateRepository,
       CertificateModelRepository certificateModelRepository,
       CertificateEventDomainService certificateEventDomainService) {

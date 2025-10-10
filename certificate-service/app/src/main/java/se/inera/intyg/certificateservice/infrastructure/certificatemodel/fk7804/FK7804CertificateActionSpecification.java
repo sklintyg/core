@@ -142,6 +142,7 @@ public class FK7804CertificateActionSpecification {
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.CREATE_DRAFT_FROM_CERTIFICATE)
+            .contentProvider(new FK7804CertificateCreateDraftFromCertificateContentProvider())
             .build()
     );
   }

@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.domain.action.certificate.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ID;
@@ -34,6 +35,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionContentProvider;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.common.model.AccessScope;
@@ -56,19 +58,22 @@ class CertificateActionCreateDraftFromCertificateTest {
   private CertificateActionCreateDraftFromCertificate certificateActionCreateDraftFromCertificate;
   private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
   private MedicalCertificate.MedicalCertificateBuilder certificateBuilder;
-  private static final CertificateActionSpecification CERTIFICATE_ACTION_SPECIFICATION =
-      CertificateActionSpecification.builder()
-          .certificateActionType(CertificateActionType.CREATE_DRAFT_FROM_CERTIFICATE)
-          .build();
+  @Mock
+  CertificateActionContentProvider certificateActionContentProvider;
   @Mock
   CertificateActionConfigurationRepository certificateActionConfigurationRepository;
   @InjectMocks
   CertificateActionFactory certificateActionFactory;
 
+  private final CertificateActionSpecification certificateActionSpecification =
+      CertificateActionSpecification.builder()
+          .certificateActionType(CertificateActionType.CREATE_DRAFT_FROM_CERTIFICATE)
+          .build();
+
   @BeforeEach
   void setUp() {
     certificateActionCreateDraftFromCertificate = (CertificateActionCreateDraftFromCertificate) certificateActionFactory.create(
-        CERTIFICATE_ACTION_SPECIFICATION);
+        certificateActionSpecification);
 
     certificateBuilder = MedicalCertificate.builder()
         .status(Status.SIGNED)
@@ -97,12 +102,30 @@ class CertificateActionCreateDraftFromCertificateTest {
 
   @Test
   void shouldReturnName() {
+    certificateActionCreateDraftFromCertificate = (CertificateActionCreateDraftFromCertificate) certificateActionFactory.create(
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.CREATE_DRAFT_FROM_CERTIFICATE)
+            .contentProvider(certificateActionContentProvider)
+            .build()
+    );
+
+    when(certificateActionContentProvider.name(null)).thenReturn(AG7804_NAME);
+
     assertEquals(AG7804_NAME,
         certificateActionCreateDraftFromCertificate.getName(Optional.empty()));
   }
 
   @Test
   void shouldReturnDescription() {
+    certificateActionCreateDraftFromCertificate = (CertificateActionCreateDraftFromCertificate) certificateActionFactory.create(
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.CREATE_DRAFT_FROM_CERTIFICATE)
+            .contentProvider(certificateActionContentProvider)
+            .build()
+    );
+
+    when(certificateActionContentProvider.description(null)).thenReturn(AG7804_DESCRIPTION);
+
     assertEquals(
         AG7804_DESCRIPTION,
         certificateActionCreateDraftFromCertificate.getDescription(Optional.empty()));
@@ -110,6 +133,15 @@ class CertificateActionCreateDraftFromCertificateTest {
 
   @Test
   void shouldReturnBody() {
+    certificateActionCreateDraftFromCertificate = (CertificateActionCreateDraftFromCertificate) certificateActionFactory.create(
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.CREATE_DRAFT_FROM_CERTIFICATE)
+            .contentProvider(certificateActionContentProvider)
+            .build()
+    );
+
+    when(certificateActionContentProvider.body(null)).thenReturn(AG7804_BODY);
+    
     assertEquals(
         AG7804_BODY,
         certificateActionCreateDraftFromCertificate.getBody(Optional.empty(), Optional.empty())
