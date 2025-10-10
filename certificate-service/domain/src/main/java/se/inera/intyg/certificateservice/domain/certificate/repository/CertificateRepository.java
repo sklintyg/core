@@ -20,6 +20,8 @@ public interface CertificateRepository {
 
   Certificate getById(CertificateId certificateId);
 
+	Certificate getByIdForPrint(CertificateId certificateId);
+
   List<Certificate> getByIds(List<CertificateId> certificateIds);
 
   List<Certificate> findByIds(List<CertificateId> certificateIds);

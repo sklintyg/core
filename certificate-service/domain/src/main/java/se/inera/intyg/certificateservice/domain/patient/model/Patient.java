@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.domain.patient.model;
 import java.time.LocalDate;
 import java.time.Period;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Value;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 

@@ -8,6 +8,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
+import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -44,4 +46,34 @@ public class UnitEntity {
   @ManyToOne
   @JoinColumn(name = "unit_type_key")
   private UnitTypeEntity type;
+
+  @Version
+  private Long version;
+
+  public void updateWith(UnitEntity newUnitEntity) {
+    this.setName(newUnitEntity.getName());
+    this.setAddress(newUnitEntity.getAddress());
+    this.setZipCode(newUnitEntity.getZipCode());
+    this.setCity(newUnitEntity.getCity());
+    this.setPhoneNumber(newUnitEntity.getPhoneNumber());
+    this.setEmail(newUnitEntity.getEmail());
+    this.setWorkplaceCode(newUnitEntity.getWorkplaceCode());
+  }
+
+  public boolean hasDiff(UnitEntity other) {
+    if (other == null) {
+      return true;
+    }
+
+    return !(Objects.equals(this.hsaId, other.getHsaId())
+        && Objects.equals(this.name, other.getName())
+        && Objects.equals(this.address, other.getAddress())
+        && Objects.equals(this.zipCode, other.getZipCode())
+        && Objects.equals(this.city, other.getCity())
+        && Objects.equals(this.phoneNumber, other.getPhoneNumber())
+        && Objects.equals(this.email, other.getEmail())
+        && Objects.equals(this.workplaceCode, other.getWorkplaceCode())
+    );
+  }
+
 }

@@ -8,26 +8,25 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Version;
-import java.util.Objects;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "patient")
+@Table(name = "patient_version")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PatientEntity {
+public class PatientVersionEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "`key`")
   private Integer key;
-  @Column(name = "patient_id", unique = true, updatable = false)
+  @Column(name = "patient_id", nullable = false)
   private String id;
   @Column(name = "protected_person")
   private boolean protectedPerson;
@@ -41,34 +40,11 @@ public class PatientEntity {
   private String middleName;
   @Column(name = "last_name")
   private String lastName;
+  @Column(name = "valid_from")
+  private LocalDateTime validFrom;
+  @Column(name = "valid_to", nullable = false)
+  private LocalDateTime validTo;
   @ManyToOne
   @JoinColumn(name = "patient_id_type_key")
   private PatientIdTypeEntity type;
-
-  @Version
-  private Long version;
-
-  public void updateWith(PatientEntity source) {
-    this.firstName = source.getFirstName();
-    this.middleName = source.getMiddleName();
-    this.lastName = source.getLastName();
-    this.protectedPerson = source.isProtectedPerson();
-    this.deceased = source.isDeceased();
-    this.testIndicated = source.isTestIndicated();
-    this.type = source.getType();
-  }
-
-  public boolean hasDiff(PatientEntity other) {
-    if (other == null) {
-      return true;
-    }
-    return !(Objects.equals(this.id, other.getId())
-        && this.protectedPerson == other.isProtectedPerson()
-        && this.deceased == other.isDeceased()
-        && this.testIndicated == other.isTestIndicated()
-        && Objects.equals(this.firstName, other.getFirstName())
-        && Objects.equals(this.middleName, other.getMiddleName())
-        && Objects.equals(this.lastName, other.getLastName())
-        && Objects.equals(this.type, other.getType()));
-  }
 }

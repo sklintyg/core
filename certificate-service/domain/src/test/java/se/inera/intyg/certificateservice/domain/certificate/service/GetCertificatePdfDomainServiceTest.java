@@ -57,7 +57,7 @@ class GetCertificatePdfDomainServiceTest {
 
   @BeforeEach
   void setUp() {
-    doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
+    doReturn(certificate).when(certificateRepository).getByIdForPrint(CERTIFICATE_ID);
   }
 
   @Nested

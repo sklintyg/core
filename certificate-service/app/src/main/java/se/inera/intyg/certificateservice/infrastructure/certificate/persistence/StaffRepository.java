@@ -2,31 +2,36 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.StaffEntityMapper.toEntity;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.OptimisticLockException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.StaffEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffEntityRepository;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class StaffRepository {
 
   private final StaffEntityRepository staffEntityRepository;
+  private final MetadataVersionRepository metadataVersionRepository;
+  private final EntityManager entityManager;
 
   public StaffEntity staff(Staff issuer) {
     return staffEntityRepository.findByHsaId(issuer.hsaId().id())
-        .orElseGet(
-            () -> staffEntityRepository.save(
-                toEntity(issuer)
-            )
-        );
+        .map(staffEntity -> updateStaffVersion(staffEntity, issuer))
+        .orElseGet(() -> staffEntityRepository.save(toEntity(issuer)));
   }
 
   public Map<HsaId, StaffEntity> staffs(Certificate certificate) {
@@ -45,23 +50,39 @@ public class StaffRepository {
     }
 
     final var staffEntities = staffEntityRepository.findStaffEntitiesByHsaIdIn(
-        staffs.stream()
-            .map(staff -> staff.hsaId().id())
-            .distinct()
-            .toList()
+        staffs.stream().map(staff -> staff.hsaId().id()).distinct().toList()
     );
 
     final var staffEntityMap = staffEntities.stream()
         .collect(Collectors.toMap(staff -> HsaId.create(staff.getHsaId()), Function.identity()));
 
     staffs.forEach(staff -> {
-          if (!staffEntityMap.containsKey(staff.hsaId())) {
-            final var staffEntity = staffEntityRepository.save(toEntity(staff));
-            staffEntityMap.put(HsaId.create(staffEntity.getHsaId()), staffEntity);
-          }
-        }
-    );
+      if (!staffEntityMap.containsKey(staff.hsaId())) {
+        final var staffEntity = staffEntityRepository.save(toEntity(staff));
+        staffEntityMap.put(HsaId.create(staffEntity.getHsaId()), staffEntity);
+      } else if (!toEntity(staff).equals(staffEntityMap.get(staff.hsaId()))) {
+        final var staffEntity = updateStaffVersion(staffEntityMap.get(staff.hsaId()), staff);
+        staffEntityMap.replace(HsaId.create(staffEntity.getHsaId()), staffEntity);
+      }
+    });
 
     return staffEntityMap;
   }
+
+  private StaffEntity updateStaffVersion(StaffEntity staffEntity, Staff staff) {
+    var newStaffEntity = StaffEntityMapper.toEntity(staff);
+    if (staffEntity.hasDiff(newStaffEntity)) {
+      try {
+        metadataVersionRepository.saveStaffVersion(staffEntity, newStaffEntity);
+        entityManager.refresh(staffEntity);
+      } catch (OptimisticLockException | ObjectOptimisticLockingFailureException e) {
+        log.info("Skipped updating StaffEntity {} because it was updated concurrently",
+            staff.hsaId().id());
+        entityManager.refresh(staffEntity);
+      }
+    }
+    return staffEntity;
+  }
+
+
 }
