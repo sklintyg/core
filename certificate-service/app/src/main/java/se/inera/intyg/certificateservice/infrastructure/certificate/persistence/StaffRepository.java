@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.StaffEntityMapper.toEntity;
 
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.OptimisticLockException;
 import java.util.ArrayList;
 import java.util.Map;
@@ -25,6 +26,7 @@ public class StaffRepository {
 
   private final StaffEntityRepository staffEntityRepository;
   private final MetadataVersionRepository metadataVersionRepository;
+  private final EntityManager entityManager;
 
   public StaffEntity staff(Staff issuer) {
     return staffEntityRepository.findByHsaId(issuer.hsaId().id())
@@ -71,11 +73,12 @@ public class StaffRepository {
     var newStaffEntity = StaffEntityMapper.toEntity(staff);
     if (staffEntity.hasDiff(newStaffEntity)) {
       try {
-        return metadataVersionRepository.saveStaffVersion(staffEntity, newStaffEntity);
+        metadataVersionRepository.saveStaffVersion(staffEntity, newStaffEntity);
+        entityManager.refresh(staffEntity);
       } catch (OptimisticLockException | ObjectOptimisticLockingFailureException e) {
         log.info("Skipped updating StaffEntity {} because it was updated concurrently",
             staff.hsaId().id());
-        return metadataVersionRepository.getFreshStaffEntity(staff.hsaId().id());
+        entityManager.refresh(staffEntity);
       }
     }
     return staffEntity;

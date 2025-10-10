@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.PatientEntityMapper.toEntity;
 
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.OptimisticLockException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ public class PatientRepository {
 
   private final PatientEntityRepository patientEntityRepository;
   private final MetadataVersionRepository metadataVersionRepository;
+  private final EntityManager entityManager;
 
   public PatientEntity patient(Patient patient) {
     return patientEntityRepository.findById(patient.id().idWithoutDash())
@@ -29,11 +31,12 @@ public class PatientRepository {
     var newPatientEntity = toEntity(patient);
     if (patientEntity.hasDiff(newPatientEntity)) {
       try {
-        return metadataVersionRepository.savePatientVersion(patientEntity, newPatientEntity);
+        metadataVersionRepository.savePatientVersion(patientEntity, newPatientEntity);
+        entityManager.refresh(patientEntity);
       } catch (OptimisticLockException | ObjectOptimisticLockingFailureException e) {
         log.info("Skipped updating PatientEntity because it was updated concurrently");
 
-        return metadataVersionRepository.getFreshPatientEntity(patient.id().idWithoutDash());
+        entityManager.refresh(patientEntity);
       }
     }
     return patientEntity;

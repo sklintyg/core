@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence;
 
-import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
 import lombok.RequiredArgsConstructor;
@@ -33,16 +32,13 @@ public class MetadataVersionRepository {
   private final StaffVersionEntityRepository staffVersionEntityRepository;
   private final PatientVersionEntityRepository patientVersionEntityRepository;
   private final UnitVersionEntityRepository unitVersionEntityRepository;
-  private final EntityManager entityManager;
 
   @Transactional(TxType.REQUIRES_NEW)
-  public StaffEntity saveStaffVersion(StaffEntity staffEntity, StaffEntity newStaffEntity) {
+  public void saveStaffVersion(StaffEntity staffEntity, StaffEntity newStaffEntity) {
     final var staffVersionEntity = StaffVersionEntityMapper.toStaffVersion(staffEntity);
     staffEntity.updateWith(newStaffEntity);
-    var result = staffEntityRepository.save(staffEntity);
-    entityManager.flush();
+    staffEntityRepository.save(staffEntity);
     updateStaffVersionHistory(staffVersionEntity);
-    return result;
   }
 
   private void updateStaffVersionHistory(StaffVersionEntity staffVersionEntity) {
@@ -57,70 +53,38 @@ public class MetadataVersionRepository {
   }
 
   @Transactional(TxType.REQUIRES_NEW)
-  public UnitEntity saveUnit(UnitEntity unitEntity, UnitEntity newUnitEntity) {
+  public void saveUnit(UnitEntity unitEntity, UnitEntity newUnitEntity) {
     final var unitVersionEntity = UnitVersionEntityMapper.toUnitVersion(unitEntity);
     unitEntity.updateWith(newUnitEntity);
-    var result = unitEntityRepository.save(unitEntity);
-    entityManager.flush();
+    unitEntityRepository.save(unitEntity);
     saveUnitVersion(unitVersionEntity);
-    return result;
   }
 
 
   private void saveUnitVersion(UnitVersionEntity unitVersionEntity) {
     final var latestVersion = unitVersionEntityRepository
         .findFirstByHsaIdOrderByValidFromDesc(unitVersionEntity.getHsaId());
-
     latestVersion.ifPresent(
         versionEntity -> unitVersionEntity.setValidFrom(versionEntity.getValidTo()));
-
     unitVersionEntityRepository.save(unitVersionEntity);
   }
 
 
   @Transactional(TxType.REQUIRES_NEW)
-  public PatientEntity savePatientVersion(PatientEntity patientEntity,
+  public void savePatientVersion(PatientEntity patientEntity,
       PatientEntity newPatientEntity) {
-
     final var patientVersionEntity = PatientVersionEntityMapper.toPatientVersion(patientEntity);
-
     patientEntity.updateWith(newPatientEntity);
-    var result = patientEntityRepository.save(patientEntity);
-    entityManager.flush();
+    patientEntityRepository.save(patientEntity);
     updatePatientVersionHistory(patientVersionEntity);
-    return result;
-
-
   }
 
 
   private void updatePatientVersionHistory(PatientVersionEntity patientVersionEntity) {
     final var latestVersion = patientVersionEntityRepository
         .findFirstByIdOrderByValidFromDesc(patientVersionEntity.getId());
-
     latestVersion.ifPresent(
         versionEntity -> patientVersionEntity.setValidFrom(versionEntity.getValidTo()));
-
     patientVersionEntityRepository.save(patientVersionEntity);
-  }
-
-  @Transactional(TxType.REQUIRES_NEW)
-  public StaffEntity getFreshStaffEntity(String hsaId) {
-    return staffEntityRepository.findByHsaId(hsaId)
-        .orElseThrow(() -> new IllegalStateException(
-            String.format("StaffEntity for %s could not be found", hsaId)));
-  }
-
-  @Transactional(TxType.REQUIRES_NEW)
-  public UnitEntity getFreshUnitEntity(String hsaId) {
-    return unitEntityRepository.findByHsaId(hsaId)
-        .orElseThrow(() -> new IllegalStateException(
-            String.format("StaffEntity for %s could not be found", hsaId)));
-  }
-
-  @Transactional(TxType.REQUIRES_NEW)
-  public PatientEntity getFreshPatientEntity(String id) {
-    return patientEntityRepository.findById(id)
-        .orElseThrow(() -> new IllegalStateException("PersonEntity ould not be found"));
   }
 }
