@@ -36,6 +36,7 @@ class PrintCertificateCategoryConverterTest {
 
   private static final PrintCertificateQuestionDTO PRINT_CERTIFICATE_QUESTION_DTO =
       PrintCertificateQuestionDTO.builder().build();
+  private static final boolean IS_CITIZEN_FORMAT = true;
 
 
   public static final String CATEGORY_NAME = "Beräknat födelsedatum kategori";
@@ -71,7 +72,8 @@ class PrintCertificateCategoryConverterTest {
 
   @Test
   void shouldSetName() {
-    final var response = printCertificateCategoryConverter.convert(CERTIFICATE, KAT_1, HIDDEN);
+    final var response = printCertificateCategoryConverter.convert(CERTIFICATE, KAT_1, HIDDEN,
+        IS_CITIZEN_FORMAT);
 
     assertEquals(
         CERTIFICATE.certificateModel().elementSpecifications().getFirst().configuration().name(),
@@ -80,7 +82,8 @@ class PrintCertificateCategoryConverterTest {
 
   @Test
   void shouldSetId() {
-    final var response = printCertificateCategoryConverter.convert(CERTIFICATE, KAT_1, HIDDEN);
+    final var response = printCertificateCategoryConverter.convert(CERTIFICATE, KAT_1, HIDDEN,
+        IS_CITIZEN_FORMAT);
 
     assertEquals(CERTIFICATE.certificateModel().elementSpecifications().getFirst().id().id(),
         response.getId());
@@ -89,7 +92,7 @@ class PrintCertificateCategoryConverterTest {
   @Test
   void shouldNotConvertChildrenIfPartOfHiddenElementIds() {
     final var response = printCertificateCategoryConverter.convert(CERTIFICATE, KAT_1,
-        List.of(QUESTION_BERAKNAT_FODELSEDATUM_ID));
+        List.of(QUESTION_BERAKNAT_FODELSEDATUM_ID), IS_CITIZEN_FORMAT);
     assertEquals(List.of(), response.getQuestions());
   }
 
@@ -100,13 +103,14 @@ class PrintCertificateCategoryConverterTest {
     void setUp() {
       when(printCertificateQuestionConverter.convert(
           CERTIFICATE.certificateModel().elementSpecifications().getFirst().children().getFirst(),
-          CERTIFICATE, HIDDEN
+          CERTIFICATE, HIDDEN, IS_CITIZEN_FORMAT
       )).thenReturn(Optional.of(PRINT_CERTIFICATE_QUESTION_DTO));
     }
 
     @Test
     void shouldSetChildren() {
-      final var response = printCertificateCategoryConverter.convert(CERTIFICATE, KAT_1, HIDDEN);
+      final var response = printCertificateCategoryConverter.convert(CERTIFICATE, KAT_1, HIDDEN,
+          IS_CITIZEN_FORMAT);
       assertEquals(List.of(PRINT_CERTIFICATE_QUESTION_DTO), response.getQuestions());
     }
   }

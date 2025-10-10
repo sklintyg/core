@@ -36,7 +36,7 @@ public class GeneralPdfGenerator implements PdfGenerator {
                 .stream()
                 .filter(isNotContactInformation())
                 .map(element -> printCertificateCategoryConverter.convert(certificate, element,
-                    hiddenElements))
+                    hiddenElements, isCitizenFormat))
                 .filter(hasQuestions())
                 .toList()
         )

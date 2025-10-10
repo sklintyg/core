@@ -14,7 +14,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDiagnosis;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemIcd10Se;
 
 public class QuestionDiagnos {
@@ -64,7 +64,7 @@ public class QuestionDiagnos {
                 .build()
         ))
         .shouldValidate(
-            ShouldValidateFactory.radioBooleans(List.of(QUESTION_FORMEDLA_DIAGNOS_ID), true))
+            ElementDataPredicateFactory.radioBooleans(List.of(QUESTION_FORMEDLA_DIAGNOS_ID), true))
         .mapping(new ElementMapping(CustomMapperId.UNIFIED_DIAGNOSIS_LIST))
         .build();
   }

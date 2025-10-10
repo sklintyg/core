@@ -10,7 +10,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
 
 public class QuestionSjukdomEllerSynnedsattning {
 
@@ -55,7 +55,7 @@ public class QuestionSjukdomEllerSynnedsattning {
                 )
             )
         )
-        .shouldValidate(ShouldValidateFactory.valueBoolean(QUESTION_SYNFUNKTIONER_ID, false))
+        .shouldValidate(ElementDataPredicateFactory.valueBoolean(QUESTION_SYNFUNKTIONER_ID, false))
         .children(List.of(children))
         .build();
   }

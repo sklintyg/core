@@ -6,12 +6,15 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.HiddenElement;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
 
 public class AG7804HiddenElementsForPrint {
 
   private AG7804HiddenElementsForPrint() {
     throw new IllegalStateException("Utility class");
   }
+
+  public static final String HIDDEN_DIAGNOSIS_TEXT = "På patientens begäran uppges inte diagnos";
 
   public static List<HiddenElement> create() {
     return List.of(
@@ -20,18 +23,24 @@ public class AG7804HiddenElementsForPrint {
             .id(QUESTION_FORMEDLA_DIAGNOS_ID)
             .value(
                 ElementSimplifiedValueText.builder()
-                    .text("Nej")
+                    .text(HIDDEN_DIAGNOSIS_TEXT)
                     .build()
             )
+            .shouldHideByValue(
+                ElementDataPredicateFactory.radioBooleans(List.of(QUESTION_FORMEDLA_DIAGNOS_ID),
+                    false))
             .build(),
         HiddenElement.builder()
             .hiddenBy(QUESTION_DIAGNOS_ID)
             .id(QUESTION_DIAGNOS_ID)
             .value(
                 ElementSimplifiedValueText.builder()
-                    .text("Ej angivet")
+                    .text(HIDDEN_DIAGNOSIS_TEXT)
                     .build()
             )
+            .shouldHideByValue(
+                ElementDataPredicateFactory.radioBooleans(List.of(QUESTION_FORMEDLA_DIAGNOS_ID),
+                    false))
             .build()
     );
   }

@@ -106,7 +106,7 @@ class GeneralPdfGeneratorTest {
     @BeforeEach
     void setup() {
       when(printCertificateCategoryConverter.convert(CERTIFICATE_NO_GENERAL_RECIPIENT_NAME,
-          ELEMENT_SPECIFICATION, List.of()))
+          ELEMENT_SPECIFICATION, List.of(), IS_CITIZEN))
           .thenReturn(PRINT_CERTIFICATE_CATEGORY_DTO);
       when(
           printCertificateMetadataConverter.convert(CERTIFICATE_NO_GENERAL_RECIPIENT_NAME,
@@ -146,7 +146,8 @@ class GeneralPdfGeneratorTest {
 
     @BeforeEach
     void setup() {
-      when(printCertificateCategoryConverter.convert(CERTIFICATE, ELEMENT_SPECIFICATION, List.of()))
+      when(printCertificateCategoryConverter.convert(CERTIFICATE, ELEMENT_SPECIFICATION, List.of(),
+          IS_CITIZEN))
           .thenReturn(PRINT_CERTIFICATE_CATEGORY_DTO);
       when(printCertificateMetadataConverter.convert(CERTIFICATE, IS_CITIZEN,
           "lakarintyg_transportstyrelsen"))
@@ -232,7 +233,7 @@ class GeneralPdfGeneratorTest {
         .build();
 
     when(printCertificateCategoryConverter.convert(certWithMultipleElements,
-        ELEMENT_SPECIFICATION, List.of()))
+        ELEMENT_SPECIFICATION, List.of(), IS_CITIZEN))
         .thenReturn(PRINT_CERTIFICATE_CATEGORY_DTO).thenReturn(categoryWithQuestion);
 
     when(

@@ -53,6 +53,7 @@ class PrintCertificateQuestionConverterTest {
           .max(Period.ofDays(0))
           .build()
   );
+  private static final boolean IS_CITIZEN_FORMAT = true;
 
   private static final ElementSpecification ELEMENT_SPECIFICATION = ElementSpecification.builder()
       .id(new ElementId("1"))
@@ -151,7 +152,7 @@ class PrintCertificateQuestionConverterTest {
   @Test
   void shouldSetName() {
     final var response = printCertificateQuestionConverter.convert(
-        ELEMENT_SPECIFICATION, CERTIFICATE, List.of()
+        ELEMENT_SPECIFICATION, CERTIFICATE, List.of(), IS_CITIZEN_FORMAT
     );
 
     assertEquals("Beräknat födelsedatum", response.get().getName());
@@ -160,7 +161,7 @@ class PrintCertificateQuestionConverterTest {
   @Test
   void shouldSetId() {
     final var response = printCertificateQuestionConverter.convert(
-        ELEMENT_SPECIFICATION, CERTIFICATE, List.of()
+        ELEMENT_SPECIFICATION, CERTIFICATE, List.of(), IS_CITIZEN_FORMAT
     );
 
     assertEquals("1", response.get().getId());
@@ -170,7 +171,8 @@ class PrintCertificateQuestionConverterTest {
   @Test
   void shouldReturnNullIfNoElementDate() {
     final var response = printCertificateQuestionConverter.convert(
-        ElementSpecification.builder().id(new ElementId("2")).build(), CERTIFICATE_EMPTY, List.of()
+        ElementSpecification.builder().id(new ElementId("2")).build(), CERTIFICATE_EMPTY, List.of(),
+        IS_CITIZEN_FORMAT
     );
 
     assertTrue(response.isEmpty());
@@ -183,7 +185,7 @@ class PrintCertificateQuestionConverterTest {
         .build();
 
     final var response = printCertificateQuestionConverter.convert(
-        ELEMENT_SPECIFICATION, CERTIFICATE, List.of()
+        ELEMENT_SPECIFICATION, CERTIFICATE, List.of(), IS_CITIZEN_FORMAT
     );
 
     assertEquals(expected, response.get().getValue());
@@ -194,7 +196,7 @@ class PrintCertificateQuestionConverterTest {
     final var expected = Optional.empty();
 
     final var response = printCertificateQuestionConverter.convert(
-        ELEMENT_SPECIFICATION, CERTIFICATE_EMPTY, List.of()
+        ELEMENT_SPECIFICATION, CERTIFICATE_EMPTY, List.of(), IS_CITIZEN_FORMAT
     );
 
     assertEquals(expected, response);
@@ -212,7 +214,7 @@ class PrintCertificateQuestionConverterTest {
         .build();
 
     final var response = printCertificateQuestionConverter.convert(
-        ELEMENT_SPECIFICATION, CERTIFICATE, List.of()
+        ELEMENT_SPECIFICATION, CERTIFICATE, List.of(), IS_CITIZEN_FORMAT
     );
 
     assertEquals(expected, response.get().getSubquestions().getFirst());
@@ -228,23 +230,10 @@ class PrintCertificateQuestionConverterTest {
         .build();
 
     final var response = printCertificateQuestionConverter.convert(
-        ELEMENT_SPECIFICATION_MULTIPLE_DATES, CERTIFICATE_MULTIPLE_DATES, List.of()
+        ELEMENT_SPECIFICATION_MULTIPLE_DATES, CERTIFICATE_MULTIPLE_DATES, List.of(),
+        IS_CITIZEN_FORMAT
     );
 
     assertEquals(expected, response.get().getValue());
   }
-
-  @Test
-  void shouldHideElementIfPresentInHiddenElementIds() {
-    final var expected = ElementSimplifiedValueTextDTO.builder()
-        .text("Ej angivet")
-        .build();
-
-    final var response = printCertificateQuestionConverter.convert(
-        ELEMENT_SPECIFICATION, CERTIFICATE, HIDDEN_ELEMENTS
-    );
-
-    assertEquals(expected, response.get().getValue());
-  }
-
 }

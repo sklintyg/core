@@ -13,7 +13,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
 
 public class QuestionEpilepsiMedicin {
 
@@ -59,7 +59,7 @@ public class QuestionEpilepsiMedicin {
                 )
             )
         )
-        .shouldValidate(ShouldValidateFactory.radioBooleans(
+        .shouldValidate(ElementDataPredicateFactory.radioBooleans(
                 List.of(QUESTION_EPILEPSI_ID, QUESTION_EPILEPSI_ANFALL_ID)
             )
         )

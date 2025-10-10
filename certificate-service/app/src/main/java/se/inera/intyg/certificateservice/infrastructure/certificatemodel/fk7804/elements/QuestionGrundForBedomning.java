@@ -13,7 +13,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfig
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0006;
 
 public class QuestionGrundForBedomning {
@@ -59,7 +59,7 @@ public class QuestionGrundForBedomning {
                     .build()
             )
         )
-        .shouldValidate(ShouldValidateFactory.codes(QUESTION_PROGNOS_ID,
+        .shouldValidate(ElementDataPredicateFactory.codes(QUESTION_PROGNOS_ID,
             List.of(new FieldId(CodeSystemKvFkmu0006.PROGNOS_OKLAR.code()))))
         .mapping(new ElementMapping(QUESTION_PROGNOS_ID, CodeSystemKvFkmu0006.PROGNOS_OKLAR))
         .pdfConfiguration(

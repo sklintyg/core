@@ -16,7 +16,6 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplif
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueTable;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
-import se.inera.intyg.certificateservice.domain.certificate.model.HiddenElement;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 
@@ -25,34 +24,21 @@ public class PrintCertificateQuestionConverter {
 
   public Optional<PrintCertificateQuestionDTO> convert(
       ElementSpecification elementSpecification, Certificate certificate,
-      List<ElementId> hiddenElementIds) {
-    final var elementData = certificate.getElementDataById(elementSpecification.id());
-
-    if (elementData.isEmpty()) {
-      return Optional.empty();
-    }
-
-    final var hiddenElementsForPrint = certificate.certificateModel().hiddenElementsForPrint();
-    final var hiddenElement = hiddenElement(elementSpecification.id(), hiddenElementIds,
-        hiddenElementsForPrint);
-    final var value = elementData.get().value();
-    final var simplifiedValue = hiddenElement.map(HiddenElement::value)
-        .or(() -> elementSpecification.configuration().simplified(value));
-
-    return simplifiedValue.map(elementSimplifiedValue -> PrintCertificateQuestionDTO.builder()
-        .id(elementSpecification.id().id())
-        .name(elementSpecification.configuration().name())
-        .value(convertValue(elementSimplifiedValue))
-        .subquestions(
-            elementSpecification.children().stream()
-                .map(child -> convert(child, certificate, hiddenElementIds))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .toList()
-        )
-        .build()
-    );
-
+      List<ElementId> hiddenElementIds, boolean isCitizenFormat) {
+    return certificate.simplifiedValue(elementSpecification.id(), hiddenElementIds, isCitizenFormat)
+        .map(elementSimplifiedValue -> PrintCertificateQuestionDTO.builder()
+            .id(elementSpecification.id().id())
+            .name(elementSpecification.configuration().name())
+            .value(convertValue(elementSimplifiedValue))
+            .subquestions(
+                elementSpecification.children().stream()
+                    .map(child -> convert(child, certificate, hiddenElementIds, isCitizenFormat))
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .toList()
+            )
+            .build()
+        );
   }
 
   private ElementSimplifiedValueDTO convertValue(ElementSimplifiedValue elementSimplifiedValue) {
@@ -92,13 +78,5 @@ public class PrintCertificateQuestionConverter {
     }
 
     throw new IllegalStateException("No converter for this simplified value type");
-  }
-
-  private Optional<HiddenElement> hiddenElement(ElementId elementId,
-      List<ElementId> hiddenElements, List<HiddenElement> hiddenElementsForPrint) {
-    return hiddenElementsForPrint.stream()
-        .filter(hiddenElement -> hiddenElement.id().equals(elementId))
-        .filter(hiddenElement -> hiddenElements.contains(hiddenElement.hiddenBy()))
-        .findFirst();
   }
 }

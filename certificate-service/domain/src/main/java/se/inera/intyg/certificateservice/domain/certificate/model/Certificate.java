@@ -136,4 +136,7 @@ public interface Certificate {
   }
 
   String fileName();
+
+  Optional<ElementSimplifiedValue> simplifiedValue(ElementId elementId,
+      List<ElementId> hiddenElements, boolean isCitizenFormat);
 }

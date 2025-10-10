@@ -18,7 +18,7 @@ public class PrintCertificateCategoryConverter {
   private final PrintCertificateQuestionConverter printCertificateQuestionConverter;
 
   public PrintCertificateCategoryDTO convert(Certificate certificate,
-      ElementSpecification category, List<ElementId> hiddenElements) {
+      ElementSpecification category, List<ElementId> hiddenElements, boolean isCitizenFormat) {
     if (!(category.configuration() instanceof ElementConfigurationCategory)) {
       throw new IllegalStateException(
           "Only category can be at top level of element specifications");
@@ -27,16 +27,17 @@ public class PrintCertificateCategoryConverter {
     return PrintCertificateCategoryDTO.builder()
         .name(category.configuration().name())
         .id(category.id().id())
-        .questions(convertChildren(certificate, category, hiddenElements))
+        .questions(convertChildren(certificate, category, hiddenElements, isCitizenFormat))
         .build();
   }
 
   private List<PrintCertificateQuestionDTO> convertChildren(Certificate certificate,
-      ElementSpecification category, List<ElementId> hiddenElementIds) {
+      ElementSpecification category, List<ElementId> hiddenElementIds, boolean isCitizenFormat) {
     return category.children().stream()
         .map(elementSpecification -> printCertificateQuestionConverter.convert(elementSpecification,
             certificate,
-            hiddenElementIds)
+            hiddenElementIds,
+            isCitizenFormat)
         )
         .filter(Optional::isPresent)
         .map(Optional::get)

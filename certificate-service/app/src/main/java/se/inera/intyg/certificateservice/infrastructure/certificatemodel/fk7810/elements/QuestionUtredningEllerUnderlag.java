@@ -32,7 +32,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldI
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationMedicalInvestigationList;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
 
 public class QuestionUtredningEllerUnderlag {
 
@@ -117,7 +117,8 @@ public class QuestionUtredningEllerUnderlag {
                     .build()
             )
         )
-        .shouldValidate(ShouldValidateFactory.valueBoolean(QUESTION_BASERAT_PA_ANNAT_UNDERLAG_ID))
+        .shouldValidate(
+            ElementDataPredicateFactory.valueBoolean(QUESTION_BASERAT_PA_ANNAT_UNDERLAG_ID))
         .pdfConfiguration(
             PdfConfigurationMedicalInvestigationList.builder()
                 .list(

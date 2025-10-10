@@ -16,7 +16,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfig
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
 
 public class QuestionSjukvardandeInsatsEgenvardInsatser {
 
@@ -64,7 +64,7 @@ public class QuestionSjukvardandeInsatsEgenvardInsatser {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.valueBoolean(QUESTION_SJUKVARDANDE_INSATS_EGENVARD_ID)
+            ElementDataPredicateFactory.valueBoolean(QUESTION_SJUKVARDANDE_INSATS_EGENVARD_ID)
         )
         .pdfConfiguration(
             PdfConfigurationText.builder()

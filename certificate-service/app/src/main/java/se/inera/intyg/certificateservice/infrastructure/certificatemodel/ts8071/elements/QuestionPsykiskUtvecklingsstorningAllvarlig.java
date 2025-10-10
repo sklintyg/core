@@ -12,7 +12,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
 
 public class QuestionPsykiskUtvecklingsstorningAllvarlig {
 
@@ -51,7 +51,7 @@ public class QuestionPsykiskUtvecklingsstorningAllvarlig {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.valueBoolean(QUESTION_PSYKISK_UTVECKLINGSSTORNING_ID)
+            ElementDataPredicateFactory.valueBoolean(QUESTION_PSYKISK_UTVECKLINGSSTORNING_ID)
         )
         .mapping(
             new ElementMapping(QUESTION_NEUROPSYKIATRISK_ID, null)

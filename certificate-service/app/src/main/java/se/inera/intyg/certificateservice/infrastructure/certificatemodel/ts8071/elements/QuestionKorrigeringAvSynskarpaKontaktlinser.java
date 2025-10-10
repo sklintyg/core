@@ -10,7 +10,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKorrigeringAvSynskarpa;
 
 public class QuestionKorrigeringAvSynskarpaKontaktlinser {
@@ -57,7 +57,7 @@ public class QuestionKorrigeringAvSynskarpaKontaktlinser {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.codeList(QUESTION_KORRIGERING_AV_SYNSKARPA_ID, List.of(
+            ElementDataPredicateFactory.codeList(QUESTION_KORRIGERING_AV_SYNSKARPA_ID, List.of(
                 new FieldId(
                     CodeSystemKorrigeringAvSynskarpa.KONTAKTLINSER.code())))
         )

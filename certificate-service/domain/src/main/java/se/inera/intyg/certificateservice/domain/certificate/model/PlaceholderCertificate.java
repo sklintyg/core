@@ -307,4 +307,10 @@ public class PlaceholderCertificate implements Certificate {
   public String fileName() {
     throw new IllegalStateException("Cannot get file name for a placeholder certificate");
   }
+
+  @Override
+  public Optional<ElementSimplifiedValue> simplifiedValue(ElementId elementId,
+      List<ElementId> hiddenElements, boolean isCitizenFormat) {
+    throw new IllegalStateException("Cannot get simplified value for a placeholder certificate");
+  }
 }

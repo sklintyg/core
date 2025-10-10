@@ -605,4 +605,49 @@ public class MedicalCertificate implements Certificate {
         .replace("__", "_")
         .toLowerCase();
   }
+
+  @Override
+  public Optional<ElementSimplifiedValue> simplifiedValue(ElementId elementId,
+      List<ElementId> hiddenElements, boolean isCitizenFormat) {
+    final var dataForElement = getElementDataById(elementId);
+    final var hiddenElement = hiddenElement(elementId, hiddenElements, isCitizenFormat);
+
+    if (hiddenElement.isPresent()) {
+      return Optional.of(hiddenElement.get().value());
+    }
+
+    if (dataForElement.isEmpty()) {
+      return Optional.empty();
+    }
+
+    return certificateModel
+        .elementSpecification(elementId)
+        .configuration()
+        .simplified(dataForElement.get().value());
+  }
+
+  private Optional<HiddenElement> hiddenElement(ElementId elementId,
+      List<ElementId> hiddenElements, boolean isCitizenFormat) {
+    if (!isCitizenFormat) {
+      return Optional.empty();
+    }
+
+    return certificateModel.hiddenElementsForPrint().stream()
+        .filter(hiddenElement -> hiddenElement.id().equals(elementId))
+        .filter(hiddenElement ->
+            shouldHideByCitizenChoice(hiddenElements, hiddenElement)
+                || shouldHideByValue(hiddenElement))
+        .findFirst();
+  }
+
+  private static boolean shouldHideByCitizenChoice(List<ElementId> hiddenElements,
+      HiddenElement hiddenElement) {
+    return hiddenElements.contains(hiddenElement.hiddenBy());
+  }
+
+  private boolean shouldHideByValue(HiddenElement hiddenElement) {
+    return hiddenElement.shouldHideByValue() != null
+        && hiddenElement.shouldHideByValue()
+        .test(elementData);
+  }
 }

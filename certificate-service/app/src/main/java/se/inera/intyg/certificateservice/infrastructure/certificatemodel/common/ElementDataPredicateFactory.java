@@ -10,9 +10,9 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDa
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
-public class ShouldValidateFactory {
+public class ElementDataPredicateFactory {
 
-  private ShouldValidateFactory() {
+  private ElementDataPredicateFactory() {
     throw new IllegalStateException("Utility class");
   }
 

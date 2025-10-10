@@ -12,7 +12,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCode;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0006;
 
 public class QuestionPrognos {
@@ -86,7 +86,8 @@ public class QuestionPrognos {
                     .build()
             )
         )
-        .shouldValidate(ShouldValidateFactory.checkboxBoolean(QUESTION_SMITTBARARPENNING_ID, false))
+        .shouldValidate(
+            ElementDataPredicateFactory.checkboxBoolean(QUESTION_SMITTBARARPENNING_ID, false))
         .children(List.of(children))
         .build();
   }

@@ -14,7 +14,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCode;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs001;
 
@@ -60,7 +60,7 @@ public class QuestionStrokePavarkan {
                 )
             )
         )
-        .shouldValidate(ShouldValidateFactory.valueBoolean(QUESTION_STROKE_ID))
+        .shouldValidate(ElementDataPredicateFactory.valueBoolean(QUESTION_STROKE_ID))
         .mapping(new ElementMapping(QUESTION_HJARTSJUKDOM_ID, null))
         .validations(
             List.of(
