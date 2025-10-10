@@ -98,6 +98,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
+import se.inera.intyg.certificateservice.domain.common.model.Recipient;
+import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 import se.inera.intyg.certificateservice.domain.message.model.Forwarded;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.domain.user.model.ResponsibleIssuer;
@@ -938,5 +940,286 @@ class CertificateMetadataConverterTest {
     assertEquals(certificate.readyForSign().readyForSignAt(),
         certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getReadyForSign()
     );
+  }
+
+  @Nested
+  class TestCertificateRecipientWhenLogicalAddressMissing {
+
+    @Test
+    void shallNotReturnRecipientIfLogicalAddressIsNull() {
+
+      final var recipientWithoutLogicalAddress = new Recipient(
+          new RecipientId("RecipientId"),
+          "Name",
+          null,
+          "test/logo.png", "General Name");
+
+      certificateBuilder = MedicalCertificate.builder()
+          .id(new CertificateId(CERTIFICATE_ID))
+          .created(CREATED)
+          .revision(REVISION)
+          .status(Status.DRAFT)
+          .sent(SENT)
+          .signed(SIGNED)
+          .modified(MODIFIED)
+          .forwarded(FORWARDED)
+          .revoked(
+              Revoked.builder()
+                  .revokedAt(LocalDateTime.now())
+                  .revokedBy(ALVA_VARDADMINISTRATOR)
+                  .build()
+          )
+          .readyForSign(
+              ReadyForSign.builder()
+                  .readyForSignAt(LocalDateTime.now())
+                  .readyForSignBy(Staff.builder().build())
+                  .build()
+          )
+          .certificateModel(
+              CertificateModel.builder()
+                  .id(
+                      CertificateModelId.builder()
+                          .type(new CertificateType(TYPE))
+                          .version(new CertificateVersion(VERSION))
+                          .build()
+                  )
+                  .name(TYPE_NAME)
+                  .detailedDescription(TYPE_DESCRIPTION)
+                  .recipient(recipientWithoutLogicalAddress)
+                  .messageTypes(CERTIFICATE_MESSAGE_TYPES)
+                  .elementSpecifications(
+                      List.of(
+                          ElementSpecification.builder()
+                              .id(new ElementId(Q_1))
+                              .configuration(
+                                  ElementConfigurationCategory.builder()
+                                      .name(NAME)
+                                      .build()
+                              )
+                              .children(
+                                  List.of(
+                                      ElementSpecification.builder()
+                                          .id(new ElementId(ID))
+                                          .configuration(
+                                              ElementConfigurationDate.builder()
+                                                  .id(new FieldId(ID))
+                                                  .name(NAME)
+                                                  .min(Period.ofDays(0))
+                                                  .max(Period.ofYears(1))
+                                                  .build()
+                                          )
+                                          .rules(
+                                              List.of(
+                                                  ElementRuleExpression.builder()
+                                                      .id(new ElementId(ID))
+                                                      .type(ElementRuleType.MANDATORY)
+                                                      .expression(
+                                                          new RuleExpression(EXPRESSION))
+                                                      .build()
+                                              )
+                                          )
+                                          .validations(
+                                              List.of(
+                                                  ElementValidationDate.builder()
+                                                      .mandatory(true)
+                                                      .min(Period.ofDays(0))
+                                                      .max(Period.ofYears(1))
+                                                      .build()
+                                              )
+                                          )
+                                          .build()
+                                  )
+                              )
+                              .build()
+                      )
+                  )
+                  .summaryProvider(certificateSummaryProvider)
+                  .confirmationModalProvider(certificateConfirmationModalProvider)
+                  .availableForCitizen(true)
+                  .build()
+          )
+          .certificateMetaData(
+              CertificateMetaData.builder()
+                  .patient(
+                      athenaReactAnderssonBuilder()
+                          .id(
+                              PersonId.builder()
+                                  .id(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH)
+                                  .type(PersonIdType.PERSONAL_IDENTITY_NUMBER)
+                                  .build()
+                          )
+                          .build()
+                  )
+                  .creator(ALF_DOKTOR)
+                  .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
+                  .careUnit(ALFA_MEDICINCENTRUM)
+                  .careProvider(ALFA_REGIONEN)
+                  .issuer(AJLA_DOKTOR)
+                  .responsibleIssuer(new ResponsibleIssuer(RESPONSIBLE_ISSUER))
+                  .build()
+          )
+          .elementData(
+              List.of(
+                  ElementData.builder()
+                      .id(new ElementId(Q_1))
+                      .value(null)
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId(ID))
+                      .value(
+                          ElementValueDate.builder()
+                              .date(DATE)
+                              .build()
+                      )
+                      .build()
+              )
+          )
+          .externalReference(
+              EXTERNAL_REFERENCE
+          );
+      certificate = certificateBuilder.build();
+
+      assertNull(
+          certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getRecipient());
+    }
+
+    @Test
+    void shallNotReturnRecipientIfLogicalAddressIsEmpty() {
+
+      final var recipientWithoutLogicalAddress = new Recipient(
+          new RecipientId("RecipientId"),
+          "Name",
+          "",
+          "test/logo.png", "General Name");
+
+      certificateBuilder = MedicalCertificate.builder()
+          .id(new CertificateId(CERTIFICATE_ID))
+          .created(CREATED)
+          .revision(REVISION)
+          .status(Status.DRAFT)
+          .sent(SENT)
+          .signed(SIGNED)
+          .modified(MODIFIED)
+          .forwarded(FORWARDED)
+          .revoked(
+              Revoked.builder()
+                  .revokedAt(LocalDateTime.now())
+                  .revokedBy(ALVA_VARDADMINISTRATOR)
+                  .build()
+          )
+          .readyForSign(
+              ReadyForSign.builder()
+                  .readyForSignAt(LocalDateTime.now())
+                  .readyForSignBy(Staff.builder().build())
+                  .build()
+          )
+          .certificateModel(
+              CertificateModel.builder()
+                  .id(
+                      CertificateModelId.builder()
+                          .type(new CertificateType(TYPE))
+                          .version(new CertificateVersion(VERSION))
+                          .build()
+                  )
+                  .name(TYPE_NAME)
+                  .detailedDescription(TYPE_DESCRIPTION)
+                  .recipient(recipientWithoutLogicalAddress)
+                  .messageTypes(CERTIFICATE_MESSAGE_TYPES)
+                  .elementSpecifications(
+                      List.of(
+                          ElementSpecification.builder()
+                              .id(new ElementId(Q_1))
+                              .configuration(
+                                  ElementConfigurationCategory.builder()
+                                      .name(NAME)
+                                      .build()
+                              )
+                              .children(
+                                  List.of(
+                                      ElementSpecification.builder()
+                                          .id(new ElementId(ID))
+                                          .configuration(
+                                              ElementConfigurationDate.builder()
+                                                  .id(new FieldId(ID))
+                                                  .name(NAME)
+                                                  .min(Period.ofDays(0))
+                                                  .max(Period.ofYears(1))
+                                                  .build()
+                                          )
+                                          .rules(
+                                              List.of(
+                                                  ElementRuleExpression.builder()
+                                                      .id(new ElementId(ID))
+                                                      .type(ElementRuleType.MANDATORY)
+                                                      .expression(
+                                                          new RuleExpression(EXPRESSION))
+                                                      .build()
+                                              )
+                                          )
+                                          .validations(
+                                              List.of(
+                                                  ElementValidationDate.builder()
+                                                      .mandatory(true)
+                                                      .min(Period.ofDays(0))
+                                                      .max(Period.ofYears(1))
+                                                      .build()
+                                              )
+                                          )
+                                          .build()
+                                  )
+                              )
+                              .build()
+                      )
+                  )
+                  .summaryProvider(certificateSummaryProvider)
+                  .confirmationModalProvider(certificateConfirmationModalProvider)
+                  .availableForCitizen(true)
+                  .build()
+          )
+          .certificateMetaData(
+              CertificateMetaData.builder()
+                  .patient(
+                      athenaReactAnderssonBuilder()
+                          .id(
+                              PersonId.builder()
+                                  .id(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH)
+                                  .type(PersonIdType.PERSONAL_IDENTITY_NUMBER)
+                                  .build()
+                          )
+                          .build()
+                  )
+                  .creator(ALF_DOKTOR)
+                  .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
+                  .careUnit(ALFA_MEDICINCENTRUM)
+                  .careProvider(ALFA_REGIONEN)
+                  .issuer(AJLA_DOKTOR)
+                  .responsibleIssuer(new ResponsibleIssuer(RESPONSIBLE_ISSUER))
+                  .build()
+          )
+          .elementData(
+              List.of(
+                  ElementData.builder()
+                      .id(new ElementId(Q_1))
+                      .value(null)
+                      .build(),
+                  ElementData.builder()
+                      .id(new ElementId(ID))
+                      .value(
+                          ElementValueDate.builder()
+                              .date(DATE)
+                              .build()
+                      )
+                      .build()
+              )
+          )
+          .externalReference(
+              EXTERNAL_REFERENCE
+          );
+      certificate = certificateBuilder.build();
+
+      assertNull(
+          certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getRecipient());
+    }
+
   }
 }
