@@ -9,7 +9,6 @@ import static se.inera.intyg.certificateservice.integrationtest.ag114.AG114Const
 import static se.inera.intyg.certificateservice.integrationtest.ag114.AG114Constants.CODE_SYSTEM;
 
 import java.util.stream.Stream;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.params.provider.Arguments;
@@ -58,7 +57,6 @@ class AG114ActiveIT {
   }
 
   @Nested
-  @Disabled
   @DisplayName(TYPE + "Utökad behörighet vid djupintegration utan SVOD")
   class AccessLevelsDeepIntegration extends AccessLevelsDeepIntegrationIT {
 
@@ -74,7 +72,6 @@ class AG114ActiveIT {
   }
 
   @Nested
-  @Disabled
   @DisplayName(TYPE + "Utökad behörighet vid djupintegration och SVOD (sjf=true)")
   class AccessLevelsSVOD extends AccessLevelsSVODIT {
 
@@ -90,7 +87,6 @@ class AG114ActiveIT {
   }
 
   @Nested
-  @Disabled
   @DisplayName(TYPE + "Skapa utkast")
   class CreateCertificate extends CreateCertificateIT {
 
@@ -117,7 +113,6 @@ class AG114ActiveIT {
   }
 
   @Nested
-  @Disabled
   @DisplayName(TYPE + "Ta bort utkast")
   class DeleteCertificate extends DeleteCertificateIT {
 
@@ -133,7 +128,6 @@ class AG114ActiveIT {
   }
 
   @Nested
-  @Disabled
   @DisplayName(TYPE + "Finns intyget i tjänsten")
   class ExistsCertificate extends ExistsCertificateIT {
 
@@ -149,7 +143,6 @@ class AG114ActiveIT {
   }
 
   @Nested
-  @Disabled
   @DisplayName(TYPE + "Aktiva versioner")
   class ExistsCertificateTypeInfo extends ExistsCertificateTypeInfoIT {
 
@@ -165,7 +158,6 @@ class AG114ActiveIT {
   }
 
   @Nested
-  @Disabled
   @DisplayName(TYPE + "Hämta intyg")
   class GetCertificate extends GetCertificateIT {
 
@@ -195,7 +187,6 @@ class AG114ActiveIT {
   }
 
   @Nested
-  @Disabled
   @DisplayName(TYPE + "Hämta intygets händelser")
   class GetCertificateEvents extends GetCertificateEventsIT {
 
@@ -224,7 +215,6 @@ class AG114ActiveIT {
   }
 
   @Nested
-  @Disabled
   @DisplayName(TYPE + "Hämta intygstyp när den är aktiv")
   class GetCertificateTypeInfo extends GetCertificateTypeInfoIT {
 
@@ -240,7 +230,6 @@ class AG114ActiveIT {
   }
 
   @Nested
-  @Disabled
   @DisplayName(TYPE + "Hämta intygsxml")
   class GetCertificateXml extends GetCertificateXmlIT {
 
@@ -262,7 +251,6 @@ class AG114ActiveIT {
   }
 
   @Nested
-  @Disabled
   @DisplayName(TYPE + "Hämta tidigare intyg för patient")
   class GetPatientCertificates extends GetPatientCertificatesIT {
 
@@ -292,7 +280,6 @@ class AG114ActiveIT {
   }
 
   @Nested
-  @Disabled
   @DisplayName(TYPE + "Hämta ej signerade utkast sökkriterier")
   class GetUnitCertificatesInfo extends GetUnitCertificatesInfoIT {
 
@@ -308,7 +295,6 @@ class AG114ActiveIT {
   }
 
   @Nested
-  @Disabled
   @DisplayName(TYPE + "Hämta ej signerade utkast")
   class GetUnitCertificates extends GetUnitCertificatesIT {
 
@@ -334,7 +320,6 @@ class AG114ActiveIT {
   }
 
   @Nested
-  @Disabled
   @DisplayName(TYPE + "Hämta signerade intyg")
   class GetUnitCertificatesWhenSigned extends GetUnitCertificatesWhenSignedIT {
 
@@ -350,7 +335,6 @@ class AG114ActiveIT {
   }
 
   @Nested
-  @Disabled
   @DisplayName(TYPE + "Ersätta")
   class ReplaceCertificate extends ReplaceCertificateIT {
 
@@ -366,7 +350,6 @@ class AG114ActiveIT {
   }
 
   @Nested
-  @Disabled
   @DisplayName(TYPE + "Makulera")
   class RevokeCertificate extends RevokeCertificateIT {
 
@@ -382,7 +365,6 @@ class AG114ActiveIT {
   }
 
   @Nested
-  @Disabled
   @DisplayName(TYPE + "Markera klar för signering")
   class ReadyForSignCertificate extends CertificateReadyForSignIT {
 
@@ -408,7 +390,6 @@ class AG114ActiveIT {
   }
 
   @Nested
-  @Disabled
   @DisplayName(TYPE + "Signera")
   class SignCertificate extends SignCertificateIT {
 
@@ -424,7 +405,6 @@ class AG114ActiveIT {
   }
 
   @Nested
-  @Disabled
   @DisplayName(TYPE + "Uppdatera svarsalternativ")
   class UpdateCertificate extends UpdateCertificateIT {
 
@@ -451,7 +431,6 @@ class AG114ActiveIT {
   }
 
   @Nested
-  @Disabled
   @DisplayName(TYPE + "Validera utkast")
   class ValidateCertificate extends ValidateCertificateIT {
 
@@ -478,7 +457,6 @@ class AG114ActiveIT {
   }
 
   @Nested
-  @Disabled
   @DisplayName(TYPE + "Vidarebefodra utkast")
   class ForwardCertificate extends ForwardCertificateIT {
 
@@ -504,7 +482,6 @@ class AG114ActiveIT {
   }
 
   @Nested
-  @Disabled
   @DisplayName(TYPE + "ListCertificatesForCareWithQA")
   class IncludeCerificatesWithQA extends CertificatesWithQAForCareIT {
 
@@ -520,7 +497,6 @@ class AG114ActiveIT {
   }
 
   @Nested
-  @Disabled
   @DisplayName(TYPE + "Hämta statistik")
   class IncludeUnitStatistics extends UnitStatisticsIT {
 
@@ -555,7 +531,6 @@ class AG114ActiveIT {
   }
 
   @Nested
-  @Disabled
   @DisplayName(TYPE + "Aktiva versioner utifrån intygstyp och kodsystem")
   class IncludeExistsCertificateExternalTypeInfo extends ExistsCertificateExternalTypeInfoIT {
 
@@ -582,7 +557,6 @@ class AG114ActiveIT {
   }
 
   @Nested
-  @Disabled
   @DisplayName(TYPE + "Förnya intyg från extern källa")
   class RenewExternalCertificate extends RenewExternalCertificateIT {
 

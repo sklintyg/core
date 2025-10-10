@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateservice.integrationtest.ag114;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -21,7 +20,6 @@ class AG114CitizenIT {
   }
 
   @Nested
-  @Disabled
   @DisplayName(TYPE + "Hämta intyg för invånare")
   class GetCitizenCertificate extends GetCitizenCertificateIT {
 
@@ -37,7 +35,6 @@ class AG114CitizenIT {
   }
 
   @Nested
-  @Disabled
   @DisplayName(TYPE + "Hämta intygslista för invånare")
   class GetCitizenCertificateList extends GetCitizenCertificateListIT {
 
@@ -53,7 +50,6 @@ class AG114CitizenIT {
   }
 
   @Nested
-  @Disabled
   @DisplayName(TYPE + "Finns intyg för invånare")
   class ExistsCitizenCertificate extends ExistsCitizenCertificateIT {
 
