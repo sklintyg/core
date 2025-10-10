@@ -6,7 +6,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenPrintConfiguration;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenPdfConfiguration;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
@@ -65,8 +65,8 @@ public class QuestionFormedlaInfoOmDiagnosTillAG {
                     .build()
             )
         )
-        .citizenPrintConfiguration(
-            CitizenPrintConfiguration.builder()
+        .pdfConfiguration(
+            CitizenPdfConfiguration.builder()
                 .hiddenBy(QUESTION_DIAGNOS_ID)
                 .shouldHide(
                     ElementDataPredicateFactory.radioBooleans(List.of(QUESTION_FORMEDLA_DIAGNOS_ID),

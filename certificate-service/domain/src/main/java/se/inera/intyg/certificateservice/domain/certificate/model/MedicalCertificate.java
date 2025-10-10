@@ -23,6 +23,7 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.Certifi
 import se.inera.intyg.certificateservice.domain.certificate.service.PrefillProcessor;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenPdfConfiguration;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModificationException;
 import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
@@ -634,7 +635,7 @@ public class MedicalCertificate implements Certificate {
     }
 
     final var elementSpecification = certificateModel.elementSpecification(elementId);
-    final var hiddenConfig = elementSpecification.citizenPrintConfiguration();
+    final var hiddenConfig = (CitizenPdfConfiguration) elementSpecification.pdfConfiguration(); // TODO: Add error handling
 
     if (hiddenConfig == null) {
       return Optional.empty();

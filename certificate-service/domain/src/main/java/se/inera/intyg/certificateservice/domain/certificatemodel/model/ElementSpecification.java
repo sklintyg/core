@@ -33,7 +33,6 @@ public class ElementSpecification {
   @Builder.Default
   boolean includeForCitizen = Boolean.TRUE;
   ElementVisibilityConfiguration visibilityConfiguration;
-  CitizenPrintConfiguration citizenPrintConfiguration;
 
   public boolean exists(ElementId id) {
     if (id().equals(id)) {

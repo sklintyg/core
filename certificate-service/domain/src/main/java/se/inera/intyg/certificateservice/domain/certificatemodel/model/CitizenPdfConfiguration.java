@@ -9,7 +9,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplif
 
 @Value
 @Builder
-public class CitizenPrintConfiguration {
+public class CitizenPdfConfiguration implements PdfConfiguration {
 
   ElementId hiddenBy;
   Predicate<List<ElementData>> shouldHide;
