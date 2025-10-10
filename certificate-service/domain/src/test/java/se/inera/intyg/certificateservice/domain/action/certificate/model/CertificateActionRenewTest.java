@@ -39,6 +39,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
+import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 
 @ExtendWith(MockitoExtension.class)
@@ -50,6 +51,7 @@ class CertificateActionRenewTest {
   private static final CertificateActionSpecification CERTIFICATE_ACTION_SPECIFICATION =
       CertificateActionSpecification.builder()
           .certificateActionType(CertificateActionType.RENEW)
+          .allowedRoles(List.of(Role.DOCTOR))
           .build();
   @Mock
   CertificateActionConfigurationRepository certificateActionConfigurationRepository;
