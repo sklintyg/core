@@ -196,7 +196,7 @@ public class CertificateMetadataConverter {
   private CertificateRecipientDTO toCertificateRecipientDTO(Certificate certificate) {
     final var sent = certificate.sent();
     if (certificate.certificateModel().recipient() == null) {
-      return CertificateRecipientDTO.builder().build();
+      return null;
     }
 
     if (!certificate.certificateModel().recipient().canSendElectronically()) {
