@@ -1,17 +1,5 @@
 package se.inera.intyg.certificateservice.application.common.dto;
 
-import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.CREATE;
-import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.DELETE;
-import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.PRINT;
-import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.READ;
-import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.RENEW;
-import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.REPLACE;
-import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.REPLACE_CONTINUE;
-import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.REVOKE;
-import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.SEND;
-import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.SIGN;
-import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.UPDATE;
-
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.message.model.MessageActionType;
 
@@ -98,6 +86,7 @@ public enum ResourceLinkTypeDTO {
       case FMB -> FMB;
       case SRS_DRAFT -> SRS_FULL_VIEW;
       case SRS_SIGNED -> SRS_MINIMIZED_VIEW;
+      case CREATE_DRAFT_FROM_CERTIFICATE -> CREATE_CERTIFICATE_FROM_TEMPLATE;
       case RECEIVE_COMPLEMENT, RECEIVE_ANSWER, RECEIVE_QUESTION, RECEIVE_REMINDER, SAVE_MESSAGE,
            DELETE_MESSAGE, SEND_MESSAGE, SAVE_ANSWER, DELETE_ANSWER, SEND_ANSWER,
            LIST_CERTIFICATE_TYPE ->
@@ -112,26 +101,6 @@ public enum ResourceLinkTypeDTO {
       case FORWARD -> FORWARD_QUESTION;
       case CANNOT_COMPLEMENT -> CANNOT_COMPLEMENT_CERTIFICATE_ONLY_MESSAGE;
       case HANDLE_COMPLEMENT, HANDLE_MESSAGE -> HANDLE_QUESTION;
-    };
-  }
-
-  public CertificateActionType toCertificateActionType() {
-    return switch (this) {
-      case CREATE_CERTIFICATE -> CREATE;
-      case READ_CERTIFICATE -> READ;
-      case EDIT_CERTIFICATE -> UPDATE;
-      case REMOVE_CERTIFICATE -> DELETE;
-      case SIGN_CERTIFICATE -> SIGN;
-      case SEND_CERTIFICATE -> SEND;
-      case PRINT_CERTIFICATE -> PRINT;
-      case REVOKE_CERTIFICATE -> REVOKE;
-      case REPLACE_CERTIFICATE -> REPLACE;
-      case REPLACE_CERTIFICATE_CONTINUE -> REPLACE_CONTINUE;
-      case RENEW_CERTIFICATE -> RENEW;
-      case READY_FOR_SIGN -> CertificateActionType.READY_FOR_SIGN;
-      default -> throw new IllegalArgumentException(
-          "Cannot convert %s to certificate action type!".formatted(this)
-      );
     };
   }
 }

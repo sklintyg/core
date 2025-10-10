@@ -92,6 +92,7 @@ import se.inera.intyg.certificateservice.domain.certificate.service.PrefillProce
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModificationException;
@@ -2808,6 +2809,70 @@ class CertificateTest {
 
       certificate.prefill(XML, prefillProcessor);
       assertTrue(expectedElementData.containsAll(certificate.elementData()));
+    }
+  }
+
+  @Nested
+  class TestFillFromCertificate {
+
+    @Test
+    void shouldThrowIfRevisionIsGreaterThanZero() {
+      final var medicalCertificate = MedicalCertificate.builder()
+          .id(CERTIFICATE_ID)
+          .revision(new Revision(1))
+          .build();
+
+      assertThrows(IllegalStateException.class,
+          () -> medicalCertificate.fillFromCertificate(certificate));
+    }
+
+    @Test
+    void shouldUpdateElementDataWithDataFromProvidedCertificate() {
+      final var elementConfigurationTextArea = mock(ElementConfigurationTextArea.class);
+      final var elementId = new ElementId("elementId");
+
+      final var medicalCertificate = MedicalCertificate.builder()
+          .id(CERTIFICATE_ID)
+          .revision(new Revision(0))
+          .certificateModel(
+              CertificateModel.builder()
+                  .elementSpecifications(
+                      List.of(
+                          ElementSpecification.builder()
+                              .id(elementId)
+                              .configuration(elementConfigurationTextArea)
+                              .build()
+                      )
+                  )
+                  .build()
+          )
+          .build();
+
+      final var elementData = ElementData.builder()
+          .id(elementId)
+          .build();
+
+      final var elementSpecification = ElementSpecification.builder()
+          .id(elementId)
+          .build();
+
+      final var originalCertificate = MedicalCertificate.builder()
+          .id(CERTIFICATE_ID)
+          .revision(new Revision(0))
+          .certificateModel(
+              CertificateModel.builder()
+                  .elementSpecifications(List.of(elementSpecification))
+                  .build()
+          )
+          .elementData(List.of(elementData))
+          .build();
+
+      when(elementConfigurationTextArea.convert(elementData, elementSpecification)).thenReturn(
+          Optional.of(elementData));
+
+      medicalCertificate.fillFromCertificate(originalCertificate);
+
+      assertEquals(List.of(elementData), medicalCertificate.elementData());
     }
   }
 }

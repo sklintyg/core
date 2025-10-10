@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.CertificateModelFactoryAG7804.AG7804_V2_0;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -260,5 +261,11 @@ class CertificateModelFactoryFK7804Test {
       assertTrue(certificateModel.elementSpecificationExists(elementId),
           "Expected elementId: '%s' to exist in elementSpecifications".formatted(elementId));
     }
+  }
+
+  @Test
+  void shouldIncludeAbleToCreateDraftForModel() {
+    final var certificateModel = certificateModelFactoryFK7804.create();
+    assertEquals(AG7804_V2_0, certificateModel.getAbleToCreateDraftForModel().orElseThrow());
   }
 }

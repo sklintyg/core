@@ -15,9 +15,9 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 public class QuestionKontakt {
 
   public static final ElementId QUESTION_KONTAKT_ID = new ElementId(
-      "26");
+      "103");
   public static final FieldId QUESTION_KONTAKT_FIELD_ID = new FieldId(
-      "26.1");
+      "103.1");
 
   private QuestionKontakt() {
     throw new IllegalStateException("Utility class");

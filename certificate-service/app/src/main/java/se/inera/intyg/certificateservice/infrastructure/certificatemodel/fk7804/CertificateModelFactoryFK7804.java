@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804;
 
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.CertificateModelFactoryAG7804.AG7804_V2_0;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.elements.ElementUnitContactInformation.issuingUnitContactInfo;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.CategoryAktivitetsbegransning.categoryAktivitetsbegransning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.CategoryAtgarderSomKanFramjaAttergang.categoryAtgarderSomKanFramjaAttergang;
@@ -138,6 +139,7 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
         .recipient(CertificateRecipientFactory.fkassa(fkLogicalAddress))
         .schematronPath(SCHEMATRON_PATH)
         .sickLeaveProvider(new FK7804SickLeaveProvider())
+        .ableToCreateDraftForModel(AG7804_V2_0)
         .messageTypes(List.of(
             CertificateMessageType.builder()
                 .type(MessageType.MISSING)

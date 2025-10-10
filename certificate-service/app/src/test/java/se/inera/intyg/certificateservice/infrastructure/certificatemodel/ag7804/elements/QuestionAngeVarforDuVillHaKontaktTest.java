@@ -19,7 +19,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionAngeVarforDuVillHaKontakt;
 
 class QuestionAngeVarforDuVillHaKontaktTest {
 
@@ -33,7 +32,8 @@ class QuestionAngeVarforDuVillHaKontaktTest {
   void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationTextArea.builder()
         .id(QUESTION_VARFOR_KONTAKT_FIELD_ID)
-        .name("Ange gärna varför du vill ha kontakt")
+        .name(
+            "Ange varför du vill ha kontakt och vem som i första hand ska kontaktas samt kontaktuppgifter")
         .build();
 
     final var element = QuestionAngeVarforDuVillHaKontakt.questionAngeVarforDuVillHaKontakt();
@@ -75,7 +75,7 @@ class QuestionAngeVarforDuVillHaKontaktTest {
     void shallReturnTrueIfBooleanIsTrue() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("26"))
+              .id(new ElementId("103"))
               .value(
                   ElementValueBoolean.builder()
                       .value(true)
@@ -86,7 +86,7 @@ class QuestionAngeVarforDuVillHaKontaktTest {
 
       final var element = QuestionAngeVarforDuVillHaKontakt.questionAngeVarforDuVillHaKontakt();
 
-      final var shouldValidate = element.elementSpecification(new ElementId("26.2"))
+      final var shouldValidate = element.elementSpecification(new ElementId("103.2"))
           .shouldValidate();
 
       assertTrue(shouldValidate.test(elementData));
@@ -107,7 +107,7 @@ class QuestionAngeVarforDuVillHaKontaktTest {
 
       final var element = QuestionAngeVarforDuVillHaKontakt.questionAngeVarforDuVillHaKontakt();
 
-      final var shouldValidate = element.elementSpecification(new ElementId("26.2"))
+      final var shouldValidate = element.elementSpecification(new ElementId("103.2"))
           .shouldValidate();
 
       assertFalse(shouldValidate.test(elementData));
@@ -117,7 +117,7 @@ class QuestionAngeVarforDuVillHaKontaktTest {
     void shallReturnFalseIfElementFalse() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("26"))
+              .id(new ElementId("103"))
               .value(
                   ElementValueBoolean.builder()
                       .value(false)
@@ -128,7 +128,7 @@ class QuestionAngeVarforDuVillHaKontaktTest {
 
       final var element = QuestionAngeVarforDuVillHaKontakt.questionAngeVarforDuVillHaKontakt();
 
-      final var shouldValidate = element.elementSpecification(new ElementId("26.2"))
+      final var shouldValidate = element.elementSpecification(new ElementId("103.2"))
           .shouldValidate();
 
       assertFalse(shouldValidate.test(elementData));
