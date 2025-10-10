@@ -18,6 +18,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.collections4.CollectionUtils;
 
 @Entity
 @Table(name = "staff")
@@ -74,9 +75,9 @@ public class StaffEntity {
         && Objects.equals(this.middleName, other.getMiddleName())
         && Objects.equals(this.lastName, other.getLastName())
         && Objects.equals(this.role, other.getRole())
-        && Objects.equals(this.paTitles, other.getPaTitles())
-        && Objects.equals(this.specialities, other.getSpecialities())
-        && Objects.equals(this.healthcareProfessionalLicences,
+        && CollectionUtils.isEqualCollection(this.paTitles, other.getPaTitles())
+        && CollectionUtils.isEqualCollection(this.specialities, other.getSpecialities())
+        && CollectionUtils.isEqualCollection(this.healthcareProfessionalLicences,
         other.getHealthcareProfessionalLicences())
     );
   }

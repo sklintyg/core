@@ -27,7 +27,7 @@ public class PatientRepository {
 
   private PatientEntity updatePatientVersion(PatientEntity patientEntity, Patient patient) {
     var newPatientEntity = toEntity(patient);
-    if (!patientEntity.equals(newPatientEntity)) {
+    if (patientEntity.hasDiff(newPatientEntity)) {
       try {
         return metadataVersionRepository.savePatientVersion(patientEntity, newPatientEntity);
       } catch (OptimisticLockException | ObjectOptimisticLockingFailureException e) {

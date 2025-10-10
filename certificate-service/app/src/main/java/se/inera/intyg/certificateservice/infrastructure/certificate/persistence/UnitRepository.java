@@ -67,7 +67,7 @@ public class UnitRepository {
   }
 
   private UnitEntity saveUnit(UnitEntity unitEntity, UnitEntity newUnitEntity) {
-    if (!unitEntity.equals(newUnitEntity)) {
+    if (unitEntity.hasDiff(newUnitEntity)) {
       try {
         return metadataVersionRepository.saveUnit(unitEntity, newUnitEntity);
 

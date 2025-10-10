@@ -69,7 +69,7 @@ public class StaffRepository {
 
   private StaffEntity updateStaffVersion(StaffEntity staffEntity, Staff staff) {
     var newStaffEntity = StaffEntityMapper.toEntity(staff);
-    if (!staffEntity.equals(newStaffEntity)) {
+    if (staffEntity.hasDiff(newStaffEntity)) {
       try {
         return metadataVersionRepository.saveStaffVersion(staffEntity, newStaffEntity);
       } catch (OptimisticLockException | ObjectOptimisticLockingFailureException e) {
