@@ -127,7 +127,8 @@ public class MedicalCertificate implements Certificate {
         .issuer(Staff.create(actionEvaluation.user()))
         .careUnit(actionEvaluation.careUnit())
         .careProvider(actionEvaluation.careProvider())
-        .issuingUnit(actionEvaluation.subUnit())
+        .issuingUnit(actionEvaluation.isIssuingUnitCareUnit() ?
+            actionEvaluation.careUnit() : actionEvaluation.subUnit())
         .responsibleIssuer(actionEvaluation.user().responsibleIssuer())
         .build();
   }
