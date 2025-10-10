@@ -14,4 +14,14 @@ public class CheckboxDate {
   Code code;
   Period min;
   Period max;
+
+  public static CheckboxDate create(Code code, Period min, Period max) {
+    return CheckboxDate.builder()
+        .id(new FieldId(code.code()))
+        .label(code.displayName())
+        .code(code)
+        .max(max)
+        .min(min)
+        .build();
+  }
 }
