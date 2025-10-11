@@ -15,6 +15,7 @@ import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.Cer
 import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
 import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
+import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
 
 public class RenewExternalCertificateRequestBuilder {
 
@@ -25,7 +26,12 @@ public class RenewExternalCertificateRequestBuilder {
   private CertificateModelIdDTO certificateModelId = FK7804_CERTIFICATE_MODEL_ID_DTO;
   private CertificateStatusTypeDTO status = CertificateStatusTypeDTO.SIGNED;
   private UnitDTO issuingUnit = ALFA_MEDICINCENTRUM_DTO;
-  private PrefillXmlDTO prefillXml = new PrefillXmlDTO("test");
+  private PrefillXmlDTO prefillXml = new PrefillXmlDTO(
+      new Xml(
+          """
+              <ns3:forifyllnad xmlns:ns3="urn:riv:clinicalprocess:healthcond:certificate:3.3"></ns3:forifyllnad>"""
+      ).base64()
+  );
 
   public static RenewExternalCertificateRequestBuilder create() {
     return new RenewExternalCertificateRequestBuilder();
