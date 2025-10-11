@@ -21,16 +21,10 @@ import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkType
 
 public abstract class GetCertificateTypeInfoIT extends BaseIntegrationIT {
 
-  protected abstract String type();
-
-  protected boolean canDentistsUseType() {
-    return false;
-  }
-
   @Test
   @DisplayName("Om aktiverad ska intygstypen returneras i listan av tillgängliga intygstyper")
   void shallReturnCertificateWhenActive() {
-    final var response = api.certificateTypeInfo(
+    final var response = api().certificateTypeInfo(
         defaultCertificateTypeInfoRequest()
     );
 
@@ -43,7 +37,7 @@ public abstract class GetCertificateTypeInfoIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om användaren har rollen tandläkare och inte får signera intyget ska intygstypen inte returneras i listan av tillgängliga intygstyper")
   void shallRespectRulesIfDentistCanSignCertificateTypeWhenReturningCertificateTypeInList() {
-    final var response = api.certificateTypeInfo(
+    final var response = api().certificateTypeInfo(
         customCertificateTypeInfoRequest()
             .user(DAN_DENTIST_DTO)
             .build()
@@ -65,7 +59,7 @@ public abstract class GetCertificateTypeInfoIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om aktiverad ska 'Skapa utkast' vara tillgänglig")
   void shallReturnResourceLinkCreateCertificate() {
-    final var response = api.certificateTypeInfo(
+    final var response = api().certificateTypeInfo(
         defaultCertificateTypeInfoRequest()
     );
 
@@ -80,7 +74,7 @@ public abstract class GetCertificateTypeInfoIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om patienten är avliden ska inte 'Skapa utkast' vara tillgänglig")
   void shallNotReturnResourceLinkCreateCertificateIfPatientIsDeceased() {
-    final var response = api.certificateTypeInfo(
+    final var response = api().certificateTypeInfo(
         customCertificateTypeInfoRequest()
             .patient(ATLAS_REACT_ABRAHAMSSON_DTO)
             .build()
@@ -97,7 +91,7 @@ public abstract class GetCertificateTypeInfoIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om användaren är blockerad ska inte 'Skapa utkast' vara tillgänglig")
   void shallNotReturnResourceLinkCreateCertificateIfUserIsBlocked() {
-    final var response = api.certificateTypeInfo(
+    final var response = api().certificateTypeInfo(
         customCertificateTypeInfoRequest()
             .user(
                 ajlaDoktorDtoBuilder()
@@ -118,7 +112,7 @@ public abstract class GetCertificateTypeInfoIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om användaren är blockerad och patienten avliden ska inte 'Skapa utkast' vara tillgänglig")
   void shallNotReturnResourceLinkCreateCertificateIfUserIsBlockedAndPatientIsDeceased() {
-    final var response = api.certificateTypeInfo(
+    final var response = api().certificateTypeInfo(
         customCertificateTypeInfoRequest()
             .user(
                 ajlaDoktorDtoBuilder()
@@ -140,7 +134,7 @@ public abstract class GetCertificateTypeInfoIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Vårdadmininstratör - Om patienten har skyddade personuppgifter ska inte 'Skapa utkast' vara tillgänglig")
   void shallNotReturnResourceLinkCreateCertificateIfUserIsCareAdminAndPatientIsProtected() {
-    final var response = api.certificateTypeInfo(
+    final var response = api().certificateTypeInfo(
         customCertificateTypeInfoRequest()
             .user(ALVA_VARDADMINISTRATOR_DTO)
             .patient(ANONYMA_REACT_ATTILA_DTO)
@@ -158,7 +152,7 @@ public abstract class GetCertificateTypeInfoIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Läkare - Om patienten har skyddade personuppgifter ska 'Skapa utkast' vara tillgänglig")
   void shallReturnResourceLinkCreateCertificateIfUserIsDoctorAndPatientIsProtected() {
-    final var response = api.certificateTypeInfo(
+    final var response = api().certificateTypeInfo(
         customCertificateTypeInfoRequest()
             .user(AJLA_DOCTOR_DTO)
             .patient(ANONYMA_REACT_ATTILA_DTO)

@@ -11,18 +11,15 @@ import org.junit.jupiter.api.Test;
 
 public abstract class ExistsCertificateIT extends BaseIntegrationIT {
 
-  protected abstract String type();
-
-  protected abstract String typeVersion();
 
   @Test
   @DisplayName("Om intyget finns så returneras true")
   void shallReturnTrueIfCertificateExists() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.certificateExists(
+    final var response = api().certificateExists(
         certificateId(testCertificates)
     );
 
@@ -35,7 +32,7 @@ public abstract class ExistsCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget inte finns lagrat så returneras false")
   void shallReturnFalseIfCertificateDoesnt() {
-    final var response = api.certificateExists("certificate-not-exists");
+    final var response = api().certificateExists("certificate-not-exists");
 
     assertFalse(
         exists(response.getBody()),

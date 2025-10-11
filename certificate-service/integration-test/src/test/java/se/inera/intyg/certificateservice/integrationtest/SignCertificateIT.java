@@ -25,19 +25,15 @@ import se.inera.intyg.certificateservice.testability.certificate.dto.Testability
 
 public abstract class SignCertificateIT extends BaseIntegrationIT {
 
-  protected abstract String type();
-
-  protected abstract String typeVersion();
-
 
   @Test
   @DisplayName("Om intyget är utfärdat på samma mottagning skall det gå att signera")
   void shallSuccessfullySignIfUnitIsSubUnitAndIssuedOnSameSubUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.signCertificate(
+    final var response = api().signCertificate(
         defaultSignCertificateRequest(),
         certificateId(testCertificates),
         version(testCertificates)
@@ -53,11 +49,11 @@ public abstract class SignCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på mottagning men på samma vårdenhet skall det gå att signera")
   void shallSuccessfullySignIfUnitIsCareUnitAndOnSameCareUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.signCertificate(
+    final var response = api().signCertificate(
         customSignCertificateRequest()
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build(),
@@ -75,13 +71,13 @@ public abstract class SignCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på samma vårdenhet skall det gå att signera")
   void shallSuccessfullySignIfUnitIsCareUnitAndIssuedOnSameCareUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion())
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build()
     );
 
-    final var response = api.signCertificate(
+    final var response = api().signCertificate(
         customSignCertificateRequest()
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build(),
@@ -99,11 +95,11 @@ public abstract class SignCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på en annan mottagning skall felkod 403 (FORBIDDEN) returneras")
   void shallReturn403IfUnitIsSubUnitAndNotOnSameUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.signCertificate(
+    final var response = api().signCertificate(
         customSignCertificateRequest()
             .unit(ALFA_HUDMOTTAGNINGEN_DTO)
             .build(),
@@ -117,11 +113,11 @@ public abstract class SignCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
   void shallReturn403IfUnitIsCareUnitAndNotOnCareUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.signCertificate(
+    final var response = api().signCertificate(
         customSignCertificateRequest()
             .careUnit(ALFA_VARDCENTRAL_DTO)
             .unit(ALFA_VARDCENTRAL_DTO)
@@ -136,11 +132,11 @@ public abstract class SignCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Vårdadministratör - Felkod 403 (FORBIDDEN) returneras")
   void shallReturn403UserIsCareAdmin() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.signCertificate(
+    final var response = api().signCertificate(
         customSignCertificateRequest()
             .user(ALVA_VARDADMINISTRATOR_DTO)
             .build(),
@@ -154,13 +150,13 @@ public abstract class SignCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall det returneras")
   void shallSuccessfullySignIfPatientIsProtectedPersonAndUserIsDoctor() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion())
             .patient(ANONYMA_REACT_ATTILA_DTO)
             .build()
     );
 
-    final var response = api.signCertificate(
+    final var response = api().signCertificate(
         defaultSignCertificateRequest(),
         certificateId(testCertificates),
         version(testCertificates)
@@ -176,13 +172,13 @@ public abstract class SignCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget inte är klart för signering skall felkod 400 (BAD_REQUEST) returneras")
   void shallReturn403IfCertificateNotValid() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion())
             .fillType(TestabilityFillTypeDTO.EMPTY)
             .build()
     );
 
-    final var response = api.signCertificate(
+    final var response = api().signCertificate(
         defaultSignCertificateRequest(),
         certificateId(testCertificates),
         version(testCertificates)
@@ -194,11 +190,11 @@ public abstract class SignCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om signatur saknas skall felkod 400 (BAD_REQUEST) returneras")
   void shallReturn403IfSignatureNotValid() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.signCertificate(
+    final var response = api().signCertificate(
         customSignCertificateRequest()
             .signatureXml(null)
             .build(),
@@ -212,11 +208,11 @@ public abstract class SignCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om man försöker signera med en inaktuell revision skall felkod 400 (BAD_REQUEST) returneras")
   void shallReturn403IfVersionNotValid() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.signCertificate(
+    final var response = api().signCertificate(
         customSignCertificateRequest()
             .signatureXml(null)
             .build(),
@@ -230,13 +226,13 @@ public abstract class SignCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget signeras ska ett meddelande läggas på AMQn")
   void shallSuccessfullyAddMessageOfSigningOnAMQ() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion())
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build()
     );
 
-    api.signCertificate(
+    api().signCertificate(
         customSignCertificateRequest()
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build(),
@@ -246,14 +242,14 @@ public abstract class SignCertificateIT extends BaseIntegrationIT {
 
     assertAll(
         () -> waitAtMost(Duration.ofSeconds(5))
-            .untilAsserted(() -> assertEquals(1, testListener.messages().size())),
+            .untilAsserted(() -> assertEquals(1, testListener().messages().size())),
         () -> assertEquals(
             certificateId(testCertificates),
-            testListener.messages().get(0).getStringProperty("certificateId")
+            testListener().messages().get(0).getStringProperty("certificateId")
         ),
         () -> assertEquals(
             "certificate-signed",
-            testListener.messages().get(0).getStringProperty("eventType")
+            testListener().messages().get(0).getStringProperty("eventType")
         )
     );
   }

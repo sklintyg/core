@@ -1,23 +1,42 @@
 package se.inera.intyg.certificateservice.integrationtest.fk7210;
 
+import static se.inera.intyg.certificateservice.integrationtest.fk7210.FK7210TestSetup.fk7210TestSetup;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
+import se.inera.intyg.certificateservice.integrationtest.BaseTestabilityUtilities;
 import se.inera.intyg.certificateservice.integrationtest.ExistsCitizenCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCitizenCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCitizenCertificateListIT;
 import se.inera.intyg.certificateservice.integrationtest.PrintCitizenCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.TestabilityUtilities;
+import se.inera.intyg.certificateservice.integrationtest.ag114.ActiveCertificatesIT;
 
-class FK7210CitizenIT {
+class FK7210CitizenIT extends ActiveCertificatesIT {
 
-  private static final String CERTIFICATE_TYPE = FK7210Constants.FK7210;
-  private static final String ACTIVE_VERSION = FK7210Constants.VERSION;
-  private static final String TYPE = FK7210Constants.TYPE;
+  public static final String TYPE = FK7210TestSetup.TYPE;
 
-  @DynamicPropertySource
-  static void testProperties(DynamicPropertyRegistry registry) {
-    registry.add("certificate.model.fk7210.v1_0.active.from", () -> "2024-01-01T00:00:00");
+  @BeforeEach
+  void setUp() {
+    super.setUpBaseIT();
+
+    baseTestabilityUtilities = fk7210TestSetup()
+        .testabilityUtilities(
+            TestabilityUtilities.builder()
+                .api(api)
+                .internalApi(internalApi)
+                .testabilityApi(testabilityApi)
+                .testListener(testListener)
+                .build()
+        )
+        .build();
+  }
+
+  @AfterEach
+  void tearDown() {
+    super.tearDownBaseIT();
   }
 
   @Nested
@@ -25,13 +44,8 @@ class FK7210CitizenIT {
   class GetCitizenCertificate extends GetCitizenCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -40,13 +54,8 @@ class FK7210CitizenIT {
   class GetCitizenCertificateList extends GetCitizenCertificateListIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -55,13 +64,8 @@ class FK7210CitizenIT {
   class PrintCitizenCertificate extends PrintCitizenCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -70,13 +74,8 @@ class FK7210CitizenIT {
   class ExistsCitizenCertificate extends ExistsCitizenCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 }

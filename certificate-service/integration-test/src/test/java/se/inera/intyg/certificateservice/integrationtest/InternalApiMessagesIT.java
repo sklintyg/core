@@ -15,26 +15,20 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public abstract class InternalApiMessagesIT extends BaseIntegrationIT {
-
-  protected abstract String type();
-
-  protected abstract String typeVersion();
-
-  protected abstract String questionId();
-
+  
   @Test
   @DisplayName("Ärendekommunikation för intyget skall gå att hämta")
   void shallReturnQuestionsAndAnswers() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    api.receiveMessage(
+    api().receiveMessage(
         incomingComplementMessageBuilder()
             .certificateId(certificateId(testCertificates))
             .complements(List.of(incomingComplementDTOBuilder()
@@ -43,7 +37,7 @@ public abstract class InternalApiMessagesIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var response = internalApi.getMessages(
+    final var response = internalApi().getMessages(
         certificateId(testCertificates)
     );
 

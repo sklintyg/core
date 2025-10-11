@@ -5,21 +5,19 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ALVA_VARDADMINISTRATOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ANNA_SJUKSKOTERSKA_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.BERTIL_BARNMORSKA_DTO;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.elements.QuestionForutsattningarForAttLamnaSkriftligtSamtycke.FORUTSATTNINGAR_FOR_ATT_LAMNA_SKRIFTLIGT_SAMTYCKE_ID;
-import static se.inera.intyg.certificateservice.integrationtest.fk3226.FK3226Constants.CODE;
-import static se.inera.intyg.certificateservice.integrationtest.fk3226.FK3226Constants.CODE_SYSTEM;
+import static se.inera.intyg.certificateservice.integrationtest.fk3226.FK3226TestSetup.fk3226TestSetup;
 
 import java.util.stream.Stream;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.params.provider.Arguments;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.integrationtest.AccessLevelsDeepIntegrationIT;
 import se.inera.intyg.certificateservice.integrationtest.AccessLevelsSVODIT;
 import se.inera.intyg.certificateservice.integrationtest.AdministrativeMessagesIT;
 import se.inera.intyg.certificateservice.integrationtest.AnswerComplementIT;
+import se.inera.intyg.certificateservice.integrationtest.BaseTestabilityUtilities;
 import se.inera.intyg.certificateservice.integrationtest.CertificateFromMessageIT;
 import se.inera.intyg.certificateservice.integrationtest.CertificateReadyForSignIT;
 import se.inera.intyg.certificateservice.integrationtest.CertificatesWithQAForCareIT;
@@ -51,23 +49,35 @@ import se.inera.intyg.certificateservice.integrationtest.RevokeCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.SendCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.SendCitizenCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.SignCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.TestabilityUtilities;
 import se.inera.intyg.certificateservice.integrationtest.UnitStatisticsIT;
 import se.inera.intyg.certificateservice.integrationtest.UpdateCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.ValidateCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.ag114.ActiveCertificatesIT;
 
-public class FK3226ActiveIT {
+public class FK3226ActiveIT extends ActiveCertificatesIT {
 
-  private static final String CERTIFICATE_TYPE = FK3226Constants.FK3226;
-  private static final String RECIPIENT = "FKASSA";
-  private static final String ACTIVE_VERSION = FK3226Constants.VERSION;
-  private static final String WRONG_VERSION = FK3226Constants.WRONG_VERSION;
-  private static final String TYPE = FK3226Constants.TYPE;
-  private static final ElementId ELEMENT_ID = FORUTSATTNINGAR_FOR_ATT_LAMNA_SKRIFTLIGT_SAMTYCKE_ID;
-  private static final Boolean VALUE = false;
+  public static final String TYPE = FK3226TestSetup.TYPE;
 
-  @DynamicPropertySource
-  static void testProperties(DynamicPropertyRegistry registry) {
-    registry.add("certificate.model.fk3226.v1_0.active.from", () -> "2024-01-01T00:00:00");
+  @BeforeEach
+  void setUp() {
+    super.setUpBaseIT();
+
+    baseTestabilityUtilities = fk3226TestSetup()
+        .testabilityUtilities(
+            TestabilityUtilities.builder()
+                .api(api)
+                .internalApi(internalApi)
+                .testabilityApi(testabilityApi)
+                .testListener(testListener)
+                .build()
+        )
+        .build();
+  }
+
+  @AfterEach
+  void tearDown() {
+    super.tearDownBaseIT();
   }
 
   @Nested
@@ -75,13 +85,8 @@ public class FK3226ActiveIT {
   class AccessLevelsDeepIntegration extends AccessLevelsDeepIntegrationIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -90,13 +95,8 @@ public class FK3226ActiveIT {
   class AccessLevelsSVOD extends AccessLevelsSVODIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -105,13 +105,8 @@ public class FK3226ActiveIT {
   class AdministrativeMessages extends AdministrativeMessagesIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -120,18 +115,8 @@ public class FK3226ActiveIT {
   class AnswerComplement extends AnswerComplementIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected String questionId() {
-      return ELEMENT_ID.id();
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -140,18 +125,8 @@ public class FK3226ActiveIT {
   class CertificateFromMessage extends CertificateFromMessageIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected String questionId() {
-      return ELEMENT_ID.id();
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -160,18 +135,8 @@ public class FK3226ActiveIT {
   class Complement extends ComplementIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected String questionId() {
-      return ELEMENT_ID.id();
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
 
     //TODO Add test for "Kompletteringsbegäran skall sättas som hanterad när förnyade intyget signeras" - see FK7472ActiveIT
@@ -182,18 +147,8 @@ public class FK3226ActiveIT {
   class CreateCertificate extends CreateCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected String wrongVersion() {
-      return WRONG_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
 
     protected static Stream<Arguments> rolesAccessToProtectedPerson() {
@@ -208,13 +163,8 @@ public class FK3226ActiveIT {
   class DeleteCertificate extends DeleteCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -223,13 +173,8 @@ public class FK3226ActiveIT {
   class ExistsCertificate extends ExistsCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -238,13 +183,8 @@ public class FK3226ActiveIT {
   class ExistsCertificateTypeInfo extends ExistsCertificateTypeInfoIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -253,13 +193,8 @@ public class FK3226ActiveIT {
   class GetCertificate extends GetCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
 
     protected static Stream<Arguments> rolesNoAccessToProtectedPerson() {
@@ -282,18 +217,8 @@ public class FK3226ActiveIT {
   class GetCertificateEvents extends GetCertificateEventsIT {
 
     @Override
-    protected boolean isAvailableForPatient() {
-      return true;
-    }
-
-    @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
 
     protected static Stream<Arguments> rolesNoAccessToProtectedPerson() {
@@ -310,13 +235,8 @@ public class FK3226ActiveIT {
   class GetCertificatePdf extends GetCertificatePdfIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
 
     protected static Stream<Arguments> rolesNoAccessToProtectedPerson() {
@@ -333,8 +253,8 @@ public class FK3226ActiveIT {
   class GetCertificateTypeInfo extends GetCertificateTypeInfoIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -343,13 +263,8 @@ public class FK3226ActiveIT {
   class GetCertificateXml extends GetCertificateXmlIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
 
     protected static Stream<Arguments> rolesNoAccessToProtectedPerson() {
@@ -366,13 +281,8 @@ public class FK3226ActiveIT {
   class GetPatientCertificates extends GetPatientCertificatesIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
 
     protected static Stream<Arguments> rolesNoAccessToProtectedPerson() {
@@ -395,13 +305,8 @@ public class FK3226ActiveIT {
   class GetUnitCertificatesInfo extends GetUnitCertificatesInfoIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -410,23 +315,8 @@ public class FK3226ActiveIT {
   class GetUnitCertificates extends GetUnitCertificatesIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected ElementId element() {
-      return ELEMENT_ID;
-    }
-
-    @Override
-    protected Object value() {
-      return VALUE;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -435,13 +325,8 @@ public class FK3226ActiveIT {
   class GetUnitCertificatesWhenSigned extends GetUnitCertificatesWhenSignedIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -450,13 +335,8 @@ public class FK3226ActiveIT {
   class InternalApi extends InternalApiIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -465,18 +345,8 @@ public class FK3226ActiveIT {
   class InternalApiMessages extends InternalApiMessagesIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected String questionId() {
-      return ELEMENT_ID.id();
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -485,18 +355,8 @@ public class FK3226ActiveIT {
   class MessageExists extends MessageExistsIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected String questionId() {
-      return ELEMENT_ID.id();
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -505,18 +365,8 @@ public class FK3226ActiveIT {
   class ComplementMessages extends ComplementMessagesIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected String questionId() {
-      return ELEMENT_ID.id();
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
 
     protected static Stream<Arguments> rolesNoAccessToProtectedPerson() {
@@ -533,13 +383,8 @@ public class FK3226ActiveIT {
   class RenewCertificate extends RenewCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -548,13 +393,8 @@ public class FK3226ActiveIT {
   class ReplaceCertificate extends ReplaceCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
 
   }
@@ -564,13 +404,8 @@ public class FK3226ActiveIT {
   class RevokeCertificate extends RevokeCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -579,18 +414,8 @@ public class FK3226ActiveIT {
   class SendCertificate extends SendCertificateIT {
 
     @Override
-    protected String recipient() {
-      return RECIPIENT;
-    }
-
-    @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -599,23 +424,8 @@ public class FK3226ActiveIT {
   class ReadyForSignCertificate extends CertificateReadyForSignIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected boolean nurseCanMarkReadyForSignCertificate() {
-      return true;
-    }
-
-    @Override
-    protected boolean midwifeCanMarkReadyForSignCertificate() {
-      return true;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -624,13 +434,8 @@ public class FK3226ActiveIT {
   class SignCertificate extends SignCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -639,28 +444,18 @@ public class FK3226ActiveIT {
   class UpdateCertificate extends UpdateCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected ElementId element() {
-      return ELEMENT_ID;
-    }
-
-    @Override
-    protected Object value() {
-      return VALUE;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
 
     @Nested
     @DisplayName(TYPE + "Uppdatera svar")
     class UpdateCertificateFK3226 extends UpdateCertificateFK3226IT {
+
+      @Override
+      protected BaseTestabilityUtilities testabilityUtilities() {
+        return baseTestabilityUtilities;
+      }
 
     }
   }
@@ -670,23 +465,8 @@ public class FK3226ActiveIT {
   class ValidateCertificate extends ValidateCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected ElementId element() {
-      return ELEMENT_ID;
-    }
-
-    @Override
-    protected Object value() {
-      return VALUE;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -695,23 +475,8 @@ public class FK3226ActiveIT {
   class ForwardCertificate extends ForwardCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected boolean nurseCanForwardCertificate() {
-      return true;
-    }
-
-    @Override
-    protected boolean midwifeCanForwardCertificate() {
-      return true;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -720,18 +485,8 @@ public class FK3226ActiveIT {
   class ForwardCertificateMessage extends ForwardCertificateMessageIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected String questionId() {
-      return ELEMENT_ID.id();
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -740,13 +495,8 @@ public class FK3226ActiveIT {
   class IncludeCerificatesWithQA extends CertificatesWithQAForCareIT {
 
     @Override
-    protected String type() {
-      return FK3226Constants.FK3226;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return FK3226Constants.VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -755,18 +505,8 @@ public class FK3226ActiveIT {
   class IncludeUnitStatistics extends UnitStatisticsIT {
 
     @Override
-    protected String type() {
-      return FK3226Constants.FK3226;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return FK3226Constants.VERSION;
-    }
-
-    @Override
-    protected Boolean canRecieveQuestions() {
-      return true;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
 
     protected static Stream<Arguments> rolesNoAccessToProtectedPerson() {
@@ -788,25 +528,9 @@ public class FK3226ActiveIT {
   @DisplayName(TYPE + "Aktiva versioner utifrån intygstyp och kodsystem")
   class IncludeExistsCertificateExternalTypeInfo extends ExistsCertificateExternalTypeInfoIT {
 
-
     @Override
-    protected String type() {
-      return FK3226Constants.FK3226;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return FK3226Constants.VERSION;
-    }
-
-    @Override
-    protected String codeSystem() {
-      return CODE_SYSTEM;
-    }
-
-    @Override
-    protected String code() {
-      return CODE;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -814,20 +538,9 @@ public class FK3226ActiveIT {
   @DisplayName(TYPE + "Skicka intyg som invånare från 1177 Intyg")
   class IncludeSendCitizenCertificateIT extends SendCitizenCertificateIT {
 
-
     @Override
-    protected String type() {
-      return FK3226Constants.FK3226;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return FK3226Constants.VERSION;
-    }
-
-    @Override
-    protected boolean availableForCitizen() {
-      return true;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -836,13 +549,8 @@ public class FK3226ActiveIT {
   class RenewExternalCertificate extends RenewExternalCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 }

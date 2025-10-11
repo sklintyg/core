@@ -21,22 +21,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 
 public abstract class ValidateCertificateIT extends BaseIntegrationIT {
-
-  protected abstract String type();
-
-  protected abstract String typeVersion();
-
-  protected abstract ElementId element();
-
-  protected abstract Object value();
 
   @Test
   @DisplayName("Om utkastet saknar 'Vårdenhetens adress' skall valideringsfel returneras")
   void shallReturnListOfErrorsIfMissingUnitContactAddress() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
@@ -53,7 +44,7 @@ public abstract class ValidateCertificateIT extends BaseIntegrationIT {
         )
     );
 
-    final var response = api.validateCertificate(
+    final var response = api().validateCertificate(
         customValidateCertificateRequest()
             .certificate(certificate)
             .build(),
@@ -75,7 +66,7 @@ public abstract class ValidateCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om utkastet saknar 'Vårdenhetens postnummer' skall valideringsfel returneras")
   void shallReturnListOfErrorsIfMissingUnitContactZipCode() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
@@ -92,7 +83,7 @@ public abstract class ValidateCertificateIT extends BaseIntegrationIT {
         )
     );
 
-    final var response = api.validateCertificate(
+    final var response = api().validateCertificate(
         customValidateCertificateRequest()
             .certificate(certificate)
             .build(),
@@ -114,7 +105,7 @@ public abstract class ValidateCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om utkastet saknar 'Vårdenhetens postort' skall valideringsfel returneras")
   void shallReturnListOfErrorsIfMissingUnitContactCity() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
@@ -131,7 +122,7 @@ public abstract class ValidateCertificateIT extends BaseIntegrationIT {
         )
     );
 
-    final var response = api.validateCertificate(
+    final var response = api().validateCertificate(
         customValidateCertificateRequest()
             .certificate(certificate)
             .build(),
@@ -153,7 +144,7 @@ public abstract class ValidateCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om utkastet saknar 'Vårdenhetens telefonnummer' skall valideringsfel returneras")
   void shallReturnListOfErrorsIfMissingUnitContactPhoneNumber() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
@@ -170,7 +161,7 @@ public abstract class ValidateCertificateIT extends BaseIntegrationIT {
         )
     );
 
-    final var response = api.validateCertificate(
+    final var response = api().validateCertificate(
         customValidateCertificateRequest()
             .certificate(certificate)
             .build(),
@@ -193,11 +184,11 @@ public abstract class ValidateCertificateIT extends BaseIntegrationIT {
   @DisplayName("Om utkastet saknar värden skall valideringsfel returneras")
   void shallReturnListOfErrorsIfEmptyCertificate() {
 
-    final var certificate = api.createCertificate(defaultCreateCertificateRequest(
+    final var certificate = api().createCertificate(defaultCreateCertificateRequest(
         type(), typeVersion()
     ));
 
-    final var response = api.validateCertificate(
+    final var response = api().validateCertificate(
         customValidateCertificateRequest()
             .certificate(certificate.getBody().getCertificate())
             .build(),

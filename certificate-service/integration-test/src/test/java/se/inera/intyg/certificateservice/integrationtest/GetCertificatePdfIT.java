@@ -26,18 +26,15 @@ import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 
 public abstract class GetCertificatePdfIT extends BaseIntegrationIT {
 
-  protected abstract String type();
-
-  protected abstract String typeVersion();
 
   @Test
   @DisplayName("Om intyget är utfärdat på samma mottagning skall pdf returneras")
   void shallReturnCertificatePdfIfUnitIsSubUnitAndOnSameUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.getCertificatePdf(
+    final var response = api().getCertificatePdf(
         defaultGetCertificatePdfRequest(),
         certificateId(testCertificates)
     );
@@ -51,11 +48,11 @@ public abstract class GetCertificatePdfIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på mottagning men på samma vårdenhet skall pdf returneras")
   void shallReturnCertificatePdfIfUnitIsCareUnitAndOnSameCareUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.getCertificatePdf(
+    final var response = api().getCertificatePdf(
         customGetCertificatePdfRequest()
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build(),
@@ -71,13 +68,13 @@ public abstract class GetCertificatePdfIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på samma vårdenhet skall pdf returneras")
   void shallReturnCertificatePdfIfUnitIsCareUnitAndIssuedOnSameCareUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion())
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build()
     );
 
-    final var response = api.getCertificatePdf(
+    final var response = api().getCertificatePdf(
         customGetCertificatePdfRequest()
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build(),
@@ -93,11 +90,11 @@ public abstract class GetCertificatePdfIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på en annan enhet inom samma vårdgivare skall pdf returneras")
   void shallReturnPdfIfOnDifferentUnitButSameCareProvider() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.getCertificatePdf(
+    final var response = api().getCertificatePdf(
         customGetCertificatePdfRequest()
             .user(ajlaDoktorDtoBuilder()
                 .accessScope(AccessScopeTypeDTO.WITHIN_CARE_PROVIDER)
@@ -117,11 +114,11 @@ public abstract class GetCertificatePdfIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på en annan mottagning skall felkod 403 (FORBIDDEN) returneras")
   void shallReturn403IfUnitIsSubUnitAndNotOnSameUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.getCertificatePdf(
+    final var response = api().getCertificatePdf(
         customGetCertificatePdfRequest().unit(ALFA_HUDMOTTAGNINGEN_DTO).build(),
         certificateId(testCertificates)
     );
@@ -132,11 +129,11 @@ public abstract class GetCertificatePdfIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
   void shallReturn403IfUnitIsCareUnitAndNotOnCareUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.getCertificatePdf(
+    final var response = api().getCertificatePdf(
         customGetCertificatePdfRequest()
             .careUnit(ALFA_VARDCENTRAL_DTO)
             .unit(ALFA_VARDCENTRAL_DTO)
@@ -151,13 +148,13 @@ public abstract class GetCertificatePdfIT extends BaseIntegrationIT {
   @DisplayName("Om intyget är utfärdat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
   @MethodSource("rolesNoAccessToProtectedPerson")
   void shallReturn403IfPatientIsProtectedPerson(UserDTO userDTO) {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion())
             .patient(ANONYMA_REACT_ATTILA_DTO)
             .build()
     );
 
-    final var response = api.getCertificatePdf(
+    final var response = api().getCertificatePdf(
         customGetCertificatePdfRequest()
             .user(userDTO)
             .build(),
@@ -170,13 +167,13 @@ public abstract class GetCertificatePdfIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall pdf returneras")
   void shallReturnCertificatePdfIfPatientIsProtectedPersonAndUserIsDoctor() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion())
             .patient(ANONYMA_REACT_ATTILA_DTO)
             .build()
     );
 
-    final var response = api.getCertificatePdf(
+    final var response = api().getCertificatePdf(
         customGetCertificatePdfRequest()
             .user(AJLA_DOCTOR_DTO)
             .build(),
@@ -192,11 +189,11 @@ public abstract class GetCertificatePdfIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är signerat skall pdf returneras")
   void shallReturnSignedCertificatePdf() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    final var response = api.getCertificatePdf(
+    final var response = api().getCertificatePdf(
         defaultGetCertificatePdfRequest(),
         certificateId(testCertificates)
     );
@@ -210,16 +207,16 @@ public abstract class GetCertificatePdfIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är signerat och skickat skall pdf returneras")
   void shallReturnSentCertificatePdf() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    final var response = api.getCertificatePdf(
+    final var response = api().getCertificatePdf(
         defaultGetCertificatePdfRequest(),
         certificateId(testCertificates)
     );

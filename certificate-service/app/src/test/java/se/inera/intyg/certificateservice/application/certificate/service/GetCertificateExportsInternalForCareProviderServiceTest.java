@@ -23,47 +23,49 @@ import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 @ExtendWith(MockitoExtension.class)
 class GetCertificateExportsInternalForCareProviderServiceTest {
 
-    private static final int PAGE = 1;
-    private static final int SIZE = 10;
-    private static final String CARE_PROVIDER_ID = "careProviderId";
-    @Mock
-    CertificateRepository certificateRepository;
-    @Mock
-    XmlGenerator xmlGenerator;
-    @InjectMocks
-    GetCertificateExportsInternalForCareProviderService getCertificateExportsInternalForCareProviderService;
+  private static final int PAGE = 1;
+  private static final int SIZE = 10;
+  private static final String CARE_PROVIDER_ID = "careProviderId";
+  @Mock
+  CertificateRepository certificateRepository;
+  @Mock
+  XmlGenerator xmlGenerator;
+  @InjectMocks
+  GetCertificateExportsInternalForCareProviderService getCertificateExportsInternalForCareProviderService;
 
-    @Test
-    void shallReturnExportInternalResponseExportInternalResponse() {
-        final var exportCertificateInternalResponses = List.of(
-            ExportCertificateInternalResponse.builder()
-                .certificateId(FK7210_CERTIFICATE.id().id())
-                .xml(XML.base64())
-                .revoked(true)
-                .build(),
-            ExportCertificateInternalResponse.builder()
-                .certificateId(FK3226_CERTIFICATE.id().id())
-                .xml(XML.base64())
-                .revoked(true)
-                .build()
-        );
+  @Test
+  void shallReturnExportInternalResponseExportInternalResponse() {
+    final var exportCertificateInternalResponses = List.of(
+        ExportCertificateInternalResponse.builder()
+            .certificateId(FK7210_CERTIFICATE.id().id())
+            .xml(XML.base64())
+            .revoked(true)
+            .build(),
+        ExportCertificateInternalResponse.builder()
+            .certificateId(FK3226_CERTIFICATE.id().id())
+            .xml(XML.base64())
+            .revoked(true)
+            .build()
+    );
 
-        final var expectedResult = ExportInternalResponse.builder()
-            .exports(exportCertificateInternalResponses)
-            .build();
+    final var expectedResult = ExportInternalResponse.builder()
+        .exports(exportCertificateInternalResponses)
+        .build();
 
-        final var certificateExportPage = CertificateExportPage.builder()
-            .certificates(List.of(FK7210_CERTIFICATE, FK3226_CERTIFICATE))
-            .build();
+    final var certificateExportPage = CertificateExportPage.builder()
+        .certificates(List.of(FK7210_CERTIFICATE, FK3226_CERTIFICATE))
+        .build();
 
-        final var internalRequest = ExportCertificateInternalRequest.builder()
-            .page(PAGE)
-            .size(SIZE)
-            .build();
+    final var internalRequest = ExportCertificateInternalRequest.builder()
+        .page(PAGE)
+        .size(SIZE)
+        .build();
 
-        doReturn(certificateExportPage).when(certificateRepository).getExportByCareProviderId(new HsaId(CARE_PROVIDER_ID), PAGE, SIZE);
+    doReturn(certificateExportPage).when(certificateRepository)
+        .getExportByCareProviderId(new HsaId(CARE_PROVIDER_ID), PAGE, SIZE);
 
-        final var actualResult = getCertificateExportsInternalForCareProviderService.get(internalRequest, CARE_PROVIDER_ID);
-        assertEquals(expectedResult, actualResult);
-    }
+    final var actualResult = getCertificateExportsInternalForCareProviderService.get(
+        internalRequest, CARE_PROVIDER_ID);
+    assertEquals(expectedResult, actualResult);
+  }
 }

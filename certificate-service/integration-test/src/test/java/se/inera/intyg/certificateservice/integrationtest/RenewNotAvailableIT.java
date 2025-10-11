@@ -12,23 +12,20 @@ import org.junit.jupiter.api.Test;
 
 public abstract class RenewNotAvailableIT extends BaseIntegrationIT {
 
-  protected abstract String type();
-
-  protected abstract String typeVersion();
 
   @Test
   @DisplayName("Intyg skall inte kunna förnyas - 403 (FORBIDDEN)")
   void shallReturn403IfRenewReceived() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    final var response = api.renewCertificate(defaultRenewCertificateRequest(),
+    final var response = api().renewCertificate(defaultRenewCertificateRequest(),
         certificateId(testCertificates));
 
     assertEquals(403, response.getStatusCode().value());

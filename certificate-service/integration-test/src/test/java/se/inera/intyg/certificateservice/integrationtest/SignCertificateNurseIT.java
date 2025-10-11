@@ -16,18 +16,15 @@ import org.junit.jupiter.api.Test;
 
 public abstract class SignCertificateNurseIT extends BaseIntegrationIT {
 
-  protected abstract String type();
-
-  protected abstract String typeVersion();
 
   @Test
   @DisplayName("Om användaren har rollen sjuksköterska ska intyget gå att signeras")
   void shallSuccessfullySignIfRoleIsNurse() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.signCertificate(
+    final var response = api().signCertificate(
         customSignCertificateRequest()
             .user(ANNA_SJUKSKOTERSKA_DTO)
             .build(),

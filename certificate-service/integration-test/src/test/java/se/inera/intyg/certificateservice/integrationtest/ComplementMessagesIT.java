@@ -47,26 +47,19 @@ import se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil;
 
 public abstract class ComplementMessagesIT extends BaseIntegrationIT {
 
-  protected abstract String type();
-
-  protected abstract String typeVersion();
-
-  protected abstract String questionId();
-
-
   @Test
   @DisplayName("Skall returnera lista av frågor som finns på intyget")
   void shallReturnListOfQuestionsForCertificate() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    api.receiveMessage(
+    api().receiveMessage(
         incomingComplementMessageBuilder()
             .certificateId(certificateId(testCertificates))
             .complements(List.of(incomingComplementDTOBuilder()
@@ -75,7 +68,7 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var messagesForCertificate = api.getMessagesForCertificate(
+    final var messagesForCertificate = api().getMessagesForCertificate(
         defaultGetCertificateMessageRequest(),
         certificateId(testCertificates)
     );
@@ -88,16 +81,16 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Ska returnera lista av frågor för enheten när ärenden filtreras fram")
   void shallReturnListOfQuestionsForUnitWhenApplyingMatchingFilters() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    api.receiveMessage(
+    api().receiveMessage(
         incomingComplementMessageBuilder()
             .certificateId(certificateId(testCertificates))
             .complements(List.of(incomingComplementDTOBuilder()
@@ -106,7 +99,7 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var response = api.getMessagesForUnit(
+    final var response = api().getMessagesForUnit(
         customGetUnitMessagesRequest()
             .messagesQueryCriteria(
                 MessagesQueryCriteriaDTO.builder()
@@ -136,16 +129,16 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Ska returnera ärende om filter för skickat är satt till samma dag som meddelandet skickats")
   void shallReturnListOfQuestionsForUnitWhenApplyingFilterSetToSameDayAsSent() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    api.receiveMessage(
+    api().receiveMessage(
         incomingComplementMessageBuilder()
             .certificateId(certificateId(testCertificates))
             .complements(List.of(incomingComplementDTOBuilder()
@@ -154,7 +147,7 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var response = api.getMessagesForUnit(
+    final var response = api().getMessagesForUnit(
         customGetUnitMessagesRequest()
             .messagesQueryCriteria(
                 MessagesQueryCriteriaDTO.builder()
@@ -184,16 +177,16 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Ska filtrera ärenden om avsändare inte matchar filtreringen")
   void shallFilterQuestionIfAuthorDoesNotMatch() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    api.receiveMessage(
+    api().receiveMessage(
         incomingComplementMessageBuilder()
             .certificateId(certificateId(testCertificates))
             .complements(List.of(incomingComplementDTOBuilder()
@@ -202,7 +195,7 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var response = api.getMessagesForUnit(
+    final var response = api().getMessagesForUnit(
         customGetUnitMessagesRequest()
             .messagesQueryCriteria(
                 MessagesQueryCriteriaDTO.builder()
@@ -232,16 +225,16 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Ska filtrera ärenden om vidarebefordrat inte matchar filtreringen")
   void shallFilterQuestionIfForwardedDoesNotMatch() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    api.receiveMessage(
+    api().receiveMessage(
         incomingComplementMessageBuilder()
             .certificateId(certificateId(testCertificates))
             .complements(List.of(incomingComplementDTOBuilder()
@@ -250,7 +243,7 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var response = api.getMessagesForUnit(
+    final var response = api().getMessagesForUnit(
         customGetUnitMessagesRequest()
             .messagesQueryCriteria(
                 MessagesQueryCriteriaDTO.builder()
@@ -280,16 +273,16 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Ska filtrera ärenden om skickat från inte matchar filtreringen")
   void shallFilterQuestionIfSentFromDoesNotMatch() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    api.receiveMessage(
+    api().receiveMessage(
         incomingComplementMessageBuilder()
             .certificateId(certificateId(testCertificates))
             .complements(List.of(incomingComplementDTOBuilder()
@@ -298,7 +291,7 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var response = api.getMessagesForUnit(
+    final var response = api().getMessagesForUnit(
         customGetUnitMessagesRequest()
             .messagesQueryCriteria(
                 MessagesQueryCriteriaDTO.builder()
@@ -328,16 +321,16 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Ska filtrera ärenden om skickat till inte matchar filtreringen")
   void shallFilterQuestionIfSentToDoesNotMatch() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    api.receiveMessage(
+    api().receiveMessage(
         incomingComplementMessageBuilder()
             .certificateId(certificateId(testCertificates))
             .complements(List.of(incomingComplementDTOBuilder()
@@ -346,7 +339,7 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var response = api.getMessagesForUnit(
+    final var response = api().getMessagesForUnit(
         customGetUnitMessagesRequest()
             .messagesQueryCriteria(
                 MessagesQueryCriteriaDTO.builder()
@@ -376,16 +369,16 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Ska filtrera ärenden om intygsutfärdare inte matchar filtreringen")
   void shallFilterQuestionIfIssuerDoesNotMatch() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    api.receiveMessage(
+    api().receiveMessage(
         incomingComplementMessageBuilder()
             .certificateId(certificateId(testCertificates))
             .complements(List.of(incomingComplementDTOBuilder()
@@ -394,7 +387,7 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var response = api.getMessagesForUnit(
+    final var response = api().getMessagesForUnit(
         customGetUnitMessagesRequest()
             .messagesQueryCriteria(
                 MessagesQueryCriteriaDTO.builder()
@@ -424,16 +417,16 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Ska filtrera ärenden om enhet inte matchar filtreringen")
   void shallFilterQuestionIfUnitDoesNotMatch() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    api.receiveMessage(
+    api().receiveMessage(
         incomingComplementMessageBuilder()
             .certificateId(certificateId(testCertificates))
             .complements(List.of(incomingComplementDTOBuilder()
@@ -442,7 +435,7 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var response = api.getMessagesForUnit(
+    final var response = api().getMessagesForUnit(
         customGetUnitMessagesRequest()
             .messagesQueryCriteria(
                 MessagesQueryCriteriaDTO.builder()
@@ -472,16 +465,16 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Ska filtrera ärenden om patient id inte matchar filtreringen")
   void shallFilterQuestionIfPatientIdDoesNotMatch() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    api.receiveMessage(
+    api().receiveMessage(
         incomingComplementMessageBuilder()
             .certificateId(certificateId(testCertificates))
             .complements(List.of(incomingComplementDTOBuilder()
@@ -490,7 +483,7 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var response = api.getMessagesForUnit(
+    final var response = api().getMessagesForUnit(
         customGetUnitMessagesRequest()
             .messagesQueryCriteria(
                 MessagesQueryCriteriaDTO.builder()
@@ -520,16 +513,16 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på samma mottagning ska hantering av frågor vara tillgänglig")
   void shallReturnListOfQuestionsForCertificateOnSameUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    api.receiveMessage(
+    api().receiveMessage(
         incomingComplementMessageBuilder()
             .certificateId(certificateId(testCertificates))
             .complements(List.of(incomingComplementDTOBuilder()
@@ -538,7 +531,7 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var messagesForCertificate = api.getMessagesForCertificate(
+    final var messagesForCertificate = api().getMessagesForCertificate(
         defaultGetCertificateMessageRequest(),
         certificateId(testCertificates)
     );
@@ -554,16 +547,16 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på mottagning men på samma vårdenhet ska hantering av frågor vara tillgänglig")
   void shallReturnQuestionWithComplementCertificateIfIssuedOnSameCareUnitDifferentSubUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    api.receiveMessage(
+    api().receiveMessage(
         incomingComplementMessageBuilder()
             .certificateId(certificateId(testCertificates))
             .complements(List.of(incomingComplementDTOBuilder()
@@ -572,7 +565,7 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var messagesForCertificate = api.getMessagesForCertificate(
+    final var messagesForCertificate = api().getMessagesForCertificate(
         customGetCertificateMessageRequest()
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build(),
@@ -590,20 +583,20 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på samma vårdenhet ska hantering av frågor vara tillgänglig")
   void shallReturnQuestionWithComplementCertificateIfIssuedOnSameCareUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion(), SIGNED)
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build()
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         customSendCertificateRequest()
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build(),
         certificateId(testCertificates)
     );
 
-    api.receiveMessage(
+    api().receiveMessage(
         incomingComplementMessageBuilder()
             .certificateId(certificateId(testCertificates))
             .complements(List.of(incomingComplementDTOBuilder()
@@ -612,7 +605,7 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var messagesForCertificate = api.getMessagesForCertificate(
+    final var messagesForCertificate = api().getMessagesForCertificate(
         customGetCertificateMessageRequest()
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build(),
@@ -630,16 +623,16 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på en annan mottagning ska hantering av frågor inte vara tillgänglig")
   void shallReturn403IfUnitIsSubUnitAndNotOnSameUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    api.receiveMessage(
+    api().receiveMessage(
         incomingComplementMessageBuilder()
             .certificateId(certificateId(testCertificates))
             .complements(List.of(incomingComplementDTOBuilder()
@@ -648,7 +641,7 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var messagesForCertificate = api.getMessagesForCertificate(
+    final var messagesForCertificate = api().getMessagesForCertificate(
         customGetCertificateMessageRequest()
             .unit(ALFA_HUDMOTTAGNINGEN_DTO).build(),
         certificateId(testCertificates)
@@ -662,18 +655,18 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
   @DisplayName("Om intyget är utfärdat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
   @MethodSource("rolesNoAccessToProtectedPerson")
   void shallReturn403IfPatientIsProtectedPerson(UserDTO userDTO) {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion(), SIGNED)
             .patient(ANONYMA_REACT_ATTILA_DTO)
             .build()
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    api.receiveMessage(
+    api().receiveMessage(
         incomingComplementMessageBuilder()
             .personId(ANONYMA_REACT_ATTILA_DTO.getId())
             .certificateId(certificateId(testCertificates))
@@ -683,7 +676,7 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var messagesForCertificate = api.getMessagesForCertificate(
+    final var messagesForCertificate = api().getMessagesForCertificate(
         customGetCertificateMessageRequest()
             .user(userDTO)
             .build(),
@@ -696,18 +689,18 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter ska inte hantering av frågor vara tillgänglig")
   void shallReturnComplementCertificateLinkIfPatientIsProtectedPersonAndUserIsDoctor() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion(), SIGNED)
             .patient(ANONYMA_REACT_ATTILA_DTO)
             .build()
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    api.receiveMessage(
+    api().receiveMessage(
         incomingComplementMessageBuilder()
             .personId(ANONYMA_REACT_ATTILA_DTO.getId())
             .certificateId(certificateId(testCertificates))
@@ -717,7 +710,7 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var messagesForCertificate = api.getMessagesForCertificate(
+    final var messagesForCertificate = api().getMessagesForCertificate(
         customGetCertificateMessageRequest()
             .user(AJLA_DOCTOR_DTO)
             .build(),
@@ -735,16 +728,16 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om användaren är blockerad ska inte hantering av frågor vara tillgänglig")
   void shallNotReturnComplementCertificateIfUserIsBlocked() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    api.receiveMessage(
+    api().receiveMessage(
         incomingComplementMessageBuilder()
             .certificateId(certificateId(testCertificates))
             .complements(List.of(incomingComplementDTOBuilder()
@@ -753,7 +746,7 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var messagesForCertificate = api.getMessagesForCertificate(
+    final var messagesForCertificate = api().getMessagesForCertificate(
         customGetCertificateMessageRequest()
             .user(
                 ajlaDoktorDtoBuilder()
@@ -774,11 +767,11 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget inte är skickat skall information om att meddelanden ej är tillgängliga visas")
   void shallDisplayMessagesNotAvailableIfCertificateIsNotSent() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    final var response = api.getCertificate(
+    final var response = api().getCertificate(
         defaultGetCertificateRequest(),
         certificateId(testCertificates)
     );
@@ -796,13 +789,13 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är skickat skall information om att meddelanden ej är tillgängliga inte visas")
   void shallNotDisplayMessagesNotAvailableIfCertificateIsSent() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
+    api().sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
 
-    final var response = api.getCertificate(
+    final var response = api().getCertificate(
         defaultGetCertificateRequest(),
         certificateId(testCertificates)
     );
@@ -820,11 +813,11 @@ public abstract class ComplementMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är osignerat skall information om att meddelanden ej är tillgängliga inte visas")
   void shallNotDisplayMessagesNotAvailableIfCertificateIsUnsigned() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), UNSIGNED)
     );
 
-    final var response = api.getCertificate(
+    final var response = api().getCertificate(
         defaultGetCertificateRequest(),
         certificateId(testCertificates)
     );

@@ -9,16 +9,7 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
 
 public abstract class ExistsCertificateExternalTypeInfoIT extends BaseIntegrationIT {
-
-  protected abstract String type();
-
-  protected abstract String typeVersion();
-
-  protected abstract String codeSystem();
-
-  protected abstract String code();
-
-
+  
   @Test
   @DisplayName("Skall returnera den senaste aktiva versionen om intygstypen med bifogat kodsystem existerar")
   void shallReturnLatestVersionWhenExternalTypeExists() {
@@ -27,7 +18,7 @@ public abstract class ExistsCertificateExternalTypeInfoIT extends BaseIntegratio
         .version(typeVersion())
         .build();
 
-    final var response = api.findLatestCertificateExternalTypeVersion(
+    final var response = api().findLatestCertificateExternalTypeVersion(
         codeSystem(), code()
     );
 
@@ -40,7 +31,7 @@ public abstract class ExistsCertificateExternalTypeInfoIT extends BaseIntegratio
   @Test
   @DisplayName("Skall returnera ett tomt svar om intygstypen finns men det bifogade kodsystemet matchar inte")
   void shallReturnEmptyResponseIfCodeSystemDontMatch() {
-    final var response = api.findLatestCertificateExternalTypeVersion(
+    final var response = api().findLatestCertificateExternalTypeVersion(
         "invalidCodeSystem", code()
     );
 
@@ -50,7 +41,7 @@ public abstract class ExistsCertificateExternalTypeInfoIT extends BaseIntegratio
   @Test
   @DisplayName("Skall returnera ett tomt svar om intygstypen inte finns")
   void shallReturnEmptyResponseIfCodeDontMatch() {
-    final var response = api.findLatestCertificateExternalTypeVersion(
+    final var response = api().findLatestCertificateExternalTypeVersion(
         codeSystem(), "invalidCode"
     );
 

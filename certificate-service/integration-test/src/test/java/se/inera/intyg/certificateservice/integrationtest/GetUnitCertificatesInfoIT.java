@@ -21,14 +21,11 @@ import se.inera.intyg.certificateservice.integrationtest.util.StaffUtil;
 
 public abstract class GetUnitCertificatesInfoIT extends BaseIntegrationIT {
 
-  protected abstract String type();
-
-  protected abstract String typeVersion();
 
   @Test
   @DisplayName("Returnera lista av personal som har sparat utkast på mottagning")
   void shallReturnAListOfStaffOnTheSameSubUnit() {
-    testabilityApi.addCertificates(
+    testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion()),
         defaultTestablilityCertificateRequest(type(), typeVersion()),
         customTestabilityCertificateRequest(type(), typeVersion())
@@ -36,7 +33,7 @@ public abstract class GetUnitCertificatesInfoIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var response = api.getUnitCertificatesInfo(
+    final var response = api().getUnitCertificatesInfo(
         defaultGetUnitCertificatesInfoRequest()
     );
 
@@ -54,7 +51,7 @@ public abstract class GetUnitCertificatesInfoIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Returnera lista av personal som har sparat utkast på vårdenhet")
   void shallReturnAListOfStaffOnTheSameCareUnit() {
-    testabilityApi.addCertificates(
+    testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion())
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build(),
@@ -67,7 +64,7 @@ public abstract class GetUnitCertificatesInfoIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var response = api.getUnitCertificatesInfo(
+    final var response = api().getUnitCertificatesInfo(
         customGetUnitCertificatesInfoRequest()
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build()
@@ -87,7 +84,7 @@ public abstract class GetUnitCertificatesInfoIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Inkludera inte personal som har sparat utkast på annan mottagning")
   void shallReturnAListOfStaffNotIncludingStaffOnDifferentSubUnit() {
-    testabilityApi.addCertificates(
+    testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion()),
         customTestabilityCertificateRequest(type(), typeVersion())
             .unit(ALFA_HUDMOTTAGNINGEN_DTO)
@@ -95,7 +92,7 @@ public abstract class GetUnitCertificatesInfoIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var response = api.getUnitCertificatesInfo(
+    final var response = api().getUnitCertificatesInfo(
         defaultGetUnitCertificatesInfoRequest()
     );
 
@@ -113,7 +110,7 @@ public abstract class GetUnitCertificatesInfoIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Inkludera inte personal som har sparat utkast på annan vårdenhet")
   void shallReturnAListOfStaffNotIncludingStaffOnDifferentCareUnit() {
-    testabilityApi.addCertificates(
+    testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion()),
         customTestabilityCertificateRequest(type(), typeVersion())
             .careUnit(ALFA_VARDCENTRAL_DTO)
@@ -122,7 +119,7 @@ public abstract class GetUnitCertificatesInfoIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var response = api.getUnitCertificatesInfo(
+    final var response = api().getUnitCertificatesInfo(
         customGetUnitCertificatesInfoRequest()
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build()

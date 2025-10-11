@@ -1,20 +1,39 @@
 package se.inera.intyg.certificateservice.integrationtest.fk7426;
 
+import static se.inera.intyg.certificateservice.integrationtest.fk7426.FK7426TestSetup.fk7426TestSetup;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
+import se.inera.intyg.certificateservice.integrationtest.BaseTestabilityUtilities;
 import se.inera.intyg.certificateservice.integrationtest.InactiveTypeIT;
+import se.inera.intyg.certificateservice.integrationtest.TestabilityUtilities;
+import se.inera.intyg.certificateservice.integrationtest.ag114.InActiveCertificatesIT;
 
-class FK7426InactiveIT {
+class FK7426InactiveIT extends InActiveCertificatesIT {
 
-  private static final String CERTIFICATE_TYPE = FK7426Constants.FK7426;
-  private static final String ACTIVE_VERSION = FK7426Constants.VERSION;
-  private static final String TYPE = FK7426Constants.TYPE;
+  public static final String TYPE = FK7426TestSetup.TYPE;
 
-  @DynamicPropertySource
-  static void testProperties(DynamicPropertyRegistry registry) {
-    registry.add("certificate.model.fk7426.v1_0.active.from", () -> "2099-01-01T00:00:00");
+  @BeforeEach
+  void setUp() {
+    super.setUpBaseIT();
+
+    baseTestabilityUtilities = fk7426TestSetup()
+        .testabilityUtilities(
+            TestabilityUtilities.builder()
+                .api(api)
+                .internalApi(internalApi)
+                .testabilityApi(testabilityApi)
+                .testListener(testListener)
+                .build()
+        )
+        .build();
+  }
+
+  @AfterEach
+  void tearDown() {
+    super.tearDownBaseIT();
   }
 
   @Nested
@@ -22,13 +41,8 @@ class FK7426InactiveIT {
   class InactiveType extends InactiveTypeIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 }

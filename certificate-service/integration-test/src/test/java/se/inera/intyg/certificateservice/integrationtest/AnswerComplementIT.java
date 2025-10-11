@@ -19,26 +19,20 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkTypeDTO;
 
 public abstract class AnswerComplementIT extends BaseIntegrationIT {
-
-  protected abstract String type();
-
-  protected abstract String typeVersion();
-
-  protected abstract String questionId();
-
+  
   @Test
   @DisplayName("Skall markera komplettering som hanterad om besvarad med meddelande")
   void shallSetComplementedQuestionsToHandledWitAnswers() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    api.receiveMessage(
+    api().receiveMessage(
         incomingComplementMessageBuilder()
             .certificateId(certificateId(testCertificates))
             .complements(List.of(incomingComplementDTOBuilder()
@@ -47,12 +41,12 @@ public abstract class AnswerComplementIT extends BaseIntegrationIT {
             .build()
     );
 
-    api.answerComplement(
+    api().answerComplement(
         defaultAnswerComplementRequest(),
         certificateId(testCertificates)
     );
 
-    final var messagesForCertificate = api.getMessagesForCertificate(
+    final var messagesForCertificate = api().getMessagesForCertificate(
         defaultGetCertificateMessageRequest(),
         certificateId(testCertificates)
     );
@@ -66,16 +60,16 @@ public abstract class AnswerComplementIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Skall skicka det nya intyget om kompletteringen besvaras med ett nytt intyg")
   void shallSendComplementingCertificateAfterSign() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    api.receiveMessage(
+    api().receiveMessage(
         incomingComplementMessageBuilder()
             .certificateId(certificateId(testCertificates))
             .complements(List.of(incomingComplementDTOBuilder()
@@ -84,12 +78,12 @@ public abstract class AnswerComplementIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var complementingCertificate = api.complementCertificate(
+    final var complementingCertificate = api().complementCertificate(
         defaultComplementCertificateRequest(),
         certificateId(testCertificates)
     ).getBody().getCertificate();
 
-    final var signedComplement = api.signCertificate(
+    final var signedComplement = api().signCertificate(
         defaultSignCertificateRequest(),
         complementingCertificate.getMetadata().getId(),
         complementingCertificate.getMetadata().getVersion()

@@ -3,8 +3,6 @@ package se.inera.intyg.certificateservice.integrationtest.fk7472;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.elements.QuestionPeriod.QUESTION_PERIOD_ID;
-import static se.inera.intyg.certificateservice.integrationtest.fk7472.FK7472Constants.FK7472;
-import static se.inera.intyg.certificateservice.integrationtest.fk7472.FK7472Constants.VERSION;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customTestabilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customUpdateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificate;
@@ -25,8 +23,8 @@ public abstract class UpdateCertificateFK7472IT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget får ett uppdaterat värde för period ska svarsalternativ uppdateras")
   void shallUpdateDataForPeriod() {
-    final var testCertificates = testabilityApi.addCertificates(
-        customTestabilityCertificateRequest(FK7472, VERSION)
+    final var testCertificates = testabilityApi().addCertificates(
+        customTestabilityCertificateRequest(type(), typeVersion())
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build()
     );
@@ -46,7 +44,7 @@ public abstract class UpdateCertificateFK7472IT extends BaseIntegrationIT {
             updateDateRangeListValue(certificate, QUESTION_PERIOD_ID.id(), expectedData))
     );
 
-    final var response = api.updateCertificate(
+    final var response = api().updateCertificate(
         customUpdateCertificateRequest()
             .certificate(certificate)
             .unit(ALFA_MEDICINCENTRUM_DTO)

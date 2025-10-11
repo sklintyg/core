@@ -16,21 +16,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public abstract class CertificateFromMessageIT extends BaseIntegrationIT {
-
-  protected abstract String type();
-
-  protected abstract String typeVersion();
-
-  protected abstract String questionId();
-
+  
   @Test
   @DisplayName("Ska returnera intyget om det finns")
   void shallReturnCertificate() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.receiveMessage(
+    api().receiveMessage(
         incomingComplementMessageBuilder()
             .certificateId(certificateId(testCertificates))
             .complements(List.of(incomingComplementDTOBuilder()
@@ -39,14 +33,14 @@ public abstract class CertificateFromMessageIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var messagesForCertificate = api.getMessagesForCertificate(
+    final var messagesForCertificate = api().getMessagesForCertificate(
         defaultGetCertificateMessageRequest(),
         certificateId(testCertificates)
     );
 
     final var questions = questions(messagesForCertificate.getBody());
 
-    final var response = api.certificateFromMessage(
+    final var response = api().certificateFromMessage(
         defaultGetCertificateFromMessageRequest(),
         messageId(questions.get(0))
     );
@@ -60,7 +54,7 @@ public abstract class CertificateFromMessageIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget inte finns i tjänsten skall felkod 400 (BAD_REQUEST) returneras")
   void shallNotReturnCertificateIfMissing() {
-    final var response = api.certificateFromMessage(
+    final var response = api().certificateFromMessage(
         defaultGetCertificateFromMessageRequest(),
         "message-not-exists");
 

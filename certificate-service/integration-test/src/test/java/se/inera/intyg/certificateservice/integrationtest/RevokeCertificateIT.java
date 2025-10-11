@@ -24,18 +24,15 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 
 public abstract class RevokeCertificateIT extends BaseIntegrationIT {
 
-  protected abstract String type();
-
-  protected abstract String typeVersion();
 
   @Test
   @DisplayName("Om intyget är utfärdat på samma mottagning skall det gå att makulera")
   void shallSuccessfullyRevokeIfUnitIsSubUnitAndIssuedOnSameSubUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    final var response = api.revokeCertificate(
+    final var response = api().revokeCertificate(
         defaultRevokeCertificateRequest(),
         certificateId(testCertificates)
     );
@@ -49,11 +46,11 @@ public abstract class RevokeCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på mottagning men på samma vårdenhet skall det gå att makulera")
   void shallSuccessfullyRevokeIfUnitIsCareUnitAndOnSameCareUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    final var response = api.revokeCertificate(
+    final var response = api().revokeCertificate(
         defaultRevokeCertificateRequest(),
         certificateId(testCertificates)
     );
@@ -67,13 +64,13 @@ public abstract class RevokeCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på samma vårdenhet skall det gå att makulera")
   void shallSuccessfullyRevokeIfUnitIsCareUnitAndIssuedOnSameCareUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion(), SIGNED)
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build()
     );
 
-    final var response = api.revokeCertificate(
+    final var response = api().revokeCertificate(
         customRevokeCertificateRequest()
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build(),
@@ -89,25 +86,25 @@ public abstract class RevokeCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget makuleras ska ett meddelande läggas på AMQn")
   void shallSuccessfullyAddMessageToAMQWhenRevokingCertificate() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.revokeCertificate(
+    api().revokeCertificate(
         defaultRevokeCertificateRequest(),
         certificateId(testCertificates)
     );
 
     assertAll(
         () -> waitAtMost(Duration.ofSeconds(5))
-            .untilAsserted(() -> assertEquals(1, testListener.messages().size())),
+            .untilAsserted(() -> assertEquals(1, testListener().messages().size())),
         () -> assertEquals(
             certificateId(testCertificates),
-            testListener.messages().get(0).getStringProperty("certificateId")
+            testListener().messages().get(0).getStringProperty("certificateId")
         ),
         () -> assertEquals(
             "certificate-revoked",
-            testListener.messages().get(0).getStringProperty("eventType")
+            testListener().messages().get(0).getStringProperty("eventType")
         )
     );
   }
@@ -115,11 +112,11 @@ public abstract class RevokeCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på en annan mottagning skall felkod 403 (FORBIDDEN) returneras")
   void shallReturn403IfUnitIsSubUnitAndNotOnSameUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    final var response = api.revokeCertificate(
+    final var response = api().revokeCertificate(
         customRevokeCertificateRequest()
             .unit(ALFA_HUDMOTTAGNINGEN_DTO)
             .build(),
@@ -132,11 +129,11 @@ public abstract class RevokeCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
   void shallReturn403IfUnitIsCareUnitAndNotOnCareUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    final var response = api.revokeCertificate(
+    final var response = api().revokeCertificate(
         customRevokeCertificateRequest()
             .careUnit(ALFA_VARDCENTRAL_DTO)
             .unit(ALFA_VARDCENTRAL_DTO)
@@ -150,11 +147,11 @@ public abstract class RevokeCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Vårdadministratör - Felkod 403 (FORBIDDEN) returneras")
   void shallReturn403UserIsCareAdmin() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    final var response = api.revokeCertificate(
+    final var response = api().revokeCertificate(
         customRevokeCertificateRequest()
             .user(ALVA_VARDADMINISTRATOR_DTO)
             .build(),
@@ -167,13 +164,13 @@ public abstract class RevokeCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall det gå att makulera")
   void shallSuccessfullyRevokeIfPatientIsProtectedPersonAndUserIsDoctor() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion(), SIGNED)
             .patient(ANONYMA_REACT_ATTILA_DTO)
             .build()
     );
 
-    final var response = api.revokeCertificate(
+    final var response = api().revokeCertificate(
         defaultRevokeCertificateRequest(),
         certificateId(testCertificates)
     );
@@ -187,11 +184,11 @@ public abstract class RevokeCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget inte är signerat skall felkod 403 (FORBIDDEN) returneras")
   void shallReturn403IfCertificateNotSigned() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.revokeCertificate(
+    final var response = api().revokeCertificate(
         defaultRevokeCertificateRequest(),
         certificateId(testCertificates)
     );
@@ -202,16 +199,16 @@ public abstract class RevokeCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget redan är makulerat skall felkod 403 (FORBIDDEN) returneras")
   void shallReturn403IfCertificateIsAlreadyRevoked() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    api.revokeCertificate(
+    api().revokeCertificate(
         defaultRevokeCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    final var response = api.revokeCertificate(
+    final var response = api().revokeCertificate(
         defaultRevokeCertificateRequest(),
         certificateId(testCertificates)
     );

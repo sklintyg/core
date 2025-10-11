@@ -18,23 +18,21 @@ import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
 
 public abstract class SendCitizenCertificateIT extends BaseIntegrationIT {
 
-  protected abstract String type();
-
-  protected abstract String typeVersion();
-
-  protected abstract boolean availableForCitizen();
+  protected boolean availableForCitizen() {
+    return true;
+  }
 
   @Test
   @DisplayName("Om intyget är utfärdat på invånaren ska intyget skickas")
   void shallSendCertificateIfIssuedOnCitizen() {
-    if (!availableForCitizen()) {
+    if (!isAvailableForPatient()) {
       return;
     }
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    final var response = api.sendCitizenCertificate(
+    final var response = api().sendCitizenCertificate(
         SendCitizenCertificateRequest.builder()
             .personId(PersonIdDTO.builder()
                 .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
@@ -50,14 +48,14 @@ public abstract class SendCitizenCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget inte är tillgängligt på 1177 ska intyget inte gå att skicka")
   void shallNotSendCertificateIfNotAvailableForCitizen() {
-    if (availableForCitizen()) {
+    if (isAvailableForPatient()) {
       return;
     }
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    final var response = api.sendCitizenCertificate(
+    final var response = api().sendCitizenCertificate(
         SendCitizenCertificateRequest.builder()
             .personId(PersonIdDTO.builder()
                 .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
@@ -72,14 +70,14 @@ public abstract class SendCitizenCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på en annan invånare ska felkod 403 (FORBIDDEN) returneras")
   void shallReturn403IfNotIssuedOnCitizen() {
-    if (!availableForCitizen()) {
+    if (!isAvailableForPatient()) {
       return;
     }
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    final var response = api.sendCitizenCertificate(
+    final var response = api().sendCitizenCertificate(
         SendCitizenCertificateRequest.builder()
             .personId(PersonIdDTO.builder()
                 .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
@@ -94,18 +92,18 @@ public abstract class SendCitizenCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget redan är skickat ska felkod 403 (FORBIDDEN) returneras")
   void shallReturn403IfCertificateAlreadySent() {
-    if (!availableForCitizen()) {
+    if (!isAvailableForPatient()) {
       return;
     }
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(), certificateId(testCertificates)
     );
 
-    final var response = api.sendCitizenCertificate(
+    final var response = api().sendCitizenCertificate(
         SendCitizenCertificateRequest.builder()
             .personId(PersonIdDTO.builder()
                 .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)

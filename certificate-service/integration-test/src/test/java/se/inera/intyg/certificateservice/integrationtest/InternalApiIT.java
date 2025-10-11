@@ -26,24 +26,21 @@ import org.junit.jupiter.api.Test;
 
 public abstract class InternalApiIT extends BaseIntegrationIT {
 
-  protected abstract String type();
-
-  protected abstract String typeVersion();
 
   @Test
   @DisplayName("Signerat intyg skall gå att hämta från intern api:et")
   void shallReturnSignedCertificate() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    api.signCertificate(
+    api().signCertificate(
         defaultSignCertificateRequest(),
         certificateId(testCertificates),
         version(testCertificates)
     );
 
-    final var response = internalApi.getCertificateXml(certificateId(testCertificates));
+    final var response = internalApi().getCertificateXml(certificateId(testCertificates));
 
     assertAll(
         () -> assertEquals(certificateId(testCertificates),
@@ -62,16 +59,16 @@ public abstract class InternalApiIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Makulerat intyg skall gå att hämta från intern api:et")
   void shallReturnRevokedCertificate() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.revokeCertificate(
+    api().revokeCertificate(
         defaultRevokeCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    final var response = internalApi.getCertificateXml(certificateId(testCertificates));
+    final var response = internalApi().getCertificateXml(certificateId(testCertificates));
 
     assertAll(
         () -> assertEquals(certificateId(testCertificates),
@@ -90,16 +87,16 @@ public abstract class InternalApiIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Skickat intyg skall gå att hämta från intern api:et")
   void shallReturnSentCertificate() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    final var response = internalApi.getCertificateXml(certificateId(testCertificates));
+    final var response = internalApi().getCertificateXml(certificateId(testCertificates));
 
     assertAll(
         () -> assertEquals(certificateId(testCertificates),
@@ -119,11 +116,11 @@ public abstract class InternalApiIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Metadata för intyget skall gå att hämta")
   void shallReturnCertificateMetadata() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = internalApi.getCertificateMetadata(
+    final var response = internalApi().getCertificateMetadata(
         certificateId(testCertificates)
     );
 
@@ -139,11 +136,11 @@ public abstract class InternalApiIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget finns så returneras true")
   void shallReturnTrueIfCertificateExists() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = internalApi.certificateExists(
+    final var response = internalApi().certificateExists(
         certificateId(testCertificates)
     );
 
@@ -156,7 +153,7 @@ public abstract class InternalApiIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget inte finns lagrat så returneras false")
   void shallReturnFalseIfCertificateDoesnt() {
-    final var response = internalApi.certificateExists("certificate-not-exists");
+    final var response = internalApi().certificateExists("certificate-not-exists");
 
     assertFalse(
         exists(response.getBody()),
@@ -167,11 +164,11 @@ public abstract class InternalApiIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Intyget skall gå att hämta")
   void shallReturnCertificate() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = internalApi.getCertificate(
+    final var response = internalApi().getCertificate(
         certificateId(testCertificates)
     );
 

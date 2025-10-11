@@ -1,8 +1,6 @@
 package se.inera.intyg.certificateservice.integrationtest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static se.inera.intyg.certificateservice.integrationtest.fk7210.FK7210Constants.FK7210;
-import static se.inera.intyg.certificateservice.integrationtest.fk7210.FK7210Constants.VERSION;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultTestablilityCertificateRequest;
 
 import org.junit.jupiter.api.AfterEach;
@@ -30,15 +28,14 @@ class MiscellaneousIT {
   private final TestRestTemplate restTemplate;
   private ApiUtil api;
   private TestabilityApiUtil testabilityApi;
-
-
+  
   @Autowired
   public MiscellaneousIT(TestRestTemplate restTemplate) {
     this.restTemplate = restTemplate;
   }
 
   @BeforeAll
-  public static void beforeAll() {
+  static void beforeAll() {
     Containers.ensureRunning();
   }
 
@@ -58,7 +55,7 @@ class MiscellaneousIT {
   @DisplayName("Om testability inte är aktiverat skall felkod 404 (NOT_FOUND) returneras")
   void shallReturn() {
     final var response = testabilityApi.addCertificate(
-        defaultTestablilityCertificateRequest(FK7210, VERSION)
+        defaultTestablilityCertificateRequest("fk7210", "1.0")
     );
 
     assertEquals(404, response.getStatusCode().value());

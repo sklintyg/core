@@ -21,18 +21,15 @@ import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 
 public abstract class GetCertificateIT extends BaseIntegrationIT {
 
-  protected abstract String type();
-
-  protected abstract String typeVersion();
 
   @Test
   @DisplayName("Om intyget är utfärdat på samma mottagning skall det returneras")
   void shallReturnCertificateIfUnitIsSubUnitAndOnSameUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.getCertificate(
+    final var response = api().getCertificate(
         defaultGetCertificateRequest(),
         certificateId(testCertificates)
     );
@@ -46,11 +43,11 @@ public abstract class GetCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på mottagning men på samma vårdenhet skall det returneras")
   void shallReturnCertificateIfUnitIsCareUnitAndOnSameCareUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.getCertificate(
+    final var response = api().getCertificate(
         customGetCertificateRequest()
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build(),
@@ -66,13 +63,13 @@ public abstract class GetCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på samma vårdenhet skall det returneras")
   void shallReturnCertificateIfUnitIsCareUnitAndIssuedOnSameCareUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion())
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build()
     );
 
-    final var response = api.getCertificate(
+    final var response = api().getCertificate(
         customGetCertificateRequest()
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build(),
@@ -88,11 +85,11 @@ public abstract class GetCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på en annan mottagning skall felkod 403 (FORBIDDEN) returneras")
   void shallReturn403IfUnitIsSubUnitAndNotOnSameUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.getCertificate(
+    final var response = api().getCertificate(
         customGetCertificateRequest().unit(ALFA_HUDMOTTAGNINGEN_DTO).build(),
         certificateId(testCertificates)
     );
@@ -103,11 +100,11 @@ public abstract class GetCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
   void shallReturn403IfUnitIsCareUnitAndNotOnCareUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.getCertificate(
+    final var response = api().getCertificate(
         customGetCertificateRequest()
             .careUnit(ALFA_VARDCENTRAL_DTO)
             .unit(ALFA_VARDCENTRAL_DTO)
@@ -122,13 +119,13 @@ public abstract class GetCertificateIT extends BaseIntegrationIT {
   @DisplayName("Om intyget är utfärdat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras om användaren har fel roll")
   @MethodSource("rolesNoAccessToProtectedPerson")
   void shallReturn403IfPatientIsProtectedPerson(UserDTO userDTO) {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion())
             .patient(ANONYMA_REACT_ATTILA_DTO)
             .build()
     );
 
-    final var response = api.getCertificate(
+    final var response = api().getCertificate(
         customGetCertificateRequest()
             .user(userDTO)
             .build(),
@@ -142,13 +139,13 @@ public abstract class GetCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras om användaren har rätt roll med är inloggad på fel enhet")
   void shallReturn403IfPatientIsProtectedPersonAndUserHasCorrectRoleButWrongUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion())
             .patient(ANONYMA_REACT_ATTILA_DTO)
             .build()
     );
 
-    final var response = api.getCertificate(
+    final var response = api().getCertificate(
         customGetCertificateRequest()
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build(),
@@ -162,13 +159,13 @@ public abstract class GetCertificateIT extends BaseIntegrationIT {
   @DisplayName("Om intyget är utfärdat på en patient som har skyddade personuppgifter skall det returneras")
   @MethodSource("rolesAccessToProtectedPerson")
   void shallReturnCertificateIfPatientIsProtectedPerson(UserDTO userDTO) {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion())
             .patient(ANONYMA_REACT_ATTILA_DTO)
             .build()
     );
 
-    final var response = api.getCertificate(
+    final var response = api().getCertificate(
         customGetCertificateRequest()
             .user(userDTO)
             .build(),

@@ -29,18 +29,15 @@ import se.inera.intyg.certificateservice.application.unit.dto.CertificatesQueryC
 
 public abstract class GetUnitCertificatesWhenSignedIT extends BaseIntegrationIT {
 
-  protected abstract String type();
-
-  protected abstract String typeVersion();
 
   @Test
   @DisplayName("Returnera lista med intyg som har utfärdats på mottagning")
   void shallReturnCertificatesOnTheSameSubUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    final var response = api.getUnitCertificates(
+    final var response = api().getUnitCertificates(
         customGetUnitCertificatesRequest()
             .queryCriteria(
                 CertificatesQueryCriteriaDTO.builder()
@@ -63,13 +60,13 @@ public abstract class GetUnitCertificatesWhenSignedIT extends BaseIntegrationIT 
   @Test
   @DisplayName("Returnera lista med intyg som har utfärdats på vårdenhet")
   void shallReturnCertificatesOnTheSameCareUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion(), SIGNED)
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build()
     );
 
-    final var response = api.getUnitCertificates(
+    final var response = api().getUnitCertificates(
         customGetUnitCertificatesRequest()
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .queryCriteria(
@@ -92,11 +89,11 @@ public abstract class GetUnitCertificatesWhenSignedIT extends BaseIntegrationIT 
   @Test
   @DisplayName("Returnera lista med intyg som har utfärdats på mottagning inom vårdenhet")
   void shallReturnCertificatesIssuedOnSubUnitOnTheSameCareUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    final var response = api.getUnitCertificates(
+    final var response = api().getUnitCertificates(
         customGetUnitCertificatesRequest()
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .queryCriteria(
@@ -119,13 +116,13 @@ public abstract class GetUnitCertificatesWhenSignedIT extends BaseIntegrationIT 
   @Test
   @DisplayName("Ej returnera intyg som utfärdats på annan mottagning")
   void shallNotReturnCertificatesOnDifferentSubUnit() {
-    testabilityApi.addCertificates(
+    testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion())
             .unit(ALFA_HUDMOTTAGNINGEN_DTO)
             .build()
     );
 
-    final var response = api.getUnitCertificates(
+    final var response = api().getUnitCertificates(
         customGetUnitCertificatesRequest()
             .queryCriteria(
                 CertificatesQueryCriteriaDTO.builder()
@@ -143,14 +140,14 @@ public abstract class GetUnitCertificatesWhenSignedIT extends BaseIntegrationIT 
   @Test
   @DisplayName("Ej returnera intyg som utfärdats på annan vårdenhet")
   void shallNotReturnCertificatesOnDifferentCareUnit() {
-    testabilityApi.addCertificates(
+    testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion())
             .unit(ALFA_VARDCENTRAL_DTO)
             .careUnit(ALFA_VARDCENTRAL_DTO)
             .build()
     );
 
-    final var response = api.getUnitCertificates(
+    final var response = api().getUnitCertificates(
         customGetUnitCertificatesRequest()
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .queryCriteria(
@@ -169,13 +166,13 @@ public abstract class GetUnitCertificatesWhenSignedIT extends BaseIntegrationIT 
   @Test
   @DisplayName("Ej returnera intyg som utfärdats på vårdenheten när man är på mottagningen")
   void shallNotReturnCertificatesOnCareUnitWhenOnSubUnit() {
-    testabilityApi.addCertificates(
+    testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion())
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build()
     );
 
-    final var response = api.getUnitCertificates(
+    final var response = api().getUnitCertificates(
         customGetUnitCertificatesRequest()
             .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
             .queryCriteria(
@@ -194,11 +191,11 @@ public abstract class GetUnitCertificatesWhenSignedIT extends BaseIntegrationIT 
   @Test
   @DisplayName("Returnera lista med intyg som har signerats datum efter från och med datum")
   void shallReturnCertificatesSavedAfterFrom() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    final var response = api.getUnitCertificates(
+    final var response = api().getUnitCertificates(
         customGetUnitCertificatesRequest()
             .queryCriteria(
                 CertificatesQueryCriteriaDTO.builder()
@@ -221,11 +218,11 @@ public abstract class GetUnitCertificatesWhenSignedIT extends BaseIntegrationIT 
   @Test
   @DisplayName("Ej returnera intyg som har signerats datum före från och med datum")
   void shallNotReturnCertificatesSavedBeforeFrom() {
-    testabilityApi.addCertificates(
+    testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.getUnitCertificates(
+    final var response = api().getUnitCertificates(
         customGetUnitCertificatesRequest()
             .queryCriteria(
                 CertificatesQueryCriteriaDTO.builder()
@@ -244,11 +241,11 @@ public abstract class GetUnitCertificatesWhenSignedIT extends BaseIntegrationIT 
   @Test
   @DisplayName("Returnera lista med intyg som har signerats datum före till och med datum")
   void shallReturnCertificatesSavedBeforeTo() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    final var response = api.getUnitCertificates(
+    final var response = api().getUnitCertificates(
         customGetUnitCertificatesRequest()
             .queryCriteria(
                 CertificatesQueryCriteriaDTO.builder()
@@ -271,11 +268,11 @@ public abstract class GetUnitCertificatesWhenSignedIT extends BaseIntegrationIT 
   @Test
   @DisplayName("Ej returnera intyg som har signerats datum efter till och med datum")
   void shallNotReturnCertificatesSavedAfterTo() {
-    testabilityApi.addCertificates(
+    testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.getUnitCertificates(
+    final var response = api().getUnitCertificates(
         customGetUnitCertificatesRequest()
             .queryCriteria(
                 CertificatesQueryCriteriaDTO.builder()
@@ -294,11 +291,11 @@ public abstract class GetUnitCertificatesWhenSignedIT extends BaseIntegrationIT 
   @Test
   @DisplayName("Returnera lista med intyg som har utfärdats på patienten")
   void shallReturnCertificatesSavedOnPatient() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    final var response = api.getUnitCertificates(
+    final var response = api().getUnitCertificates(
         customGetUnitCertificatesRequest()
             .queryCriteria(
                 CertificatesQueryCriteriaDTO.builder()
@@ -326,11 +323,11 @@ public abstract class GetUnitCertificatesWhenSignedIT extends BaseIntegrationIT 
   @Test
   @DisplayName("Ej returnera intyg som har utfärdats på annan patient")
   void shallNotReturnCertificatesSavedOnDifferentPatient() {
-    testabilityApi.addCertificates(
+    testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.getUnitCertificates(
+    final var response = api().getUnitCertificates(
         customGetUnitCertificatesRequest()
             .queryCriteria(
                 CertificatesQueryCriteriaDTO.builder()
@@ -355,11 +352,11 @@ public abstract class GetUnitCertificatesWhenSignedIT extends BaseIntegrationIT 
   @Test
   @DisplayName("Returnera lista med intyg som har signerats av vald användare")
   void shallReturnCertificatesSavedBySameStaff() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    final var response = api.getUnitCertificates(
+    final var response = api().getUnitCertificates(
         customGetUnitCertificatesRequest()
             .queryCriteria(
                 CertificatesQueryCriteriaDTO.builder()
@@ -382,11 +379,11 @@ public abstract class GetUnitCertificatesWhenSignedIT extends BaseIntegrationIT 
   @Test
   @DisplayName("Ej returnera intyg som har signerats av annan användare")
   void shallNotReturnCertificatesSavedByDifferentStaff() {
-    testabilityApi.addCertificates(
+    testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.getUnitCertificates(
+    final var response = api().getUnitCertificates(
         customGetUnitCertificatesRequest()
             .queryCriteria(
                 CertificatesQueryCriteriaDTO.builder()
@@ -405,11 +402,11 @@ public abstract class GetUnitCertificatesWhenSignedIT extends BaseIntegrationIT 
   @Test
   @DisplayName("Ej returnera intyg som inte har signerats")
   void shallNotReturnCertificatesWithDifferentStatus() {
-    testabilityApi.addCertificates(
+    testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.getUnitCertificates(
+    final var response = api().getUnitCertificates(
         customGetUnitCertificatesRequest()
             .queryCriteria(
                 CertificatesQueryCriteriaDTO.builder()

@@ -1,54 +1,148 @@
 package se.inera.intyg.certificateservice.integrationtest;
 
-import static se.inera.intyg.certificateservice.testability.common.TestabilityConstants.TESTABILITY_PROFILE;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.test.context.ActiveProfiles;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.integrationtest.util.ApiUtil;
-import se.inera.intyg.certificateservice.integrationtest.util.Containers;
 import se.inera.intyg.certificateservice.integrationtest.util.InternalApiUtil;
 import se.inera.intyg.certificateservice.integrationtest.util.TestListener;
 import se.inera.intyg.certificateservice.integrationtest.util.TestabilityApiUtil;
 
-@ActiveProfiles({"integration-test", TESTABILITY_PROFILE})
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public abstract class BaseIntegrationIT {
 
-  @LocalServerPort
-  protected int port;
-
-  @Autowired
-  protected TestRestTemplate restTemplate;
-  protected static final TestListener testListener = new TestListener();
-
-  protected ApiUtil api;
-  protected InternalApiUtil internalApi;
-  protected TestabilityApiUtil testabilityApi;
-
-  @BeforeEach
-  void setUp() {
-    this.api = new ApiUtil(restTemplate, port);
-    this.internalApi = new InternalApiUtil(restTemplate, port);
-    this.testabilityApi = new TestabilityApiUtil(restTemplate, port);
-    testListener.emptyMessages();
+  protected String wrongVersion() {
+    return "wrongVersion";
   }
 
-  @BeforeAll
-  public static void beforeAll() {
-    Containers.ensureRunning();
+  protected String codeSystem() {
+    return "b64ea353-e8f6-4832-b563-fc7d46f29548";
   }
 
-  @AfterEach
-  void tearDown() {
-    testabilityApi.reset();
-    api.reset();
-    internalApi.reset();
+  protected BaseTestabilityUtilities testabilityUtilities() {
+    return BaseTestabilityUtilities.builder().build();
   }
+
+  protected ApiUtil api() {
+    return testabilityUtilities().getTestabilityUtilities().getApi();
+  }
+
+  protected InternalApiUtil internalApi() {
+    return testabilityUtilities().getTestabilityUtilities().getInternalApi();
+  }
+
+  protected TestabilityApiUtil testabilityApi() {
+    return testabilityUtilities().getTestabilityUtilities().getTestabilityApi();
+  }
+
+  protected TestListener testListener() {
+    return testabilityUtilities().getTestabilityUtilities().getTestListener();
+  }
+
+  protected String type() {
+    return testabilityUtilities().getTestabilityCertificate().getType();
+  }
+
+  protected String typeVersion() {
+    return testabilityUtilities().getTestabilityCertificate().getActiveVersion();
+  }
+
+  protected ElementId element() {
+    return testabilityUtilities()
+        .getTestabilityCertificate()
+        .getValueForTest()
+        .id();
+  }
+
+  protected Object value() {
+    final var elementValue = testabilityUtilities()
+        .getTestabilityCertificate()
+        .getValueForTest()
+        .value();
+
+    if (elementValue instanceof ElementValueText elementValueText) {
+      return elementValueText.text();
+    }
+
+    if (elementValue instanceof ElementValueBoolean elementValueBoolean) {
+      return elementValueBoolean.value();
+    }
+
+    if (elementValue instanceof ElementValueDate elementValueDate) {
+      return elementValueDate.date();
+    }
+
+    throw new IllegalStateException("Unknown element value type: " + elementValue.getClass());
+  }
+
+  protected String code() {
+    return testabilityUtilities()
+        .getTestabilityCertificate()
+        .getCode();
+  }
+
+  protected Boolean canRecieveQuestions() {
+    return testabilityUtilities()
+        .getTestabilityCertificate()
+        .getTestabilityAccess()
+        .isCanRecieveQuestions();
+  }
+
+  protected boolean nurseCanForwardCertificate() {
+    return testabilityUtilities()
+        .getTestabilityCertificate()
+        .getTestabilityAccess()
+        .isNurseCanForwardCertificate();
+  }
+
+  protected boolean midwifeCanForwardCertificate() {
+    return testabilityUtilities()
+        .getTestabilityCertificate()
+        .getTestabilityAccess()
+        .isMidwifeCanForwardCertificate();
+  }
+
+  protected boolean canDentistsUseType() {
+    return testabilityUtilities()
+        .getTestabilityCertificate()
+        .getTestabilityAccess()
+        .isCanDentistsUseType();
+  }
+
+  protected boolean midwifeCanMarkReadyForSignCertificate() {
+    return testabilityUtilities()
+        .getTestabilityCertificate()
+        .getTestabilityAccess()
+        .isMidwifeCanMarkReadyForSignCertificate();
+  }
+
+  protected boolean nurseCanMarkReadyForSignCertificate() {
+    return testabilityUtilities()
+        .getTestabilityCertificate()
+        .getTestabilityAccess()
+        .isNurseCanMarkReadyForSignCertificate();
+  }
+
+  protected boolean isAvailableForPatient() {
+    return testabilityUtilities()
+        .getTestabilityCertificate()
+        .getTestabilityAccess()
+        .isAvailableForPatient();
+  }
+
+  protected String recipient() {
+    return testabilityUtilities()
+        .getTestabilityCertificate()
+        .getRecipient();
+  }
+
+  protected String questionId() {
+    return testabilityUtilities()
+        .getTestabilityCertificate()
+        .getValueForTest()
+        .id()
+        .id();
+  }
+
+  ;
 }

@@ -88,7 +88,7 @@ class SendMessageDomainServiceTest {
     final var certificate = mock(MedicalCertificate.class);
     final var message = mock(Message.class);
     final var certificateEventCaptor = ArgumentCaptor.forClass(MessageEvent.class);
-    
+
     doReturn(CERTIFICATE_ID).when(certificate).id();
     doReturn(true).when(certificate)
         .allowTo(CertificateActionType.SEND_MESSAGE, Optional.of(ACTION_EVALUATION));

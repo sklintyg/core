@@ -16,18 +16,15 @@ import org.junit.jupiter.api.Test;
 
 public abstract class CertificatesWithQAForCareIT extends BaseIntegrationIT {
 
-  protected abstract String type();
-
-  protected abstract String typeVersion();
 
   @Test
   @DisplayName("Skall returnera en lista av intyg")
   void shallReturnListOfListItems() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    final var certificatesWithQA = internalApi.getCertificatesInternalWithQA(
+    final var certificatesWithQA = internalApi().getCertificatesInternalWithQA(
         customGetCertificatesInternalWithQARequest()
             .certificateIds(
                 testCertificates.stream()
@@ -48,11 +45,11 @@ public abstract class CertificatesWithQAForCareIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Skall returnera en tom lista om inga intyg hittas")
   void shallReturnListWithoutListItems() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    final var certificatesWithQA = internalApi.getCertificatesInternalWithQA(
+    final var certificatesWithQA = internalApi().getCertificatesInternalWithQA(
         defaultGetCertificatesInternalWithQARequest()
     );
 

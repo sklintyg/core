@@ -16,18 +16,15 @@ import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
 
 public abstract class PrintCitizenCertificateIT extends BaseIntegrationIT {
 
-  protected abstract String type();
-
-  protected abstract String typeVersion();
 
   @Test
   @DisplayName("Om intyget är utfärdat på invånaren ska intyget skrivas ut")
   void shallReturnCertificateIfIssuedOnCitizen() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    final var response = api.printCitizenCertificate(
+    final var response = api().printCitizenCertificate(
         PrintCitizenCertificateRequest.builder()
             .personId(PersonIdDTO.builder()
                 .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)
@@ -44,11 +41,11 @@ public abstract class PrintCitizenCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på en annan invånare ska felkod 403 (FORBIDDEN) returneras")
   void shallReturn403IfNotIssuedOnCitizen() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    final var response = api.printCitizenCertificate(
+    final var response = api().printCitizenCertificate(
         PrintCitizenCertificateRequest.builder()
             .personId(PersonIdDTO.builder()
                 .type(PersonIdTypeDTO.PERSONAL_IDENTITY_NUMBER)

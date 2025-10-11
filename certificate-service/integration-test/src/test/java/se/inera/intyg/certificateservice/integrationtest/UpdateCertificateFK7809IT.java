@@ -16,8 +16,6 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionOvrigt.QUESTION_OVRIGT_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionPagaendeOchPlaneradeBehandlingar.QUESTION_PAGAENDE_ELLER_PLANERAD_BEHANDLING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionPrognos.QUESTION_PROGNOS_ID;
-import static se.inera.intyg.certificateservice.integrationtest.fk7809.FK7809Constants.FK7809;
-import static se.inera.intyg.certificateservice.integrationtest.fk7809.FK7809Constants.VERSION;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customTestabilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customUpdateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificate;
@@ -49,8 +47,8 @@ public abstract class UpdateCertificateFK7809IT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget får ett uppdaterat värde för grund för medicinskt underlag ska intyget uppdateras")
   void shallUpdateDataForMedicalExamination() {
-    final var testCertificates = testabilityApi.addCertificates(
-        customTestabilityCertificateRequest(FK7809, VERSION)
+    final var testCertificates = testabilityApi().addCertificates(
+        customTestabilityCertificateRequest(type(), typeVersion())
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build()
     );
@@ -73,7 +71,7 @@ public abstract class UpdateCertificateFK7809IT extends BaseIntegrationIT {
             updateValue(certificate, QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID.id(), expectedData))
     );
 
-    final var response = api.updateCertificate(
+    final var response = api().updateCertificate(
         customUpdateCertificateRequest()
             .certificate(certificate)
             .unit(ALFA_MEDICINCENTRUM_DTO)
@@ -88,8 +86,8 @@ public abstract class UpdateCertificateFK7809IT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget får ett uppdaterat värde för annat underlag ska intyget uppdateras")
   void shallUpdateDataForOtherTreatments() {
-    final var testCertificates = testabilityApi.addCertificates(
-        customTestabilityCertificateRequest(FK7809, VERSION)
+    final var testCertificates = testabilityApi().addCertificates(
+        customTestabilityCertificateRequest(type(), typeVersion())
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build()
     );
@@ -108,7 +106,7 @@ public abstract class UpdateCertificateFK7809IT extends BaseIntegrationIT {
                 expectedData))
     );
 
-    final var response = api.updateCertificate(
+    final var response = api().updateCertificate(
         customUpdateCertificateRequest()
             .certificate(certificate)
             .unit(ALFA_MEDICINCENTRUM_DTO)
@@ -123,8 +121,8 @@ public abstract class UpdateCertificateFK7809IT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget får ett uppdaterat värde för diagnos ska intyget uppdateras")
   void shallUpdateDataForDiagnosis() {
-    final var testCertificates = testabilityApi.addCertificates(
-        customTestabilityCertificateRequest(FK7809, VERSION)
+    final var testCertificates = testabilityApi().addCertificates(
+        customTestabilityCertificateRequest(type(), typeVersion())
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build()
     );
@@ -148,7 +146,7 @@ public abstract class UpdateCertificateFK7809IT extends BaseIntegrationIT {
             updateValue(certificate, DIAGNOSIS_ID.id(), expectedData))
     );
 
-    final var response = api.updateCertificate(
+    final var response = api().updateCertificate(
         customUpdateCertificateRequest()
             .certificate(certificate)
             .unit(ALFA_MEDICINCENTRUM_DTO)
@@ -162,8 +160,8 @@ public abstract class UpdateCertificateFK7809IT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget får ett uppdaterat värde för diagnoshistorik ska intyget uppdateras")
   void shallUpdateDataForDiagnosisHistory() {
-    final var testCertificates = testabilityApi.addCertificates(
-        customTestabilityCertificateRequest(FK7809, VERSION)
+    final var testCertificates = testabilityApi().addCertificates(
+        customTestabilityCertificateRequest(type(), typeVersion())
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build()
     );
@@ -177,7 +175,7 @@ public abstract class UpdateCertificateFK7809IT extends BaseIntegrationIT {
                 text))
     );
 
-    final var response = api.updateCertificate(
+    final var response = api().updateCertificate(
         customUpdateCertificateRequest()
             .certificate(certificate)
             .unit(ALFA_MEDICINCENTRUM_DTO)
@@ -191,8 +189,8 @@ public abstract class UpdateCertificateFK7809IT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget får ett uppdaterat värde för typ av funktionsnedsättning ska intyget uppdateras")
   void shallUpdateDataForDisabilityCode() {
-    final var testCertificates = testabilityApi.addCertificates(
-        customTestabilityCertificateRequest(FK7809, VERSION)
+    final var testCertificates = testabilityApi().addCertificates(
+        customTestabilityCertificateRequest(type(), typeVersion())
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build()
     );
@@ -215,7 +213,7 @@ public abstract class UpdateCertificateFK7809IT extends BaseIntegrationIT {
                 expectedData))
     );
 
-    final var response = api.updateCertificate(
+    final var response = api().updateCertificate(
         customUpdateCertificateRequest()
             .certificate(certificate)
             .unit(ALFA_MEDICINCENTRUM_DTO)
@@ -230,8 +228,8 @@ public abstract class UpdateCertificateFK7809IT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget får ett uppdaterat värde för aktivitetsbegränsningar ska intyget uppdateras")
   void shallUpdateDataForActivityLimitations() {
-    final var testCertificates = testabilityApi.addCertificates(
-        customTestabilityCertificateRequest(FK7809, VERSION)
+    final var testCertificates = testabilityApi().addCertificates(
+        customTestabilityCertificateRequest(type(), typeVersion())
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build()
     );
@@ -245,7 +243,7 @@ public abstract class UpdateCertificateFK7809IT extends BaseIntegrationIT {
                 text))
     );
 
-    final var response = api.updateCertificate(
+    final var response = api().updateCertificate(
         customUpdateCertificateRequest()
             .certificate(certificate)
             .unit(ALFA_MEDICINCENTRUM_DTO)
@@ -259,8 +257,8 @@ public abstract class UpdateCertificateFK7809IT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget får ett uppdaterat värde för medicinsk behandling ska intyget uppdateras")
   void shallUpdateDataForMedicalTreatment() {
-    final var testCertificates = testabilityApi.addCertificates(
-        customTestabilityCertificateRequest(FK7809, VERSION)
+    final var testCertificates = testabilityApi().addCertificates(
+        customTestabilityCertificateRequest(type(), typeVersion())
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build()
     );
@@ -274,7 +272,7 @@ public abstract class UpdateCertificateFK7809IT extends BaseIntegrationIT {
                 text))
     );
 
-    final var response = api.updateCertificate(
+    final var response = api().updateCertificate(
         customUpdateCertificateRequest()
             .certificate(certificate)
             .unit(ALFA_MEDICINCENTRUM_DTO)
@@ -288,8 +286,8 @@ public abstract class UpdateCertificateFK7809IT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget får ett uppdaterat värde för prognos ska intyget uppdateras")
   void shallUpdateDataForPrognosis() {
-    final var testCertificates = testabilityApi.addCertificates(
-        customTestabilityCertificateRequest(FK7809, VERSION)
+    final var testCertificates = testabilityApi().addCertificates(
+        customTestabilityCertificateRequest(type(), typeVersion())
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build()
     );
@@ -303,7 +301,7 @@ public abstract class UpdateCertificateFK7809IT extends BaseIntegrationIT {
                 text))
     );
 
-    final var response = api.updateCertificate(
+    final var response = api().updateCertificate(
         customUpdateCertificateRequest()
             .certificate(certificate)
             .unit(ALFA_MEDICINCENTRUM_DTO)
@@ -317,8 +315,8 @@ public abstract class UpdateCertificateFK7809IT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget får ett uppdaterat värde för övrigt ska intyget uppdateras")
   void shallUpdateDataForOther() {
-    final var testCertificates = testabilityApi.addCertificates(
-        customTestabilityCertificateRequest(FK7809, VERSION)
+    final var testCertificates = testabilityApi().addCertificates(
+        customTestabilityCertificateRequest(type(), typeVersion())
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build()
     );
@@ -332,7 +330,7 @@ public abstract class UpdateCertificateFK7809IT extends BaseIntegrationIT {
                 text))
     );
 
-    final var response = api.updateCertificate(
+    final var response = api().updateCertificate(
         customUpdateCertificateRequest()
             .certificate(certificate)
             .unit(ALFA_MEDICINCENTRUM_DTO)

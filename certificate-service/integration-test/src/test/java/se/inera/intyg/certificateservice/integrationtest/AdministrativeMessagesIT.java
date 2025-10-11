@@ -41,19 +41,16 @@ import se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstant
 
 public abstract class AdministrativeMessagesIT extends BaseIntegrationIT {
 
-  protected abstract String type();
-
-  protected abstract String typeVersion();
 
   @Test
   @DisplayName("Användare skall kunna skapa administrativa frågor")
   void shallCreateAdministrativeQuestion() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED));
 
-    api.sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
+    api().sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
 
-    final var response = api.createMessage(defaultCreateMessageRequest(),
+    final var response = api().createMessage(defaultCreateMessageRequest(),
         certificateId(testCertificates));
 
     assertEquals(200, response.getStatusCode().value());
@@ -62,23 +59,23 @@ public abstract class AdministrativeMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Användare skall kunna uppdatera administrativa frågor")
   void shallSaveAdministrativeQuestion() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED));
 
-    api.sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
+    api().sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
 
     final var createdQuestion = question(
-        api.createMessage(defaultCreateMessageRequest(),
+        api().createMessage(defaultCreateMessageRequest(),
             certificateId(testCertificates)).getBody());
 
-    api.saveMessage(customSaveMessageRequest()
+    api().saveMessage(customSaveMessageRequest()
             .question(questionDTOBuilder()
                 .certificateId(certificateId(testCertificates))
                 .build())
             .build(),
         messageId(createdQuestion));
 
-    final var questions = questions(api.getMessagesForCertificate(
+    final var questions = questions(api().getMessagesForCertificate(
         defaultGetCertificateMessageRequest(), certificateId(testCertificates)).getBody());
 
     assertEquals(TestDataMessageConstants.CONTENT, questions.get(0).getMessage());
@@ -87,17 +84,17 @@ public abstract class AdministrativeMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Användare skall kunna skicka administrativa frågor")
   void shallSendAdministrativeQuestion() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED));
 
-    api.sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
+    api().sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
 
-    final var createdQuestion = question(api.createMessage(defaultCreateMessageRequest(),
+    final var createdQuestion = question(api().createMessage(defaultCreateMessageRequest(),
         certificateId(testCertificates)).getBody());
 
-    api.sendMessage(defaultSendMessageRequest(), messageId(createdQuestion));
+    api().sendMessage(defaultSendMessageRequest(), messageId(createdQuestion));
 
-    final var questions = questions(api.getMessagesForCertificate(
+    final var questions = questions(api().getMessagesForCertificate(
         defaultGetCertificateMessageRequest(), certificateId(testCertificates)).getBody());
 
     assertNotNull(questions.get(0).getSent(),
@@ -107,26 +104,26 @@ public abstract class AdministrativeMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Användare skall kunna radera utkast för administrativa frågor")
   void shallDeleteAdministrativeQuestionDraft() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED));
 
-    api.sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
+    api().sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
 
-    final var createdQuestion = question(api.createMessage(defaultCreateMessageRequest(),
+    final var createdQuestion = question(api().createMessage(defaultCreateMessageRequest(),
         certificateId(testCertificates)).getBody());
 
-    api.sendMessage(defaultSendMessageRequest(), messageId(createdQuestion));
+    api().sendMessage(defaultSendMessageRequest(), messageId(createdQuestion));
 
-    api.saveMessage(customSaveMessageRequest()
+    api().saveMessage(customSaveMessageRequest()
             .question(questionDTOBuilder()
                 .certificateId(certificateId(testCertificates))
                 .build())
             .build(),
         messageId(createdQuestion));
 
-    api.deleteMessage(defaultDeleteMessageRequest(), messageId(createdQuestion));
+    api().deleteMessage(defaultDeleteMessageRequest(), messageId(createdQuestion));
 
-    final var questions = questions(api.getMessagesForCertificate(
+    final var questions = questions(api().getMessagesForCertificate(
         defaultGetCertificateMessageRequest(), certificateId(testCertificates)).getBody());
 
     assertNull(questions.get(0).getAnswer(),
@@ -136,20 +133,20 @@ public abstract class AdministrativeMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Användare skall kunna skapa svar på administrativa frågor")
   void shallCreateAnswerForAdministrativeQuestion() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED));
 
-    api.sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
-    api.receiveMessage(incomingQuestionMessageBuilder()
+    api().sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
+    api().receiveMessage(incomingQuestionMessageBuilder()
         .certificateId(certificateId(testCertificates))
         .build());
 
-    final var questionsBefore = questions(api.getMessagesForCertificate(
+    final var questionsBefore = questions(api().getMessagesForCertificate(
         defaultGetCertificateMessageRequest(), certificateId(testCertificates)).getBody());
 
-    api.saveAnswer(defaultSaveAnswerRequest(), messageId(questionsBefore.get(0)));
+    api().saveAnswer(defaultSaveAnswerRequest(), messageId(questionsBefore.get(0)));
 
-    final var questionsAfter = questions(api.getMessagesForCertificate(
+    final var questionsAfter = questions(api().getMessagesForCertificate(
         defaultGetCertificateMessageRequest(), certificateId(testCertificates)).getBody());
 
     assertNotNull(questionsAfter.get(0).getAnswer(),
@@ -160,21 +157,21 @@ public abstract class AdministrativeMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Användare skall kunna skicka svar på administrativa frågor")
   void shallSendAnswerForAdministrativeQuestion() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED));
 
-    api.sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
-    api.receiveMessage(incomingQuestionMessageBuilder()
+    api().sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
+    api().receiveMessage(incomingQuestionMessageBuilder()
         .certificateId(certificateId(testCertificates))
         .build());
 
-    final var questionsBefore = questions(api.getMessagesForCertificate(
+    final var questionsBefore = questions(api().getMessagesForCertificate(
         defaultGetCertificateMessageRequest(), certificateId(testCertificates)).getBody());
 
-    api.saveAnswer(defaultSaveAnswerRequest(), messageId(questionsBefore.get(0)));
-    api.sendAnswer(defaultSendAnswerRequest(), messageId(questionsBefore.get(0)));
+    api().saveAnswer(defaultSaveAnswerRequest(), messageId(questionsBefore.get(0)));
+    api().sendAnswer(defaultSendAnswerRequest(), messageId(questionsBefore.get(0)));
 
-    final var questionsAfter = questions(api.getMessagesForCertificate(
+    final var questionsAfter = questions(api().getMessagesForCertificate(
         defaultGetCertificateMessageRequest(), certificateId(testCertificates)).getBody());
 
     assertNotNull(questionsAfter.get(0).getAnswer().getSent(),
@@ -185,21 +182,21 @@ public abstract class AdministrativeMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Användare skall kunna radera utkast av svar på administrativa frågor")
   void shallDeleteAnswerDraftForAdministrativeQuestion() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED));
 
-    api.sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
-    api.receiveMessage(incomingQuestionMessageBuilder()
+    api().sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
+    api().receiveMessage(incomingQuestionMessageBuilder()
         .certificateId(certificateId(testCertificates))
         .build());
 
-    final var questionsBefore = questions(api.getMessagesForCertificate(
+    final var questionsBefore = questions(api().getMessagesForCertificate(
         defaultGetCertificateMessageRequest(), certificateId(testCertificates)).getBody());
 
-    api.saveAnswer(defaultSaveAnswerRequest(), messageId(questionsBefore.get(0)));
-    api.deleteAnswer(defaultDeleteAnswerRequest(), messageId(questionsBefore.get(0)));
+    api().saveAnswer(defaultSaveAnswerRequest(), messageId(questionsBefore.get(0)));
+    api().deleteAnswer(defaultDeleteAnswerRequest(), messageId(questionsBefore.get(0)));
 
-    final var questionsAfter = questions(api.getMessagesForCertificate(
+    final var questionsAfter = questions(api().getMessagesForCertificate(
         defaultGetCertificateMessageRequest(), certificateId(testCertificates)).getBody());
 
     assertNull(questionsAfter.get(0).getAnswer().getSent(),
@@ -210,17 +207,17 @@ public abstract class AdministrativeMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Intyg skall kunna ta emot administrativa frågor")
   void shallReturn200IfQuestionCanBeReceived() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED));
 
-    api.sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
+    api().sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
 
-    api.receiveMessage(incomingQuestionMessageBuilder()
+    api().receiveMessage(incomingQuestionMessageBuilder()
         .certificateId(certificateId(testCertificates))
         .build()
     );
 
-    final var questions = questions(api.getMessagesForCertificate(
+    final var questions = questions(api().getMessagesForCertificate(
         defaultGetCertificateMessageRequest(), certificateId(testCertificates)).getBody());
 
     assertEquals(1, questions.size());
@@ -229,29 +226,29 @@ public abstract class AdministrativeMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Intyg skall kunna ta emot svar på administrativa frågor")
   void shallReceiveAnswerToAdministrativeQuestion() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED));
 
-    api.sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
+    api().sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
 
-    final var createdQuestion = question(api.createMessage(defaultCreateMessageRequest(),
+    final var createdQuestion = question(api().createMessage(defaultCreateMessageRequest(),
         certificateId(testCertificates)).getBody());
 
-    api.saveMessage(customSaveMessageRequest()
+    api().saveMessage(customSaveMessageRequest()
             .question(questionDTOBuilder()
                 .certificateId(certificateId(testCertificates))
                 .build())
             .build(),
         messageId(createdQuestion));
 
-    api.sendMessage(defaultSendMessageRequest(), messageId(createdQuestion));
+    api().sendMessage(defaultSendMessageRequest(), messageId(createdQuestion));
 
-    api.receiveMessage(incomingAnswerMessageBuilder()
+    api().receiveMessage(incomingAnswerMessageBuilder()
         .certificateId(certificateId(testCertificates))
         .answerMessageId(messageId(createdQuestion))
         .build());
 
-    final var questions = questions(api.getMessagesForCertificate(
+    final var questions = questions(api().getMessagesForCertificate(
         defaultGetCertificateMessageRequest(), certificateId(testCertificates)).getBody());
 
     assertEquals(TestDataMessageConstants.ANSWER_MESSAGE_ID, questions.get(0).getAnswer().getId());
@@ -260,20 +257,20 @@ public abstract class AdministrativeMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Intyg skall kunna ta emot påminnelse för administrativa frågor")
   void shallReturn200IfReminderOnAdministrativeMessageCanBeReceived() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED));
 
-    api.sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
+    api().sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
 
-    api.receiveMessage(incomingQuestionMessageBuilder()
+    api().receiveMessage(incomingQuestionMessageBuilder()
         .certificateId(certificateId(testCertificates))
         .build());
 
-    api.receiveMessage(incomingReminderMessageBuilder()
+    api().receiveMessage(incomingReminderMessageBuilder()
         .certificateId(certificateId(testCertificates))
         .build());
 
-    final var messagesForCertificate = api.getMessagesForCertificate(
+    final var messagesForCertificate = api().getMessagesForCertificate(
         defaultGetCertificateMessageRequest(), certificateId(testCertificates));
 
     assertEquals(1, questions(messagesForCertificate.getBody()).get(0).getReminders().size());
@@ -282,10 +279,10 @@ public abstract class AdministrativeMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Utkast skall inte kunna ta emot administrativa frågor - 403 (FORBIDDEN)")
   void shallReturn403IfIncomingQuestionOnCertificateIsDraft() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion()));
 
-    final var response = api.receiveMessage(incomingQuestionMessageBuilder()
+    final var response = api().receiveMessage(incomingQuestionMessageBuilder()
         .certificateId(certificateId(testCertificates))
         .build()
     );
@@ -296,12 +293,12 @@ public abstract class AdministrativeMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Makulerade intyg skall inte kunna ta emot administrativa frågor - 403 (FORBIDDEN)")
   void shallReturn403IfIncomingQuestionOnRevokedCertificate() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED));
 
-    api.revokeCertificate(defaultRevokeCertificateRequest(), certificateId(testCertificates));
+    api().revokeCertificate(defaultRevokeCertificateRequest(), certificateId(testCertificates));
 
-    final var response = api.receiveMessage(incomingQuestionMessageBuilder()
+    final var response = api().receiveMessage(incomingQuestionMessageBuilder()
         .certificateId(certificateId(testCertificates))
         .build()
     );
@@ -312,12 +309,12 @@ public abstract class AdministrativeMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Intyg skall inte kunna ta emot administrativa frågor på fel patient - 403 (FORBIDDEN)")
   void shallReturn403IfQuestionIsOnDifferentPatient() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED));
 
-    api.sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
+    api().sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
 
-    final var response = api.receiveMessage(incomingQuestionMessageBuilder()
+    final var response = api().receiveMessage(incomingQuestionMessageBuilder()
         .certificateId(certificateId(testCertificates))
         .personId(ALVE_REACT_ALFREDSSON_DTO.getId())
         .build());
@@ -328,22 +325,22 @@ public abstract class AdministrativeMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Administrativ fråga skall inte sättas som hanterad när ersättande intyg signeras")
   void shallNotSetMessageAsHandledWhenReplacingCertificateIsSigned() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED));
 
-    api.sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
+    api().sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
 
-    final var response = api.replaceCertificate(
+    final var response = api().replaceCertificate(
         defaultReplaceCertificateRequest(), certificateId(testCertificates));
 
-    api.receiveMessage(incomingQuestionMessageBuilder()
+    api().receiveMessage(incomingQuestionMessageBuilder()
         .certificateId(certificateId(testCertificates))
         .build());
 
-    api.signCertificate(defaultSignCertificateRequest(), certificateId(response.getBody()),
+    api().signCertificate(defaultSignCertificateRequest(), certificateId(response.getBody()),
         metadata(certificate(response.getBody())).getVersion());
 
-    final var questions = questions(api.getMessagesForCertificate(
+    final var questions = questions(api().getMessagesForCertificate(
         defaultGetCertificateMessageRequest(), certificateId(testCertificates)).getBody());
 
     assertFalse(questions.get(0).isHandled(),
@@ -354,22 +351,22 @@ public abstract class AdministrativeMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Administrativ fråga skall inte sättas som hanterad när förnyande intyg signeras")
   void shallNotSetMessageAsHandledWhenRenewingCertificateIsSigned() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED));
 
-    api.sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
+    api().sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
 
-    final var response = api.renewCertificate(
+    final var response = api().renewCertificate(
         defaultRenewCertificateRequest(), certificateId(testCertificates));
 
-    api.receiveMessage(incomingQuestionMessageBuilder()
+    api().receiveMessage(incomingQuestionMessageBuilder()
         .certificateId(certificateId(testCertificates))
         .build());
 
-    api.signCertificate(defaultSignCertificateRequest(), certificateId(response.getBody()),
+    api().signCertificate(defaultSignCertificateRequest(), certificateId(response.getBody()),
         metadata(certificate(response.getBody())).getVersion());
 
-    final var questions = questions(api.getMessagesForCertificate(
+    final var questions = questions(api().getMessagesForCertificate(
         defaultGetCertificateMessageRequest(), certificateId(testCertificates)).getBody());
 
     assertFalse(questions.get(0).isHandled(),
@@ -380,18 +377,18 @@ public abstract class AdministrativeMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Administrativ fråga skall sättas som hanterad när intyg makuleras")
   void shallSetMessageAsHandledWhenCertificateIsRevoked() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED));
 
-    api.sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
+    api().sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
 
-    api.receiveMessage(incomingQuestionMessageBuilder()
+    api().receiveMessage(incomingQuestionMessageBuilder()
         .certificateId(certificateId(testCertificates))
         .build());
 
-    api.revokeCertificate(defaultRevokeCertificateRequest(), certificateId(testCertificates));
+    api().revokeCertificate(defaultRevokeCertificateRequest(), certificateId(testCertificates));
 
-    final var questions = questions(api.getMessagesForCertificate(
+    final var questions = questions(api().getMessagesForCertificate(
         defaultGetCertificateMessageRequest(), certificateId(testCertificates)).getBody());
 
     assertTrue(questions.get(0).isHandled(),
@@ -402,18 +399,18 @@ public abstract class AdministrativeMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Administrativ fråga ska kunna sättas som hanterad av användaren")
   void shallSetAdministrativeMessageAsHandledWhenHandledByUser() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED));
 
-    api.sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
+    api().sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
 
-    api.receiveMessage(incomingQuestionMessageBuilder()
+    api().receiveMessage(incomingQuestionMessageBuilder()
         .certificateId(certificateId(testCertificates))
         .build());
 
-    final var questions = questions(api.getMessagesForCertificate(
+    final var questions = questions(api().getMessagesForCertificate(
         defaultGetCertificateMessageRequest(), certificateId(testCertificates)).getBody());
-    final var question = question(api.handleMessage(defaultHandleMessageRequest(),
+    final var question = question(api().handleMessage(defaultHandleMessageRequest(),
         messageId(questions.get(0))).getBody());
 
     assertTrue(question.isHandled(), "Expected administrative message not to be handled");
@@ -422,21 +419,21 @@ public abstract class AdministrativeMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Administrativ fråga på makulerat intyg ska inte kunna sättas till ej hanterad av användaren - 403 (FORBIDDEN)")
   void shallReturn403WhenUnhandlingQuestionOnRevokedCertificate() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED));
 
-    api.sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
+    api().sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
 
-    api.receiveMessage(incomingQuestionMessageBuilder()
+    api().receiveMessage(incomingQuestionMessageBuilder()
         .certificateId(certificateId(testCertificates))
         .build());
 
-    api.revokeCertificate(defaultRevokeCertificateRequest(), certificateId(testCertificates));
+    api().revokeCertificate(defaultRevokeCertificateRequest(), certificateId(testCertificates));
 
-    final var questions = questions(api.getMessagesForCertificate(
+    final var questions = questions(api().getMessagesForCertificate(
         defaultGetCertificateMessageRequest(), certificateId(testCertificates)).getBody());
 
-    final var response = api.handleMessage(
+    final var response = api().handleMessage(
         customHandleMessageRequest()
             .handled(false)
             .build(),
@@ -449,22 +446,22 @@ public abstract class AdministrativeMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Administrativ fråga skall sättas som hanterad när den besvaras av användare")
   void shallSetAdministrativeQuestionsToHandledWhenAnswered() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED));
 
-    api.sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
+    api().sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
 
-    api.receiveMessage(incomingQuestionMessageBuilder()
+    api().receiveMessage(incomingQuestionMessageBuilder()
         .certificateId(certificateId(testCertificates))
         .build());
 
-    final var questionsBefore = questions(api.getMessagesForCertificate(
+    final var questionsBefore = questions(api().getMessagesForCertificate(
         defaultGetCertificateMessageRequest(), certificateId(testCertificates)).getBody());
 
-    api.saveAnswer(defaultSaveAnswerRequest(), messageId(questionsBefore.get(0)));
-    api.sendAnswer(defaultSendAnswerRequest(), messageId(questionsBefore.get(0)));
+    api().saveAnswer(defaultSaveAnswerRequest(), messageId(questionsBefore.get(0)));
+    api().sendAnswer(defaultSendAnswerRequest(), messageId(questionsBefore.get(0)));
 
-    final var questionsAfter = questions(api.getMessagesForCertificate(
+    final var questionsAfter = questions(api().getMessagesForCertificate(
         defaultGetCertificateMessageRequest(), certificateId(testCertificates)).getBody());
 
     assertTrue(questionsAfter.get(0).isHandled(),
@@ -475,22 +472,22 @@ public abstract class AdministrativeMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Utkast för svar på administrativ fråga skall raderas när intyget makuleras")
   void shallDeleteAnswerDraftIfCertificateIsRevoked() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED));
 
-    api.sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
+    api().sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
 
-    api.receiveMessage(incomingQuestionMessageBuilder()
+    api().receiveMessage(incomingQuestionMessageBuilder()
         .certificateId(certificateId(testCertificates))
         .build());
 
-    final var questionsBefore = questions(api.getMessagesForCertificate(
+    final var questionsBefore = questions(api().getMessagesForCertificate(
         defaultGetCertificateMessageRequest(), certificateId(testCertificates)).getBody());
 
-    api.saveAnswer(defaultSaveAnswerRequest(), messageId(questionsBefore.get(0)));
-    api.revokeCertificate(defaultRevokeCertificateRequest(), certificateId(testCertificates));
+    api().saveAnswer(defaultSaveAnswerRequest(), messageId(questionsBefore.get(0)));
+    api().revokeCertificate(defaultRevokeCertificateRequest(), certificateId(testCertificates));
 
-    final var questionsAfter = questions(api.getMessagesForCertificate(
+    final var questionsAfter = questions(api().getMessagesForCertificate(
         defaultGetCertificateMessageRequest(), certificateId(testCertificates)).getBody());
 
     assertNull(questionsAfter.get(0).getAnswer(),
@@ -501,23 +498,23 @@ public abstract class AdministrativeMessagesIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Xml för ärendekommunikation skall gå att hämta")
   void shallReturnMessageXml() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED));
 
-    api.sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
+    api().sendCertificate(defaultSendCertificateRequest(), certificateId(testCertificates));
 
-    final var createdQuestion = question(api.createMessage(defaultCreateMessageRequest(),
+    final var createdQuestion = question(api().createMessage(defaultCreateMessageRequest(),
         certificateId(testCertificates)).getBody());
 
-    api.sendMessage(defaultSendMessageRequest(), messageId(createdQuestion));
+    api().sendMessage(defaultSendMessageRequest(), messageId(createdQuestion));
 
-    final var response = internalApi.getMessages(
+    final var response = internalApi().getMessages(
         certificateId(testCertificates)
     );
 
     final var messages = messages(response.getBody());
 
-    final var xml = internalApi.getMessageXml(messages.get(0).getId()).getBody().getXml();
+    final var xml = internalApi().getMessageXml(messages.get(0).getId()).getBody().getXml();
 
     assertNotNull(xml);
   }

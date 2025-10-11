@@ -146,7 +146,8 @@ class CertificateModelFactoryFK7427Test {
   void shallIncludeSchematronPath() {
     final var certificateModel = certificateModelFactoryFK7427.create();
 
-    assertEquals("fk7427/schematron/lu_tfp_b12_16.v1.sch", certificateModel.schematronPath().value());
+    assertEquals("fk7427/schematron/lu_tfp_b12_16.v1.sch",
+        certificateModel.schematronPath().value());
   }
 
   @Nested

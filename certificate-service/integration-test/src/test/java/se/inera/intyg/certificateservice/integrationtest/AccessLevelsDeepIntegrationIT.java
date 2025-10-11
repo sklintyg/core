@@ -24,18 +24,14 @@ import se.inera.intyg.certificateservice.application.common.dto.AccessScopeTypeD
 
 public abstract class AccessLevelsDeepIntegrationIT extends BaseIntegrationIT {
 
-  protected abstract String type();
-
-  protected abstract String typeVersion();
-
   @Test
   @DisplayName("Om intyget är utfärdat på en annan enhet inom samma vårdgivare skall det gå att läsa intyget")
   void shallReturnCertificateIfOnDifferentUnitButSameCareProvider() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.getCertificate(
+    final var response = api().getCertificate(
         customGetCertificateRequest()
             .user(ajlaDoktorDtoBuilder()
                 .accessScope(AccessScopeTypeDTO.WITHIN_CARE_PROVIDER)
@@ -55,11 +51,11 @@ public abstract class AccessLevelsDeepIntegrationIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på en annan enhet inom samma vårdgivare skall felkod 403 (FORBIDDEN) returneras vid skickande av intyg")
   void shallNotAllowToSendOnDifferentUnitButSameCareProvider() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.sendCertificate(
+    final var response = api().sendCertificate(
         customSendCertificateRequest()
             .user(ajlaDoktorDtoBuilder()
                 .accessScope(AccessScopeTypeDTO.WITHIN_CARE_PROVIDER)
@@ -76,11 +72,11 @@ public abstract class AccessLevelsDeepIntegrationIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på en annan enhet inom samma vårdgivare skall det gå att läsa intyget - metadata skall vara oförändrad")
   void shallReturnCertificateIfOnDifferentUnitButSameCareProviderWithSameMetadata() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.getCertificate(
+    final var response = api().getCertificate(
         customGetCertificateRequest()
             .user(alvaVardadministratorDtoBuilder()
                 .accessScope(AccessScopeTypeDTO.WITHIN_CARE_PROVIDER)

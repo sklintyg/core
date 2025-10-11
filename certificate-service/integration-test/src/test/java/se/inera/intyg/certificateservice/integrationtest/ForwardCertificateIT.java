@@ -28,22 +28,14 @@ import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkType
 
 public abstract class ForwardCertificateIT extends BaseIntegrationIT {
 
-  protected abstract String type();
-
-  protected abstract String typeVersion();
-
-  protected abstract boolean nurseCanForwardCertificate();
-
-  protected abstract boolean midwifeCanForwardCertificate();
-
   @Test
   @DisplayName("Om användaren har rollen vårdadministratör och intyget inte är signerat skall intyget gå att vidarebefordra")
   void shallUpdateCertificateWithForwardedTrueIfUserIsCareAdminAndStatusOnCertificateIsDraft() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.forwardCertificate(
+    final var response = api().forwardCertificate(
         certificateId(testCertificates),
         defaultForwardCertificateRequest()
     );
@@ -60,11 +52,11 @@ public abstract class ForwardCertificateIT extends BaseIntegrationIT {
     if (!nurseCanForwardCertificate()) {
       return;
     }
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.forwardCertificate(
+    final var response = api().forwardCertificate(
         certificateId(testCertificates),
         customForwardCertificateRequest()
             .user(ANNA_SJUKSKOTERSKA_DTO)
@@ -83,11 +75,11 @@ public abstract class ForwardCertificateIT extends BaseIntegrationIT {
     if (!midwifeCanForwardCertificate()) {
       return;
     }
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.forwardCertificate(
+    final var response = api().forwardCertificate(
         certificateId(testCertificates),
         customForwardCertificateRequest()
             .user(BERTIL_BARNMORSKA_DTO)
@@ -103,12 +95,12 @@ public abstract class ForwardCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om användaren har rollen vårdadministratör och intyget är signerat skall felkod 403 (FORBIDDEN) returneras")
   void shallReturnForbiddenIfUserIsCareAdminAndStatusOnCertificateIsSigned() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(),
             CertificateStatusTypeDTO.SIGNED)
     );
 
-    final var response = api.forwardCertificate(
+    final var response = api().forwardCertificate(
         certificateId(testCertificates),
         defaultForwardCertificateRequest()
     );
@@ -119,11 +111,11 @@ public abstract class ForwardCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om användaren har signeringsrätt skall intyget inte gå att vidarebefordra från utkastvyn")
   void shallReturnForbiddenIfUserIsDoctor() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.forwardCertificate(
+    final var response = api().forwardCertificate(
         certificateId(testCertificates),
         customForwardCertificateRequest()
             .user(AJLA_DOCTOR_DTO)
@@ -144,13 +136,13 @@ public abstract class ForwardCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
   void shallReturnForbiddenIfPatientIsProtectedPerson() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion())
             .patient(ANONYMA_REACT_ATTILA_DTO)
             .build()
     );
 
-    final var response = api.forwardCertificate(
+    final var response = api().forwardCertificate(
         certificateId(testCertificates),
         defaultForwardCertificateRequest()
     );
@@ -161,13 +153,13 @@ public abstract class ForwardCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om patienten är avliden skall intyget vidarebefordras")
   void shallReturnForbiddenIfPatientIsDeceased() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion())
             .patient(ATLAS_REACT_ABRAHAMSSON_DTO)
             .build()
     );
 
-    final var response = api.forwardCertificate(
+    final var response = api().forwardCertificate(
         certificateId(testCertificates),
         defaultForwardCertificateRequest()
     );
@@ -178,11 +170,11 @@ public abstract class ForwardCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om vårdadministratör är blockerad skall felkod 403 (FORBIDDEN) returneras")
   void shallReturnForbiddenIfUserIsBlocked() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.forwardCertificate(
+    final var response = api().forwardCertificate(
         certificateId(testCertificates),
         customForwardCertificateRequest()
             .user(
@@ -199,11 +191,11 @@ public abstract class ForwardCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på samma mottagning skall intyget gå att vidarebefordra av vårdadministratör")
   void shallUpdateCertificateToForwardedIfCertificateOnSameUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.forwardCertificate(
+    final var response = api().forwardCertificate(
         certificateId(testCertificates),
         defaultForwardCertificateRequest()
     );
@@ -217,11 +209,11 @@ public abstract class ForwardCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på mottagning men på samma vårdenhet skall intyget gå att vidarebefordra av vårdadministratör")
   void shallUpdateCertificateToForwardedIfIssuedOnSameCareUnitDifferentSubUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.forwardCertificate(
+    final var response = api().forwardCertificate(
         certificateId(testCertificates),
         customForwardCertificateRequest()
             .unit(ALFA_MEDICINCENTRUM_DTO)
@@ -237,13 +229,13 @@ public abstract class ForwardCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på samma vårdenhet skall intyget gå att vidarebefordra av vårdadministratör")
   void shallUpdateCertificateToForwardedIfIssuedOnSameCareUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion())
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build()
     );
 
-    final var response = api.forwardCertificate(
+    final var response = api().forwardCertificate(
         certificateId(testCertificates),
         customForwardCertificateRequest()
             .unit(ALFA_MEDICINCENTRUM_DTO)
@@ -259,11 +251,11 @@ public abstract class ForwardCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på en annan mottagning skall felkod 403 (FORBIDDEN) returneras")
   void shallReturn403IfUnitIsSubUnitAndNotOnSameUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.forwardCertificate(
+    final var response = api().forwardCertificate(
         certificateId(testCertificates),
         customForwardCertificateRequest()
             .unit(ALFA_HUDMOTTAGNINGEN_DTO)
@@ -276,11 +268,11 @@ public abstract class ForwardCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Intyget ska gå att vidarebefordra av läkare från utkastlistan")
   void shallBeAbleToForwardCertificateFromDraftListForDoctor() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.getCertificate(
+    final var response = api().getCertificate(
         customGetCertificateRequest()
             .user(AJLA_DOCTOR_DTO)
             .build(),
@@ -301,11 +293,11 @@ public abstract class ForwardCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Intyget ska gå att vidarebefordra av barnmorska från utkastlistan")
   void shallBeAbleToForwardCertificateFromDraftListForMidwife() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.getCertificate(
+    final var response = api().getCertificate(
         customGetCertificateRequest()
             .user(BERTIL_BARNMORSKA_DTO)
             .build(),
@@ -326,11 +318,11 @@ public abstract class ForwardCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Intyget ska gå att vidarebefordra av sjuksköterska från utkastlistan")
   void shallBeAbleToForwardCertificateFromDraftListForNurse() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.getCertificate(
+    final var response = api().getCertificate(
         customGetCertificateRequest()
             .user(ANNA_SJUKSKOTERSKA_DTO)
             .build(),
@@ -351,11 +343,11 @@ public abstract class ForwardCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Intyget ska gå att vidarebefordra av vårdadministratör från utkastlistan")
   void shallBeAbleToForwardCertificateFromDraftListForCareAdmin() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.getCertificate(
+    final var response = api().getCertificate(
         customGetCertificateRequest()
             .user(AJLA_DOCTOR_DTO)
             .build(),

@@ -9,9 +9,6 @@ import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.Cer
 
 public abstract class ExistsCertificateTypeInfoIT extends BaseIntegrationIT {
 
-  protected abstract String type();
-
-  protected abstract String typeVersion();
 
   @Test
   @DisplayName("Aktiv version skall vara senaste version")
@@ -21,7 +18,7 @@ public abstract class ExistsCertificateTypeInfoIT extends BaseIntegrationIT {
         .version(typeVersion())
         .build();
 
-    final var response = api.findLatestCertificateTypeVersion(type());
+    final var response = api().findLatestCertificateTypeVersion(type());
 
     assertEquals(
         expectedCertificateModelId,

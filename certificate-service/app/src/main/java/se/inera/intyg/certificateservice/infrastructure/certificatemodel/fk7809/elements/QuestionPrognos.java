@@ -14,7 +14,7 @@ public class QuestionPrognos {
 
   public static final ElementId QUESTION_PROGNOS_ID = new ElementId(
       "51");
-  private static final FieldId QUESTION_PROGNOS_FIELD_ID = new FieldId("51.1");
+  public static final FieldId QUESTION_PROGNOS_FIELD_ID = new FieldId("51.1");
   private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[3].flt_txtPatientenslFunktionsnedsattning[0]");
 

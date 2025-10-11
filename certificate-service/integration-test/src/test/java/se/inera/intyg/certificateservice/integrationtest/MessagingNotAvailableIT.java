@@ -12,23 +12,20 @@ import org.junit.jupiter.api.Test;
 
 public abstract class MessagingNotAvailableIT extends BaseIntegrationIT {
 
-  protected abstract String type();
-
-  protected abstract String typeVersion();
 
   @Test
   @DisplayName("Intyg skall inte kunna ta emot kompletteringsbegäran - 403 (FORBIDDEN)")
   void shallReturn403IfComplementIsReceived() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    final var response = api.receiveMessage(
+    final var response = api().receiveMessage(
         incomingComplementMessageBuilder()
             .certificateId(
                 certificateId(testCertificates)

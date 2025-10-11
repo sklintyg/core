@@ -25,19 +25,15 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.common.dto.AccessScopeTypeDTO;
 
 public abstract class AccessLevelsSVODIT extends BaseIntegrationIT {
-
-  protected abstract String type();
-
-  protected abstract String typeVersion();
-
+  
   @Test
   @DisplayName("Om intyget är utfärdat inom en annan vårdgivare skall det gå att läsa intyget")
   void shallReturnCertificateIfOnDifferentUnitButSameCareProvider() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.getCertificate(
+    final var response = api().getCertificate(
         customGetCertificateRequest()
             .user(ajlaDoktorDtoBuilder()
                 .accessScope(AccessScopeTypeDTO.ALL_CARE_PROVIDERS)
@@ -58,11 +54,11 @@ public abstract class AccessLevelsSVODIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på en annan enhet inom samma vårdgivare skall felkod 403 (FORBIDDEN) returneras vid hämtning av PDF")
   void shallReturnPdfIfOnDifferentUnitButSameCareProvider() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.getCertificatePdf(
+    final var response = api().getCertificatePdf(
         customGetCertificatePdfRequest()
             .user(ajlaDoktorDtoBuilder()
                 .accessScope(AccessScopeTypeDTO.WITHIN_CARE_PROVIDER)
@@ -80,11 +76,11 @@ public abstract class AccessLevelsSVODIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på en annan enhet inom samma vårdgivare skall felkod 403 (FORBIDDEN) returneras vid skickande av intyg")
   void shallNotAllowToSendOnDifferentUnitButSameCareProvider() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.sendCertificate(
+    final var response = api().sendCertificate(
         customSendCertificateRequest()
             .user(ajlaDoktorDtoBuilder()
                 .accessScope(AccessScopeTypeDTO.WITHIN_CARE_PROVIDER)
@@ -102,11 +98,11 @@ public abstract class AccessLevelsSVODIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat inom en annan vårdgivare skall det gå att läsa intyget - metadata skall vara oförändrad")
   void shallReturnCertificateIfOnDifferentUnitButSameCareProviderWithSameMetadata() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.getCertificate(
+    final var response = api().getCertificate(
         customGetCertificateRequest()
             .user(alvaVardadministratorDtoBuilder()
                 .accessScope(AccessScopeTypeDTO.ALL_CARE_PROVIDERS)

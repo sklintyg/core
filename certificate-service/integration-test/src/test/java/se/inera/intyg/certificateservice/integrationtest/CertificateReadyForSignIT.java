@@ -17,22 +17,14 @@ import se.inera.intyg.certificateservice.application.common.dto.AccessScopeTypeD
 
 public abstract class CertificateReadyForSignIT extends BaseIntegrationIT {
 
-  protected abstract String type();
-
-  protected abstract String typeVersion();
-
-  protected abstract boolean nurseCanMarkReadyForSignCertificate();
-
-  protected abstract boolean midwifeCanMarkReadyForSignCertificate();
-
   @Test
   @DisplayName("Vårdadministratör - Om användaren är en vårdadministratör som loggat in djupintegrerat skall utkastet gå att markera som redo för signering")
   void shallAllowIfCareAdminAndOriginIsDjupintegrerad() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.readyForSignCertificate(
+    final var response = api().readyForSignCertificate(
         customReadyForSignCertificateRequest()
             .user(
                 alvaVardadministratorDtoBuilder()
@@ -52,11 +44,11 @@ public abstract class CertificateReadyForSignIT extends BaseIntegrationIT {
     if (!midwifeCanMarkReadyForSignCertificate()) {
       return;
     }
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.readyForSignCertificate(
+    final var response = api().readyForSignCertificate(
         customReadyForSignCertificateRequest()
             .user(
                 bertilBarnmorskaDtoBuilder()
@@ -76,11 +68,11 @@ public abstract class CertificateReadyForSignIT extends BaseIntegrationIT {
     if (!nurseCanMarkReadyForSignCertificate()) {
       return;
     }
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.readyForSignCertificate(
+    final var response = api().readyForSignCertificate(
         customReadyForSignCertificateRequest()
             .user(
                 annaSjukskoterskaDtoBuilder()
@@ -97,11 +89,11 @@ public abstract class CertificateReadyForSignIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Vårdadministratör - Om användaren är en vårdadministratör som loggat in fristående skall utkastet inte gå att markera som redo för signering")
   void shallNotAllowIfCareAdminAndOriginIsNormal() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.readyForSignCertificate(
+    final var response = api().readyForSignCertificate(
         customReadyForSignCertificateRequest()
             .user(
                 alvaVardadministratorDtoBuilder()
@@ -118,7 +110,7 @@ public abstract class CertificateReadyForSignIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Läkare - Om användaren är en läkare skall utkastet inte gå att markera som redo för signering")
   void shallNotAllowIfDoctor() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion())
             .user(
                 ajlaDoktorDtoBuilder()
@@ -128,7 +120,7 @@ public abstract class CertificateReadyForSignIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var response = api.readyForSignCertificate(
+    final var response = api().readyForSignCertificate(
         customReadyForSignCertificateRequest()
             .user(
                 ajlaDoktorDtoBuilder()
@@ -145,11 +137,11 @@ public abstract class CertificateReadyForSignIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är signerat skall felkod 403 (FORBIDDEN) returneras")
   void shallReturn403IfCertificateNotSigned() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    final var response = api.readyForSignCertificate(
+    final var response = api().readyForSignCertificate(
         customReadyForSignCertificateRequest()
             .user(
                 alvaVardadministratorDtoBuilder()

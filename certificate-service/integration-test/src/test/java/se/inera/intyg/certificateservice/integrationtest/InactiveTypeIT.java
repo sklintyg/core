@@ -11,15 +11,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public abstract class InactiveTypeIT extends BaseIntegrationIT {
-
-  protected abstract String type();
-
-  protected abstract String typeVersion();
-
+  
   @Test
   @DisplayName("Inaktivt intyg skall ej visas i listan med tillgängliga intygstyper")
   void shallNotReturnInactiveCertificate() {
-    final var response = api.certificateTypeInfo(
+    final var response = api().certificateTypeInfo(
         defaultCertificateTypeInfoRequest()
     );
 
@@ -32,7 +28,7 @@ public abstract class InactiveTypeIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intygstyp inte är aktiverad skall ingen version returneras")
   void shallReturnEmptyWhenTypeIsNotActive() {
-    final var response = api.findLatestCertificateTypeVersion(type());
+    final var response = api().findLatestCertificateTypeVersion(type());
 
     assertNull(
         certificateModelId(response.getBody()),
@@ -44,7 +40,7 @@ public abstract class InactiveTypeIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om utkast av inaktivt intyg skapas skall felkod 400 (BAD_REQUEST) returneras")
   void shallReturn400WhenTypeIsNotActive() {
-    final var response = api.createCertificate(
+    final var response = api().createCertificate(
         defaultCreateCertificateRequest(type(), typeVersion())
     );
 

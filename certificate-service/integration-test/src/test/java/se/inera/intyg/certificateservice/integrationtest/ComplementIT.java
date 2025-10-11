@@ -28,25 +28,19 @@ import org.junit.jupiter.api.Test;
 
 public abstract class ComplementIT extends BaseIntegrationIT {
 
-  protected abstract String type();
-
-  protected abstract String typeVersion();
-
-  protected abstract String questionId();
-
   @Test
   @DisplayName("Intyg skall kunna ta emot kompletteringsbegäran")
   void shallReturn200IfComplementCanBeReceived() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    final var response = api.receiveMessage(
+    final var response = api().receiveMessage(
         incomingComplementMessageBuilder()
             .certificateId(certificateId(testCertificates))
             .complements(List.of(incomingComplementDTOBuilder()
@@ -61,16 +55,16 @@ public abstract class ComplementIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Intyg skall kunna ta emot påminnelse")
   void shallReturn200IfReminderOnComplementCanBeReceived() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    api.receiveMessage(
+    api().receiveMessage(
         incomingComplementMessageBuilder()
             .certificateId(
                 certificateId(testCertificates)
@@ -78,7 +72,7 @@ public abstract class ComplementIT extends BaseIntegrationIT {
             .build()
     );
 
-    api.receiveMessage(
+    api().receiveMessage(
         incomingComplementMessageBuilder()
             .certificateId(certificateId(testCertificates))
             .complements(List.of(incomingComplementDTOBuilder()
@@ -87,7 +81,7 @@ public abstract class ComplementIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var messagesForCertificate = api.getMessagesForCertificate(
+    final var messagesForCertificate = api().getMessagesForCertificate(
         defaultGetCertificateMessageRequest(),
         certificateId(testCertificates)
     );
@@ -98,16 +92,16 @@ public abstract class ComplementIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Intyg som har kompletteringsbegäran ska kunna kompletteras")
   void shallReturnCertificateIfComplementingCertificateWithComplements() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    api.receiveMessage(
+    api().receiveMessage(
         incomingComplementMessageBuilder()
             .certificateId(certificateId(testCertificates))
             .complements(List.of(incomingComplementDTOBuilder()
@@ -116,7 +110,7 @@ public abstract class ComplementIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var response = api.complementCertificate(
+    final var response = api().complementCertificate(
         defaultComplementCertificateRequest(),
         certificateId(testCertificates)
     );
@@ -128,16 +122,16 @@ public abstract class ComplementIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Intyg som har påbörjad komplettering ska inte kunna kompletteras - 403 (FORBIDDEN)")
   void shallReturn403IfDraftComplementAlreadyExists() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    api.receiveMessage(
+    api().receiveMessage(
         incomingComplementMessageBuilder()
             .certificateId(
                 certificateId(testCertificates)
@@ -145,12 +139,12 @@ public abstract class ComplementIT extends BaseIntegrationIT {
             .build()
     );
 
-    api.complementCertificate(
+    api().complementCertificate(
         defaultComplementCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    final var response = api.complementCertificate(
+    final var response = api().complementCertificate(
         defaultComplementCertificateRequest(),
         certificateId(testCertificates)
     );
@@ -161,16 +155,16 @@ public abstract class ComplementIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Intyg som inte har kompletteringsbegäran ska inte kunna kompletteras - 403 (FORBIDDEN)")
   void shallReturn403IfNoComplementsFromRecipient() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    final var response = api.complementCertificate(
+    final var response = api().complementCertificate(
         defaultComplementCertificateRequest(),
         certificateId(testCertificates)
     );
@@ -181,11 +175,11 @@ public abstract class ComplementIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Utkast skall inte kunna ta emot kompletteringsbegäran - 403 (FORBIDDEN) ")
   void shallReturn403IfCertificateIsDraft() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.receiveMessage(
+    final var response = api().receiveMessage(
         incomingComplementMessageBuilder()
             .certificateId(
                 certificateId(testCertificates)
@@ -199,16 +193,16 @@ public abstract class ComplementIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Makulerade intyg skall inte kunna ta emot kompletteringsbegäran - 403 (FORBIDDEN)")
   void shallReturn403IfCertificateIsRevoked() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.revokeCertificate(
+    api().revokeCertificate(
         defaultRevokeCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    final var response = api.receiveMessage(
+    final var response = api().receiveMessage(
         incomingComplementMessageBuilder()
             .certificateId(
                 certificateId(testCertificates)
@@ -222,16 +216,16 @@ public abstract class ComplementIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Intyg skall inte kunna ta emot kompletteringsbegäran på fel patient - 403 (FORBIDDEN)")
   void shallReturn403IfComplementIsOfDifferentPatient() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    final var response = api.receiveMessage(
+    final var response = api().receiveMessage(
         incomingComplementMessageBuilder()
             .certificateId(
                 certificateId(testCertificates)
@@ -246,21 +240,21 @@ public abstract class ComplementIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Kompletteringsbegäran skall sättas som hanterad när ersättande intyg signeras")
   void shallSetComplementAsHandledWhenComplementingCertificateIsSigned() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    final var response = api.replaceCertificate(
+    final var response = api().replaceCertificate(
         defaultReplaceCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    api.receiveMessage(
+    api().receiveMessage(
         incomingComplementMessageBuilder()
             .certificateId(certificateId(testCertificates))
             .complements(List.of(incomingComplementDTOBuilder()
@@ -269,13 +263,13 @@ public abstract class ComplementIT extends BaseIntegrationIT {
             .build()
     );
 
-    api.signCertificate(
+    api().signCertificate(
         defaultSignCertificateRequest(),
         certificateId(response.getBody()),
         Objects.requireNonNull(certificate(response.getBody())).getMetadata().getVersion()
     );
 
-    final var messagesForCertificate = api.getMessagesForCertificate(
+    final var messagesForCertificate = api().getMessagesForCertificate(
         defaultGetCertificateMessageRequest(),
         certificateId(testCertificates)
     );
@@ -288,16 +282,16 @@ public abstract class ComplementIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Kompletteringsbegäran ska kunna sättas som hanterad av användaren")
   void shallSetComplementAsHandledWhenHandledByUser() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    api.receiveMessage(
+    api().receiveMessage(
         incomingComplementMessageBuilder()
             .certificateId(certificateId(testCertificates))
             .complements(List.of(incomingComplementDTOBuilder()
@@ -306,14 +300,14 @@ public abstract class ComplementIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var messagesForCertificate = api.getMessagesForCertificate(
+    final var messagesForCertificate = api().getMessagesForCertificate(
         defaultGetCertificateMessageRequest(),
         certificateId(testCertificates)
     );
 
     final var questions = questions(messagesForCertificate.getBody());
 
-    final var response = api.handleMessage(
+    final var response = api().handleMessage(
         defaultHandleMessageRequest(),
         messageId(questions.getFirst())
     );
@@ -326,16 +320,16 @@ public abstract class ComplementIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Kompletteringsbegäran ska inte kunna byta status till ej hanterad av användaren")
   void shallNotSetComplementAsUnhandled() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    api.receiveMessage(
+    api().receiveMessage(
         incomingComplementMessageBuilder()
             .certificateId(certificateId(testCertificates))
             .complements(List.of(incomingComplementDTOBuilder()
@@ -344,19 +338,19 @@ public abstract class ComplementIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var messagesForCertificate = api.getMessagesForCertificate(
+    final var messagesForCertificate = api().getMessagesForCertificate(
         defaultGetCertificateMessageRequest(),
         certificateId(testCertificates)
     );
 
     final var questions = questions(messagesForCertificate.getBody());
 
-    api.handleMessage(
+    api().handleMessage(
         defaultHandleMessageRequest(),
         messageId(questions.getFirst())
     );
 
-    final var response = api.handleMessage(
+    final var response = api().handleMessage(
         customHandleMessageRequest()
             .handled(false)
             .build(),
@@ -371,16 +365,16 @@ public abstract class ComplementIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget redan kompletterats så ska felkod 403 (FORBIDDEN) returneras vid försök att ersätta")
   void shallReturn403IfCertificateAlreadyIsComplemented() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    api.receiveMessage(
+    api().receiveMessage(
         incomingComplementMessageBuilder()
             .certificateId(certificateId(testCertificates))
             .complements(List.of(incomingComplementDTOBuilder()
@@ -389,18 +383,18 @@ public abstract class ComplementIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var complement = api.complementCertificate(
+    final var complement = api().complementCertificate(
         defaultComplementCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    api.signCertificate(
+    api().signCertificate(
         defaultSignCertificateRequest(),
         complement.getBody().getCertificate().getMetadata().getId(),
         complement.getBody().getCertificate().getMetadata().getVersion()
     );
 
-    final var response = api.replaceCertificate(
+    final var response = api().replaceCertificate(
         defaultReplaceCertificateRequest(),
         certificateId(testCertificates)
     );

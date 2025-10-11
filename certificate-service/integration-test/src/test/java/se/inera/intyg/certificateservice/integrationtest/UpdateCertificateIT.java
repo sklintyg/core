@@ -28,22 +28,13 @@ import org.springframework.http.ResponseEntity;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDataElement;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 
 public abstract class UpdateCertificateIT extends BaseIntegrationIT {
-
-  protected abstract String type();
-
-  protected abstract String typeVersion();
-
-  protected abstract ElementId element();
-
-  protected abstract Object value();
 
   @Test
   @DisplayName("Vårdadmin - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
   void shallNotUpdateDataIfUserIsCareAdminAndPatientIsProtectedPerson() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion())
             .patient(ANONYMA_REACT_ATTILA_DTO)
             .build()
@@ -51,7 +42,7 @@ public abstract class UpdateCertificateIT extends BaseIntegrationIT {
 
     final var certificate = certificate(testCertificates);
 
-    final var response = api.updateCertificate(
+    final var response = api().updateCertificate(
         customUpdateCertificateRequest()
             .user(ALVA_VARDADMINISTRATOR_DTO)
             .certificate(certificate)
@@ -65,13 +56,13 @@ public abstract class UpdateCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på en annan mottagning skall felkod 403 (FORBIDDEN) returneras")
   void shallReturn403IfUnitIsSubUnitAndNotOnSameUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
     final var certificate = certificate(testCertificates);
 
-    final var response = api.updateCertificate(
+    final var response = api().updateCertificate(
         customUpdateCertificateRequest()
             .certificate(certificate)
             .unit(ALFA_HUDMOTTAGNINGEN_DTO)
@@ -85,13 +76,13 @@ public abstract class UpdateCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
   void shallReturn403IfUnitIsCareUnitAndNotOnCareUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
     final var certificate = certificate(testCertificates);
 
-    final var response = api.updateCertificate(
+    final var response = api().updateCertificate(
         customUpdateCertificateRequest()
             .certificate(certificate)
             .unit(ALFA_VARDCENTRAL_DTO)
@@ -105,20 +96,20 @@ public abstract class UpdateCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om utkastet sparas med en inaktuell revision av utkastet skall felkod 409 (CONFLICT) returneras")
   void shallNotUpdateDataIfUserIsTryingToSaveWithAnOldRevision() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
     final var certificate = certificate(testCertificates);
 
-    api.updateCertificate(
+    api().updateCertificate(
         customUpdateCertificateRequest()
             .certificate(certificate)
             .build(),
         certificateId(testCertificates)
     );
 
-    final var response = api.updateCertificateWithConcurrentError(
+    final var response = api().updateCertificateWithConcurrentError(
         customUpdateCertificateRequest()
             .certificate(certificate)
             .build(),
@@ -132,7 +123,7 @@ public abstract class UpdateCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall svarsalternativ uppdateras")
   void shallUpdateDataIfUserIsDoctorAndPatientIsProtectedPerson() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion())
             .patient(ANONYMA_REACT_ATTILA_DTO)
             .build()
@@ -147,7 +138,7 @@ public abstract class UpdateCertificateIT extends BaseIntegrationIT {
         )
     );
 
-    final var response = api.updateCertificate(
+    final var response = api().updateCertificate(
         customUpdateCertificateRequest()
             .user(AJLA_DOCTOR_DTO)
             .certificate(certificate)
@@ -161,7 +152,7 @@ public abstract class UpdateCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på mottagning men på samma vårdenhet skall svarsalternativ uppdateras")
   void shallUpdateDataIfUnitIsCareUnitAndOnSameCareUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
@@ -175,7 +166,7 @@ public abstract class UpdateCertificateIT extends BaseIntegrationIT {
         )
     );
 
-    final var response = api.updateCertificate(
+    final var response = api().updateCertificate(
         customUpdateCertificateRequest()
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .certificate(certificate)
@@ -189,7 +180,7 @@ public abstract class UpdateCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på samma vårdenhet skall svarsalternativ uppdateras")
   void shallUpdateDataIfUnitIsCareUnitAndIssuedOnSameCareUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion())
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build()
@@ -205,7 +196,7 @@ public abstract class UpdateCertificateIT extends BaseIntegrationIT {
         )
     );
 
-    final var response = api.updateCertificate(
+    final var response = api().updateCertificate(
         customUpdateCertificateRequest()
             .certificate(certificate)
             .unit(ALFA_MEDICINCENTRUM_DTO)
@@ -219,7 +210,7 @@ public abstract class UpdateCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på samma mottagning skall svarsalternativ uppdateras")
   void shallUpdateDataIfUnitIsSubUnitAndOnSameUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
@@ -233,7 +224,7 @@ public abstract class UpdateCertificateIT extends BaseIntegrationIT {
         )
     );
 
-    final var response = api.updateCertificate(
+    final var response = api().updateCertificate(
         customUpdateCertificateRequest()
             .certificate(certificate)
             .build(),

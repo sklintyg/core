@@ -27,21 +27,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public abstract class SendCertificateIT extends BaseIntegrationIT {
-
-  protected abstract String type();
-
-  protected abstract String typeVersion();
-
-  protected abstract String recipient();
-
+  
   @Test
   @DisplayName("Om intyget är utfärdat på samma mottagning skall det gå att skicka")
   void shallSuccessfullySendIfUnitIsSubUnitAndIssuedOnSameSubUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    final var response = api.sendCertificate(
+    final var response = api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
@@ -55,11 +49,11 @@ public abstract class SendCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på mottagning men på samma vårdenhet skall det gå att skicka")
   void shallSuccessfullySendIfUnitIsCareUnitAndOnSameCareUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    final var response = api.sendCertificate(
+    final var response = api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
@@ -73,13 +67,13 @@ public abstract class SendCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på samma vårdenhet skall det gå att skicka")
   void shallSuccessfullySendIfUnitIsCareUnitAndIssuedOnSameCareUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion(), SIGNED)
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build()
     );
 
-    final var response = api.sendCertificate(
+    final var response = api().sendCertificate(
         customSendCertificateRequest()
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build(),
@@ -95,13 +89,13 @@ public abstract class SendCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget skickas ska ett meddelande läggas på AMQn")
   void shallSuccessfullyAddMessageToAMQWhenSendingCertificate() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion(), SIGNED)
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build()
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         customSendCertificateRequest()
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build(),
@@ -110,14 +104,14 @@ public abstract class SendCertificateIT extends BaseIntegrationIT {
 
     assertAll(
         () -> waitAtMost(Duration.ofSeconds(5))
-            .untilAsserted(() -> assertEquals(1, testListener.messages().size())),
+            .untilAsserted(() -> assertEquals(1, testListener().messages().size())),
         () -> assertEquals(
             certificateId(testCertificates),
-            testListener.messages().getFirst().getStringProperty("certificateId")
+            testListener().messages().getFirst().getStringProperty("certificateId")
         ),
         () -> assertEquals(
             "certificate-sent",
-            testListener.messages().getFirst().getStringProperty("eventType")
+            testListener().messages().getFirst().getStringProperty("eventType")
         )
     );
   }
@@ -125,11 +119,11 @@ public abstract class SendCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på en annan mottagning skall felkod 403 (FORBIDDEN) returneras")
   void shallReturn403IfUnitIsSubUnitAndNotOnSameUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    final var response = api.sendCertificate(
+    final var response = api().sendCertificate(
         customSendCertificateRequest()
             .unit(ALFA_HUDMOTTAGNINGEN_DTO)
             .build(),
@@ -142,11 +136,11 @@ public abstract class SendCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
   void shallReturn403IfUnitIsCareUnitAndNotOnCareUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    final var response = api.sendCertificate(
+    final var response = api().sendCertificate(
         customSendCertificateRequest()
             .careUnit(ALFA_VARDCENTRAL_DTO)
             .unit(ALFA_VARDCENTRAL_DTO)
@@ -160,11 +154,11 @@ public abstract class SendCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Vårdadministratör - Om intyget är signerat ska intyget gå att skicka")
   void shallReturnBeAbleToSendIfUserIsCareAdmin() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    final var response = api.sendCertificate(
+    final var response = api().sendCertificate(
         customSendCertificateRequest()
             .user(ALVA_VARDADMINISTRATOR_DTO)
             .build(),
@@ -180,11 +174,11 @@ public abstract class SendCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Barnmorska - Om intyget är signerat ska intyget gå att skicka")
   void shallReturnBeAbleToSendIfUserIsMidWife() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    final var response = api.sendCertificate(
+    final var response = api().sendCertificate(
         customSendCertificateRequest()
             .user(BERTIL_BARNMORSKA_DTO)
             .build(),
@@ -200,11 +194,11 @@ public abstract class SendCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Sjuksköterska - Om intyget är signerat ska intyget gå att skicka")
   void shallReturnBeAbleToSendIfUserIsNurse() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    final var response = api.sendCertificate(
+    final var response = api().sendCertificate(
         customSendCertificateRequest()
             .user(ANNA_SJUKSKOTERSKA_DTO)
             .build(),
@@ -220,13 +214,13 @@ public abstract class SendCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall det gå att skicka")
   void shallSuccessfullySendIfPatientIsProtectedPersonAndUserIsDoctor() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion(), SIGNED)
             .patient(ANONYMA_REACT_ATTILA_DTO)
             .build()
     );
 
-    final var response = api.sendCertificate(
+    final var response = api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
@@ -240,11 +234,11 @@ public abstract class SendCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget inte är signerat skall felkod 403 (FORBIDDEN) returneras")
   void shallReturn403IfCertificateNotSigned() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.sendCertificate(
+    final var response = api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
@@ -255,16 +249,16 @@ public abstract class SendCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget redan är skickat skall felkod 403 (FORBIDDEN) returneras")
   void shallReturn403IfCertificateIsAlreadySent() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    api.sendCertificate(
+    api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
 
-    final var response = api.sendCertificate(
+    final var response = api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );
@@ -275,11 +269,11 @@ public abstract class SendCertificateIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är ersatt av ett signerat intyg skall det inte gå att skicka")
   void shallReturn403IfCertificateReplacedIsAlreadySent() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
-    final var replaceCertificate = api.replaceCertificate(
+    final var replaceCertificate = api().replaceCertificate(
         defaultReplaceCertificateRequest(),
         certificateId(testCertificates)
     );
@@ -290,13 +284,13 @@ public abstract class SendCertificateIT extends BaseIntegrationIT {
         .getMetadata()
         .getId();
 
-    api.signCertificate(
+    api().signCertificate(
         defaultSignCertificateRequest(),
         replacedCertificateId,
         0L
     );
 
-    final var response = api.sendCertificate(
+    final var response = api().sendCertificate(
         defaultSendCertificateRequest(),
         certificateId(testCertificates)
     );

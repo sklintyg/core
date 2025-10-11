@@ -1,22 +1,41 @@
 package se.inera.intyg.certificateservice.integrationtest.ts8071;
 
+import static se.inera.intyg.certificateservice.integrationtest.ts8071.TS8071TestSetup.ts8071TestSetup;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
+import se.inera.intyg.certificateservice.integrationtest.BaseTestabilityUtilities;
 import se.inera.intyg.certificateservice.integrationtest.ExistsCitizenCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCitizenCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.GetCitizenCertificateListIT;
+import se.inera.intyg.certificateservice.integrationtest.TestabilityUtilities;
+import se.inera.intyg.certificateservice.integrationtest.ag114.ActiveCertificatesIT;
 
-class TS8071CitizenIT {
+class TS8071CitizenIT extends ActiveCertificatesIT {
 
-  private static final String CERTIFICATE_TYPE = TS8071Constants.TS8071;
-  private static final String ACTIVE_VERSION = TS8071Constants.VERSION;
-  private static final String TYPE = TS8071Constants.TYPE;
+  public static final String TYPE = TS8071TestSetup.TYPE;
 
-  @DynamicPropertySource
-  static void testProperties(DynamicPropertyRegistry registry) {
-    registry.add("certificate.model.ts8071.v1_0.active.from", () -> "2024-01-01T00:00:00");
+  @BeforeEach
+  void setUp() {
+    super.setUpBaseIT();
+
+    baseTestabilityUtilities = ts8071TestSetup()
+        .testabilityUtilities(
+            TestabilityUtilities.builder()
+                .api(api)
+                .internalApi(internalApi)
+                .testabilityApi(testabilityApi)
+                .testListener(testListener)
+                .build()
+        )
+        .build();
+  }
+
+  @AfterEach
+  void tearDown() {
+    super.tearDownBaseIT();
   }
 
   @Nested
@@ -24,13 +43,8 @@ class TS8071CitizenIT {
   class GetCitizenCertificate extends GetCitizenCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -39,13 +53,8 @@ class TS8071CitizenIT {
   class GetCitizenCertificateList extends GetCitizenCertificateListIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -54,13 +63,8 @@ class TS8071CitizenIT {
   class ExistsCitizenCertificate extends ExistsCitizenCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 }

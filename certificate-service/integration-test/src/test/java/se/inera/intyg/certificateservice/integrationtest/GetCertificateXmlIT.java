@@ -24,18 +24,15 @@ import se.inera.intyg.certificateservice.application.common.dto.UserDTO;
 
 public abstract class GetCertificateXmlIT extends BaseIntegrationIT {
 
-  protected abstract String type();
-
-  protected abstract String typeVersion();
 
   @Test
   @DisplayName("Om intyget är utfärdat på samma mottagning skall det returneras")
   void shallReturnCertificateXMLIfUnitIsSubUnitAndIssuedOnSameSubUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.getCertificateXml(
+    final var response = api().getCertificateXml(
         defaultGetCertificateXmlRequest(),
         certificateId(testCertificates)
     );
@@ -54,11 +51,11 @@ public abstract class GetCertificateXmlIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på mottagning men på samma vårdenhet skall det returneras")
   void shallReturnCertificateXMLIfUnitIsCareUnitAndOnSameCareUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.getCertificateXml(
+    final var response = api().getCertificateXml(
         customGetCertificateXmlRequest()
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build(),
@@ -79,13 +76,13 @@ public abstract class GetCertificateXmlIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på samma vårdenhet skall det returneras")
   void shallReturnCertificateXMLIfUnitIsCareUnitAndIssuedOnSameCareUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion())
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build()
     );
 
-    final var response = api.getCertificateXml(
+    final var response = api().getCertificateXml(
         customGetCertificateXmlRequest()
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .build(),
@@ -106,11 +103,11 @@ public abstract class GetCertificateXmlIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på en annan mottagning skall felkod 403 (FORBIDDEN) returneras")
   void shallReturn403IfUnitIsSubUnitAndNotOnSameUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.getCertificateXml(
+    final var response = api().getCertificateXml(
         customGetCertificateXmlRequest()
             .unit(ALFA_HUDMOTTAGNINGEN_DTO)
             .build(),
@@ -123,11 +120,11 @@ public abstract class GetCertificateXmlIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
   void shallReturn403IfUnitIsCareUnitAndNotOnCareUnit() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.getCertificateXml(
+    final var response = api().getCertificateXml(
         customGetCertificateXmlRequest()
             .careUnit(ALFA_VARDCENTRAL_DTO)
             .unit(ALFA_VARDCENTRAL_DTO)
@@ -142,13 +139,13 @@ public abstract class GetCertificateXmlIT extends BaseIntegrationIT {
   @DisplayName("Om intyget är utfärdat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
   @MethodSource("rolesNoAccessToProtectedPerson")
   void shallReturn403IfPatientIsProtectedPerson(UserDTO userDTO) {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion())
             .patient(ANONYMA_REACT_ATTILA_DTO)
             .build()
     );
 
-    final var response = api.getCertificateXml(
+    final var response = api().getCertificateXml(
         customGetCertificateXmlRequest()
             .user(userDTO)
             .build(),
@@ -161,13 +158,13 @@ public abstract class GetCertificateXmlIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall det returneras")
   void shallReturnCertificateXMLIfPatientIsProtectedPersonAndUserIsDoctor() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion())
             .patient(ANONYMA_REACT_ATTILA_DTO)
             .build()
     );
 
-    final var response = api.getCertificateXml(
+    final var response = api().getCertificateXml(
         defaultGetCertificateXmlRequest(),
         certificateId(testCertificates)
     );

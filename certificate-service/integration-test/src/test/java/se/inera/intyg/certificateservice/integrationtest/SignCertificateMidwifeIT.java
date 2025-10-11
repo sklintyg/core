@@ -16,18 +16,15 @@ import org.junit.jupiter.api.Test;
 
 public abstract class SignCertificateMidwifeIT extends BaseIntegrationIT {
 
-  protected abstract String type();
-
-  protected abstract String typeVersion();
 
   @Test
   @DisplayName("Om användaren har rollen barnmorska ska intyget gå att signeras")
   void shallSuccessfullySignIfRoleIsMidwife() {
-    final var testCertificates = testabilityApi.addCertificates(
+    final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
-    final var response = api.signCertificate(
+    final var response = api().signCertificate(
         customSignCertificateRequest()
             .user(BERTIL_BARNMORSKA_DTO)
             .build(),
