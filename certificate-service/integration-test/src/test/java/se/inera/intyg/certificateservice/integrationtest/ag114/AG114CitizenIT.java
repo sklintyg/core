@@ -6,11 +6,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
-import se.inera.intyg.certificateservice.integrationtest.BaseTestabilityUtilities;
-import se.inera.intyg.certificateservice.integrationtest.ExistsCitizenCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.GetCitizenCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.GetCitizenCertificateListIT;
-import se.inera.intyg.certificateservice.integrationtest.TestabilityUtilities;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.BaseTestabilityUtilities;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.ExistsCitizenCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.GetCitizenCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.GetCitizenCertificateListIT;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.TestabilityUtilities;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.ActiveCertificatesIT;
 
 class AG114CitizenIT extends ActiveCertificatesIT {
 

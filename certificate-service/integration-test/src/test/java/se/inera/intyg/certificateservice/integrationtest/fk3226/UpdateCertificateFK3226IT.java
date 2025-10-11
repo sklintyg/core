@@ -11,15 +11,15 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.elements.QuestionUtlatandeBaseratPa.QUESTION_UTLATANDE_BASERAT_PA_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.elements.QuestionUtlatandeBaseratPa.QUESTION_UTLATANDE_BASERAT_PA_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3226.elements.QuestionUtlatandeBaseratPa.UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID;
-import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customTestabilityCertificateRequest;
-import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customUpdateCertificateRequest;
-import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificate;
-import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateId;
-import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.getValueBoolean;
-import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.getValueCode;
-import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.getValueDateList;
-import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.getValueDiagnosisList;
-import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.updateValue;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.customTestabilityCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.customUpdateCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.certificate;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.certificateId;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.getValueBoolean;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.getValueCode;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.getValueDateList;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.getValueDiagnosisList;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.updateValue;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -33,7 +33,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.value.Certi
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDiagnosis;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDiagnosisList;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0009;
-import se.inera.intyg.certificateservice.integrationtest.BaseIntegrationIT;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.BaseIntegrationIT;
 
 public abstract class UpdateCertificateFK3226IT extends BaseIntegrationIT {
 

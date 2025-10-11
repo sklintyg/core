@@ -5,9 +5,9 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
-import se.inera.intyg.certificateservice.integrationtest.BaseTestabilityUtilities;
-import se.inera.intyg.certificateservice.integrationtest.TestabilityAccess;
-import se.inera.intyg.certificateservice.integrationtest.TestabilityCertificate;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.BaseTestabilityUtilities;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.TestabilityAccess;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.TestabilityCertificate;
 
 public class FK3226TestSetup {
 

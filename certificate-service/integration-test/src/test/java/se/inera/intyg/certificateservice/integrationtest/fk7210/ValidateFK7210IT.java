@@ -4,19 +4,19 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.elements.QuestionBeraknatFodelsedatum.QUESTION_BERAKNAT_FODELSEDATUM_ID;
-import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customValidateCertificateRequest;
-import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultTestablilityCertificateRequest;
-import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificate;
-import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateId;
-import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.updateDateValue;
-import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.validationErrors;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.customValidateCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.defaultTestablilityCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.certificate;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.certificateId;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.updateDateValue;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.validationErrors;
 
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Objects;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.integrationtest.BaseIntegrationIT;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.BaseIntegrationIT;
 
 public abstract class ValidateFK7210IT extends BaseIntegrationIT {
 

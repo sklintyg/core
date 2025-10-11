@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.integrationtest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultTestablilityCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.defaultTestablilityCertificateRequest;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -14,9 +14,9 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
-import se.inera.intyg.certificateservice.integrationtest.util.ApiUtil;
-import se.inera.intyg.certificateservice.integrationtest.util.Containers;
-import se.inera.intyg.certificateservice.integrationtest.util.TestabilityApiUtil;
+import se.inera.intyg.certificateservice.integrationtest.common.util.ApiUtil;
+import se.inera.intyg.certificateservice.integrationtest.common.util.Containers;
+import se.inera.intyg.certificateservice.integrationtest.common.util.TestabilityApiUtil;
 
 @ActiveProfiles({"integration-test"})
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -28,7 +28,7 @@ class MiscellaneousIT {
   private final TestRestTemplate restTemplate;
   private ApiUtil api;
   private TestabilityApiUtil testabilityApi;
-  
+
   @Autowired
   public MiscellaneousIT(TestRestTemplate restTemplate) {
     this.restTemplate = restTemplate;

@@ -3,12 +3,12 @@ package se.inera.intyg.certificateservice.integrationtest.fk7472;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.elements.QuestionPeriod.QUESTION_PERIOD_ID;
-import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customTestabilityCertificateRequest;
-import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customUpdateCertificateRequest;
-import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificate;
-import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateId;
-import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.getValueDateRangeList;
-import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.updateDateRangeListValue;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.customTestabilityCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.customUpdateCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.certificate;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.certificateId;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.getValueDateRangeList;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.updateDateRangeListValue;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.Objects;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDateRange;
-import se.inera.intyg.certificateservice.integrationtest.BaseIntegrationIT;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.BaseIntegrationIT;
 
 public abstract class UpdateCertificateFK7472IT extends BaseIntegrationIT {
 

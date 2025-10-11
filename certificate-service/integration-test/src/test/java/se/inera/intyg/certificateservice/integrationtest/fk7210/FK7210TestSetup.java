@@ -7,9 +7,9 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
-import se.inera.intyg.certificateservice.integrationtest.BaseTestabilityUtilities;
-import se.inera.intyg.certificateservice.integrationtest.TestabilityAccess;
-import se.inera.intyg.certificateservice.integrationtest.TestabilityCertificate;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.BaseTestabilityUtilities;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.TestabilityAccess;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.TestabilityCertificate;
 
 public class FK7210TestSetup {
 

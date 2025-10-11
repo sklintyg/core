@@ -6,10 +6,10 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
-import se.inera.intyg.certificateservice.integrationtest.BaseTestabilityUtilities;
-import se.inera.intyg.certificateservice.integrationtest.InactiveTypeIT;
-import se.inera.intyg.certificateservice.integrationtest.TestabilityUtilities;
-import se.inera.intyg.certificateservice.integrationtest.ag114.InActiveCertificatesIT;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.BaseTestabilityUtilities;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.InactiveTypeIT;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.TestabilityUtilities;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.InActiveCertificatesIT;
 
 class FK7472InactiveIT extends InActiveCertificatesIT {
 
