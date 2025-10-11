@@ -6,7 +6,6 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueTe
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.integrationtest.common.util.ApiUtil;
 import se.inera.intyg.certificateservice.integrationtest.common.util.InternalApiUtil;
-import se.inera.intyg.certificateservice.integrationtest.common.util.TestListener;
 import se.inera.intyg.certificateservice.integrationtest.common.util.TestabilityApiUtil;
 
 public abstract class BaseIntegrationIT {
@@ -33,10 +32,6 @@ public abstract class BaseIntegrationIT {
 
   protected TestabilityApiUtil testabilityApi() {
     return testabilityUtilities().getTestabilityUtilities().getTestabilityApi();
-  }
-
-  protected TestListener testListener() {
-    return testabilityUtilities().getTestabilityUtilities().getTestListener();
   }
 
   protected String type() {
@@ -143,6 +138,4 @@ public abstract class BaseIntegrationIT {
         .id()
         .id();
   }
-
-  ;
 }

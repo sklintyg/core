@@ -14,7 +14,6 @@ import org.springframework.test.context.DynamicPropertySource;
 import se.inera.intyg.certificateservice.integrationtest.common.util.ApiUtil;
 import se.inera.intyg.certificateservice.integrationtest.common.util.Containers;
 import se.inera.intyg.certificateservice.integrationtest.common.util.InternalApiUtil;
-import se.inera.intyg.certificateservice.integrationtest.common.util.TestListener;
 import se.inera.intyg.certificateservice.integrationtest.common.util.TestabilityApiUtil;
 
 @ActiveProfiles({"integration-test", TESTABILITY_PROFILE})
@@ -26,7 +25,6 @@ public abstract class InActiveCertificatesIT {
 
   @Autowired
   protected TestRestTemplate restTemplate;
-  protected static final TestListener testListener = new TestListener();
 
   protected ApiUtil api;
   protected InternalApiUtil internalApi;
@@ -59,7 +57,6 @@ public abstract class InActiveCertificatesIT {
     this.api = new ApiUtil(restTemplate, port);
     this.internalApi = new InternalApiUtil(restTemplate, port);
     this.testabilityApi = new TestabilityApiUtil(restTemplate, port);
-    testListener.emptyMessages();
   }
 
   protected void tearDownBaseIT() {

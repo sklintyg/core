@@ -10,11 +10,11 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.BERTIL_BARNMORSKA_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.incomingComplementDTOBuilder;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.incomingComplementMessageBuilder;
-import static se.inera.intyg.certificateservice.integrationtest.fk7810.FK7810TestSetup.fk7810TestSetup;
 import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.defaultComplementCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.defaultSendCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.defaultTestablilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.certificateId;
+import static se.inera.intyg.certificateservice.integrationtest.fk7810.FK7810TestSetup.fk7810TestSetup;
 
 import java.util.List;
 import java.util.Objects;
@@ -25,11 +25,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.provider.Arguments;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.ActiveCertificatesIT;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.BaseTestabilityUtilities;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.TestabilityUtilities;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.AccessLevelsDeepIntegrationIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.AccessLevelsSVODIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.AdministrativeMessagesIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.AnswerComplementIT;
-import se.inera.intyg.certificateservice.integrationtest.common.setup.BaseTestabilityUtilities;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.CertificateReadyForSignIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.CertificatesWithQAForCareIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.ComplementIT;
@@ -58,11 +60,9 @@ import se.inera.intyg.certificateservice.integrationtest.common.tests.RevokeCert
 import se.inera.intyg.certificateservice.integrationtest.common.tests.SendCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.SendCitizenCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.SignCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.common.setup.TestabilityUtilities;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.UnitStatisticsIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.UpdateCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.ValidateCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.common.setup.ActiveCertificatesIT;
 
 public class FK7810ActiveIT extends ActiveCertificatesIT {
 
@@ -78,7 +78,6 @@ public class FK7810ActiveIT extends ActiveCertificatesIT {
                 .api(api)
                 .internalApi(internalApi)
                 .testabilityApi(testabilityApi)
-                .testListener(testListener)
                 .build()
         )
         .build();

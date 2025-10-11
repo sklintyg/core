@@ -12,7 +12,6 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataInc
 import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.incomingComplementMessageBuilder;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionGrundForMedicinsktUnderlag.QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionGrundForMedicinsktUnderlag.UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID;
-import static se.inera.intyg.certificateservice.integrationtest.fk7809.FK7809TestSetup.fk7809TestSetup;
 import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.customUpdateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.defaultComplementCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.defaultGetCertificateMessageRequest;
@@ -24,6 +23,7 @@ import static se.inera.intyg.certificateservice.integrationtest.common.util.Cert
 import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.certificateId;
 import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.questions;
 import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.updateDateListValue;
+import static se.inera.intyg.certificateservice.integrationtest.fk7809.FK7809TestSetup.fk7809TestSetup;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -36,11 +36,13 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.provider.Arguments;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDate;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.ActiveCertificatesIT;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.BaseTestabilityUtilities;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.TestabilityUtilities;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.AccessLevelsDeepIntegrationIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.AccessLevelsSVODIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.AdministrativeMessagesIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.AnswerComplementIT;
-import se.inera.intyg.certificateservice.integrationtest.common.setup.BaseTestabilityUtilities;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.CertificateFromMessageIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.CertificateReadyForSignIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.CertificatesWithQAForCareIT;
@@ -72,12 +74,10 @@ import se.inera.intyg.certificateservice.integrationtest.common.tests.RevokeCert
 import se.inera.intyg.certificateservice.integrationtest.common.tests.SendCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.SendCitizenCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.SignCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.common.setup.TestabilityUtilities;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.UnitStatisticsIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.UpdateCertificateFK7809IT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.UpdateCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.ValidateCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.common.setup.ActiveCertificatesIT;
 
 public class FK7809ActiveIT extends ActiveCertificatesIT {
 
@@ -93,7 +93,6 @@ public class FK7809ActiveIT extends ActiveCertificatesIT {
                 .api(api)
                 .internalApi(internalApi)
                 .testabilityApi(testabilityApi)
-                .testListener(testListener)
                 .build()
         )
         .build();

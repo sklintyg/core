@@ -6,12 +6,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.ActiveCertificatesIT;
 import se.inera.intyg.certificateservice.integrationtest.common.setup.BaseTestabilityUtilities;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.TestabilityUtilities;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.ExistsCitizenCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.GetCitizenCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.GetCitizenCertificateListIT;
-import se.inera.intyg.certificateservice.integrationtest.common.setup.TestabilityUtilities;
-import se.inera.intyg.certificateservice.integrationtest.common.setup.ActiveCertificatesIT;
 
 class TS8071CitizenIT extends ActiveCertificatesIT {
 
@@ -27,7 +27,6 @@ class TS8071CitizenIT extends ActiveCertificatesIT {
                 .api(api)
                 .internalApi(internalApi)
                 .testabilityApi(testabilityApi)
-                .testListener(testListener)
                 .build()
         )
         .build();

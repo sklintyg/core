@@ -12,11 +12,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.params.provider.Arguments;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.ActiveCertificatesIT;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.BaseTestabilityUtilities;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.TestabilityUtilities;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.AccessLevelsDeepIntegrationIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.AccessLevelsSVODIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.AdministrativeMessagesIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.AnswerComplementIT;
-import se.inera.intyg.certificateservice.integrationtest.common.setup.BaseTestabilityUtilities;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.CertificateReadyForSignIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.CertificatesWithQAForCareIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.ComplementIT;
@@ -46,11 +48,9 @@ import se.inera.intyg.certificateservice.integrationtest.common.tests.RevokeCert
 import se.inera.intyg.certificateservice.integrationtest.common.tests.SendCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.SendCitizenCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.SignCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.common.setup.TestabilityUtilities;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.UnitStatisticsIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.UpdateCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.ValidateCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.common.setup.ActiveCertificatesIT;
 
 public class FK7804ActiveIT extends ActiveCertificatesIT {
 
@@ -66,7 +66,6 @@ public class FK7804ActiveIT extends ActiveCertificatesIT {
                 .api(api)
                 .internalApi(internalApi)
                 .testabilityApi(testabilityApi)
-                .testListener(testListener)
                 .build()
         )
         .build();

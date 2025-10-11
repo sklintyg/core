@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateservice.integrationtest.common.tests;
 
-import static org.awaitility.Awaitility.waitAtMost;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO.SIGNED;
@@ -22,6 +21,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.integrationtest.common.setup.BaseIntegrationIT;
+import se.inera.intyg.certificateservice.integrationtest.common.util.MessageListenerUtil;
 
 public abstract class RevokeCertificateIT extends BaseIntegrationIT {
 
@@ -96,16 +96,14 @@ public abstract class RevokeCertificateIT extends BaseIntegrationIT {
         certificateId(testCertificates)
     );
 
+    final var message = MessageListenerUtil.awaitMessage(Duration.ofSeconds(5));
+
     assertAll(
-        () -> waitAtMost(Duration.ofSeconds(5))
-            .untilAsserted(() -> assertEquals(1, testListener().messages().size())),
         () -> assertEquals(
-            certificateId(testCertificates),
-            testListener().messages().get(0).getStringProperty("certificateId")
+            certificateId(testCertificates), message.getStringProperty("certificateId")
         ),
         () -> assertEquals(
-            "certificate-revoked",
-            testListener().messages().get(0).getStringProperty("eventType")
+            "certificate-revoked", message.getStringProperty("eventType")
         )
     );
   }

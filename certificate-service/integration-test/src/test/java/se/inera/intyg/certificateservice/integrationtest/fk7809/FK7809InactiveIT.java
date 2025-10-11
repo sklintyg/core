@@ -7,9 +7,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import se.inera.intyg.certificateservice.integrationtest.common.setup.BaseTestabilityUtilities;
-import se.inera.intyg.certificateservice.integrationtest.common.tests.InactiveTypeIT;
-import se.inera.intyg.certificateservice.integrationtest.common.setup.TestabilityUtilities;
 import se.inera.intyg.certificateservice.integrationtest.common.setup.InActiveCertificatesIT;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.TestabilityUtilities;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.InactiveTypeIT;
 
 class FK7809InactiveIT extends InActiveCertificatesIT {
 
@@ -25,7 +25,6 @@ class FK7809InactiveIT extends InActiveCertificatesIT {
                 .api(api)
                 .internalApi(internalApi)
                 .testabilityApi(testabilityApi)
-                .testListener(testListener)
                 .build()
         )
         .build();

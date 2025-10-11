@@ -9,7 +9,6 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.incomingComplementDTOBuilder;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.incomingComplementMessageBuilder;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7472.elements.QuestionPeriod.QUESTION_PERIOD_ID;
-import static se.inera.intyg.certificateservice.integrationtest.fk7472.FK7472TestSetup.fk7472TestSetup;
 import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.customUpdateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.defaultGetCertificateMessageRequest;
 import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.defaultRenewCertificateRequest;
@@ -20,6 +19,7 @@ import static se.inera.intyg.certificateservice.integrationtest.common.util.Cert
 import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.certificateId;
 import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.questions;
 import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.updateDateRangeListValue;
+import static se.inera.intyg.certificateservice.integrationtest.fk7472.FK7472TestSetup.fk7472TestSetup;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -33,10 +33,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.provider.Arguments;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDateRange;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0008;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.ActiveCertificatesIT;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.BaseTestabilityUtilities;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.TestabilityUtilities;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.AccessLevelsDeepIntegrationIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.AccessLevelsSVODIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.AnswerComplementIT;
-import se.inera.intyg.certificateservice.integrationtest.common.setup.BaseTestabilityUtilities;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.CertificateFromMessageIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.CertificateReadyForSignIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.CertificatesWithQAForCareIT;
@@ -69,11 +71,9 @@ import se.inera.intyg.certificateservice.integrationtest.common.tests.SendCertif
 import se.inera.intyg.certificateservice.integrationtest.common.tests.SendCitizenCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.SignCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.SignCertificateNurseIT;
-import se.inera.intyg.certificateservice.integrationtest.common.setup.TestabilityUtilities;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.UnitStatisticsIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.UpdateCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.ValidateCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.common.setup.ActiveCertificatesIT;
 
 public class FK7472ActiveIT extends ActiveCertificatesIT {
 
@@ -89,7 +89,6 @@ public class FK7472ActiveIT extends ActiveCertificatesIT {
                 .api(api)
                 .internalApi(internalApi)
                 .testabilityApi(testabilityApi)
-                .testListener(testListener)
                 .build()
         )
         .build();

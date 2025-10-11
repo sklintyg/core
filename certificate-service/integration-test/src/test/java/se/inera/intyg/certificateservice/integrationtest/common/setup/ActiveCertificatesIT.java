@@ -14,11 +14,12 @@ import org.springframework.test.context.DynamicPropertySource;
 import se.inera.intyg.certificateservice.integrationtest.common.util.ApiUtil;
 import se.inera.intyg.certificateservice.integrationtest.common.util.Containers;
 import se.inera.intyg.certificateservice.integrationtest.common.util.InternalApiUtil;
-import se.inera.intyg.certificateservice.integrationtest.common.util.TestListener;
+import se.inera.intyg.certificateservice.integrationtest.common.util.MessageListenerUtil;
 import se.inera.intyg.certificateservice.integrationtest.common.util.TestabilityApiUtil;
 
 @ActiveProfiles({"integration-test", TESTABILITY_PROFILE})
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = {MessagingListenerConfig.class},
+    webEnvironment = WebEnvironment.RANDOM_PORT)
 public abstract class ActiveCertificatesIT {
 
   @LocalServerPort
@@ -26,7 +27,6 @@ public abstract class ActiveCertificatesIT {
 
   @Autowired
   protected TestRestTemplate restTemplate;
-  protected static final TestListener testListener = new TestListener();
 
   protected ApiUtil api;
   protected InternalApiUtil internalApi;
@@ -59,7 +59,7 @@ public abstract class ActiveCertificatesIT {
     this.api = new ApiUtil(restTemplate, port);
     this.internalApi = new InternalApiUtil(restTemplate, port);
     this.testabilityApi = new TestabilityApiUtil(restTemplate, port);
-    testListener.emptyMessages();
+    MessageListenerUtil.clear();
   }
 
   protected void tearDownBaseIT() {

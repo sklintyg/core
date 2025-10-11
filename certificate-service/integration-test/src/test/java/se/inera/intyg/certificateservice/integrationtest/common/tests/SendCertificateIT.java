@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateservice.integrationtest.common.tests;
 
-import static org.awaitility.Awaitility.waitAtMost;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -26,6 +25,7 @@ import java.time.Duration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.integrationtest.common.setup.BaseIntegrationIT;
+import se.inera.intyg.certificateservice.integrationtest.common.util.MessageListenerUtil;
 
 public abstract class SendCertificateIT extends BaseIntegrationIT {
 
@@ -103,16 +103,14 @@ public abstract class SendCertificateIT extends BaseIntegrationIT {
         certificateId(testCertificates)
     );
 
+    final var message = MessageListenerUtil.awaitMessage(Duration.ofSeconds(5));
+
     assertAll(
-        () -> waitAtMost(Duration.ofSeconds(5))
-            .untilAsserted(() -> assertEquals(1, testListener().messages().size())),
         () -> assertEquals(
-            certificateId(testCertificates),
-            testListener().messages().getFirst().getStringProperty("certificateId")
+            certificateId(testCertificates), message.getStringProperty("certificateId")
         ),
         () -> assertEquals(
-            "certificate-sent",
-            testListener().messages().getFirst().getStringProperty("eventType")
+            "certificate-sent", message.getStringProperty("eventType")
         )
     );
   }

@@ -15,7 +15,6 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7426.elements.QuestionVardasBarnetInskrivetMedHemsjukvard.QUESTION_VARDAS_BARN_INSKRIVET_MED_HEMSJUKVARD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionGrundForMedicinsktUnderlag.QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionGrundForMedicinsktUnderlag.UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID;
-import static se.inera.intyg.certificateservice.integrationtest.fk7426.FK7426TestSetup.fk7426TestSetup;
 import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.customUpdateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.defaultGetCertificateMessageRequest;
 import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.defaultRenewCertificateRequest;
@@ -29,6 +28,7 @@ import static se.inera.intyg.certificateservice.integrationtest.common.util.Cert
 import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.updateDateListValue;
 import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.updateDateRangeValue;
 import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.updateTextValue;
+import static se.inera.intyg.certificateservice.integrationtest.fk7426.FK7426TestSetup.fk7426TestSetup;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -42,11 +42,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.provider.Arguments;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDate;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDateRange;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.ActiveCertificatesIT;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.BaseTestabilityUtilities;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.TestabilityUtilities;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.AccessLevelsDeepIntegrationIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.AccessLevelsSVODIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.AdministrativeMessagesIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.AnswerComplementIT;
-import se.inera.intyg.certificateservice.integrationtest.common.setup.BaseTestabilityUtilities;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.CertificateReadyForSignIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.CertificatesWithQAForCareIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.ComplementIT;
@@ -76,11 +78,9 @@ import se.inera.intyg.certificateservice.integrationtest.common.tests.RevokeCert
 import se.inera.intyg.certificateservice.integrationtest.common.tests.SendCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.SendCitizenCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.SignCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.common.setup.TestabilityUtilities;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.UnitStatisticsIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.UpdateCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.ValidateCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.common.setup.ActiveCertificatesIT;
 
 public class FK7426ActiveIT extends ActiveCertificatesIT {
 
@@ -96,7 +96,6 @@ public class FK7426ActiveIT extends ActiveCertificatesIT {
                 .api(api)
                 .internalApi(internalApi)
                 .testabilityApi(testabilityApi)
-                .testListener(testListener)
                 .build()
         )
         .build();
