@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804;
 
 import java.util.List;
+import java.util.stream.Stream;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
@@ -12,42 +13,36 @@ public class FK7804CertificateActionSpecification {
   }
 
   public static List<CertificateActionSpecification> create() {
-    final var allowedRoles = List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.DENTIST, Role.NURSE,
-        Role.MIDWIFE,
-        Role.CARE_ADMIN);
 
-    final var rolesAllowedToSignOrRevoke = List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.DENTIST);
+    final var signingRoles = List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.DENTIST);
+    final var nonSigningRoles = List.of(Role.NURSE, Role.MIDWIFE, Role.CARE_ADMIN);
+    final var allowedRoles = Stream.concat(signingRoles.stream(), nonSigningRoles.stream())
+        .toList();
 
     return List.of(
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.CREATE)
-            .allowedRoles(
-                allowedRoles)
+            .allowedRoles(allowedRoles)
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.READ)
-            .allowedRoles(
-                allowedRoles)
+            .allowedRoles(allowedRoles)
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.UPDATE)
-            .allowedRoles(
-                allowedRoles)
+            .allowedRoles(allowedRoles)
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.DELETE)
-            .allowedRoles(
-                allowedRoles)
+            .allowedRoles(allowedRoles)
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.SIGN)
-            .allowedRoles(rolesAllowedToSignOrRevoke)
+            .allowedRoles(signingRoles)
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.SEND)
-            .allowedRoles(
-                List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.DENTIST, Role.CARE_ADMIN, Role.NURSE,
-                    Role.MIDWIFE))
+            .allowedRoles(allowedRoles)
             .contentProvider(new FK7804CertificateSendContentProvider())
             .build(),
         CertificateActionSpecification.builder()
@@ -55,22 +50,19 @@ public class FK7804CertificateActionSpecification {
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.REVOKE)
-            .allowedRoles(rolesAllowedToSignOrRevoke)
+            .allowedRoles(signingRoles)
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.REPLACE)
-            .allowedRoles(
-                List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.DENTIST, Role.NURSE, Role.MIDWIFE))
+            .allowedRoles(signingRoles)
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.REPLACE_CONTINUE)
-            .allowedRoles(
-                List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.DENTIST, Role.NURSE, Role.MIDWIFE))
+            .allowedRoles(signingRoles)
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.RENEW)
-            .allowedRoles(
-                allowedRoles)
+            .allowedRoles(allowedRoles)
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.MESSAGES)
@@ -93,8 +85,7 @@ public class FK7804CertificateActionSpecification {
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.COMPLEMENT)
-            .allowedRoles(
-                allowedRoles)
+            .allowedRoles(allowedRoles)
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.SEND_AFTER_COMPLEMENT)
@@ -137,16 +128,15 @@ public class FK7804CertificateActionSpecification {
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE)
-            .allowedRoles(List.of(Role.CARE_ADMIN, Role.MIDWIFE, Role.NURSE))
+            .allowedRoles(nonSigningRoles)
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.READY_FOR_SIGN)
-            .allowedRoles(List.of(Role.CARE_ADMIN, Role.MIDWIFE, Role.NURSE))
+            .allowedRoles(nonSigningRoles)
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.LIST_CERTIFICATE_TYPE)
-            .allowedRoles(
-                allowedRoles)
+            .allowedRoles(allowedRoles)
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.QUESTIONS_NOT_AVAILABLE)
@@ -165,9 +155,7 @@ public class FK7804CertificateActionSpecification {
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.CREATE_DRAFT_FROM_CERTIFICATE)
-            .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.DENTIST, Role.NURSE,
-                Role.MIDWIFE,
-                Role.CARE_ADMIN))
+            .allowedRoles(allowedRoles)
             .contentProvider(new FK7804CertificateCreateDraftFromCertificateContentProvider())
             .build()
     );

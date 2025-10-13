@@ -122,7 +122,7 @@ class AG114CertificateActionSpecificationTest {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.REPLACE)
         .allowedRoles(
-            List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.DENTIST, Role.NURSE, Role.MIDWIFE))
+            List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.DENTIST))
         .build();
 
     final var actionSpecifications = AG114CertificateActionSpecification.create();
@@ -137,7 +137,7 @@ class AG114CertificateActionSpecificationTest {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.REPLACE_CONTINUE)
         .allowedRoles(
-            List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.DENTIST, Role.NURSE, Role.MIDWIFE))
+            List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.DENTIST))
         .build();
 
     final var actionSpecifications = AG114CertificateActionSpecification.create();
@@ -160,7 +160,7 @@ class AG114CertificateActionSpecificationTest {
   void shouldIncludeCertificateActionForwardCertificate() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE)
-        .allowedRoles(List.of(Role.CARE_ADMIN, Role.MIDWIFE, Role.NURSE))
+        .allowedRoles(List.of(Role.NURSE, Role.MIDWIFE, Role.CARE_ADMIN))
         .build();
 
     final var actionSpecifications = AG114CertificateActionSpecification.create();
@@ -174,7 +174,7 @@ class AG114CertificateActionSpecificationTest {
   void shouldIncludeCertificateActionReadyForSign() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.READY_FOR_SIGN)
-        .allowedRoles(List.of(Role.CARE_ADMIN, Role.MIDWIFE, Role.NURSE))
+        .allowedRoles(List.of(Role.NURSE, Role.MIDWIFE, Role.CARE_ADMIN))
         .build();
 
     final var actionSpecifications = AG114CertificateActionSpecification.create();
@@ -188,8 +188,9 @@ class AG114CertificateActionSpecificationTest {
   void shouldIncludeCertificateActionListCertificateType() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.LIST_CERTIFICATE_TYPE)
-        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
-            Role.CARE_ADMIN, Role.DENTIST))
+        .allowedRoles(
+            List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.DENTIST, Role.NURSE, Role.MIDWIFE,
+                Role.CARE_ADMIN))
         .build();
 
     final var actionSpecifications = AG114CertificateActionSpecification.create();
