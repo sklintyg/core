@@ -591,8 +591,7 @@ public class CertificateActionFactory {
               List.of(
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
                   new ActionRuleRole(
-                      List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
-                          Role.CARE_ADMIN)
+                      actionSpecification.allowedRoles()
                   ),
                   new ActionRuleStatus(List.of(Status.SIGNED)),
                   new ActionRuleUserNotBlocked(),

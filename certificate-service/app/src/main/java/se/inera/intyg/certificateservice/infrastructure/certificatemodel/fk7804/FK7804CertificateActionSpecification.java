@@ -166,6 +166,9 @@ public class FK7804CertificateActionSpecification {
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.CREATE_DRAFT_FROM_CERTIFICATE)
+            .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.DENTIST, Role.NURSE,
+                Role.MIDWIFE,
+                Role.CARE_ADMIN))
             .contentProvider(new FK7804CertificateCreateDraftFromCertificateContentProvider())
             .build()
     );
