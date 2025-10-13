@@ -1,5 +1,5 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
-public enum AvailableFunctionInformationType {
+public enum CitizenAvailableFunctionInformationType {
   OPTIONS, ALERT, FILENAME
 }

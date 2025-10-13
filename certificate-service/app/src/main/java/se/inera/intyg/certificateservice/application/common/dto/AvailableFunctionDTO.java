@@ -6,7 +6,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Value;
 import se.inera.intyg.certificateservice.application.common.dto.AvailableFunctionDTO.AvailableFunctionDTOBuilder;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.AvailableFunction;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenAvailableFunction;
 
 @JsonDeserialize(builder = AvailableFunctionDTOBuilder.class)
 @Value
@@ -26,7 +26,7 @@ public class AvailableFunctionDTO {
 
   }
 
-  public static AvailableFunctionDTO toDTO(AvailableFunction function) {
+  public static AvailableFunctionDTO toDTO(CitizenAvailableFunction function) {
     return AvailableFunctionDTO.builder()
         .title(function.title())
         .name(function.name())

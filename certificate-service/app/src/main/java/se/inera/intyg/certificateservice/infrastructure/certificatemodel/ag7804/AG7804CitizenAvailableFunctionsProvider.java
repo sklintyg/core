@@ -12,15 +12,15 @@ import java.util.ArrayList;
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.AvailableFunction;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.AvailableFunctionInformation;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.AvailableFunctionInformationType;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.AvailableFunctionType;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateAvailableFunctionsProvider;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenAvailableFunction;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenAvailableFunctionInformation;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenAvailableFunctionInformationType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenAvailableFunctionType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenAvailableFunctionsProvider;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 
-public class AG7804CertificateAvailableFunctionsProvider implements
-    CertificateAvailableFunctionsProvider {
+public class AG7804CitizenAvailableFunctionsProvider implements
+    CitizenAvailableFunctionsProvider {
 
   private static final String AVSTANGNING_SMITTSKYDD_INFO_TITLE = "Avstängning enligt smittskyddslagen";
   private static final String AVSTANGNING_SMITTSKYDD_INFO_NAME = "Presentera informationsruta";
@@ -42,21 +42,21 @@ public class AG7804CertificateAvailableFunctionsProvider implements
 
 
   @Override
-  public List<AvailableFunction> of(Certificate certificate) {
-    final var functions = new ArrayList<AvailableFunction>();
+  public List<CitizenAvailableFunction> of(Certificate certificate) {
+    final var functions = new ArrayList<CitizenAvailableFunction>();
 
-    functions.add(AvailableFunction.builder()
+    functions.add(CitizenAvailableFunction.builder()
         .title(SEND_CERTIFICATE_TITLE)
         .name(SEND_CERTIFICATE_NAME)
-        .type(AvailableFunctionType.SEND_CERTIFICATE)
+        .type(CitizenAvailableFunctionType.SEND_CERTIFICATE)
         .body(SEND_CERTIFICATE_BODY)
         .enabled(certificate.isSendActiveForCitizen())
         .build());
 
     if (isSmittbararpenning(certificate)) {
       functions.add(
-          AvailableFunction.builder()
-              .type(AvailableFunctionType.ATTENTION)
+          CitizenAvailableFunction.builder()
+              .type(CitizenAvailableFunctionType.ATTENTION)
               .enabled(true)
               .title(AVSTANGNING_SMITTSKYDD_INFO_TITLE)
               .name(AVSTANGNING_SMITTSKYDD_INFO_NAME)
@@ -67,8 +67,8 @@ public class AG7804CertificateAvailableFunctionsProvider implements
 
     if (isDiagnosisIncluded(certificate) && !isSmittbararpenning(certificate)) {
       functions.add(
-          AvailableFunction.builder()
-              .type(AvailableFunctionType.CUSTOMIZE_PRINT_CERTIFICATE)
+          CitizenAvailableFunction.builder()
+              .type(CitizenAvailableFunctionType.CUSTOMIZE_PRINT_CERTIFICATE)
               .enabled(true)
               .title(AVAILABLE_FUNCTION_CUSTOMIZE_TITLE)
               .name(AVAILABLE_FUNCTION_CUSTOMIZE_NAME)
@@ -76,16 +76,16 @@ public class AG7804CertificateAvailableFunctionsProvider implements
               .description(AVAILABLE_FUNCTION_CUSTOMIZE_DESCRIPTION)
               .information(
                   List.of(
-                      AvailableFunctionInformation.builder()
-                          .type(AvailableFunctionInformationType.FILENAME)
+                      CitizenAvailableFunctionInformation.builder()
+                          .type(CitizenAvailableFunctionInformationType.FILENAME)
                           .text(certificate.fileName())
                           .build(),
-                      AvailableFunctionInformation.builder()
-                          .type(AvailableFunctionInformationType.OPTIONS)
+                      CitizenAvailableFunctionInformation.builder()
+                          .type(CitizenAvailableFunctionInformationType.OPTIONS)
                           .text(SHOW_DIAGNOSIS_TEXT)
                           .build(),
-                      AvailableFunctionInformation.builder()
-                          .type(AvailableFunctionInformationType.OPTIONS)
+                      CitizenAvailableFunctionInformation.builder()
+                          .type(CitizenAvailableFunctionInformationType.OPTIONS)
                           .text(HIDE_DIAGNOSIS_TEXT)
                           .id(QUESTION_DIAGNOS_ID)
                           .build()
@@ -93,13 +93,13 @@ public class AG7804CertificateAvailableFunctionsProvider implements
               .build()
       );
     } else {
-      functions.add(AvailableFunction.builder()
+      functions.add(CitizenAvailableFunction.builder()
           .name(AVAILABLE_FUNCTION_PRINT_NAME)
-          .type(AvailableFunctionType.PRINT_CERTIFICATE)
+          .type(CitizenAvailableFunctionType.PRINT_CERTIFICATE)
           .information(
               List.of(
-                  AvailableFunctionInformation.builder()
-                      .type(AvailableFunctionInformationType.FILENAME)
+                  CitizenAvailableFunctionInformation.builder()
+                      .type(CitizenAvailableFunctionInformationType.FILENAME)
                       .text(certificate.fileName())
                       .build()
               )

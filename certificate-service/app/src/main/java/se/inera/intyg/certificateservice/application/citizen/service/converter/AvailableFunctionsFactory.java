@@ -23,8 +23,8 @@ public class AvailableFunctionsFactory {
   }
 
   public static List<AvailableFunctionDTO> get(Certificate certificate) {
-    if (certificate.certificateModel().availableFunctionsProvider() != null) {
-      return certificate.certificateModel().availableFunctionsProvider().of(certificate)
+    if (certificate.certificateModel().citizenAvailableFunctionsProvider() != null) {
+      return certificate.certificateModel().citizenAvailableFunctionsProvider().of(certificate)
           .stream()
           .map(AvailableFunctionDTO::toDTO)
           .toList();

@@ -4,27 +4,27 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.AvailableFunction;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.AvailableFunctionInformation;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.AvailableFunctionInformationType;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.AvailableFunctionType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenAvailableFunction;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenAvailableFunctionInformation;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenAvailableFunctionInformationType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenAvailableFunctionType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 
-class AvailableFunctionDTOTest {
+class CitizenAvailableFunctionDTOTest {
 
   @Test
   void shouldConvertDomainToDTO() {
-    final var availableFunction = AvailableFunction.builder()
-        .type(AvailableFunctionType.PRINT_CERTIFICATE)
+    final var availableFunction = CitizenAvailableFunction.builder()
+        .type(CitizenAvailableFunctionType.PRINT_CERTIFICATE)
         .name("Print")
         .description("Print description")
         .title("Print title")
         .body("Print body")
         .information(
             List.of(
-                AvailableFunctionInformation.builder()
+                CitizenAvailableFunctionInformation.builder()
                     .id(new ElementId("ID"))
-                    .type(AvailableFunctionInformationType.ALERT)
+                    .type(CitizenAvailableFunctionInformationType.ALERT)
                     .text("Some info text")
                     .build()
             )

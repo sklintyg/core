@@ -5,14 +5,14 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.Value;
 
-@JsonDeserialize(builder = AvailableFunctionInformation.InformationDTOBuilder.class)
+@JsonDeserialize(builder = CitizenAvailableFunctionInformation.InformationDTOBuilder.class)
 @Value
 @Builder
-public class AvailableFunctionInformation {
+public class CitizenAvailableFunctionInformation {
 
   ElementId id;
   String text;
-  AvailableFunctionInformationType type;
+  CitizenAvailableFunctionInformationType type;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class InformationDTOBuilder {

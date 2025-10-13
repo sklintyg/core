@@ -47,7 +47,7 @@ public class CertificateModel implements Comparator<ElementId> {
   @With
   CertificateActionFactory certificateActionFactory;
   SickLeaveProvider sickLeaveProvider;
-  CertificateAvailableFunctionsProvider availableFunctionsProvider;
+  CitizenAvailableFunctionsProvider citizenAvailableFunctionsProvider;
   CertificateModelId ableToCreateDraftForModel;
 
   public List<CertificateAction> actions() {

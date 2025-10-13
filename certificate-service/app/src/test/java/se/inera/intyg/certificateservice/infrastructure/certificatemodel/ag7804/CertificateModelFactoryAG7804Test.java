@@ -157,6 +157,6 @@ class CertificateModelFactoryAG7804Test {
   void shouldHaveAvailableFunctionsProvider() {
     final var certificateModel = certificateModelFactoryAG7804.create();
 
-    assertNotNull(certificateModel.availableFunctionsProvider());
+    assertNotNull(certificateModel.citizenAvailableFunctionsProvider());
   }
 }

@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import se.inera.intyg.certificateservice.application.common.dto.AvailableFunctionDTO;
 import se.inera.intyg.certificateservice.application.common.dto.InformationDTO;
 import se.inera.intyg.certificateservice.application.common.dto.InformationType;
@@ -24,12 +23,12 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.AvailableFunction;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.AvailableFunctionType;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateAvailableFunctionsProvider;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenAvailableFunction;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenAvailableFunctionType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenAvailableFunctionsProvider;
 
-class AvailableFunctionsFactoryTest {
+class CitizenAvailableFunctionsFactoryTest {
 
   private static final String FILENAME = "intyg_om_graviditet";
   private static final AvailableFunctionDTO EXPECTED_PRINT =
@@ -68,15 +67,12 @@ class AvailableFunctionsFactoryTest {
           .enabled(false)
           .build();
 
-  @InjectMocks
-  private AvailableFunctionsFactory availableFunctionsFactory;
-
   @Nested
   class Send {
 
     @Test
     void shouldReturnSendDisabledIfNoRecipient() {
-      final var result = availableFunctionsFactory.get(
+      final var result = AvailableFunctionsFactory.get(
           fk7210CertificateBuilder()
               .sent(null)
               .status(Status.SIGNED)
@@ -91,7 +87,7 @@ class AvailableFunctionsFactoryTest {
 
     @Test
     void shouldReturnSendDisabledIfDraft() {
-      final var result = availableFunctionsFactory.get(
+      final var result = AvailableFunctionsFactory.get(
           fk7210CertificateBuilder()
               .sent(null)
               .status(Status.DRAFT)
@@ -103,7 +99,7 @@ class AvailableFunctionsFactoryTest {
 
     @Test
     void shouldReturnSendDisabledIfAlreadySent() {
-      final var result = availableFunctionsFactory.get(
+      final var result = AvailableFunctionsFactory.get(
           fk7210CertificateBuilder()
               .status(Status.SIGNED)
               .sent(Sent.builder()
@@ -117,7 +113,7 @@ class AvailableFunctionsFactoryTest {
 
     @Test
     void shouldReturnSendDisabledIfReplacedBySignedCertificate() {
-      final var result = availableFunctionsFactory.get(
+      final var result = AvailableFunctionsFactory.get(
           fk7210CertificateBuilder()
               .sent(null)
               .status(Status.SIGNED)
@@ -139,7 +135,7 @@ class AvailableFunctionsFactoryTest {
 
     @Test
     void shouldReturnSendIfReplacedByDraft() {
-      final var result = availableFunctionsFactory.get(
+      final var result = AvailableFunctionsFactory.get(
           fk7210CertificateBuilder()
               .sent(null)
               .status(Status.SIGNED)
@@ -159,7 +155,7 @@ class AvailableFunctionsFactoryTest {
 
     @Test
     void shouldReturnSendIfRenewed() {
-      final var result = availableFunctionsFactory.get(
+      final var result = AvailableFunctionsFactory.get(
           fk7210CertificateBuilder()
               .sent(null)
               .status(Status.SIGNED)
@@ -179,7 +175,7 @@ class AvailableFunctionsFactoryTest {
 
     @Test
     void shouldReturnSendIfAllConditionsAreMet() {
-      final var result = availableFunctionsFactory.get(
+      final var result = AvailableFunctionsFactory.get(
           fk7210CertificateBuilder()
               .sent(null)
               .status(Status.SIGNED)
@@ -195,7 +191,7 @@ class AvailableFunctionsFactoryTest {
 
     @Test
     void shouldReturnAvailableFunctionPrint() {
-      final var result = availableFunctionsFactory.get(fk7210CertificateBuilder().build());
+      final var result = AvailableFunctionsFactory.get(fk7210CertificateBuilder().build());
 
       assertTrue(result.contains(EXPECTED_PRINT));
     }
@@ -205,7 +201,7 @@ class AvailableFunctionsFactoryTest {
   void shouldReturnFunctionsFromProviderWhenProviderIsNotNull() {
     final var certificate = mock(Certificate.class);
     final var certificateModel = mock(CertificateModel.class);
-    final var availableFunctionsProvider = mock(CertificateAvailableFunctionsProvider.class);
+    final var availableFunctionsProvider = mock(CitizenAvailableFunctionsProvider.class);
     final var expectedProviderFunctions = List.of(
         AvailableFunctionDTO.builder()
             .name("Custom Function")
@@ -216,14 +212,15 @@ class AvailableFunctionsFactoryTest {
             .build()
     );
     final var providerFunctions = List.of(
-        AvailableFunction.builder()
+        CitizenAvailableFunction.builder()
             .name("Custom Function")
-            .type(AvailableFunctionType.PRINT_CERTIFICATE)
+            .type(CitizenAvailableFunctionType.PRINT_CERTIFICATE)
             .enabled(true)
             .build()
     );
     when(certificate.certificateModel()).thenReturn(certificateModel);
-    when(certificateModel.availableFunctionsProvider()).thenReturn(availableFunctionsProvider);
+    when(certificateModel.citizenAvailableFunctionsProvider()).thenReturn(
+        availableFunctionsProvider);
     when(availableFunctionsProvider.of(certificate)).thenReturn(providerFunctions);
 
     assertEquals(expectedProviderFunctions, AvailableFunctionsFactory.get(certificate));

@@ -3,8 +3,8 @@ package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 
-public interface CertificateAvailableFunctionsProvider {
+public interface CitizenAvailableFunctionsProvider {
 
-  List<AvailableFunction> of(Certificate certificate);
+  List<CitizenAvailableFunction> of(Certificate certificate);
 
 }

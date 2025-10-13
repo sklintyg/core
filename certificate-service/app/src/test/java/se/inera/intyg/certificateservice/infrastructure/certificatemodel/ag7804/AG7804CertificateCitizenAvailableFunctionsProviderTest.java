@@ -17,20 +17,20 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.AvailableFunction;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.AvailableFunctionInformation;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.AvailableFunctionInformationType;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.AvailableFunctionType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenAvailableFunction;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenAvailableFunctionInformation;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenAvailableFunctionInformationType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenAvailableFunctionType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 
-class AG7804CertificateAvailableFunctionsProviderTest {
+class AG7804CertificateCitizenAvailableFunctionsProviderTest {
 
-  private AG7804CertificateAvailableFunctionsProvider provider;
+  private AG7804CitizenAvailableFunctionsProvider provider;
   private Certificate certificate;
 
   @BeforeEach
   void setUp() {
-    provider = new AG7804CertificateAvailableFunctionsProvider();
+    provider = new AG7804CitizenAvailableFunctionsProvider();
     certificate = mock(Certificate.class);
     when(certificate.fileName()).thenReturn("ag7804-certificate.pdf");
     when(certificate.isSendActiveForCitizen()).thenReturn(true);
@@ -52,8 +52,8 @@ class AG7804CertificateAvailableFunctionsProviderTest {
               .value(ElementValueBoolean.builder().value(false).build())
               .build()));
 
-      final var expectedSendFunction = AvailableFunction.builder()
-          .type(AvailableFunctionType.SEND_CERTIFICATE)
+      final var expectedSendFunction = CitizenAvailableFunction.builder()
+          .type(CitizenAvailableFunctionType.SEND_CERTIFICATE)
           .name("Skicka intyg")
           .title("Skicka intyg")
           .body(
@@ -84,8 +84,8 @@ class AG7804CertificateAvailableFunctionsProviderTest {
               .value(ElementValueBoolean.builder().value(false).build())
               .build()));
 
-      final var expectedSendFunction = AvailableFunction.builder()
-          .type(AvailableFunctionType.SEND_CERTIFICATE)
+      final var expectedSendFunction = CitizenAvailableFunction.builder()
+          .type(CitizenAvailableFunctionType.SEND_CERTIFICATE)
           .name("Skicka intyg")
           .title("Skicka intyg")
           .body(
@@ -94,8 +94,8 @@ class AG7804CertificateAvailableFunctionsProviderTest {
           .information(List.of())
           .build();
 
-      final var expectedAttentionFunction = AvailableFunction.builder()
-          .type(AvailableFunctionType.ATTENTION)
+      final var expectedAttentionFunction = CitizenAvailableFunction.builder()
+          .type(CitizenAvailableFunctionType.ATTENTION)
           .name("Presentera informationsruta")
           .title("Avstängning enligt smittskyddslagen")
           .body(
@@ -110,7 +110,7 @@ class AG7804CertificateAvailableFunctionsProviderTest {
       assertEquals(3, result.size());
       assertEquals(expectedSendFunction, result.getFirst());
       assertEquals(expectedAttentionFunction, result.get(1));
-      assertEquals(AvailableFunctionType.PRINT_CERTIFICATE, result.get(2).type());
+      assertEquals(CitizenAvailableFunctionType.PRINT_CERTIFICATE, result.get(2).type());
     }
 
     @Test
@@ -129,8 +129,8 @@ class AG7804CertificateAvailableFunctionsProviderTest {
       final var result = provider.of(certificate);
 
       assertEquals(2, result.size());
-      assertEquals(AvailableFunctionType.SEND_CERTIFICATE, result.getFirst().type());
-      assertEquals(AvailableFunctionType.PRINT_CERTIFICATE, result.get(1).type());
+      assertEquals(CitizenAvailableFunctionType.SEND_CERTIFICATE, result.getFirst().type());
+      assertEquals(CitizenAvailableFunctionType.PRINT_CERTIFICATE, result.get(1).type());
     }
 
     @Test
@@ -146,8 +146,8 @@ class AG7804CertificateAvailableFunctionsProviderTest {
       final var result = provider.of(certificate);
 
       assertEquals(2, result.size());
-      assertEquals(AvailableFunctionType.SEND_CERTIFICATE, result.getFirst().type());
-      assertEquals(AvailableFunctionType.PRINT_CERTIFICATE, result.get(1).type());
+      assertEquals(CitizenAvailableFunctionType.SEND_CERTIFICATE, result.getFirst().type());
+      assertEquals(CitizenAvailableFunctionType.PRINT_CERTIFICATE, result.get(1).type());
     }
   }
 
@@ -167,8 +167,8 @@ class AG7804CertificateAvailableFunctionsProviderTest {
               .value(ElementValueBoolean.builder().value(true).build())
               .build()));
 
-      final var expectedSendFunction = AvailableFunction.builder()
-          .type(AvailableFunctionType.SEND_CERTIFICATE)
+      final var expectedSendFunction = CitizenAvailableFunction.builder()
+          .type(CitizenAvailableFunctionType.SEND_CERTIFICATE)
           .name("Skicka intyg")
           .title("Skicka intyg")
           .body(
@@ -177,8 +177,8 @@ class AG7804CertificateAvailableFunctionsProviderTest {
           .information(List.of())
           .build();
 
-      final var expectedCustomizeFunction = AvailableFunction.builder()
-          .type(AvailableFunctionType.CUSTOMIZE_PRINT_CERTIFICATE)
+      final var expectedCustomizeFunction = CitizenAvailableFunction.builder()
+          .type(CitizenAvailableFunctionType.CUSTOMIZE_PRINT_CERTIFICATE)
           .name("Anpassa intyget för utskrift")
           .title("Vill du visa eller dölja diagnos?")
           .body("När du skriver ut ett läkarintyg du ska lämna till din arbetsgivare kan du "
@@ -188,17 +188,17 @@ class AG7804CertificateAvailableFunctionsProviderTest {
                   + " Det kan underlätta anpassning av din arbetssituation. Det kan också göra att du snabbare kommer tillbaka till arbetet.")
           .enabled(true)
           .information(List.of(
-              AvailableFunctionInformation.builder()
-                  .type(AvailableFunctionInformationType.FILENAME)
+              CitizenAvailableFunctionInformation.builder()
+                  .type(CitizenAvailableFunctionInformationType.FILENAME)
                   .text("ag7804-certificate.pdf")
                   .build(),
-              AvailableFunctionInformation.builder()
-                  .type(AvailableFunctionInformationType.OPTIONS)
+              CitizenAvailableFunctionInformation.builder()
+                  .type(CitizenAvailableFunctionInformationType.OPTIONS)
                   .text("Visa diagnos")
                   .build(),
-              AvailableFunctionInformation.builder()
+              CitizenAvailableFunctionInformation.builder()
                   .id(QUESTION_DIAGNOS_ID)
-                  .type(AvailableFunctionInformationType.OPTIONS)
+                  .type(CitizenAvailableFunctionInformationType.OPTIONS)
                   .text("Dölj diagnos")
                   .build()
           ))
@@ -227,8 +227,8 @@ class AG7804CertificateAvailableFunctionsProviderTest {
       final var result = provider.of(certificate);
 
       assertEquals(2, result.size());
-      assertEquals(AvailableFunctionType.SEND_CERTIFICATE, result.getFirst().type());
-      assertEquals(AvailableFunctionType.PRINT_CERTIFICATE, result.get(1).type());
+      assertEquals(CitizenAvailableFunctionType.SEND_CERTIFICATE, result.getFirst().type());
+      assertEquals(CitizenAvailableFunctionType.PRINT_CERTIFICATE, result.get(1).type());
     }
 
     @Test
@@ -244,8 +244,8 @@ class AG7804CertificateAvailableFunctionsProviderTest {
       final var result = provider.of(certificate);
 
       assertEquals(2, result.size());
-      assertEquals(AvailableFunctionType.SEND_CERTIFICATE, result.getFirst().type());
-      assertEquals(AvailableFunctionType.PRINT_CERTIFICATE, result.get(1).type());
+      assertEquals(CitizenAvailableFunctionType.SEND_CERTIFICATE, result.getFirst().type());
+      assertEquals(CitizenAvailableFunctionType.PRINT_CERTIFICATE, result.get(1).type());
     }
   }
 

@@ -7,14 +7,14 @@ import lombok.Value;
 
 @Value
 @Builder
-public class AvailableFunction {
+public class CitizenAvailableFunction {
 
-  AvailableFunctionType type;
+  CitizenAvailableFunctionType type;
   String name;
   String description;
   String title;
   String body;
   @Builder.Default
-  List<AvailableFunctionInformation> information = Collections.emptyList();
+  List<CitizenAvailableFunctionInformation> information = Collections.emptyList();
   boolean enabled;
 }

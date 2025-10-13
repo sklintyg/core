@@ -126,7 +126,7 @@ public class CertificateModelFactoryAG7804 implements CertificateModelFactory {
                 .build()
         ))
         .summaryProvider(new AG7804CertificateSummaryProvider())
-        .availableFunctionsProvider(new AG7804CertificateAvailableFunctionsProvider())
+        .citizenAvailableFunctionsProvider(new AG7804CitizenAvailableFunctionsProvider())
         .certificateActionSpecifications(AG7804CertificateActionSpecification.create())
         .messageActionSpecifications(List.of())
         .elementSpecifications(List.of(
