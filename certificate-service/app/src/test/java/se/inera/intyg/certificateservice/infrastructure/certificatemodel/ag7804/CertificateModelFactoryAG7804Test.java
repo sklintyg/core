@@ -142,7 +142,7 @@ class CertificateModelFactoryAG7804Test {
     @ValueSource(strings = {
         "KAT_1", "KAT_2", "KAT_3", "KAT_4", "KAT_5", "KAT_6", "KAT_7", "KAT_8", "KAT_9", "KAT_10",
         "KAT_11", "KAT_12", "UNIT_CONTACT_INFORMATION", "27", "1", "1.3", "28", "29", "19", "32",
-        "37", "34", "33", "33.2", "6", "44", "25", "39", "39.2", "39.4", "26", "26.2", "100"
+        "37", "34", "33", "33.2", "6", "44", "25", "39", "39.2", "39.4", "103", "103.2", "100"
     })
     void shouldIncludeCategories(String id) {
       final var elementId = new ElementId(id);

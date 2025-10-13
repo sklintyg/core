@@ -7,6 +7,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 
 class CategoryGrundForMedicinsktUnderlagTest {
+
   private static final ElementId ELEMENT_ID = new ElementId("KAT_1");
 
   @Test

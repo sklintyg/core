@@ -12,86 +12,95 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataInc
 import static se.inera.intyg.certificateservice.application.testdata.TestDataIncomingMessage.incomingComplementMessageBuilder;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionGrundForMedicinsktUnderlag.QUESTION_GRUND_FOR_MEDICINSKT_UNDERLAG_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionGrundForMedicinsktUnderlag.UTLATANDE_BASERAT_PA_JOURNALUPPGIFTER_FIELD_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionPrognos.QUESTION_PROGNOS_ID;
-import static se.inera.intyg.certificateservice.integrationtest.fk7809.FK7809Constants.CODE;
-import static se.inera.intyg.certificateservice.integrationtest.fk7809.FK7809Constants.CODE_SYSTEM;
-import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customUpdateCertificateRequest;
-import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultComplementCertificateRequest;
-import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultGetCertificateMessageRequest;
-import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultRenewCertificateRequest;
-import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultSendCertificateRequest;
-import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultSignCertificateRequest;
-import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultTestablilityCertificateRequest;
-import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificate;
-import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateId;
-import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.questions;
-import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.updateDateListValue;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.customUpdateCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.defaultComplementCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.defaultGetCertificateMessageRequest;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.defaultRenewCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.defaultSendCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.defaultSignCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.defaultTestablilityCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.certificate;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.certificateId;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.questions;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.updateDateListValue;
+import static se.inera.intyg.certificateservice.integrationtest.fk7809.FK7809TestSetup.fk7809TestSetup;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.provider.Arguments;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueDate;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.integrationtest.AccessLevelsDeepIntegrationIT;
-import se.inera.intyg.certificateservice.integrationtest.AccessLevelsSVODIT;
-import se.inera.intyg.certificateservice.integrationtest.AdministrativeMessagesIT;
-import se.inera.intyg.certificateservice.integrationtest.AnswerComplementIT;
-import se.inera.intyg.certificateservice.integrationtest.CertificateFromMessageIT;
-import se.inera.intyg.certificateservice.integrationtest.CertificateReadyForSignIT;
-import se.inera.intyg.certificateservice.integrationtest.CertificatesWithQAForCareIT;
-import se.inera.intyg.certificateservice.integrationtest.ComplementIT;
-import se.inera.intyg.certificateservice.integrationtest.ComplementMessagesIT;
-import se.inera.intyg.certificateservice.integrationtest.CreateCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.DeleteCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.ExistsCertificateExternalTypeInfoIT;
-import se.inera.intyg.certificateservice.integrationtest.ExistsCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.ExistsCertificateTypeInfoIT;
-import se.inera.intyg.certificateservice.integrationtest.ForwardCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.ForwardCertificateMessageIT;
-import se.inera.intyg.certificateservice.integrationtest.GetCertificateEventsIT;
-import se.inera.intyg.certificateservice.integrationtest.GetCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.GetCertificatePdfIT;
-import se.inera.intyg.certificateservice.integrationtest.GetCertificateTypeInfoIT;
-import se.inera.intyg.certificateservice.integrationtest.GetCertificateXmlIT;
-import se.inera.intyg.certificateservice.integrationtest.GetPatientCertificatesIT;
-import se.inera.intyg.certificateservice.integrationtest.GetUnitCertificatesIT;
-import se.inera.intyg.certificateservice.integrationtest.GetUnitCertificatesInfoIT;
-import se.inera.intyg.certificateservice.integrationtest.GetUnitCertificatesWhenSignedIT;
-import se.inera.intyg.certificateservice.integrationtest.InternalApiIT;
-import se.inera.intyg.certificateservice.integrationtest.InternalApiMessagesIT;
-import se.inera.intyg.certificateservice.integrationtest.MessageExistsIT;
-import se.inera.intyg.certificateservice.integrationtest.RenewCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.RenewExternalCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.ReplaceCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.RevokeCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.SendCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.SendCitizenCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.SignCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.UnitStatisticsIT;
-import se.inera.intyg.certificateservice.integrationtest.UpdateCertificateFK7809IT;
-import se.inera.intyg.certificateservice.integrationtest.UpdateCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.ValidateCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.ActiveCertificatesIT;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.BaseTestabilityUtilities;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.TestabilityUtilities;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.AccessLevelsDeepIntegrationIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.AccessLevelsSVODIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.AdministrativeMessagesIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.AnswerComplementIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.CertificateFromMessageIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.CertificateReadyForSignIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.CertificatesWithQAForCareIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.ComplementIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.ComplementMessagesIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.CreateCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.DeleteCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.ExistsCertificateExternalTypeInfoIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.ExistsCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.ExistsCertificateTypeInfoIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.ForwardCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.ForwardCertificateMessageIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.GetCertificateEventsIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.GetCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.GetCertificatePdfIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.GetCertificateTypeInfoIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.GetCertificateXmlIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.GetPatientCertificatesIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.GetUnitCertificatesIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.GetUnitCertificatesInfoIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.GetUnitCertificatesWhenSignedIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.InternalApiIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.InternalApiMessagesIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.MessageExistsIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.RenewCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.RenewExternalCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.ReplaceCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.RevokeCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.SendCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.SendCitizenCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.SignCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.UnitStatisticsIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.UpdateCertificateFK7809IT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.UpdateCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.ValidateCertificateIT;
 
-public class FK7809ActiveIT {
+public class FK7809ActiveIT extends ActiveCertificatesIT {
 
-  private static final String CERTIFICATE_TYPE = FK7809Constants.FK7809;
-  private static final String ACTIVE_VERSION = FK7809Constants.VERSION;
-  private static final String WRONG_VERSION = FK7809Constants.WRONG_VERSION;
-  private static final String TYPE = FK7809Constants.TYPE;
-  private static final ElementId ELEMENT_ID = QUESTION_PROGNOS_ID;
-  private static final String VALUE = "Svarstext för prognos.";
-  private static final String RECIPIENT = "FKASSA";
+  public static final String TYPE = FK7809TestSetup.TYPE;
 
-  @DynamicPropertySource
-  static void testProperties(DynamicPropertyRegistry registry) {
-    registry.add("certificate.model.fk7809.v1_0.active.from", () -> "2024-01-01T00:00:00");
+  @BeforeEach
+  void setUp() {
+    super.setUpBaseIT();
+
+    baseTestabilityUtilities = fk7809TestSetup()
+        .testabilityUtilities(
+            TestabilityUtilities.builder()
+                .api(api)
+                .internalApi(internalApi)
+                .testabilityApi(testabilityApi)
+                .build()
+        )
+        .build();
+  }
+
+  @AfterEach
+  void tearDown() {
+    super.tearDownBaseIT();
   }
 
   @Nested
@@ -99,13 +108,8 @@ public class FK7809ActiveIT {
   class AccessLevelsDeepIntegration extends AccessLevelsDeepIntegrationIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -114,13 +118,8 @@ public class FK7809ActiveIT {
   class AccessLevelsSVOD extends AccessLevelsSVODIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -129,13 +128,8 @@ public class FK7809ActiveIT {
   class AdministrativeMessages extends AdministrativeMessagesIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -144,18 +138,8 @@ public class FK7809ActiveIT {
   class AnswerComplement extends AnswerComplementIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected String questionId() {
-      return ELEMENT_ID.id();
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -164,18 +148,8 @@ public class FK7809ActiveIT {
   class CertificateFromMessage extends CertificateFromMessageIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected String questionId() {
-      return ELEMENT_ID.id();
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -183,36 +157,26 @@ public class FK7809ActiveIT {
   @DisplayName(TYPE + "Kompletteringsbegäran")
   class Complement extends ComplementIT {
 
+    @Override
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
+    }
+
     private static final String FUNKTIONSNEDSATTNING_MOTIVERING_KOMMUNIKATION_SOCIAL_INTERAKTION_ID = "9";
-
-    @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected String questionId() {
-      return ELEMENT_ID.id();
-    }
 
     @Test
     @DisplayName("Kompletteringsbegäran ska sättas som hanterad när förnyade intyget signeras")
     void shallSetComplementAsHandledWhenRenewingCertificateIsSigned() {
-      final var testCertificates = testabilityApi.addCertificates(
+      final var testCertificates = testabilityApi().addCertificates(
           defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
       );
 
-      api.sendCertificate(
+      api().sendCertificate(
           defaultSendCertificateRequest(),
           certificateId(testCertificates)
       );
 
-      api.receiveMessage(
+      api().receiveMessage(
           incomingComplementMessageBuilder()
               .certificateId(certificateId(testCertificates))
               .complements(List.of(incomingComplementDTOBuilder()
@@ -221,7 +185,7 @@ public class FK7809ActiveIT {
               .build()
       );
 
-      final var renewResponse = api.renewCertificate(
+      final var renewResponse = api().renewCertificate(
           defaultRenewCertificateRequest(),
           certificateId(testCertificates)
       );
@@ -240,20 +204,20 @@ public class FK7809ActiveIT {
           )
       );
 
-      final var updateResponse = api.updateCertificate(
+      final var updateResponse = api().updateCertificate(
           customUpdateCertificateRequest()
               .certificate(renewingCertificate)
               .build(),
           certificateId(renewResponse.getBody())
       );
 
-      api.signCertificate(
+      api().signCertificate(
           defaultSignCertificateRequest(),
           certificateId(renewResponse.getBody()),
           Objects.requireNonNull(certificate(updateResponse.getBody())).getMetadata().getVersion()
       );
 
-      final var messagesForCertificate = api.getMessagesForCertificate(
+      final var messagesForCertificate = api().getMessagesForCertificate(
           defaultGetCertificateMessageRequest(),
           certificateId(testCertificates)
       );
@@ -266,16 +230,16 @@ public class FK7809ActiveIT {
     @Test
     @DisplayName("Tidigare dold fråga ska bli synlig efter komplettering om en kompletteringsbegäran finns på frågan")
     void shallDisplayPreviouslyHiddenQuestionOnCertificateIfItHasComplement() {
-      final var testCertificates = testabilityApi.addCertificates(
+      final var testCertificates = testabilityApi().addCertificates(
           defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
       );
 
-      api.sendCertificate(
+      api().sendCertificate(
           defaultSendCertificateRequest(),
           certificateId(testCertificates)
       );
 
-      api.receiveMessage(
+      api().receiveMessage(
           incomingComplementMessageBuilder()
               .certificateId(certificateId(testCertificates))
               .complements(List.of(incomingComplementDTOBuilder()
@@ -284,7 +248,7 @@ public class FK7809ActiveIT {
               .build()
       );
 
-      final var response = api.complementCertificate(
+      final var response = api().complementCertificate(
           defaultComplementCertificateRequest(),
           certificateId(testCertificates)
       );
@@ -302,18 +266,8 @@ public class FK7809ActiveIT {
   class CreateCertificate extends CreateCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected String wrongVersion() {
-      return WRONG_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
 
     protected static Stream<Arguments> rolesAccessToProtectedPerson() {
@@ -328,13 +282,8 @@ public class FK7809ActiveIT {
   class DeleteCertificate extends DeleteCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -343,13 +292,8 @@ public class FK7809ActiveIT {
   class ExistsCertificate extends ExistsCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -358,13 +302,8 @@ public class FK7809ActiveIT {
   class ExistsCertificateTypeInfo extends ExistsCertificateTypeInfoIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -373,13 +312,8 @@ public class FK7809ActiveIT {
   class GetCertificate extends GetCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
 
     protected static Stream<Arguments> rolesNoAccessToProtectedPerson() {
@@ -402,18 +336,8 @@ public class FK7809ActiveIT {
   class GetCertificateEvents extends GetCertificateEventsIT {
 
     @Override
-    protected boolean isAvailableForPatient() {
-      return true;
-    }
-
-    @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
 
     protected static Stream<Arguments> rolesNoAccessToProtectedPerson() {
@@ -430,13 +354,8 @@ public class FK7809ActiveIT {
   class GetCertificatePdf extends GetCertificatePdfIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
 
     protected static Stream<Arguments> rolesNoAccessToProtectedPerson() {
@@ -453,8 +372,8 @@ public class FK7809ActiveIT {
   class GetCertificateTypeInfo extends GetCertificateTypeInfoIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -463,13 +382,8 @@ public class FK7809ActiveIT {
   class GetCertificateXml extends GetCertificateXmlIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
 
     protected static Stream<Arguments> rolesNoAccessToProtectedPerson() {
@@ -486,13 +400,8 @@ public class FK7809ActiveIT {
   class GetPatientCertificates extends GetPatientCertificatesIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
 
     protected static Stream<Arguments> rolesNoAccessToProtectedPerson() {
@@ -515,13 +424,8 @@ public class FK7809ActiveIT {
   class GetUnitCertificatesInfo extends GetUnitCertificatesInfoIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -530,23 +434,8 @@ public class FK7809ActiveIT {
   class GetUnitCertificates extends GetUnitCertificatesIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected ElementId element() {
-      return ELEMENT_ID;
-    }
-
-    @Override
-    protected Object value() {
-      return VALUE;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -555,13 +444,8 @@ public class FK7809ActiveIT {
   class GetUnitCertificatesWhenSigned extends GetUnitCertificatesWhenSignedIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -570,13 +454,8 @@ public class FK7809ActiveIT {
   class InternalApi extends InternalApiIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -585,18 +464,8 @@ public class FK7809ActiveIT {
   class InternalApiMessages extends InternalApiMessagesIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected String questionId() {
-      return ELEMENT_ID.id();
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -605,18 +474,8 @@ public class FK7809ActiveIT {
   class MessageExists extends MessageExistsIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected String questionId() {
-      return ELEMENT_ID.id();
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -625,18 +484,8 @@ public class FK7809ActiveIT {
   class ComplementMessages extends ComplementMessagesIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected String questionId() {
-      return ELEMENT_ID.id();
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
 
     protected static Stream<Arguments> rolesNoAccessToProtectedPerson() {
@@ -653,13 +502,8 @@ public class FK7809ActiveIT {
   class RenewCertificate extends RenewCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -668,13 +512,8 @@ public class FK7809ActiveIT {
   class ReplaceCertificate extends ReplaceCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -683,13 +522,8 @@ public class FK7809ActiveIT {
   class RevokeCertificate extends RevokeCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -698,18 +532,8 @@ public class FK7809ActiveIT {
   class SendCertificate extends SendCertificateIT {
 
     @Override
-    protected String recipient() {
-      return RECIPIENT;
-    }
-
-    @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
 
   }
@@ -719,23 +543,8 @@ public class FK7809ActiveIT {
   class ReadyForSignCertificate extends CertificateReadyForSignIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected boolean nurseCanMarkReadyForSignCertificate() {
-      return true;
-    }
-
-    @Override
-    protected boolean midwifeCanMarkReadyForSignCertificate() {
-      return true;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -744,13 +553,8 @@ public class FK7809ActiveIT {
   class SignCertificate extends SignCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -759,29 +563,18 @@ public class FK7809ActiveIT {
   class UpdateCertificate extends UpdateCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected ElementId element() {
-      return ELEMENT_ID;
-    }
-
-    @Override
-    protected Object value() {
-      return VALUE;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
 
     @Nested
     @DisplayName(TYPE + "Uppdatera svar")
     class UpdateCertificateFK7809 extends UpdateCertificateFK7809IT {
 
+      @Override
+      protected BaseTestabilityUtilities testabilityUtilities() {
+        return baseTestabilityUtilities;
+      }
     }
   }
 
@@ -790,23 +583,8 @@ public class FK7809ActiveIT {
   class ValidateCertificate extends ValidateCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected ElementId element() {
-      return ELEMENT_ID;
-    }
-
-    @Override
-    protected Object value() {
-      return VALUE;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -815,23 +593,8 @@ public class FK7809ActiveIT {
   class ForwardCertificate extends ForwardCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected boolean nurseCanForwardCertificate() {
-      return true;
-    }
-
-    @Override
-    protected boolean midwifeCanForwardCertificate() {
-      return true;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -840,18 +603,8 @@ public class FK7809ActiveIT {
   class ForwardCertificateMessage extends ForwardCertificateMessageIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected String questionId() {
-      return ELEMENT_ID.id();
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -860,13 +613,8 @@ public class FK7809ActiveIT {
   class IncludeCerificatesWithQA extends CertificatesWithQAForCareIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -875,18 +623,8 @@ public class FK7809ActiveIT {
   class IncludeUnitStatistics extends UnitStatisticsIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected Boolean canRecieveQuestions() {
-      return true;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
 
     protected static Stream<Arguments> rolesNoAccessToProtectedPerson() {
@@ -909,25 +647,9 @@ public class FK7809ActiveIT {
   @DisplayName(TYPE + "Aktiva versioner utifrån intygstyp och kodsystem")
   class IncludeExistsCertificateExternalTypeInfo extends ExistsCertificateExternalTypeInfoIT {
 
-
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected String codeSystem() {
-      return CODE_SYSTEM;
-    }
-
-    @Override
-    protected String code() {
-      return CODE;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -935,20 +657,9 @@ public class FK7809ActiveIT {
   @DisplayName(TYPE + "Skicka intyg som invånare från 1177 Intyg")
   class IncludeSendCitizenCertificateIT extends SendCitizenCertificateIT {
 
-
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
-    }
-
-    @Override
-    protected boolean availableForCitizen() {
-      return true;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -957,13 +668,8 @@ public class FK7809ActiveIT {
   class RenewExternalCertificate extends RenewExternalCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 }

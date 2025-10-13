@@ -113,7 +113,7 @@ class XmlGeneratorIcfValueTest {
             response.getFirst().getDelsvar().getFirst().getContent().getFirst())
     );
   }
-  
+
   @Test
   void shouldMapEmptyIfNullValue() {
     final var data = ElementData.builder()

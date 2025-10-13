@@ -7,6 +7,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 
 class CategoryBehandlingTest {
+
   private static final ElementId ELEMENT_ID = new ElementId("KAT_5");
 
   @Test
@@ -22,7 +23,7 @@ class CategoryBehandlingTest {
         .name("Behandling")
         .build();
 
-    final var element =  CategoryBehandling.categoryBehandling();
+    final var element = CategoryBehandling.categoryBehandling();
 
     assertEquals(expectedConfiguration, element.configuration());
   }

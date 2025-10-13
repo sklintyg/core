@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.stream.Stream;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -592,6 +593,30 @@ public class MedicalCertificate implements Certificate {
     } catch (Exception e) {
       log.warn("Failed to prefill certificate.", e);
     }
+  }
+
+  @Override
+  public void fillFromCertificate(Certificate certificate) {
+    if (this.revision.value() != 0) {
+      throw new IllegalStateException(
+          "Unable to fill certificate '%s' since revision is greater than 0".formatted(
+              this.id.id())
+      );
+    }
+
+    this.certificateMetaData = certificate.certificateMetaData();
+    this.elementData = certificate.elementData().stream()
+        .filter(data -> this.certificateModel.elementSpecificationExists(data.id()))
+        .map(convertElementDataWithModelSpecification(certificate))
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .toList();
+  }
+
+  private Function<ElementData, Optional<ElementData>> convertElementDataWithModelSpecification(
+      Certificate certificate) {
+    return data -> this.certificateModel.elementSpecification(data.id()).configuration()
+        .convert(data, certificate.certificateModel().elementSpecification(data.id()));
   }
 
   @Override

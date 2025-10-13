@@ -4,9 +4,11 @@ import java.util.Optional;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueIcf;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 
 @Value
@@ -32,6 +34,29 @@ public class ElementConfigurationTextArea implements ElementConfiguration {
     return ElementValueText.builder()
         .textId(id)
         .build();
+  }
+
+  @Override
+  public Optional<ElementData> convert(ElementData elementData,
+      ElementSpecification specification) {
+    if (elementData.value() instanceof ElementValueText) {
+      return Optional.of(elementData);
+    }
+
+    if (elementData.value() instanceof ElementValueIcf elementValueIcf
+        && specification.configuration() instanceof ElementConfigurationIcf elementConfigurationIcf) {
+
+      return Optional.of(
+          elementData.withValue(
+              ElementValueText.builder()
+                  .textId(elementValueIcf.id())
+                  .text(elementValueIcf.formatIcfValueText(elementConfigurationIcf))
+                  .build()
+          )
+      );
+    }
+
+    return Optional.empty();
   }
 
   @Override

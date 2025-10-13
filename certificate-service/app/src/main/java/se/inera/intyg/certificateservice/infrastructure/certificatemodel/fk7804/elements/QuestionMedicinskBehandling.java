@@ -18,7 +18,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 public class QuestionMedicinskBehandling {
 
   public static final ElementId QUESTION_MEDICINSK_BEHANDLING_ID = new ElementId("19");
-  private static final FieldId QUESTION_MEDICINSK_BEHANDLING_FIELD_ID = new FieldId("19.1");
+  public static final FieldId QUESTION_MEDICINSK_BEHANDLING_FIELD_ID = new FieldId("19.1");
 
   private QuestionMedicinskBehandling() {
     throw new IllegalStateException("Utility class");

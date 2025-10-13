@@ -48,6 +48,7 @@ public class CertificateModel implements Comparator<ElementId> {
   CertificateActionFactory certificateActionFactory;
   SickLeaveProvider sickLeaveProvider;
   CertificateAvailableFunctionsProvider availableFunctionsProvider;
+  CertificateModelId ableToCreateDraftForModel;
 
   public List<CertificateAction> actions() {
     return certificateActionSpecifications.stream()
@@ -148,5 +149,9 @@ public class CertificateModel implements Comparator<ElementId> {
             )
         )
         .toList();
+  }
+
+  public Optional<CertificateModelId> getAbleToCreateDraftForModel() {
+    return Optional.ofNullable(ableToCreateDraftForModel);
   }
 }

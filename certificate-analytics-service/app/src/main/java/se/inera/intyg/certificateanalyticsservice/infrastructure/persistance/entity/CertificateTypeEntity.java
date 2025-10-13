@@ -12,7 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "certificate_type")
+@Table(name = "dim_certificate_type")
 @Data
 @Builder
 @AllArgsConstructor
@@ -21,7 +21,7 @@ public class CertificateTypeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "`key`")
+  @Column(name = "certificate_type_key")
   private Long key;
 
   @Column(name = "certificate_type", nullable = false, length = 20)

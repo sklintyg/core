@@ -13,7 +13,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 public class QuestionSymptom {
 
   public static final ElementId QUESTION_SYMPTOM_ID = new ElementId("55");
-  private static final FieldId QUESTION_SYMPTOM_FIELD_ID = new FieldId("55.1");
+  public static final FieldId QUESTION_SYMPTOM_FIELD_ID = new FieldId("55.1");
   private static final PdfFieldId PDF_SYMPTOM_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[0].flt_txtDiagnos[0]");
   private static final short LIMIT = 318;
