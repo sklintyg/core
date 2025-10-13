@@ -23,7 +23,6 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.Certifi
 import se.inera.intyg.certificateservice.domain.certificate.service.PrefillProcessor;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenPdfConfiguration;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModificationException;
 import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
@@ -605,50 +604,5 @@ public class MedicalCertificate implements Certificate {
         .replace("–", "")
         .replace("__", "_")
         .toLowerCase();
-  }
-
-  @Override
-  public Optional<ElementSimplifiedValue> simplifiedValue(ElementId elementId,
-      List<ElementId> hiddenElements, boolean isCitizenFormat) {
-    final var dataForElement = getElementDataById(elementId);
-    final var hiddenElementValue = hasHiddenElementValue(elementId, hiddenElements,
-        isCitizenFormat);
-
-    if (hiddenElementValue.isPresent()) {
-      return hiddenElementValue;
-    }
-
-    if (dataForElement.isEmpty()) {
-      return Optional.empty();
-    }
-
-    return certificateModel
-        .elementSpecification(elementId)
-        .configuration()
-        .simplified(dataForElement.get().value());
-  }
-
-  private Optional<ElementSimplifiedValue> hasHiddenElementValue(ElementId elementId,
-      List<ElementId> hiddenElements, boolean isCitizenFormat) {
-    if (!isCitizenFormat) {
-      return Optional.empty();
-    }
-
-    final var elementSpecification = certificateModel.elementSpecification(elementId);
-    final var hiddenConfig = (CitizenPdfConfiguration) elementSpecification.pdfConfiguration(); // TODO: Add error handling
-
-    if (hiddenConfig == null) {
-      return Optional.empty();
-    }
-
-    final var shouldHideByCitizenChoice = hiddenElements.contains(hiddenConfig.hiddenBy());
-    final var shouldHideByValue = hiddenConfig.shouldHide() != null
-        && hiddenConfig.shouldHide().test(elementData);
-
-    if (shouldHideByCitizenChoice || shouldHideByValue) {
-      return Optional.of(hiddenConfig.replacementValue());
-    }
-
-    return Optional.empty();
   }
 }

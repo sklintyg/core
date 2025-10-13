@@ -25,7 +25,11 @@ public class PrintCertificateQuestionConverter {
   public Optional<PrintCertificateQuestionDTO> convert(
       ElementSpecification elementSpecification, Certificate certificate,
       List<ElementId> hiddenElementIds, boolean isCitizenFormat) {
-    return certificate.simplifiedValue(elementSpecification.id(), hiddenElementIds, isCitizenFormat)
+    final var elementData = certificate.getElementDataById(elementSpecification.id());
+    final var allElementData = certificate.elementData();
+
+    return elementSpecification.simplifiedValue(elementData, allElementData, hiddenElementIds,
+            isCitizenFormat)
         .map(elementSimplifiedValue -> PrintCertificateQuestionDTO.builder()
             .id(elementSpecification.id().id())
             .name(elementSpecification.configuration().name())

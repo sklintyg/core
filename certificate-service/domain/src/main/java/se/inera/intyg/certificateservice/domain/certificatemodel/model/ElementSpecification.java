@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 import lombok.Builder;
 import lombok.Value;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValue;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidation;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationError;
 
@@ -127,5 +128,42 @@ public class ElementSpecification {
 
   public Optional<ElementVisibilityConfiguration> getVisibilityConfiguration() {
     return Optional.ofNullable(visibilityConfiguration);
+  }
+
+  public Optional<ElementSimplifiedValue> simplifiedValue(Optional<ElementData> elementData,
+      List<ElementData> allElementData, List<ElementId> hiddenElements, boolean isCitizenFormat) {
+    final var hiddenElementValue = hasHiddenElementValue(hiddenElements, allElementData,
+        isCitizenFormat);
+
+    if (hiddenElementValue.isPresent()) {
+      return hiddenElementValue;
+    }
+
+    if (elementData.isEmpty()) {
+      return Optional.empty();
+    }
+
+    return configuration.simplified(elementData.get().value());
+  }
+
+  private Optional<ElementSimplifiedValue> hasHiddenElementValue(List<ElementId> hiddenElements,
+      List<ElementData> allElementData, boolean isCitizenFormat) {
+    if (!isCitizenFormat || pdfConfiguration == null) {
+      return Optional.empty();
+    }
+
+    if (!(pdfConfiguration instanceof CitizenPdfConfiguration hiddenConfig)) {
+      return Optional.empty();
+    }
+
+    final var shouldHideByCitizenChoice = hiddenElements.contains(hiddenConfig.hiddenBy());
+    final var shouldHideByValue = hiddenConfig.shouldHide() != null
+        && hiddenConfig.shouldHide().test(allElementData);
+
+    if (shouldHideByCitizenChoice || shouldHideByValue) {
+      return Optional.of(hiddenConfig.replacementValue());
+    }
+
+    return Optional.empty();
   }
 }
