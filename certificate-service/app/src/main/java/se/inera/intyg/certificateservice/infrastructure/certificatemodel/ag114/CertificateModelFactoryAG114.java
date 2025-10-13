@@ -115,6 +115,7 @@ public class CertificateModelFactoryAG114 implements CertificateModelFactory {
         ))
         .summaryProvider(new AG114CertificateSummaryProvider())
         .certificateActionSpecifications(AG114CertificateActionSpecification.create())
+        .citizenAvailableFunctionsProvider(new AG114CitizenAvailableFunctionsProvider())
         .messageActionSpecifications(List.of())
         .elementSpecifications(List.of(
             categoryGrundForMedicinsktUnderlag(
