@@ -35,6 +35,7 @@ public class PdfUnitValueGenerator {
           String.format("Wrong value type: '%s'", elementValue.getClass())
       );
     }
+//TODO: get version managed metadata
 
     return String.join("\n",
         certificate.certificateMetaData().issuingUnit().name().name(),

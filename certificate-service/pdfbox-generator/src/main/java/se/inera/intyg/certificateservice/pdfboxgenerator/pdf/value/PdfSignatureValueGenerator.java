@@ -15,7 +15,7 @@ import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 public class PdfSignatureValueGenerator {
 
   public List<PdfField> generate(Certificate certificate) {
-
+//TODO: get version managed metadata
     final var fields = new ArrayList<PdfField>();
     fields.add(getSignedDate(certificate));
     fields.add(getIssuerFullName(certificate));

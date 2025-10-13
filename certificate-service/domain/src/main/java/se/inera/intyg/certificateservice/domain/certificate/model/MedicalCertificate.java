@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.certificate.repository.SignedCertificateMetadataRepostiory;
 import se.inera.intyg.certificateservice.domain.certificate.service.PrefillProcessor;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
@@ -69,6 +70,7 @@ public class MedicalCertificate implements Certificate {
   @Builder.Default
   private List<Message> messages = Collections.emptyList();
   private Forwarded forwarded;
+  private SignedCertificateMetadataRepostiory signedCertificateMetadataRepostiory;
 
   @Override
   public List<CertificateAction> actions(Optional<ActionEvaluation> actionEvaluation) {
@@ -592,5 +594,10 @@ public class MedicalCertificate implements Certificate {
     } catch (Exception e) {
       log.warn("Failed to prefill certificate.", e);
     }
+  }
+
+  public CertificateMetaData getMetadataWhenSigned() {
+    return this.signedCertificateMetadataRepostiory.getMetadataWhenSigned(
+        this.certificateMetaData, this.signed);
   }
 }

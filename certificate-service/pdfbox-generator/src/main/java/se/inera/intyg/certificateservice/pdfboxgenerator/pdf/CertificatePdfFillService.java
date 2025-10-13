@@ -102,6 +102,8 @@ public class CertificatePdfFillService {
 
   private void setFields(Certificate certificate, PDDocument document, AtomicInteger mcid) {
     final var pdfSpecification = certificate.certificateModel().pdfSpecification();
+    //TODO: get version managed metadata for pdfsignature and pdfunit generators
+
     if (certificate.status() == Status.SIGNED) {
       setFieldValues(document, pdfSignatureValueGenerator.generate(certificate));
     }

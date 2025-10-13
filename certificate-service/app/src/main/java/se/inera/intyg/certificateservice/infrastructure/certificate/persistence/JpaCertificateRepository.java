@@ -29,16 +29,10 @@ import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateEntityMapper;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.PatientVersionEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.PlaceholderCertificateEntityMapper;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.StaffVersionEntityMapper;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.UnitVersionEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecificationFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateRelationRepository;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.PatientVersionEntityRepository;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffVersionEntityRepository;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitVersionEntityRepository;
 import se.inera.intyg.certificateservice.testability.certificate.service.repository.TestabilityCertificateRepository;
 
 @Repository
@@ -53,10 +47,6 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
   private final CertificateEntityMapper certificateEntityMapper;
   private final CertificateEntitySpecificationFactory certificateEntitySpecificationFactory;
   private final CertificateRelationRepository certificateRelationRepository;
-
-  private final StaffVersionEntityRepository staffVersionEntityRepository;
-  private final UnitVersionEntityRepository unitVersionEntityRepository;
-  private final PatientVersionEntityRepository patientVersionEntityRepository;
 
   @Override
   public Certificate create(CertificateModel certificateModel) {
@@ -154,46 +144,6 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
 
     return certificateEntityMapper.toDomain(certificateEntity);
   }
-
-  @Override
-  public Certificate getByIdForPrint(CertificateId certificateId) {
-    if (certificateId == null) {
-      throw new IllegalArgumentException("Cannot get certificate if certificateId is null");
-    }
-
-    final var certificateEntity = certificateEntityRepository.findByCertificateId(
-            certificateId.id())
-        .orElseThrow(() ->
-            new IllegalArgumentException(
-                "CertificateId '%s' not present in repository".formatted(certificateId)
-            )
-        );
-
-    final var signedAt = certificateEntity.getSigned();
-    if (signedAt != null) {
-      final var patient = certificateEntity.getPatient();
-      patientVersionEntityRepository
-          .findCoveringTimestampOrderByMostRecent(patient.getId(), signedAt).stream()
-          .findFirst().ifPresent(patientVersionAtSigned -> certificateEntity.setPatient(
-              PatientVersionEntityMapper.toPatient(patientVersionAtSigned)));
-
-      final var issuedBy = certificateEntity.getIssuedBy();
-      staffVersionEntityRepository
-          .findCoveringTimestampOrderByMostRecent(issuedBy.getHsaId(), signedAt).stream()
-          .findFirst().ifPresent(staffVersionAtSigned -> certificateEntity.setIssuedBy(
-              StaffVersionEntityMapper.toStaff(staffVersionAtSigned)));
-
-      final var issuedOn = certificateEntity.getIssuedOnUnit();
-      unitVersionEntityRepository
-          .findCoveringTimestampOrderByMostRecent(issuedOn.getHsaId(), signedAt).stream()
-          .findFirst().ifPresent(unitVersionAtSigned -> certificateEntity.setIssuedOnUnit(
-              UnitVersionEntityMapper.toUnit(unitVersionAtSigned)));
-
-    }
-
-    return certificateEntityMapper.toDomain(certificateEntity);
-  }
-
 
   @Override
   public List<Certificate> getByIds(List<CertificateId> certificateIds) {
