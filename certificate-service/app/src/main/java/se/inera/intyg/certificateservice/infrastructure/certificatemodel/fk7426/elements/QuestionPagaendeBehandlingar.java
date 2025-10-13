@@ -17,7 +17,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 public class QuestionPagaendeBehandlingar {
 
   public static final ElementId QUESTION_PAGAENDE_BEHANDLING_ID = new ElementId("19");
-  private static final FieldId QUESTION_PAGAENDE_BEHANDLING_FIELD_ID = new FieldId(
+  public static final FieldId QUESTION_PAGAENDE_BEHANDLING_FIELD_ID = new FieldId(
       "19.1");
   private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[2].flt_txt_PagaendeBehandling[0]");

@@ -1,8 +1,4 @@
 apply plugin: "java-test-fixtures"
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
-import java.util.regex.Matcher
 
 dependencies {
     implementation project(':domain')
@@ -52,57 +48,6 @@ testing {
                     maxHeapSize = "3g"
                 }
             }
-        }
-    }
-}
-
-def today = LocalDate.now()
-def isoFormatter = DateTimeFormatter.ISO_LOCAL_DATE
-
-tasks.named('processIntegrationTestResources', Copy).configure {
-    outputs.upToDateWhen { false }
-
-    doLast {
-        fileTree(destinationDir).matching {
-            include 'prefill/**/*.xml'
-        }.each { File file ->
-            String text = file.getText('UTF-8')
-
-            def matcher = (text =~ /<ns4:datePeriod>\s*<ns4:start>(\d{4}-\d{2}-\d{2})<\/ns4:start>\s*<ns4:end>(\d{4}-\d{2}-\d{2})<\/ns4:end>\s*<\/ns4:datePeriod>/)
-            def periods = matcher.collect { full, oldStartStr, oldEndStr ->
-                [
-                        oldStart: LocalDate.parse(oldStartStr, isoFormatter),
-                        oldEnd  : LocalDate.parse(oldEndStr, isoFormatter)
-                ]
-            }
-
-            if (!periods.isEmpty()) {
-                def firstOldStart = periods[0].oldStart
-                periods.eachWithIndex { p, idx ->
-                    long offsetDays = ChronoUnit.DAYS.between(firstOldStart, p.oldStart)
-                    long lengthDays = ChronoUnit.DAYS.between(p.oldStart, p.oldEnd)
-                    def newStart = today.plusDays(offsetDays)
-                    def newEnd = newStart.plusDays(lengthDays)
-
-                    def replacement =
-                            """<ns4:datePeriod>
-                                <ns4:start>${newStart.format(isoFormatter)}</ns4:start>
-                                <ns4:end>${newEnd.format(isoFormatter)}</ns4:end>
-                                </ns4:datePeriod>
-                                """
-
-                    text = text.replaceFirst(
-                            /<ns4:datePeriod>\s*<ns4:start>\d{4}-\d{2}-\d{2}<\/ns4:start>\s*<ns4:end>\d{4}-\d{2}-\d{2}<\/ns4:end>\s*<\/ns4:datePeriod>/, Matcher.quoteReplacement(replacement)
-                    )
-                }
-            }
-
-            text = text.replaceAll(
-                    /(?<!<ns4:start>|<ns4:end>)(\d{4}-\d{2}-\d{2})/,
-                    today.format(isoFormatter)
-            )
-
-            file.write(text, 'UTF-8')
         }
     }
 }

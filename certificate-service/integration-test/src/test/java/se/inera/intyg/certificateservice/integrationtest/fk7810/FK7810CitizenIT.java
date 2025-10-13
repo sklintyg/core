@@ -1,23 +1,41 @@
 package se.inera.intyg.certificateservice.integrationtest.fk7810;
 
+import static se.inera.intyg.certificateservice.integrationtest.fk7810.FK7810TestSetup.fk7810TestSetup;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import se.inera.intyg.certificateservice.integrationtest.ExistsCitizenCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.GetCitizenCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.GetCitizenCertificateListIT;
-import se.inera.intyg.certificateservice.integrationtest.PrintCitizenCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.ActiveCertificatesIT;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.BaseTestabilityUtilities;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.TestabilityUtilities;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.ExistsCitizenCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.GetCitizenCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.GetCitizenCertificateListIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.PrintCitizenCertificateIT;
 
-class FK7810CitizenIT {
+class FK7810CitizenIT extends ActiveCertificatesIT {
 
-  private static final String CERTIFICATE_TYPE = FK7810Constants.FK7810;
-  private static final String ACTIVE_VERSION = FK7810Constants.VERSION;
-  private static final String TYPE = FK7810Constants.TYPE;
+  public static final String TYPE = FK7810TestSetup.TYPE;
 
-  @DynamicPropertySource
-  static void testProperties(DynamicPropertyRegistry registry) {
-    registry.add("certificate.model.fk7810.v1_0.active.from", () -> "2024-01-01T00:00:00");
+  @BeforeEach
+  void setUp() {
+    super.setUpBaseIT();
+
+    baseTestabilityUtilities = fk7810TestSetup()
+        .testabilityUtilities(
+            TestabilityUtilities.builder()
+                .api(api)
+                .internalApi(internalApi)
+                .testabilityApi(testabilityApi)
+                .build()
+        )
+        .build();
+  }
+
+  @AfterEach
+  void tearDown() {
+    super.tearDownBaseIT();
   }
 
   @Nested
@@ -25,13 +43,8 @@ class FK7810CitizenIT {
   class GetCitizenCertificate extends GetCitizenCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -40,13 +53,8 @@ class FK7810CitizenIT {
   class GetCitizenCertificateList extends GetCitizenCertificateListIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -55,13 +63,8 @@ class FK7810CitizenIT {
   class PrintCitizenCertificate extends PrintCitizenCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -70,13 +73,8 @@ class FK7810CitizenIT {
   class ExistsCitizenCertificate extends ExistsCitizenCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 }

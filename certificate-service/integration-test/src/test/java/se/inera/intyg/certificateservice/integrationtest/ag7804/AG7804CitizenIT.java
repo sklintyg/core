@@ -1,22 +1,40 @@
 package se.inera.intyg.certificateservice.integrationtest.ag7804;
 
+import static se.inera.intyg.certificateservice.integrationtest.ag7804.AG7804TestSetup.ag7804TestSetup;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import se.inera.intyg.certificateservice.integrationtest.ExistsCitizenCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.GetCitizenCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.GetCitizenCertificateListIT;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.ActiveCertificatesIT;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.BaseTestabilityUtilities;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.TestabilityUtilities;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.ExistsCitizenCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.GetCitizenCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.GetCitizenCertificateListIT;
 
-class AG7804CitizenIT {
+class AG7804CitizenIT extends ActiveCertificatesIT {
 
-  private static final String CERTIFICATE_TYPE = AG7804Constants.AG7804;
-  private static final String ACTIVE_VERSION = AG7804Constants.VERSION;
-  private static final String TYPE = AG7804Constants.TYPE;
+  public static final String TYPE = AG7804TestSetup.TYPE;
 
-  @DynamicPropertySource
-  static void testProperties(DynamicPropertyRegistry registry) {
-    registry.add("certificate.model.ag7804.v1_0.active.from", () -> "2024-01-01T00:00:00");
+  @BeforeEach
+  void setUp() {
+    super.setUpBaseIT();
+
+    baseTestabilityUtilities = ag7804TestSetup()
+        .testabilityUtilities(
+            TestabilityUtilities.builder()
+                .api(api)
+                .internalApi(internalApi)
+                .testabilityApi(testabilityApi)
+                .build()
+        )
+        .build();
+  }
+
+  @AfterEach
+  void tearDown() {
+    super.tearDownBaseIT();
   }
 
   @Nested
@@ -24,13 +42,8 @@ class AG7804CitizenIT {
   class GetCitizenCertificate extends GetCitizenCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -39,13 +52,8 @@ class AG7804CitizenIT {
   class GetCitizenCertificateList extends GetCitizenCertificateListIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
@@ -54,13 +62,8 @@ class AG7804CitizenIT {
   class ExistsCitizenCertificate extends ExistsCitizenCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 }

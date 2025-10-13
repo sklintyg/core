@@ -1,20 +1,38 @@
 package se.inera.intyg.certificateservice.integrationtest.fk7210;
 
+import static se.inera.intyg.certificateservice.integrationtest.fk7210.FK7210TestSetup.fk7210TestSetup;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import se.inera.intyg.certificateservice.integrationtest.InactiveTypeIT;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.BaseTestabilityUtilities;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.InActiveCertificatesIT;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.TestabilityUtilities;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.InactiveTypeIT;
 
-class FK7210InactiveIT {
+class FK7210InactiveIT extends InActiveCertificatesIT {
 
-  private static final String CERTIFICATE_TYPE = FK7210Constants.FK7210;
-  private static final String ACTIVE_VERSION = FK7210Constants.VERSION;
-  private static final String TYPE = FK7210Constants.TYPE;
+  public static final String TYPE = FK7210TestSetup.TYPE;
 
-  @DynamicPropertySource
-  static void testProperties(DynamicPropertyRegistry registry) {
-    registry.add("certificate.model.fk7210.v1_0.active.from", () -> "2099-01-01T00:00:00");
+  @BeforeEach
+  void setUp() {
+    super.setUpBaseIT();
+
+    baseTestabilityUtilities = fk7210TestSetup()
+        .testabilityUtilities(
+            TestabilityUtilities.builder()
+                .api(api)
+                .internalApi(internalApi)
+                .testabilityApi(testabilityApi)
+                .build()
+        )
+        .build();
+  }
+
+  @AfterEach
+  void tearDown() {
+    super.tearDownBaseIT();
   }
 
   @Nested
@@ -22,13 +40,8 @@ class FK7210InactiveIT {
   class InactiveType extends InactiveTypeIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 }

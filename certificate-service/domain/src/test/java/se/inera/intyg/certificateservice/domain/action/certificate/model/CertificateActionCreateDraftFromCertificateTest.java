@@ -141,7 +141,7 @@ class CertificateActionCreateDraftFromCertificateTest {
     );
 
     when(certificateActionContentProvider.body(null)).thenReturn(AG7804_BODY);
-    
+
     assertEquals(
         AG7804_BODY,
         certificateActionCreateDraftFromCertificate.getBody(Optional.empty(), Optional.empty())

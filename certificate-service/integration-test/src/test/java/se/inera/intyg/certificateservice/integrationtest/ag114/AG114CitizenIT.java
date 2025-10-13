@@ -1,70 +1,69 @@
 package se.inera.intyg.certificateservice.integrationtest.ag114;
 
-import org.junit.jupiter.api.Disabled;
+import static se.inera.intyg.certificateservice.integrationtest.ag114.AG114TestSetup.ag114TestSetup;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import se.inera.intyg.certificateservice.integrationtest.ExistsCitizenCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.GetCitizenCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.GetCitizenCertificateListIT;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.ActiveCertificatesIT;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.BaseTestabilityUtilities;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.TestabilityUtilities;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.ExistsCitizenCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.GetCitizenCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.GetCitizenCertificateListIT;
 
-class AG114CitizenIT {
+class AG114CitizenIT extends ActiveCertificatesIT {
 
-  private static final String CERTIFICATE_TYPE = AG114Constants.AG114;
-  private static final String ACTIVE_VERSION = AG114Constants.VERSION;
-  private static final String TYPE = AG114Constants.TYPE;
+  public static final String TYPE = AG114TestSetup.TYPE;
 
-  @DynamicPropertySource
-  static void testProperties(DynamicPropertyRegistry registry) {
-    registry.add("certificate.model.ag114.v1_0.active.from", () -> "2024-01-01T00:00:00");
+  @BeforeEach
+  void setUp() {
+    super.setUpBaseIT();
+
+    baseTestabilityUtilities = ag114TestSetup()
+        .testabilityUtilities(
+            TestabilityUtilities.builder()
+                .api(api)
+                .internalApi(internalApi)
+                .testabilityApi(testabilityApi)
+                .build()
+        )
+        .build();
+  }
+
+  @AfterEach
+  void tearDown() {
+    super.tearDownBaseIT();
   }
 
   @Nested
-  @Disabled
   @DisplayName(TYPE + "Hämta intyg för invånare")
   class GetCitizenCertificate extends GetCitizenCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
   @Nested
-  @Disabled
   @DisplayName(TYPE + "Hämta intygslista för invånare")
   class GetCitizenCertificateList extends GetCitizenCertificateListIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 
   @Nested
-  @Disabled
   @DisplayName(TYPE + "Finns intyg för invånare")
   class ExistsCitizenCertificate extends ExistsCitizenCertificateIT {
 
     @Override
-    protected String type() {
-      return CERTIFICATE_TYPE;
-    }
-
-    @Override
-    protected String typeVersion() {
-      return ACTIVE_VERSION;
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
     }
   }
 }
