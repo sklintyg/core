@@ -1,7 +1,9 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionDiagnos.questionDiagnos;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionFormedlaInfoOmDiagnosTillAG.FORMEDLA_DIAGNOSIS_FIELD_ID;
@@ -14,7 +16,9 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenPdfConfiguration;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDiagnosisListItem;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDiagnosisTerminology;
@@ -179,5 +183,22 @@ class QuestionDiagnosTest {
       final var shouldValidate = element.shouldValidate();
       assertFalse(shouldValidate.test(elementData));
     }
+  }
+
+  @Test
+  void shouldReturnPdfConfiguration() {
+    final var response = QuestionDiagnos.questionDiagnos(diagnosisCodeRepository);
+
+    final var pdfConfig = (CitizenPdfConfiguration) response.pdfConfiguration();
+
+    assertAll(
+        () -> assertEquals(ELEMENT_ID, pdfConfig.hiddenBy()),
+        () -> assertNotNull(pdfConfig.shouldHide()),
+        () -> assertEquals(
+            ElementSimplifiedValueText.builder()
+                .text("På patientens begäran uppges inte diagnos")
+                .build(), pdfConfig.replacementValue()
+        )
+    );
   }
 }
