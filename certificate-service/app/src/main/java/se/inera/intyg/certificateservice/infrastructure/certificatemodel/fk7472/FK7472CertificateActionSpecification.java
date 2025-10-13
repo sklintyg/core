@@ -18,46 +18,53 @@ public class FK7472CertificateActionSpecification {
         Role.NURSE,
         Role.MIDWIFE
     );
+
+    final var allowedRoles = List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
+        Role.CARE_ADMIN);
+
+    final var rolesAllowedToSignOrRevoke = List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE,
+        Role.MIDWIFE);
+
     return List.of(
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.CREATE)
             .allowedRoles(
-                List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE, Role.CARE_ADMIN)
+                allowedRoles
             )
             .allowedRolesForProtectedPersons(allowedRolesForProtectedPersons)
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.READ)
             .allowedRoles(
-                List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE, Role.CARE_ADMIN)
+                allowedRoles
             )
             .allowedRolesForProtectedPersons(allowedRolesForProtectedPersons)
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.UPDATE)
             .allowedRoles(
-                List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE, Role.CARE_ADMIN)
+                allowedRoles
             )
             .allowedRolesForProtectedPersons(allowedRolesForProtectedPersons)
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.DELETE)
             .allowedRoles(
-                List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE, Role.CARE_ADMIN)
+                allowedRoles
             )
             .allowedRolesForProtectedPersons(allowedRolesForProtectedPersons)
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.SIGN)
             .allowedRoles(
-                List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE)
+                rolesAllowedToSignOrRevoke
             )
             .allowedRolesForProtectedPersons(allowedRolesForProtectedPersons)
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.SEND)
             .allowedRoles(
-                List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE, Role.CARE_ADMIN)
+                allowedRoles
             )
             .allowedRolesForProtectedPersons(allowedRolesForProtectedPersons)
             .build(),
@@ -68,7 +75,7 @@ public class FK7472CertificateActionSpecification {
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.REVOKE)
             .allowedRoles(
-                List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE)
+                rolesAllowedToSignOrRevoke
             )
             .allowedRolesForProtectedPersons(allowedRolesForProtectedPersons)
             .build(),
@@ -109,8 +116,7 @@ public class FK7472CertificateActionSpecification {
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.COMPLEMENT)
-            .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
-                Role.CARE_ADMIN))
+            .allowedRoles(allowedRoles)
             .allowedRolesForProtectedPersons(allowedRolesForProtectedPersons)
             .build(),
         CertificateActionSpecification.builder()
@@ -138,8 +144,7 @@ public class FK7472CertificateActionSpecification {
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.LIST_CERTIFICATE_TYPE)
-            .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
-                Role.CARE_ADMIN))
+            .allowedRoles(allowedRoles)
             .allowedRolesForProtectedPersons(allowedRolesForProtectedPersons)
             .build(),
         CertificateActionSpecification.builder()
