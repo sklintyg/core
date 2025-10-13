@@ -70,8 +70,10 @@ public class StaffEntity {
     if (other == null) {
       return true;
     }
-    return !(Objects.equals(this.hsaId, other.getHsaId())
-        && Objects.equals(this.firstName, other.getFirstName())
+    if (!Objects.equals(this.hsaId, other.getHsaId())) {
+      throw new IllegalArgumentException("Cannot compare StaffEntity with different hsaId");
+    }
+    return !(Objects.equals(this.firstName, other.getFirstName())
         && Objects.equals(this.middleName, other.getMiddleName())
         && Objects.equals(this.lastName, other.getLastName())
         && Objects.equals(this.role, other.getRole())

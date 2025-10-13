@@ -64,9 +64,10 @@ public class UnitEntity {
     if (other == null) {
       return true;
     }
-
-    return !(Objects.equals(this.hsaId, other.getHsaId())
-        && Objects.equals(this.name, other.getName())
+    if (!Objects.equals(this.hsaId, other.getHsaId())) {
+      throw new IllegalArgumentException("Cannot compare UnitEntity with different hsaId");
+    }
+    return !(Objects.equals(this.name, other.getName())
         && Objects.equals(this.address, other.getAddress())
         && Objects.equals(this.zipCode, other.getZipCode())
         && Objects.equals(this.city, other.getCity())

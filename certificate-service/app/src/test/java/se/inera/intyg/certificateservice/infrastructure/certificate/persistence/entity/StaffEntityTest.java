@@ -3,9 +3,11 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffEntity.AJLA_DOKTOR_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffEntity.ajlaDoctorEntityBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALF_DOKTOR_HSA_ID;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -148,6 +150,15 @@ class StaffEntityTest {
   @Test
   void shallFindDiffWhenOtherIsNull() {
     assertTrue(AJLA_DOKTOR_ENTITY.hasDiff(null));
+  }
+
+  @Test
+  void shallThrowExceptionWhenComparingStaffWithDifferentHsaId() {
+    var staffWithDifferentHsaId = ajlaDoctorEntityBuilder()
+        .hsaId(ALF_DOKTOR_HSA_ID)
+        .build();
+    assertThrows(IllegalArgumentException.class,
+        () -> AJLA_DOKTOR_ENTITY.hasDiff(staffWithDifferentHsaId));
   }
 
 }

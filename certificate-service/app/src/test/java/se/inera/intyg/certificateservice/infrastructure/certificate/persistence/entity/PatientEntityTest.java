@@ -3,9 +3,11 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataPatientEntity.ATHENA_REACT_ANDERSSON_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataPatientEntity.athenaReactAnderssonEntityBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ALVE_REACT_ALFREDSSON_ID;
 
 import org.junit.jupiter.api.Test;
 
@@ -113,4 +115,15 @@ class PatientEntityTest {
   void shallFindDiffWhenOtherIsNull() {
     assertTrue(ATHENA_REACT_ANDERSSON_ENTITY.hasDiff(null));
   }
+
+  @Test
+  void shallThrowExceptionWhenComparingPatientsWithDifferentIds() {
+    var patientWithDifferentId = athenaReactAnderssonEntityBuilder()
+        .id(ALVE_REACT_ALFREDSSON_ID)
+        .build();
+
+    assertThrows(IllegalArgumentException.class,
+        () -> ATHENA_REACT_ANDERSSON_ENTITY.hasDiff(patientWithDifferentId));
+  }
+
 }

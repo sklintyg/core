@@ -62,8 +62,12 @@ public class PatientEntity {
     if (other == null) {
       return true;
     }
-    return !(Objects.equals(this.id, other.getId())
-        && this.protectedPerson == other.isProtectedPerson()
+
+    if (!Objects.equals(this.id, other.getId())) {
+      throw new IllegalArgumentException("Cannot compare patients with different IDs");
+    }
+
+    return !(this.protectedPerson == other.isProtectedPerson()
         && this.deceased == other.isDeceased()
         && this.testIndicated == other.isTestIndicated()
         && Objects.equals(this.firstName, other.getFirstName())

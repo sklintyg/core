@@ -3,9 +3,11 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitEntity.ALFA_REGIONEN_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitEntity.alfaRegionenEntityBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.BETA_REGIONEN_ID;
 
 import org.junit.jupiter.api.Test;
 
@@ -124,4 +126,14 @@ class UnitEntityTest {
   void shallFindDiffWhenOtherIsNull() {
     assertTrue(ALFA_REGIONEN_ENTITY.hasDiff(null));
   }
+
+  @Test
+  void shallThrowExceptionWhenComparingUnitWithDifferentHsaId() {
+    var unitWithDifferentHsaId = alfaRegionenEntityBuilder()
+        .hsaId(BETA_REGIONEN_ID)
+        .build();
+    assertThrows(IllegalArgumentException.class,
+        () -> ALFA_REGIONEN_ENTITY.hasDiff(unitWithDifferentHsaId));
+  }
+
 }
