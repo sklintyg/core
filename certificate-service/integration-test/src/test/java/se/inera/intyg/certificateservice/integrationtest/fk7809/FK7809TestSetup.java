@@ -39,7 +39,7 @@ public class FK7809TestSetup {
                 )
                 .testabilityAccess(
                     TestabilityAccess.builder()
-                        .canRecieveQuestions(true)
+                        .canReceiveQuestions(true)
                         .nurseCanForwardCertificate(true)
                         .midwifeCanForwardCertificate(true)
                         .canDentistsUseType(false)

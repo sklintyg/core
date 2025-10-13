@@ -76,11 +76,11 @@ public abstract class BaseIntegrationIT {
         .getCode();
   }
 
-  protected Boolean canRecieveQuestions() {
+  protected Boolean canReceiveQuestions() {
     return testabilityUtilities()
         .getTestabilityCertificate()
         .getTestabilityAccess()
-        .isCanRecieveQuestions();
+        .isCanReceiveQuestions();
   }
 
   protected boolean nurseCanForwardCertificate() {

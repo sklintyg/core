@@ -39,7 +39,7 @@ public class TS8071TestSetup {
                 )
                 .testabilityAccess(
                     TestabilityAccess.builder()
-                        .canRecieveQuestions(false)
+                        .canReceiveQuestions(false)
                         .nurseCanForwardCertificate(true)
                         .midwifeCanForwardCertificate(true)
                         .canDentistsUseType(false)

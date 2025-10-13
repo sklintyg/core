@@ -40,7 +40,7 @@ public class FK3226TestSetup {
                 )
                 .testabilityAccess(
                     TestabilityAccess.builder()
-                        .canRecieveQuestions(true)
+                        .canReceiveQuestions(true)
                         .nurseCanForwardCertificate(true)
                         .midwifeCanForwardCertificate(true)
                         .canDentistsUseType(false)

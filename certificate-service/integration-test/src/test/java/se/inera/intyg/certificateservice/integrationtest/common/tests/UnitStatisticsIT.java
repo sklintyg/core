@@ -92,7 +92,7 @@ public abstract class UnitStatisticsIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Skall returnera antalet ohanterade frågor på en enhet")
   void shallReturnCountOfAllUnhandledQuestionsOnUnit() {
-    if (!canRecieveQuestions()) {
+    if (!canReceiveQuestions()) {
       return;
     }
 
@@ -153,7 +153,7 @@ public abstract class UnitStatisticsIT extends BaseIntegrationIT {
   @Test
   @DisplayName("Skall returnera antalet ohanterade frågor på flera enheter")
   void shallReturnCountOfAllUnhandledQuestionsOnUnits() {
-    if (!canRecieveQuestions()) {
+    if (!canReceiveQuestions()) {
       return;
     }
 
@@ -278,7 +278,7 @@ public abstract class UnitStatisticsIT extends BaseIntegrationIT {
   @DisplayName("Skall returnera antal ej hanterade ärenden som är skapade på patient med skyddade personuppgifter")
   @MethodSource("rolesNoAccessToProtectedPerson")
   void shallReturnCountOfUnhandledMessagesExcludingPatientIsProtectedPerson(UserDTO userDTO) {
-    if (!canRecieveQuestions()) {
+    if (!canReceiveQuestions()) {
       return;
     }
 
@@ -341,7 +341,7 @@ public abstract class UnitStatisticsIT extends BaseIntegrationIT {
   @DisplayName("Skall returnera antal ej hanterade ärenden som är skapade på patient med skyddade personuppgifter")
   @MethodSource("rolesAccessToProtectedPerson")
   void shallReturnCountOfUnhandledMessagesIncludingPatientIsProtectedPerson(UserDTO userDTO) {
-    if (!canRecieveQuestions()) {
+    if (!canReceiveQuestions()) {
       return;
     }
 

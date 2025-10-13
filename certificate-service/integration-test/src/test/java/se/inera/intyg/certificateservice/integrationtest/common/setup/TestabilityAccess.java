@@ -7,7 +7,7 @@ import lombok.Value;
 @Builder
 public class TestabilityAccess {
 
-  boolean canRecieveQuestions;
+  boolean canReceiveQuestions;
 
   boolean nurseCanForwardCertificate;
   boolean midwifeCanForwardCertificate;

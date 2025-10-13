@@ -38,7 +38,7 @@ public class AG114TestSetup {
                 )
                 .testabilityAccess(
                     TestabilityAccess.builder()
-                        .canRecieveQuestions(false)
+                        .canReceiveQuestions(false)
                         .nurseCanForwardCertificate(false)
                         .midwifeCanForwardCertificate(false)
                         .canDentistsUseType(true)
