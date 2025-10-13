@@ -11,7 +11,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
 
 public class QuestionKontaktBeskrivning {
 
@@ -55,7 +55,7 @@ public class QuestionKontaktBeskrivning {
             new ElementMapping(QUESTION_KONTAKT_ID, null)
         )
         .shouldValidate(
-            ShouldValidateFactory.checkboxBoolean(QUESTION_KONTAKT_ID, true)
+            ElementDataPredicateFactory.checkboxBoolean(QUESTION_KONTAKT_ID, true)
         )
         .build();
   }

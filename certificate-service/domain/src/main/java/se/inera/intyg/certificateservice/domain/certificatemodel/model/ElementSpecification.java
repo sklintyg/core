@@ -156,7 +156,8 @@ public class ElementSpecification {
       return Optional.empty();
     }
 
-    final var shouldHideByCitizenChoice = hiddenElements.contains(hiddenConfig.hiddenBy());
+    final var shouldHideByCitizenChoice = hiddenConfig.hiddenBy() != null
+        && hiddenElements.contains(hiddenConfig.hiddenBy());
     final var shouldHideByValue = hiddenConfig.shouldHide() != null
         && hiddenConfig.shouldHide().test(allElementData);
 

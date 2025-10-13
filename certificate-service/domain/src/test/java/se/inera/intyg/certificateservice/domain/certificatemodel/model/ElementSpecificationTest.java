@@ -19,10 +19,13 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementS
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidation;
@@ -374,5 +377,229 @@ class ElementSpecificationTest {
         () -> assertEquals(element, response.getFirst()),
         () -> assertEquals(DATE_ELEMENT_SPECIFICATION, response.getLast())
     );
+  }
+
+  @Nested
+  class SimplifiedValue {
+
+    private static final ElementId ELEMENT_ID = new ElementId("elementId");
+    private static final ElementId HIDDEN_BY_ELEMENT_ID = new ElementId("hiddenByElementId");
+    private static final List<ElementId> HIDDEN_ELEMENTS = List.of(HIDDEN_BY_ELEMENT_ID);
+    private static final List<ElementData> ALL_ELEMENT_DATA = Collections.emptyList();
+
+    private CitizenPdfConfiguration citizenPdfConfiguration;
+    private ElementValue elementValue;
+    private ElementSimplifiedValue expectedSimplifiedValue;
+    private ElementSimplifiedValue replacementValue;
+    private ElementConfiguration configuration;
+    private ElementData elementData;
+
+    @BeforeEach
+    void setUp() {
+      elementValue = mock(ElementValue.class);
+      expectedSimplifiedValue = mock(ElementSimplifiedValue.class);
+      replacementValue = mock(ElementSimplifiedValue.class);
+      configuration = mock(ElementConfiguration.class);
+
+      elementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(elementValue)
+          .build();
+
+      citizenPdfConfiguration = CitizenPdfConfiguration.builder()
+          .hiddenBy(HIDDEN_BY_ELEMENT_ID)
+          .replacementValue(replacementValue)
+          .build();
+    }
+
+    @Test
+    void shouldReturnEmptyWhenElementDataIsEmpty() {
+      final var elementSpecification = dateElementSpecificationBuilder()
+          .id(ELEMENT_ID)
+          .build();
+
+      final var result = elementSpecification.simplifiedValue(
+          Optional.empty(),
+          ALL_ELEMENT_DATA,
+          HIDDEN_ELEMENTS,
+          false
+      );
+
+      assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void shouldReturnSimplifiedValueFromConfigurationIfNotCitizenFormat() {
+      doReturn(Optional.of(expectedSimplifiedValue))
+          .when(configuration).simplified(elementValue);
+
+      final var elementSpecification = ElementSpecification.builder()
+          .id(ELEMENT_ID)
+          .configuration(configuration)
+          .pdfConfiguration(citizenPdfConfiguration)
+          .build();
+
+      final var result = elementSpecification.simplifiedValue(
+          Optional.of(elementData),
+          ALL_ELEMENT_DATA,
+          HIDDEN_ELEMENTS,
+          false
+      );
+
+      assertEquals(Optional.of(expectedSimplifiedValue), result);
+    }
+
+    @Test
+    void shouldReturnSimplifiedValueFromConfigurationIfNoCitizenPdfConfig() {
+      doReturn(Optional.of(expectedSimplifiedValue))
+          .when(configuration).simplified(elementValue);
+
+      final var elementSpecification = ElementSpecification.builder()
+          .id(ELEMENT_ID)
+          .configuration(configuration)
+          .pdfConfiguration(null)
+          .build();
+
+      final var result = elementSpecification.simplifiedValue(
+          Optional.of(elementData),
+          ALL_ELEMENT_DATA,
+          HIDDEN_ELEMENTS,
+          true
+      );
+
+      assertEquals(Optional.of(expectedSimplifiedValue), result);
+    }
+
+    @Test
+    void shouldReturnReplacementValueWhenHiddenByCitizenChoice() {
+      final var citizenPdfConfiguration = CitizenPdfConfiguration.builder()
+          .hiddenBy(HIDDEN_BY_ELEMENT_ID)
+          .replacementValue(replacementValue)
+          .build();
+
+      final var elementSpecification = ElementSpecification.builder()
+          .id(ELEMENT_ID)
+          .configuration(configuration)
+          .pdfConfiguration(citizenPdfConfiguration)
+          .build();
+
+      final var result = elementSpecification.simplifiedValue(
+          Optional.of(elementData),
+          ALL_ELEMENT_DATA,
+          HIDDEN_ELEMENTS,
+          true
+      );
+
+      assertEquals(Optional.of(replacementValue), result);
+    }
+
+    @Test
+    void shouldReturnReplacementValueWhenHiddenByValuePredicate() {
+      final var shouldHidePredicate = mock(Predicate.class);
+      doReturn(true).when(shouldHidePredicate).test(ALL_ELEMENT_DATA);
+
+      final var citizenPdfConfiguration = CitizenPdfConfiguration.builder()
+          .shouldHide(shouldHidePredicate)
+          .replacementValue(replacementValue)
+          .build();
+
+      final var elementSpecification = ElementSpecification.builder()
+          .id(ELEMENT_ID)
+          .configuration(configuration)
+          .pdfConfiguration(citizenPdfConfiguration)
+          .build();
+
+      final var result = elementSpecification.simplifiedValue(
+          Optional.of(elementData),
+          ALL_ELEMENT_DATA,
+          Collections.emptyList(),
+          true
+      );
+
+      assertEquals(Optional.of(replacementValue), result);
+      verify(shouldHidePredicate).test(ALL_ELEMENT_DATA);
+    }
+
+    @Test
+    void shouldNotHideWhenHiddenByIsNullAndShouldHideIsFalse() {
+      final var shouldHidePredicate = mock(Predicate.class);
+      doReturn(false).when(shouldHidePredicate).test(ALL_ELEMENT_DATA);
+      doReturn(Optional.of(expectedSimplifiedValue))
+          .when(configuration).simplified(elementValue);
+
+      final var citizenPdfConfiguration = CitizenPdfConfiguration.builder()
+          .hiddenBy(null)
+          .shouldHide(shouldHidePredicate)
+          .replacementValue(replacementValue)
+          .build();
+
+      final var elementSpecification = ElementSpecification.builder()
+          .id(ELEMENT_ID)
+          .configuration(configuration)
+          .pdfConfiguration(citizenPdfConfiguration)
+          .build();
+
+      final var result = elementSpecification.simplifiedValue(
+          Optional.of(elementData),
+          ALL_ELEMENT_DATA,
+          HIDDEN_ELEMENTS,
+          true
+      );
+
+      assertEquals(Optional.of(expectedSimplifiedValue), result);
+      verify(shouldHidePredicate).test(ALL_ELEMENT_DATA);
+      verify(configuration).simplified(elementValue);
+    }
+
+    @Test
+    void shouldNotHideWhenElementNotInHiddenElementsList() {
+      final var otherElementId = new ElementId("otherElementId");
+      doReturn(Optional.of(expectedSimplifiedValue))
+          .when(configuration).simplified(elementValue);
+
+      final var citizenPdfConfiguration = CitizenPdfConfiguration.builder()
+          .hiddenBy(otherElementId)
+          .replacementValue(replacementValue)
+          .build();
+
+      final var elementSpecification = ElementSpecification.builder()
+          .id(ELEMENT_ID)
+          .configuration(configuration)
+          .pdfConfiguration(citizenPdfConfiguration)
+          .build();
+
+      final var result = elementSpecification.simplifiedValue(
+          Optional.of(elementData),
+          ALL_ELEMENT_DATA,
+          HIDDEN_ELEMENTS,
+          true
+      );
+
+      assertEquals(Optional.of(expectedSimplifiedValue), result);
+      verify(configuration).simplified(elementValue);
+    }
+
+    @Test
+    void shouldIgnoreHiddenLogicWhenPdfConfigurationIsNotCitizenPdfConfiguration() {
+      final var nonCitizenPdfConfiguration = mock(PdfConfiguration.class);
+      doReturn(Optional.of(expectedSimplifiedValue))
+          .when(configuration).simplified(elementValue);
+
+      final var elementSpecification = ElementSpecification.builder()
+          .id(ELEMENT_ID)
+          .configuration(configuration)
+          .pdfConfiguration(nonCitizenPdfConfiguration)
+          .build();
+
+      final var result = elementSpecification.simplifiedValue(
+          Optional.of(elementData),
+          ALL_ELEMENT_DATA,
+          HIDDEN_ELEMENTS,
+          true
+      );
+
+      assertEquals(Optional.of(expectedSimplifiedValue), result);
+      verify(configuration).simplified(elementValue);
+    }
   }
 }
