@@ -3,6 +3,10 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -10,7 +14,6 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMet
 import se.inera.intyg.certificateservice.domain.certificate.repository.MetadataRepository;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
-import se.inera.intyg.certificateservice.domain.unit.model.IssuingUnit;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientVersionEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffEntity;
@@ -107,18 +110,37 @@ public class MetadataVersionRepository implements MetadataRepository {
           "SignedAt is required to fetch metadata from signed instance");
     }
 
-    final var patientWhenSigned = getPatientVersionWhenSigned(metadata.patient(), signedAt);
-    final var staffWhenSigned = getStaffVersionWhenSigned(metadata.issuer(), signedAt);
-    final var unitWhenSigned = getUnitVersionWhenSigned(metadata.issuingUnit(), signedAt);
+    final var patientWhenSigned = getPatientVersionWhenSigned(metadata.patient(),
+        signedAt);
+    final var staffMap = getStaffVersionsWhenSigned(
+        List.of(metadata.issuer(), metadata.creator()), signedAt);
+    final var unitMap = getUnitVersionsWhenSigned(
+        List.of(metadata.issuingUnit().hsaId().id(), metadata.careUnit().hsaId().id(),
+            metadata.careProvider().hsaId().id()),
+        signedAt);
 
-    //TODO: add careprovider,unit,responsibleissuer?
     return CertificateMetaData.builder()
         .patient(patientWhenSigned)
-        .issuer(staffWhenSigned)
-        .issuingUnit(unitWhenSigned)
+        .issuer(staffMap.get(metadata.issuer().hsaId().id()))
+        .creator(staffMap.get(metadata.creator().hsaId().id()))
+        .issuingUnit(
+            unitMap.containsKey(metadata.issuingUnit().hsaId().id())
+                ? UnitEntityMapper.toIssuingUnitDomain(
+                unitMap.get(metadata.issuingUnit().hsaId().id()))
+                : metadata.issuingUnit()
+        )
+        .careProvider(
+            unitMap.containsKey(metadata.careProvider().hsaId().id())
+                ? UnitEntityMapper.toCareProviderDomain(
+                unitMap.get(metadata.careProvider().hsaId().id()))
+                : metadata.careProvider()
+        )
+        .careUnit(
+            unitMap.containsKey(metadata.careUnit().hsaId().id())
+                ? UnitEntityMapper.toCareUnitDomain(unitMap.get(metadata.careUnit().hsaId().id()))
+                : metadata.careUnit()
+        )
         .build();
-
-
   }
 
   private Patient getPatientVersionWhenSigned(Patient patient,
@@ -130,22 +152,33 @@ public class MetadataVersionRepository implements MetadataRepository {
         .orElse(patient);
   }
 
-  private Staff getStaffVersionWhenSigned(
-      Staff staff, LocalDateTime signedAt) {
-    return staffVersionEntityRepository
-        .findFirstCoveringTimestampOrderByMostRecent(staff.hsaId().id(), signedAt)
+  private Map<String, Staff> getStaffVersionsWhenSigned(List<Staff> staffs,
+      LocalDateTime signedAt) {
+    List<StaffVersionEntity> entities = staffVersionEntityRepository
+        .findAllCoveringTimestampByHsaIdIn(
+            staffs.stream().map(s -> s.hsaId().id()).collect(Collectors.toList()), signedAt);
+
+    Map<String, Staff> versionedStaffMap = entities.stream()
         .map(StaffVersionEntityMapper::toStaff)
         .map(StaffEntityMapper::toDomain)
-        .orElse(staff);
+        .collect(Collectors.toMap(s -> s.hsaId().id(), Function.identity(), (a, b) -> a));
+
+    return staffs.stream()
+        .collect(Collectors.toMap(
+            s -> s.hsaId().id(),
+            s -> versionedStaffMap.getOrDefault(s.hsaId().id(), s),
+            (a, b) -> a
+        ));
   }
 
-  private IssuingUnit getUnitVersionWhenSigned(
-      IssuingUnit unit, LocalDateTime signedAt) {
-    return unitVersionEntityRepository
-        .findFirstCoveringTimestampOrderByMostRecent(unit.hsaId().id(), signedAt)
+
+  private Map<String, UnitEntity> getUnitVersionsWhenSigned(List<String> unitHsaIds,
+      LocalDateTime signedAt) {
+    List<UnitVersionEntity> entities =
+        unitVersionEntityRepository.findAllCoveringTimestampByHsaIdIn(unitHsaIds, signedAt);
+    return entities.stream()
         .map(UnitVersionEntityMapper::toUnit)
-        .map(UnitEntityMapper::toIssuingUnitDomain)
-        .orElse(unit);
+        .collect(Collectors.toMap(UnitEntity::getHsaId, Function.identity(), (a, b) -> a));
   }
 
 }
