@@ -28,6 +28,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
+import se.inera.intyg.certificateservice.domain.certificate.service.PdfGeneratorOptions;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidation;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationError;
 
@@ -418,11 +419,15 @@ class ElementSpecificationTest {
           .id(ELEMENT_ID)
           .build();
 
+      final var options = PdfGeneratorOptions.builder()
+          .citizenFormat(false)
+          .hiddenElements(HIDDEN_ELEMENTS)
+          .build();
+
       final var result = elementSpecification.simplifiedValue(
           Optional.empty(),
           ALL_ELEMENT_DATA,
-          HIDDEN_ELEMENTS,
-          false
+          options
       );
 
       assertTrue(result.isEmpty());
@@ -439,11 +444,15 @@ class ElementSpecificationTest {
           .pdfConfiguration(citizenPdfConfiguration)
           .build();
 
+      final var options = PdfGeneratorOptions.builder()
+          .citizenFormat(false)
+          .hiddenElements(HIDDEN_ELEMENTS)
+          .build();
+
       final var result = elementSpecification.simplifiedValue(
           Optional.of(elementData),
           ALL_ELEMENT_DATA,
-          HIDDEN_ELEMENTS,
-          false
+          options
       );
 
       assertEquals(Optional.of(expectedSimplifiedValue), result);
@@ -460,11 +469,15 @@ class ElementSpecificationTest {
           .pdfConfiguration(null)
           .build();
 
+      final var options = PdfGeneratorOptions.builder()
+          .citizenFormat(true)
+          .hiddenElements(HIDDEN_ELEMENTS)
+          .build();
+
       final var result = elementSpecification.simplifiedValue(
           Optional.of(elementData),
           ALL_ELEMENT_DATA,
-          HIDDEN_ELEMENTS,
-          true
+          options
       );
 
       assertEquals(Optional.of(expectedSimplifiedValue), result);
@@ -483,11 +496,15 @@ class ElementSpecificationTest {
           .pdfConfiguration(citizenPdfConfiguration)
           .build();
 
+      final var options = PdfGeneratorOptions.builder()
+          .citizenFormat(true)
+          .hiddenElements(HIDDEN_ELEMENTS)
+          .build();
+
       final var result = elementSpecification.simplifiedValue(
           Optional.of(elementData),
           ALL_ELEMENT_DATA,
-          HIDDEN_ELEMENTS,
-          true
+          options
       );
 
       assertEquals(Optional.of(replacementValue), result);
@@ -509,11 +526,15 @@ class ElementSpecificationTest {
           .pdfConfiguration(citizenPdfConfiguration)
           .build();
 
+      final var options = PdfGeneratorOptions.builder()
+          .citizenFormat(true)
+          .hiddenElements(Collections.emptyList())
+          .build();
+
       final var result = elementSpecification.simplifiedValue(
           Optional.of(elementData),
           ALL_ELEMENT_DATA,
-          Collections.emptyList(),
-          true
+          options
       );
 
       assertEquals(Optional.of(replacementValue), result);
@@ -539,11 +560,15 @@ class ElementSpecificationTest {
           .pdfConfiguration(citizenPdfConfiguration)
           .build();
 
+      final var options = PdfGeneratorOptions.builder()
+          .citizenFormat(true)
+          .hiddenElements(HIDDEN_ELEMENTS)
+          .build();
+
       final var result = elementSpecification.simplifiedValue(
           Optional.of(elementData),
           ALL_ELEMENT_DATA,
-          HIDDEN_ELEMENTS,
-          true
+          options
       );
 
       assertEquals(Optional.of(expectedSimplifiedValue), result);
@@ -568,11 +593,15 @@ class ElementSpecificationTest {
           .pdfConfiguration(citizenPdfConfiguration)
           .build();
 
+      final var options = PdfGeneratorOptions.builder()
+          .citizenFormat(true)
+          .hiddenElements(HIDDEN_ELEMENTS)
+          .build();
+
       final var result = elementSpecification.simplifiedValue(
           Optional.of(elementData),
           ALL_ELEMENT_DATA,
-          HIDDEN_ELEMENTS,
-          true
+          options
       );
 
       assertEquals(Optional.of(expectedSimplifiedValue), result);
@@ -591,11 +620,15 @@ class ElementSpecificationTest {
           .pdfConfiguration(nonCitizenPdfConfiguration)
           .build();
 
+      final var options = PdfGeneratorOptions.builder()
+          .citizenFormat(true)
+          .hiddenElements(HIDDEN_ELEMENTS)
+          .build();
+
       final var result = elementSpecification.simplifiedValue(
           Optional.of(elementData),
           ALL_ELEMENT_DATA,
-          HIDDEN_ELEMENTS,
-          true
+          options
       );
 
       assertEquals(Optional.of(expectedSimplifiedValue), result);
@@ -603,3 +636,4 @@ class ElementSpecificationTest {
     }
   }
 }
+

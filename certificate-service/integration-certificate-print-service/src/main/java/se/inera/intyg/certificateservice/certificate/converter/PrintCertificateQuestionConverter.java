@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateservice.certificate.converter;
 
-import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.certificate.dto.ElementSimplifiedValueDTO;
@@ -16,7 +15,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplif
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueTable;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificate.service.PdfGeneratorOptions;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 
 @Component
@@ -24,19 +23,18 @@ public class PrintCertificateQuestionConverter {
 
   public Optional<PrintCertificateQuestionDTO> convert(
       ElementSpecification elementSpecification, Certificate certificate,
-      List<ElementId> hiddenElementIds, boolean isCitizenFormat) {
+      PdfGeneratorOptions pdfGeneratorOptions) {
     final var elementData = certificate.getElementDataById(elementSpecification.id());
     final var allElementData = certificate.elementData();
 
-    return elementSpecification.simplifiedValue(elementData, allElementData, hiddenElementIds,
-            isCitizenFormat)
+    return elementSpecification.simplifiedValue(elementData, allElementData, pdfGeneratorOptions)
         .map(elementSimplifiedValue -> PrintCertificateQuestionDTO.builder()
             .id(elementSpecification.id().id())
             .name(elementSpecification.configuration().name())
             .value(convertValue(elementSimplifiedValue))
             .subquestions(
                 elementSpecification.children().stream()
-                    .map(child -> convert(child, certificate, hiddenElementIds, isCitizenFormat))
+                    .map(child -> convert(child, certificate, pdfGeneratorOptions))
                     .filter(Optional::isPresent)
                     .map(Optional::get)
                     .toList()

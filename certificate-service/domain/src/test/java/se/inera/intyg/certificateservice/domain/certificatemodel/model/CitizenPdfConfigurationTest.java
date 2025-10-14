@@ -2,9 +2,11 @@ package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
+import se.inera.intyg.certificateservice.domain.certificate.service.PdfGeneratorOptions;
 
 class CitizenPdfConfigurationTest {
 
@@ -19,10 +21,14 @@ class CitizenPdfConfigurationTest {
         .hiddenBy(HIDDEN_BY)
         .build();
 
+    final var options = PdfGeneratorOptions.builder()
+        .citizenFormat(false)
+        .hiddenElements(Collections.emptyList())
+        .build();
+
     final var result = config.replacementElementValue(
-        null,
-        null,
-        false
+        options,
+        Collections.emptyList()
     );
 
     assertTrue(result.isEmpty());
@@ -30,15 +36,19 @@ class CitizenPdfConfigurationTest {
 
   @Test
   void shouldReturnReplacementValueIfHiddenByIsInHiddenElements() {
-    var config = CitizenPdfConfiguration.builder()
+    final var config = CitizenPdfConfiguration.builder()
         .hiddenBy(HIDDEN_BY)
         .replacementValue(REPLACEMENT)
         .build();
 
-    var result = config.replacementElementValue(
-        List.of(HIDDEN_BY),
-        null,
-        true
+    final var options = PdfGeneratorOptions.builder()
+        .citizenFormat(true)
+        .hiddenElements(List.of(HIDDEN_BY))
+        .build();
+
+    final var result = config.replacementElementValue(
+        options,
+        Collections.emptyList()
     );
 
     assertTrue(result.isPresent());
@@ -50,10 +60,15 @@ class CitizenPdfConfigurationTest {
         .shouldHide(elementData -> true)
         .replacementValue(REPLACEMENT)
         .build();
-    var result = config.replacementElementValue(
-        null,
-        List.of(),
-        true
+
+    final var options = PdfGeneratorOptions.builder()
+        .citizenFormat(true)
+        .hiddenElements(Collections.emptyList())
+        .build();
+
+    final var result = config.replacementElementValue(
+        options,
+        Collections.emptyList()
     );
 
     assertTrue(result.isPresent());
@@ -61,17 +76,23 @@ class CitizenPdfConfigurationTest {
 
   @Test
   void shouldReturnEmptyIfNeitherHiddenByNorShouldHidePredicateIsTrue() {
-    var config = CitizenPdfConfiguration.builder()
+    final var config = CitizenPdfConfiguration.builder()
         .hiddenBy(HIDDEN_BY)
         .shouldHide(elementData -> false)
         .replacementValue(REPLACEMENT)
         .build();
-    var result = config.replacementElementValue(
-        List.of(new ElementId("otherElement")),
-        List.of(),
-        true
+
+    final var options = PdfGeneratorOptions.builder()
+        .citizenFormat(true)
+        .hiddenElements(List.of(new ElementId("otherElement")))
+        .build();
+
+    final var result = config.replacementElementValue(
+        options,
+        Collections.emptyList()
     );
 
     assertTrue(result.isEmpty());
   }
 }
+

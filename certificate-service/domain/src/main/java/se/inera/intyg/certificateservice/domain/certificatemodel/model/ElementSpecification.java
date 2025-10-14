@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Value;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValue;
+import se.inera.intyg.certificateservice.domain.certificate.service.PdfGeneratorOptions;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidation;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationError;
 
@@ -131,12 +132,11 @@ public class ElementSpecification {
   }
 
   public Optional<ElementSimplifiedValue> simplifiedValue(Optional<ElementData> elementData,
-      List<ElementData> allElementData, List<ElementId> hiddenElements, boolean isCitizenFormat) {
+      List<ElementData> allElementData, PdfGeneratorOptions pdfGeneratorOptions) {
     if ((pdfConfiguration instanceof CitizenPdfConfiguration hiddenConfig)) {
       final var replacementElementValue = hiddenConfig.replacementElementValue(
-          hiddenElements,
-          allElementData,
-          isCitizenFormat
+          pdfGeneratorOptions,
+          allElementData
       );
 
       if (replacementElementValue.isPresent()) {
