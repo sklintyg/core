@@ -241,11 +241,6 @@ class JpaCertificateRepositoryTest {
       .name(new UnitName("NAME_ISSUED"))
       .build();
 
-  private static final SubUnit ISSUED_ON_UNIT_OLD_NAME = SubUnit.builder()
-      .hsaId(new HsaId("HSA_ID_ISSUED"))
-      .name(new UnitName("OLD"))
-      .build();
-
   private static final PatientEntity PATIENT_ENTITY = PatientEntity.builder()
       .id("ID")
       .protectedPerson(false)
@@ -276,21 +271,6 @@ class JpaCertificateRepositoryTest {
           .build())
       .build();
 
-  private static final Patient PATIENT_OLD_NAME = Patient.builder()
-      .id(PersonId.builder()
-          .id("ID")
-          .type(PersonIdType.PERSONAL_IDENTITY_NUMBER)
-          .build())
-      .testIndicated(new TestIndicated(false))
-      .protectedPerson(new ProtectedPerson(false))
-      .deceased(new Deceased(false))
-      .name(Name.builder()
-          .firstName("OLD")
-          .middleName("OLD")
-          .lastName("OLD")
-          .build())
-      .build();
-
   private static final Staff ISSUED_BY = Staff.builder()
       .name(Name.builder()
           .firstName("NAME")
@@ -300,14 +280,6 @@ class JpaCertificateRepositoryTest {
       .hsaId(new HsaId("HSA_ID"))
       .build();
 
-  private static final Staff ISSUED_BY_OLD_NAME = Staff.builder()
-      .name(Name.builder()
-          .firstName("OLD")
-          .middleName("OLD")
-          .lastName("OLD")
-          .build())
-      .hsaId(new HsaId("HSA_ID"))
-      .build();
 
   private static final StaffEntity ISSUED_BY_ENTITY = StaffEntity.builder()
       .firstName("NAME")
@@ -360,24 +332,6 @@ class JpaCertificateRepositoryTest {
       .placeholder(false)
       .build();
 
-  private static final CertificateEntity MUTABLE_SIGNED_CERTIFICATE_ENTITY =
-      CertificateEntity.builder()
-          .revision(1L)
-          .certificateId("ID")
-          .modified(TIMESTAMP)
-          .signed(TIMESTAMP)
-          .created(TIMESTAMP)
-          .careProvider(CARE_PROVIDER_ENTITY)
-          .careUnit(CARE_UNIT_ENTITY)
-          .createdBy(ISSUED_BY_ENTITY)
-          .issuedOnUnit(ISSUED_ON_UNIT_ENTITY)
-          .issuedBy(ISSUED_BY_ENTITY)
-          .patient(PATIENT_ENTITY)
-          .certificateModel(MODEL)
-          .status(new CertificateStatusEntity(1, Status.SIGNED.name()))
-          .data(DATA)
-          .placeholder(false)
-          .build();
 
   private static final Certificate EXPECTED_CERTIFICATE = MedicalCertificate.builder()
       .revision(new Revision(1L))
@@ -400,26 +354,6 @@ class JpaCertificateRepositoryTest {
       )
       .build();
 
-  private static final Certificate EXPECTED_CERTIFICATE_VERSIONED = MedicalCertificate.builder()
-      .revision(new Revision(1L))
-      .id(new CertificateId("ID"))
-      .status(Status.SIGNED)
-      .created(TIMESTAMP)
-      .modified(TIMESTAMP)
-      .signed(TIMESTAMP)
-      .status(Status.SIGNED)
-      .certificateModel(CONVERTED_MODEL)
-      .certificateMetaData(
-          CertificateMetaData.builder()
-              .issuer(ISSUED_BY_OLD_NAME)
-              .careProvider(CARE_PROVIDER)
-              .careUnit(CARE_UNIT)
-              .issuingUnit(ISSUED_ON_UNIT_OLD_NAME)
-              .patient(PATIENT_OLD_NAME)
-              .creator(ISSUED_BY)
-              .build()
-      )
-      .build();
 
   @Nested
   class Create {

@@ -71,7 +71,7 @@ public class UnitRepository {
   private UnitEntity saveUnit(UnitEntity unitEntity, UnitEntity newUnitEntity) {
     if (unitEntity.hasDiff(newUnitEntity)) {
       try {
-        metadataVersionRepository.saveUnit(unitEntity, newUnitEntity);
+        metadataVersionRepository.saveUnitVersion(unitEntity, newUnitEntity);
         entityManager.refresh(unitEntity);
       } catch (OptimisticLockException | ObjectOptimisticLockingFailureException e) {
         log.info("Skipped updating UnitEntity {} because it was updated concurrently",

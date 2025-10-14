@@ -65,15 +65,15 @@ public class MetadataVersionRepository implements MetadataRepository {
   }
 
   @Transactional(TxType.REQUIRES_NEW)
-  public void saveUnit(UnitEntity unitEntity, UnitEntity newUnitEntity) {
+  public void saveUnitVersion(UnitEntity unitEntity, UnitEntity newUnitEntity) {
     final var unitVersionEntity = UnitVersionEntityMapper.toUnitVersion(unitEntity);
     unitEntity.updateWith(newUnitEntity);
     unitEntityRepository.save(unitEntity);
-    saveUnitVersion(unitVersionEntity);
+    updateUnitVersionHistory(unitVersionEntity);
   }
 
 
-  private void saveUnitVersion(UnitVersionEntity unitVersionEntity) {
+  private void updateUnitVersionHistory(UnitVersionEntity unitVersionEntity) {
     final var latestVersion = unitVersionEntityRepository
         .findFirstByHsaIdOrderByValidFromDesc(unitVersionEntity.getHsaId());
     latestVersion.ifPresent(
@@ -115,8 +115,10 @@ public class MetadataVersionRepository implements MetadataRepository {
     final var staffMap = getStaffVersionsWhenSigned(
         List.of(metadata.issuer(), metadata.creator()), signedAt);
     final var unitMap = getUnitVersionsWhenSigned(
-        List.of(metadata.issuingUnit().hsaId().id(), metadata.careUnit().hsaId().id(),
-            metadata.careProvider().hsaId().id()),
+        List.of(metadata.careProvider().hsaId().id(),
+            metadata.careUnit().hsaId().id(),
+            metadata.issuingUnit().hsaId().id()
+        ),
         signedAt);
 
     return CertificateMetaData.builder()
