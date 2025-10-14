@@ -135,7 +135,6 @@ public interface Certificate {
     return false;
   }
 
-  String fileName();
 
   void fillFromCertificate(Certificate certificate);
 }

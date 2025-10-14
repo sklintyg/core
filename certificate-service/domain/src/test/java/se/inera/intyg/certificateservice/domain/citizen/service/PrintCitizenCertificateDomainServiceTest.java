@@ -78,7 +78,7 @@ class PrintCitizenCertificateDomainServiceTest {
     void shouldThrowIfPatientIdDoesNotMatchCitizen() {
       assertThrows(CitizenCertificateForbidden.class,
           () -> printCitizenCertificateDomainService.get(CERTIFICATE_ID, LILLTOLVAN_PERSON_ID,
-              ADDITIONAL_INFO_TEXT, HIDDEN)
+              ADDITIONAL_INFO_TEXT, List.of(HIDDEN))
       );
     }
 
@@ -90,7 +90,7 @@ class PrintCitizenCertificateDomainServiceTest {
           List.of(HIDDEN))).thenReturn(PDF);
 
       final var response = printCitizenCertificateDomainService.get(CERTIFICATE_ID,
-          TOLVAN_PERSON_ID, ADDITIONAL_INFO_TEXT, HIDDEN);
+          TOLVAN_PERSON_ID, ADDITIONAL_INFO_TEXT, List.of(HIDDEN));
 
       assertEquals(PDF, response);
     }
@@ -103,7 +103,7 @@ class PrintCitizenCertificateDomainServiceTest {
 
     assertThrows(CitizenCertificateForbidden.class,
         () -> printCitizenCertificateDomainService.get(CERTIFICATE_ID, LILLTOLVAN_PERSON_ID,
-            ADDITIONAL_INFO_TEXT, HIDDEN)
+            ADDITIONAL_INFO_TEXT, List.of(HIDDEN))
     );
   }
 

@@ -17,7 +17,7 @@ public class PrintCitizenCertificateDomainService {
   private final PdfGeneratorProvider pdfGeneratorProvider;
 
   public Pdf get(CertificateId certificateId, PersonId personId, String additionalInfoText,
-      ElementId hiddenElement) {
+      List<ElementId> hiddenElements) {
 
     final var certificate = certificateRepository.getById(certificateId);
 
@@ -35,6 +35,6 @@ public class PrintCitizenCertificateDomainService {
     }
 
     return pdfGeneratorProvider.provider(certificate)
-        .generate(certificate, additionalInfoText, true, List.of(hiddenElement));
+        .generate(certificate, additionalInfoText, true, hiddenElements);
   }
 }

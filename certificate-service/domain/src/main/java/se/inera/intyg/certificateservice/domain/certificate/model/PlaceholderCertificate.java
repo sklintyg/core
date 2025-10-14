@@ -307,9 +307,4 @@ public class PlaceholderCertificate implements Certificate {
   public void fillFromCertificate(Certificate certificate) {
     throw new IllegalStateException("Cannot fill from certificate for a placeholder certificate");
   }
-
-  @Override
-  public String fileName() {
-    throw new IllegalStateException("Cannot get file name for a placeholder certificate");
-  }
 }

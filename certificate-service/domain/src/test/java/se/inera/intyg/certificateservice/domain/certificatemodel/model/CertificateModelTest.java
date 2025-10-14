@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7210_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementDataConstants.DATE_ELEMENT_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementSpecification.DATE_ELEMENT_SPECIFICATION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementSpecification.dateElementSpecificationBuilder;
@@ -808,5 +809,10 @@ class CertificateModelTest {
         .build();
 
     assertEquals(1, certificateModel.compare(firstElement, secondElement));
+  }
+
+  @Test
+  void shouldReturnFileNameForCertificate() {
+    assertEquals("intyg_om_graviditet", FK7210_CERTIFICATE_MODEL.fileName());
   }
 }

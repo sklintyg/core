@@ -618,16 +618,4 @@ public class MedicalCertificate implements Certificate {
     return data -> this.certificateModel.elementSpecification(data.id()).configuration()
         .convert(data, certificate.certificateModel().elementSpecification(data.id()));
   }
-
-  @Override
-  public String fileName() {
-    return this.certificateModel.name()
-        .replace("å", "a")
-        .replace("ä", "a")
-        .replace("ö", "o")
-        .replace(" ", "_")
-        .replace("–", "")
-        .replace("__", "_")
-        .toLowerCase();
-  }
 }

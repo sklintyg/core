@@ -154,4 +154,15 @@ public class CertificateModel implements Comparator<ElementId> {
   public Optional<CertificateModelId> getAbleToCreateDraftForModel() {
     return Optional.ofNullable(ableToCreateDraftForModel);
   }
+
+  public String fileName() {
+    return this.name()
+        .replace("å", "a")
+        .replace("ä", "a")
+        .replace("ö", "o")
+        .replace(" ", "_")
+        .replace("–", "")
+        .replace("__", "_")
+        .toLowerCase();
+  }
 }

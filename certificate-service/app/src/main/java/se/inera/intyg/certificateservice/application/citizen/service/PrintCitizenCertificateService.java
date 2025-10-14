@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.application.citizen.service;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.application.citizen.dto.PrintCitizenCertificateRequest;
@@ -27,7 +28,8 @@ public class PrintCitizenCertificateService {
             .type(request.getPersonId().getType().toPersonIdType())
             .build(),
         request.getAdditionalInfo(),
-        new ElementId(request.getCustomizationId())
+        request.getCustomizationId() != null ? List.of(new ElementId(request.getCustomizationId()))
+            : List.of()
     );
 
     return PrintCitizenCertificateResponse.builder()

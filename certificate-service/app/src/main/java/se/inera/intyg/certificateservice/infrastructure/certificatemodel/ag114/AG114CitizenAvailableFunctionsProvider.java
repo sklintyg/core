@@ -1,9 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag114;
 
 import static se.inera.intyg.certificateservice.application.citizen.service.converter.AvailableFunctionsFactory.AVAILABLE_FUNCTION_PRINT_NAME;
-import static se.inera.intyg.certificateservice.application.citizen.service.converter.AvailableFunctionsFactory.SEND_CERTIFICATE_BODY;
-import static se.inera.intyg.certificateservice.application.citizen.service.converter.AvailableFunctionsFactory.SEND_CERTIFICATE_NAME;
-import static se.inera.intyg.certificateservice.application.citizen.service.converter.AvailableFunctionsFactory.SEND_CERTIFICATE_TITLE;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag114.elements.QuestionDiagnos.QUESTION_DIAGNOS_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag114.elements.QuestionFormedlaDiagnos.QUESTION_FORMEDLA_DIAGNOS_ID;
 
@@ -38,14 +35,6 @@ public class AG114CitizenAvailableFunctionsProvider implements
   public List<CitizenAvailableFunction> of(Certificate certificate) {
     final var functions = new ArrayList<CitizenAvailableFunction>();
 
-    functions.add(CitizenAvailableFunction.builder()
-        .title(SEND_CERTIFICATE_TITLE)
-        .name(SEND_CERTIFICATE_NAME)
-        .type(CitizenAvailableFunctionType.SEND_CERTIFICATE)
-        .body(SEND_CERTIFICATE_BODY)
-        .enabled(certificate.isSendActiveForCitizen())
-        .build());
-
     if (isDiagnosisIncluded(certificate)) {
       functions.add(
           CitizenAvailableFunction.builder()
@@ -59,7 +48,7 @@ public class AG114CitizenAvailableFunctionsProvider implements
                   List.of(
                       CitizenAvailableFunctionInformation.builder()
                           .type(CitizenAvailableFunctionInformationType.FILENAME)
-                          .text(certificate.fileName())
+                          .text(certificate.certificateModel().fileName())
                           .build(),
                       CitizenAvailableFunctionInformation.builder()
                           .type(CitizenAvailableFunctionInformationType.OPTIONS)
@@ -81,7 +70,7 @@ public class AG114CitizenAvailableFunctionsProvider implements
               List.of(
                   CitizenAvailableFunctionInformation.builder()
                       .type(CitizenAvailableFunctionInformationType.FILENAME)
-                      .text(certificate.fileName())
+                      .text(certificate.certificateModel().fileName())
                       .build()
               )
           )
@@ -93,7 +82,7 @@ public class AG114CitizenAvailableFunctionsProvider implements
     return functions;
   }
 
-  boolean isDiagnosisIncluded(Certificate certificate) {
+  private boolean isDiagnosisIncluded(Certificate certificate) {
     return getBooleanValue(certificate, QUESTION_FORMEDLA_DIAGNOS_ID);
   }
 

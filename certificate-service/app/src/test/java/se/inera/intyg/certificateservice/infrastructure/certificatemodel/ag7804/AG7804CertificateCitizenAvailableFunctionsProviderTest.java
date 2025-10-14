@@ -1,8 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionDiagnos.QUESTION_DIAGNOS_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionFormedlaInfoOmDiagnosTillAG.QUESTION_FORMEDLA_DIAGNOS_ID;
@@ -13,59 +11,34 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenAvailableFunction;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenAvailableFunctionInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenAvailableFunctionInformationType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenAvailableFunctionType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 
+@ExtendWith(MockitoExtension.class)
 class AG7804CertificateCitizenAvailableFunctionsProviderTest {
 
   private AG7804CitizenAvailableFunctionsProvider provider;
+
+  @Mock
   private Certificate certificate;
+  @Mock
+  private CertificateModel certificateModel;
 
   @BeforeEach
   void setUp() {
     provider = new AG7804CitizenAvailableFunctionsProvider();
-    certificate = mock(Certificate.class);
-    when(certificate.fileName()).thenReturn("ag7804-certificate.pdf");
-    when(certificate.isSendActiveForCitizen()).thenReturn(true);
-  }
-
-  @Nested
-  class SendCertificateFunction {
-
-    @Test
-    void shouldIncludeSendCertificateFunctionIfSmittbararAndDiagnos() {
-      when(certificate.getElementDataById(QUESTION_SMITTBARARPENNING_ID))
-          .thenReturn(Optional.of(ElementData.builder()
-              .id(new ElementId(QUESTION_SMITTBARARPENNING_ID.id()))
-              .value(ElementValueBoolean.builder().value(false).build())
-              .build()));
-      when(certificate.getElementDataById(QUESTION_FORMEDLA_DIAGNOS_ID))
-          .thenReturn(Optional.of(ElementData.builder()
-              .id(new ElementId(QUESTION_FORMEDLA_DIAGNOS_ID.id()))
-              .value(ElementValueBoolean.builder().value(false).build())
-              .build()));
-
-      final var expectedSendFunction = CitizenAvailableFunction.builder()
-          .type(CitizenAvailableFunctionType.SEND_CERTIFICATE)
-          .name("Skicka intyg")
-          .title("Skicka intyg")
-          .body(
-              "Från den här sidan kan du välja att skicka ditt intyg digitalt till mottagaren. Endast mottagare som kan ta emot digitala intyg visas nedan.")
-          .enabled(true)
-          .information(List.of())
-          .build();
-
-      final var result = provider.of(certificate);
-
-      assertEquals(expectedSendFunction, result.getFirst());
-    }
+    when(certificateModel.fileName()).thenReturn("ag7804-certificate.pdf");
+    when(certificate.certificateModel()).thenReturn(certificateModel);
   }
 
   @Nested
@@ -84,16 +57,6 @@ class AG7804CertificateCitizenAvailableFunctionsProviderTest {
               .value(ElementValueBoolean.builder().value(false).build())
               .build()));
 
-      final var expectedSendFunction = CitizenAvailableFunction.builder()
-          .type(CitizenAvailableFunctionType.SEND_CERTIFICATE)
-          .name("Skicka intyg")
-          .title("Skicka intyg")
-          .body(
-              "Från den här sidan kan du välja att skicka ditt intyg digitalt till mottagaren. Endast mottagare som kan ta emot digitala intyg visas nedan.")
-          .enabled(true)
-          .information(List.of())
-          .build();
-
       final var expectedAttentionFunction = CitizenAvailableFunction.builder()
           .type(CitizenAvailableFunctionType.ATTENTION)
           .name("Presentera informationsruta")
@@ -107,10 +70,9 @@ class AG7804CertificateCitizenAvailableFunctionsProviderTest {
 
       final var result = provider.of(certificate);
 
-      assertEquals(3, result.size());
-      assertEquals(expectedSendFunction, result.getFirst());
-      assertEquals(expectedAttentionFunction, result.get(1));
-      assertEquals(CitizenAvailableFunctionType.PRINT_CERTIFICATE, result.get(2).type());
+      assertEquals(2, result.size());
+      assertEquals(expectedAttentionFunction, result.getFirst());
+      assertEquals(CitizenAvailableFunctionType.PRINT_CERTIFICATE, result.get(1).type());
     }
 
     @Test
@@ -128,9 +90,8 @@ class AG7804CertificateCitizenAvailableFunctionsProviderTest {
 
       final var result = provider.of(certificate);
 
-      assertEquals(2, result.size());
-      assertEquals(CitizenAvailableFunctionType.SEND_CERTIFICATE, result.getFirst().type());
-      assertEquals(CitizenAvailableFunctionType.PRINT_CERTIFICATE, result.get(1).type());
+      assertEquals(1, result.size());
+      assertEquals(CitizenAvailableFunctionType.PRINT_CERTIFICATE, result.getFirst().type());
     }
 
     @Test
@@ -145,9 +106,8 @@ class AG7804CertificateCitizenAvailableFunctionsProviderTest {
 
       final var result = provider.of(certificate);
 
-      assertEquals(2, result.size());
-      assertEquals(CitizenAvailableFunctionType.SEND_CERTIFICATE, result.getFirst().type());
-      assertEquals(CitizenAvailableFunctionType.PRINT_CERTIFICATE, result.get(1).type());
+      assertEquals(1, result.size());
+      assertEquals(CitizenAvailableFunctionType.PRINT_CERTIFICATE, result.getFirst().type());
     }
   }
 
@@ -166,16 +126,6 @@ class AG7804CertificateCitizenAvailableFunctionsProviderTest {
               .id(new ElementId(QUESTION_FORMEDLA_DIAGNOS_ID.id()))
               .value(ElementValueBoolean.builder().value(true).build())
               .build()));
-
-      final var expectedSendFunction = CitizenAvailableFunction.builder()
-          .type(CitizenAvailableFunctionType.SEND_CERTIFICATE)
-          .name("Skicka intyg")
-          .title("Skicka intyg")
-          .body(
-              "Från den här sidan kan du välja att skicka ditt intyg digitalt till mottagaren. Endast mottagare som kan ta emot digitala intyg visas nedan.")
-          .enabled(true)
-          .information(List.of())
-          .build();
 
       final var expectedCustomizeFunction = CitizenAvailableFunction.builder()
           .type(CitizenAvailableFunctionType.CUSTOMIZE_PRINT_CERTIFICATE)
@@ -206,9 +156,8 @@ class AG7804CertificateCitizenAvailableFunctionsProviderTest {
 
       final var result = provider.of(certificate);
 
-      assertEquals(2, result.size());
-      assertEquals(expectedSendFunction, result.getFirst());
-      assertEquals(expectedCustomizeFunction, result.get(1));
+      assertEquals(1, result.size());
+      assertEquals(expectedCustomizeFunction, result.getFirst());
     }
 
     @Test
@@ -226,9 +175,8 @@ class AG7804CertificateCitizenAvailableFunctionsProviderTest {
 
       final var result = provider.of(certificate);
 
-      assertEquals(2, result.size());
-      assertEquals(CitizenAvailableFunctionType.SEND_CERTIFICATE, result.getFirst().type());
-      assertEquals(CitizenAvailableFunctionType.PRINT_CERTIFICATE, result.get(1).type());
+      assertEquals(1, result.size());
+      assertEquals(CitizenAvailableFunctionType.PRINT_CERTIFICATE, result.getFirst().type());
     }
 
     @Test
@@ -243,41 +191,8 @@ class AG7804CertificateCitizenAvailableFunctionsProviderTest {
 
       final var result = provider.of(certificate);
 
-      assertEquals(2, result.size());
-      assertEquals(CitizenAvailableFunctionType.SEND_CERTIFICATE, result.getFirst().type());
-      assertEquals(CitizenAvailableFunctionType.PRINT_CERTIFICATE, result.get(1).type());
-    }
-  }
-
-  @Nested
-  class ErrorHandling {
-
-    @Test
-    void shouldThrowIllegalStateExceptionWhenSmittbararpenningElementHasWrongType() {
-      when(certificate.getElementDataById(QUESTION_SMITTBARARPENNING_ID))
-          .thenReturn(Optional.of(ElementData.builder()
-              .id(new ElementId(QUESTION_SMITTBARARPENNING_ID.id()))
-              .value(ElementValueText.builder().text("not a boolean").build())
-              .build()));
-
-      final var exception = assertThrows(IllegalStateException.class,
-          () -> provider.isSmittbararpenning(certificate));
-
-      assertEquals("Element value is not of type ElementValueBoolean", exception.getMessage());
-    }
-
-    @Test
-    void shouldThrowIllegalStateExceptionWhenDiagnosisElementHasWrongType() {
-      when(certificate.getElementDataById(QUESTION_FORMEDLA_DIAGNOS_ID))
-          .thenReturn(Optional.of(ElementData.builder()
-              .id(new ElementId(QUESTION_FORMEDLA_DIAGNOS_ID.id()))
-              .value(ElementValueText.builder().text("not a boolean").build())
-              .build()));
-
-      final var exception = assertThrows(IllegalStateException.class,
-          () -> provider.isDiagnosisIncluded(certificate));
-
-      assertEquals("Element value is not of type ElementValueBoolean", exception.getMessage());
+      assertEquals(1, result.size());
+      assertEquals(CitizenAvailableFunctionType.PRINT_CERTIFICATE, result.getFirst().type());
     }
   }
 }

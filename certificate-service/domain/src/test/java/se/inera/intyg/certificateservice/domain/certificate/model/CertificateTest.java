@@ -2875,16 +2875,4 @@ class CertificateTest {
       assertEquals(List.of(elementData), medicalCertificate.elementData());
     }
   }
-
-  @Test
-  void shouldReturnFileNameForCertificate() {
-    final var certificate = fk7210CertificateBuilder()
-        .status(Status.SIGNED)
-        .certificateModel(CertificateModel.builder()
-            .name("Intyg om graviditet")
-            .build())
-        .build();
-
-    assertEquals("intyg_om_graviditet", certificate.fileName());
-  }
 }

@@ -69,7 +69,7 @@ public class AvailableFunctionsFactory {
                 List.of(
                     InformationDTO.builder()
                         .type(InformationType.FILENAME)
-                        .text(certificate.fileName())
+                        .text(certificate.certificateModel().fileName())
                         .build()
                 )
             )

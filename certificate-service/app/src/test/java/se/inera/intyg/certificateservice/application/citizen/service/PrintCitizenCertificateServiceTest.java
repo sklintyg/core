@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -57,7 +58,7 @@ class PrintCitizenCertificateServiceTest {
                 .type(PersonIdType.PERSONAL_IDENTITY_NUMBER)
                 .build(),
             ADDITIONAL_INFO_TEXT,
-            ELEMENT_ID
+            List.of(ELEMENT_ID)
         )
     ).thenReturn(PDF);
   }
