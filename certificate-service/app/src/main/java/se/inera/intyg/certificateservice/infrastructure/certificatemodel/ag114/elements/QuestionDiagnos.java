@@ -5,6 +5,8 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificate.model.CustomMapperId;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenPdfConfiguration;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDiagnosisListItem;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -14,7 +16,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDiagnosis;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemIcd10Se;
 
 public class QuestionDiagnos {
@@ -64,8 +66,22 @@ public class QuestionDiagnos {
                 .build()
         ))
         .shouldValidate(
-            ShouldValidateFactory.radioBooleans(List.of(QUESTION_FORMEDLA_DIAGNOS_ID), true))
+            ElementDataPredicateFactory.radioBooleans(List.of(QUESTION_FORMEDLA_DIAGNOS_ID), true))
         .mapping(new ElementMapping(CustomMapperId.UNIFIED_DIAGNOSIS_LIST))
+        .pdfConfiguration(
+            CitizenPdfConfiguration.builder()
+                .hiddenBy(QUESTION_DIAGNOS_ID)
+                .shouldHide(
+                    ElementDataPredicateFactory.radioBooleans(List.of(QUESTION_FORMEDLA_DIAGNOS_ID),
+                        false)
+                )
+                .replacementValue(
+                    ElementSimplifiedValueText.builder()
+                        .text("På patientens begäran uppges inte diagnos")
+                        .build()
+                )
+                .build()
+        )
         .build();
   }
 }

@@ -14,7 +14,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfig
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
 
 public class QuestionAngeVarforDuVillHaKontakt {
 
@@ -62,7 +62,7 @@ public class QuestionAngeVarforDuVillHaKontakt {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.checkboxBoolean(QUESTION_KONTAKT_ID, true)
+            ElementDataPredicateFactory.checkboxBoolean(QUESTION_KONTAKT_ID, true)
         )
         .includeWhenRenewing(false)
         .mapping(new ElementMapping(QUESTION_KONTAKT_ID, null))

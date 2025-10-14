@@ -38,6 +38,7 @@ import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateRecipientFactory;
 
 @Component
 @RequiredArgsConstructor
@@ -105,6 +106,7 @@ public class CertificateModelFactoryAG114 implements CertificateModelFactory {
         .detailedDescription(DETAILED_DESCRIPTION.replaceAll("\\R", ""))
         .activeFrom(activeFrom)
         .availableForCitizen(true)
+        .recipient(CertificateRecipientFactory.skr())
         .texts(List.of(
             CertificateText.builder()
                 .text(PREAMBLE_TEXT)
@@ -113,6 +115,7 @@ public class CertificateModelFactoryAG114 implements CertificateModelFactory {
         ))
         .summaryProvider(new AG114CertificateSummaryProvider())
         .certificateActionSpecifications(AG114CertificateActionSpecification.create())
+        .citizenAvailableFunctionsProvider(new AG114CitizenAvailableFunctionsProvider())
         .messageActionSpecifications(List.of())
         .elementSpecifications(List.of(
             categoryGrundForMedicinsktUnderlag(

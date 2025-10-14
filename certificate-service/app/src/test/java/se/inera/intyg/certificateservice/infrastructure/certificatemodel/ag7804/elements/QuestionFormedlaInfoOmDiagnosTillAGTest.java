@@ -1,6 +1,9 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionDiagnos.QUESTION_DIAGNOS_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionFormedlaInfoOmDiagnosTillAG.FORMEDLA_DIAGNOSIS_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionFormedlaInfoOmDiagnosTillAG.QUESTION_FORMEDLA_DIAGNOS_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionFormedlaInfoOmDiagnosTillAG.questionFormedlaInfoOmDiagnosTillAG;
@@ -10,7 +13,9 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenPdfConfiguration;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleAutofill;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
@@ -88,4 +93,20 @@ class QuestionFormedlaInfoOmDiagnosTillAGTest {
     assertEquals(expectedValidations, element.validations());
   }
 
+  @Test
+  void shouldReturnPdfConfiguration() {
+    final var response = QuestionFormedlaInfoOmDiagnosTillAG.questionFormedlaInfoOmDiagnosTillAG();
+
+    final var pdfConfig = (CitizenPdfConfiguration) response.pdfConfiguration();
+
+    assertAll(
+        () -> assertEquals(QUESTION_DIAGNOS_ID, pdfConfig.hiddenBy()),
+        () -> assertNotNull(pdfConfig.shouldHide()),
+        () -> assertEquals(
+            ElementSimplifiedValueText.builder()
+                .text("På patientens begäran uppges inte diagnos")
+                .build(), pdfConfig.replacementValue()
+        )
+    );
+  }
 }

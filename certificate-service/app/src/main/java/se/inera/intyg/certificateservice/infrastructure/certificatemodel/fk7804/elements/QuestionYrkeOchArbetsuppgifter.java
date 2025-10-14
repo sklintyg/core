@@ -14,7 +14,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldI
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
 
 public class QuestionYrkeOchArbetsuppgifter {
 
@@ -58,7 +58,7 @@ public class QuestionYrkeOchArbetsuppgifter {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.codeList(
+            ElementDataPredicateFactory.codeList(
                 QUESTION_SYSSELSATTNING_ID,
                 List.of(new FieldId(NUVARANDE_ARBETE.code()))
             )

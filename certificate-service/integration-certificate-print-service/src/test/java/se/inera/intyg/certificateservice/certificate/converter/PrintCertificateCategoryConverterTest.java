@@ -19,6 +19,7 @@ import se.inera.intyg.certificateservice.certificate.dto.PrintCertificateQuestio
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
+import se.inera.intyg.certificateservice.domain.certificate.service.PdfGeneratorOptions;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -36,6 +37,7 @@ class PrintCertificateCategoryConverterTest {
 
   private static final PrintCertificateQuestionDTO PRINT_CERTIFICATE_QUESTION_DTO =
       PrintCertificateQuestionDTO.builder().build();
+  private static final boolean IS_CITIZEN_FORMAT = true;
 
 
   public static final String CATEGORY_NAME = "Beräknat födelsedatum kategori";
@@ -67,10 +69,27 @@ class PrintCertificateCategoryConverterTest {
           )
           .build())
       .build();
+  private static final List<ElementId> HIDDEN = List.of(new ElementId("1"));
+  private static final PdfGeneratorOptions OPTIONS = PdfGeneratorOptions.builder()
+      .additionalInfoText("Text")
+      .citizenFormat(true)
+      .hiddenElements(List.of())
+      .build();
+  private static final PdfGeneratorOptions OPTIONS_WITH_ELEMENT = PdfGeneratorOptions.builder()
+      .additionalInfoText("Text")
+      .citizenFormat(true)
+      .hiddenElements(List.of(QUESTION_BERAKNAT_FODELSEDATUM_ID))
+      .build();
+  private static final PdfGeneratorOptions OPTIONS_WITH_HIDDEN = PdfGeneratorOptions.builder()
+      .additionalInfoText("Text")
+      .citizenFormat(true)
+      .hiddenElements(HIDDEN)
+      .build();
+
 
   @Test
   void shouldSetName() {
-    final var response = printCertificateCategoryConverter.convert(CERTIFICATE, KAT_1);
+    final var response = printCertificateCategoryConverter.convert(CERTIFICATE, KAT_1, OPTIONS);
 
     assertEquals(
         CERTIFICATE.certificateModel().elementSpecifications().getFirst().configuration().name(),
@@ -79,10 +98,16 @@ class PrintCertificateCategoryConverterTest {
 
   @Test
   void shouldSetId() {
-    final var response = printCertificateCategoryConverter.convert(CERTIFICATE, KAT_1);
-
+    final var response = printCertificateCategoryConverter.convert(CERTIFICATE, KAT_1, OPTIONS);
     assertEquals(CERTIFICATE.certificateModel().elementSpecifications().getFirst().id().id(),
         response.getId());
+  }
+
+  @Test
+  void shouldNotConvertChildrenIfPartOfHiddenElementIds() {
+    final var response = printCertificateCategoryConverter.convert(CERTIFICATE, KAT_1,
+        OPTIONS_WITH_ELEMENT);
+    assertEquals(List.of(), response.getQuestions());
   }
 
   @Nested
@@ -92,13 +117,14 @@ class PrintCertificateCategoryConverterTest {
     void setUp() {
       when(printCertificateQuestionConverter.convert(
           CERTIFICATE.certificateModel().elementSpecifications().getFirst().children().getFirst(),
-          CERTIFICATE
+          CERTIFICATE, OPTIONS_WITH_HIDDEN
       )).thenReturn(Optional.of(PRINT_CERTIFICATE_QUESTION_DTO));
     }
 
     @Test
     void shouldSetChildren() {
-      final var response = printCertificateCategoryConverter.convert(CERTIFICATE, KAT_1);
+      final var response = printCertificateCategoryConverter.convert(CERTIFICATE, KAT_1,
+          OPTIONS_WITH_HIDDEN);
       assertEquals(List.of(PRINT_CERTIFICATE_QUESTION_DTO), response.getQuestions());
     }
   }

@@ -11,6 +11,7 @@ import se.inera.intyg.certificateservice.certificate.integration.PrintCertificat
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Pdf;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGenerator;
+import se.inera.intyg.certificateservice.domain.certificate.service.PdfGeneratorOptions;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 
@@ -23,16 +24,21 @@ public class GeneralPdfGenerator implements PdfGenerator {
   private final PrintCertificateFromCertificatePrintService printCertificateFromCertificatePrintService;
 
   @Override
-  public Pdf generate(Certificate certificate, String additionalInfoText, boolean isCitizenFormat) {
+  public Pdf generate(Certificate certificate, PdfGeneratorOptions options) {
     final var fileName = getFileName(certificate);
 
     final var request = PrintCertificateRequestDTO.builder()
-        .metadata(printCertificateMetadataConverter.convert(certificate, isCitizenFormat, fileName))
+        .metadata(printCertificateMetadataConverter.convert(certificate, options.citizenFormat(),
+            fileName))
         .categories(
             certificate.certificateModel().elementSpecifications()
                 .stream()
                 .filter(isNotContactInformation())
-                .map(element -> printCertificateCategoryConverter.convert(certificate, element))
+                .map(element -> printCertificateCategoryConverter.convert(
+                    certificate,
+                    element,
+                    options)
+                )
                 .filter(hasQuestions())
                 .toList()
         )
@@ -68,3 +74,4 @@ public class GeneralPdfGenerator implements PdfGenerator {
   }
 
 }
+

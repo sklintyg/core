@@ -9,7 +9,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0003;
 
 public class QuestionSvarareAtergangVidOjamnArbetstid {
@@ -68,7 +68,7 @@ public class QuestionSvarareAtergangVidOjamnArbetstid {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.dateRangeList(QUESTION_NEDSATTNING_ARBETSFORMAGA_ID,
+            ElementDataPredicateFactory.dateRangeList(QUESTION_NEDSATTNING_ARBETSFORMAGA_ID,
                 List.of(
                     new FieldId(CodeSystemKvFkmu0003.HALFTEN.code()),
                     new FieldId(CodeSystemKvFkmu0003.TRE_FJARDEDEL.code()),

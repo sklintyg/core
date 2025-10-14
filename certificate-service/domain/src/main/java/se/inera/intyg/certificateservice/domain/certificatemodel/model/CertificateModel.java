@@ -47,6 +47,7 @@ public class CertificateModel implements Comparator<ElementId> {
   @With
   CertificateActionFactory certificateActionFactory;
   SickLeaveProvider sickLeaveProvider;
+  CitizenAvailableFunctionsProvider citizenAvailableFunctionsProvider;
   CertificateModelId ableToCreateDraftForModel;
 
   public List<CertificateAction> actions() {
@@ -152,5 +153,22 @@ public class CertificateModel implements Comparator<ElementId> {
 
   public Optional<CertificateModelId> getAbleToCreateDraftForModel() {
     return Optional.ofNullable(ableToCreateDraftForModel);
+  }
+
+  public CitizenAvailableFunctionsProvider citizenAvailableFunctionsProvider() {
+    return citizenAvailableFunctionsProvider != null
+        ? citizenAvailableFunctionsProvider
+        : new DefaultCitizenAvailableFunctionsProvider();
+  }
+
+  public String fileName() {
+    return this.name()
+        .replace("å", "a")
+        .replace("ä", "a")
+        .replace("ö", "o")
+        .replace(" ", "_")
+        .replace("–", "")
+        .replace("__", "_")
+        .toLowerCase();
   }
 }

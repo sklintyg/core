@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Pdf;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGenerator;
+import se.inera.intyg.certificateservice.domain.certificate.service.PdfGeneratorOptions;
 
 @Component("CertificatePdfGenerator")
 @RequiredArgsConstructor
@@ -15,13 +16,18 @@ public class CertificatePdfGenerator implements PdfGenerator {
 
   private final CertificatePdfFillService certificatePdfFillService;
 
-  public Pdf generate(Certificate certificate, String additionalInfoText, boolean isCitizenFormat) {
+  @Override
+  public Pdf generate(Certificate certificate, PdfGeneratorOptions options) {
+
+    if (options.hiddenElements() != null && !options.hiddenElements().isEmpty()) {
+      throw new IllegalArgumentException("Cannot hide elements for template printing");
+    }
 
     try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
       final var filledPdf = certificatePdfFillService.fillDocument(
           certificate,
-          additionalInfoText,
-          isCitizenFormat
+          options.additionalInfoText(),
+          options.citizenFormat()
       );
 
       filledPdf.getDocumentInformation().setTitle(getFileName(certificate));
@@ -52,3 +58,4 @@ public class CertificatePdfGenerator implements PdfGenerator {
         .toLowerCase();
   }
 }
+

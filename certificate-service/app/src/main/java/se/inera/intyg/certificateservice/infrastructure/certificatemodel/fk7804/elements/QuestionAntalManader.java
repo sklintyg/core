@@ -12,7 +12,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfig
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationInteger;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0006;
 
 public class QuestionAntalManader {
@@ -66,7 +66,7 @@ public class QuestionAntalManader {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.codes(
+            ElementDataPredicateFactory.codes(
                 QUESTION_PROGNOS_ID,
                 List.of(
                     new FieldId(CodeSystemKvFkmu0006.ATER_X_ANTAL_MANADER.code())

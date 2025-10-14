@@ -135,5 +135,6 @@ public interface Certificate {
     return false;
   }
 
+
   void fillFromCertificate(Certificate certificate);
 }

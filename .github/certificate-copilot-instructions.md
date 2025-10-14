@@ -79,7 +79,8 @@ This document describes how a new certificate model is created.
 - Then you need to find the correct ElementConfiguration and place the values such as id etc.
 - For both implementation and tests you should use the examples in the table above since we want the
   code uniform.
-- Use a factory like `ElementRuleFactory` and `ShouldValidateFactory` if you find a method that fits
+- Use a factory like `ElementRuleFactory` and `ElementDataPredicateFactory` if you find a method
+  that fits
 - If a question is a sub question (ElementId is x.x instead of x for example 1.2) it needs to have
   an ElementMapping to the parent question, 1.2 maps to 1 for example.
 

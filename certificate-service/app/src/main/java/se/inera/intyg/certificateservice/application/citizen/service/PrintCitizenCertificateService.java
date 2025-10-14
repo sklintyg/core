@@ -1,11 +1,13 @@
 package se.inera.intyg.certificateservice.application.citizen.service;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.application.citizen.dto.PrintCitizenCertificateRequest;
 import se.inera.intyg.certificateservice.application.citizen.dto.PrintCitizenCertificateResponse;
 import se.inera.intyg.certificateservice.application.citizen.validation.CitizenCertificateRequestValidator;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.citizen.service.PrintCitizenCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 
@@ -25,7 +27,9 @@ public class PrintCitizenCertificateService {
             .id(request.getPersonId().getId())
             .type(request.getPersonId().getType().toPersonIdType())
             .build(),
-        request.getAdditionalInfo()
+        request.getAdditionalInfo(),
+        request.getCustomizationId() != null ? List.of(new ElementId(request.getCustomizationId()))
+            : List.of()
     );
 
     return PrintCitizenCertificateResponse.builder()

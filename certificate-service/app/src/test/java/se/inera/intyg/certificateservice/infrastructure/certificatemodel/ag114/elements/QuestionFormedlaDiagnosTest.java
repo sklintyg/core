@@ -1,11 +1,16 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag114.elements;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag114.elements.QuestionDiagnos.QUESTION_DIAGNOS_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag114.elements.QuestionFormedlaDiagnos.QUESTION_FORMEDLA_DIAGNOS_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag114.elements.QuestionFormedlaDiagnos.QUESTION_FORMEDLA_DIAGNOS_ID;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenPdfConfiguration;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
@@ -57,5 +62,22 @@ class QuestionFormedlaDiagnosTest {
             .build()
     );
     assertEquals(expectedValidations, element.validations());
+  }
+
+  @Test
+  void shouldReturnPdfConfiguration() {
+    final var response = QuestionFormedlaDiagnos.questionFormedlaDiagnos();
+
+    final var pdfConfig = (CitizenPdfConfiguration) response.pdfConfiguration();
+
+    assertAll(
+        () -> assertEquals(QUESTION_DIAGNOS_ID, pdfConfig.hiddenBy()),
+        () -> assertNotNull(pdfConfig.shouldHide()),
+        () -> assertEquals(
+            ElementSimplifiedValueText.builder()
+                .text("På patientens begäran uppges inte diagnos")
+                .build(), pdfConfig.replacementValue()
+        )
+    );
   }
 }

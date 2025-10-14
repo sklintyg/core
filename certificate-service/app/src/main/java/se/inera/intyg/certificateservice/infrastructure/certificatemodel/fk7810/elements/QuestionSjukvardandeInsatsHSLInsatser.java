@@ -15,7 +15,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfig
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
 
 public class QuestionSjukvardandeInsatsHSLInsatser {
 
@@ -62,7 +62,8 @@ public class QuestionSjukvardandeInsatsHSLInsatser {
                     .build()
             )
         )
-        .shouldValidate(ShouldValidateFactory.valueBoolean(QUESTION_SJUKVARDANDE_INSATS_HSL_ID))
+        .shouldValidate(
+            ElementDataPredicateFactory.valueBoolean(QUESTION_SJUKVARDANDE_INSATS_HSL_ID))
         .pdfConfiguration(
             PdfConfigurationText.builder()
                 .pdfFieldId(PDF_FIELD_ID)

@@ -11,7 +11,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
 
 public class QuestionMedicineringBeskrivning {
 
@@ -49,7 +49,7 @@ public class QuestionMedicineringBeskrivning {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.valueBoolean(QUESTION_MEDICINERING_ID)
+            ElementDataPredicateFactory.valueBoolean(QUESTION_MEDICINERING_ID)
         )
         .mapping(
             new ElementMapping(QUESTION_MEDICINERING_ID, null)
