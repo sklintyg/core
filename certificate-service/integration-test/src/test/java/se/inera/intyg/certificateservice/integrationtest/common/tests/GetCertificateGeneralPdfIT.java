@@ -32,12 +32,11 @@ import se.inera.intyg.certificateservice.integrationtest.common.util.Containers;
 public abstract class GetCertificateGeneralPdfIT extends BaseIntegrationIT {
 
 
-  private MockServerClient mockServerClient;
   private CertificatePrintServiceMock certificatePrintServiceMock;
 
   @BeforeEach
   void setupMocks() {
-    this.mockServerClient = new MockServerClient(
+    final var mockServerClient = new MockServerClient(
         Containers.MOCK_SERVER_CONTAINER.getHost(),
         Containers.MOCK_SERVER_CONTAINER.getServerPort()
     );
@@ -45,7 +44,7 @@ public abstract class GetCertificateGeneralPdfIT extends BaseIntegrationIT {
   }
 
   @Test
-  @DisplayName("Om intyget är utfärdat på samma mottagning skall pdf returneras")
+  @DisplayName("Om intyget är utfärdat på samma mottagning ska pdf returneras")
   void shallReturnCertificatePdfIfUnitIsSubUnitAndOnSameUnit() {
     final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
@@ -60,12 +59,12 @@ public abstract class GetCertificateGeneralPdfIT extends BaseIntegrationIT {
 
     assertNotNull(
         pdfData(response.getBody()),
-        "Should return certificate pdf data when exists!"
+        "Should return certificate pdf data when exists"
     );
   }
 
   @Test
-  @DisplayName("Om intyget är utfärdat på mottagning men på samma vårdenhet skall pdf returneras")
+  @DisplayName("Om intyget är utfärdat på mottagning men på samma vårdenhet ska pdf returneras")
   void shallReturnCertificatePdfIfUnitIsCareUnitAndOnSameCareUnit() {
     final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
@@ -82,12 +81,12 @@ public abstract class GetCertificateGeneralPdfIT extends BaseIntegrationIT {
 
     assertNotNull(
         pdfData(response.getBody()),
-        "Should return certificate pdf data when exists!"
+        "Should return certificate pdf data when exists"
     );
   }
 
   @Test
-  @DisplayName("Om intyget är utfärdat på samma vårdenhet skall pdf returneras")
+  @DisplayName("Om intyget är utfärdat på samma vårdenhet ska pdf returneras")
   void shallReturnCertificatePdfIfUnitIsCareUnitAndIssuedOnSameCareUnit() {
     final var testCertificates = testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion())
@@ -106,12 +105,12 @@ public abstract class GetCertificateGeneralPdfIT extends BaseIntegrationIT {
 
     assertNotNull(
         pdfData(response.getBody()),
-        "Should return certificate pdf data when exists!"
+        "Should return certificate pdf data when exists"
     );
   }
 
   @Test
-  @DisplayName("Om intyget är utfärdat på en annan enhet inom samma vårdgivare skall pdf returneras")
+  @DisplayName("Om intyget är utfärdat på en annan enhet inom samma vårdgivare ska pdf returneras")
   void shallReturnPdfIfOnDifferentUnitButSameCareProvider() {
     final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
@@ -132,12 +131,12 @@ public abstract class GetCertificateGeneralPdfIT extends BaseIntegrationIT {
 
     assertNotNull(
         pdfData(response.getBody()),
-        "Should return pdf when exists!"
+        "Should return pdf when exists"
     );
   }
 
   @Test
-  @DisplayName("Om intyget är utfärdat på en annan mottagning skall felkod 403 (FORBIDDEN) returneras")
+  @DisplayName("Om intyget är utfärdat på en annan mottagning ska felkod 403 (FORBIDDEN) returneras")
   void shallReturn403IfUnitIsSubUnitAndNotOnSameUnit() {
     final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
@@ -154,7 +153,7 @@ public abstract class GetCertificateGeneralPdfIT extends BaseIntegrationIT {
   }
 
   @Test
-  @DisplayName("Om intyget är utfärdat på en annan vårdenhet skall felkod 403 (FORBIDDEN) returneras")
+  @DisplayName("Om intyget är utfärdat på en annan vårdenhet ska felkod 403 (FORBIDDEN) returneras")
   void shallReturn403IfUnitIsCareUnitAndNotOnCareUnit() {
     final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
@@ -174,7 +173,7 @@ public abstract class GetCertificateGeneralPdfIT extends BaseIntegrationIT {
   }
 
   @ParameterizedTest
-  @DisplayName("Om intyget är utfärdat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras")
+  @DisplayName("Om intyget är utfärdat på en patient som har skyddade personuppgifter ska felkod 403 (FORBIDDEN) returneras")
   @MethodSource("rolesNoAccessToProtectedPerson")
   void shallReturn403IfPatientIsProtectedPerson(UserDTO userDTO) {
     final var testCertificates = testabilityApi().addCertificates(
@@ -196,7 +195,7 @@ public abstract class GetCertificateGeneralPdfIT extends BaseIntegrationIT {
   }
 
   @Test
-  @DisplayName("Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter skall pdf returneras")
+  @DisplayName("Läkare - Om intyget är utfärdat på en patient som har skyddade personuppgifter ska pdf returneras")
   void shallReturnCertificatePdfIfPatientIsProtectedPersonAndUserIsDoctor() {
     final var testCertificates = testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion())
@@ -215,12 +214,12 @@ public abstract class GetCertificateGeneralPdfIT extends BaseIntegrationIT {
 
     assertNotNull(
         pdfData(response.getBody()),
-        "Should return certificate pdf data when exists!"
+        "Should return certificate pdf data when exists"
     );
   }
 
   @Test
-  @DisplayName("Om intyget är signerat skall pdf returneras")
+  @DisplayName("Om intyget är signerat ska pdf returneras")
   void shallReturnSignedCertificatePdf() {
     final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
@@ -235,12 +234,12 @@ public abstract class GetCertificateGeneralPdfIT extends BaseIntegrationIT {
 
     assertNotNull(
         pdfData(response.getBody()),
-        "Should return signed certificate pdf data!"
+        "Should return signed certificate pdf data"
     );
   }
 
   @Test
-  @DisplayName("Om intyget är signerat och skickat skall pdf returneras")
+  @DisplayName("Om intyget är signerat och skickat ska pdf returneras")
   void shallReturnSentCertificatePdf() {
     final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
@@ -260,7 +259,7 @@ public abstract class GetCertificateGeneralPdfIT extends BaseIntegrationIT {
 
     assertNotNull(
         pdfData(response.getBody()),
-        "Should return sent certificate pdf data!"
+        "Should return sent certificate pdf data"
     );
   }
 }

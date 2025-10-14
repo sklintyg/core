@@ -12,6 +12,7 @@ import se.inera.intyg.certificateservice.integrationtest.common.setup.Testabilit
 import se.inera.intyg.certificateservice.integrationtest.common.tests.ExistsCitizenCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.GetCitizenCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.GetCitizenCertificateListIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.PrintGeneralCitizenCertificateIT;
 
 class AG7804CitizenIT extends ActiveCertificatesIT {
 
@@ -60,6 +61,16 @@ class AG7804CitizenIT extends ActiveCertificatesIT {
   @Nested
   @DisplayName(TYPE + "Finns intyg för invånare")
   class ExistsCitizenCertificate extends ExistsCitizenCertificateIT {
+
+    @Override
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
+    }
+  }
+
+  @Nested
+  @DisplayName(TYPE + "Skriv ut intyg för invånare")
+  class PrintGeneralCitizenCertificate extends PrintGeneralCitizenCertificateIT {
 
     @Override
     protected BaseTestabilityUtilities testabilityUtilities() {
