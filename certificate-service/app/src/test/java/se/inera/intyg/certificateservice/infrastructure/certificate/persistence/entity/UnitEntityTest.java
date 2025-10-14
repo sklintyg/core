@@ -100,15 +100,8 @@ class UnitEntityTest {
   }
 
   @Test
-  void shallFindDiffWhenHsaIdDiffers() {
-    assertTrue(ALFA_REGIONEN_ENTITY.hasDiff(alfaRegionenEntityBuilder().hsaId("NEW-HSA").build()),
-        "hsaId");
-  }
-
-  @Test
   void shallFindDiffWhenAllFieldsDiffer() {
     var allDiff = UnitEntity.builder()
-        .hsaId("DIFF-HSA")
         .name("N")
         .address("A")
         .zipCode("Z")

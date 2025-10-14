@@ -102,8 +102,6 @@ public class CertificatePdfFillService {
 
   private void setFields(Certificate certificate, PDDocument document, AtomicInteger mcid) {
     final var pdfSpecification = certificate.certificateModel().pdfSpecification();
-    //TODO: get version managed metadata for pdfsignature and pdfunit generators
-
     if (certificate.status() == Status.SIGNED) {
       setFieldValues(document, pdfSignatureValueGenerator.generate(certificate));
     }
@@ -136,7 +134,7 @@ public class CertificatePdfFillService {
     try {
       final var patientField = PdfField.builder()
           .id(pdfSpecification.patientIdFieldIds().getLast().id())
-          .value(certificate.certificateMetaData().patient().id().idWithoutDash())
+          .value(certificate.getMetadataForPrint().patient().id().idWithoutDash())
           .build();
       setFieldValuesAppendix(document, pdfSpecification.overFlowPageIndex().value(), appendedFields,
           patientField, mcid, pdfSpecification);

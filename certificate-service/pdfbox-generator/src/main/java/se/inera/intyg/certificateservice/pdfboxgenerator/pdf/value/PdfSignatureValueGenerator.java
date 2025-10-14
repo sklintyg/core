@@ -15,7 +15,6 @@ import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 public class PdfSignatureValueGenerator {
 
   public List<PdfField> generate(Certificate certificate) {
-//TODO: get version managed metadata
     final var fields = new ArrayList<PdfField>();
     fields.add(getSignedDate(certificate));
     fields.add(getIssuerFullName(certificate));
@@ -38,12 +37,12 @@ public class PdfSignatureValueGenerator {
     return PdfField.builder()
         .id(certificate.certificateModel().pdfSpecification().signature().signedByNameFieldId()
             .id())
-        .value(certificate.certificateMetaData().issuer().name().fullName())
+        .value(certificate.getMetadataForPrint().issuer().name().fullName())
         .build();
   }
 
   private Optional<PdfField> getPaTitles(Certificate certificate) {
-    final var paTitles = certificate.certificateMetaData().issuer().paTitles();
+    final var paTitles = certificate.getMetadataForPrint().issuer().paTitles();
     if (paTitles != null) {
       final var paTitleCodes = paTitles.stream()
           .map(PaTitle::code)
@@ -59,7 +58,7 @@ public class PdfSignatureValueGenerator {
   }
 
   private Optional<PdfField> getSpeciality(Certificate certificate) {
-    final var specialities = certificate.certificateMetaData().issuer().specialities();
+    final var specialities = certificate.getMetadataForPrint().issuer().specialities();
     if (specialities != null) {
       final var mappedSpecialities = specialities.stream()
           .map(Speciality::value)
@@ -76,7 +75,7 @@ public class PdfSignatureValueGenerator {
   }
 
   private PdfField getHsaId(Certificate certificate) {
-    final var hsaId = certificate.certificateMetaData().issuer().hsaId().id();
+    final var hsaId = certificate.getMetadataForPrint().issuer().hsaId().id();
     return PdfField.builder()
         .id(certificate.certificateModel().pdfSpecification().signature().hsaIdFieldId().id())
         .value(hsaId)
@@ -84,7 +83,7 @@ public class PdfSignatureValueGenerator {
   }
 
   private Optional<PdfField> getWorkplaceCode(Certificate certificate) {
-    final var workplaceCode = certificate.certificateMetaData().issuingUnit().workplaceCode();
+    final var workplaceCode = certificate.getMetadataForPrint().issuingUnit().workplaceCode();
     if (workplaceCode != null) {
       return Optional.of(
           PdfField.builder()

@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -71,6 +72,8 @@ public class MedicalCertificate implements Certificate {
   private List<Message> messages = Collections.emptyList();
   private Forwarded forwarded;
   private MetadataRepository metadataRepository;
+  @Getter(AccessLevel.NONE)
+  private CertificateMetaData metaDataFromSignInstance;
 
   @Override
   public List<CertificateAction> actions(Optional<ActionEvaluation> actionEvaluation) {
@@ -596,7 +599,15 @@ public class MedicalCertificate implements Certificate {
     }
   }
 
-  public CertificateMetaData getMetadataFromSignInstance() {
+  public CertificateMetaData getMetadataForPrint() {
+    if (this.signed == null) {
+      return this.certificateMetaData;
+    }
+
+    if (metaDataFromSignInstance != null) {
+      return metaDataFromSignInstance;
+    }
+
     return this.metadataRepository.getMetadataFromSignInstance(this.certificateMetaData,
         this.signed);
   }

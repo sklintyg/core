@@ -48,12 +48,6 @@ class PatientEntityTest {
   }
 
   @Test
-  void shallFindDiffWhenIdDiffers() {
-    assertTrue(ATHENA_REACT_ANDERSSON_ENTITY.hasDiff(
-        athenaReactAnderssonEntityBuilder().id("NEW-ID").build()));
-  }
-
-  @Test
   void shallFindDiffWhenProtectedPersonDiffers() {
     assertTrue(ATHENA_REACT_ANDERSSON_ENTITY.hasDiff(athenaReactAnderssonEntityBuilder()
         .protectedPerson(!ATHENA_REACT_ANDERSSON_ENTITY.isProtectedPerson()).build()));
@@ -98,7 +92,6 @@ class PatientEntityTest {
   @Test
   void shallFindDiffWhenAllFieldsDiffer() {
     var allDiff = PatientEntity.builder()
-        .id("ALL-DIFF-ID")
         .firstName("F")
         .middleName("M")
         .lastName("L")

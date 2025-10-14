@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_META_DATA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
 
 import java.util.List;
@@ -28,7 +29,7 @@ class PdfPatientValueGeneratorTest {
 
     final var expected = List.of(PdfField.builder()
         .id(FIELD_ID)
-        .value(certificate.certificateMetaData().patient().id().idWithoutDash())
+        .value(CERTIFICATE_META_DATA.patient().id().idWithoutDash())
         .build()
     );
 
@@ -45,11 +46,11 @@ class PdfPatientValueGeneratorTest {
     final var expected = List.of(
         PdfField.builder()
             .id(FIELD_ID)
-            .value(certificate.certificateMetaData().patient().id().idWithoutDash())
+            .value(CERTIFICATE_META_DATA.patient().id().idWithoutDash())
             .build(),
         PdfField.builder()
             .id(FIELD_ID_2)
-            .value(certificate.certificateMetaData().patient().id().idWithoutDash())
+            .value(CERTIFICATE_META_DATA.patient().id().idWithoutDash())
             .build()
     );
 
@@ -60,7 +61,10 @@ class PdfPatientValueGeneratorTest {
   }
 
   private Certificate buildCertificate() {
-    return fk7210CertificateBuilder().build();
+    return fk7210CertificateBuilder()
+        .certificateMetaData(null)
+        .metaDataFromSignInstance(CERTIFICATE_META_DATA)
+        .build();
   }
 
 }

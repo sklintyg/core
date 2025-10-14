@@ -20,10 +20,7 @@ public class PrintCertificateMetadataConverter {
 
   public PrintCertificateMetadataDTO convert(Certificate certificate,
       boolean isCitizenFormat, String fileName) {
-    var metadata = certificate.certificateMetaData();
-    if (certificate.signed() != null) {
-      metadata = certificate.getMetadataFromSignInstance();
-    }
+    final var metadata = certificate.getMetadataForPrint();
 
     return PrintCertificateMetadataDTO.builder()
         .name(certificate.certificateModel().name())

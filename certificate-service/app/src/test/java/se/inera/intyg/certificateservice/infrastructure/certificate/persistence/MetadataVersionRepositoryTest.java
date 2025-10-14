@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataPatientVersionEntity.ATHENA_REACT_ANDERSSON_VERSION_ENTITY;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_META_DATA_AJLA;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_META_DATA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.ajlaMetadataBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 
@@ -54,7 +54,7 @@ class MetadataVersionRepositoryTest {
     @Test
     void shouldThrowIllegalStateExceptionWhenNotSigned() {
       assertThrows(IllegalStateException.class, () -> {
-        metadataVersionRepository.getMetadataFromSignInstance(CERTIFICATE_META_DATA_AJLA, null);
+        metadataVersionRepository.getMetadataFromSignInstance(CERTIFICATE_META_DATA, null);
       });
     }
 

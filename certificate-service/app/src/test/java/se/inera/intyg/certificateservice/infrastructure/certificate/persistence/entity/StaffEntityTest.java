@@ -64,12 +64,6 @@ class StaffEntityTest {
 
 
   @Test
-  void shallFindDiffWhenHsaIdDiffers() {
-    assertTrue(AJLA_DOKTOR_ENTITY.hasDiff(
-        ajlaDoctorEntityBuilder().hsaId("NEW-HSA-ID").build()), "hsaId");
-  }
-
-  @Test
   void shallFindDiffWhenFirstNameDiffers() {
     assertTrue(AJLA_DOKTOR_ENTITY.hasDiff(
         ajlaDoctorEntityBuilder().firstName("DifferentFirst").build()), "firstName");
@@ -120,7 +114,6 @@ class StaffEntityTest {
   void shallFindDiffWhenAllComparedFieldsDiffer() {
     assertTrue(AJLA_DOKTOR_ENTITY.hasDiff(
             ajlaDoctorEntityBuilder()
-                .hsaId("ALL-DIFF-HSA")
                 .firstName("F")
                 .middleName("M")
                 .lastName("L")

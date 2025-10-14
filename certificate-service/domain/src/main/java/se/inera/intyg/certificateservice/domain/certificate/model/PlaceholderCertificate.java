@@ -304,8 +304,8 @@ public class PlaceholderCertificate implements Certificate {
   }
 
   @Override
-  public CertificateMetaData getMetadataFromSignInstance() {
+  public CertificateMetaData getMetadataForPrint() {
     throw new IllegalStateException(
-        "Cannot get version managed metadata for a placeholder certificate");
+        "Cannot get metadata for print for a placeholder certificate");
   }
 }
