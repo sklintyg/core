@@ -19,24 +19,26 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_WORKPLACE_CODE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ZIP_CODE;
 
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitType;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitTypeEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitVersionEntity;
 
-public class TestDataUnitEntity {
+public class TestDataUnitVersionEntity {
 
-  private TestDataUnitEntity() {
+  private TestDataUnitVersionEntity() {
     throw new IllegalStateException("Utility class");
   }
 
-  public static final UnitEntity ALFA_REGIONEN_ENTITY = alfaRegionenEntityBuilder().build();
+  public static final UnitVersionEntity ALFA_REGIONEN_VERSION_ENTITY =
+      alfaRegionenVersionEntityBuilder().build();
+  public static final UnitVersionEntity ALFA_MEDICINCENTRUM_VERSION_ENTITY =
+      alfaMedicinCentrumVersionEntityBuilder().build();
+  public static final UnitVersionEntity ALFA_ALLERGIMOTTAGNINGEN_VERSION_ENTITY =
+      alfaAllergimottagningenVersionEntityBuilder().build();
 
-  public static final UnitEntity ALFA_MEDICINCENTRUM_ENTITY = alfaMedicinCentrumEntityBuilder().build();
-  public static final UnitEntity ALFA_ALLERGIMOTTAGNINGEN_ENTITY = alfaAllergimottagningenEntityBuilder().build();
 
-
-  public static UnitEntity.UnitEntityBuilder alfaRegionenEntityBuilder() {
-    return UnitEntity.builder()
+  public static UnitVersionEntity.UnitVersionEntityBuilder alfaRegionenVersionEntityBuilder() {
+    return UnitVersionEntity.builder()
         .type(
             UnitTypeEntity.builder()
                 .type(UnitType.CARE_PROVIDER.name())
@@ -47,8 +49,9 @@ public class TestDataUnitEntity {
         .name(ALFA_REGIONEN_NAME);
   }
 
-  public static UnitEntity.UnitEntityBuilder alfaMedicinCentrumEntityBuilder() {
-    return UnitEntity.builder()
+
+  public static UnitVersionEntity.UnitVersionEntityBuilder alfaMedicinCentrumVersionEntityBuilder() {
+    return UnitVersionEntity.builder()
         .type(
             UnitTypeEntity.builder()
                 .type(UnitType.CARE_UNIT.name())
@@ -65,8 +68,8 @@ public class TestDataUnitEntity {
         .workplaceCode(ALFA_MEDICINCENTRUM_WORKPLACE_CODE);
   }
 
-  public static UnitEntity.UnitEntityBuilder alfaAllergimottagningenEntityBuilder() {
-    return UnitEntity.builder()
+  public static UnitVersionEntity.UnitVersionEntityBuilder alfaAllergimottagningenVersionEntityBuilder() {
+    return UnitVersionEntity.builder()
         .type(
             UnitTypeEntity.builder()
                 .type(UnitType.SUB_UNIT.name())

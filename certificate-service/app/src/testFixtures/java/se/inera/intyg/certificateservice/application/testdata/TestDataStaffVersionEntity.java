@@ -15,26 +15,25 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALF_DOKTOR_PA_TITLES;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALF_DOKTOR_SPECIALITIES;
 
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.HealthcareProfessionalLicenceEmbeddable;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PaTitleEmbeddable;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.SpecialityEmbeddable;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.HealthcareProfessionalLicenceVersionEmbeddable;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PaTitleVersionEmbeddable;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.SpecialityVersionEmbeddable;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffRole;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffRoleEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffVersionEntity;
 
-public class TestDataStaffEntity {
+public class TestDataStaffVersionEntity {
 
-  private TestDataStaffEntity() {
+  private TestDataStaffVersionEntity() {
     throw new IllegalStateException("Utility class");
   }
 
-  public static final StaffEntity AJLA_DOKTOR_ENTITY = ajlaDoctorEntityBuilder().build();
+  public static final StaffVersionEntity AJLA_DOKTOR_VERSION_ENTITY = ajlaDoctorVersionEntityBuilder().build();
 
+  public static final StaffVersionEntity ALF_DOKTOR_VERSION_ENTITY = alfDoktorVersionEntityBuilder().build();
 
-  public static final StaffEntity ALF_DOKTOR_ENTITY = alfDoktorEntityBuilder().build();
-
-  public static StaffEntity.StaffEntityBuilder ajlaDoctorEntityBuilder() {
-    return StaffEntity.builder()
+  public static StaffVersionEntity.StaffVersionEntityBuilder ajlaDoctorVersionEntityBuilder() {
+    return StaffVersionEntity.builder()
         .hsaId(AJLA_DOCTOR_HSA_ID)
         .firstName(AJLA_DOCTOR_FIRST_NAME)
         .middleName(AJLA_DOCTOR_MIDDLE_NAME)
@@ -47,7 +46,7 @@ public class TestDataStaffEntity {
         )
         .paTitles(
             AJLA_DOCTOR_PA_TITLES.stream()
-                .map(paTitle -> PaTitleEmbeddable.builder()
+                .map(paTitle -> PaTitleVersionEmbeddable.builder()
                     .code(paTitle.code())
                     .description(paTitle.description())
                     .build()
@@ -56,7 +55,7 @@ public class TestDataStaffEntity {
         )
         .specialities(
             AJLA_DOCTOR_SPECIALITIES.stream()
-                .map(speciality -> SpecialityEmbeddable.builder()
+                .map(speciality -> SpecialityVersionEmbeddable.builder()
                     .speciality(speciality.value())
                     .build()
                 )
@@ -65,17 +64,17 @@ public class TestDataStaffEntity {
         .healthcareProfessionalLicences(
             AJLA_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES.stream()
                 .map(
-                    healthCareProfessionalLicence -> HealthcareProfessionalLicenceEmbeddable.builder()
-                        .healthcareProfessionalLicence(healthCareProfessionalLicence.value())
-                        .build()
+                    healthCareProfessionalLicence ->
+                        HealthcareProfessionalLicenceVersionEmbeddable.builder()
+                            .healthcareProfessionalLicence(healthCareProfessionalLicence.value())
+                            .build()
                 )
                 .toList()
         );
   }
 
-
-  public static StaffEntity.StaffEntityBuilder alfDoktorEntityBuilder() {
-    return StaffEntity.builder()
+  public static StaffVersionEntity.StaffVersionEntityBuilder alfDoktorVersionEntityBuilder() {
+    return StaffVersionEntity.builder()
         .hsaId(ALF_DOKTOR_HSA_ID)
         .firstName(ALF_DOKTOR_FIRST_NAME)
         .middleName(ALF_DOKTOR_MIDDLE_NAME)
@@ -88,7 +87,7 @@ public class TestDataStaffEntity {
         )
         .paTitles(
             ALF_DOKTOR_PA_TITLES.stream()
-                .map(paTitle -> PaTitleEmbeddable.builder()
+                .map(paTitle -> PaTitleVersionEmbeddable.builder()
                     .code(paTitle.code())
                     .description(paTitle.description())
                     .build()
@@ -97,7 +96,7 @@ public class TestDataStaffEntity {
         )
         .specialities(
             ALF_DOKTOR_SPECIALITIES.stream()
-                .map(speciality -> SpecialityEmbeddable.builder()
+                .map(speciality -> SpecialityVersionEmbeddable.builder()
                     .speciality(speciality.value())
                     .build()
                 )
@@ -106,9 +105,10 @@ public class TestDataStaffEntity {
         .healthcareProfessionalLicences(
             ALF_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES.stream()
                 .map(
-                    healthCareProfessionalLicence -> HealthcareProfessionalLicenceEmbeddable.builder()
-                        .healthcareProfessionalLicence(healthCareProfessionalLicence.value())
-                        .build()
+                    healthCareProfessionalLicence ->
+                        HealthcareProfessionalLicenceVersionEmbeddable.builder()
+                            .healthcareProfessionalLicence(healthCareProfessionalLicence.value())
+                            .build()
                 )
                 .toList()
         );

@@ -9,7 +9,6 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataUni
 import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitEntity.ALFA_MEDICINCENTRUM_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitEntity.ALFA_REGIONEN_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitEntity.alfaRegionenEntityBuilder;
-import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitEntity.updatedAlfaRegionenEntityBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.UPPDATERAD_ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_ID;
@@ -157,7 +156,7 @@ class UnitRepositoryTest {
     @BeforeEach
     void setup() {
       alfa = alfaRegionenEntityBuilder().build();
-      uppdateradAlfa = updatedAlfaRegionenEntityBuilder().name("NyttNamn").build();
+      uppdateradAlfa = alfaRegionenEntityBuilder().name("NyttNamn").build();
     }
 
     @Test
