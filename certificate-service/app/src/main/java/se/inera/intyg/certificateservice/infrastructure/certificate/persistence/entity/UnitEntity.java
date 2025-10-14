@@ -62,11 +62,17 @@ public class UnitEntity {
 
   public boolean hasDiff(UnitEntity other) {
     if (other == null) {
-      return true;
+      throw new IllegalArgumentException("Cannot compare UnitEntity with null");
     }
+
     if (!Objects.equals(this.hsaId, other.getHsaId())) {
       throw new IllegalArgumentException("Cannot compare UnitEntity with different hsaId");
     }
+
+    if (!Objects.equals(this.type, other.getType())) {
+      throw new IllegalArgumentException("Cannot compare UnitEntity with different types");
+    }
+
     return !(Objects.equals(this.name, other.getName())
         && Objects.equals(this.address, other.getAddress())
         && Objects.equals(this.zipCode, other.getZipCode())

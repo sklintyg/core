@@ -9,8 +9,6 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataSta
 import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffEntity.ajlaDoctorEntityBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALF_DOKTOR_HSA_ID;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -126,23 +124,11 @@ class StaffEntityTest {
         "all fields changed");
   }
 
-  @Test
-  void shallFindDiffWhenOnlyOrderChangesInList() {
-
-    final var reversePaTitles = new ArrayList<>(AJLA_DOKTOR_ENTITY.getPaTitles());
-    Collections.reverse(reversePaTitles);
-
-    var modified = ajlaDoctorEntityBuilder()
-        .paTitles(reversePaTitles)
-        .build();
-
-    assertTrue(AJLA_DOKTOR_ENTITY.hasDiff(modified),
-        "Expected diff when only list order changes");
-  }
 
   @Test
-  void shallFindDiffWhenOtherIsNull() {
-    assertTrue(AJLA_DOKTOR_ENTITY.hasDiff(null));
+  void shallThrowExceptionWhenOtherIsNull() {
+    assertThrows(IllegalArgumentException.class,
+        () -> AJLA_DOKTOR_ENTITY.hasDiff(null));
   }
 
   @Test

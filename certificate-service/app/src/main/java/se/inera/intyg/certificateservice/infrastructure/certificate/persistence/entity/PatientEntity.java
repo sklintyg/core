@@ -60,11 +60,11 @@ public class PatientEntity {
 
   public boolean hasDiff(PatientEntity other) {
     if (other == null) {
-      return true;
+      throw new IllegalArgumentException("Cannot compare patientEntity with null");
     }
 
     if (!Objects.equals(this.id, other.getId())) {
-      throw new IllegalArgumentException("Cannot compare patients with different IDs");
+      throw new IllegalArgumentException("Cannot compare patientEntity with different IDs");
     }
 
     return !(this.protectedPerson == other.isProtectedPerson()

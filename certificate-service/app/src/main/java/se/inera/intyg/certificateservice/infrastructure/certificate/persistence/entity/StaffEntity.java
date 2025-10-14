@@ -68,11 +68,13 @@ public class StaffEntity {
 
   public boolean hasDiff(StaffEntity other) {
     if (other == null) {
-      return true;
+      throw new IllegalArgumentException("Cannot compare StaffEntity with null");
     }
+
     if (!Objects.equals(this.hsaId, other.getHsaId())) {
       throw new IllegalArgumentException("Cannot compare StaffEntity with different hsaId");
     }
+
     return !(Objects.equals(this.firstName, other.getFirstName())
         && Objects.equals(this.middleName, other.getMiddleName())
         && Objects.equals(this.lastName, other.getLastName())

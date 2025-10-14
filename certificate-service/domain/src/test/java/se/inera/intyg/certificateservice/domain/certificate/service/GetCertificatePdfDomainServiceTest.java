@@ -24,7 +24,6 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.Certifi
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Pdf;
-import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType;
@@ -43,9 +42,6 @@ class GetCertificatePdfDomainServiceTest {
   @Mock
   private Certificate certificate;
   @Mock
-  private CertificateRepository certificateRepository;
-
-  @Mock
   private CertificateEventDomainService certificateEventDomainService;
   @Mock
   private PdfGenerator pdfGenerator;
@@ -54,11 +50,6 @@ class GetCertificatePdfDomainServiceTest {
 
   @InjectMocks
   GetCertificatePdfDomainService getCertificatePdfDomainService;
-
-  @BeforeEach
-  void setUp() {
-    doReturn(certificate).when(certificateRepository).getByIdForPrint(CERTIFICATE_ID);
-  }
 
   @Nested
   class AllowedToPrint {

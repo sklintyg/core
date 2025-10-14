@@ -92,6 +92,7 @@ class PatientEntityTest {
   @Test
   void shallFindDiffWhenAllFieldsDiffer() {
     var allDiff = PatientEntity.builder()
+        .id(ATHENA_REACT_ANDERSSON_ENTITY.getId())
         .firstName("F")
         .middleName("M")
         .lastName("L")
@@ -105,8 +106,9 @@ class PatientEntityTest {
   }
 
   @Test
-  void shallFindDiffWhenOtherIsNull() {
-    assertTrue(ATHENA_REACT_ANDERSSON_ENTITY.hasDiff(null));
+  void shallThrowExceptionWhenOtherIsNull() {
+    assertThrows(IllegalArgumentException.class,
+        () -> ATHENA_REACT_ANDERSSON_ENTITY.hasDiff(null));
   }
 
   @Test

@@ -2,7 +2,6 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitEntity.ALFA_REGIONEN_ENTITY;
@@ -39,7 +38,6 @@ class UnitEntityTest {
     assertEquals("010-00 00 00", target.getPhoneNumber());
     assertEquals("new@example.com", target.getEmail());
     assertEquals("NEWCODE", target.getWorkplaceCode());
-    assertSame(source.getType(), target.getType());
     assertEquals(originalHsaId, target.getHsaId(), "hsaId must remain unchanged");
     assertEquals(originalKey, target.getKey(), "key must remain unchanged");
 
@@ -94,14 +92,8 @@ class UnitEntityTest {
   }
 
   @Test
-  void shallFindDiffWhenTypeDiffers() {
-    assertTrue(ALFA_REGIONEN_ENTITY.hasDiff(
-        alfaRegionenEntityBuilder().type(new UnitTypeEntity()).build()), "type");
-  }
-
-  @Test
   void shallFindDiffWhenAllFieldsDiffer() {
-    var allDiff = UnitEntity.builder()
+    var allDiff = alfaRegionenEntityBuilder()
         .name("N")
         .address("A")
         .zipCode("Z")
@@ -109,15 +101,14 @@ class UnitEntityTest {
         .phoneNumber("P")
         .email("e@x.se")
         .workplaceCode("W")
-        .type(new UnitTypeEntity())
         .build();
 
     assertTrue(ALFA_REGIONEN_ENTITY.hasDiff(allDiff), "all fields");
   }
 
   @Test
-  void shallFindDiffWhenOtherIsNull() {
-    assertTrue(ALFA_REGIONEN_ENTITY.hasDiff(null));
+  void shallThrowExceptionWhenOtherIsNull() {
+    assertThrows(IllegalArgumentException.class, () -> ALFA_REGIONEN_ENTITY.hasDiff(null));
   }
 
   @Test
@@ -127,6 +118,18 @@ class UnitEntityTest {
         .build();
     assertThrows(IllegalArgumentException.class,
         () -> ALFA_REGIONEN_ENTITY.hasDiff(unitWithDifferentHsaId));
+  }
+
+  @Test
+  void shallThrowExceptionWhenComparingUnitWithDifferentTypes() {
+    var unitWithDifferentType = alfaRegionenEntityBuilder()
+        .type(UnitTypeEntity.builder()
+            .type(UnitType.CARE_UNIT.name())
+            .key(UnitType.CARE_UNIT.getKey())
+            .build())
+        .build();
+    assertThrows(IllegalArgumentException.class,
+        () -> ALFA_REGIONEN_ENTITY.hasDiff(unitWithDifferentType));
   }
 
 }

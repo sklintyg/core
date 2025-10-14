@@ -88,6 +88,7 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionE
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.certificate.repository.MetadataRepository;
 import se.inera.intyg.certificateservice.domain.certificate.service.PrefillProcessor;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
@@ -110,7 +111,7 @@ import se.inera.intyg.certificateservice.domain.validation.model.ValidationError
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationResult;
 
 @ExtendWith(MockitoExtension.class)
-class CertificateTest {
+class MedicalCertificateTest {
 
   private Certificate certificate;
   private MedicalCertificate.MedicalCertificateBuilder certificateBuilder;
@@ -122,6 +123,8 @@ class CertificateTest {
   private XmlGenerator xmlGenerator = mock(XmlGenerator.class);
   @Mock
   private CertificateActionFactory certificateActionFactory;
+  @Mock
+  private MetadataRepository metadataRepository;
 
   @BeforeEach
   void setUp() {
@@ -142,9 +145,8 @@ class CertificateTest {
                 .careProvider(ALFA_REGIONEN)
                 .build()
         )
-        .elementData(
-            List.of(DATE)
-        );
+        .elementData(List.of(DATE))
+        .metadataRepository(metadataRepository);
 
     certificate = certificateBuilder.build();
 
@@ -2808,6 +2810,41 @@ class CertificateTest {
 
       certificate.prefill(XML, prefillProcessor);
       assertTrue(expectedElementData.containsAll(certificate.elementData()));
+    }
+  }
+
+  @Nested
+  class MetadataForPrintTests {
+
+    @Test
+    void shouldReturnCertificateMetaDataWhenUnSigned() {
+      assertEquals(certificate.certificateMetaData(), certificate.getMetadataForPrint());
+    }
+
+    @Test
+    void shouldReturnMetaDataFromSignInstanceWhenSigned() {
+      final var certificateMetaData = mock(CertificateMetaData.class);
+      var certWithLocallyStoredUpdateMetadata = certificateBuilder.signed(LocalDateTime.now())
+          .metaDataFromSignInstance(certificateMetaData)
+          .build();
+      assertEquals(certificateMetaData, certWithLocallyStoredUpdateMetadata.getMetadataForPrint());
+    }
+
+    @Test
+    void shouldCallRepositoryWhenSignedAndMetaDataFromSignInstanceNull() {
+      final var signed = LocalDateTime.now();
+      final var expected = mock(CertificateMetaData.class);
+      MedicalCertificate certificate = certificateBuilder
+          .signed(signed)
+          .build();
+
+      when(metadataRepository.getMetadataFromSignInstance(certificate.certificateMetaData(),
+          signed)).thenReturn(
+          expected);
+
+      assertEquals(expected, certificate.getMetadataForPrint());
+      verify(metadataRepository).getMetadataFromSignInstance(certificate.certificateMetaData(),
+          signed);
     }
   }
 }
