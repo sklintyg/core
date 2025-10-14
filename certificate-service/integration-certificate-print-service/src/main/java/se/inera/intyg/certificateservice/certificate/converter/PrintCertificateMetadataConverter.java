@@ -22,9 +22,9 @@ public class PrintCertificateMetadataConverter {
       boolean isCitizenFormat, String fileName) {
     var metadata = certificate.certificateMetaData();
     if (certificate.signed() != null) {
-      metadata = certificate.getMetadataWhenSigned();
+      metadata = certificate.getMetadataFromSignInstance();
     }
-    
+
     return PrintCertificateMetadataDTO.builder()
         .name(certificate.certificateModel().name())
         .typeId(certificate.certificateModel().type().code())

@@ -38,6 +38,8 @@ class PatientRepositoryTest {
   private PatientEntityRepository patientEntityRepository;
   @Mock
   private PatientVersionEntityRepository patientVersionEntityRepository;
+  @Mock
+  MetadataVersionRepository metadataVersionRepository;
   @InjectMocks
   private PatientRepository patientRepository;
 

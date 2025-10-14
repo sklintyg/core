@@ -302,4 +302,10 @@ public class PlaceholderCertificate implements Certificate {
   public boolean isPlaceholder() {
     return true;
   }
+
+  @Override
+  public CertificateMetaData getMetadataFromSignInstance() {
+    throw new IllegalStateException(
+        "Cannot get version managed metadata for a placeholder certificate");
+  }
 }

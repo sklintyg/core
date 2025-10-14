@@ -41,6 +41,8 @@ class UnitRepositoryTest {
   private UnitEntityRepository unitEntityRepository;
   @Mock
   private UnitVersionEntityRepository unitVersionEntityRepository;
+  @Mock
+  MetadataVersionRepository metadataVersionRepository;
   @InjectMocks
   private UnitRepository unitRepository;
 

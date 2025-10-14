@@ -135,5 +135,5 @@ public interface Certificate {
     return false;
   }
 
-  CertificateMetaData getMetadataWhenSigned();
+  CertificateMetaData getMetadataFromSignInstance();
 }

@@ -33,6 +33,9 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecificationFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateRelationRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.PatientVersionEntityRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffVersionEntityRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitVersionEntityRepository;
 import se.inera.intyg.certificateservice.testability.certificate.service.repository.TestabilityCertificateRepository;
 
 @Repository
@@ -47,6 +50,9 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
   private final CertificateEntityMapper certificateEntityMapper;
   private final CertificateEntitySpecificationFactory certificateEntitySpecificationFactory;
   private final CertificateRelationRepository certificateRelationRepository;
+  private final StaffVersionEntityRepository staffVersionEntityRepository;
+  private final PatientVersionEntityRepository patientVersionEntityRepository;
+  private final UnitVersionEntityRepository unitVersionEntityRepository;
 
   @Override
   public Certificate create(CertificateModel certificateModel) {
@@ -352,4 +358,3 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
 
   }
 }
-

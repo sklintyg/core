@@ -43,6 +43,8 @@ class StaffRepositoryTest {
   private StaffEntityRepository staffEntityRepository;
   @Mock
   StaffVersionEntityRepository staffVersionEntityRepository;
+  @Mock
+  MetadataVersionRepository metadataVersionRepository;
   @InjectMocks
   private StaffRepository staffRepository;
 

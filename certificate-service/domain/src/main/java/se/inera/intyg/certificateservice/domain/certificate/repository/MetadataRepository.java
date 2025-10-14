@@ -3,8 +3,9 @@ package se.inera.intyg.certificateservice.domain.certificate.repository;
 import java.time.LocalDateTime;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 
-public interface SignedCertificateMetadataRepostiory {
+public interface MetadataRepository {
 
-  CertificateMetaData getMetadataWhenSigned(CertificateMetaData metadata,
+  CertificateMetaData getMetadataFromSignInstance(CertificateMetaData metadata,
       LocalDateTime signedAt);
+
 }

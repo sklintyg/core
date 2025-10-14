@@ -17,6 +17,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Revoked;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
+import se.inera.intyg.certificateservice.domain.certificate.repository.MetadataRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
@@ -62,6 +63,7 @@ public class CertificateEntityMapper {
   private final MessageEntityRepository messageEntityRepository;
   private final MessageEntityMapper messageEntityMapper;
   private final PlaceholderCertificateEntityMapper placeholderCertificateEntityMapper;
+  private final MetadataRepository metadataRepository;
 
   public Certificate toDomain(CertificateEntity certificateEntity) {
     return toDomain(certificateEntity, true);
@@ -194,7 +196,7 @@ public class CertificateEntityMapper {
     }
 
     certificateEntity.setPlaceholder(false);
-    
+
     return certificateEntity;
   }
 
@@ -359,6 +361,7 @@ public class CertificateEntityMapper {
                 ? new Forwarded(certificateEntity.getForwarded())
                 : null
         )
+        .metadataRepository(metadataRepository)
         .build();
   }
 
