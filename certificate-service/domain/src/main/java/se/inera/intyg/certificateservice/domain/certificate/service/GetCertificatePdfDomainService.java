@@ -42,8 +42,14 @@ public class GetCertificatePdfDomainService {
       certificate.updateMetadata(actionEvaluation);
     }
 
+    final var options = PdfGeneratorOptions.builder()
+        .additionalInfoText(additionalInfoText)
+        .citizenFormat(false)
+        .hiddenElements(Collections.emptyList())
+        .build();
+
     final var generatedPdf = pdfGeneratorProvider.provider(certificate)
-        .generate(certificate, additionalInfoText, false, Collections.emptyList());
+        .generate(certificate, options);
 
     certificateEventDomainService.publish(
         CertificateEvent.builder()

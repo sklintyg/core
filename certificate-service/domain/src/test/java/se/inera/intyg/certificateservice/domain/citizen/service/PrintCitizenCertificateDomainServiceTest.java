@@ -19,6 +19,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertifi
 import se.inera.intyg.certificateservice.domain.certificate.model.Pdf;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGenerator;
+import se.inera.intyg.certificateservice.domain.certificate.service.PdfGeneratorOptions;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGeneratorProvider;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -86,8 +87,14 @@ class PrintCitizenCertificateDomainServiceTest {
     void shouldReturnPdfIfPatientIdMatchesCitizen() {
       when(pdfGeneratorProvider.provider(CERTIFICATE))
           .thenReturn(pdfGenerator);
-      when(pdfGenerator.generate(CERTIFICATE, ADDITIONAL_INFO_TEXT, true,
-          List.of(HIDDEN))).thenReturn(PDF);
+
+      final var options = PdfGeneratorOptions.builder()
+          .additionalInfoText(ADDITIONAL_INFO_TEXT)
+          .citizenFormat(true)
+          .hiddenElements(List.of(HIDDEN))
+          .build();
+
+      when(pdfGenerator.generate(CERTIFICATE, options)).thenReturn(PDF);
 
       final var response = printCitizenCertificateDomainService.get(CERTIFICATE_ID,
           TOLVAN_PERSON_ID, ADDITIONAL_INFO_TEXT, List.of(HIDDEN));
@@ -122,3 +129,4 @@ class PrintCitizenCertificateDomainServiceTest {
         .build();
   }
 }
+

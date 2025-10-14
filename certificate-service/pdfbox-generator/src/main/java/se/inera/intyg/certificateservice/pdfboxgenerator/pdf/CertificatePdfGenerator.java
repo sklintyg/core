@@ -3,13 +3,12 @@ package se.inera.intyg.certificateservice.pdfboxgenerator.pdf;
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Pdf;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGenerator;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificate.service.PdfGeneratorOptions;
 
 @Component("CertificatePdfGenerator")
 @RequiredArgsConstructor
@@ -17,18 +16,18 @@ public class CertificatePdfGenerator implements PdfGenerator {
 
   private final CertificatePdfFillService certificatePdfFillService;
 
-  public Pdf generate(Certificate certificate, String additionalInfoText, boolean isCitizenFormat,
-      List<ElementId> hiddenElements) {
+  @Override
+  public Pdf generate(Certificate certificate, PdfGeneratorOptions options) {
 
-    if (!hiddenElements.isEmpty()) {
+    if (options.hiddenElements() != null && !options.hiddenElements().isEmpty()) {
       throw new IllegalArgumentException("Cannot hide elements for template printing");
     }
 
     try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
       final var filledPdf = certificatePdfFillService.fillDocument(
           certificate,
-          additionalInfoText,
-          isCitizenFormat
+          options.additionalInfoText(),
+          options.citizenFormat()
       );
 
       filledPdf.getDocumentInformation().setTitle(getFileName(certificate));
@@ -59,3 +58,4 @@ public class CertificatePdfGenerator implements PdfGenerator {
         .toLowerCase();
   }
 }
+

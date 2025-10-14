@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.Pdf;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
+import se.inera.intyg.certificateservice.domain.certificate.service.PdfGeneratorOptions;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGeneratorProvider;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.common.exception.CitizenCertificateForbidden;
@@ -34,7 +35,14 @@ public class PrintCitizenCertificateDomainService {
       );
     }
 
+    final var options = PdfGeneratorOptions.builder()
+        .additionalInfoText(additionalInfoText)
+        .citizenFormat(true)
+        .hiddenElements(hiddenElements)
+        .build();
+
     return pdfGeneratorProvider.provider(certificate)
-        .generate(certificate, additionalInfoText, true, hiddenElements);
+        .generate(certificate, options);
   }
 }
+

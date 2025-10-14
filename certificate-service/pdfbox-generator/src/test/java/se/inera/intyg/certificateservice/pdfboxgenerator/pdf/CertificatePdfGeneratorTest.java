@@ -13,7 +13,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.util.Collections;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +24,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
+import se.inera.intyg.certificateservice.domain.certificate.service.PdfGeneratorOptions;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
@@ -69,9 +70,15 @@ class CertificatePdfGeneratorTest {
         )
         .build();
 
+    final var options = PdfGeneratorOptions.builder()
+        .additionalInfoText(ADDITIONAL_INFO_TEXT)
+        .citizenFormat(false)
+        .hiddenElements(Collections.emptyList())
+        .build();
+
     assertThrows(
         IllegalStateException.class,
-        () -> certificatePdfGenerator.generate(certificate, ADDITIONAL_INFO_TEXT, false, List.of())
+        () -> certificatePdfGenerator.generate(certificate, options)
     );
   }
 
@@ -91,11 +98,15 @@ class CertificatePdfGeneratorTest {
 
       @Test
       void shouldReturnPDF() {
+        final var options = PdfGeneratorOptions.builder()
+            .additionalInfoText(ADDITIONAL_INFO_TEXT)
+            .citizenFormat(false)
+            .hiddenElements(Collections.emptyList())
+            .build();
+
         final var pdf = certificatePdfGenerator.generate(
             buildFK7210Certificate(),
-            ADDITIONAL_INFO_TEXT,
-            false,
-            List.of()
+            options
         );
 
         assertNotEquals(0, pdf.pdfData().length);
@@ -106,11 +117,15 @@ class CertificatePdfGeneratorTest {
         final var expected = "intyg_om_graviditet_" + LocalDateTime.now()
             .format((DateTimeFormatter.ofPattern("yy-MM-dd_HHmm")));
 
+        final var options = PdfGeneratorOptions.builder()
+            .additionalInfoText(ADDITIONAL_INFO_TEXT)
+            .citizenFormat(false)
+            .hiddenElements(Collections.emptyList())
+            .build();
+
         final var pdf = certificatePdfGenerator.generate(
             buildFK7210Certificate(),
-            ADDITIONAL_INFO_TEXT,
-            false,
-            List.of()
+            options
         );
 
         assertEquals(expected, pdf.fileName());
@@ -122,11 +137,15 @@ class CertificatePdfGeneratorTest {
 
       @Test
       void shouldReturnPDF() {
+        final var options = PdfGeneratorOptions.builder()
+            .additionalInfoText(ADDITIONAL_INFO_TEXT)
+            .citizenFormat(false)
+            .hiddenElements(Collections.emptyList())
+            .build();
+
         final var pdf = certificatePdfGenerator.generate(
             buildFK7472Certificate(),
-            ADDITIONAL_INFO_TEXT,
-            false,
-            List.of()
+            options
         );
 
         assertNotEquals(0, pdf.pdfData().length);
@@ -137,11 +156,15 @@ class CertificatePdfGeneratorTest {
         final var expected = "intyg_om_tillfallig_foraldrapenning_" + LocalDateTime.now()
             .format((DateTimeFormatter.ofPattern("yy-MM-dd_HHmm")));
 
+        final var options = PdfGeneratorOptions.builder()
+            .additionalInfoText(ADDITIONAL_INFO_TEXT)
+            .citizenFormat(false)
+            .hiddenElements(Collections.emptyList())
+            .build();
+
         final var pdf = certificatePdfGenerator.generate(
             buildFK7472Certificate(),
-            ADDITIONAL_INFO_TEXT,
-            false,
-            List.of()
+            options
         );
 
         assertEquals(expected, pdf.fileName());
@@ -159,3 +182,4 @@ class CertificatePdfGeneratorTest {
         .build();
   }
 }
+
