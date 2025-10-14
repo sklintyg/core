@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
@@ -814,5 +815,23 @@ class CertificateModelTest {
   @Test
   void shouldReturnFileNameForCertificate() {
     assertEquals("intyg_om_graviditet", FK7210_CERTIFICATE_MODEL.fileName());
+  }
+
+  @Test
+  void shouldReturnCitizenAvailableFunctionsProvider() {
+    final var provider = mock(CitizenAvailableFunctionsProvider.class);
+    final var certificateModel = CertificateModel.builder()
+        .citizenAvailableFunctionsProvider(provider)
+        .build();
+
+    assertEquals(provider, certificateModel.citizenAvailableFunctionsProvider());
+  }
+
+  @Test
+  void shouldReturnDefaultCitizenAvailableFunctionsProviderIfNotSet() {
+    final var certificateModel = CertificateModel.builder().build();
+
+    assertInstanceOf(DefaultCitizenAvailableFunctionsProvider.class,
+        certificateModel.citizenAvailableFunctionsProvider());
   }
 }

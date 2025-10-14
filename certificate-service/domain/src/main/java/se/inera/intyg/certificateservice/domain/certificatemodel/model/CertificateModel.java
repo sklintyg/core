@@ -155,6 +155,12 @@ public class CertificateModel implements Comparator<ElementId> {
     return Optional.ofNullable(ableToCreateDraftForModel);
   }
 
+  public CitizenAvailableFunctionsProvider citizenAvailableFunctionsProvider() {
+    return citizenAvailableFunctionsProvider != null
+        ? citizenAvailableFunctionsProvider
+        : new DefaultCitizenAvailableFunctionsProvider();
+  }
+
   public String fileName() {
     return this.name()
         .replace("å", "a")

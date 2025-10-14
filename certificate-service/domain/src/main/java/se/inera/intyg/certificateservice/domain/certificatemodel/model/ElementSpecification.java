@@ -132,11 +132,16 @@ public class ElementSpecification {
 
   public Optional<ElementSimplifiedValue> simplifiedValue(Optional<ElementData> elementData,
       List<ElementData> allElementData, List<ElementId> hiddenElements, boolean isCitizenFormat) {
-    final var hiddenElementValue = hasHiddenElementValue(hiddenElements, allElementData,
-        isCitizenFormat);
+    if ((pdfConfiguration instanceof CitizenPdfConfiguration hiddenConfig)) {
+      final var replacementElementValue = hiddenConfig.replacementElementValue(
+          hiddenElements,
+          allElementData,
+          isCitizenFormat
+      );
 
-    if (hiddenElementValue.isPresent()) {
-      return hiddenElementValue;
+      if (replacementElementValue.isPresent()) {
+        return replacementElementValue;
+      }
     }
 
     if (elementData.isEmpty()) {
@@ -144,27 +149,5 @@ public class ElementSpecification {
     }
 
     return configuration.simplified(elementData.get().value());
-  }
-
-  private Optional<ElementSimplifiedValue> hasHiddenElementValue(List<ElementId> hiddenElements,
-      List<ElementData> allElementData, boolean isCitizenFormat) {
-    if (!isCitizenFormat || pdfConfiguration == null) {
-      return Optional.empty();
-    }
-
-    if (!(pdfConfiguration instanceof CitizenPdfConfiguration hiddenConfig)) {
-      return Optional.empty();
-    }
-
-    final var shouldHideByCitizenChoice = hiddenConfig.hiddenBy() != null
-        && hiddenElements.contains(hiddenConfig.hiddenBy());
-    final var shouldHideByValue = hiddenConfig.shouldHide() != null
-        && hiddenConfig.shouldHide().test(allElementData);
-
-    if (shouldHideByCitizenChoice || shouldHideByValue) {
-      return Optional.of(hiddenConfig.replacementValue());
-    }
-
-    return Optional.empty();
   }
 }
