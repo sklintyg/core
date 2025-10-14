@@ -40,7 +40,7 @@ public class AG7804TestSetup {
                         .canReceiveQuestions(false)
                         .nurseCanForwardCertificate(false)
                         .midwifeCanForwardCertificate(false)
-                        .canDentistsUseType(false)
+                        .canDentistsUseType(true)
                         .availableForPatient(true)
                         .midwifeCanMarkReadyForSignCertificate(false)
                         .nurseCanMarkReadyForSignCertificate(false)

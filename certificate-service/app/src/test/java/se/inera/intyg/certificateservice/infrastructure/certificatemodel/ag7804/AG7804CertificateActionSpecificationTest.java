@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -8,13 +8,13 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.Certifi
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 
-class TS8071CertificateActionSpecificationTest {
+class AG7804CertificateActionSpecificationTest {
 
   @Test
   void shallIncludeCertificateActionCreate() {
     final var expectedType = CertificateActionType.CREATE;
 
-    final var actionSpecifications = TS8071CertificateActionSpecification.create();
+    final var actionSpecifications = AG7804CertificateActionSpecification.create();
 
     assertTrue(actionSpecifications.stream()
         .anyMatch(actionSpecification ->
@@ -27,7 +27,7 @@ class TS8071CertificateActionSpecificationTest {
   void shallIncludeCertificateActionRead() {
     final var expectedType = CertificateActionType.READ;
 
-    final var actionSpecifications = TS8071CertificateActionSpecification.create();
+    final var actionSpecifications = AG7804CertificateActionSpecification.create();
 
     assertTrue(actionSpecifications.stream()
         .anyMatch(actionSpecification ->
@@ -40,7 +40,7 @@ class TS8071CertificateActionSpecificationTest {
   void shallIncludeCertificateActionUpdate() {
     final var expectedType = CertificateActionType.UPDATE;
 
-    final var actionSpecifications = TS8071CertificateActionSpecification.create();
+    final var actionSpecifications = AG7804CertificateActionSpecification.create();
 
     assertTrue(actionSpecifications.stream().anyMatch(
             actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
@@ -52,7 +52,7 @@ class TS8071CertificateActionSpecificationTest {
   void shallIncludeCertificateActionDelete() {
     final var expectedType = CertificateActionType.DELETE;
 
-    final var actionSpecifications = TS8071CertificateActionSpecification.create();
+    final var actionSpecifications = AG7804CertificateActionSpecification.create();
 
     assertTrue(actionSpecifications.stream().anyMatch(
             actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
@@ -64,10 +64,10 @@ class TS8071CertificateActionSpecificationTest {
   void shallIncludeCertificateActionSign() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.SIGN)
-        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
+        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.DENTIST))
         .build();
 
-    final var actionSpecifications = TS8071CertificateActionSpecification.create();
+    final var actionSpecifications = AG7804CertificateActionSpecification.create();
 
     assertTrue(actionSpecifications.stream().anyMatch(
             expectedSpecification::equals),
@@ -75,28 +75,25 @@ class TS8071CertificateActionSpecificationTest {
   }
 
   @Test
-  void shallIncludeCertificateActionSend() {
-    final var expectedSpecification = CertificateActionSpecification.builder()
-        .certificateActionType(CertificateActionType.SEND)
-        .allowedRoles(
-            List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.CARE_ADMIN, Role.MIDWIFE, Role.NURSE))
-        .build();
+  void shallIncludeCertificateActionPrint() {
+    final var expectedType = CertificateActionType.PRINT;
 
-    final var actionSpecifications = TS8071CertificateActionSpecification.create();
+    final var actionSpecifications = AG7804CertificateActionSpecification.create();
 
     assertTrue(actionSpecifications.stream().anyMatch(
-            expectedSpecification::equals),
-        "Expected type: %s".formatted(expectedSpecification));
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
   }
 
   @Test
   void shallIncludeCertificateActionRevoke() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.REVOKE)
-        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
+        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.DENTIST))
         .build();
 
-    final var actionSpecifications = TS8071CertificateActionSpecification.create();
+    final var actionSpecifications = AG7804CertificateActionSpecification.create();
 
     assertTrue(actionSpecifications.stream().anyMatch(
             expectedSpecification::equals),
@@ -107,7 +104,7 @@ class TS8071CertificateActionSpecificationTest {
   void shallIncludeCertificateActionReplace() {
     final var expectedType = CertificateActionType.REPLACE;
 
-    final var actionSpecifications = TS8071CertificateActionSpecification.create();
+    final var actionSpecifications = AG7804CertificateActionSpecification.create();
 
     assertTrue(actionSpecifications.stream().anyMatch(
             actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
@@ -119,7 +116,19 @@ class TS8071CertificateActionSpecificationTest {
   void shallIncludeCertificateActionReplaceContinue() {
     final var expectedType = CertificateActionType.REPLACE_CONTINUE;
 
-    final var actionSpecifications = TS8071CertificateActionSpecification.create();
+    final var actionSpecifications = AG7804CertificateActionSpecification.create();
+
+    assertTrue(actionSpecifications.stream().anyMatch(
+            actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
+        ),
+        "Expected type: %s".formatted(expectedType));
+  }
+
+  @Test
+  void shallIncludeCertificateActionRenew() {
+    final var expectedType = CertificateActionType.RENEW;
+
+    final var actionSpecifications = AG7804CertificateActionSpecification.create();
 
     assertTrue(actionSpecifications.stream().anyMatch(
             actionSpecification -> expectedType.equals(actionSpecification.certificateActionType())
@@ -131,10 +140,10 @@ class TS8071CertificateActionSpecificationTest {
   void shallIncludeCertificateActionForwardCertificate() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE)
-        .allowedRoles(List.of(Role.CARE_ADMIN, Role.MIDWIFE, Role.NURSE))
+        .allowedRoles(List.of(Role.NURSE, Role.MIDWIFE, Role.CARE_ADMIN))
         .build();
 
-    final var actionSpecifications = TS8071CertificateActionSpecification.create();
+    final var actionSpecifications = AG7804CertificateActionSpecification.create();
 
     assertTrue(actionSpecifications.stream().anyMatch(
             expectedSpecification::equals),
@@ -145,10 +154,10 @@ class TS8071CertificateActionSpecificationTest {
   void shallIncludeCertificateActionReadyForSign() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.READY_FOR_SIGN)
-        .allowedRoles(List.of(Role.CARE_ADMIN, Role.MIDWIFE, Role.NURSE))
+        .allowedRoles(List.of(Role.NURSE, Role.MIDWIFE, Role.CARE_ADMIN))
         .build();
 
-    final var actionSpecifications = TS8071CertificateActionSpecification.create();
+    final var actionSpecifications = AG7804CertificateActionSpecification.create();
 
     assertTrue(actionSpecifications.stream().anyMatch(
             expectedSpecification::equals),
@@ -159,11 +168,12 @@ class TS8071CertificateActionSpecificationTest {
   void shallIncludeCertificateActionAccessForRoles() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.LIST_CERTIFICATE_TYPE)
-        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.CARE_ADMIN, Role.MIDWIFE,
-            Role.NURSE))
+        .allowedRoles(
+            List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.DENTIST, Role.NURSE, Role.MIDWIFE,
+                Role.CARE_ADMIN))
         .build();
 
-    final var actionSpecifications = TS8071CertificateActionSpecification.create();
+    final var actionSpecifications = AG7804CertificateActionSpecification.create();
 
     assertTrue(actionSpecifications.stream().anyMatch(
             expectedSpecification::equals),
@@ -176,23 +186,11 @@ class TS8071CertificateActionSpecificationTest {
         .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE_FROM_LIST)
         .build();
 
-    final var actionSpecifications = TS8071CertificateActionSpecification.create();
+    final var actionSpecifications = AG7804CertificateActionSpecification.create();
 
     assertTrue(actionSpecifications.stream().anyMatch(
             expectedSpecification::equals),
         "Expected type: %s".formatted(expectedSpecification));
   }
 
-  @Test
-  void shallIncludeCertificateActionPrint() {
-    final var expectedSpecification = CertificateActionSpecification.builder()
-        .certificateActionType(CertificateActionType.PRINT)
-        .build();
-
-    final var actionSpecifications = TS8071CertificateActionSpecification.create();
-
-    assertTrue(actionSpecifications.stream().anyMatch(
-            expectedSpecification::equals),
-        "Expected type: %s".formatted(expectedSpecification));
-  }
 }

@@ -40,6 +40,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.common.model.AccessScope;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
+import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 
 @ExtendWith(MockitoExtension.class)
@@ -68,6 +69,9 @@ class CertificateActionCreateDraftFromCertificateTest {
   private final CertificateActionSpecification certificateActionSpecification =
       CertificateActionSpecification.builder()
           .certificateActionType(CertificateActionType.CREATE_DRAFT_FROM_CERTIFICATE)
+          .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.DENTIST, Role.NURSE,
+              Role.MIDWIFE,
+              Role.CARE_ADMIN))
           .build();
 
   @BeforeEach
@@ -237,14 +241,14 @@ class CertificateActionCreateDraftFromCertificateTest {
   }
 
   @Test
-  void shallReturnFalseIfDentist() {
+  void shallReturnTrueIfDentist() {
     final var actionEvaluation = actionEvaluationBuilder
         .user(DAN_DENTIST)
         .build();
 
     final var certificate = certificateBuilder.build();
 
-    assertFalse(
+    assertTrue(
         certificateActionCreateDraftFromCertificate.evaluate(Optional.of(certificate),
             Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)

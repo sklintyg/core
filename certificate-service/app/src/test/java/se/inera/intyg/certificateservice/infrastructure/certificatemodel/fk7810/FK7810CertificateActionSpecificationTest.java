@@ -79,7 +79,7 @@ class FK7810CertificateActionSpecificationTest {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.SEND)
         .allowedRoles(
-            List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.CARE_ADMIN, Role.NURSE, Role.MIDWIFE))
+            List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.CARE_ADMIN, Role.MIDWIFE, Role.NURSE))
         .build();
 
     final var actionSpecifications = FK7810CertificateActionSpecification.create();
@@ -425,8 +425,8 @@ class FK7810CertificateActionSpecificationTest {
   void shallIncludeCertificateActionAccessForRoles() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.LIST_CERTIFICATE_TYPE)
-        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
-            Role.CARE_ADMIN))
+        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.CARE_ADMIN, Role.MIDWIFE,
+            Role.NURSE))
         .build();
 
     final var actionSpecifications = FK7810CertificateActionSpecification.create();

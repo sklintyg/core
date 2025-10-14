@@ -42,7 +42,7 @@ public class FK7804TestSetup {
                         .canReceiveQuestions(true)
                         .nurseCanForwardCertificate(true)
                         .midwifeCanForwardCertificate(true)
-                        .canDentistsUseType(false)
+                        .canDentistsUseType(true)
                         .availableForPatient(true)
                         .midwifeCanMarkReadyForSignCertificate(true)
                         .nurseCanMarkReadyForSignCertificate(true)

@@ -15,10 +15,14 @@ class FK7472CertificateActionSpecificationTest {
       Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE
   );
 
+  public static final List<Role> ROLES_ALLOWED = List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR,
+      Role.NURSE, Role.MIDWIFE, Role.CARE_ADMIN);
+
   @Test
   void shallIncludeCertificateActionCreate() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.CREATE)
+        .allowedRoles(ROLES_ALLOWED)
         .allowedRolesForProtectedPersons(
             ROLES_FOR_PROTECTED_PERSON
         )
@@ -35,6 +39,7 @@ class FK7472CertificateActionSpecificationTest {
   void shallIncludeCertificateActionRead() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.READ)
+        .allowedRoles(ROLES_ALLOWED)
         .allowedRolesForProtectedPersons(
             ROLES_FOR_PROTECTED_PERSON
         )
@@ -51,6 +56,7 @@ class FK7472CertificateActionSpecificationTest {
   void shallIncludeCertificateActionUpdate() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.UPDATE)
+        .allowedRoles(ROLES_ALLOWED)
         .allowedRolesForProtectedPersons(
             ROLES_FOR_PROTECTED_PERSON
         )
@@ -67,6 +73,7 @@ class FK7472CertificateActionSpecificationTest {
   void shallIncludeCertificateActionDelete() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.DELETE)
+        .allowedRoles(ROLES_ALLOWED)
         .allowedRolesForProtectedPersons(
             ROLES_FOR_PROTECTED_PERSON
         )
@@ -167,6 +174,7 @@ class FK7472CertificateActionSpecificationTest {
   void shallIncludeCertificateActionReplace() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.REPLACE)
+        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE))
         .allowedRolesForProtectedPersons(
             ROLES_FOR_PROTECTED_PERSON
         )
@@ -183,6 +191,7 @@ class FK7472CertificateActionSpecificationTest {
   void shallIncludeCertificateActionReplaceContinue() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.REPLACE_CONTINUE)
+        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE))
         .allowedRolesForProtectedPersons(
             ROLES_FOR_PROTECTED_PERSON
         )
@@ -199,6 +208,7 @@ class FK7472CertificateActionSpecificationTest {
   void shallIncludeCertificateActionRenew() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.RENEW)
+        .allowedRoles(ROLES_ALLOWED)
         .allowedRolesForProtectedPersons(
             ROLES_FOR_PROTECTED_PERSON
         )
@@ -268,6 +278,7 @@ class FK7472CertificateActionSpecificationTest {
   void shallIncludeCertificateActionComplement() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.COMPLEMENT)
+        .allowedRoles(ROLES_ALLOWED)
         .allowedRolesForProtectedPersons(
             ROLES_FOR_PROTECTED_PERSON
         )
