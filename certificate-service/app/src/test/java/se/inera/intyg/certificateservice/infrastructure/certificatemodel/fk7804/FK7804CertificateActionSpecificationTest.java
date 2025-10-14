@@ -66,7 +66,7 @@ class FK7804CertificateActionSpecificationTest {
   void shallIncludeCertificateActionSign() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.SIGN)
-        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
+        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.DENTIST))
         .build();
 
     final var actionSpecifications = FK7804CertificateActionSpecification.create();
@@ -130,7 +130,7 @@ class FK7804CertificateActionSpecificationTest {
   void shallIncludeCertificateActionRevoke() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.REVOKE)
-        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR))
+        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.DENTIST))
         .build();
 
     final var actionSpecifications = FK7804CertificateActionSpecification.create();
@@ -277,7 +277,7 @@ class FK7804CertificateActionSpecificationTest {
   void shallIncludeCertificateActionForwardCertificate() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE)
-        .allowedRoles(List.of(Role.CARE_ADMIN, Role.MIDWIFE, Role.NURSE))
+        .allowedRoles(List.of(Role.NURSE, Role.MIDWIFE, Role.CARE_ADMIN))
         .build();
 
     final var actionSpecifications = FK7804CertificateActionSpecification.create();
@@ -423,7 +423,7 @@ class FK7804CertificateActionSpecificationTest {
   void shallIncludeCertificateActionReadyForSign() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.READY_FOR_SIGN)
-        .allowedRoles(List.of(Role.CARE_ADMIN, Role.MIDWIFE, Role.NURSE))
+        .allowedRoles(List.of(Role.NURSE, Role.MIDWIFE, Role.CARE_ADMIN))
         .build();
 
     final var actionSpecifications = FK7804CertificateActionSpecification.create();
@@ -437,8 +437,9 @@ class FK7804CertificateActionSpecificationTest {
   void shallIncludeCertificateActionAccessForRoles() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.LIST_CERTIFICATE_TYPE)
-        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
-            Role.CARE_ADMIN))
+        .allowedRoles(
+            List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.DENTIST, Role.NURSE, Role.MIDWIFE,
+                Role.CARE_ADMIN))
         .build();
 
     final var actionSpecifications = FK7804CertificateActionSpecification.create();
