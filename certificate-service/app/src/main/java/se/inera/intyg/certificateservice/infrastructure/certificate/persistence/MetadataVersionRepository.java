@@ -146,7 +146,7 @@ public class MetadataVersionRepository implements MetadataRepository {
   private Patient getPatientVersionWhenSigned(Patient patient,
       LocalDateTime signedAt) {
     return patientVersionEntityRepository
-        .findFirstCoveringTimestampOrderByMostRecent(patient.id().id(), signedAt)
+        .findFirstCoveringTimestampOrderByMostRecent(patient.id().idWithoutDash(), signedAt)
         .map(PatientVersionEntityMapper::toPatient)
         .map(PatientEntityMapper::toDomain)
         .orElse(patient);
