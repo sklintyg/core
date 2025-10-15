@@ -2,7 +2,7 @@ package se.inera.intyg.certificateservice.application.testdata;
 
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_DECEASED;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_FIRST_NAME;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_LAST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_MIDDLE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_PROTECTED_PERSON;
@@ -26,7 +26,7 @@ public class TestDataPatientVersionEntity {
 
   public static PatientVersionEntity.PatientVersionEntityBuilder athenaReactAnderssonVersionEntityBuilder() {
     return PatientVersionEntity.builder()
-        .id(ATHENA_REACT_ANDERSSON_ID)
+        .id(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH)
         .protectedPerson(ATHENA_REACT_ANDERSSON_PROTECTED_PERSON.value())
         .testIndicated(ATHENA_REACT_ANDERSSON_TEST_INDICATED.value())
         .deceased(ATHENA_REACT_ANDERSSON_DECEASED.value())

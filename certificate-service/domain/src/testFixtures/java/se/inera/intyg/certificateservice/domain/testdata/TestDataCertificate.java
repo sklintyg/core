@@ -106,26 +106,6 @@ public class TestDataCertificate {
   public static final MedicalCertificate FK7210_CERTIFICATE = fk7210CertificateBuilder().build();
   public static final Certificate FK3226_CERTIFICATE = fk3226CertificateBuilder().build();
 
-  public static CertificateMetaData.CertificateMetaDataBuilder ajlaMetadataBuilder() {
-    return CertificateMetaData.builder()
-        .issuer(TestDataStaff.AJLA_DOKTOR)
-        .creator(TestDataStaff.ALF_DOKTOR)
-        .patient(TestDataPatient.ATHENA_REACT_ANDERSSON)
-        .issuingUnit(TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN)
-        .careUnit(TestDataCareUnit.ALFA_MEDICINCENTRUM)
-        .careProvider(TestDataCareProvider.ALFA_REGIONEN);
-  }
-
-  public static CertificateMetaData.CertificateMetaDataBuilder alfMetadataBuilder() {
-    return CertificateMetaData.builder()
-        .creator(TestDataStaff.ALF_DOKTOR)
-        .issuer(TestDataStaff.AJLA_DOKTOR)
-        .patient(TestDataPatient.ATHENA_REACT_ANDERSSON)
-        .issuingUnit(TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN)
-        .careUnit(TestDataCareUnit.ALFA_MEDICINCENTRUM)
-        .careProvider(TestDataCareProvider.ALFA_REGIONEN);
-  }
-
   public static MedicalCertificate.MedicalCertificateBuilder fk7210CertificateBuilder() {
     return MedicalCertificate.builder()
         .id(CERTIFICATE_ID)
