@@ -6,6 +6,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificate.persi
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecification.modifiedEqualsAndGreaterThan;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecification.modifiedEqualsAndLesserThan;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecification.notPlacerholderCertificate;
+import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateModelEntitySpecification.containsTypes;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.PatientEntitySpecification.equalsPatient;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffEntitySpecification.equalsIssuedByStaff;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StatusEntitySpecification.containsStatus;
@@ -73,6 +74,12 @@ public class CertificateEntitySpecificationFactory {
     if (certificatesRequest.statuses() != null && !certificatesRequest.statuses().isEmpty()) {
       specification = specification.and(
           containsStatus(certificatesRequest.statuses())
+      );
+    }
+
+    if (certificatesRequest.types() != null && !certificatesRequest.types().isEmpty()) {
+      specification = specification.and(
+          containsTypes(certificatesRequest.types())
       );
     }
 
