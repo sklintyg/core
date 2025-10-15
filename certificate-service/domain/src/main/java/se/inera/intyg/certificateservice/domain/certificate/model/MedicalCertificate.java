@@ -71,6 +71,7 @@ public class MedicalCertificate implements Certificate {
   @Builder.Default
   private List<Message> messages = Collections.emptyList();
   private Forwarded forwarded;
+  @Getter(AccessLevel.NONE)
   private MetadataRepository metadataRepository;
   @Getter(AccessLevel.NONE)
   private CertificateMetaData metaDataFromSignInstance;

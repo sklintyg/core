@@ -50,14 +50,17 @@ public class UnitEntity {
   @Version
   private Long version;
 
-  public void updateWith(UnitEntity newUnitEntity) {
-    this.setName(newUnitEntity.getName());
-    this.setAddress(newUnitEntity.getAddress());
-    this.setZipCode(newUnitEntity.getZipCode());
-    this.setCity(newUnitEntity.getCity());
-    this.setPhoneNumber(newUnitEntity.getPhoneNumber());
-    this.setEmail(newUnitEntity.getEmail());
-    this.setWorkplaceCode(newUnitEntity.getWorkplaceCode());
+  public void updateWith(UnitEntity source) {
+    if (source == null) {
+      throw new IllegalArgumentException("Cannot update UnitEntity with null");
+    }
+    this.setName(source.getName());
+    this.setAddress(source.getAddress());
+    this.setZipCode(source.getZipCode());
+    this.setCity(source.getCity());
+    this.setPhoneNumber(source.getPhoneNumber());
+    this.setEmail(source.getEmail());
+    this.setWorkplaceCode(source.getWorkplaceCode());
   }
 
   public boolean hasDiff(UnitEntity other) {
@@ -67,10 +70,6 @@ public class UnitEntity {
 
     if (!Objects.equals(this.hsaId, other.getHsaId())) {
       throw new IllegalArgumentException("Cannot compare UnitEntity with different hsaId");
-    }
-
-    if (!Objects.equals(this.type, other.getType())) {
-      throw new IllegalArgumentException("Cannot compare UnitEntity with different types");
     }
 
     return !(Objects.equals(this.name, other.getName())

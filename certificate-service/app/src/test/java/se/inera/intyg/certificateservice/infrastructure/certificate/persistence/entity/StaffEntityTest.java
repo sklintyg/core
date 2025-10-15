@@ -45,7 +45,11 @@ class StaffEntityTest {
         "licences list reference should be replaced");
     assertEquals(originalHsaId, target.getHsaId(), "hsaId must remain unchanged");
     assertEquals(originalKey, target.getKey(), "key must remain unchanged");
+  }
 
+  @Test
+  void shallThrowExceptionWhenSourceIsNull() {
+    assertThrows(IllegalArgumentException.class, () -> AJLA_DOKTOR_ENTITY.updateWith(null));
   }
 
   @Test

@@ -44,6 +44,11 @@ class UnitEntityTest {
   }
 
   @Test
+  void shallThrowExceptionWhenSourceIsNull() {
+    assertThrows(IllegalArgumentException.class, () -> ALFA_REGIONEN_ENTITY.updateWith(null));
+  }
+
+  @Test
   void shallNotFindDiffWhenEntityHasSameValues() {
     assertFalse(ALFA_REGIONEN_ENTITY.hasDiff(alfaRegionenEntityBuilder().build()));
   }
@@ -119,17 +124,4 @@ class UnitEntityTest {
     assertThrows(IllegalArgumentException.class,
         () -> ALFA_REGIONEN_ENTITY.hasDiff(unitWithDifferentHsaId));
   }
-
-  @Test
-  void shallThrowExceptionWhenComparingUnitWithDifferentTypes() {
-    var unitWithDifferentType = alfaRegionenEntityBuilder()
-        .type(UnitTypeEntity.builder()
-            .type(UnitType.CARE_UNIT.name())
-            .key(UnitType.CARE_UNIT.getKey())
-            .build())
-        .build();
-    assertThrows(IllegalArgumentException.class,
-        () -> ALFA_REGIONEN_ENTITY.hasDiff(unitWithDifferentType));
-  }
-
 }

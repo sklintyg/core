@@ -43,6 +43,12 @@ class PatientEntityTest {
   }
 
   @Test
+  void shallThrowExceptionWhenSourceIsNull() {
+    assertThrows(IllegalArgumentException.class,
+        () -> ATHENA_REACT_ANDERSSON_ENTITY.updateWith(null));
+  }
+
+  @Test
   void shallNotFindDiffWhenEntityHasSameValues() {
     assertFalse(ATHENA_REACT_ANDERSSON_ENTITY.hasDiff(athenaReactAnderssonEntityBuilder().build()));
   }

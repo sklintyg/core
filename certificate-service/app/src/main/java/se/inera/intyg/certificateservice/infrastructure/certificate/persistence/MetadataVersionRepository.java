@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence;
 
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
 import java.time.LocalDateTime;
@@ -44,6 +45,7 @@ public class MetadataVersionRepository implements MetadataRepository {
   private final StaffVersionEntityRepository staffVersionEntityRepository;
   private final PatientVersionEntityRepository patientVersionEntityRepository;
   private final UnitVersionEntityRepository unitVersionEntityRepository;
+  private final EntityManager entityManager;
 
   @Transactional(TxType.REQUIRES_NEW)
   public void saveStaffVersion(StaffEntity staffEntity, StaffEntity newStaffEntity) {
@@ -51,6 +53,7 @@ public class MetadataVersionRepository implements MetadataRepository {
     staffEntity.updateWith(newStaffEntity);
     staffEntityRepository.save(staffEntity);
     updateStaffVersionHistory(staffVersionEntity);
+    entityManager.flush();
   }
 
   private void updateStaffVersionHistory(StaffVersionEntity staffVersionEntity) {
@@ -158,7 +161,7 @@ public class MetadataVersionRepository implements MetadataRepository {
       LocalDateTime signedAt) {
     List<StaffVersionEntity> entities = staffVersionEntityRepository
         .findAllCoveringTimestampByHsaIdIn(
-            staffs.stream().map(s -> s.hsaId().id()).collect(Collectors.toList()), signedAt);
+            staffs.stream().map(s -> s.hsaId().id()).toList(), signedAt);
 
     Map<String, Staff> versionedStaffMap = entities.stream()
         .map(StaffVersionEntityMapper::toStaff)

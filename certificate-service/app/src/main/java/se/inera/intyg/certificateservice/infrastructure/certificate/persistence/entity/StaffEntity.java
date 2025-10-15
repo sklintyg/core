@@ -57,6 +57,9 @@ public class StaffEntity {
   private Long version;
 
   public void updateWith(StaffEntity source) {
+    if (source == null) {
+      throw new IllegalArgumentException("Cannot update StaffEntity with null");
+    }
     this.setFirstName(source.getFirstName());
     this.setMiddleName(source.getMiddleName());
     this.setLastName(source.getLastName());

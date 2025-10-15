@@ -71,7 +71,7 @@ public class StaffRepository {
   }
 
   private StaffEntity updateStaffVersion(StaffEntity staffEntity, Staff staff) {
-    var newStaffEntity = StaffEntityMapper.toEntity(staff);
+    final var newStaffEntity = StaffEntityMapper.toEntity(staff);
     if (staffEntity.hasDiff(newStaffEntity)) {
       try {
         metadataVersionRepository.saveStaffVersion(staffEntity, newStaffEntity);

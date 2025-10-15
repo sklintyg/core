@@ -49,6 +49,10 @@ public class PatientEntity {
   private Long version;
 
   public void updateWith(PatientEntity source) {
+    if (source == null) {
+      throw new IllegalArgumentException("Cannot update PatientEntity with null");
+    }
+
     this.firstName = source.getFirstName();
     this.middleName = source.getMiddleName();
     this.lastName = source.getLastName();

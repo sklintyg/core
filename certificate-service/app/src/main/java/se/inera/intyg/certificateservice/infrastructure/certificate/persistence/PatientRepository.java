@@ -28,7 +28,7 @@ public class PatientRepository {
   }
 
   private PatientEntity updatePatientVersion(PatientEntity patientEntity, Patient patient) {
-    var newPatientEntity = toEntity(patient);
+    final var newPatientEntity = toEntity(patient);
     if (patientEntity.hasDiff(newPatientEntity)) {
       try {
         metadataVersionRepository.savePatientVersion(patientEntity, newPatientEntity);
