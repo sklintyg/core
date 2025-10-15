@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.prefill.converter;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -24,7 +25,7 @@ import se.riv.clinicalprocess.healthcond.certificate.v33.Forifyllnad;
 @Component
 public class PrefillCheckboxMultipleDatesConverter implements PrefillStandardConverter {
 
-  private static final int MINIMUM_SUB_ANSWERS = 2;
+  private static final int MINIMUM_SUB_ANSWERS = 1;
 
   @Override
   public Class<? extends ElementConfiguration> supports() {
@@ -102,7 +103,7 @@ public class PrefillCheckboxMultipleDatesConverter implements PrefillStandardCon
         .findFirst();
 
     if (subAnswer.isEmpty() || subAnswer.get().getContent().isEmpty()) {
-      throw new IllegalStateException("Invalid format: date is missing");
+      return LocalDate.now(ZoneId.systemDefault());
     }
 
     return LocalDate.parse((String) subAnswer.get().getContent().getFirst());
