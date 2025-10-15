@@ -49,14 +49,15 @@ public class StaffRepository {
       staffs.add(certificate.readyForSign().readyForSignBy());
     }
 
+    final var uniqueStaffs = staffs.stream().distinct().toList();
+
     final var staffEntities = staffEntityRepository.findStaffEntitiesByHsaIdIn(
-        staffs.stream().map(staff -> staff.hsaId().id()).distinct().toList()
-    );
+        uniqueStaffs.stream().map(s -> s.hsaId().id()).toList());
 
     final var staffEntityMap = staffEntities.stream()
         .collect(Collectors.toMap(staff -> HsaId.create(staff.getHsaId()), Function.identity()));
 
-    staffs.forEach(staff -> {
+    uniqueStaffs.forEach(staff -> {
       if (!staffEntityMap.containsKey(staff.hsaId())) {
         final var staffEntity = staffEntityRepository.save(toEntity(staff));
         staffEntityMap.put(HsaId.create(staffEntity.getHsaId()), staffEntity);
