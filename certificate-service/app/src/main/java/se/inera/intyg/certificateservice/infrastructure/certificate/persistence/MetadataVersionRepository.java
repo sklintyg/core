@@ -1,8 +1,5 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence;
 
-import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
-import jakarta.transaction.Transactional.TxType;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -45,34 +42,27 @@ public class MetadataVersionRepository implements MetadataRepository {
   private final StaffVersionEntityRepository staffVersionEntityRepository;
   private final PatientVersionEntityRepository patientVersionEntityRepository;
   private final UnitVersionEntityRepository unitVersionEntityRepository;
-  private final EntityManager entityManager;
 
-  @Transactional(TxType.REQUIRES_NEW)
-  public void saveStaffVersion(StaffEntity staffEntity, StaffEntity newStaffEntity) {
+  public StaffEntity saveStaffVersion(StaffEntity staffEntity, StaffEntity newStaffEntity) {
     final var staffVersionEntity = StaffVersionEntityMapper.toStaffVersion(staffEntity);
     staffEntity.updateWith(newStaffEntity);
-    staffEntityRepository.save(staffEntity);
     updateStaffVersionHistory(staffVersionEntity);
-    entityManager.flush();
+    return staffEntityRepository.save(staffEntity);
   }
 
   private void updateStaffVersionHistory(StaffVersionEntity staffVersionEntity) {
-    final var latestVersion =
-        staffVersionEntityRepository.findFirstByHsaIdOrderByValidFromDesc(
-            staffVersionEntity.getHsaId());
-
+    final var latestVersion = staffVersionEntityRepository.findFirstByHsaIdOrderByValidFromDesc(
+        staffVersionEntity.getHsaId());
     latestVersion.ifPresent(
         versionEntity -> staffVersionEntity.setValidFrom(versionEntity.getValidTo()));
-
     staffVersionEntityRepository.save(staffVersionEntity);
   }
 
-  @Transactional(TxType.REQUIRES_NEW)
-  public void saveUnitVersion(UnitEntity unitEntity, UnitEntity newUnitEntity) {
+  public UnitEntity saveUnitVersion(UnitEntity unitEntity, UnitEntity newUnitEntity) {
     final var unitVersionEntity = UnitVersionEntityMapper.toUnitVersion(unitEntity);
     unitEntity.updateWith(newUnitEntity);
-    unitEntityRepository.save(unitEntity);
     updateUnitVersionHistory(unitVersionEntity);
+    return unitEntityRepository.save(unitEntity);
   }
 
 
@@ -85,13 +75,12 @@ public class MetadataVersionRepository implements MetadataRepository {
   }
 
 
-  @Transactional(TxType.REQUIRES_NEW)
-  public void savePatientVersion(PatientEntity patientEntity,
+  public PatientEntity savePatientVersion(PatientEntity patientEntity,
       PatientEntity newPatientEntity) {
     final var patientVersionEntity = PatientVersionEntityMapper.toPatientVersion(patientEntity);
     patientEntity.updateWith(newPatientEntity);
-    patientEntityRepository.save(patientEntity);
     updatePatientVersionHistory(patientVersionEntity);
+    return patientEntityRepository.save(patientEntity);
   }
 
 
@@ -185,5 +174,4 @@ public class MetadataVersionRepository implements MetadataRepository {
         .map(UnitVersionEntityMapper::toUnit)
         .collect(Collectors.toMap(UnitEntity::getHsaId, Function.identity(), (a, b) -> a));
   }
-
 }

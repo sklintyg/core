@@ -2,11 +2,8 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.UnitEntityMapper.toEntity;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.OptimisticLockException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.unit.model.CareProvider;
 import se.inera.intyg.certificateservice.domain.unit.model.CareUnit;
@@ -22,7 +19,6 @@ public class UnitRepository {
 
   private final UnitEntityRepository unitEntityRepository;
   private final MetadataVersionRepository metadataVersionRepository;
-  private final EntityManager entityManager;
 
   public UnitEntity careProvider(CareProvider careProvider) {
     return unitEntityRepository.findByHsaId(careProvider.hsaId().id())
@@ -70,14 +66,7 @@ public class UnitRepository {
 
   private UnitEntity saveUnit(UnitEntity unitEntity, UnitEntity newUnitEntity) {
     if (unitEntity.hasDiff(newUnitEntity)) {
-      try {
-        metadataVersionRepository.saveUnitVersion(unitEntity, newUnitEntity);
-        entityManager.refresh(unitEntity);
-      } catch (OptimisticLockException | ObjectOptimisticLockingFailureException e) {
-        log.info("Skipped updating UnitEntity {} because it was updated concurrently",
-            unitEntity.getHsaId());
-        entityManager.refresh(unitEntity);
-      }
+      return metadataVersionRepository.saveUnitVersion(unitEntity, newUnitEntity);
     }
     return unitEntity;
   }

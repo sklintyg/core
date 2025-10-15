@@ -2,15 +2,12 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.StaffEntityMapper.toEntity;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.OptimisticLockException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
@@ -26,7 +23,6 @@ public class StaffRepository {
 
   private final StaffEntityRepository staffEntityRepository;
   private final MetadataVersionRepository metadataVersionRepository;
-  private final EntityManager entityManager;
 
   public StaffEntity staff(Staff issuer) {
     return staffEntityRepository.findByHsaId(issuer.hsaId().id())
@@ -73,17 +69,8 @@ public class StaffRepository {
   private StaffEntity updateStaffVersion(StaffEntity staffEntity, Staff staff) {
     final var newStaffEntity = StaffEntityMapper.toEntity(staff);
     if (staffEntity.hasDiff(newStaffEntity)) {
-      try {
-        metadataVersionRepository.saveStaffVersion(staffEntity, newStaffEntity);
-        entityManager.refresh(staffEntity);
-      } catch (OptimisticLockException | ObjectOptimisticLockingFailureException e) {
-        log.info("Skipped updating StaffEntity {} because it was updated concurrently",
-            staff.hsaId().id());
-        entityManager.refresh(staffEntity);
-      }
+      return metadataVersionRepository.saveStaffVersion(staffEntity, newStaffEntity);
     }
     return staffEntity;
   }
-
-
 }
