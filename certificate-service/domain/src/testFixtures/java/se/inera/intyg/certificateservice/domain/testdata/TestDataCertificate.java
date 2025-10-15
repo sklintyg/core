@@ -524,9 +524,7 @@ public class TestDataCertificate {
         )
         .certificateMetaData(CERTIFICATE_META_DATA);
   }
-
-  public static final Certificate FK7426_CERTIFICATE = fk7426CertificateBuilder().build();
-
+  
   public static MedicalCertificate.MedicalCertificateBuilder fk7426CertificateBuilder() {
     return MedicalCertificate.builder()
         .id(CERTIFICATE_ID)
@@ -698,7 +696,6 @@ public class TestDataCertificate {
         .certificateMetaData(CERTIFICATE_META_DATA);
   }
 
-  public static final Certificate FK3221_CERTIFICATE = fk3221CertificateBuilder().build();
 
   public static MedicalCertificate.MedicalCertificateBuilder fk3221CertificateBuilder() {
     return MedicalCertificate.builder()
