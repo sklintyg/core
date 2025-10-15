@@ -41,6 +41,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMet
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.PlaceholderCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
+import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
@@ -396,7 +397,7 @@ class JpaCertificateRepositoryTest {
       doReturn(CERTIFICATE).when(certificateEntityMapper).toDomain(eq(CERTIFICATE_ENTITY),
           any(CertificateRepository.class));
 
-      final var actualCertificate = jpaCertificateRepository.insert(CERTIFICATE);
+      final var actualCertificate = jpaCertificateRepository.insert(CERTIFICATE, new Revision(1));
 
       assertEquals(CERTIFICATE, actualCertificate);
     }
@@ -408,7 +409,7 @@ class JpaCertificateRepositoryTest {
       doReturn(CERTIFICATE).when(certificateEntityMapper).toDomain(eq(CERTIFICATE_ENTITY),
           any(CertificateRepository.class));
 
-      jpaCertificateRepository.insert(CERTIFICATE);
+      jpaCertificateRepository.insert(CERTIFICATE, new Revision(1));
       verify(certificateRelationRepository).save(CERTIFICATE, CERTIFICATE_ENTITY);
     }
 

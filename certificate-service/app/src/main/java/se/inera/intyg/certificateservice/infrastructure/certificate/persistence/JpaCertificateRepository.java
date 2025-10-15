@@ -327,10 +327,11 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
   }
 
   @Override
-  public Certificate insert(Certificate certificate) {
-    final var savedEntity = certificateEntityRepository.save(
-        certificateEntityMapper.toEntity(certificate)
-    );
+  public Certificate insert(Certificate certificate, Revision revision) {
+    final var entity = certificateEntityMapper.toEntity(certificate);
+    entity.setRevision(revision.value());
+
+    final var savedEntity = certificateEntityRepository.save(entity);
 
     certificateRelationRepository.save(
         certificate, savedEntity

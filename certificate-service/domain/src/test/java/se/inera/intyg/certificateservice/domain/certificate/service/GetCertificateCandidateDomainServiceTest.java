@@ -3,9 +3,7 @@ package se.inera.intyg.certificateservice.domain.certificate.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.verify;
 import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.READ;
-import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.UPDATE_DRAFT_FROM_CERTIFICATE;
 
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,16 +38,7 @@ class GetCertificateCandidateDomainServiceTest {
   }
 
   @Test
-  void shallValidateIfAllowedToUpdateDraftFromCertificate() {
-    doReturn(true).when(certificate).allowTo(READ, Optional.of(ACTION_EVALUATION));
-    doReturn(true).when(certificate)
-        .allowTo(UPDATE_DRAFT_FROM_CERTIFICATE, Optional.of(ACTION_EVALUATION));
-    getCertificateCandidateDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION);
-    verify(certificate).allowTo(UPDATE_DRAFT_FROM_CERTIFICATE, Optional.of(ACTION_EVALUATION));
-  }
-
-  @Test
-  void shallThrowIfNotAllowedToRead() {
+  void shallThrowIfNotAllowedToReadCertificate() {
     doReturn(false).when(certificate).allowTo(READ, Optional.of(ACTION_EVALUATION));
     assertThrows(CertificateActionForbidden.class,
         () -> getCertificateCandidateDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION)
@@ -57,10 +46,10 @@ class GetCertificateCandidateDomainServiceTest {
   }
 
   @Test
-  void shallThrowIfNotAllowedToUpdateDraftFromCertificate() {
+  void shallThrowIfNotAllowedToReadCandidateCertificate() {
+    doReturn(Optional.of(candidateCertificate)).when(certificate).candidateForUpdate();
     doReturn(true).when(certificate).allowTo(READ, Optional.of(ACTION_EVALUATION));
-    doReturn(false).when(certificate)
-        .allowTo(UPDATE_DRAFT_FROM_CERTIFICATE, Optional.of(ACTION_EVALUATION));
+    doReturn(false).when(candidateCertificate).allowTo(READ, Optional.of(ACTION_EVALUATION));
     assertThrows(CertificateActionForbidden.class,
         () -> getCertificateCandidateDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION)
     );
@@ -69,8 +58,7 @@ class GetCertificateCandidateDomainServiceTest {
   @Test
   void shallReturnCandidateForUpdate() {
     doReturn(true).when(certificate).allowTo(READ, Optional.of(ACTION_EVALUATION));
-    doReturn(true).when(certificate)
-        .allowTo(UPDATE_DRAFT_FROM_CERTIFICATE, Optional.of(ACTION_EVALUATION));
+    doReturn(true).when(candidateCertificate).allowTo(READ, Optional.of(ACTION_EVALUATION));
     doReturn(Optional.of(candidateCertificate)).when(certificate).candidateForUpdate();
     final var actualCertificate = getCertificateCandidateDomainService.get(CERTIFICATE_ID,
         ACTION_EVALUATION);
