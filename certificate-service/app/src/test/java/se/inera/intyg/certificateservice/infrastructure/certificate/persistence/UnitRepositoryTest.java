@@ -2,9 +2,9 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitEntity.ALFA_ALLERGIMOTTAGNINGEN_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitEntity.ALFA_MEDICINCENTRUM_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitEntity.ALFA_REGIONEN_ENTITY;
@@ -158,10 +158,9 @@ class UnitRepositoryTest {
       doThrow(OptimisticLockException.class).when(metadataVersionRepository)
           .saveUnitVersion(UPPDATERAD_ALFA_REGIONEN_ENTITY, ALFA_REGIONEN_ENTITY);
 
-      final var result = unitRepository.careProvider(ALFA_REGIONEN);
+      assertThrows(OptimisticLockException.class,
+          () -> unitRepository.careProvider(ALFA_REGIONEN));
 
-      verify(entityManager).refresh(UPPDATERAD_ALFA_REGIONEN_ENTITY);
-      assertEquals(UPPDATERAD_ALFA_REGIONEN_ENTITY, result);
     }
 
     @Test
@@ -175,10 +174,8 @@ class UnitRepositoryTest {
       doThrow(OptimisticLockException.class).when(metadataVersionRepository)
           .saveUnitVersion(UPPDATERAD_ALFA_MEDICINCENTRUM_ENTITY, ALFA_MEDICINCENTRUM_ENTITY);
 
-      final var result = unitRepository.careUnit(ALFA_MEDICINCENTRUM);
-
-      verify(entityManager).refresh(UPPDATERAD_ALFA_MEDICINCENTRUM_ENTITY);
-      assertEquals(UPPDATERAD_ALFA_MEDICINCENTRUM_ENTITY, result);
+      assertThrows(OptimisticLockException.class,
+          () -> unitRepository.careUnit(ALFA_MEDICINCENTRUM));
 
     }
 
@@ -194,10 +191,8 @@ class UnitRepositoryTest {
           .saveUnitVersion(UPPDATERAD_ALFA_ALLERGIMOTTAGNINGEN_ENTITY,
               ALFA_ALLERGIMOTTAGNINGEN_ENTITY);
 
-      final var result = unitRepository.issuingUnit(ALFA_ALLERGIMOTTAGNINGEN);
-
-      verify(entityManager).refresh(UPPDATERAD_ALFA_ALLERGIMOTTAGNINGEN_ENTITY);
-      assertEquals(UPPDATERAD_ALFA_ALLERGIMOTTAGNINGEN_ENTITY, result);
+      assertThrows(OptimisticLockException.class,
+          () -> unitRepository.issuingUnit(ALFA_ALLERGIMOTTAGNINGEN));
     }
   }
 }

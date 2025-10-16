@@ -1,9 +1,9 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffEntity.AJLA_DOKTOR_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffEntity.ALF_DOKTOR_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffEntity.ajlaDoctorEntityBuilder;
@@ -276,10 +276,8 @@ class StaffRepositoryTest {
       doThrow(OptimisticLockException.class).when(metadataVersionRepository)
           .saveStaffVersion(updatedAlja, AJLA_DOKTOR_ENTITY);
 
-      final var result = staffRepository.staffs(certificate);
-
-      verify(entityManager).refresh(updatedAlja);
-      assertEquals(updatedAlja, result.get(AJLA_DOKTOR.hsaId()));
+      assertThrows(OptimisticLockException.class,
+          () -> staffRepository.staffs(certificate));
     }
   }
 

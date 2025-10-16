@@ -1,9 +1,9 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataPatientEntity.ATHENA_REACT_ANDERSSON_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataPatientEntity.athenaReactAnderssonEntityBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
@@ -71,10 +71,8 @@ class PatientRepositoryTest {
       doThrow(OptimisticLockException.class).when(metadataVersionRepository)
           .savePatientVersion(updatedAthena, ATHENA_REACT_ANDERSSON_ENTITY);
 
-      final var result = patientRepository.patient(ATHENA_REACT_ANDERSSON);
-
-      verify(entityManager).refresh(updatedAthena);
-      assertEquals(updatedAthena, result);
+      assertThrows(OptimisticLockException.class,
+          () -> patientRepository.patient(ATHENA_REACT_ANDERSSON));
     }
   }
 }
