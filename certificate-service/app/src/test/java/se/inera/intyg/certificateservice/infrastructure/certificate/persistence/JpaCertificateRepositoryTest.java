@@ -42,7 +42,9 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMet
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.PlaceholderCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
+import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
+import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PlaceholderCertificateRequest;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
@@ -63,22 +65,15 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateModelEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.PlaceholderCertificateEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecificationFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateRelationRepository;
 
 @ExtendWith(MockitoExtension.class)
 class JpaCertificateRepositoryTest {
 
   @Mock
-  CertificateEntitySpecificationFactory certificateEntitySpecificationFactory;
-  @Mock
   CertificateRelationRepository certificateRelationRepository;
   @Mock
   CertificateEntityRepository certificateEntityRepository;
-  @Mock
-  UnitRepository unitRepository;
-  @Mock
-  PatientRepository patientRepository;
   @Mock
   CertificateEntityMapper certificateEntityMapper;
   @Mock
@@ -230,7 +225,8 @@ class JpaCertificateRepositoryTest {
 
       doReturn(CERTIFICATE_ENTITY).when(certificateEntityMapper).toEntity(certificate);
       doReturn(CERTIFICATE_ENTITY).when(certificateEntityRepository).save(CERTIFICATE_ENTITY);
-      doReturn(certificate).when(certificateEntityMapper).toDomain(CERTIFICATE_ENTITY);
+      doReturn(certificate).when(certificateEntityMapper).toDomain(eq(CERTIFICATE_ENTITY),
+          any(CertificateRepository.class));
 
       final var response = jpaCertificateRepository.save(certificate);
 
@@ -273,7 +269,8 @@ class JpaCertificateRepositoryTest {
 
       doReturn(CERTIFICATE_ENTITY).when(certificateEntityMapper).toEntity(certificate);
       doReturn(CERTIFICATE_ENTITY).when(certificateEntityRepository).save(CERTIFICATE_ENTITY);
-      doReturn(certificate).when(certificateEntityMapper).toDomain(CERTIFICATE_ENTITY);
+      doReturn(certificate).when(certificateEntityMapper).toDomain(eq(CERTIFICATE_ENTITY),
+          any(CertificateRepository.class));
 
       jpaCertificateRepository.save(certificate);
       verify(certificateRelationRepository).save(certificate, CERTIFICATE_ENTITY);
@@ -303,7 +300,8 @@ class JpaCertificateRepositoryTest {
 
       when(certificateEntityRepository.findByCertificateId("ID"))
           .thenReturn(Optional.of(CERTIFICATE_ENTITY));
-      when(certificateEntityMapper.toDomain(CERTIFICATE_ENTITY))
+      when(certificateEntityMapper.toDomain(eq(CERTIFICATE_ENTITY),
+          any(CertificateRepository.class)))
           .thenReturn(expectedCertificate);
 
       final var response = jpaCertificateRepository.getById(new CertificateId("ID"));
@@ -341,7 +339,8 @@ class JpaCertificateRepositoryTest {
       when(certificateEntityRepository.findCertificateEntitiesByCertificateIdIn(
           List.of("ID1", "ID2"))
       ).thenReturn(List.of(CERTIFICATE_ENTITY, CERTIFICATE_ENTITY));
-      when(certificateEntityMapper.toDomain(CERTIFICATE_ENTITY))
+      when(certificateEntityMapper.toDomain(eq(CERTIFICATE_ENTITY),
+          any(CertificateRepository.class)))
           .thenReturn(expectedCertificate);
 
       final var response = jpaCertificateRepository.getByIds(certificateIds);
@@ -398,9 +397,10 @@ class JpaCertificateRepositoryTest {
     void shouldInsertCertificates() {
       doReturn(CERTIFICATE_ENTITY).when(certificateEntityMapper).toEntity(CERTIFICATE);
       doReturn(CERTIFICATE_ENTITY).when(certificateEntityRepository).save(CERTIFICATE_ENTITY);
-      doReturn(CERTIFICATE).when(certificateEntityMapper).toDomain(CERTIFICATE_ENTITY);
+      doReturn(CERTIFICATE).when(certificateEntityMapper).toDomain(eq(CERTIFICATE_ENTITY),
+          any(CertificateRepository.class));
 
-      final var actualCertificate = jpaCertificateRepository.insert(CERTIFICATE);
+      final var actualCertificate = jpaCertificateRepository.insert(CERTIFICATE, new Revision(1));
 
       assertEquals(CERTIFICATE, actualCertificate);
     }
@@ -409,9 +409,10 @@ class JpaCertificateRepositoryTest {
     void shouldSaveCertificateRelations() {
       doReturn(CERTIFICATE_ENTITY).when(certificateEntityMapper).toEntity(CERTIFICATE);
       doReturn(CERTIFICATE_ENTITY).when(certificateEntityRepository).save(CERTIFICATE_ENTITY);
-      doReturn(CERTIFICATE).when(certificateEntityMapper).toDomain(CERTIFICATE_ENTITY);
+      doReturn(CERTIFICATE).when(certificateEntityMapper).toDomain(eq(CERTIFICATE_ENTITY),
+          any(CertificateRepository.class));
 
-      jpaCertificateRepository.insert(CERTIFICATE);
+      jpaCertificateRepository.insert(CERTIFICATE, new Revision(1));
       verify(certificateRelationRepository).save(CERTIFICATE, CERTIFICATE_ENTITY);
     }
 
@@ -450,7 +451,8 @@ class JpaCertificateRepositoryTest {
 
       doReturn(List.of(CERTIFICATE_ENTITY)).when(certificateEntityRepository)
           .findCertificateEntitiesByCertificateIdIn(certificateIds);
-      doReturn(CERTIFICATE).when(certificateEntityMapper).toDomain(CERTIFICATE_ENTITY);
+      doReturn(CERTIFICATE).when(certificateEntityMapper).toDomain(eq(CERTIFICATE_ENTITY),
+          any(CertificateRepository.class));
 
       final var actualCertificates = jpaCertificateRepository.findByIds(request);
       assertEquals(expectedCertificates, actualCertificates);
@@ -512,7 +514,8 @@ class JpaCertificateRepositoryTest {
           );
       doReturn(Collections.singletonList(certificateEntity)).when(page).getContent();
       doReturn(2L).when(page).getTotalElements();
-      doReturn(FK3226_CERTIFICATE).when(certificateEntityMapper).toDomain(certificateEntity);
+      doReturn(FK3226_CERTIFICATE).when(certificateEntityMapper).toDomain(eq(certificateEntity),
+          any(CertificateRepository.class));
 
       final var actualResult = jpaCertificateRepository.getExportByCareProviderId(
           new HsaId(CARE_PROVIDER.getHsaId()), 0, 10);

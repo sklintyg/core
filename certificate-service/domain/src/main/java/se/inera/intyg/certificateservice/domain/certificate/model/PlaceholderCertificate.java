@@ -307,4 +307,11 @@ public class PlaceholderCertificate implements Certificate {
   public void fillFromCertificate(Certificate certificate) {
     throw new IllegalStateException("Cannot fill from certificate for a placeholder certificate");
   }
+
+  @Override
+  public Optional<Certificate> candidateForUpdate() {
+    throw new IllegalStateException(
+        "Cannot get candidate for update for a placeholder certificate"
+    );
+  }
 }

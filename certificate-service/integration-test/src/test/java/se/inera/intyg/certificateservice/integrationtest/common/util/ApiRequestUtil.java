@@ -8,6 +8,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.CreateCerti
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ForwardCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateCandidateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateEventsRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificatePdfRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
@@ -19,6 +20,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.RevokeCerti
 import se.inera.intyg.certificateservice.application.certificate.dto.SendCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.UpdateWithCertificateCandidateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.ValidateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
@@ -270,6 +272,14 @@ public class ApiRequestUtil {
 
   public static CreateDraftFromCertificateRequest defaultCreateDraftFromCertificateRequest() {
     return CreateDraftFromCertificateRequestBuilder.create().build();
+  }
+
+  public static GetCertificateCandidateRequest defaultGetCertificateCandidateRequest() {
+    return GetCertificateCandidateRequestBuilder.create().build();
+  }
+
+  public static UpdateWithCertificateCandidateRequest defaultUpdateWithCertificateCandidateRequest() {
+    return UpdateWithCertificateCandidateRequestBuilder.create().build();
   }
 
   public static CreateDraftFromCertificateRequestBuilder customCreateDraftFromCertificateRequest() {

@@ -611,6 +611,25 @@ public class CertificateActionFactory {
               )
           )
           .build();
+      case UPDATE_DRAFT_FROM_CERTIFICATE -> CertificateActionUpdateDraftFromCertificate.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
+                  new ActionRuleProtectedPerson(
+                      actionSpecification.allowedRolesForProtectedPersons()
+                  ),
+                  new ActionRuleStatus(List.of(Status.DRAFT)),
+                  new ActionRuleRole(
+                      actionSpecification.allowedRoles()
+                  ),
+                  new ActionRuleUserAgreement(),
+                  new ActionRuleUserHasAccessScope(
+                      List.of(AccessScope.WITHIN_CARE_PROVIDER, AccessScope.ALL_CARE_PROVIDERS)
+                  )
+              )
+          )
+          .build();
     };
   }
 }

@@ -29,6 +29,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraft
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ForwardCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ForwardCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateCandidateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateCandidateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateEventsRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateEventsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificatePdfRequest;
@@ -50,6 +52,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.SignCertifi
 import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.UpdateWithCertificateCandidateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.UpdateWithCertificateCandidateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ValidateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.ValidateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.GetCertificateTypeInfoRequest;
@@ -640,6 +644,24 @@ public class ApiUtil {
     }
 
     return response;
+  }
+
+  public ResponseEntity<GetCertificateCandidateResponse> getCertificateCandidate(
+      GetCertificateCandidateRequest request, String certificateId) {
+    final var requestUrl = "http://localhost:%s/api/certificate/%s/candidate".formatted(
+        port,
+        certificateId
+    );
+
+    return sendRequest(request, requestUrl, GetCertificateCandidateResponse.class);
+  }
+
+  public ResponseEntity<UpdateWithCertificateCandidateResponse> updateWithCertificateCandidate(
+      UpdateWithCertificateCandidateRequest request, String certificateId, String candidateId) {
+    final var requestUrl = "http://localhost:%s/api/certificate/%s/candidate/%s"
+        .formatted(port, certificateId, candidateId);
+
+    return sendRequest(request, requestUrl, UpdateWithCertificateCandidateResponse.class);
   }
 
   public ResponseEntity<GetCertificatePdfResponse> getCertificatePdf(

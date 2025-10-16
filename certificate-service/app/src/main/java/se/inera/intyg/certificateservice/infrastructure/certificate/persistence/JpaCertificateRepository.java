@@ -60,6 +60,7 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
         .created(LocalDateTime.now(ZoneId.systemDefault()))
         .certificateModel(certificateModel)
         .revision(new Revision(0))
+        .certificateRepository(this)
         .build();
   }
 
@@ -92,6 +93,7 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
                 .created(LocalDateTime.now(ZoneId.systemDefault()))
                 .build()
         )
+        .certificateRepository(this)
         .build();
   }
 
@@ -126,7 +128,7 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
         certificate, savedEntity
     );
 
-    return certificateEntityMapper.toDomain(savedEntity);
+    return certificateEntityMapper.toDomain(savedEntity, this);
   }
 
   @Override
@@ -143,7 +145,7 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
             )
         );
 
-    return certificateEntityMapper.toDomain(certificateEntity);
+    return certificateEntityMapper.toDomain(certificateEntity, this);
   }
 
 
@@ -177,7 +179,7 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
     }
 
     return certificateEntities.stream()
-        .map(certificateEntityMapper::toDomain)
+        .map(certificateEntity -> certificateEntityMapper.toDomain(certificateEntity, this))
         .toList();
   }
 
@@ -200,7 +202,7 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
     );
 
     return certificateEntities.stream()
-        .map(certificateEntityMapper::toDomain)
+        .map(certificateEntity -> certificateEntityMapper.toDomain(certificateEntity, this))
         .toList();
   }
 
@@ -219,7 +221,7 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
     final var specification = certificateEntitySpecificationFactory.create(request);
 
     return certificateEntityRepository.findAll(specification).stream()
-        .map(certificateEntityMapper::toDomain)
+        .map(certificateEntity -> certificateEntityMapper.toDomain(certificateEntity, this))
         .toList();
   }
 
@@ -245,7 +247,7 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
         .totalRevoked(revokedCertificatesOnCareProvider)
         .certificates(
             certificateEntitiesPage.getContent().stream()
-                .map(certificateEntityMapper::toDomain)
+                .map(certificateEntity -> certificateEntityMapper.toDomain(certificateEntity, this))
                 .toList()
         )
         .build();
@@ -335,16 +337,17 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
   }
 
   @Override
-  public Certificate insert(Certificate certificate) {
-    final var savedEntity = certificateEntityRepository.save(
-        certificateEntityMapper.toEntity(certificate)
-    );
+  public Certificate insert(Certificate certificate, Revision revision) {
+    final var entity = certificateEntityMapper.toEntity(certificate);
+    entity.setRevision(revision.value());
+
+    final var savedEntity = certificateEntityRepository.save(entity);
 
     certificateRelationRepository.save(
         certificate, savedEntity
     );
 
-    return certificateEntityMapper.toDomain(savedEntity);
+    return certificateEntityMapper.toDomain(savedEntity, this);
   }
 
   @Override

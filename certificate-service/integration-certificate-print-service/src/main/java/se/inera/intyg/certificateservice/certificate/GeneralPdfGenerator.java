@@ -15,7 +15,7 @@ import se.inera.intyg.certificateservice.domain.certificate.service.PdfGenerator
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 
-@Component("GeneralPdfGenerator")
+@Component("generalPdfGenerator")
 @AllArgsConstructor
 public class GeneralPdfGenerator implements PdfGenerator {
 

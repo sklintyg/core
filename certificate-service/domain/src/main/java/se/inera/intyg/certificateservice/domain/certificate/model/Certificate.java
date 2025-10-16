@@ -137,4 +137,6 @@ public interface Certificate {
 
 
   void fillFromCertificate(Certificate certificate);
+
+  Optional<Certificate> candidateForUpdate();
 }

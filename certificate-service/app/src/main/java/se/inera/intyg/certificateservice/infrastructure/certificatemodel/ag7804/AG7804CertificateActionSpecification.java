@@ -73,6 +73,11 @@ public class AG7804CertificateActionSpecification {
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE_FROM_LIST)
+            .build(),
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.UPDATE_DRAFT_FROM_CERTIFICATE)
+            .allowedRoles(allowedRoles)
+            .contentProvider(new AG7804UpdateDraftFromCertificateContentProvider())
             .build()
     );
   }
