@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence;
 
+import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +44,7 @@ public class MetadataVersionRepository implements MetadataRepository {
   private final PatientVersionEntityRepository patientVersionEntityRepository;
   private final UnitVersionEntityRepository unitVersionEntityRepository;
 
+  @Transactional
   public StaffEntity saveStaffVersion(StaffEntity staffEntity, StaffEntity newStaffEntity) {
     final var staffVersionEntity = StaffVersionEntityMapper.toStaffVersion(staffEntity);
     staffEntity.updateWith(newStaffEntity);
@@ -58,13 +60,13 @@ public class MetadataVersionRepository implements MetadataRepository {
     staffVersionEntityRepository.save(staffVersionEntity);
   }
 
+  @Transactional
   public UnitEntity saveUnitVersion(UnitEntity unitEntity, UnitEntity newUnitEntity) {
     final var unitVersionEntity = UnitVersionEntityMapper.toUnitVersion(unitEntity);
     unitEntity.updateWith(newUnitEntity);
     updateUnitVersionHistory(unitVersionEntity);
     return unitEntityRepository.save(unitEntity);
   }
-
 
   private void updateUnitVersionHistory(UnitVersionEntity unitVersionEntity) {
     final var latestVersion = unitVersionEntityRepository
@@ -75,6 +77,7 @@ public class MetadataVersionRepository implements MetadataRepository {
   }
 
 
+  @Transactional
   public PatientEntity savePatientVersion(PatientEntity patientEntity,
       PatientEntity newPatientEntity) {
     final var patientVersionEntity = PatientVersionEntityMapper.toPatientVersion(patientEntity);
