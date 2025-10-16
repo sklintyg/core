@@ -1305,7 +1305,207 @@ public class TestDataCertificate {
         .xml(XML)
         .externalReference(EXTERNAL_REFERENCE)
         .elementData(
-            List.of()
+            List.of(
+                ElementData.builder()
+                    .id(new ElementId("1"))
+                    .value(
+                        ElementValueDateList.builder()
+                            .dateListId(new FieldId("1.1"))
+                            .dateList(
+                                List.of(
+                                    ElementValueDate.builder()
+                                        .dateId(new FieldId("FYSISKUNDERSOKNING"))
+                                        .date(LocalDate.now())
+                                        .build()
+                                )
+                            )
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("6"))
+                    .value(
+                        ElementValueDiagnosisList.builder()
+                            .diagnoses(
+                                List.of(
+                                    ElementValueDiagnosis.builder()
+                                        .code("A013")
+                                        .description("Paratyfoidfeber C")
+                                        .terminology("ICD_10_SE")
+                                        .build()
+                                )
+                            )
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("35"))
+                    .value(
+                        ElementValueIcf.builder()
+                            .id(new FieldId("35.1"))
+                            .text("Funktionsnedsättning")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("17"))
+                    .value(
+                        ElementValueIcf.builder()
+                            .id(new FieldId("17.1"))
+                            .text("Aktivitetsbegräsning")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("27"))
+                    .value(
+                        ElementValueBoolean.builder()
+                            .booleanId(new FieldId("27.1"))
+                            .value(false)
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("28"))
+                    .value(
+                        ElementValueCodeList.builder()
+                            .id(new FieldId("28.1"))
+                            .list(List.of(
+                                    ElementValueCode.builder()
+                                        .code("NUVARANDE_ARBETE")
+                                        .codeId(new FieldId("NUVARANDE_ARBETE"))
+                                        .build()
+                                )
+                            ).build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("29"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("29.1"))
+                            .text("Butikssäljare, ansvarar för kassa och varuplock.")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("19"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("19.1"))
+                            .text("Rehabövningar under 10 dagar hemifrån.")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("32"))
+                    .value(
+                        ElementValueDateRangeList.builder()
+                            .dateRangeListId(new FieldId("32.1"))
+                            .dateRangeList(List.of(
+                                DateRange.builder()
+                                    .dateRangeId(new FieldId(("EN_FJARDEDEL")))
+                                    .from(LocalDate.now())
+                                    .to(LocalDate.now().plusDays(30))
+                                    .build()
+                            ))
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("33"))
+                    .value(
+                        ElementValueBoolean.builder()
+                            .booleanId(new FieldId("33.1"))
+                            .value(true)
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("33.2"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("33.2"))
+                            .text("Behöver regelbundna vilopauser och kan inte arbeta heltid.")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("34"))
+                    .value(
+                        ElementValueBoolean.builder()
+                            .booleanId(new FieldId("34.1"))
+                            .value(false)
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("37"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("37.1"))
+                            .text(
+                                "Patienten har långvariga besvär och tidigare behandlingar har haft begränsad effekt.")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("39"))
+                    .value(
+                        ElementValueCode.builder()
+                            .code("ATER_X_ANTAL_MANADER")
+                            .codeId(new FieldId("ATER_X_ANTAL_MANADER"))
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("39.4"))
+                    .value(
+                        ElementValueInteger.builder()
+                            .integerId(new FieldId("39.4"))
+                            .value(6)
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("44"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("44.1"))
+                            .text(
+                                "Arbetsanpassning med höj- och sänkbart skrivbord och flexibla arbetstider.")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("25"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("25.1"))
+                            .text(
+                                "Patienten har svårt att ta sig till arbetsplatsen med kollektivtrafik.")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("26"))
+                    .value(
+                        ElementValueBoolean.builder()
+                            .booleanId(new FieldId("26.1"))
+                            .value(true)
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("26.2"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("26.2"))
+                            .text("Behöver diskutera kompletterande intyg med handläggare.")
+                            .build()
+                    )
+                    .build()
+            )
         )
         .certificateMetaData(
             CertificateMetaData.builder()
