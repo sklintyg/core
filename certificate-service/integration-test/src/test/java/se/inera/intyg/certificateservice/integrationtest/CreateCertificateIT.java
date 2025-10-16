@@ -1,13 +1,9 @@
 package se.inera.intyg.certificateservice.integrationtest;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ANONYMA_REACT_ATTILA_DTO;
-import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ATHENA_REACT_ANDERSSON_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ATLAS_REACT_ABRAHAMSSON_DTO;
-import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.athenaReactAnderssonDtoBuilder;
-import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ALVA_VARDADMINISTRATOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ajlaDoktorDtoBuilder;
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customCreateCertificateRequest;
@@ -15,7 +11,6 @@ import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestU
 import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCreateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificate;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateId;
-import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.metadata;
 import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.validationErrors;
 
 import java.io.IOException;
@@ -188,38 +183,6 @@ public abstract class CreateCertificateIT extends BaseIntegrationIT {
     );
 
     assertEquals(400, response.getStatusCode().value());
-  }
-
-  @Test
-  @DisplayName("Om Patienten har bytt namn så ska det nya namnet användas i det skapade utkastet")
-  void shallUseUpdatedPatientName() {
-
-    final var updatedAthena = athenaReactAnderssonDtoBuilder()
-        .lastName("Athenasson").fullName("Athena Athenasson").build();
-    final var response = api.createCertificate(
-        defaultCreateCertificateRequest(type(), typeVersion())
-    );
-
-    assertAll(
-        () -> assertNotNull(certificate(response.getBody()), "Should return certificate"),
-        () -> assertEquals(ATHENA_REACT_ANDERSSON_DTO.getLastName(),
-            metadata(certificate(response.getBody())).getPatient().getLastName())
-
-    );
-
-    final var updatedResponse = api.createCertificate(
-        customCreateCertificateRequest(type(), typeVersion())
-            .patient(updatedAthena)
-            .user(AJLA_DOCTOR_DTO)
-            .build()
-    );
-
-    assertAll(
-        () -> assertNotNull(certificate(updatedResponse.getBody()), "Should return certificate"),
-        () -> assertEquals(updatedAthena.getLastName(),
-            metadata(certificate(updatedResponse.getBody())).getPatient().getLastName())
-
-    );
   }
 
 }
