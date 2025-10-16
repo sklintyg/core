@@ -1,20 +1,25 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository;
 
 import static org.springframework.data.jpa.domain.Specification.where;
+import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecification.certificateTypeIn;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecification.createdEqualsAndGreaterThan;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecification.createdEqualsAndLesserThan;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecification.modifiedEqualsAndGreaterThan;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecification.modifiedEqualsAndLesserThan;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecification.notPlacerholderCertificate;
+import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecification.signedEqualsAndGreaterThan;
+import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecification.signedEqualsAndLesserThan;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.PatientEntitySpecification.equalsPatient;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffEntitySpecification.equalsIssuedByStaff;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StatusEntitySpecification.containsStatus;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitEntitySpecification.equalsCareUnit;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitEntitySpecification.equalsIssuedOnUnit;
+import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitEntitySpecification.issuedOnUnitIdIn;
 
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
+import se.inera.intyg.certificateservice.domain.common.model.SickLeavesRequest;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
 
 @Component
@@ -82,4 +87,45 @@ public class CertificateEntitySpecificationFactory {
 
     return specification;
   }
+
+  public Specification<CertificateEntity> create(SickLeavesRequest request) {
+    Specification<CertificateEntity> specification = where(null);
+
+    if (request.personId() != null) {
+      specification = specification.and(
+          equalsPatient(request.personId())
+      );
+    }
+
+    if (request.certificateTypes() != null && !request.certificateTypes().isEmpty()) {
+      specification = specification.and(
+          certificateTypeIn(request.certificateTypes())
+      );
+    }
+
+    if (request.signedFrom() != null) {
+      specification = specification.and(
+          signedEqualsAndGreaterThan(request.signedFrom())
+      );
+    }
+
+    if (request.signedTo() != null) {
+      specification = specification.and(
+          signedEqualsAndLesserThan(request.signedTo())
+      );
+    }
+
+    if (request.issuedByUnitIds() != null && !request.issuedByUnitIds().isEmpty()) {
+      specification = specification.and(
+          issuedOnUnitIdIn(request.issuedByUnitIds())
+      );
+    }
+
+    specification = specification.and(
+        notPlacerholderCertificate()
+    );
+
+    return specification;
+  }
 }
+

@@ -27,6 +27,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PlaceholderCertificateRequest;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
+import se.inera.intyg.certificateservice.domain.common.model.SickLeavesRequest;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.PlaceholderCertificateEntityMapper;
@@ -322,6 +323,15 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
     );
 
     return placeholderCertificateEntityMapper.toDomain(certificateEntity);
+  }
+
+  @Override
+  public List<Certificate> findBySickLeavesRequest(SickLeavesRequest request) {
+    final var specification = certificateEntitySpecificationFactory.create(request);
+
+    return certificateEntityRepository.findAll(specification).stream()
+        .map(certificateEntityMapper::toDomain)
+        .toList();
   }
 
   @Override

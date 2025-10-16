@@ -33,6 +33,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateExportPage;
@@ -44,8 +45,10 @@ import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PlaceholderCertificateRequest;
+import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
+import se.inera.intyg.certificateservice.domain.common.model.SickLeavesRequest;
 import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateDataEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
@@ -718,6 +721,90 @@ class JpaCertificateRepositoryTest {
       final var actualCertificate = jpaCertificateRepository.save(PLACEHOLDER_CERTIFICATE);
 
       assertEquals(PLACEHOLDER_CERTIFICATE, actualCertificate);
+    }
+  }
+
+  @Nested
+  class FindByCertificatesRequestTest {
+
+    @Test
+    void shouldReturnEmptyListIfNoCertificatesAreFound() {
+      final var request = CertificatesRequest.builder()
+          .build();
+
+      doReturn(List.of()).when(certificateEntityRepository).findAll(any());
+
+      final var actualCertificates = jpaCertificateRepository.findByCertificatesRequest(request);
+
+      assertTrue(actualCertificates.isEmpty());
+    }
+
+    @Test
+    void shouldReturnListOfCertificates() {
+      final var expectedCertificates = List.of(CERTIFICATE);
+      final var request = CertificatesRequest.builder()
+          .build();
+      doReturn(List.of(CERTIFICATE_ENTITY)).when(certificateEntityRepository).findAll(any());
+      doReturn(CERTIFICATE).when(certificateEntityMapper).toDomain(CERTIFICATE_ENTITY);
+
+      final var actualCertificates = jpaCertificateRepository.findByCertificatesRequest(request);
+
+      assertEquals(expectedCertificates, actualCertificates);
+    }
+
+    @Test
+    void shouldCallSpecificationFactoryToCreateSpecification() {
+      final var request = CertificatesRequest.builder()
+          .build();
+      final var specification = mock(Specification.class);
+      doReturn(List.of()).when(certificateEntityRepository).findAll(any());
+      when(certificateEntitySpecificationFactory.create(request)).thenReturn(specification);
+
+      jpaCertificateRepository.findByCertificatesRequest(request);
+
+      verify(certificateEntityRepository).findAll(specification);
+    }
+  }
+
+  @Nested
+  class FindBySickLeavesRequestTest {
+
+    @Test
+    void shouldReturnEmptyListIfNoCertificatesAreFound() {
+      final var request = SickLeavesRequest.builder()
+          .build();
+
+      doReturn(List.of()).when(certificateEntityRepository).findAll(any());
+
+      final var actualCertificates = jpaCertificateRepository.findBySickLeavesRequest(request);
+
+      assertTrue(actualCertificates.isEmpty());
+    }
+
+    @Test
+    void shouldReturnListOfCertificates() {
+      final var expectedCertificates = List.of(CERTIFICATE);
+      final var request = SickLeavesRequest.builder()
+          .build();
+      doReturn(List.of(CERTIFICATE_ENTITY)).when(certificateEntityRepository).findAll(any());
+      doReturn(CERTIFICATE).when(certificateEntityMapper).toDomain(CERTIFICATE_ENTITY);
+
+      final var actualCertificates = jpaCertificateRepository.findBySickLeavesRequest(request);
+
+      assertEquals(expectedCertificates, actualCertificates);
+    }
+
+    @Test
+    void shouldCallSpecificationFactoryToCreateSpecification() {
+      final var request = SickLeavesRequest.builder()
+          .build();
+      final var specification = mock(Specification.class);
+      doReturn(List.of()).when(certificateEntityRepository).findAll(any());
+      when(certificateEntitySpecificationFactory.create(request)).thenReturn(specification);
+
+      jpaCertificateRepository.findBySickLeavesRequest(request);
+
+      verify(certificateEntityRepository).findAll(specification);
     }
   }
 }

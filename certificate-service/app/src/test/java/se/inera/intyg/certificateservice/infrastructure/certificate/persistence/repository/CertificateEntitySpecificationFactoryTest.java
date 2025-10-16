@@ -8,6 +8,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJ
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_MEDICINSKT_CENTRUM;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Collections;
@@ -18,7 +19,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.springframework.data.jpa.domain.Specification;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
+import se.inera.intyg.certificateservice.domain.common.model.SickLeavesRequest;
 
 class CertificateEntitySpecificationFactoryTest {
 
@@ -392,6 +395,242 @@ class CertificateEntitySpecificationFactoryTest {
               CertificateEntitySpecification.class)
       ) {
         assertNotNull(certificateEntitySpecificationFactory.create(certificatesRequest));
+        specification.verify(
+            CertificateEntitySpecification::notPlacerholderCertificate
+        );
+      }
+    }
+  }
+
+  @Nested
+  class SickLeavesRequestTest {
+
+    @Test
+    void shallIncludePersonId() {
+      final var sickLeavesRequest = se.inera.intyg.certificateservice.domain.common.model.SickLeavesRequest.builder()
+          .personId(ATHENA_REACT_ANDERSSON.id())
+          .build();
+      try (
+          MockedStatic<PatientEntitySpecification> specification = mockStatic(
+              PatientEntitySpecification.class)
+      ) {
+        specification.when(
+                () -> PatientEntitySpecification.equalsPatient(sickLeavesRequest.personId()))
+            .thenReturn(mock(Specification.class));
+
+        assertNotNull(certificateEntitySpecificationFactory.create(sickLeavesRequest));
+
+        specification.verify(
+            () -> PatientEntitySpecification.equalsPatient(sickLeavesRequest.personId())
+        );
+      }
+    }
+
+    @Test
+    void shallNotIncludePersonId() {
+      final var sickLeavesRequest = se.inera.intyg.certificateservice.domain.common.model.SickLeavesRequest.builder()
+          .build();
+      try (
+          MockedStatic<PatientEntitySpecification> specification = mockStatic(
+              PatientEntitySpecification.class)
+      ) {
+        assertNotNull(certificateEntitySpecificationFactory.create(sickLeavesRequest));
+
+        specification.verifyNoInteractions();
+      }
+    }
+
+    @Test
+    void shallIncludeCertificateTypes() {
+      final var certificateTypes = List.of(new CertificateType("FK7804"));
+      final var sickLeavesRequest = SickLeavesRequest.builder()
+          .certificateTypes(certificateTypes)
+          .build();
+      try (
+          MockedStatic<CertificateEntitySpecification> specification = mockStatic(
+              CertificateEntitySpecification.class)
+      ) {
+        specification.when(
+                () -> CertificateEntitySpecification.certificateTypeIn(certificateTypes))
+            .thenReturn(mock(Specification.class));
+
+        assertNotNull(certificateEntitySpecificationFactory.create(sickLeavesRequest));
+
+        specification.verify(
+            () -> CertificateEntitySpecification.certificateTypeIn(certificateTypes)
+        );
+      }
+    }
+
+    @Test
+    void shallNotIncludeCertificateTypesIfNull() {
+      final var sickLeavesRequest = SickLeavesRequest.builder()
+          .build();
+      try (
+          MockedStatic<CertificateEntitySpecification> specification = mockStatic(
+              CertificateEntitySpecification.class)
+      ) {
+        assertNotNull(certificateEntitySpecificationFactory.create(sickLeavesRequest));
+        specification.verify(
+            CertificateEntitySpecification::notPlacerholderCertificate
+        );
+        specification.verifyNoMoreInteractions();
+      }
+    }
+
+    @Test
+    void shallNotIncludeCertificateTypesIfEmptyList() {
+      final var sickLeavesRequest = SickLeavesRequest.builder()
+          .certificateTypes(Collections.emptyList())
+          .build();
+      try (
+          MockedStatic<CertificateEntitySpecification> specification = mockStatic(
+              CertificateEntitySpecification.class)
+      ) {
+        assertNotNull(certificateEntitySpecificationFactory.create(sickLeavesRequest));
+        specification.verify(
+            CertificateEntitySpecification::notPlacerholderCertificate
+        );
+        specification.verifyNoMoreInteractions();
+      }
+    }
+
+    @Test
+    void shallIncludeSignedFrom() {
+      final var signedFrom = LocalDate.now();
+      final var sickLeavesRequest = SickLeavesRequest.builder()
+          .signedFrom(signedFrom)
+          .build();
+      try (
+          MockedStatic<CertificateEntitySpecification> specification = mockStatic(
+              CertificateEntitySpecification.class)
+      ) {
+        specification.when(
+                () -> CertificateEntitySpecification.signedEqualsAndGreaterThan(signedFrom))
+            .thenReturn(mock(Specification.class));
+
+        assertNotNull(certificateEntitySpecificationFactory.create(sickLeavesRequest));
+
+        specification.verify(
+            () -> CertificateEntitySpecification.signedEqualsAndGreaterThan(signedFrom)
+        );
+      }
+    }
+
+    @Test
+    void shallNotIncludeSignedFrom() {
+      final var sickLeavesRequest = SickLeavesRequest.builder()
+          .build();
+      try (
+          MockedStatic<CertificateEntitySpecification> specification = mockStatic(
+              CertificateEntitySpecification.class)
+      ) {
+        assertNotNull(certificateEntitySpecificationFactory.create(sickLeavesRequest));
+        specification.verify(
+            CertificateEntitySpecification::notPlacerholderCertificate
+        );
+        specification.verifyNoMoreInteractions();
+      }
+    }
+
+    @Test
+    void shallIncludeSignedTo() {
+      final var signedTo = LocalDate.now();
+      final var sickLeavesRequest = SickLeavesRequest.builder()
+          .signedTo(signedTo)
+          .build();
+      try (
+          MockedStatic<CertificateEntitySpecification> specification = mockStatic(
+              CertificateEntitySpecification.class)
+      ) {
+        specification.when(
+                () -> CertificateEntitySpecification.signedEqualsAndLesserThan(signedTo))
+            .thenReturn(mock(Specification.class));
+
+        assertNotNull(certificateEntitySpecificationFactory.create(sickLeavesRequest));
+
+        specification.verify(
+            () -> CertificateEntitySpecification.signedEqualsAndLesserThan(signedTo)
+        );
+      }
+    }
+
+    @Test
+    void shallNotIncludeSignedTo() {
+      final var sickLeavesRequest = SickLeavesRequest.builder()
+          .build();
+      try (
+          MockedStatic<CertificateEntitySpecification> specification = mockStatic(
+              CertificateEntitySpecification.class)
+      ) {
+        assertNotNull(certificateEntitySpecificationFactory.create(sickLeavesRequest));
+        specification.verify(
+            CertificateEntitySpecification::notPlacerholderCertificate
+        );
+        specification.verifyNoMoreInteractions();
+      }
+    }
+
+    @Test
+    void shallIncludeIssuedByUnitIds() {
+      final var unitIds = List.of(ALFA_ALLERGIMOTTAGNINGEN.hsaId());
+      final var sickLeavesRequest = SickLeavesRequest.builder()
+          .issuedByUnitIds(unitIds)
+          .build();
+      try (
+          MockedStatic<UnitEntitySpecification> specification = mockStatic(
+              UnitEntitySpecification.class)
+      ) {
+        specification.when(
+                () -> UnitEntitySpecification.issuedOnUnitIdIn(unitIds))
+            .thenReturn(mock(Specification.class));
+
+        assertNotNull(certificateEntitySpecificationFactory.create(sickLeavesRequest));
+
+        specification.verify(
+            () -> UnitEntitySpecification.issuedOnUnitIdIn(unitIds)
+        );
+      }
+    }
+
+    @Test
+    void shallNotIncludeIssuedByUnitIdsIfNull() {
+      final var sickLeavesRequest = SickLeavesRequest.builder()
+          .build();
+      try (
+          MockedStatic<UnitEntitySpecification> specification = mockStatic(
+              UnitEntitySpecification.class)
+      ) {
+        assertNotNull(certificateEntitySpecificationFactory.create(sickLeavesRequest));
+
+        specification.verifyNoInteractions();
+      }
+    }
+
+    @Test
+    void shallNotIncludeIssuedByUnitIdsIfEmptyList() {
+      final var sickLeavesRequest = SickLeavesRequest.builder()
+          .issuedByUnitIds(Collections.emptyList())
+          .build();
+      try (
+          MockedStatic<UnitEntitySpecification> specification = mockStatic(
+              UnitEntitySpecification.class)
+      ) {
+        assertNotNull(certificateEntitySpecificationFactory.create(sickLeavesRequest));
+
+        specification.verifyNoInteractions();
+      }
+    }
+
+    @Test
+    void shallIncludeNotPlaceholderCertificateSpecification() {
+      final var sickLeavesRequest = SickLeavesRequest.builder()
+          .build();
+      try (
+          MockedStatic<CertificateEntitySpecification> specification = mockStatic(
+              CertificateEntitySpecification.class)
+      ) {
+        assertNotNull(certificateEntitySpecificationFactory.create(sickLeavesRequest));
         specification.verify(
             CertificateEntitySpecification::notPlacerholderCertificate
         );
