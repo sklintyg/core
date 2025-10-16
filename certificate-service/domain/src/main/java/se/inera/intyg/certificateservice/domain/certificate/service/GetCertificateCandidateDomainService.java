@@ -1,7 +1,6 @@
 package se.inera.intyg.certificateservice.domain.certificate.service;
 
 import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.READ;
-import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.UPDATE_DRAFT_FROM_CERTIFICATE;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +34,7 @@ public class GetCertificateCandidateDomainService {
       throw new CertificateActionForbidden(
           "Not allowed to get candidate certificate %s for %s"
               .formatted(candidateCertificate.get().id(), certificateId),
-          certificate.reasonNotAllowed(UPDATE_DRAFT_FROM_CERTIFICATE, Optional.of(actionEvaluation))
+          certificate.reasonNotAllowed(READ, Optional.of(actionEvaluation))
       );
     }
 
