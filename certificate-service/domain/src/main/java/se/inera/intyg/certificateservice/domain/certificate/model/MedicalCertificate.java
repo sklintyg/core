@@ -13,6 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Stream;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -21,11 +22,13 @@ import lombok.extern.slf4j.Slf4j;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateAction;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
+import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificate.service.PrefillProcessor;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModificationException;
+import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
 import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
@@ -70,6 +73,10 @@ public class MedicalCertificate implements Certificate {
   @Builder.Default
   private List<Message> messages = Collections.emptyList();
   private Forwarded forwarded;
+
+  @Getter(AccessLevel.NONE)
+  @EqualsAndHashCode.Exclude
+  private CertificateRepository certificateRepository;
 
   @Override
   public List<CertificateAction> actions(Optional<ActionEvaluation> actionEvaluation) {
@@ -391,6 +398,7 @@ public class MedicalCertificate implements Certificate {
         .created(LocalDateTime.now(ZoneId.systemDefault()))
         .certificateModel(this.certificateModel())
         .revision(new Revision(0))
+        .certificateRepository(this.certificateRepository)
         .build();
 
     newCertificate.certificateMetaData = this.certificateMetaData();
@@ -467,26 +475,26 @@ public class MedicalCertificate implements Certificate {
   @Override
   public void answerComplement(ActionEvaluation actionEvaluation, Content content) {
     this.messages = this.messages.stream()
-        .map(message -> {
-          if (message.type().equals(MessageType.COMPLEMENT)) {
-            message.answer(
-                Answer.builder()
-                    .id(new MessageId(UUID.randomUUID().toString()))
-                    .reference(message.reference())
-                    .type(message.type())
-                    .created(LocalDateTime.now())
-                    .subject(message.subject())
-                    .content(content)
-                    .modified(LocalDateTime.now())
-                    .sent(LocalDateTime.now())
-                    .status(MessageStatus.HANDLED)
-                    .author(new Author(actionEvaluation.user().name().fullName()))
-                    .authoredStaff(Staff.create(actionEvaluation.user()))
-                    .build()
-            );
-          }
-          return message;
-        })
+        .peek(message -> {
+              if (message.type().equals(MessageType.COMPLEMENT)) {
+                message.answer(
+                    Answer.builder()
+                        .id(new MessageId(UUID.randomUUID().toString()))
+                        .reference(message.reference())
+                        .type(message.type())
+                        .created(LocalDateTime.now())
+                        .subject(message.subject())
+                        .content(content)
+                        .modified(LocalDateTime.now())
+                        .sent(LocalDateTime.now())
+                        .status(MessageStatus.HANDLED)
+                        .author(new Author(actionEvaluation.user().name().fullName()))
+                        .authoredStaff(Staff.create(actionEvaluation.user()))
+                        .build()
+                );
+              }
+            }
+        )
         .toList();
   }
 
@@ -611,11 +619,38 @@ public class MedicalCertificate implements Certificate {
         .filter(Optional::isPresent)
         .map(Optional::get)
         .toList();
+
+    this.revision = this.revision.increment();
   }
 
   private Function<ElementData, Optional<ElementData>> convertElementDataWithModelSpecification(
       Certificate certificate) {
     return data -> this.certificateModel.elementSpecification(data.id()).configuration()
         .convert(data, certificate.certificateModel().elementSpecification(data.id()));
+  }
+
+  @Override
+  public Optional<Certificate> candidateForUpdate() {
+    if (revision.value() != 0) {
+      return Optional.empty();
+    }
+
+    if (certificateModel.ableToCreateDraftForModel() == null) {
+      return Optional.empty();
+    }
+
+    final var certificates = certificateRepository.findByCertificatesRequest(
+        CertificatesRequest.builder()
+            .personId(certificateMetaData().patient().id())
+            .careUnitId(certificateMetaData().careUnit().hsaId())
+            .types(
+                List.of(certificateModel().ableToCreateDraftForModel().type())
+            )
+            .statuses(List.of(Status.SIGNED))
+            .build()
+    );
+
+    return certificates.stream()
+        .max(Comparator.comparing(Certificate::signed));
   }
 }

@@ -7,6 +7,7 @@ import lombok.Value;
 import lombok.With;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 
 @Value
 @Builder
@@ -17,6 +18,7 @@ public class CertificatesRequest {
   LocalDateTime createdFrom;
   LocalDateTime createdTo;
   List<Status> statuses;
+  List<CertificateType> types;
   HsaId issuedByStaffId;
   @With
   HsaId issuedUnitId;

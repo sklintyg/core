@@ -15,6 +15,7 @@ import se.inera.intyg.certificateservice.domain.certificate.service.CreateDraftF
 import se.inera.intyg.certificateservice.domain.certificate.service.DeleteCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.ForwardCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.ForwardCertificateMessagesDomainService;
+import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateCandidateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateEventsDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateEventsOfTypeDomainService;
@@ -34,6 +35,7 @@ import se.inera.intyg.certificateservice.domain.certificate.service.SetCertifica
 import se.inera.intyg.certificateservice.domain.certificate.service.SignCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.SignCertificateWithoutSignatureDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.UpdateCertificateDomainService;
+import se.inera.intyg.certificateservice.domain.certificate.service.UpdateWithCertificateCandidateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.ValidateCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGeneratorCertificatesForCareWithQA;
@@ -459,8 +461,8 @@ public class AppConfig {
 
   @Bean
   public PdfGeneratorProvider pdfGeneratorProvider(
-      @Qualifier("CertificatePdfGenerator") PdfGenerator certificatePdfGenerator,
-      @Qualifier("GeneralPdfGenerator") PdfGenerator generalPdfGenerator) {
+      @Qualifier("certificatePdfGenerator") PdfGenerator certificatePdfGenerator,
+      @Qualifier("generalPdfGenerator") PdfGenerator generalPdfGenerator) {
     return new PdfGeneratorProvider(certificatePdfGenerator, generalPdfGenerator);
   }
 
@@ -482,5 +484,19 @@ public class AppConfig {
       CertificateEventDomainService certificateEventDomainService) {
     return new CreateDraftFromCertificateDomainService(certificateRepository,
         certificateModelRepository, certificateEventDomainService);
+  }
+
+  @Bean
+  public GetCertificateCandidateDomainService getCertificateCandidateDomainService(
+      CertificateRepository certificateRepository) {
+    return new GetCertificateCandidateDomainService(certificateRepository);
+  }
+
+  @Bean
+  public UpdateWithCertificateCandidateDomainService updateWithCertificateCandidateDomainService(
+      CertificateRepository certificateRepository,
+      CertificateEventDomainService certificateEventDomainService) {
+    return new UpdateWithCertificateCandidateDomainService(certificateRepository,
+        certificateEventDomainService);
   }
 }

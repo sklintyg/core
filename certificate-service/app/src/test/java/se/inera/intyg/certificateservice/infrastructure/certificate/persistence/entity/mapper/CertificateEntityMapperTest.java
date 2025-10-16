@@ -51,6 +51,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
+import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
@@ -107,6 +108,9 @@ class CertificateEntityMapperTest {
 
   @Mock
   private MessageEntityMapper messageEntityMapper;
+
+  @Mock
+  private CertificateRepository certificateRepository;
 
   @InjectMocks
   private CertificateEntityMapper certificateEntityMapper;
@@ -298,7 +302,7 @@ class CertificateEntityMapperTest {
     @Test
     void shouldMapId() {
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
-          FK7210_CERTIFICATE_MODEL);
+          FK7210_CERTIFICATE_MODEL, certificateRepository);
 
       assertEquals(CERTIFICATE_ENTITY.getCertificateId(), response.id().id());
     }
@@ -306,7 +310,7 @@ class CertificateEntityMapperTest {
     @Test
     void shouldMapStatus() {
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
-          FK7210_CERTIFICATE_MODEL);
+          FK7210_CERTIFICATE_MODEL, certificateRepository);
 
       assertEquals(Status.SIGNED, response.status());
     }
@@ -314,7 +318,7 @@ class CertificateEntityMapperTest {
     @Test
     void shouldMapCreated() {
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
-          FK7210_CERTIFICATE_MODEL);
+          FK7210_CERTIFICATE_MODEL, certificateRepository);
 
       assertEquals(CERTIFICATE_ENTITY.getCreated(), response.created());
     }
@@ -322,7 +326,7 @@ class CertificateEntityMapperTest {
     @Test
     void shouldMapCreatedBy() {
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
-          FK7210_CERTIFICATE_MODEL);
+          FK7210_CERTIFICATE_MODEL, certificateRepository);
 
       assertEquals(
           ALF_DOKTOR,
@@ -333,7 +337,7 @@ class CertificateEntityMapperTest {
     @Test
     void shouldMapSigned() {
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
-          FK7210_CERTIFICATE_MODEL);
+          FK7210_CERTIFICATE_MODEL, certificateRepository);
 
       assertEquals(CERTIFICATE_ENTITY.getSigned(), response.signed());
     }
@@ -341,7 +345,7 @@ class CertificateEntityMapperTest {
     @Test
     void shouldMapModified() {
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
-          FK7210_CERTIFICATE_MODEL);
+          FK7210_CERTIFICATE_MODEL, certificateRepository);
 
       assertEquals(CERTIFICATE_ENTITY.getModified(), response.modified());
     }
@@ -349,7 +353,7 @@ class CertificateEntityMapperTest {
     @Test
     void shouldMapRevision() {
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
-          FK7210_CERTIFICATE_MODEL);
+          FK7210_CERTIFICATE_MODEL, certificateRepository);
 
       assertEquals(CERTIFICATE_ENTITY.getRevision(), response.revision().value());
     }
@@ -357,7 +361,7 @@ class CertificateEntityMapperTest {
     @Test
     void shouldMapModel() {
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
-          FK7210_CERTIFICATE_MODEL);
+          FK7210_CERTIFICATE_MODEL, certificateRepository);
 
       assertEquals(FK7210_CERTIFICATE_MODEL, response.certificateModel());
     }
@@ -365,7 +369,7 @@ class CertificateEntityMapperTest {
     @Test
     void shouldMapCareProvider() {
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
-          FK7210_CERTIFICATE_MODEL);
+          FK7210_CERTIFICATE_MODEL, certificateRepository);
 
       assertEquals(ALFA_REGIONEN, response.certificateMetaData().careProvider());
     }
@@ -373,7 +377,7 @@ class CertificateEntityMapperTest {
     @Test
     void shouldMapCareUnit() {
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
-          FK7210_CERTIFICATE_MODEL);
+          FK7210_CERTIFICATE_MODEL, certificateRepository);
 
       assertEquals(ALFA_MEDICINCENTRUM, response.certificateMetaData().careUnit());
     }
@@ -381,7 +385,7 @@ class CertificateEntityMapperTest {
     @Test
     void shouldMapIssuedOnUnitAsSubUnit() {
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
-          FK7210_CERTIFICATE_MODEL);
+          FK7210_CERTIFICATE_MODEL, certificateRepository);
 
       assertEquals(ALFA_ALLERGIMOTTAGNINGEN, response.certificateMetaData().issuingUnit());
     }
@@ -391,7 +395,7 @@ class CertificateEntityMapperTest {
       CERTIFICATE_ENTITY.setIssuedOnUnit(ALFA_MEDICINCENTRUM_ENTITY);
 
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
-          FK7210_CERTIFICATE_MODEL);
+          FK7210_CERTIFICATE_MODEL, certificateRepository);
 
       assertEquals(ALFA_MEDICINCENTRUM, response.certificateMetaData().issuingUnit());
     }
@@ -399,7 +403,7 @@ class CertificateEntityMapperTest {
     @Test
     void shouldMapIssuer() {
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
-          FK7210_CERTIFICATE_MODEL);
+          FK7210_CERTIFICATE_MODEL, certificateRepository);
 
       assertEquals(AJLA_DOKTOR, response.certificateMetaData().issuer());
     }
@@ -424,7 +428,7 @@ class CertificateEntityMapperTest {
           .build();
 
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
-          FK7210_CERTIFICATE_MODEL);
+          FK7210_CERTIFICATE_MODEL, certificateRepository);
 
       assertEquals(expected, response.certificateMetaData().patient());
     }
@@ -445,7 +449,7 @@ class CertificateEntityMapperTest {
       doReturn(expected).when(certificateDataEntityMapper).toDomain(any());
 
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
-          FK7210_CERTIFICATE_MODEL);
+          FK7210_CERTIFICATE_MODEL, certificateRepository);
 
       assertEquals(expected, response.elementData());
     }
@@ -453,7 +457,7 @@ class CertificateEntityMapperTest {
     @Test
     void shouldMapXml() {
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
-          FK7210_CERTIFICATE_MODEL);
+          FK7210_CERTIFICATE_MODEL, certificateRepository);
 
       assertEquals(XML, response.xml().xml());
     }
@@ -461,7 +465,7 @@ class CertificateEntityMapperTest {
     @Test
     void shouldMapSentBy() {
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
-          FK7210_CERTIFICATE_MODEL);
+          FK7210_CERTIFICATE_MODEL, certificateRepository);
 
       assertEquals(AJLA_DOKTOR, response.sent().sentBy());
     }
@@ -472,7 +476,7 @@ class CertificateEntityMapperTest {
           .sentBy(null)
           .build();
       final var response = certificateEntityMapper.toDomain(certificateEntity,
-          FK7210_CERTIFICATE_MODEL);
+          FK7210_CERTIFICATE_MODEL, certificateRepository);
 
       assertNull(response.sent().sentBy());
     }
@@ -480,7 +484,7 @@ class CertificateEntityMapperTest {
     @Test
     void shouldMapSent() {
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
-          FK7210_CERTIFICATE_MODEL);
+          FK7210_CERTIFICATE_MODEL, certificateRepository);
 
       assertNotNull(response.sent().sentAt());
     }
@@ -488,7 +492,7 @@ class CertificateEntityMapperTest {
     @Test
     void shouldMapReadyForSignBy() {
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
-          FK7210_CERTIFICATE_MODEL);
+          FK7210_CERTIFICATE_MODEL, certificateRepository);
 
       assertEquals(AJLA_DOKTOR, response.readyForSign().readyForSignBy());
     }
@@ -496,7 +500,7 @@ class CertificateEntityMapperTest {
     @Test
     void shouldMapReadyForSign() {
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
-          FK7210_CERTIFICATE_MODEL);
+          FK7210_CERTIFICATE_MODEL, certificateRepository);
 
       assertNotNull(response.readyForSign().readyForSignAt());
     }
@@ -504,14 +508,14 @@ class CertificateEntityMapperTest {
     @Test
     void shouldMapRevokedAt() {
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
-          FK7210_CERTIFICATE_MODEL);
+          FK7210_CERTIFICATE_MODEL, certificateRepository);
       assertNotNull(response.revoked().revokedAt());
     }
 
     @Test
     void shouldMapRevokedBy() {
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
-          FK7210_CERTIFICATE_MODEL);
+          FK7210_CERTIFICATE_MODEL, certificateRepository);
 
       assertEquals(AJLA_DOKTOR, response.revoked().revokedBy());
     }
@@ -524,7 +528,7 @@ class CertificateEntityMapperTest {
       );
 
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
-          FK7210_CERTIFICATE_MODEL);
+          FK7210_CERTIFICATE_MODEL, certificateRepository);
 
       assertEquals(expectedRevokedInformation, response.revoked().revokedInformation());
     }
@@ -534,7 +538,7 @@ class CertificateEntityMapperTest {
       final var expectedRef = new ExternalReference(EXTERNAL_REF);
 
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
-          FK7210_CERTIFICATE_MODEL);
+          FK7210_CERTIFICATE_MODEL, certificateRepository);
 
       assertEquals(expectedRef, response.externalReference());
     }
@@ -558,7 +562,7 @@ class CertificateEntityMapperTest {
       doReturn(FK7210_CERTIFICATE_MODEL).when(certificateModelRepository).getById(FK7210_ID);
 
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
-          FK7210_CERTIFICATE_MODEL);
+          FK7210_CERTIFICATE_MODEL, certificateRepository);
 
       assertEquals(expectedChild.certificate().id(),
           response.children().getFirst().certificate().id());
@@ -585,7 +589,7 @@ class CertificateEntityMapperTest {
       doReturn(FK7210_CERTIFICATE_MODEL).when(certificateModelRepository).getById(FK7210_ID);
 
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
-          FK7210_CERTIFICATE_MODEL);
+          FK7210_CERTIFICATE_MODEL, certificateRepository);
 
       assertEquals(expectedParent.certificate().id(), response.parent().certificate().id());
       assertEquals(expectedParent.type(), response.parent().type());
@@ -595,7 +599,7 @@ class CertificateEntityMapperTest {
     @Test
     void shouldMapForwarded() {
       final var response = certificateEntityMapper.toDomain(CERTIFICATE_ENTITY,
-          FK7210_CERTIFICATE_MODEL);
+          FK7210_CERTIFICATE_MODEL, certificateRepository);
       assertTrue(response.forwarded().value());
     }
   }

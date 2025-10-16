@@ -36,6 +36,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionTransportstod.questionTransportstod;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionYrkeOchArbetsuppgifter.questionYrkeOchArbetsuppgifter;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.elements.ElementUnitContactInformation.issuingUnitContactInfo;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.CertificateModelFactoryFK7804.FK7804_V2_0;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -125,6 +126,7 @@ public class CertificateModelFactoryAG7804 implements CertificateModelFactory {
                 .type(CertificateTextType.PREAMBLE_TEXT)
                 .build()
         ))
+        .ableToCreateDraftForModel(FK7804_V2_0)
         .summaryProvider(new AG7804CertificateSummaryProvider())
         .citizenAvailableFunctionsProvider(new AG7804CitizenAvailableFunctionsProvider())
         .certificateActionSpecifications(AG7804CertificateActionSpecification.create())

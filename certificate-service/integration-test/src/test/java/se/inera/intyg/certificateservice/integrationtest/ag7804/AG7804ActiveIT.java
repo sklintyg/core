@@ -41,6 +41,7 @@ import se.inera.intyg.certificateservice.integrationtest.common.tests.RevokeCert
 import se.inera.intyg.certificateservice.integrationtest.common.tests.SignCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.UnitStatisticsIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.UpdateCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.UpdateWithCertificateCandidateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.ValidateCertificateIT;
 
 public class AG7804ActiveIT extends ActiveCertificatesIT {
@@ -400,5 +401,13 @@ public class AG7804ActiveIT extends ActiveCertificatesIT {
     }
   }
 
+  @Nested
+  @DisplayName(TYPE + "Uppdatera ett AG7804 utifrån ett FK7804 (kandidatintyg)")
+  class UpdateWithCertificateCandidate extends UpdateWithCertificateCandidateIT {
 
+    @Override
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
+    }
+  }
 }

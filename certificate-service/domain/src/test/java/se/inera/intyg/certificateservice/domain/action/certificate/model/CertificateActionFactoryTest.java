@@ -5,16 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
-import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateActionFactoryTest {
 
-  @Mock
-  CertificateActionConfigurationRepository certificateActionConfigurationRepository;
   @InjectMocks
   CertificateActionFactory certificateActionFactory;
 
@@ -484,5 +480,18 @@ class CertificateActionFactoryTest {
 
     assert certificateAction != null;
     assertEquals(CertificateActionCreateDraftFromCertificate.class, certificateAction.getClass());
+  }
+
+
+  @Test
+  void shallReturnCertificateActionUpdateDraftFromCertificateIfExistInSpecification() {
+    final var certificateActionSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.UPDATE_DRAFT_FROM_CERTIFICATE)
+        .build();
+
+    final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
+
+    assert certificateAction != null;
+    assertEquals(CertificateActionUpdateDraftFromCertificate.class, certificateAction.getClass());
   }
 }
