@@ -332,7 +332,7 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
     final var specification = certificateEntitySpecificationFactory.create(request);
 
     return certificateEntityRepository.findAll(specification).stream()
-        .map(certificateEntityMapper::toDomain)
+        .map(certificate -> certificateEntityMapper.toDomain(certificate, this))
         .toList();
   }
 

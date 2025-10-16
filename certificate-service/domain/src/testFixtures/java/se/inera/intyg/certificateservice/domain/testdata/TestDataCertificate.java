@@ -1318,4 +1318,66 @@ public class TestDataCertificate {
                 .build()
         );
   }
+
+  public static final MedicalCertificate AG114_CERTIFICATE = ag114CertificateBuilder().build();
+
+  public static MedicalCertificate.MedicalCertificateBuilder ag114CertificateBuilder() {
+    return MedicalCertificate.builder()
+        .id(new CertificateId("AG114_CERTIFICATE_ID"))
+        .revision(REVISION)
+        .created(LocalDateTime.now(ZoneId.systemDefault()))
+        .certificateModel(TestDataCertificateModel.ag114certificateModelBuilder().build())
+        .xml(XML)
+        .sent(SENT)
+        .revoked(REVOKED)
+        .externalReference(EXTERNAL_REFERENCE)
+        .elementData(
+            List.of(
+                ElementData.builder()
+                    .id(new ElementId("1"))
+                    .value(
+                        ElementValueText.builder()
+                            .textId(new FieldId("1.1"))
+                            .text("Svarstext för sysselsättning")
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("4"))
+                    .value(
+                        ElementValueDiagnosisList.builder()
+                            .diagnoses(
+                                List.of(
+                                    ElementValueDiagnosis.builder()
+                                        .code("A013")
+                                        .description("Paratyfoidfeber C")
+                                        .terminology("ICD_10_SE")
+                                        .build()
+                                )
+                            )
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("7"))
+                    .value(
+                        ElementValueInteger.builder()
+                            .integerId(new FieldId("7.1"))
+                            .value(75)
+                            .build()
+                    )
+                    .build()
+            )
+        )
+        .certificateMetaData(
+            CertificateMetaData.builder()
+                .issuer(AJLA_DOKTOR)
+                .creator(ALF_DOKTOR)
+                .patient(ATHENA_REACT_ANDERSSON)
+                .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
+                .careUnit(ALFA_MEDICINCENTRUM)
+                .careProvider(ALFA_REGIONEN)
+                .build()
+        );
+  }
 }

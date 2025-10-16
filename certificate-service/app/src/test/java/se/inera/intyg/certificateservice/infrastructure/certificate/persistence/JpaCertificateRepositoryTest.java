@@ -65,6 +65,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateModelEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.PlaceholderCertificateEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecificationFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateRelationRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -78,6 +79,8 @@ class JpaCertificateRepositoryTest {
   CertificateEntityMapper certificateEntityMapper;
   @Mock
   PlaceholderCertificateEntityMapper placeHolderEntityMapper;
+  @Mock
+  CertificateEntitySpecificationFactory certificateEntitySpecificationFactory;
   @InjectMocks
   JpaCertificateRepository jpaCertificateRepository;
 
@@ -748,7 +751,8 @@ class JpaCertificateRepositoryTest {
       final var request = CertificatesRequest.builder()
           .build();
       doReturn(List.of(CERTIFICATE_ENTITY)).when(certificateEntityRepository).findAll(any());
-      doReturn(CERTIFICATE).when(certificateEntityMapper).toDomain(CERTIFICATE_ENTITY);
+      doReturn(CERTIFICATE).when(certificateEntityMapper)
+          .toDomain(CERTIFICATE_ENTITY, jpaCertificateRepository);
 
       final var actualCertificates = jpaCertificateRepository.findByCertificatesRequest(request);
 
@@ -790,7 +794,8 @@ class JpaCertificateRepositoryTest {
       final var request = SickLeavesRequest.builder()
           .build();
       doReturn(List.of(CERTIFICATE_ENTITY)).when(certificateEntityRepository).findAll(any());
-      doReturn(CERTIFICATE).when(certificateEntityMapper).toDomain(CERTIFICATE_ENTITY);
+      doReturn(CERTIFICATE).when(certificateEntityMapper)
+          .toDomain(CERTIFICATE_ENTITY, jpaCertificateRepository);
 
       final var actualCertificates = jpaCertificateRepository.findBySickLeavesRequest(request);
 
