@@ -1363,7 +1363,17 @@ public class TestDataCertificate {
                     .value(
                         ElementValueInteger.builder()
                             .integerId(new FieldId("7.1"))
-                            .value(75)
+                            .value(70)
+                            .build()
+                    )
+                    .build(),
+                ElementData.builder()
+                    .id(new ElementId("7.2"))
+                    .value(
+                        ElementValueDateRange.builder()
+                            .id(new FieldId("7.2"))
+                            .fromDate(LocalDate.now())
+                            .toDate(LocalDate.now().plusDays(30))
                             .build()
                     )
                     .build()
