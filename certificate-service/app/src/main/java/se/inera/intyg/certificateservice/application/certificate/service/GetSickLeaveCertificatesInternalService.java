@@ -7,8 +7,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetSickLeav
 import se.inera.intyg.certificateservice.application.certificate.service.converter.SickLeaveConverter;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetSickLeaveCertificatesDomainService;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
+import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
-import se.inera.intyg.certificateservice.domain.common.model.SickLeavesRequest;
 
 @Service
 @RequiredArgsConstructor
@@ -36,12 +36,12 @@ public class GetSickLeaveCertificatesInternalService {
         .build();
   }
 
-  private SickLeavesRequest getRequest(GetSickLeaveCertificatesInternalRequest request) {
-    return SickLeavesRequest.builder()
+  private CertificatesRequest getRequest(GetSickLeaveCertificatesInternalRequest request) {
+    return CertificatesRequest.builder()
         .personId(PersonId.builder().id(request.getPersonId().getId()).build())
         .signedFrom(request.getSignedFrom())
         .signedTo(request.getSignedTo())
-        .certificateTypes(
+        .types(
             request.getCertificateTypes().stream()
                 .map(CertificateType::new)
                 .toList()

@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.domain.common.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
@@ -26,6 +27,9 @@ public class CertificatesRequest {
   HsaId careUnitId;
   PersonId personId;
   Boolean validCertificates;
+  LocalDate signedFrom;
+  LocalDate signedTo;
+  List<HsaId> issuedByUnitIds;
 
   public CertificatesRequest apply(ActionEvaluation actionEvaluation) {
     if (issuedUnitId() == null && actionEvaluation.isIssuingUnitSubUnit()) {

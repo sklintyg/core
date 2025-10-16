@@ -5,15 +5,15 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.certificate.model.SickLeaveCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
-import se.inera.intyg.certificateservice.domain.common.model.SickLeavesRequest;
+import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
 
 @RequiredArgsConstructor
 public class GetSickLeaveCertificatesDomainService {
 
   private final CertificateRepository certificateRepository;
 
-  public List<SickLeaveCertificate> get(SickLeavesRequest request) {
-    final var sickLeaves = certificateRepository.findBySickLeavesRequest(
+  public List<SickLeaveCertificate> get(CertificatesRequest request) {
+    final var sickLeaves = certificateRepository.findByCertificatesRequest(
         request
     );
 

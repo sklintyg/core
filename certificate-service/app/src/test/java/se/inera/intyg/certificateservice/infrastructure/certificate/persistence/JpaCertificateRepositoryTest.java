@@ -50,7 +50,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Placehold
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
-import se.inera.intyg.certificateservice.domain.common.model.SickLeavesRequest;
 import se.inera.intyg.certificateservice.domain.unit.model.SubUnit;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateDataEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
@@ -768,49 +767,6 @@ class JpaCertificateRepositoryTest {
       when(certificateEntitySpecificationFactory.create(request)).thenReturn(specification);
 
       jpaCertificateRepository.findByCertificatesRequest(request);
-
-      verify(certificateEntityRepository).findAll(specification);
-    }
-  }
-
-  @Nested
-  class FindBySickLeavesRequestTest {
-
-    @Test
-    void shouldReturnEmptyListIfNoCertificatesAreFound() {
-      final var request = SickLeavesRequest.builder()
-          .build();
-
-      doReturn(List.of()).when(certificateEntityRepository).findAll(any());
-
-      final var actualCertificates = jpaCertificateRepository.findBySickLeavesRequest(request);
-
-      assertTrue(actualCertificates.isEmpty());
-    }
-
-    @Test
-    void shouldReturnListOfCertificates() {
-      final var expectedCertificates = List.of(CERTIFICATE);
-      final var request = SickLeavesRequest.builder()
-          .build();
-      doReturn(List.of(CERTIFICATE_ENTITY)).when(certificateEntityRepository).findAll(any());
-      doReturn(CERTIFICATE).when(certificateEntityMapper)
-          .toDomain(CERTIFICATE_ENTITY, jpaCertificateRepository);
-
-      final var actualCertificates = jpaCertificateRepository.findBySickLeavesRequest(request);
-
-      assertEquals(expectedCertificates, actualCertificates);
-    }
-
-    @Test
-    void shouldCallSpecificationFactoryToCreateSpecification() {
-      final var request = SickLeavesRequest.builder()
-          .build();
-      final var specification = mock(Specification.class);
-      doReturn(List.of()).when(certificateEntityRepository).findAll(any());
-      when(certificateEntitySpecificationFactory.create(request)).thenReturn(specification);
-
-      jpaCertificateRepository.findBySickLeavesRequest(request);
 
       verify(certificateEntityRepository).findAll(specification);
     }

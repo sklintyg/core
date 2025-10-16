@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -17,7 +18,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.SickLeaveCe
 import se.inera.intyg.certificateservice.application.certificate.service.converter.SickLeaveConverter;
 import se.inera.intyg.certificateservice.domain.certificate.model.SickLeaveCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetSickLeaveCertificatesDomainService;
-import se.inera.intyg.certificateservice.domain.common.model.SickLeavesRequest;
+import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
 
 @ExtendWith(MockitoExtension.class)
 class GetSickLeaveCertificatesInternalServiceTest {
@@ -61,7 +62,7 @@ class GetSickLeaveCertificatesInternalServiceTest {
     final var expectedSickLeaveDTO = SickLeaveCertificateDTO.builder().build();
 
     when(getSickLeaveCertificatesDomainService.get(
-        org.mockito.ArgumentMatchers.any(SickLeavesRequest.class)))
+        ArgumentMatchers.any(CertificatesRequest.class)))
         .thenReturn(List.of(sickLeaveCertificate));
     when(sickLeaveConverter.convert(sickLeaveCertificate))
         .thenReturn(expectedSickLeaveDTO);

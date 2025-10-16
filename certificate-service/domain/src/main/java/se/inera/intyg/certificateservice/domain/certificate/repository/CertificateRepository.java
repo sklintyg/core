@@ -9,7 +9,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PlaceholderCertificateRequest;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
-import se.inera.intyg.certificateservice.domain.common.model.SickLeavesRequest;
 
 public interface CertificateRepository {
 
@@ -38,6 +37,4 @@ public interface CertificateRepository {
   PlaceholderCertificate getPlaceholderById(CertificateId certificateId);
 
   PlaceholderCertificate save(PlaceholderCertificate placeholderCertificate);
-
-  List<Certificate> findBySickLeavesRequest(SickLeavesRequest request);
 }

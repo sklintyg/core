@@ -17,12 +17,13 @@ import se.inera.intyg.certificateservice.domain.certificate.model.SickLeaveCerti
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SickLeaveProvider;
-import se.inera.intyg.certificateservice.domain.common.model.SickLeavesRequest;
+import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
 
 @ExtendWith(MockitoExtension.class)
 class GetSickLeaveCertificatesDomainServiceTest {
 
-  private static final SickLeavesRequest SICK_LEAVES_REQUEST = SickLeavesRequest.builder().build();
+  private static final CertificatesRequest SICK_LEAVES_REQUEST = CertificatesRequest.builder()
+      .build();
   @Mock
   CertificateRepository certificateRepository;
   @InjectMocks
@@ -36,7 +37,7 @@ class GetSickLeaveCertificatesDomainServiceTest {
         )
         .build();
 
-    when(certificateRepository.findBySickLeavesRequest(SICK_LEAVES_REQUEST))
+    when(certificateRepository.findByCertificatesRequest(SICK_LEAVES_REQUEST))
         .thenReturn(List.of(certificate));
 
     final var result = getSickLeaveCertificatesDomainService.get(SICK_LEAVES_REQUEST);
@@ -55,7 +56,7 @@ class GetSickLeaveCertificatesDomainServiceTest {
         )
         .build();
 
-    when(certificateRepository.findBySickLeavesRequest(SICK_LEAVES_REQUEST))
+    when(certificateRepository.findByCertificatesRequest(SICK_LEAVES_REQUEST))
         .thenReturn(List.of(certificate));
     when(sickLeaveProvider.build(certificate))
         .thenReturn(Optional.of(expectedSickLeaveCertificate));

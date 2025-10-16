@@ -1,15 +1,14 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository;
 
 import static org.springframework.data.jpa.domain.Specification.where;
-import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecification.certificateTypeIn;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecification.createdEqualsAndGreaterThan;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecification.createdEqualsAndLesserThan;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecification.modifiedEqualsAndGreaterThan;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecification.modifiedEqualsAndLesserThan;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecification.notPlacerholderCertificate;
-import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateModelEntitySpecification.containsTypes;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecification.signedEqualsAndGreaterThan;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecification.signedEqualsAndLesserThan;
+import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateModelEntitySpecification.containsTypes;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.PatientEntitySpecification.equalsPatient;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffEntitySpecification.equalsIssuedByStaff;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StatusEntitySpecification.containsStatus;
@@ -20,7 +19,6 @@ import static se.inera.intyg.certificateservice.infrastructure.certificate.persi
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
-import se.inera.intyg.certificateservice.domain.common.model.SickLeavesRequest;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
 
 @Component
@@ -92,45 +90,24 @@ public class CertificateEntitySpecificationFactory {
         notPlacerholderCertificate()
     );
 
-    return specification;
-  }
-
-  public Specification<CertificateEntity> create(SickLeavesRequest request) {
-    Specification<CertificateEntity> specification = where(null);
-
-    if (request.personId() != null) {
+    if (certificatesRequest.signedFrom() != null) {
       specification = specification.and(
-          equalsPatient(request.personId())
+          signedEqualsAndGreaterThan(certificatesRequest.signedFrom())
       );
     }
 
-    if (request.certificateTypes() != null && !request.certificateTypes().isEmpty()) {
+    if (certificatesRequest.signedTo() != null) {
       specification = specification.and(
-          certificateTypeIn(request.certificateTypes())
+          signedEqualsAndLesserThan(certificatesRequest.signedTo())
       );
     }
 
-    if (request.signedFrom() != null) {
+    if (certificatesRequest.issuedByUnitIds() != null && !certificatesRequest.issuedByUnitIds()
+        .isEmpty()) {
       specification = specification.and(
-          signedEqualsAndGreaterThan(request.signedFrom())
+          issuedOnUnitIdIn(certificatesRequest.issuedByUnitIds())
       );
     }
-
-    if (request.signedTo() != null) {
-      specification = specification.and(
-          signedEqualsAndLesserThan(request.signedTo())
-      );
-    }
-
-    if (request.issuedByUnitIds() != null && !request.issuedByUnitIds().isEmpty()) {
-      specification = specification.and(
-          issuedOnUnitIdIn(request.issuedByUnitIds())
-      );
-    }
-
-    specification = specification.and(
-        notPlacerholderCertificate()
-    );
 
     return specification;
   }
