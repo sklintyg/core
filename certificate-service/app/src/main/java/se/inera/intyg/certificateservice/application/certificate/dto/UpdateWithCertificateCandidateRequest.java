@@ -19,6 +19,7 @@ public class UpdateWithCertificateCandidateRequest {
   UnitDTO careUnit;
   UnitDTO careProvider;
   PatientDTO patient;
+  String externalReference;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class UpdateWithCertificateCandidateRequestBuilder {

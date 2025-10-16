@@ -32,6 +32,7 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.Certifi
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.service.UpdateWithCertificateCandidateDomainService;
+import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
 import se.inera.intyg.certificateservice.domain.user.model.User;
 
@@ -40,6 +41,7 @@ class UpdateWithCertificateCandidateServiceTest {
 
   private static final String CERTIFICATE_ID = "certificateId";
   private static final String CANDIDATE_CERTIFICATE_ID = "candidateCertificateId";
+  private static final String EXTERNAL_REFERENCE = "externalReference";
   @Mock
   private ActionEvaluationFactory actionEvaluationFactory;
   @Mock
@@ -95,7 +97,8 @@ class UpdateWithCertificateCandidateServiceTest {
         .when(updateWithCertificateCandidateDomainService).update(
             new CertificateId(CERTIFICATE_ID),
             new CertificateId(CANDIDATE_CERTIFICATE_ID),
-            actionEvaluation
+            actionEvaluation,
+            new ExternalReference(EXTERNAL_REFERENCE)
         );
 
     final var certificateAction = mock(CertificateAction.class);
@@ -114,6 +117,7 @@ class UpdateWithCertificateCandidateServiceTest {
             .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
             .careUnit(ALFA_MEDICINCENTRUM_DTO)
             .careProvider(ALFA_REGIONEN_DTO)
+            .externalReference(EXTERNAL_REFERENCE)
             .build(),
         CERTIFICATE_ID,
         CANDIDATE_CERTIFICATE_ID

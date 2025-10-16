@@ -12,6 +12,7 @@ import se.inera.intyg.certificateservice.application.common.ActionEvaluationFact
 import se.inera.intyg.certificateservice.application.common.converter.ResourceLinkConverter;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.service.UpdateWithCertificateCandidateDomainService;
+import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
 
 @Service
 @RequiredArgsConstructor
@@ -41,7 +42,9 @@ public class UpdateWithCertificateCandidateService {
     final var certificate = updateWithCertificateCandidateDomainService.update(
         new CertificateId(certificateId),
         new CertificateId(candidateCertificateId),
-        actionEvaluation
+        actionEvaluation,
+        request.getExternalReference() == null ? null
+            : new ExternalReference(request.getExternalReference())
     );
 
     return UpdateWithCertificateCandidateResponse.builder()
