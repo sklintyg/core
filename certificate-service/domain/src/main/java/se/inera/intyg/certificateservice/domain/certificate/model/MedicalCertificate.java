@@ -13,6 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Stream;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -73,6 +74,7 @@ public class MedicalCertificate implements Certificate {
   private List<Message> messages = Collections.emptyList();
   private Forwarded forwarded;
 
+  @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   private CertificateRepository certificateRepository;
 
