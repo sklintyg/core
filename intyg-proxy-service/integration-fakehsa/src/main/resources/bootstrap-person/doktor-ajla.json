@@ -29,7 +29,7 @@
       ]
     }
   ],
-  "paTitle": [{"titleName": "b", "titleCode": "204010"}],
+  "paTitle": [{"titleName": "Läkare ej legitimerad, allmäntjänstgöring", "titleCode": "204010"}],
   "fakeProperties": {
     "allowedInApplications": [],
     "displayOrder": 90,
