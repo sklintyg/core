@@ -1,37 +1,16 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataPatientEntity.athenaReactAnderssonEntityBuilder;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataPatientVersionEntity.ATHENA_REACT_ANDERSSON_VERSION_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffEntity.ajlaDoctorEntityBuilder;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffVersionEntity.AJLA_DOKTOR_VERSION_ENTITY;
-import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffVersionEntity.ALF_DOKTOR_VERSION_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitEntity.alfaMedicinCentrumEntityBuilder;
-import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitVersionEntity.ALFA_ALLERGIMOTTAGNINGEN_VERSION_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitVersionEntity.ALFA_MEDICINCENTRUM_VERSION_ENTITY;
-import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitVersionEntity.ALFA_REGIONEN_VERSION_ENTITY;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_META_DATA;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.athenaReactAnderssonBuilder;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.ALF_DOKTOR;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HSA_ID;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALF_DOKTOR_HSA_ID;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -67,73 +46,6 @@ class MetadataVersionRepositoryTest {
   private static final LocalDateTime TIMESTAMP = LocalDateTime.now()
       .truncatedTo(ChronoUnit.SECONDS);
 
-
-  @Nested
-  class GetMetadataFromSignInstance {
-
-    @Test
-    void shouldThrowIllegalStateExceptionWhenNotSigned() {
-      assertThrows(IllegalStateException.class, () -> {
-        metadataVersionRepository.getMetadataFromSignInstance(CERTIFICATE_META_DATA, null);
-      });
-    }
-
-    @Test
-    void shouldReturnVersionedPatientMetadataWhenSigned() {
-
-      final var athenaWithoutAddress = athenaReactAnderssonBuilder().address(null).build();
-
-      doReturn(Optional.of(ATHENA_REACT_ANDERSSON_VERSION_ENTITY)).when(
-              patientVersionEntityRepository)
-          .findFirstCoveringTimestampOrderByMostRecent(CERTIFICATE_META_DATA
-              .patient().id().idWithoutDash(), TIMESTAMP);
-
-      final var result = metadataVersionRepository.getMetadataFromSignInstance(
-          CERTIFICATE_META_DATA, TIMESTAMP);
-
-      assertEquals(athenaWithoutAddress, result.patient());
-    }
-
-    @Test
-    void shouldReturnVersionedStaffMetadataWhenSigned() {
-
-      doReturn(List.of(AJLA_DOKTOR_VERSION_ENTITY, ALF_DOKTOR_VERSION_ENTITY)).when(
-              staffVersionEntityRepository)
-          .findAllCoveringTimestampByHsaIdIn(List.of(AJLA_DOCTOR_HSA_ID, ALF_DOKTOR_HSA_ID),
-              TIMESTAMP);
-
-      final var result = metadataVersionRepository.getMetadataFromSignInstance(
-          CERTIFICATE_META_DATA, TIMESTAMP);
-
-      assertAll(
-          () -> assertEquals(AJLA_DOKTOR, result.issuer()),
-          () -> assertEquals(ALF_DOKTOR, result.creator())
-      );
-
-    }
-
-    @Test
-    void shouldReturnUnitsMetadataWhenSigned() {
-
-      doReturn(List.of(
-          ALFA_REGIONEN_VERSION_ENTITY,
-          ALFA_MEDICINCENTRUM_VERSION_ENTITY,
-          ALFA_ALLERGIMOTTAGNINGEN_VERSION_ENTITY))
-          .when(unitVersionEntityRepository)
-          .findAllCoveringTimestampByHsaIdIn(List.of(
-                  ALFA_REGIONEN_ID, ALFA_MEDICINCENTRUM_ID, ALFA_ALLERGIMOTTAGNINGEN_ID),
-              TIMESTAMP);
-
-      final var result = metadataVersionRepository.getMetadataFromSignInstance(
-          CERTIFICATE_META_DATA, TIMESTAMP);
-
-      assertAll(
-          () -> assertEquals(ALFA_REGIONEN, result.careProvider()),
-          () -> assertEquals(ALFA_MEDICINCENTRUM, result.careUnit()),
-          () -> assertEquals(ALFA_ALLERGIMOTTAGNINGEN, result.issuingUnit())
-      );
-    }
-  }
 
   @Nested
   class SaveVersions {

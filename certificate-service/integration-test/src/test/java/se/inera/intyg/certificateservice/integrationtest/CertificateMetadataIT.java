@@ -9,12 +9,12 @@ import static se.inera.intyg.certificateservice.application.testdata.TestDataCom
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.alfaAllergimottagningenDtoBuilder;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ajlaDoktorDtoBuilder;
-import static se.inera.intyg.certificateservice.integrationtest.fk7804.FK7804Constants.FK7804;
-import static se.inera.intyg.certificateservice.integrationtest.fk7804.FK7804Constants.VERSION;
-import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customCreateCertificateRequest;
-import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultCreateCertificateRequest;
-import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificate;
-import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.metadata;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.customCreateCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.defaultCreateCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.certificate;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.metadata;
+import static se.inera.intyg.certificateservice.integrationtest.fk7804.FK7804TestSetup.ACTIVE_CERTIFICATE_TYPE_VERSION;
+import static se.inera.intyg.certificateservice.integrationtest.fk7804.FK7804TestSetup.CERTIFICATE_TYPE;
 import static se.inera.intyg.certificateservice.testability.common.TestabilityConstants.TESTABILITY_PROFILE;
 
 import org.junit.jupiter.api.AfterEach;
@@ -28,9 +28,9 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
-import se.inera.intyg.certificateservice.integrationtest.util.ApiUtil;
-import se.inera.intyg.certificateservice.integrationtest.util.Containers;
-import se.inera.intyg.certificateservice.integrationtest.util.TestabilityApiUtil;
+import se.inera.intyg.certificateservice.integrationtest.common.util.ApiUtil;
+import se.inera.intyg.certificateservice.integrationtest.common.util.Containers;
+import se.inera.intyg.certificateservice.integrationtest.common.util.TestabilityApiUtil;
 
 @ActiveProfiles({"integration-test", TESTABILITY_PROFILE})
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -49,7 +49,7 @@ class CertificateMetadataIT {
   }
 
   @BeforeAll
-  public static void beforeAll() {
+  static void beforeAll() {
     Containers.ensureRunning();
   }
 
@@ -72,7 +72,7 @@ class CertificateMetadataIT {
     final var updatedAthena = athenaReactAnderssonDtoBuilder()
         .lastName("Athenasson").fullName("Athena Athenasson").build();
     final var response = api.createCertificate(
-        defaultCreateCertificateRequest(FK7804, VERSION)
+        defaultCreateCertificateRequest(CERTIFICATE_TYPE, ACTIVE_CERTIFICATE_TYPE_VERSION)
     );
 
     assertAll(
@@ -83,7 +83,7 @@ class CertificateMetadataIT {
     );
 
     final var updatedResponse = api.createCertificate(
-        customCreateCertificateRequest(FK7804, VERSION)
+        customCreateCertificateRequest(CERTIFICATE_TYPE, ACTIVE_CERTIFICATE_TYPE_VERSION)
             .patient(updatedAthena)
             .user(AJLA_DOCTOR_DTO)
             .build()
@@ -106,7 +106,7 @@ class CertificateMetadataIT {
         .lastName("Ajlasson").fullName("Ajla Ajlasson").build();
 
     final var response = api.createCertificate(
-        defaultCreateCertificateRequest(FK7804, VERSION)
+        defaultCreateCertificateRequest(CERTIFICATE_TYPE, ACTIVE_CERTIFICATE_TYPE_VERSION)
     );
 
     assertAll(
@@ -117,7 +117,7 @@ class CertificateMetadataIT {
     );
 
     final var updatedResponse = api.createCertificate(
-        customCreateCertificateRequest(FK7804, VERSION)
+        customCreateCertificateRequest(CERTIFICATE_TYPE, ACTIVE_CERTIFICATE_TYPE_VERSION)
             .user(updatedAjla)
             .build()
     );
@@ -138,7 +138,7 @@ class CertificateMetadataIT {
     final var updatedAlfaAllergi = alfaAllergimottagningenDtoBuilder()
         .name("ALERGI").build();
     final var response = api.createCertificate(
-        defaultCreateCertificateRequest(FK7804, VERSION)
+        defaultCreateCertificateRequest(CERTIFICATE_TYPE, ACTIVE_CERTIFICATE_TYPE_VERSION)
     );
 
     assertAll(
@@ -149,7 +149,7 @@ class CertificateMetadataIT {
     );
 
     final var updatedResponse = api.createCertificate(
-        customCreateCertificateRequest(FK7804, VERSION)
+        customCreateCertificateRequest(CERTIFICATE_TYPE, ACTIVE_CERTIFICATE_TYPE_VERSION)
             .unit(updatedAlfaAllergi)
             .build()
     );

@@ -12,8 +12,26 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataPatientVersionEntity.ATHENA_REACT_ANDERSSON_VERSION_ENTITY;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffVersionEntity.AJLA_DOKTOR_VERSION_ENTITY;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffVersionEntity.ALF_DOKTOR_VERSION_ENTITY;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitVersionEntity.ALFA_ALLERGIMOTTAGNINGEN_VERSION_ENTITY;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitVersionEntity.ALFA_MEDICINCENTRUM_VERSION_ENTITY;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitVersionEntity.ALFA_REGIONEN_VERSION_ENTITY;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_META_DATA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK3226_CERTIFICATE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.athenaReactAnderssonBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.ALF_DOKTOR;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HSA_ID;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALF_DOKTOR_HSA_ID;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -74,6 +92,9 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.PlaceholderCertificateEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateRelationRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.PatientVersionEntityRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffVersionEntityRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitVersionEntityRepository;
 
 @ExtendWith(MockitoExtension.class)
 class JpaCertificateRepositoryTest {
@@ -86,12 +107,20 @@ class JpaCertificateRepositoryTest {
   CertificateEntityMapper certificateEntityMapper;
   @Mock
   PlaceholderCertificateEntityMapper placeHolderEntityMapper;
+  @Mock
+  StaffVersionEntityRepository staffVersionEntityRepository;
+  @Mock
+  PatientVersionEntityRepository patientVersionEntityRepository;
+  @Mock
+
+  UnitVersionEntityRepository unitVersionEntityRepository;
 
   @InjectMocks
   JpaCertificateRepository jpaCertificateRepository;
 
   private void stubDomain() {
-    when(certificateEntityMapper.toDomain(any(CertificateEntity.class)))
+    when(certificateEntityMapper.toDomain(any(CertificateEntity.class),
+        any(CertificateRepository.class)))
         .thenAnswer(inv -> {
           CertificateEntity ce = inv.getArgument(0);
 
@@ -571,7 +600,8 @@ class JpaCertificateRepositoryTest {
       doReturn(SIGNED_CERTIFICATE_ENTITY).when(certificateEntityRepository)
           .save(SIGNED_CERTIFICATE_ENTITY);
 
-      final var actualCertificate = jpaCertificateRepository.insert(EXPECTED_CERTIFICATE);
+      final var actualCertificate = jpaCertificateRepository.insert(EXPECTED_CERTIFICATE,
+          new Revision(1));
 
       assertEquals(EXPECTED_CERTIFICATE, actualCertificate);
     }
@@ -583,7 +613,7 @@ class JpaCertificateRepositoryTest {
       doReturn(SIGNED_CERTIFICATE_ENTITY).when(certificateEntityRepository)
           .save(SIGNED_CERTIFICATE_ENTITY);
 
-      jpaCertificateRepository.insert(EXPECTED_CERTIFICATE);
+      jpaCertificateRepository.insert(EXPECTED_CERTIFICATE, new Revision(1));
       verify(certificateRelationRepository).save(EXPECTED_CERTIFICATE, SIGNED_CERTIFICATE_ENTITY);
     }
 
@@ -897,6 +927,73 @@ class JpaCertificateRepositoryTest {
       final var actualCertificate = jpaCertificateRepository.save(PLACEHOLDER_CERTIFICATE);
 
       assertEquals(PLACEHOLDER_CERTIFICATE, actualCertificate);
+    }
+  }
+
+  @Nested
+  class GetMetadataFromSignInstance {
+
+    @Test
+    void shouldThrowIllegalStateExceptionWhenNotSigned() {
+      assertThrows(IllegalStateException.class, () -> {
+        jpaCertificateRepository.getMetadataFromSignInstance(CERTIFICATE_META_DATA, null);
+      });
+    }
+
+    @Test
+    void shouldReturnVersionedPatientMetadataWhenSigned() {
+
+      final var athenaWithoutAddress = athenaReactAnderssonBuilder().address(null).build();
+
+      doReturn(Optional.of(ATHENA_REACT_ANDERSSON_VERSION_ENTITY)).when(
+              patientVersionEntityRepository)
+          .findFirstCoveringTimestampOrderByMostRecent(CERTIFICATE_META_DATA
+              .patient().id().idWithoutDash(), TIMESTAMP);
+
+      final var result = jpaCertificateRepository.getMetadataFromSignInstance(
+          CERTIFICATE_META_DATA, TIMESTAMP);
+
+      assertEquals(athenaWithoutAddress, result.patient());
+    }
+
+    @Test
+    void shouldReturnVersionedStaffMetadataWhenSigned() {
+
+      doReturn(List.of(AJLA_DOKTOR_VERSION_ENTITY, ALF_DOKTOR_VERSION_ENTITY)).when(
+              staffVersionEntityRepository)
+          .findAllCoveringTimestampByHsaIdIn(List.of(AJLA_DOCTOR_HSA_ID, ALF_DOKTOR_HSA_ID),
+              TIMESTAMP);
+
+      final var result = jpaCertificateRepository.getMetadataFromSignInstance(
+          CERTIFICATE_META_DATA, TIMESTAMP);
+
+      assertAll(
+          () -> assertEquals(AJLA_DOKTOR, result.issuer()),
+          () -> assertEquals(ALF_DOKTOR, result.creator())
+      );
+
+    }
+
+    @Test
+    void shouldReturnUnitsMetadataWhenSigned() {
+
+      doReturn(List.of(
+          ALFA_REGIONEN_VERSION_ENTITY,
+          ALFA_MEDICINCENTRUM_VERSION_ENTITY,
+          ALFA_ALLERGIMOTTAGNINGEN_VERSION_ENTITY))
+          .when(unitVersionEntityRepository)
+          .findAllCoveringTimestampByHsaIdIn(List.of(
+                  ALFA_REGIONEN_ID, ALFA_MEDICINCENTRUM_ID, ALFA_ALLERGIMOTTAGNINGEN_ID),
+              TIMESTAMP);
+
+      final var result = jpaCertificateRepository.getMetadataFromSignInstance(
+          CERTIFICATE_META_DATA, TIMESTAMP);
+
+      assertAll(
+          () -> assertEquals(ALFA_REGIONEN, result.careProvider()),
+          () -> assertEquals(ALFA_MEDICINCENTRUM, result.careUnit()),
+          () -> assertEquals(ALFA_ALLERGIMOTTAGNINGEN, result.issuingUnit())
+      );
     }
   }
 }
