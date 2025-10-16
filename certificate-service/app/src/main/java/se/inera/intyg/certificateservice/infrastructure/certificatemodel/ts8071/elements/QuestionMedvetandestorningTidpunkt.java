@@ -12,7 +12,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
 
 public class QuestionMedvetandestorningTidpunkt {
 
@@ -50,7 +50,7 @@ public class QuestionMedvetandestorningTidpunkt {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.valueBoolean(QUESTION_MEDVETANDESTORNING_ID)
+            ElementDataPredicateFactory.valueBoolean(QUESTION_MEDVETANDESTORNING_ID)
         )
         .mapping(
             new ElementMapping(QUESTION_EPILEPSI_ID, null)

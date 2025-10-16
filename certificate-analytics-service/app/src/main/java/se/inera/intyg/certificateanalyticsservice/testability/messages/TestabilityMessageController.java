@@ -27,7 +27,7 @@ public class TestabilityMessageController {
   @GetMapping("/messages/v1/{messageId}")
   public PseudonymizedAnalyticsMessage getMessage(
       @PathVariable String messageId) {
-    final var pseudonymizedMessageId = pseudonymizationTokenGenerator.messageId(messageId);
+    final var pseudonymizedMessageId = pseudonymizationTokenGenerator.id(messageId);
     log.info("Testability get message with id '{}' that is pseudonymized to '{}'",
         messageId, pseudonymizedMessageId
     );

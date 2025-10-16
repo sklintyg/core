@@ -20,9 +20,9 @@ public class CertificateAnalyticsEventV1Parser implements AnalyticsMessageParser
     return TYPE.equals(type) && SCHEMA_VERSION.equals(schemaVersion);
   }
 
-  public CertificateAnalyticsEventMessageV1 parse(String message) {
+  public CertificateAnalyticsMessageV1 parse(String message) {
     try {
-      return objectMapper.readValue(message, CertificateAnalyticsEventMessageV1.class);
+      return objectMapper.readValue(message, CertificateAnalyticsMessageV1.class);
     } catch (JsonProcessingException e) {
       throw new UncheckedIOException(e);
     }

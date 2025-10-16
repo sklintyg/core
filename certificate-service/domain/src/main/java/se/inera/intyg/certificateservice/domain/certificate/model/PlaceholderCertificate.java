@@ -304,6 +304,18 @@ public class PlaceholderCertificate implements Certificate {
   }
 
   @Override
+  public void fillFromCertificate(Certificate certificate) {
+    throw new IllegalStateException("Cannot fill from certificate for a placeholder certificate");
+  }
+
+  @Override
+  public Optional<Certificate> candidateForUpdate() {
+    throw new IllegalStateException(
+        "Cannot get candidate for update for a placeholder certificate"
+    );
+  }
+
+  @Override
   public CertificateMetaData getMetadataForPrint() {
     throw new IllegalStateException(
         "Cannot get metadata for print for a placeholder certificate");

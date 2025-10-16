@@ -26,6 +26,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Pdf;
+import se.inera.intyg.certificateservice.domain.certificate.service.PdfGeneratorOptions;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -83,6 +84,11 @@ class GeneralPdfGeneratorTest {
       .pdfData(PDF_DATA)
       .build();
   private static final String FILE_NAME = "aao_123_test";
+  private static final PdfGeneratorOptions OPTIONS = PdfGeneratorOptions.builder()
+      .additionalInfoText(TEXT)
+      .citizenFormat(IS_CITIZEN)
+      .hiddenElements(List.of())
+      .build();
 
   @Mock
   private PrintCertificateCategoryConverter printCertificateCategoryConverter;
@@ -106,7 +112,7 @@ class GeneralPdfGeneratorTest {
     @BeforeEach
     void setup() {
       when(printCertificateCategoryConverter.convert(CERTIFICATE_NO_GENERAL_RECIPIENT_NAME,
-          ELEMENT_SPECIFICATION))
+          ELEMENT_SPECIFICATION, OPTIONS))
           .thenReturn(PRINT_CERTIFICATE_CATEGORY_DTO);
       when(
           printCertificateMetadataConverter.convert(CERTIFICATE_NO_GENERAL_RECIPIENT_NAME,
@@ -123,7 +129,7 @@ class GeneralPdfGeneratorTest {
           .metadata(PRINT_CERTIFICATE_METADATA_DTO)
           .build();
 
-      generalPdfGenerator.generate(CERTIFICATE_NO_GENERAL_RECIPIENT_NAME, TEXT, IS_CITIZEN);
+      generalPdfGenerator.generate(CERTIFICATE_NO_GENERAL_RECIPIENT_NAME, OPTIONS);
       verify(printCertificateFromCertificatePrintService).print(captor.capture());
 
       assertEquals(expected, captor.getValue());
@@ -133,8 +139,8 @@ class GeneralPdfGeneratorTest {
     @Test
     void shouldConvertResponseWhenNoGeneralFileName() {
       final var expectedResponse = new Pdf(PDF_DATA, FILE_NAME);
-      final var response = generalPdfGenerator.generate(CERTIFICATE_NO_GENERAL_RECIPIENT_NAME, TEXT,
-          IS_CITIZEN);
+      final var response = generalPdfGenerator.generate(CERTIFICATE_NO_GENERAL_RECIPIENT_NAME,
+          OPTIONS);
 
       assertEquals(expectedResponse, response);
     }
@@ -145,7 +151,7 @@ class GeneralPdfGeneratorTest {
 
     @BeforeEach
     void setup() {
-      when(printCertificateCategoryConverter.convert(CERTIFICATE, ELEMENT_SPECIFICATION))
+      when(printCertificateCategoryConverter.convert(CERTIFICATE, ELEMENT_SPECIFICATION, OPTIONS))
           .thenReturn(PRINT_CERTIFICATE_CATEGORY_DTO);
       when(printCertificateMetadataConverter.convert(CERTIFICATE, IS_CITIZEN,
           "lakarintyg_transportstyrelsen"))
@@ -157,7 +163,7 @@ class GeneralPdfGeneratorTest {
     void shouldConvertResponseWhenGeneralFileName() {
       final var expectedResponse = new Pdf(PDF_DATA, "lakarintyg_transportstyrelsen");
 
-      final var response = generalPdfGenerator.generate(CERTIFICATE, TEXT, IS_CITIZEN);
+      final var response = generalPdfGenerator.generate(CERTIFICATE, OPTIONS);
 
       assertEquals(expectedResponse, response);
     }
@@ -198,7 +204,7 @@ class GeneralPdfGeneratorTest {
         .metadata(PRINT_CERTIFICATE_METADATA_DTO)
         .build();
 
-    generalPdfGenerator.generate(cert, TEXT, IS_CITIZEN);
+    generalPdfGenerator.generate(cert, OPTIONS);
     verify(printCertificateFromCertificatePrintService).print(captor.capture());
 
     assertEquals(expected, captor.getValue());
@@ -231,7 +237,7 @@ class GeneralPdfGeneratorTest {
         .build();
 
     when(printCertificateCategoryConverter.convert(certWithMultipleElements,
-        ELEMENT_SPECIFICATION))
+        ELEMENT_SPECIFICATION, OPTIONS))
         .thenReturn(PRINT_CERTIFICATE_CATEGORY_DTO).thenReturn(categoryWithQuestion);
 
     when(
@@ -242,7 +248,7 @@ class GeneralPdfGeneratorTest {
 
     final var captor = ArgumentCaptor.forClass(PrintCertificateRequestDTO.class);
 
-    generalPdfGenerator.generate(certWithMultipleElements, TEXT, IS_CITIZEN);
+    generalPdfGenerator.generate(certWithMultipleElements, OPTIONS);
     verify(printCertificateFromCertificatePrintService).print(captor.capture());
 
     assertEquals(1, captor.getValue().getCategories().size());

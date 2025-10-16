@@ -14,7 +14,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDate;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
 
 public class QuestionBaseratPaDatum {
 
@@ -61,7 +61,7 @@ public class QuestionBaseratPaDatum {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.codes(
+            ElementDataPredicateFactory.codes(
                 QUESTION_BASERAT_PA_ID,
                 List.of(new FieldId(DISTANSKONTAKT.code()), new FieldId(UNDERSOKNING.code())))
         )

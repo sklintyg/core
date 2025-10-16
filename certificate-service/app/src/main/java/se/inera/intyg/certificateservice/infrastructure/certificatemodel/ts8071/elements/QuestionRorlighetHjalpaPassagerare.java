@@ -15,7 +15,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
 
 public class QuestionRorlighetHjalpaPassagerare {
 
@@ -64,7 +64,7 @@ public class QuestionRorlighetHjalpaPassagerare {
                 )
             )
         )
-        .shouldValidate(ShouldValidateFactory.codeList(QUESTION_INTYGET_AVSER_ID,
+        .shouldValidate(ElementDataPredicateFactory.codeList(QUESTION_INTYGET_AVSER_ID,
             List.of(new FieldId(GR_II_III.code()), new FieldId(FORLANG_GR_II_III.code()),
                 new FieldId(TAXI.code()))))
         .mapping(new ElementMapping(QUESTION_RORLIGHET_ID, null))

@@ -14,7 +14,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfig
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateRange;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
 
 public class QuestionPeriodVardasBarnetInskrivetMedHemsjukvard {
 
@@ -60,7 +60,8 @@ public class QuestionPeriodVardasBarnetInskrivetMedHemsjukvard {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.valueBoolean(QUESTION_VARDAS_BARN_INSKRIVET_MED_HEMSJUKVARD_ID)
+            ElementDataPredicateFactory.valueBoolean(
+                QUESTION_VARDAS_BARN_INSKRIVET_MED_HEMSJUKVARD_ID)
         )
         .pdfConfiguration(
             PdfConfigurationDateRange.builder()

@@ -12,7 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "care_provider")
+@Table(name = "dim_care_provider")
 @Data
 @Builder
 @AllArgsConstructor
@@ -21,7 +21,7 @@ public class CareProviderEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "`key`")
+  @Column(name = "care_provider_key")
   private Long key;
 
   @Column(name = "hsa_id", nullable = false, length = 22)

@@ -75,7 +75,7 @@ class XmlGeneratorTextTest {
     final var data = ElementData.builder()
         .value(ElementValueText.builder()
             .textId(new FieldId(ANSWER_ID))
-                .text("")
+            .text("")
             .build()
         )
         .id(new ElementId(QUESTION_ID))

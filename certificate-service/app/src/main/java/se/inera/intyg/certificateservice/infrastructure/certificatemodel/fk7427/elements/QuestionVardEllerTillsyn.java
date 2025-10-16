@@ -16,7 +16,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 public class QuestionVardEllerTillsyn {
 
   public static final ElementId QUESTION_VARD_ELLER_TILLSYN_ID = new ElementId("62");
-  private static final FieldId QUESTION_VARD_ELLER_TILLSYN_FIELD_ID = new FieldId("62.5");
+  public static final FieldId QUESTION_VARD_ELLER_TILLSYN_FIELD_ID = new FieldId("62.5");
   private static final PdfFieldId PDF_FIELD_ID = new PdfFieldId(
       "form1[0].#subform[2].flt_txtVilkenVardTillsyn[0]");
 

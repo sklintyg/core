@@ -1,6 +1,8 @@
 package se.inera.intyg.certificateanalyticsservice.application.messages.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.Builder;
 import lombok.Value;
 
@@ -8,7 +10,7 @@ import lombok.Value;
 @Builder
 public class PseudonymizedAnalyticsMessage {
 
-  String messageId;
+  String id;
 
   LocalDateTime eventTimestamp;
   String eventMessageType;
@@ -29,5 +31,15 @@ public class PseudonymizedAnalyticsMessage {
   String certificateRelationParentType;
 
   String recipientId;
+
+  String messageId;
+  String messageAnswerId;
+  String messageReminderId;
+  String messageType;
+  LocalDateTime messageSent;
+  LocalDate messageLastDateToAnswer;
+  List<String> messageQuestionIds;
+  String messageSenderId;
+  String messageRecipientId;
 
 }

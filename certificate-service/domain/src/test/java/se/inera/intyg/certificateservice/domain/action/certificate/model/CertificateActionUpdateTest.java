@@ -20,6 +20,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.DAN
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajlaDoctorBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AGREEMENT_FALSE;
 
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -34,6 +35,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertifi
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
+import se.inera.intyg.certificateservice.domain.common.model.Role;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateActionUpdateTest {
@@ -44,6 +46,7 @@ class CertificateActionUpdateTest {
   private static final CertificateActionSpecification CERTIFICATE_ACTION_SPECIFICATION =
       CertificateActionSpecification.builder()
           .certificateActionType(CertificateActionType.UPDATE)
+          .allowedRoles(List.of(Role.DOCTOR, Role.CARE_ADMIN, Role.MIDWIFE, Role.NURSE))
           .build();
   @Mock
   CertificateActionConfigurationRepository certificateActionConfigurationRepository;

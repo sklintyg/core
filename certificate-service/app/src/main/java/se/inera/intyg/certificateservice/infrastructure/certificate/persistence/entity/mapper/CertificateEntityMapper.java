@@ -17,7 +17,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Revoked;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificate.model.Xml;
-import se.inera.intyg.certificateservice.domain.certificate.repository.MetadataRepository;
+import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
@@ -63,13 +63,14 @@ public class CertificateEntityMapper {
   private final MessageEntityRepository messageEntityRepository;
   private final MessageEntityMapper messageEntityMapper;
   private final PlaceholderCertificateEntityMapper placeholderCertificateEntityMapper;
-  private final MetadataRepository metadataRepository;
 
-  public Certificate toDomain(CertificateEntity certificateEntity) {
-    return toDomain(certificateEntity, true);
+  public Certificate toDomain(CertificateEntity certificateEntity,
+      CertificateRepository certificateRepository) {
+    return toDomain(certificateEntity, true, certificateRepository);
   }
 
-  public Certificate toDomain(CertificateEntity certificateEntity, boolean includeRelations) {
+  private Certificate toDomain(CertificateEntity certificateEntity, boolean includeRelations,
+      CertificateRepository certificateRepository) {
     if (certificateEntity.isPlaceHolder()) {
       return placeholderCertificateEntityMapper.toDomain(certificateEntity);
     }
@@ -88,7 +89,8 @@ public class CertificateEntityMapper {
                 )
                 .build()
         ),
-        includeRelations
+        includeRelations,
+        certificateRepository
     );
   }
 
@@ -247,12 +249,13 @@ public class CertificateEntityMapper {
         .build();
   }
 
-  public Certificate toDomain(CertificateEntity certificateEntity, CertificateModel model) {
-    return toDomain(certificateEntity, model, true);
+  public Certificate toDomain(CertificateEntity certificateEntity, CertificateModel model,
+      CertificateRepository certificateRepository) {
+    return toDomain(certificateEntity, model, true, certificateRepository);
   }
 
-  public MedicalCertificate toDomain(CertificateEntity certificateEntity, CertificateModel model,
-      boolean includeRelations) {
+  private MedicalCertificate toDomain(CertificateEntity certificateEntity, CertificateModel model,
+      boolean includeRelations, CertificateRepository certificateRepository) {
     final var relations = getRelations(certificateEntity, includeRelations);
     final var messages = messageEntityRepository.findMessageEntitiesByCertificate(certificateEntity)
         .stream()
@@ -261,6 +264,7 @@ public class CertificateEntityMapper {
         .toList();
 
     return MedicalCertificate.builder()
+        .certificateRepository(certificateRepository)
         .id(new CertificateId(certificateEntity.getCertificateId()))
         .created(certificateEntity.getCreated())
         .signed(certificateEntity.getSigned())
@@ -337,7 +341,7 @@ public class CertificateEntityMapper {
                 .map(relation ->
                     RelationEntityMapper.parentToDomain(
                         relation,
-                        toDomain(relation.getParentCertificate(), false)
+                        toDomain(relation.getParentCertificate(), false, certificateRepository)
                     )
                 )
                 .orElse(null)
@@ -350,7 +354,7 @@ public class CertificateEntityMapper {
                 .map(relation ->
                     RelationEntityMapper.childToDomain(
                         relation,
-                        toDomain(relation.getChildCertificate(), false)
+                        toDomain(relation.getChildCertificate(), false, certificateRepository)
                     )
                 )
                 .toList()
@@ -361,7 +365,6 @@ public class CertificateEntityMapper {
                 ? new Forwarded(certificateEntity.getForwarded())
                 : null
         )
-        .metadataRepository(metadataRepository)
         .build();
   }
 

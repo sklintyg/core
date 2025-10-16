@@ -8,6 +8,8 @@ import java.util.stream.Stream;
 import lombok.Builder;
 import lombok.Value;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValue;
+import se.inera.intyg.certificateservice.domain.certificate.service.PdfGeneratorOptions;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidation;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationError;
 
@@ -127,5 +129,25 @@ public class ElementSpecification {
 
   public Optional<ElementVisibilityConfiguration> getVisibilityConfiguration() {
     return Optional.ofNullable(visibilityConfiguration);
+  }
+
+  public Optional<ElementSimplifiedValue> simplifiedValue(Optional<ElementData> elementData,
+      List<ElementData> allElementData, PdfGeneratorOptions pdfGeneratorOptions) {
+    if ((pdfConfiguration instanceof CitizenPdfConfiguration hiddenConfig)) {
+      final var replacementElementValue = hiddenConfig.replacementElementValue(
+          pdfGeneratorOptions,
+          allElementData
+      );
+
+      if (replacementElementValue.isPresent()) {
+        return replacementElementValue;
+      }
+    }
+
+    if (elementData.isEmpty()) {
+      return Optional.empty();
+    }
+
+    return configuration.simplified(elementData.get().value());
   }
 }

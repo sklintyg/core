@@ -13,7 +13,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfig
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationDateRange;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
 
 public class QuestionPeriodVardasBarnInneliggandePaSjukhus {
 
@@ -57,7 +57,8 @@ public class QuestionPeriodVardasBarnInneliggandePaSjukhus {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.valueBoolean(QUESTION_VARDAS_BARNET_INNELIGGANDE_PA_SJUKHUS_ID)
+            ElementDataPredicateFactory.valueBoolean(
+                QUESTION_VARDAS_BARNET_INNELIGGANDE_PA_SJUKHUS_ID)
         )
         .mapping(new ElementMapping(QUESTION_VARDAS_BARNET_INNELIGGANDE_PA_SJUKHUS_ID, null))
         .pdfConfiguration(

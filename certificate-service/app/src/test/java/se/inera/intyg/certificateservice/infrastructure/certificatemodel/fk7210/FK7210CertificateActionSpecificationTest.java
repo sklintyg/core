@@ -10,10 +10,14 @@ import se.inera.intyg.certificateservice.domain.common.model.Role;
 
 class FK7210CertificateActionSpecificationTest {
 
+  private static List<Role> ROLES_ALLOWED =
+      List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE, Role.CARE_ADMIN);
+
   @Test
   void shallIncludeCertificateActionCreate() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.CREATE)
+        .allowedRoles(ROLES_ALLOWED)
         .allowedRolesForProtectedPersons(
             List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE)
         )
@@ -30,6 +34,7 @@ class FK7210CertificateActionSpecificationTest {
   void shallIncludeCertificateActionRead() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.READ)
+        .allowedRoles(ROLES_ALLOWED)
         .allowedRolesForProtectedPersons(
             List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE)
         )
@@ -46,6 +51,7 @@ class FK7210CertificateActionSpecificationTest {
   void shallIncludeCertificateActionUpdate() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.UPDATE)
+        .allowedRoles(ROLES_ALLOWED)
         .allowedRolesForProtectedPersons(
             List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE)
         )
@@ -62,6 +68,7 @@ class FK7210CertificateActionSpecificationTest {
   void shallIncludeCertificateActionDelete() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.DELETE)
+        .allowedRoles(ROLES_ALLOWED)
         .allowedRolesForProtectedPersons(
             List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE)
         )
@@ -147,6 +154,8 @@ class FK7210CertificateActionSpecificationTest {
   void shallIncludeCertificateActionReplace() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.REPLACE)
+        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE)
+        )
         .allowedRolesForProtectedPersons(
             List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE)
         )
@@ -163,6 +172,8 @@ class FK7210CertificateActionSpecificationTest {
   void shallIncludeCertificateActionReplaceContinue() {
     final var expectedSpecification = CertificateActionSpecification.builder()
         .certificateActionType(CertificateActionType.REPLACE_CONTINUE)
+        .allowedRoles(List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE)
+        )
         .allowedRolesForProtectedPersons(
             List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE)
         )

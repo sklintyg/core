@@ -4,6 +4,7 @@ import static se.inera.intyg.certificateservice.domain.action.certificate.model.
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Collections;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
@@ -41,8 +42,14 @@ public class GetCertificatePdfDomainService {
       certificate.updateMetadata(actionEvaluation);
     }
 
+    final var options = PdfGeneratorOptions.builder()
+        .additionalInfoText(additionalInfoText)
+        .citizenFormat(false)
+        .hiddenElements(Collections.emptyList())
+        .build();
+
     final var generatedPdf = pdfGeneratorProvider.provider(certificate)
-        .generate(certificate, additionalInfoText, false);
+        .generate(certificate, options);
 
     certificateEventDomainService.publish(
         CertificateEvent.builder()

@@ -2,6 +2,11 @@
 
 This document describes how a new certificate model is created.
 
+### Important points to always follow
+
+- Do not add codes or ids that you have not gotten from the user. In that case a constant with a
+  TODO comment so the developer can fix this.
+
 ### 1. CertificateModel and ElementSpecification
 
 - The central class is `CertificateModelFactoryTYPE`, which represents a specific certificate type (
@@ -11,6 +16,8 @@ This document describes how a new certificate model is created.
 - Each `ElementSpecification` contains:
     - An `ElementId` (unique for the field/question)
     - An `ElementConfiguration` (defines the type, options, and validation for the field)
+- Add an activation date for the certificate in `application-dev.properties`
+  (e.g., `certificate.fk7804.activation-date=2024-06-01`)
 
 ### 2. ElementValue and ElementConfiguration
 
@@ -58,16 +65,24 @@ This document describes how a new certificate model is created.
 | SR-006                   | Prefill question                     | ElementRuleExpression | N/A                           |
 | If max text limit is set | Text limit                           | ElementRuleLimit      | TEXT_LIMIT                    |
 
-### 5. Question generation
+- Make sure that you verify if mandatory or mandatoryExists is needed. For example for RadioBoolean
+  mandatoryExists is needed since both true and false are valid answers, and without exists we will
+  look for only true.
+
+### 5. Category and question generation
 
 - You will receive a mapping from the requirements in Swedish of the question.
-- The name of the Class should be Question + the name in PascalCase. If the name is too long, you
-  can
-  shorten it, but keep it understandable.
+- The name of the Class should be Category/Question + the name in PascalCase. If the name is too
+  long, you can shorten it, but keep it understandable.
+- The categories won't have an id in the specification, so put KAT_x where x goes from 1 and up.
 - The test class should be the same as the question class but with Test at the end.
 - Then you need to find the correct ElementConfiguration and place the values such as id etc.
 - For both implementation and tests you should use the examples in the table above since we want the
   code uniform.
+- Use a factory like `ElementRuleFactory` and `ElementDataPredicateFactory` if you find a method
+  that fits
+- If a question is a sub question (ElementId is x.x instead of x for example 1.2) it needs to have
+  an ElementMapping to the parent question, 1.2 maps to 1 for example.
 
 ### 6. ElementRules
 
@@ -76,3 +91,12 @@ This document describes how a new certificate model is created.
 - `ElementRules` can be complex and may involve multiple conditions and actions.
 - The rules you will read them from the requirements that you will receive from the user.
 - You can use the `ElementRuleFactory` to create rules based on the rule code and parameters.
+
+### 7. Testing
+
+- Each question should have a corresponding test class (e.g., `QuestionHalsotillstandPsykiskaTest`).
+- Integration tests should be created to ensure the entire certificate model works as expected.
+- Use the existing test classes as references for creating new tests.
+- A FillService needs to be created for Testability purposes. For example
+  `TestabilityCertificateFillServiceFK7804`.
+- For example: `FK7804ActiveIT`, `FK7804CitizenIT` and `FK7804InactiveIT` for integration tests.

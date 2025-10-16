@@ -17,4 +17,5 @@ public class ElementValueBoolean implements ElementValue {
   public boolean isEmpty() {
     return value == null;
   }
+
 }

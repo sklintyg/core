@@ -7,7 +7,6 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.common.model.AccessScope;
-import se.inera.intyg.certificateservice.domain.common.model.Role;
 
 @RequiredArgsConstructor
 public class CertificateActionFactory {
@@ -27,8 +26,7 @@ public class CertificateActionFactory {
                   new ActionRuleUserNotBlocked(),
                   new ActionRuleInactiveUnit(),
                   new ActionRuleRole(
-                      List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
-                          Role.CARE_ADMIN)
+                      actionSpecification.allowedRoles()
                   ),
                   new ActionRuleUserAgreement()
               )
@@ -43,8 +41,7 @@ public class CertificateActionFactory {
                       actionSpecification.allowedRolesForProtectedPersons()
                   ),
                   new ActionRuleRole(
-                      List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
-                          Role.CARE_ADMIN)
+                      actionSpecification.allowedRoles()
                   )
               )
           )
@@ -59,8 +56,7 @@ public class CertificateActionFactory {
                   ),
                   new ActionRuleStatus(List.of(Status.DRAFT)),
                   new ActionRuleRole(
-                      List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
-                          Role.CARE_ADMIN)
+                      actionSpecification.allowedRoles()
                   ),
                   new ActionRuleUserAgreement()
               )
@@ -76,8 +72,7 @@ public class CertificateActionFactory {
                   ),
                   new ActionRuleStatus(List.of(Status.DRAFT)),
                   new ActionRuleRole(
-                      List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
-                          Role.CARE_ADMIN)
+                      actionSpecification.allowedRoles()
                   )
               )
           )
@@ -148,7 +143,7 @@ public class CertificateActionFactory {
               List.of(
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
                   new ActionRuleRole(
-                      List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE)
+                      actionSpecification.allowedRoles()
                   ),
                   new ActionRuleStatus(List.of(Status.SIGNED)),
                   new ActionRuleChildRelationNoMatch(
@@ -174,7 +169,7 @@ public class CertificateActionFactory {
               List.of(
                   new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
                   new ActionRuleRole(
-                      List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE)
+                      actionSpecification.allowedRoles()
                   ),
                   new ActionRuleStatus(List.of(Status.SIGNED)),
                   new ActionRuleChildRelationMatch(List.of(RelationType.REPLACE)),
@@ -192,8 +187,7 @@ public class CertificateActionFactory {
               List.of(
                   new ActionRuleWithinAccessScope(AccessScope.ALL_CARE_PROVIDERS),
                   new ActionRuleRole(
-                      List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
-                          Role.CARE_ADMIN)
+                      actionSpecification.allowedRoles()
                   ),
                   new ActionRuleStatus(List.of(Status.SIGNED)),
                   new ActionRuleUserNotBlocked(),
@@ -277,8 +271,7 @@ public class CertificateActionFactory {
               List.of(
                   new ActionRuleUserNotBlocked(),
                   new ActionRuleRole(
-                      List.of(Role.DOCTOR, Role.PRIVATE_DOCTOR, Role.NURSE, Role.MIDWIFE,
-                          Role.CARE_ADMIN)
+                      actionSpecification.allowedRoles()
                   ),
                   new ActionRuleSent(true),
                   new ActionRuleStatus(List.of(Status.SIGNED)),
@@ -589,6 +582,51 @@ public class CertificateActionFactory {
               List.of(
                   new ActionRuleSrs(),
                   new ActionRuleStatus(List.of(Status.SIGNED))
+              )
+          )
+          .build();
+      case CREATE_DRAFT_FROM_CERTIFICATE -> CertificateActionCreateDraftFromCertificate.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
+                  new ActionRuleRole(
+                      actionSpecification.allowedRoles()
+                  ),
+                  new ActionRuleStatus(List.of(Status.SIGNED)),
+                  new ActionRuleUserNotBlocked(),
+                  new ActionRuleUserAllowCopy(),
+                  new ActionRuleProtectedPerson(
+                      actionSpecification.allowedRolesForProtectedPersons()
+                  ),
+                  new ActionRulePatientAlive(),
+                  new ActionRuleChildRelationNoMatch(
+                      List.of(RelationType.REPLACE, RelationType.COMPLEMENT),
+                      List.of(Status.DRAFT, Status.REVOKED)
+                  ),
+                  new ActionRuleUserAgreement(),
+                  new ActionRuleUserHasAccessScope(
+                      List.of(AccessScope.WITHIN_CARE_UNIT)
+                  )
+              )
+          )
+          .build();
+      case UPDATE_DRAFT_FROM_CERTIFICATE -> CertificateActionUpdateDraftFromCertificate.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleWithinAccessScope(AccessScope.WITHIN_CARE_UNIT),
+                  new ActionRuleProtectedPerson(
+                      actionSpecification.allowedRolesForProtectedPersons()
+                  ),
+                  new ActionRuleStatus(List.of(Status.DRAFT)),
+                  new ActionRuleRole(
+                      actionSpecification.allowedRoles()
+                  ),
+                  new ActionRuleUserAgreement(),
+                  new ActionRuleUserHasAccessScope(
+                      List.of(AccessScope.WITHIN_CARE_PROVIDER, AccessScope.ALL_CARE_PROVIDERS)
+                  )
               )
           )
           .build();

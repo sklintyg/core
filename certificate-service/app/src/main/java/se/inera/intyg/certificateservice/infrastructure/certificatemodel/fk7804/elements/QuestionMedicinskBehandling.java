@@ -13,12 +13,12 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfig
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
 
 public class QuestionMedicinskBehandling {
 
   public static final ElementId QUESTION_MEDICINSK_BEHANDLING_ID = new ElementId("19");
-  private static final FieldId QUESTION_MEDICINSK_BEHANDLING_FIELD_ID = new FieldId("19.1");
+  public static final FieldId QUESTION_MEDICINSK_BEHANDLING_FIELD_ID = new FieldId("19.1");
 
   private QuestionMedicinskBehandling() {
     throw new IllegalStateException("Utility class");
@@ -54,7 +54,7 @@ public class QuestionMedicinskBehandling {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.checkboxBoolean(QUESTION_SMITTBARARPENNING_ID, false)
+            ElementDataPredicateFactory.checkboxBoolean(QUESTION_SMITTBARARPENNING_ID, false)
         )
         .children(List.of(children))
         .pdfConfiguration(

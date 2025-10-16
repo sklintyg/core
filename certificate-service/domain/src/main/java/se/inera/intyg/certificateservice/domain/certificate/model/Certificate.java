@@ -135,5 +135,11 @@ public interface Certificate {
     return false;
   }
 
+
+  void fillFromCertificate(Certificate certificate);
+
+  Optional<Certificate> candidateForUpdate();
+
   CertificateMetaData getMetadataForPrint();
+
 }

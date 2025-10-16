@@ -36,7 +36,10 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.RECIPIENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.REVISION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.XML;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.ag7804CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7804CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7804_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.CONTACT_INFO;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.DATE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.TEXT;
@@ -86,16 +89,16 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateAction;
-import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
-import se.inera.intyg.certificateservice.domain.certificate.repository.MetadataRepository;
+import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificate.service.PrefillProcessor;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModificationException;
+import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
 import se.inera.intyg.certificateservice.domain.message.model.Author;
@@ -121,10 +124,6 @@ class MedicalCertificateTest {
   private PrefillProcessor prefillProcessor;
   @Mock
   private XmlGenerator xmlGenerator = mock(XmlGenerator.class);
-  @Mock
-  private CertificateActionFactory certificateActionFactory;
-  @Mock
-  private MetadataRepository metadataRepository;
 
   @BeforeEach
   void setUp() {
@@ -145,8 +144,7 @@ class MedicalCertificateTest {
                 .careProvider(ALFA_REGIONEN)
                 .build()
         )
-        .elementData(List.of(DATE))
-        .metadataRepository(metadataRepository);
+        .elementData(List.of(DATE));
 
     certificate = certificateBuilder.build();
 
@@ -1560,7 +1558,6 @@ class MedicalCertificateTest {
 
     @Test
     void shallReturnEmptyList() {
-      final var certificateActionSpecification = CertificateActionSpecification.builder().build();
       final var actionEvaluation = ActionEvaluation.builder()
           .patient(ATHENA_REACT_ANDERSSON)
           .build();
@@ -1581,7 +1578,6 @@ class MedicalCertificateTest {
     @Test
     void shallReturnReasons() {
       final var expectedReasons = List.of("expectedReasons");
-      final var certificateActionSpecification = CertificateActionSpecification.builder().build();
       final var actionEvaluation = ActionEvaluation.builder()
           .patient(ATHENA_REACT_ANDERSSON)
           .build();
@@ -2814,6 +2810,137 @@ class MedicalCertificateTest {
   }
 
   @Nested
+  class TestFillFromCertificate {
+
+    @Test
+    void shouldThrowIfRevisionIsGreaterThanZero() {
+      final var medicalCertificate = MedicalCertificate.builder()
+          .id(CERTIFICATE_ID)
+          .revision(new Revision(1))
+          .build();
+
+      assertThrows(IllegalStateException.class,
+          () -> medicalCertificate.fillFromCertificate(certificate));
+    }
+
+    @Test
+    void shouldUpdateElementDataWithDataFromProvidedCertificate() {
+      final var elementConfigurationTextArea = mock(ElementConfigurationTextArea.class);
+      final var elementId = new ElementId("elementId");
+
+      final var medicalCertificate = MedicalCertificate.builder()
+          .id(CERTIFICATE_ID)
+          .revision(new Revision(0))
+          .certificateModel(
+              CertificateModel.builder()
+                  .elementSpecifications(
+                      List.of(
+                          ElementSpecification.builder()
+                              .id(elementId)
+                              .configuration(elementConfigurationTextArea)
+                              .build()
+                      )
+                  )
+                  .build()
+          )
+          .build();
+
+      final var elementData = ElementData.builder()
+          .id(elementId)
+          .build();
+
+      final var elementSpecification = ElementSpecification.builder()
+          .id(elementId)
+          .build();
+
+      final var originalCertificate = MedicalCertificate.builder()
+          .id(CERTIFICATE_ID)
+          .revision(new Revision(0))
+          .certificateModel(
+              CertificateModel.builder()
+                  .elementSpecifications(List.of(elementSpecification))
+                  .build()
+          )
+          .elementData(List.of(elementData))
+          .build();
+
+      when(elementConfigurationTextArea.convert(elementData, elementSpecification)).thenReturn(
+          Optional.of(elementData));
+
+      medicalCertificate.fillFromCertificate(originalCertificate);
+
+      assertEquals(List.of(elementData), medicalCertificate.elementData());
+    }
+  }
+
+  @Nested
+  class TestCandidateFromUpdate {
+
+    @Test
+    void shouldReturnEmptyCandidateIfNotRevisionZero() {
+      final var medicalCertificate = ag7804CertificateBuilder()
+          .revision(new Revision(1))
+          .build();
+
+      final var actual = medicalCertificate.candidateForUpdate();
+
+      assertEquals(Optional.empty(), actual);
+    }
+
+    @Test
+    void shouldReturnEmptyIfNoSupportForCandidates() {
+      final var medicalCertificate = ag7804CertificateBuilder()
+          .revision(new Revision(0))
+          .certificateModel(
+              CertificateModel.builder()
+                  .ableToCreateDraftForModel(null)
+                  .build()
+          )
+          .build();
+
+      final var actual = medicalCertificate.candidateForUpdate();
+
+      assertEquals(Optional.empty(), actual);
+    }
+
+    @Test
+    void shouldReturnCandidateWithLatestSignedDate() {
+      final var expected = fk7804CertificateBuilder()
+          .signed(LocalDateTime.now())
+          .build();
+
+      final var otherCandidateOne = fk7804CertificateBuilder()
+          .signed(LocalDateTime.now().minusDays(1))
+          .build();
+
+      final var otherCandidateTwo = fk7804CertificateBuilder()
+          .signed(LocalDateTime.now().minusDays(2))
+          .build();
+
+      final var certificateRepository = mock(CertificateRepository.class);
+      final var medicalCertificate = ag7804CertificateBuilder()
+          .revision(new Revision(0))
+          .status(Status.DRAFT)
+          .certificateRepository(certificateRepository)
+          .build();
+
+      when(certificateRepository.findByCertificatesRequest(
+              CertificatesRequest.builder()
+                  .statuses(List.of(Status.SIGNED))
+                  .personId(ATHENA_REACT_ANDERSSON.id())
+                  .types(List.of(FK7804_TYPE))
+                  .careUnitId(ALFA_MEDICINCENTRUM.hsaId())
+                  .build()
+          )
+      ).thenReturn(List.of(otherCandidateOne, expected, otherCandidateTwo));
+
+      final var actual = medicalCertificate.candidateForUpdate();
+
+      assertEquals(Optional.of(expected), actual);
+    }
+  }
+
+  @Nested
   class MetadataForPrintTests {
 
     @Test
@@ -2832,18 +2959,20 @@ class MedicalCertificateTest {
 
     @Test
     void shouldCallRepositoryWhenSignedAndMetaDataFromSignInstanceNull() {
+      final var certificateRepo = mock(CertificateRepository.class);
       final var signed = LocalDateTime.now();
       final var expected = mock(CertificateMetaData.class);
       MedicalCertificate certificate = certificateBuilder
           .signed(signed)
+          .certificateRepository(certificateRepo)
           .build();
 
-      when(metadataRepository.getMetadataFromSignInstance(certificate.certificateMetaData(),
+      when(certificateRepo.getMetadataFromSignInstance(certificate.certificateMetaData(),
           signed)).thenReturn(
           expected);
 
       assertEquals(expected, certificate.getMetadataForPrint());
-      verify(metadataRepository).getMetadataFromSignInstance(certificate.certificateMetaData(),
+      verify(certificateRepo).getMetadataFromSignInstance(certificate.certificateMetaData(),
           signed);
     }
   }

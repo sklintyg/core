@@ -24,6 +24,7 @@ import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
+import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
@@ -104,13 +105,18 @@ public class TestabilityCertificateService {
       certificate.sign(xmlGenerator, certificate.revision(), actionEvaluation);
     }
 
-    testabilityCertificateRepository.insert(certificate);
+    final var revision =
+        TestabilityFillTypeDTO.EMPTY.equals(testabilityCertificateRequest.getFillType())
+            ? new Revision(0)
+            : certificate.revision();
+
+    final var savedCertificate = testabilityCertificateRepository.insert(certificate, revision);
 
     return CreateCertificateResponse.builder()
         .certificate(
             certificateConverter.convert(
-                certificate,
-                certificate.actionsInclude(Optional.of(actionEvaluation)).stream()
+                savedCertificate,
+                savedCertificate.actionsInclude(Optional.of(actionEvaluation)).stream()
                     .map(certificateAction ->
                         resourceLinkConverter.convert(
                             certificateAction,

@@ -43,6 +43,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.PlaceholderCer
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
+import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PlaceholderCertificateRequest;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
@@ -72,22 +73,15 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateModelEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.PlaceholderCertificateEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecificationFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateRelationRepository;
 
 @ExtendWith(MockitoExtension.class)
 class JpaCertificateRepositoryTest {
 
   @Mock
-  CertificateEntitySpecificationFactory certificateEntitySpecificationFactory;
-  @Mock
   CertificateRelationRepository certificateRelationRepository;
   @Mock
   CertificateEntityRepository certificateEntityRepository;
-  @Mock
-  UnitRepository unitRepository;
-  @Mock
-  PatientRepository patientRepository;
   @Mock
   CertificateEntityMapper certificateEntityMapper;
   @Mock
@@ -693,7 +687,8 @@ class JpaCertificateRepositoryTest {
           );
       doReturn(Collections.singletonList(certificateEntity)).when(page).getContent();
       doReturn(2L).when(page).getTotalElements();
-      doReturn(FK3226_CERTIFICATE).when(certificateEntityMapper).toDomain(certificateEntity);
+      doReturn(FK3226_CERTIFICATE).when(certificateEntityMapper).toDomain(eq(certificateEntity),
+          any(CertificateRepository.class));
 
       final var actualResult = jpaCertificateRepository.getExportByCareProviderId(
           new HsaId(CARE_PROVIDER_ENTITY.getHsaId()), 0, 10);

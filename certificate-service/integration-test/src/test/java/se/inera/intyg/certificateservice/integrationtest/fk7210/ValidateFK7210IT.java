@@ -4,29 +4,27 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.elements.QuestionBeraknatFodelsedatum.QUESTION_BERAKNAT_FODELSEDATUM_ID;
-import static se.inera.intyg.certificateservice.integrationtest.fk7210.FK7210Constants.FK7210;
-import static se.inera.intyg.certificateservice.integrationtest.fk7210.FK7210Constants.VERSION;
-import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.customValidateCertificateRequest;
-import static se.inera.intyg.certificateservice.integrationtest.util.ApiRequestUtil.defaultTestablilityCertificateRequest;
-import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificate;
-import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.certificateId;
-import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.updateDateValue;
-import static se.inera.intyg.certificateservice.integrationtest.util.CertificateUtil.validationErrors;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.customValidateCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.defaultTestablilityCertificateRequest;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.certificate;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.certificateId;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.updateDateValue;
+import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.validationErrors;
 
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Objects;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.integrationtest.BaseIntegrationIT;
+import se.inera.intyg.certificateservice.integrationtest.common.setup.BaseIntegrationIT;
 
 public abstract class ValidateFK7210IT extends BaseIntegrationIT {
 
   @Test
   @DisplayName("Om utkastet innehåller korrekt 'beräknad fodelsedatum' skall utkastet vara klar för signering")
   void shallReturnEmptyListOfErrorsIfDateIsCorrect() {
-    final var testCertificates = testabilityApi.addCertificates(
-        defaultTestablilityCertificateRequest(FK7210, VERSION)
+    final var testCertificates = testabilityApi().addCertificates(
+        defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
     final var date = LocalDate.now().plusDays(5);
@@ -38,7 +36,7 @@ public abstract class ValidateFK7210IT extends BaseIntegrationIT {
             updateDateValue(certificate, QUESTION_BERAKNAT_FODELSEDATUM_ID.id(), date))
     );
 
-    final var response = api.validateCertificate(
+    final var response = api().validateCertificate(
         customValidateCertificateRequest()
             .certificate(certificate)
             .build(),
@@ -51,8 +49,8 @@ public abstract class ValidateFK7210IT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om utkastet innehåller 'beräknad fodelsedatum' före dagens datum skall valideringsfel returneras")
   void shallReturnListOfErrorsIfDateIsBeforeTodaysDate() {
-    final var testCertificates = testabilityApi.addCertificates(
-        defaultTestablilityCertificateRequest(FK7210, VERSION)
+    final var testCertificates = testabilityApi().addCertificates(
+        defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
     final var date = LocalDate.now().minusDays(1);
@@ -64,7 +62,7 @@ public abstract class ValidateFK7210IT extends BaseIntegrationIT {
             updateDateValue(certificate, QUESTION_BERAKNAT_FODELSEDATUM_ID.id(), date))
     );
 
-    final var response = api.validateCertificate(
+    final var response = api().validateCertificate(
         customValidateCertificateRequest()
             .certificate(certificate)
             .build(),
@@ -86,8 +84,8 @@ public abstract class ValidateFK7210IT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om utkastet innehåller 'beräknad födelsedatum' längre än ett år fram skall valideringsfel returneras")
   void shallReturnListOfErrorsIfDateIsAfterOneYearInFuture() {
-    final var testCertificates = testabilityApi.addCertificates(
-        defaultTestablilityCertificateRequest(FK7210, VERSION)
+    final var testCertificates = testabilityApi().addCertificates(
+        defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
     final var date = LocalDate.now().plusYears(1).plusDays(1);
@@ -99,7 +97,7 @@ public abstract class ValidateFK7210IT extends BaseIntegrationIT {
             updateDateValue(certificate, QUESTION_BERAKNAT_FODELSEDATUM_ID.id(), date))
     );
 
-    final var response = api.validateCertificate(
+    final var response = api().validateCertificate(
         customValidateCertificateRequest()
             .certificate(certificate)
             .build(),
@@ -121,8 +119,8 @@ public abstract class ValidateFK7210IT extends BaseIntegrationIT {
   @Test
   @DisplayName("Om utkastet saknar 'beräknad födelsedatum' skall valideringsfel returneras")
   void shallReturnListOfErrorsIfDateIsAMissing() {
-    final var testCertificates = testabilityApi.addCertificates(
-        defaultTestablilityCertificateRequest(FK7210, VERSION)
+    final var testCertificates = testabilityApi().addCertificates(
+        defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
     final var certificate = certificate(testCertificates);
@@ -133,7 +131,7 @@ public abstract class ValidateFK7210IT extends BaseIntegrationIT {
             updateDateValue(certificate, QUESTION_BERAKNAT_FODELSEDATUM_ID.id(), null))
     );
 
-    final var response = api.validateCertificate(
+    final var response = api().validateCertificate(
         customValidateCertificateRequest()
             .certificate(certificate)
             .build(),

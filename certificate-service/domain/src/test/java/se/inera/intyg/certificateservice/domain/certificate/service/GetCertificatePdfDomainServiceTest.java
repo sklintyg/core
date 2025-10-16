@@ -9,6 +9,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.UPDATE;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -102,7 +103,14 @@ class GetCertificatePdfDomainServiceTest {
 
     @Test
     void shallReturnResponseWithPdfFromGenerator() {
-      doReturn(PDF).when(pdfGenerator).generate(certificate, ADDITIONAL_INFO_TEXT, false);
+      final var options = PdfGeneratorOptions.builder()
+          .additionalInfoText(ADDITIONAL_INFO_TEXT)
+          .citizenFormat(false)
+          .hiddenElements(Collections.emptyList())
+          .build();
+
+      doReturn(PDF).when(pdfGenerator)
+          .generate(certificate, options);
 
       final var response = getCertificatePdfDomainService.get(CERTIFICATE_ID, ACTION_EVALUATION,
           ADDITIONAL_INFO_TEXT);
@@ -161,3 +169,4 @@ class GetCertificatePdfDomainServiceTest {
     assertEquals(expectedReason, certificateActionForbidden.reason());
   }
 }
+

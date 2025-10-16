@@ -12,7 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "origin")
+@Table(name = "dim_origin")
 @Data
 @Builder
 @AllArgsConstructor
@@ -21,7 +21,7 @@ public class OriginEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "`key`")
+  @Column(name = "origin_key")
   private Long key;
 
   @Column(name = "origin", nullable = false, length = 20)

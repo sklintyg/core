@@ -2,8 +2,10 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.common
 
 import java.util.Arrays;
 import java.util.List;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRule;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleAutofill;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
@@ -15,6 +17,20 @@ public class CertificateElementRuleFactory {
 
   private CertificateElementRuleFactory() {
     throw new IllegalStateException("Utility class");
+  }
+
+  public static ElementRule autofill(ElementId id, FieldId fieldId,
+      FieldId toSetFieldId) {
+    return ElementRuleAutofill.builder()
+        .id(id)
+        .type(ElementRuleType.AUTO_FILL)
+        .expression(new RuleExpression(singleExpression(fieldId.value())))
+        .fillValue(ElementValueBoolean.builder()
+            .booleanId(toSetFieldId)
+            .value(true)
+            .build()
+        )
+        .build();
   }
 
   public static ElementRule mandatory(ElementId id, FieldId fieldId) {
@@ -51,6 +67,19 @@ public class CertificateElementRuleFactory {
         .build();
   }
 
+  public static ElementRule showEmpty(ElementId id, FieldId fieldId) {
+    return ElementRuleExpression.builder()
+        .type(ElementRuleType.SHOW)
+        .id(id)
+        .expression(
+            new RuleExpression(
+                empty(singleExpression(fieldId.value())
+                )
+            )
+        )
+        .build();
+  }
+
   public static ElementRule hide(ElementId id, RuleExpression ruleExpression) {
     return ElementRuleExpression.builder()
         .type(ElementRuleType.HIDE)
@@ -78,6 +107,10 @@ public class CertificateElementRuleFactory {
 
   public static String notEmpty(String expression) {
     return "!empty(" + expression + ")";
+  }
+
+  public static String empty(String expression) {
+    return "empty(" + expression + ")";
   }
 
   public static ElementRule mandatory(ElementId id, List<FieldId> fieldIds) {
@@ -164,6 +197,31 @@ public class CertificateElementRuleFactory {
         .limit(new RuleLimit(limit))
         .build();
   }
+
+  public static ElementRule disableElement(ElementId id, FieldId fieldId) {
+    return ElementRuleExpression.builder()
+        .id(id)
+        .type(ElementRuleType.DISABLE)
+        .expression(
+            new RuleExpression(
+                singleExpression(fieldId.value())
+            )
+        )
+        .build();
+  }
+
+  public static ElementRule disableEmptyElement(ElementId id, FieldId fieldId) {
+    return ElementRuleExpression.builder()
+        .id(id)
+        .type(ElementRuleType.DISABLE)
+        .expression(
+            new RuleExpression(
+                empty(singleExpression(fieldId.value()))
+            )
+        )
+        .build();
+  }
+
 
   public static ElementRule disableSubElements(ElementId id, List<FieldId> elementsForExpression,
       List<FieldId> elementsToDisable) {

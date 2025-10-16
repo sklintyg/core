@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -18,8 +19,10 @@ import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertifi
 import se.inera.intyg.certificateservice.domain.certificate.model.Pdf;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGenerator;
+import se.inera.intyg.certificateservice.domain.certificate.service.PdfGeneratorOptions;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGeneratorProvider;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.common.exception.CitizenCertificateForbidden;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
@@ -43,6 +46,7 @@ class PrintCitizenCertificateDomainServiceTest {
   private static final Certificate CERTIFICATE = getCertificate(TOLVAN_ID, true);
 
   private static final Pdf PDF = new Pdf(null, "fileName");
+  private static final ElementId HIDDEN = new ElementId("hiddenElementId");
 
   @Mock
   CertificateRepository certificateRepository;
@@ -75,7 +79,7 @@ class PrintCitizenCertificateDomainServiceTest {
     void shouldThrowIfPatientIdDoesNotMatchCitizen() {
       assertThrows(CitizenCertificateForbidden.class,
           () -> printCitizenCertificateDomainService.get(CERTIFICATE_ID, LILLTOLVAN_PERSON_ID,
-              ADDITIONAL_INFO_TEXT)
+              ADDITIONAL_INFO_TEXT, List.of(HIDDEN))
       );
     }
 
@@ -83,10 +87,17 @@ class PrintCitizenCertificateDomainServiceTest {
     void shouldReturnPdfIfPatientIdMatchesCitizen() {
       when(pdfGeneratorProvider.provider(CERTIFICATE))
           .thenReturn(pdfGenerator);
-      when(pdfGenerator.generate(CERTIFICATE, ADDITIONAL_INFO_TEXT, true)).thenReturn(PDF);
+
+      final var options = PdfGeneratorOptions.builder()
+          .additionalInfoText(ADDITIONAL_INFO_TEXT)
+          .citizenFormat(true)
+          .hiddenElements(List.of(HIDDEN))
+          .build();
+
+      when(pdfGenerator.generate(CERTIFICATE, options)).thenReturn(PDF);
 
       final var response = printCitizenCertificateDomainService.get(CERTIFICATE_ID,
-          TOLVAN_PERSON_ID, ADDITIONAL_INFO_TEXT);
+          TOLVAN_PERSON_ID, ADDITIONAL_INFO_TEXT, List.of(HIDDEN));
 
       assertEquals(PDF, response);
     }
@@ -99,7 +110,7 @@ class PrintCitizenCertificateDomainServiceTest {
 
     assertThrows(CitizenCertificateForbidden.class,
         () -> printCitizenCertificateDomainService.get(CERTIFICATE_ID, LILLTOLVAN_PERSON_ID,
-            ADDITIONAL_INFO_TEXT)
+            ADDITIONAL_INFO_TEXT, List.of(HIDDEN))
     );
   }
 
@@ -118,3 +129,4 @@ class PrintCitizenCertificateDomainServiceTest {
         .build();
   }
 }
+

@@ -50,6 +50,7 @@ public class TestDataCertificateModel {
   public static final CertificateModel FK3221_CERTIFICATE_MODEL = fk3221certificateModelBuilder().build();
   public static final CertificateModel FK7810_CERTIFICATE_MODEL = fk7810certificateModelBuilder().build();
   public static final CertificateModel FK7804_CERTIFICATE_MODEL = fk7804certificateModelBuilder().build();
+  public static final CertificateModel AG7804_CERTIFICATE_MODEL = ag7804certificateModelBuilder().build();
   public static final CertificateModelId FK7804_CERTIFICATE_MODEL_ID = CertificateModelId.builder()
       .type(TestDataCertificateModelConstants.FK7804_TYPE)
       .version(TestDataCertificateModelConstants.FK7804_VERSION)
@@ -212,6 +213,22 @@ public class TestDataCertificateModel {
         .availableForCitizen(true)
         .schematronPath(TestDataCertificateModelConstants.FK7804_SCHEMATRON_PATH)
         .recipient(TestDataCertificateModelConstants.FK_RECIPIENT)
+        .certificateActionFactory(new CertificateActionFactory(null));
+  }
+
+  public static CertificateModel.CertificateModelBuilder ag7804certificateModelBuilder() {
+    return CertificateModel.builder()
+        .id(
+            CertificateModelId.builder()
+                .type(TestDataCertificateModelConstants.AG7804_TYPE)
+                .version(TestDataCertificateModelConstants.AG7804_VERSION)
+                .build()
+        )
+        .certificateActionSpecifications(Collections.emptyList())
+        .name(TestDataCertificateModelConstants.AG7804_NAME)
+        .type(TestDataCertificateModelConstants.AG7804_CODE_TYPE)
+        .availableForCitizen(true)
+        .ableToCreateDraftForModel(FK7804_CERTIFICATE_MODEL_ID)
         .certificateActionFactory(new CertificateActionFactory(null));
   }
 }

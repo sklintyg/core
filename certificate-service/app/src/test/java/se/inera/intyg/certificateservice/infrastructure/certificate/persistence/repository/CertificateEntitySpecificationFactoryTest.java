@@ -7,6 +7,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_MEDICINSKT_CENTRUM;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.CertificateModelFactoryFK7804.FK7804_V2_0;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -395,6 +396,54 @@ class CertificateEntitySpecificationFactoryTest {
         specification.verify(
             CertificateEntitySpecification::notPlacerholderCertificate
         );
+      }
+    }
+
+    @Test
+    void shallIncludeTypes() {
+      final var certificatesRequest = CertificatesRequest.builder()
+          .types(List.of(FK7804_V2_0.type()))
+          .build();
+      try (
+          MockedStatic<CertificateModelEntitySpecification> specification = mockStatic(
+              CertificateModelEntitySpecification.class)
+      ) {
+        specification.when(
+                () -> CertificateModelEntitySpecification.containsTypes(certificatesRequest.types()))
+            .thenReturn(mock(Specification.class));
+
+        assertNotNull(certificateEntitySpecificationFactory.create(certificatesRequest));
+
+        specification.verify(
+            () -> CertificateModelEntitySpecification.containsTypes(certificatesRequest.types())
+        );
+      }
+    }
+
+    @Test
+    void shallNotIncludeTypesIfNull() {
+      final var certificatesRequest = CertificatesRequest.builder()
+          .build();
+      try (
+          MockedStatic<CertificateModelEntitySpecification> specification = mockStatic(
+              CertificateModelEntitySpecification.class)
+      ) {
+        assertNotNull(certificateEntitySpecificationFactory.create(certificatesRequest));
+        specification.verifyNoInteractions();
+      }
+    }
+
+    @Test
+    void shallNotIncludeTypesIfEmptyList() {
+      final var certificatesRequest = CertificatesRequest.builder()
+          .statuses(Collections.emptyList())
+          .build();
+      try (
+          MockedStatic<CertificateModelEntitySpecification> specification = mockStatic(
+              CertificateModelEntitySpecification.class)
+      ) {
+        assertNotNull(certificateEntitySpecificationFactory.create(certificatesRequest));
+        specification.verifyNoInteractions();
       }
     }
   }

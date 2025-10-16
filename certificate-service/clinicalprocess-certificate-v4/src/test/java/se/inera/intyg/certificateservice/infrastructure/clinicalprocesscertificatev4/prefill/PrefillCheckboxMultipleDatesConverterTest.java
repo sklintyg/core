@@ -7,6 +7,7 @@ import static se.inera.intyg.certificateservice.infrastructure.clinicalprocessce
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.ZoneId;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -114,48 +115,20 @@ class PrefillCheckboxMultipleDatesConverterTest {
     }
 
     @Test
-    void shouldReturnElementDataIfOneAnswerHasInvalidFormat() {
-
-      final var forifyllnad = createForifyllnad();
-      forifyllnad.getSvar().getFirst().getDelsvar().getFirst().getContent().clear();
-      final var result = prefillCheckboxMultipleDatesConverter.prefillAnswer(
-          SPECIFICATION, forifyllnad);
-
-      final var expectedData = ElementData.builder()
-          .id(ELEMENT_ID)
-          .value(ElementValueDateList.builder()
-              .dateListId(FIELD_ID)
-              .dateList(
-                  List.of(
-                      ElementValueDate.builder()
-                          .dateId(CHECKBOXDATE_FIELD_ID_2)
-                          .date(DATE_NOW)
-                          .build()))
-              .build())
-          .build();
-
-      assertAll(
-          () -> assertEquals(expectedData, result.getElementData()),
-          () -> assertEquals(1, result.getErrors().size()),
-          () -> assertEquals(PrefillErrorType.INVALID_FORMAT, result.getErrors().getFirst().type())
-      );
-
-    }
-
-    @Test
-    void shouldReturnElementDataAndErrorIfOneAnswerHasTooFewSubAnswers() {
+    void shouldReturnElementDataWithTodaysDateIfOnlyCodeSubAnswer() {
       final var validSvar = new Svar();
       validSvar.setId("1");
       validSvar.getDelsvar().add(createDelsvarDate());
       validSvar.getDelsvar().add(createDelsvarCode("DIGITALUNDERSOKNING", "TEXT"));
 
-      final var invalidSvar = new Svar();
-      invalidSvar.setId("1");
-      invalidSvar.getDelsvar().add(createDelsvarDate());
+      final var incompleteSvar = new Svar();
+      incompleteSvar.setId("1");
+      incompleteSvar.getDelsvar().add(createDelsvarCode("FYSISKUNDERSOKNING",
+          "min undersökning vid fysiskt vårdmöte"));
 
       final var forifyllnad = new Forifyllnad();
       forifyllnad.getSvar().add(validSvar);
-      forifyllnad.getSvar().add(invalidSvar);
+      forifyllnad.getSvar().add(incompleteSvar);
 
       final var result = prefillCheckboxMultipleDatesConverter.prefillAnswer(SPECIFICATION,
           forifyllnad);
@@ -169,15 +142,19 @@ class PrefillCheckboxMultipleDatesConverterTest {
                       ElementValueDate.builder()
                           .dateId(CHECKBOXDATE_FIELD_ID_2)
                           .date(DATE_NOW)
-                          .build()))
+                          .build(),
+                      ElementValueDate.builder()
+                          .dateId(CHECKBOXDATE_FIELD_ID_1)
+                          .date(LocalDate.now(ZoneId.systemDefault()))
+                          .build()
+                  )
+              )
               .build())
           .build();
 
       assertAll(
           () -> assertEquals(expectedData, result.getElementData()),
-          () -> assertEquals(1, result.getErrors().size()),
-          () -> assertEquals(PrefillErrorType.WRONG_NUMBER_OF_ANSWERS,
-              result.getErrors().getFirst().type())
+          () -> assertEquals(0, result.getErrors().size())
       );
     }
 
@@ -194,6 +171,70 @@ class PrefillCheckboxMultipleDatesConverterTest {
       assertEquals(
           PrefillErrorType.TECHNICAL_ERROR,
           result.getErrors().getFirst().type()
+      );
+    }
+
+    @Test
+    void shouldDefaultToTodaysDateWhenDateIsMissing() {
+      final var forifyllnad = new Forifyllnad();
+      final var svar = new Svar();
+      svar.setId("1");
+      svar.getDelsvar().add(createDelsvarCode("FYSISKUNDERSOKNING",
+          "min undersökning vid fysiskt vårdmöte"));
+      forifyllnad.getSvar().add(svar);
+
+      final var result = prefillCheckboxMultipleDatesConverter.prefillAnswer(
+          SPECIFICATION, forifyllnad);
+
+      final var expectedData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(ElementValueDateList.builder()
+              .dateListId(FIELD_ID)
+              .dateList(
+                  List.of(
+                      ElementValueDate.builder()
+                          .dateId(CHECKBOXDATE_FIELD_ID_1)
+                          .date(LocalDate.now(ZoneId.systemDefault()))
+                          .build()))
+              .build())
+          .build();
+
+      assertAll(
+          () -> assertEquals(expectedData, result.getElementData()),
+          () -> assertEquals(0, result.getErrors().size())
+      );
+    }
+
+    @Test
+    void shouldDefaultToTodaysDateWhenDateContentIsEmpty() {
+      final var forifyllnad = new Forifyllnad();
+      final var svar = new Svar();
+      svar.setId("1");
+      final var emptyDelsvarDate = new Delsvar();
+      emptyDelsvarDate.setId("1.2");
+      svar.getDelsvar().add(emptyDelsvarDate);
+      svar.getDelsvar().add(createDelsvarCode("DIGITALUNDERSOKNING", "TEXT"));
+      forifyllnad.getSvar().add(svar);
+
+      final var result = prefillCheckboxMultipleDatesConverter.prefillAnswer(
+          SPECIFICATION, forifyllnad);
+
+      final var expectedData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(ElementValueDateList.builder()
+              .dateListId(FIELD_ID)
+              .dateList(
+                  List.of(
+                      ElementValueDate.builder()
+                          .dateId(CHECKBOXDATE_FIELD_ID_2)
+                          .date(LocalDate.now(ZoneId.systemDefault()))
+                          .build()))
+              .build())
+          .build();
+
+      assertAll(
+          () -> assertEquals(expectedData, result.getElementData()),
+          () -> assertEquals(0, result.getErrors().size())
       );
     }
   }
@@ -239,3 +280,4 @@ class PrefillCheckboxMultipleDatesConverterTest {
     return delsvarCode;
   }
 }
+

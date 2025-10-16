@@ -26,4 +26,14 @@ public class CertificateRecipientFactory {
         "Läkarintyg Transportstyrelsen"
     );
   }
+
+  public static Recipient skr() {
+    return new Recipient(
+        new RecipientId("SKR"),
+        "Sveriges Kommuner och Regioner",
+        null,
+        "skr/skr_logo.png",
+        "Läkarintyg om arbetsförmåga – arbetsgivaren"
+    );
+  }
 }

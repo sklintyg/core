@@ -23,10 +23,14 @@ import se.inera.intyg.certificateservice.application.certificate.dto.ComplementC
 import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ForwardCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ForwardCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateCandidateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateCandidateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateEventsRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateEventsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificatePdfRequest;
@@ -49,14 +53,18 @@ import se.inera.intyg.certificateservice.application.certificate.dto.SignCertifi
 import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateWithoutSignatureRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.UpdateWithCertificateCandidateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.UpdateWithCertificateCandidateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ValidateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.ValidateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.service.AnswerComplementService;
 import se.inera.intyg.certificateservice.application.certificate.service.CertificateExistsService;
 import se.inera.intyg.certificateservice.application.certificate.service.ComplementCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.CreateCertificateService;
+import se.inera.intyg.certificateservice.application.certificate.service.CreateDraftFromCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.DeleteCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.ForwardCertificateService;
+import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateCandidateService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateEventsService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificatePdfService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateService;
@@ -70,6 +78,7 @@ import se.inera.intyg.certificateservice.application.certificate.service.SetCert
 import se.inera.intyg.certificateservice.application.certificate.service.SignCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.SignCertificateWithoutSignatureService;
 import se.inera.intyg.certificateservice.application.certificate.service.UpdateCertificateService;
+import se.inera.intyg.certificateservice.application.certificate.service.UpdateWithCertificateCandidateService;
 import se.inera.intyg.certificateservice.application.certificate.service.ValidateCertificateService;
 import se.inera.intyg.certificateservice.infrastructure.errorutil.OptimisticErrorHandler;
 import se.inera.intyg.certificateservice.logging.PerformanceLogging;
@@ -99,6 +108,9 @@ public class CertificateController {
   private final ForwardCertificateService forwardCertificateService;
   private final GetCertificateEventsService getCertificateEventsService;
   private final SetCertificateReadyForSignService setCertificateReadyForSignService;
+  private final CreateDraftFromCertificateService createDraftFromCertificateService;
+  private final GetCertificateCandidateService getCertificateCandidateService;
+  private final UpdateWithCertificateCandidateService updateWithCertificateCandidateService;
 
   @PostMapping
   @PerformanceLogging(eventAction = "create-certificate", eventType = EVENT_TYPE_CREATION)
@@ -270,5 +282,31 @@ public class CertificateController {
       @RequestBody CertificateReadyForSignRequest request,
       @PathVariable("certificateId") String certificateId) {
     return setCertificateReadyForSignService.set(request, certificateId);
+  }
+
+  @PostMapping("/{certificateId}/draft")
+  @PerformanceLogging(eventAction = "create-draft-from-certificate", eventType = EVENT_TYPE_CREATION)
+  CreateDraftFromCertificateResponse createDraftFromCertificate(
+      @RequestBody CreateDraftFromCertificateRequest request,
+      @PathVariable("certificateId") String certificateId) {
+    return createDraftFromCertificateService.create(request, certificateId);
+  }
+
+  @PostMapping("/{certificateId}/candidate")
+  @PerformanceLogging(eventAction = "get-certificate-candidate", eventType = EVENT_TYPE_ACCESSED)
+  GetCertificateCandidateResponse getCertificateCandidate(
+      @RequestBody GetCertificateCandidateRequest request,
+      @PathVariable("certificateId") String certificateId) {
+    return getCertificateCandidateService.get(request, certificateId);
+  }
+
+  @PostMapping("/{certificateId}/candidate/{candidateCertificateId}")
+  @PerformanceLogging(eventAction = "update-with-certificate-candidate", eventType = EVENT_TYPE_ACCESSED)
+  UpdateWithCertificateCandidateResponse updateWithCertificateCandidate(
+      @RequestBody UpdateWithCertificateCandidateRequest request,
+      @PathVariable("certificateId") String certificateId,
+      @PathVariable("candidateCertificateId") String candidateCertificateId) {
+    return updateWithCertificateCandidateService.update(request, certificateId,
+        candidateCertificateId);
   }
 }

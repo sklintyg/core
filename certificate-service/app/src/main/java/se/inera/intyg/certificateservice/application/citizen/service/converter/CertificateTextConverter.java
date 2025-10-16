@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.application.citizen.service.converter;
 
+import java.util.Collections;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.citizen.dto.CertificateLinkDTO;
 import se.inera.intyg.certificateservice.application.citizen.dto.CertificateTextDTO;
@@ -14,14 +15,15 @@ public class CertificateTextConverter {
     return CertificateTextDTO.builder()
         .text(certificateText.text())
         .type(convertCertificateTextType(certificateText.type()))
-        .links(certificateText.links().stream()
-            .map(link -> CertificateLinkDTO.builder()
-                .url(link.url())
-                .id(link.id())
-                .name(link.name())
-                .build()
-            )
-            .toList())
+        .links(certificateText.links() == null ? Collections.emptyList()
+            : certificateText.links().stream()
+                .map(link -> CertificateLinkDTO.builder()
+                    .url(link.url())
+                    .id(link.id())
+                    .name(link.name())
+                    .build()
+                )
+                .toList())
         .build();
   }
 

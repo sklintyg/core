@@ -19,10 +19,14 @@ import se.inera.intyg.certificateservice.application.certificate.dto.ComplementC
 import se.inera.intyg.certificateservice.application.certificate.dto.ComplementCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.CreateDraftFromCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.DeleteCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ForwardCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ForwardCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateCandidateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateCandidateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateEventsRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateEventsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificatePdfRequest;
@@ -45,14 +49,18 @@ import se.inera.intyg.certificateservice.application.certificate.dto.SignCertifi
 import se.inera.intyg.certificateservice.application.certificate.dto.SignCertificateWithoutSignatureRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.UpdateCertificateResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.UpdateWithCertificateCandidateRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.UpdateWithCertificateCandidateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ValidateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.config.ValidateCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.service.AnswerComplementService;
 import se.inera.intyg.certificateservice.application.certificate.service.CertificateExistsService;
 import se.inera.intyg.certificateservice.application.certificate.service.ComplementCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.CreateCertificateService;
+import se.inera.intyg.certificateservice.application.certificate.service.CreateDraftFromCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.DeleteCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.ForwardCertificateService;
+import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateCandidateService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateEventsService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificatePdfService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateService;
@@ -66,13 +74,17 @@ import se.inera.intyg.certificateservice.application.certificate.service.SetCert
 import se.inera.intyg.certificateservice.application.certificate.service.SignCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.SignCertificateWithoutSignatureService;
 import se.inera.intyg.certificateservice.application.certificate.service.UpdateCertificateService;
+import se.inera.intyg.certificateservice.application.certificate.service.UpdateWithCertificateCandidateService;
 import se.inera.intyg.certificateservice.application.certificate.service.ValidateCertificateService;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateControllerTest {
 
   private static final String CERTIFICATE_ID = "certificateId";
+  private static final String CANDICATE_CERTIFICATE_ID = "candidateCertificateId";
   private static final Long VERSION = 0L;
+  @Mock
+  private CreateDraftFromCertificateService createDraftFromCertificateService;
   @Mock
   private AnswerComplementService answerComplementService;
   @Mock
@@ -113,6 +125,10 @@ class CertificateControllerTest {
   private GetCertificateEventsService getCertificateEventsService;
   @Mock
   private SetCertificateReadyForSignService setCertificateReadyForSignService;
+  @Mock
+  private GetCertificateCandidateService getCertificateCandidateService;
+  @Mock
+  private UpdateWithCertificateCandidateService updateWithCertificateCandidateService;
   @InjectMocks
   private CertificateController certificateController;
 
@@ -389,6 +405,44 @@ class CertificateControllerTest {
     final var actualResult = certificateController.setCertificateReadyForSign(request,
         CERTIFICATE_ID);
 
+    assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  void shallReturnCreateDraftFromCertificateResponse() {
+    final var request = CreateDraftFromCertificateRequest.builder().build();
+    final var expectedResult = CreateDraftFromCertificateResponse.builder().build();
+
+    doReturn(expectedResult).when(createDraftFromCertificateService)
+        .create(request, CERTIFICATE_ID);
+
+    final var actualResult = certificateController.createDraftFromCertificate(request,
+        CERTIFICATE_ID);
+    assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  void shallReturnGetCertificateCandidateResponse() {
+    final var request = GetCertificateCandidateRequest.builder().build();
+    final var expectedResult = GetCertificateCandidateResponse.builder().build();
+
+    doReturn(expectedResult).when(getCertificateCandidateService)
+        .get(request, CERTIFICATE_ID);
+
+    final var actualResult = certificateController.getCertificateCandidate(request, CERTIFICATE_ID);
+    assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  void shallReturnUpdateWithCertificateCandidateResponse() {
+    final var request = UpdateWithCertificateCandidateRequest.builder().build();
+    final var expectedResult = UpdateWithCertificateCandidateResponse.builder().build();
+
+    doReturn(expectedResult).when(updateWithCertificateCandidateService)
+        .update(request, CERTIFICATE_ID, CANDICATE_CERTIFICATE_ID);
+
+    final var actualResult = certificateController.updateWithCertificateCandidate(request,
+        CERTIFICATE_ID, CANDICATE_CERTIFICATE_ID);
     assertEquals(expectedResult, actualResult);
   }
 }

@@ -12,7 +12,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ShouldValidateFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
 
 public class QuestionBedomningRisk {
 
@@ -58,7 +58,7 @@ public class QuestionBedomningRisk {
             )
         )
         .shouldValidate(
-            ShouldValidateFactory.codes(
+            ElementDataPredicateFactory.codes(
                 QUESTION_BEDOMNING_ID,
                 List.of(new FieldId(YES.code())))
         )
