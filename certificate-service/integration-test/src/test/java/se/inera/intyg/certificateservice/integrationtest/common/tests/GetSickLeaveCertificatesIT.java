@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.integrationtest.common.setup.BaseIntegrationIT;
+import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityFillTypeDTO;
 
 public abstract class GetSickLeaveCertificatesIT extends BaseIntegrationIT {
 
@@ -21,6 +22,7 @@ public abstract class GetSickLeaveCertificatesIT extends BaseIntegrationIT {
         customTestabilityCertificateRequest(type(), typeVersion())
             .unit(ALFA_MEDICINCENTRUM_DTO)
             .status(CertificateStatusTypeDTO.SIGNED)
+            .fillType(TestabilityFillTypeDTO.MAXIMAL)
             .build()
     );
 
