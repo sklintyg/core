@@ -8,9 +8,9 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_PROTECTED_PERSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_TEST_INDICATED;
 
-import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientIdTypeEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PersonEntityIdType;
 
 public class TestDataPatientEntity {
 
@@ -27,8 +27,8 @@ public class TestDataPatientEntity {
         .testIndicated(ATHENA_REACT_ANDERSSON_TEST_INDICATED.value())
         .deceased(ATHENA_REACT_ANDERSSON_DECEASED.value())
         .type(PatientIdTypeEntity.builder()
-            .key(1)
-            .type(PersonIdType.PERSONAL_IDENTITY_NUMBER.name())
+            .type(PersonEntityIdType.PERSONAL_IDENTITY_NUMBER.name())
+            .key(PersonEntityIdType.PERSONAL_IDENTITY_NUMBER.getKey())
             .build())
         .firstName(ATHENA_REACT_ANDERSSON_FIRST_NAME)
         .middleName(ATHENA_REACT_ANDERSSON_MIDDLE_NAME)
