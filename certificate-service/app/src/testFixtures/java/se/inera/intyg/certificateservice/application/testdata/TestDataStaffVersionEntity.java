@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.application.testdata;
 
+import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffEntity.AJLA_DOKTOR_ENTITY;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffEntity.ALF_DOKTOR_ENTITY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_FIRST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HSA_ID;
@@ -70,7 +72,8 @@ public class TestDataStaffVersionEntity {
                             .build()
                 )
                 .toList()
-        );
+        )
+        .staff(AJLA_DOKTOR_ENTITY);
   }
 
   public static StaffVersionEntity.StaffVersionEntityBuilder alfDoktorVersionEntityBuilder() {
@@ -111,6 +114,7 @@ public class TestDataStaffVersionEntity {
                             .build()
                 )
                 .toList()
-        );
+        )
+        .staff(ALF_DOKTOR_ENTITY);
   }
 }

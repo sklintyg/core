@@ -1,5 +1,8 @@
 package se.inera.intyg.certificateservice.application.testdata;
 
+import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitEntity.ALFA_ALLERGIMOTTAGNINGEN_ENTITY;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitEntity.ALFA_MEDICINCENTRUM_ENTITY;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitEntity.ALFA_REGIONEN_ENTITY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.ALFA_REGIONEN_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ADDRESS;
@@ -46,7 +49,8 @@ public class TestDataUnitVersionEntity {
                 .build()
         )
         .hsaId(ALFA_REGIONEN_ID)
-        .name(ALFA_REGIONEN_NAME);
+        .name(ALFA_REGIONEN_NAME)
+        .unit(ALFA_REGIONEN_ENTITY);
   }
 
 
@@ -65,7 +69,8 @@ public class TestDataUnitVersionEntity {
         .city(ALFA_MEDICINCENTRUM_CITY)
         .phoneNumber(ALFA_MEDICINCENTRUM_PHONENUMBER)
         .email(ALFA_MEDICINCENTRUM_EMAIL)
-        .workplaceCode(ALFA_MEDICINCENTRUM_WORKPLACE_CODE);
+        .workplaceCode(ALFA_MEDICINCENTRUM_WORKPLACE_CODE)
+        .unit(ALFA_MEDICINCENTRUM_ENTITY);
   }
 
   public static UnitVersionEntity.UnitVersionEntityBuilder alfaAllergimottagningenVersionEntityBuilder() {
@@ -83,7 +88,8 @@ public class TestDataUnitVersionEntity {
         .city(ALFA_ALLERGIMOTTAGNINGEN_CITY)
         .phoneNumber(ALFA_ALLERGIMOTTAGNINGEN_PHONENUMBER)
         .email(ALFA_ALLERGIMOTTAGNINGEN_EMAIL)
-        .workplaceCode(ALFA_ALLERGIMOTTAGNINGEN_WORKPLACE_CODE);
+        .workplaceCode(ALFA_ALLERGIMOTTAGNINGEN_WORKPLACE_CODE)
+        .unit(ALFA_ALLERGIMOTTAGNINGEN_ENTITY);
   }
 
 }

@@ -65,4 +65,8 @@ public class StaffVersionEntity {
   @CollectionTable(name = "staff_healthcare_professional_licence_version", joinColumns = @JoinColumn(name = "staff_version_key"))
   private List<HealthcareProfessionalLicenceVersionEmbeddable> healthcareProfessionalLicences;
 
+  @ManyToOne
+  @JoinColumn(name = "staff_key", referencedColumnName = "`key`", nullable = false)
+  private StaffEntity staff;
+
 }

@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.application.testdata;
 
+import static se.inera.intyg.certificateservice.application.testdata.TestDataPatientEntity.ATHENA_REACT_ANDERSSON_ENTITY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_DECEASED;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_FIRST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH;
@@ -36,7 +37,8 @@ public class TestDataPatientVersionEntity {
         .firstName(ATHENA_REACT_ANDERSSON_FIRST_NAME)
         .middleName(ATHENA_REACT_ANDERSSON_MIDDLE_NAME)
         .lastName(ATHENA_REACT_ANDERSSON_LAST_NAME)
-        .validTo(VALID_TO);
+        .validTo(VALID_TO)
+        .patient(ATHENA_REACT_ANDERSSON_ENTITY);
   }
 
 }

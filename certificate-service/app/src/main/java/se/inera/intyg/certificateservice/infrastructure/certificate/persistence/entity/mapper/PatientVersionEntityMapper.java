@@ -22,20 +22,21 @@ public class PatientVersionEntityMapper {
         .protectedPerson(patientEntity.isProtectedPerson())
         .deceased(patientEntity.isDeceased())
         .testIndicated(patientEntity.isTestIndicated())
+        .patient(patientEntity)
         .build();
   }
 
-	public static PatientEntity toPatient(PatientVersionEntity patientVersionEntity) {
-		return PatientEntity.builder()
-				.id(patientVersionEntity.getId())
-				.type(patientVersionEntity.getType())
-				.firstName(patientVersionEntity.getFirstName())
-				.middleName(patientVersionEntity.getMiddleName())
-				.lastName(patientVersionEntity.getLastName())
-				.protectedPerson(patientVersionEntity.isProtectedPerson())
-				.deceased(patientVersionEntity.isDeceased())
-				.testIndicated(patientVersionEntity.isTestIndicated())
-				.build();
-	}
+  public static PatientEntity toPatient(PatientVersionEntity patientVersionEntity) {
+    return PatientEntity.builder()
+        .id(patientVersionEntity.getId())
+        .type(patientVersionEntity.getType())
+        .firstName(patientVersionEntity.getFirstName())
+        .middleName(patientVersionEntity.getMiddleName())
+        .lastName(patientVersionEntity.getLastName())
+        .protectedPerson(patientVersionEntity.isProtectedPerson())
+        .deceased(patientVersionEntity.isDeceased())
+        .testIndicated(patientVersionEntity.isTestIndicated())
+        .build();
+  }
 
 }

@@ -47,4 +47,7 @@ public class PatientVersionEntity {
   @ManyToOne
   @JoinColumn(name = "patient_id_type_key")
   private PatientIdTypeEntity type;
+  @ManyToOne
+  @JoinColumn(name = "patient_key", referencedColumnName = "`key`", nullable = false)
+  private PatientEntity patient;
 }

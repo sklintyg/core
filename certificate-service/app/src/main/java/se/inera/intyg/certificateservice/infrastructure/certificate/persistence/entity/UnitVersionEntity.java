@@ -49,4 +49,7 @@ public class UnitVersionEntity {
   @ManyToOne
   @JoinColumn(name = "unit_type_key")
   private UnitTypeEntity type;
+  @ManyToOne
+  @JoinColumn(name = "unit_key", referencedColumnName = "`key`", nullable = false)
+  private UnitEntity unit;
 }

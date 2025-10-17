@@ -23,20 +23,21 @@ public class UnitVersionEntityMapper {
         .type(unitEntity.getType())
         .validTo(LocalDateTime.now())
         .validFrom(null)
+        .unit(unitEntity)
         .build();
   }
 
-	public static UnitEntity toUnit(UnitVersionEntity unitVersionEntity) {
-		return UnitEntity.builder()
-				.hsaId(unitVersionEntity.getHsaId())
-				.name(unitVersionEntity.getName())
-				.address(unitVersionEntity.getAddress())
-				.zipCode(unitVersionEntity.getZipCode())
-				.city(unitVersionEntity.getCity())
-				.phoneNumber(unitVersionEntity.getPhoneNumber())
-				.email(unitVersionEntity.getEmail())
-				.workplaceCode(unitVersionEntity.getWorkplaceCode())
-				.type(unitVersionEntity.getType())
-				.build();
-	}
+  public static UnitEntity toUnit(UnitVersionEntity unitVersionEntity) {
+    return UnitEntity.builder()
+        .hsaId(unitVersionEntity.getHsaId())
+        .name(unitVersionEntity.getName())
+        .address(unitVersionEntity.getAddress())
+        .zipCode(unitVersionEntity.getZipCode())
+        .city(unitVersionEntity.getCity())
+        .phoneNumber(unitVersionEntity.getPhoneNumber())
+        .email(unitVersionEntity.getEmail())
+        .workplaceCode(unitVersionEntity.getWorkplaceCode())
+        .type(unitVersionEntity.getType())
+        .build();
+  }
 }
