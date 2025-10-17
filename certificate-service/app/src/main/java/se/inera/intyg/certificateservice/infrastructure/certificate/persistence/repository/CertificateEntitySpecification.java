@@ -2,9 +2,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import org.springframework.data.jpa.domain.Specification;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
 
 public class CertificateEntitySpecification {
@@ -45,15 +43,5 @@ public class CertificateEntitySpecification {
   public static Specification<CertificateEntity> signedEqualsAndLesserThan(LocalDate to) {
     return (root, query, criteriaBuilder) ->
         criteriaBuilder.lessThanOrEqualTo(root.get("signed"), to.atTime(23, 59, 59));
-  }
-
-  public static Specification<CertificateEntity> certificateTypeIn(
-      List<CertificateType> certificateTypes) {
-    return (root, query, criteriaBuilder) ->
-        root.get("type").in(
-            certificateTypes.stream()
-                .map(CertificateType::type)
-                .toList()
-        );
   }
 }

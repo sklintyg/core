@@ -21,9 +21,15 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.SickLeave
 
 public class AG114SickLeaveProvider implements SickLeaveProvider {
 
+  private static final ElementValueDiagnosis DEFAULT_DIAGNOSIS = ElementValueDiagnosis.builder()
+      .code("X")
+      .description("Diagnoskod X är okänd och har ingen beskrivning")
+      .build();
+
   @Override
   public Optional<SickLeaveCertificate> build(Certificate certificate) {
     final var metadata = certificate.certificateMetaData();
+    final var diagnoses = getElementValueDiagnoses(certificate);
 
     final var workCapacityPercentage = getWorkCapacityPercentage(certificate);
     final var workCapacityDateRange = getWorkCapacityDateRange(certificate, workCapacityPercentage);
@@ -38,16 +44,12 @@ public class AG114SickLeaveProvider implements SickLeaveProvider {
             .civicRegistrationNumber(metadata.patient().id())
             .signingDoctorName(metadata.issuer().name())
             .patientName(metadata.patient().name())
-            .diagnoseCode(getElementValueDiagnoses(certificate).getFirst())
+            .diagnoseCode(!diagnoses.isEmpty() ? diagnoses.getFirst() : DEFAULT_DIAGNOSIS)
             .biDiagnoseCode1(
-                getElementValueDiagnoses(certificate).size() > 1
-                    ? getElementValueDiagnoses(certificate).get(1)
-                    : null
+                diagnoses.size() > 1 ? diagnoses.get(1) : null
             )
             .biDiagnoseCode2(
-                getElementValueDiagnoses(certificate).size() > 2
-                    ? getElementValueDiagnoses(certificate).get(2)
-                    : null
+                diagnoses.size() > 2 ? diagnoses.get(2) : null
             )
             .signingDoctorId(metadata.issuer().hsaId())
             .signingDateTime(certificate.signed())
@@ -69,7 +71,7 @@ public class AG114SickLeaveProvider implements SickLeaveProvider {
         .map(ElementData::value)
         .map(ElementValueDiagnosisList.class::cast)
         .map(ElementValueDiagnosisList::diagnoses)
-        .orElseThrow();
+        .orElse(List.of());
   }
 
   private static Integer getWorkCapacityPercentage(Certificate certificate) {

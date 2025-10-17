@@ -19,6 +19,11 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.SickLeave
 
 public class AG7804SickLeaveProvider implements SickLeaveProvider {
 
+  private static final ElementValueDiagnosis DEFAULT_DIAGNOSIS = ElementValueDiagnosis.builder()
+      .code("X")
+      .description("Diagnoskod X är okänd och har ingen beskrivning")
+      .build();
+
   @Override
   public Optional<SickLeaveCertificate> build(Certificate certificate) {
     final var isNotSickLeaveCertificate = certificate.elementData().stream()
@@ -34,6 +39,8 @@ public class AG7804SickLeaveProvider implements SickLeaveProvider {
     }
 
     final var metadata = certificate.certificateMetaData();
+    final var diagnoses = getElementValueDiagnoses(certificate);
+
     return Optional.of(
         SickLeaveCertificate.builder()
             .id(certificate.id())
@@ -44,16 +51,12 @@ public class AG7804SickLeaveProvider implements SickLeaveProvider {
             .civicRegistrationNumber(metadata.patient().id())
             .signingDoctorName(metadata.issuer().name())
             .patientName(metadata.patient().name())
-            .diagnoseCode(getElementValueDiagnoses(certificate).getFirst())
+            .diagnoseCode(!diagnoses.isEmpty() ? diagnoses.getFirst() : DEFAULT_DIAGNOSIS)
             .biDiagnoseCode1(
-                getElementValueDiagnoses(certificate).size() > 1
-                    ? getElementValueDiagnoses(certificate).get(1)
-                    : null
+                diagnoses.size() > 1 ? diagnoses.get(1) : null
             )
             .biDiagnoseCode2(
-                getElementValueDiagnoses(certificate).size() > 2
-                    ? getElementValueDiagnoses(certificate).get(2)
-                    : null
+                diagnoses.size() > 2 ? diagnoses.get(2) : null
             )
             .signingDoctorId(metadata.issuer().hsaId())
             .signingDateTime(certificate.signed())
@@ -90,6 +93,6 @@ public class AG7804SickLeaveProvider implements SickLeaveProvider {
         .map(ElementData::value)
         .map(ElementValueDiagnosisList.class::cast)
         .map(ElementValueDiagnosisList::diagnoses)
-        .orElseThrow();
+        .orElse(List.of());
   }
 }

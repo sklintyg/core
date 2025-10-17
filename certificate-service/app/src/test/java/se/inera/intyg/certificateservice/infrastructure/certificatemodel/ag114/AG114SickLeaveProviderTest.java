@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag114;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.AG114_CERTIFICATE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.ag114CertificateBuilder;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -77,6 +78,23 @@ class AG114SickLeaveProviderTest {
   void shouldMapDiagnoseCode() {
     final var sickLeaveCertificate = provider.build(AG114_CERTIFICATE);
     assertEquals("A013", sickLeaveCertificate.orElseThrow().diagnoseCode().code());
+  }
+
+  @Test
+  void shouldUseDefaultDiagnosisWhenNoDiagnosisPresent() {
+    final var certificate = ag114CertificateBuilder()
+        .elementData(
+            AG114_CERTIFICATE.elementData().stream()
+                .filter(elementData -> !elementData.id().id().equals("4"))
+                .toList()
+        )
+        .build();
+
+    final var sickLeaveCertificate = provider.build(certificate);
+
+    assertEquals("X", sickLeaveCertificate.orElseThrow().diagnoseCode().code());
+    assertEquals("Diagnoskod X är okänd och har ingen beskrivning",
+        sickLeaveCertificate.orElseThrow().diagnoseCode().description());
   }
 
   @Test

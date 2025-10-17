@@ -80,6 +80,23 @@ class AG7804SickLeaveProviderTest {
   }
 
   @Test
+  void shouldUseDefaultDiagnosisWhenNoDiagnosisPresent() {
+    final var certificate = ag7804CertificateBuilder()
+        .elementData(
+            ag7804CertificateBuilder().build().elementData().stream()
+                .filter(elementData -> !elementData.id().id().equals("diagnos"))
+                .toList()
+        )
+        .build();
+
+    final var sickLeaveCertificate = provider.build(certificate);
+
+    assertEquals("X", sickLeaveCertificate.orElseThrow().diagnoseCode().code());
+    assertEquals("Diagnoskod X är okänd och har ingen beskrivning",
+        sickLeaveCertificate.orElseThrow().diagnoseCode().description());
+  }
+
+  @Test
   void shouldNotMapBiDiagnoseCode1IfMissing() {
     final var sickLeaveCertificate = provider.build(ag7804CertificateBuilder().build());
     assertNull(sickLeaveCertificate.orElseThrow().biDiagnoseCode1());
