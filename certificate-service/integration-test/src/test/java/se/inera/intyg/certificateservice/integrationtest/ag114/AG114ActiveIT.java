@@ -30,6 +30,7 @@ import se.inera.intyg.certificateservice.integrationtest.common.tests.GetCertifi
 import se.inera.intyg.certificateservice.integrationtest.common.tests.GetCertificateTypeInfoIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.GetCertificateXmlIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.GetPatientCertificatesIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.GetSickLeaveCertificatesIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.GetUnitCertificatesIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.GetUnitCertificatesInfoIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.GetUnitCertificatesWhenSignedIT;
@@ -370,6 +371,16 @@ class AG114ActiveIT extends ActiveCertificatesIT {
   @Nested
   @DisplayName(TYPE + "Förnya intyg från extern källa")
   class RenewExternalCertificate extends RenewExternalCertificateIT {
+
+    @Override
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
+    }
+  }
+
+  @Nested
+  @DisplayName(TYPE + "Hämta intyg som har sjukfallsrepresentation från internt API")
+  class GetSickLeaveCertificates extends GetSickLeaveCertificatesIT {
 
     @Override
     protected BaseTestabilityUtilities testabilityUtilities() {

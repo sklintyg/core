@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.springframework.data.jpa.domain.Specification;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
@@ -32,5 +33,15 @@ public class CertificateEntitySpecification {
   public static Specification<CertificateEntity> notPlacerholderCertificate() {
     return (root, query, criteriaBuilder) ->
         criteriaBuilder.isFalse(root.get("placeholder"));
+  }
+
+  public static Specification<CertificateEntity> signedEqualsAndGreaterThan(LocalDate from) {
+    return (root, query, criteriaBuilder) ->
+        criteriaBuilder.greaterThanOrEqualTo(root.get("signed"), from.atStartOfDay());
+  }
+
+  public static Specification<CertificateEntity> signedEqualsAndLesserThan(LocalDate to) {
+    return (root, query, criteriaBuilder) ->
+        criteriaBuilder.lessThanOrEqualTo(root.get("signed"), to.atTime(23, 59, 59));
   }
 }

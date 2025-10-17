@@ -189,6 +189,7 @@ public class CertificateModelFactoryAG7804 implements CertificateModelFactory {
         ))
         .certificateActionFactory(certificateActionFactory)
         .recipient(CertificateRecipientFactory.skr())
+        .sickLeaveProvider(new AG7804SickLeaveProvider())
         .build();
   }
 }

@@ -1,9 +1,9 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionDiagnos.QUESTION_DIAGNOS_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionNedsattningArbetsformaga.QUESTION_NEDSATTNING_ARBETSFORMAGA_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSmittbararpenning.QUESTION_SMITTBARARPENNING_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSysselsattning.QUESTION_SYSSELSATTNING_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionDiagnos.QUESTION_DIAGNOS_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionNedsattningArbetsformaga.QUESTION_NEDSATTNING_ARBETSFORMAGA_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionSmittbararpenning.QUESTION_SMITTBARARPENNING_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionSysselsattning.QUESTION_SYSSELSATTNING_ID;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +17,12 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDi
 import se.inera.intyg.certificateservice.domain.certificate.model.SickLeaveCertificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SickLeaveProvider;
 
-public class FK7804SickLeaveProvider implements SickLeaveProvider {
+public class AG7804SickLeaveProvider implements SickLeaveProvider {
+
+  private static final ElementValueDiagnosis DEFAULT_DIAGNOSIS = ElementValueDiagnosis.builder()
+      .code("X")
+      .description("Diagnoskod X är okänd och har ingen beskrivning")
+      .build();
 
   @Override
   public Optional<SickLeaveCertificate> build(Certificate certificate) {
@@ -34,6 +39,8 @@ public class FK7804SickLeaveProvider implements SickLeaveProvider {
     }
 
     final var metadata = certificate.certificateMetaData();
+    final var diagnoses = getElementValueDiagnoses(certificate);
+
     return Optional.of(
         SickLeaveCertificate.builder()
             .id(certificate.id())
@@ -44,16 +51,12 @@ public class FK7804SickLeaveProvider implements SickLeaveProvider {
             .civicRegistrationNumber(metadata.patient().id())
             .signingDoctorName(metadata.issuer().name())
             .patientName(metadata.patient().name())
-            .diagnoseCode(getElementValueDiagnoses(certificate).getFirst())
+            .diagnoseCode(!diagnoses.isEmpty() ? diagnoses.getFirst() : DEFAULT_DIAGNOSIS)
             .biDiagnoseCode1(
-                getElementValueDiagnoses(certificate).size() > 1
-                    ? getElementValueDiagnoses(certificate).get(1)
-                    : null
+                diagnoses.size() > 1 ? diagnoses.get(1) : null
             )
             .biDiagnoseCode2(
-                getElementValueDiagnoses(certificate).size() > 2
-                    ? getElementValueDiagnoses(certificate).get(2)
-                    : null
+                diagnoses.size() > 2 ? diagnoses.get(2) : null
             )
             .signingDoctorId(metadata.issuer().hsaId())
             .signingDateTime(certificate.signed())
@@ -90,6 +93,6 @@ public class FK7804SickLeaveProvider implements SickLeaveProvider {
         .map(ElementData::value)
         .map(ElementValueDiagnosisList.class::cast)
         .map(ElementValueDiagnosisList::diagnoses)
-        .orElseThrow();
+        .orElse(List.of());
   }
 }

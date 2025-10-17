@@ -28,6 +28,7 @@ public class CertificateModel implements Comparator<ElementId> {
 
   CertificateModelId id;
   Code type;
+  CertificateType externalType;
   String name;
   String description;
   String detailedDescription;

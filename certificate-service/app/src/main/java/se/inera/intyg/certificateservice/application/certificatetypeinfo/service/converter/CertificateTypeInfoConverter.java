@@ -21,7 +21,10 @@ public class CertificateTypeInfoConverter {
   public CertificateTypeInfoDTO convert(CertificateModel certificateModel,
       List<CertificateAction> certificateActions, ActionEvaluation actionEvaluation) {
     return CertificateTypeInfoDTO.builder()
-        .type(certificateModel.id().type().type())
+        .type(certificateModel.externalType() != null
+            ? certificateModel.externalType().type()
+            : certificateModel.id().type().type()
+        )
         .name(certificateModel.name())
         .description(certificateModel.description())
         .links(

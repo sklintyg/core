@@ -13,6 +13,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetCertific
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificatePdfRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateXmlRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetSickLeaveCertificatesInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.RenewCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.RenewExternalCertificateRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ReplaceCertificateRequest;
@@ -374,5 +375,9 @@ public class ApiRequestUtil {
 
   public static UnitStatisticsRequestBuilder customUnitStatisticsRequest() {
     return UnitStatisticsRequestBuilder.create();
+  }
+
+  public static GetSickLeaveCertificatesInternalRequest defaultGetSickLeaveCertificatesInternalRequest() {
+    return GetSickLeaveCertificatesInternalRequestBuilder.create().build();
   }
 }

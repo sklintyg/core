@@ -67,12 +67,16 @@ public class SickLeaveConverter {
   }
 
   private int toCapacityPercentage(FieldId fieldId) {
-    return switch (SickLeaveWorkcapacity.valueOf(fieldId.value())) {
-      case EN_FJARDEDEL -> 25;
-      case HALFTEN -> 50;
-      case TRE_FJARDEDEL -> 75;
-      case HELT_NEDSATT -> 100;
-    };
+    try {
+      return Integer.parseInt(fieldId.value());
+    } catch (NumberFormatException e) {
+      return switch (SickLeaveWorkcapacity.valueOf(fieldId.value())) {
+        case EN_FJARDEDEL -> 25;
+        case HALFTEN -> 50;
+        case TRE_FJARDEDEL -> 75;
+        case HELT_NEDSATT -> 100;
+      };
+    }
   }
 
   enum SickLeaveWorkcapacity {

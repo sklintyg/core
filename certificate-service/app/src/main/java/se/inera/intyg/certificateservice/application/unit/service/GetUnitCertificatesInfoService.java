@@ -15,7 +15,6 @@ import se.inera.intyg.certificateservice.domain.unit.service.GetUnitCertificates
 public class GetUnitCertificatesInfoService {
 
   private final GetUnitCertificatesInfoRequestValidator getUnitCertificatesInfoRequestValidator;
-  private final CertificatesRequestFactory certificatesRequestFactory;
   private final GetUnitCertificatesInfoDomainService getUnitCertificatesInfoDomainService;
   private final ActionEvaluationFactory actionEvaluationFactory;
 
@@ -31,7 +30,7 @@ public class GetUnitCertificatesInfoService {
     );
 
     final var staffs = getUnitCertificatesInfoDomainService.get(
-        certificatesRequestFactory.create(),
+        CertificatesRequestFactory.create(),
         actionEvaluation
     );
 

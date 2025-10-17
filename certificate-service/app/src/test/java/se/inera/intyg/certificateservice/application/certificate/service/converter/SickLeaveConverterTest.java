@@ -12,6 +12,7 @@ import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.application.certificate.dto.SickLeaveCertificateWorkCapacityDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
@@ -54,7 +55,7 @@ class SickLeaveConverterTest {
       .revokedBy(Staff.builder().name(SIGNING_DOCTOR_NAME).hsaId(CARE_UNIT_ID).build())
       .revokedAt(LocalDateTime.of(2050, 1, 1, 1, 1, 0)).build();
   private static final List<DateRange> WORK_CAPACITIES = List.of(
-      DateRange.builder().dateRangeId(new FieldId("EN_FJARDEDEL")).from(LocalDate.of(2023, 1, 1))
+      DateRange.builder().dateRangeId(new FieldId("25")).from(LocalDate.of(2023, 1, 1))
           .to(LocalDate.of(2023, 1, 10)).build(),
       DateRange.builder().dateRangeId(new FieldId("HELT_NEDSATT")).from(LocalDate.of(2023, 1, 10))
           .to(LocalDate.of(2023, 1, 15)).build()
@@ -241,5 +242,25 @@ class SickLeaveConverterTest {
     final var dto = converter.convert(sickLeaveCertificate);
 
     Assertions.assertTrue(dto.getDeleted());
+  }
+
+  @Test
+  void shouldConvertWorkCapacityEnum() {
+    final var expected = List.of(
+        SickLeaveCertificateWorkCapacityDTO.builder()
+            .capacityPercentage(25)
+            .fromDate("2023-01-01")
+            .toDate("2023-01-10")
+            .build(),
+        SickLeaveCertificateWorkCapacityDTO.builder()
+            .capacityPercentage(100)
+            .fromDate("2023-01-10")
+            .toDate("2023-01-15")
+            .build()
+    );
+
+    final var dto = converter.convert(sickLeaveCertificate);
+
+    assertEquals(expected, dto.getSjukfallCertificateWorkCapacity());
   }
 }
