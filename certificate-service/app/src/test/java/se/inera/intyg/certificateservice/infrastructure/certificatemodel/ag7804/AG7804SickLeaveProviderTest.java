@@ -84,7 +84,7 @@ class AG7804SickLeaveProviderTest {
     final var certificate = ag7804CertificateBuilder()
         .elementData(
             ag7804CertificateBuilder().build().elementData().stream()
-                .filter(elementData -> !elementData.id().id().equals("diagnos"))
+                .filter(elementData -> !elementData.id().id().equals("6"))
                 .toList()
         )
         .build();
