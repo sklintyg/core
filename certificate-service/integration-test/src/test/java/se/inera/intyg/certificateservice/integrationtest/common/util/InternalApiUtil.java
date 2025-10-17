@@ -16,6 +16,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetSickLeaveCertificatesInternalRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetSickLeaveCertificatesInternalResponse;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageInternalResponse;
 import se.inera.intyg.certificateservice.application.message.dto.GetMessageInternalXmlResponse;
 
@@ -155,6 +157,23 @@ public class InternalApiUtil {
         new ParameterizedTypeReference<>() {
         },
         Collections.emptyMap()
+    );
+  }
+
+  public ResponseEntity<GetSickLeaveCertificatesInternalResponse> getSickLeaveCertificatesInternal(
+      GetSickLeaveCertificatesInternalRequest request) {
+    final var requestUrl = "http://localhost:%s/internalapi/patient/sickleave".formatted(port);
+
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    return this.restTemplate.exchange(
+        requestUrl,
+        HttpMethod.POST,
+        new HttpEntity<>(request, headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyList()
     );
   }
 
