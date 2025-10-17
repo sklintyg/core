@@ -2,7 +2,6 @@ package se.inera.intyg.certificateservice.integrationtest.common.tests;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_MEDICINCENTRUM_DTO;
 import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.customTestabilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.defaultGetSickLeaveCertificatesInternalRequest;
@@ -30,10 +29,9 @@ public abstract class GetSickLeaveCertificatesIT extends BaseIntegrationIT {
     );
 
     assertAll(
-        () -> assertFalse(response.getBody().getCertificates().isEmpty()),
         () -> assertEquals(1, response.getBody().getCertificates().size()),
         () -> assertEquals(certificateId(testCertificates),
-            response.getBody().getCertificates().get(0).getId())
+            response.getBody().getCertificates().getFirst().getId())
     );
   }
 }

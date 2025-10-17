@@ -14,10 +14,12 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetSickLeav
 public class GetSickLeaveCertificatesInternalRequest {
 
   PersonIdDTO personId;
-  List<String> certificateTypes;
+  @Builder.Default
+  List<String> certificateTypes = List.of();
   LocalDate signedFrom;
   LocalDate signedTo;
-  List<String> issuedByUnitIds;
+  @Builder.Default
+  List<String> issuedByUnitIds = List.of();
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class GetSickLeaveCertificatesInternalRequestBuilder {

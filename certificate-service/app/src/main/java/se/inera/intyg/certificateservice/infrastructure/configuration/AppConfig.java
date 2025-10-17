@@ -502,7 +502,7 @@ public class AppConfig {
   }
 
   @Bean
-  public GetSickLeaveCertificatesDomainService getEmployerCertificateDomainService(
+  public GetSickLeaveCertificatesDomainService getSickLeaveCertificatesDomainService(
       CertificateRepository certificateRepository) {
     return new GetSickLeaveCertificatesDomainService(certificateRepository);
   }

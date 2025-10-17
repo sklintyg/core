@@ -2,25 +2,25 @@ package se.inera.intyg.certificateservice.application.common;
 
 import java.util.Collections;
 import java.util.Objects;
-import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetSickLeaveCertificatesInternalRequest;
 import se.inera.intyg.certificateservice.application.unit.dto.CertificatesQueryCriteriaDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
 
-@Component
 public class CertificatesRequestFactory {
 
-  public CertificatesRequest create() {
+  public static CertificatesRequest create() {
     return CertificatesRequest.builder()
         .statuses(Status.unsigned())
         .build();
   }
 
-  public CertificatesRequest create(CertificatesQueryCriteriaDTO queryCriteria) {
+  public static CertificatesRequest create(CertificatesQueryCriteriaDTO queryCriteria) {
     return CertificatesRequest.builder()
         .modifiedFrom(queryCriteria.getFrom())
         .modifiedTo(queryCriteria.getTo())
@@ -41,7 +41,7 @@ public class CertificatesRequestFactory {
             queryCriteria.getStatuses() == null ? Collections.emptyList() :
                 queryCriteria.getStatuses()
                     .stream()
-                    .map(this::convertStatus)
+                    .map(CertificatesRequestFactory::convertStatus)
                     .filter(Objects::nonNull)
                     .toList()
         )
@@ -49,7 +49,23 @@ public class CertificatesRequestFactory {
         .build();
   }
 
-  private Status convertStatus(CertificateStatusTypeDTO status) {
+  public static CertificatesRequest convert(GetSickLeaveCertificatesInternalRequest request) {
+    return CertificatesRequest.builder()
+        .personId(PersonId.builder().id(request.getPersonId()
+                .getId())
+            .type(PersonIdType.valueOf(request.getPersonId().getType()))
+            .build())
+        .signedFrom(request.getSignedFrom())
+        .signedTo(request.getSignedTo())
+        .types(
+            request.getCertificateTypes().stream()
+                .map(CertificateType::new)
+                .toList()
+        )
+        .build();
+  }
+
+  private static Status convertStatus(CertificateStatusTypeDTO status) {
     return switch (status) {
       case UNSIGNED -> Status.DRAFT;
       case SIGNED -> Status.SIGNED;
