@@ -45,4 +45,21 @@ public class PersonId {
         id.substring(8)
     );
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof PersonId other)) {
+      return false;
+    }
+    return type == other.type &&
+        idWithoutDash().equals(other.idWithoutDash());
+  }
+
+  @Override
+  public int hashCode() {
+    return java.util.Objects.hash(type, idWithoutDash());
+  }
 }

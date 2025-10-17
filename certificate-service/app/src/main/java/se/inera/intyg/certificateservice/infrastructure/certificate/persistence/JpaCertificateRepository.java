@@ -4,8 +4,11 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -27,12 +30,26 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PlaceholderCertificateRequest;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
+import se.inera.intyg.certificateservice.domain.patient.model.Patient;
+import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffVersionEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitVersionEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateEntityMapper;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.PatientEntityMapper;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.PatientVersionEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.PlaceholderCertificateEntityMapper;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.StaffEntityMapper;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.StaffVersionEntityMapper;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.UnitEntityMapper;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.UnitVersionEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecificationFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateRelationRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.PatientVersionEntityRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffVersionEntityRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitVersionEntityRepository;
 import se.inera.intyg.certificateservice.testability.certificate.service.repository.TestabilityCertificateRepository;
 
 @Repository
@@ -47,6 +64,9 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
   private final CertificateEntityMapper certificateEntityMapper;
   private final CertificateEntitySpecificationFactory certificateEntitySpecificationFactory;
   private final CertificateRelationRepository certificateRelationRepository;
+  private final StaffVersionEntityRepository staffVersionEntityRepository;
+  private final PatientVersionEntityRepository patientVersionEntityRepository;
+  private final UnitVersionEntityRepository unitVersionEntityRepository;
 
   @Override
   public Certificate create(CertificateModel certificateModel) {
@@ -146,7 +166,6 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
 
     return certificateEntityMapper.toDomain(certificateEntity, this);
   }
-
 
   @Override
   public List<Certificate> getByIds(List<CertificateId> certificateIds) {
@@ -354,5 +373,87 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
             .toList()
     );
 
+  }
+
+  @Override
+  public CertificateMetaData getMetadataFromSignInstance(CertificateMetaData metadata,
+      LocalDateTime signedAt) {
+
+    if (signedAt == null) {
+      throw new IllegalStateException(
+          "SignedAt is required to fetch metadata from signed instance");
+    }
+
+    final var patientWhenSigned = getPatientVersionWhenSigned(metadata.patient(),
+        signedAt);
+    final var staffMap = getStaffVersionsWhenSigned(
+        List.of(metadata.issuer(), metadata.creator()), signedAt);
+    final var unitMap = getUnitVersionsWhenSigned(
+        List.of(metadata.careProvider().hsaId().id(),
+            metadata.careUnit().hsaId().id(),
+            metadata.issuingUnit().hsaId().id()
+        ),
+        signedAt);
+
+    return CertificateMetaData.builder()
+        .patient(patientWhenSigned)
+        .issuer(staffMap.get(metadata.issuer().hsaId().id()))
+        .creator(staffMap.get(metadata.creator().hsaId().id()))
+        .issuingUnit(
+            unitMap.containsKey(metadata.issuingUnit().hsaId().id())
+                ? UnitEntityMapper.toIssuingUnitDomain(
+                unitMap.get(metadata.issuingUnit().hsaId().id()))
+                : metadata.issuingUnit()
+        )
+        .careProvider(
+            unitMap.containsKey(metadata.careProvider().hsaId().id())
+                ? UnitEntityMapper.toCareProviderDomain(
+                unitMap.get(metadata.careProvider().hsaId().id()))
+                : metadata.careProvider()
+        )
+        .careUnit(
+            unitMap.containsKey(metadata.careUnit().hsaId().id())
+                ? UnitEntityMapper.toCareUnitDomain(unitMap.get(metadata.careUnit().hsaId().id()))
+                : metadata.careUnit()
+        )
+        .build();
+  }
+
+  private Patient getPatientVersionWhenSigned(Patient patient,
+      LocalDateTime signedAt) {
+    return patientVersionEntityRepository
+        .findFirstCoveringTimestampOrderByMostRecent(patient.id().idWithoutDash(), signedAt)
+        .map(PatientVersionEntityMapper::toPatient)
+        .map(PatientEntityMapper::toDomain)
+        .orElse(patient);
+  }
+
+  private Map<String, Staff> getStaffVersionsWhenSigned(List<Staff> staffs,
+      LocalDateTime signedAt) {
+    List<StaffVersionEntity> entities = staffVersionEntityRepository
+        .findAllCoveringTimestampByHsaIdIn(
+            staffs.stream().map(s -> s.hsaId().id()).toList(), signedAt);
+
+    Map<String, Staff> versionedStaffMap = entities.stream()
+        .map(StaffVersionEntityMapper::toStaff)
+        .map(StaffEntityMapper::toDomain)
+        .collect(Collectors.toMap(s -> s.hsaId().id(), Function.identity(), (a, b) -> a));
+
+    return staffs.stream()
+        .collect(Collectors.toMap(
+            s -> s.hsaId().id(),
+            s -> versionedStaffMap.getOrDefault(s.hsaId().id(), s),
+            (a, b) -> a
+        ));
+  }
+
+
+  private Map<String, UnitEntity> getUnitVersionsWhenSigned(List<String> unitHsaIds,
+      LocalDateTime signedAt) {
+    List<UnitVersionEntity> entities =
+        unitVersionEntityRepository.findAllCoveringTimestampByHsaIdIn(unitHsaIds, signedAt);
+    return entities.stream()
+        .map(UnitVersionEntityMapper::toUnit)
+        .collect(Collectors.toMap(UnitEntity::getHsaId, Function.identity(), (a, b) -> a));
   }
 }

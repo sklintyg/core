@@ -20,6 +20,8 @@ public class PrintCertificateMetadataConverter {
 
   public PrintCertificateMetadataDTO convert(Certificate certificate,
       boolean isCitizenFormat, String fileName) {
+    final var metadata = certificate.getMetadataForPrint();
+
     return PrintCertificateMetadataDTO.builder()
         .name(certificate.certificateModel().name())
         .typeId(certificate.certificateModel().type().code())
@@ -35,10 +37,10 @@ public class PrintCertificateMetadataConverter {
         .applicationOrigin(isCitizenFormat
             ? APPLICATION_ORIGIN_1177_INTYG
             : APPLICATION_ORIGIN_WEBCERT)
-        .personId(certificate.certificateMetaData().patient().id().idWithDash())
+        .personId(metadata.patient().id().idWithDash())
         .description(certificate.certificateModel().description())
-        .issuerName(certificate.certificateMetaData().issuer().name().fullName())
-        .issuingUnit(certificate.certificateMetaData().issuingUnit().name().name())
+        .issuerName(metadata.issuer().name().fullName())
+        .issuingUnit(metadata.issuingUnit().name().name())
         .sentDate(
             (certificate.sent() != null && certificate.sent().sentAt() != null) ? certificate.sent()
                 .sentAt().toString() : null)

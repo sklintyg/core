@@ -1,12 +1,11 @@
 package se.inera.intyg.certificateservice.certificate.converter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_META_DATA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.fk7210certificateModelBuilder;
 
@@ -37,7 +36,7 @@ class PrintCertificateMetadataConverterTest {
   @InjectMocks
   private PrintCertificateMetadataConverter printCertificateMetadataConverter;
 
-  public static final Certificate CERTIFICATE = fk7210CertificateBuilder()
+  private static final Certificate CERTIFICATE = fk7210CertificateBuilder()
       .certificateModel(fk7210certificateModelBuilder()
           .recipient(new Recipient(new RecipientId("ts"), "ts", "ts", "transportstyrelsen-logo.png",
               "Läkarintyg Transportstyrelsen")
@@ -50,22 +49,8 @@ class PrintCertificateMetadataConverterTest {
               .build()
       )
       .signed(LocalDateTime.now())
-      .build();
-
-
-  public static final Certificate NOT_SENT_CERTIFICATE = fk7210CertificateBuilder()
-      .certificateModel(fk7210certificateModelBuilder()
-          .recipient(new Recipient(new RecipientId("ts"), "ts", "ts", "transportstyrelsen-logo.png",
-              "Läkarintyg Transportstyrelsen")
-          ).build()
-      )
-      .status(Status.SIGNED)
-      .signed(LocalDateTime.now())
-      .sent(
-          Sent.builder()
-              .sentAt(null)
-              .build()
-      )
+      .metaDataFromSignInstance(CERTIFICATE_META_DATA)
+      .certificateMetaData(null)
       .build();
 
   public static final Certificate DRAFT = fk7210CertificateBuilder()
@@ -74,6 +59,7 @@ class PrintCertificateMetadataConverterTest {
               "Läkarintyg Transportstyrelsen")
           ).build()
       )
+      .signed(null)
       .status(Status.DRAFT)
       .build();
 
@@ -158,7 +144,7 @@ class PrintCertificateMetadataConverterTest {
   @Test
   void shouldSetSPersonId() {
     final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false, FILE_NAME);
-    assertEquals(CERTIFICATE.certificateMetaData().patient().id().idWithDash(),
+    assertEquals(CERTIFICATE.getMetadataForPrint().patient().id().idWithDash(),
         result.getPersonId());
   }
 
@@ -178,14 +164,14 @@ class PrintCertificateMetadataConverterTest {
   @Test
   void shouldSetIssuerName() {
     final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false, FILE_NAME);
-    assertEquals(CERTIFICATE.certificateMetaData().issuer().name().fullName(),
+    assertEquals(CERTIFICATE_META_DATA.issuer().name().fullName(),
         result.getIssuerName());
   }
 
   @Test
   void shouldSetIssuingUnit() {
     final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false, FILE_NAME);
-    assertEquals(CERTIFICATE.certificateMetaData().issuingUnit().name().name(),
+    assertEquals(CERTIFICATE_META_DATA.issuingUnit().name().name(),
         result.getIssuingUnit());
   }
 

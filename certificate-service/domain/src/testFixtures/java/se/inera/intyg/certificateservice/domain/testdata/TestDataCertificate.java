@@ -30,6 +30,7 @@ import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData.CertificateMetaDataBuilder;
 import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
@@ -66,6 +67,7 @@ public class TestDataCertificate {
 
   public static final String EXTERNAL_REF = "externalRef";
   public static final ExternalReference EXTERNAL_REFERENCE = new ExternalReference(EXTERNAL_REF);
+  public static final CertificateMetaData CERTIFICATE_META_DATA = metaDataBuilder().build();
 
   private TestDataCertificate() {
 
@@ -112,6 +114,7 @@ public class TestDataCertificate {
         .created(LocalDateTime.now(ZoneId.systemDefault()))
         .certificateModel(FK7210_CERTIFICATE_MODEL)
         .xml(XML)
+        .signed(LocalDateTime.now(ZoneId.systemDefault()))
         .sent(SENT)
         .revoked(REVOKED)
         .externalReference(EXTERNAL_REFERENCE)
@@ -138,16 +141,7 @@ public class TestDataCertificate {
                     .build()
             )
         )
-        .certificateMetaData(
-            CertificateMetaData.builder()
-                .issuer(AJLA_DOKTOR)
-                .creator(ALF_DOKTOR)
-                .patient(ATHENA_REACT_ANDERSSON)
-                .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
-                .careUnit(ALFA_MEDICINCENTRUM)
-                .careProvider(ALFA_REGIONEN)
-                .build()
-        );
+        .certificateMetaData(CERTIFICATE_META_DATA);
   }
 
   public static MedicalCertificate.MedicalCertificateBuilder fk3226CertificateBuilder() {
@@ -223,16 +217,7 @@ public class TestDataCertificate {
                     .build()
             )
         )
-        .certificateMetaData(
-            CertificateMetaData.builder()
-                .creator(ALF_DOKTOR)
-                .issuer(AJLA_DOKTOR)
-                .patient(ATHENA_REACT_ANDERSSON)
-                .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
-                .careUnit(ALFA_MEDICINCENTRUM)
-                .careProvider(ALFA_REGIONEN)
-                .build()
-        );
+        .certificateMetaData(CERTIFICATE_META_DATA);
   }
 
 
@@ -415,16 +400,7 @@ public class TestDataCertificate {
                     .build()
             )
         )
-        .certificateMetaData(
-            CertificateMetaData.builder()
-                .issuer(AJLA_DOKTOR)
-                .creator(ALF_DOKTOR)
-                .patient(ATHENA_REACT_ANDERSSON)
-                .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
-                .careUnit(ALFA_MEDICINCENTRUM)
-                .careProvider(ALFA_REGIONEN)
-                .build()
-        );
+        .certificateMetaData(CERTIFICATE_META_DATA);
   }
 
   public static final Certificate FK7427_CERTIFICATE = fk7427CertificateBuilder().build();
@@ -547,20 +523,9 @@ public class TestDataCertificate {
                     .build()
             )
         )
-        .certificateMetaData(
-            CertificateMetaData.builder()
-                .issuer(AJLA_DOKTOR)
-                .creator(ALF_DOKTOR)
-                .patient(ATHENA_REACT_ANDERSSON)
-                .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
-                .careUnit(ALFA_MEDICINCENTRUM)
-                .careProvider(ALFA_REGIONEN)
-                .build()
-        );
+        .certificateMetaData(CERTIFICATE_META_DATA);
   }
-
-  public static final Certificate FK7426_CERTIFICATE = fk7426CertificateBuilder().build();
-
+  
   public static MedicalCertificate.MedicalCertificateBuilder fk7426CertificateBuilder() {
     return MedicalCertificate.builder()
         .id(CERTIFICATE_ID)
@@ -729,19 +694,9 @@ public class TestDataCertificate {
                     .build()
             )
         )
-        .certificateMetaData(
-            CertificateMetaData.builder()
-                .issuer(AJLA_DOKTOR)
-                .creator(ALF_DOKTOR)
-                .patient(ATHENA_REACT_ANDERSSON)
-                .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
-                .careUnit(ALFA_MEDICINCENTRUM)
-                .careProvider(ALFA_REGIONEN)
-                .build()
-        );
+        .certificateMetaData(CERTIFICATE_META_DATA);
   }
 
-  public static final Certificate FK3221_CERTIFICATE = fk3221CertificateBuilder().build();
 
   public static MedicalCertificate.MedicalCertificateBuilder fk3221CertificateBuilder() {
     return MedicalCertificate.builder()
@@ -868,16 +823,7 @@ public class TestDataCertificate {
                     .build()
             )
         )
-        .certificateMetaData(
-            CertificateMetaData.builder()
-                .issuer(AJLA_DOKTOR)
-                .creator(ALF_DOKTOR)
-                .patient(ATHENA_REACT_ANDERSSON)
-                .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
-                .careUnit(ALFA_MEDICINCENTRUM)
-                .careProvider(ALFA_REGIONEN)
-                .build()
-        );
+        .certificateMetaData(CERTIFICATE_META_DATA);
   }
 
   public static final Certificate FK7810_CERTIFICATE = fk7810CertificateBuilder().build();
@@ -1052,16 +998,7 @@ public class TestDataCertificate {
                     .build()
             )
         )
-        .certificateMetaData(
-            CertificateMetaData.builder()
-                .issuer(AJLA_DOKTOR)
-                .creator(ALF_DOKTOR)
-                .patient(ATHENA_REACT_ANDERSSON)
-                .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
-                .careUnit(ALFA_MEDICINCENTRUM)
-                .careProvider(ALFA_REGIONEN)
-                .build()
-        );
+        .certificateMetaData(CERTIFICATE_META_DATA);
   }
 
   public static final Certificate FK7804_CERTIFICATE = fk7804CertificateBuilder().build();
@@ -1279,16 +1216,17 @@ public class TestDataCertificate {
                     .build()
             )
         )
-        .certificateMetaData(
-            CertificateMetaData.builder()
-                .issuer(AJLA_DOKTOR)
-                .creator(ALF_DOKTOR)
-                .patient(ATHENA_REACT_ANDERSSON)
-                .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
-                .careUnit(ALFA_MEDICINCENTRUM)
-                .careProvider(ALFA_REGIONEN)
-                .build()
-        );
+        .certificateMetaData(CERTIFICATE_META_DATA);
+  }
+
+  public static CertificateMetaDataBuilder metaDataBuilder() {
+    return CertificateMetaData.builder()
+        .issuer(AJLA_DOKTOR)
+        .creator(ALF_DOKTOR)
+        .patient(ATHENA_REACT_ANDERSSON)
+        .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
+        .careUnit(ALFA_MEDICINCENTRUM)
+        .careProvider(ALFA_REGIONEN);
   }
 
   public static final Certificate AG7804_CERTIFICATE = ag7804CertificateBuilder().build();

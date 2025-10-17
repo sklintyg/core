@@ -1,55 +1,46 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataPatientEntity.ATHENA_REACT_ANDERSSON_ENTITY;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataPatientEntity.athenaReactAnderssonEntityBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_DECEASED;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_FIRST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_LAST_NAME;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_MIDDLE_NAME;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_PROTECTED_PERSON;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_TEST_INDICATED;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.OptimisticLockException;
 import java.util.Optional;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientEntity;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientIdTypeEntity;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PersonEntityIdType;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.PatientEntityRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.PatientVersionEntityRepository;
 
 @ExtendWith(MockitoExtension.class)
 class PatientRepositoryTest {
 
   @Mock
   private PatientEntityRepository patientEntityRepository;
+  @Mock
+  private PatientVersionEntityRepository patientVersionEntityRepository;
+  @Mock
+  MetadataVersionRepository metadataVersionRepository;
+  @Mock
+  EntityManager entityManager;
   @InjectMocks
   private PatientRepository patientRepository;
 
-  private static final PatientEntity PATIENT_ENTITY = PatientEntity.builder()
-      .id(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH)
-      .protectedPerson(ATHENA_REACT_ANDERSSON_PROTECTED_PERSON.value())
-      .testIndicated(ATHENA_REACT_ANDERSSON_TEST_INDICATED.value())
-      .deceased(ATHENA_REACT_ANDERSSON_DECEASED.value())
-      .type(PatientIdTypeEntity.builder()
-          .type(PersonEntityIdType.PERSONAL_IDENTITY_NUMBER.name())
-          .key(PersonEntityIdType.PERSONAL_IDENTITY_NUMBER.getKey())
-          .build())
-      .firstName(ATHENA_REACT_ANDERSSON_FIRST_NAME)
-      .middleName(ATHENA_REACT_ANDERSSON_MIDDLE_NAME)
-      .lastName(ATHENA_REACT_ANDERSSON_LAST_NAME)
-      .build();
 
   @Test
   void shallReturnEntityFromRepositoryIfExists() {
-    doReturn(Optional.of(PATIENT_ENTITY))
+    doReturn(Optional.of(ATHENA_REACT_ANDERSSON_ENTITY))
         .when(patientEntityRepository).findById(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH);
-    assertEquals(PATIENT_ENTITY,
-        patientRepository.patient(ATHENA_REACT_ANDERSSON)
+    assertEquals(ATHENA_REACT_ANDERSSON_ENTITY, patientRepository.patient(ATHENA_REACT_ANDERSSON)
     );
   }
 
@@ -57,11 +48,31 @@ class PatientRepositoryTest {
   void shallReturnMappedEntityIfEntityDontExistInRepository() {
     doReturn(Optional.empty())
         .when(patientEntityRepository).findById(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH);
-    doReturn(PATIENT_ENTITY)
-        .when(patientEntityRepository).save(PATIENT_ENTITY);
+    doReturn(ATHENA_REACT_ANDERSSON_ENTITY)
+        .when(patientEntityRepository).save(ATHENA_REACT_ANDERSSON_ENTITY);
 
-    assertEquals(PATIENT_ENTITY,
+    assertEquals(ATHENA_REACT_ANDERSSON_ENTITY,
         patientRepository.patient(ATHENA_REACT_ANDERSSON)
     );
+  }
+
+  @Nested
+  class UpdateEntitiesTest {
+
+    @Test
+    void shallReturnUpdatedEntityIfOptimisticLockIsThrown() {
+
+      final var updatedAthena = athenaReactAnderssonEntityBuilder()
+          .middleName("test")
+          .build();
+
+      doReturn(Optional.of(updatedAthena)).when(patientEntityRepository).findById(
+          ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH);
+      doThrow(OptimisticLockException.class).when(metadataVersionRepository)
+          .savePatientVersion(updatedAthena, ATHENA_REACT_ANDERSSON_ENTITY);
+
+      assertThrows(OptimisticLockException.class,
+          () -> patientRepository.patient(ATHENA_REACT_ANDERSSON));
+    }
   }
 }

@@ -314,4 +314,10 @@ public class PlaceholderCertificate implements Certificate {
         "Cannot get candidate for update for a placeholder certificate"
     );
   }
+
+  @Override
+  public CertificateMetaData getMetadataForPrint() {
+    throw new IllegalStateException(
+        "Cannot get metadata for print for a placeholder certificate");
+  }
 }

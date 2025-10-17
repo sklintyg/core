@@ -383,8 +383,12 @@ class XmlGeneratorCertificateV4Test {
 
   @Test
   void shouldNotIncludeSigneringsTidpunktIfSignedIsNull() {
+    final var unsignedCertificate = fk7210CertificateBuilder()
+        .signed(null)
+        .build();
+
     final var signeringstidpunkt = unmarshal(
-        xmlGeneratorCertificateV4.generate(FK7210_CERTIFICATE, true)
+        xmlGeneratorCertificateV4.generate(unsignedCertificate, true)
     ).getIntyg().getSigneringstidpunkt();
 
     assertNull(signeringstidpunkt);
@@ -392,8 +396,12 @@ class XmlGeneratorCertificateV4Test {
 
   @Test
   void shouldNotIncludeSkickatTidpunktIfSignedIsNull() {
+    final var unsignedCertificate = fk7210CertificateBuilder()
+        .signed(null)
+        .build();
+
     final var skickatTidpunkt = unmarshal(
-        xmlGeneratorCertificateV4.generate(FK7210_CERTIFICATE, true)
+        xmlGeneratorCertificateV4.generate(unsignedCertificate, true)
     ).getIntyg().getSkickatTidpunkt();
 
     assertNull(skickatTidpunkt);

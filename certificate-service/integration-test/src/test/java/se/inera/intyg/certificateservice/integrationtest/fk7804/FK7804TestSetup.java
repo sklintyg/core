@@ -13,8 +13,8 @@ public class FK7804TestSetup {
 
   public static final String TYPE = "FK7804 - ";
   private static final String CODE = "LISJP";
-  private static final String CERTIFICATE_TYPE = "fk7804";
-  private static final String ACTIVE_CERTIFICATE_TYPE_VERSION = "2.0";
+  public static final String CERTIFICATE_TYPE = "fk7804";
+  public static final String ACTIVE_CERTIFICATE_TYPE_VERSION = "2.0";
   private static final String RECIPIENT = "FKASSA";
   private static final String VALUE = "Svarstext för medicinsk behandling.";
 

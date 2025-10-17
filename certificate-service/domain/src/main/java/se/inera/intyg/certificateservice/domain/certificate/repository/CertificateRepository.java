@@ -1,9 +1,11 @@
 package se.inera.intyg.certificateservice.domain.certificate.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateExportPage;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.PlaceholderCertificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PlaceholderCertificateRequest;
@@ -37,4 +39,7 @@ public interface CertificateRepository {
   PlaceholderCertificate getPlaceholderById(CertificateId certificateId);
 
   PlaceholderCertificate save(PlaceholderCertificate placeholderCertificate);
+
+  CertificateMetaData getMetadataFromSignInstance(CertificateMetaData certificateMetaData,
+      LocalDateTime signed);
 }

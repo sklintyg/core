@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_META_DATA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
 
 import java.time.LocalDateTime;
@@ -44,7 +45,7 @@ class PdfSignatureValueGeneratorTest {
     final var certificate = getCertificate();
     final var expected = PdfField.builder()
         .id("form1[0].#subform[0].flt_txtNamnfortydligande[0]")
-        .value(certificate.certificateMetaData().issuer().name().fullName())
+        .value(certificate.getMetadataForPrint().issuer().name().fullName())
         .build();
 
     final var result = pdfSignatureValueGenerator.generate(certificate);
@@ -56,7 +57,7 @@ class PdfSignatureValueGeneratorTest {
     final var certificate = getCertificate();
     final var expected = PdfField.builder()
         .id("form1[0].#subform[0].flt_txtLakarensHSA-ID[0]")
-        .value(certificate.certificateMetaData().issuer().hsaId().id())
+        .value(certificate.getMetadataForPrint().issuer().hsaId().id())
         .build();
 
     final var result = pdfSignatureValueGenerator.generate(certificate);
@@ -102,6 +103,8 @@ class PdfSignatureValueGeneratorTest {
   private static Certificate getCertificate() {
     return fk7210CertificateBuilder()
         .signed(SIGNED)
+        .certificateMetaData(null)
+        .metaDataFromSignInstance(CERTIFICATE_META_DATA)
         .build();
   }
 }
