@@ -29,8 +29,6 @@ public class TestDataStaffEntity {
   }
 
   public static final StaffEntity AJLA_DOKTOR_ENTITY = ajlaDoctorEntityBuilder().build();
-
-
   public static final StaffEntity ALF_DOKTOR_ENTITY = alfDoktorEntityBuilder().build();
 
   public static StaffEntity.StaffEntityBuilder ajlaDoctorEntityBuilder() {
@@ -72,8 +70,7 @@ public class TestDataStaffEntity {
                 .toList()
         );
   }
-
-
+  
   public static StaffEntity.StaffEntityBuilder alfDoktorEntityBuilder() {
     return StaffEntity.builder()
         .hsaId(ALF_DOKTOR_HSA_ID)

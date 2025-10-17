@@ -58,7 +58,6 @@ import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 public class TestDataStaff {
 
   public static final Staff AJLA_DOKTOR = ajlaDoctorBuilder().build();
-  public static final Staff UPPDATERAD_AJLA_DOKTOR = updatedAjlaDoctorBuilder().build();
   public static final Staff ALF_DOKTOR = alfDoktorBuilder().build();
   public static final Staff ALVA_VARDADMINISTRATOR = alvaVardadmininstratorBuilder().build();
   public static final Staff ANNA_SJUKSKOTERSKA = annaSjukskoterskaBuilder().build();
@@ -72,24 +71,6 @@ public class TestDataStaff {
                 .firstName(AJLA_DOCTOR_FIRST_NAME)
                 .middleName(AJLA_DOCTOR_MIDDLE_NAME)
                 .lastName(AJLA_DOCTOR_LAST_NAME)
-                .build()
-        )
-        .paTitles(AJLA_DOCTOR_PA_TITLES)
-        .specialities(AJLA_DOCTOR_SPECIALITIES)
-        .blocked(AJLA_DOCTOR_BLOCKED)
-        .allowCopy(AJLA_DOCTOR_ALLOW_COPY)
-        .role(AJLA_DOCTOR_ROLE)
-        .healthCareProfessionalLicence(AJLA_DOCTOR_HEALTH_CARE_PROFESSIONAL_LICENCES);
-  }
-
-  public static Staff.StaffBuilder updatedAjlaDoctorBuilder() {
-    return Staff.builder()
-        .hsaId(new HsaId(AJLA_DOCTOR_HSA_ID))
-        .name(
-            Name.builder()
-                .firstName(AJLA_DOCTOR_FIRST_NAME)
-                .middleName(AJLA_DOCTOR_MIDDLE_NAME)
-                .lastName("Doktorsson")
                 .build()
         )
         .paTitles(AJLA_DOCTOR_PA_TITLES)

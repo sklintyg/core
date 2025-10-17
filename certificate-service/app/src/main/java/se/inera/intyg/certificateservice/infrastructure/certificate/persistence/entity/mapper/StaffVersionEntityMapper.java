@@ -57,27 +57,27 @@ public class StaffVersionEntityMapper {
   }
 
   private static List<PaTitleEmbeddable> copyPaTitles(StaffVersionEntity existing) {
-		if (existing.getPaTitles() == null) {
-			return List.of();
-		}
+    if (existing.getPaTitles() == null) {
+      return List.of();
+    }
     return existing.getPaTitles().stream()
         .map(pt -> new PaTitleEmbeddable(pt.getCode(), pt.getDescription()))
         .toList();
   }
 
   private static List<SpecialityVersionEmbeddable> copySpecialities(StaffEntity existing) {
-		if (existing.getSpecialities() == null) {
-			return List.of();
-		}
+    if (existing.getSpecialities() == null) {
+      return List.of();
+    }
     return existing.getSpecialities().stream()
         .map(sp -> new SpecialityVersionEmbeddable(sp.getSpeciality()))
         .toList();
   }
 
   private static List<SpecialityEmbeddable> copySpecialities(StaffVersionEntity existing) {
-		if (existing.getSpecialities() == null) {
-			return List.of();
-		}
+    if (existing.getSpecialities() == null) {
+      return List.of();
+    }
     return existing.getSpecialities().stream()
         .map(sp -> new SpecialityEmbeddable(sp.getSpeciality()))
         .toList();
@@ -86,9 +86,9 @@ public class StaffVersionEntityMapper {
 
   private static List<HealthcareProfessionalLicenceVersionEmbeddable> copyLicences(
       StaffEntity existing) {
-		if (existing.getHealthcareProfessionalLicences() == null) {
-			return List.of();
-		}
+    if (existing.getHealthcareProfessionalLicences() == null) {
+      return List.of();
+    }
     return existing.getHealthcareProfessionalLicences().stream()
         .map(l -> new HealthcareProfessionalLicenceVersionEmbeddable(
             l.getHealthcareProfessionalLicence()))
@@ -97,9 +97,9 @@ public class StaffVersionEntityMapper {
 
   private static List<HealthcareProfessionalLicenceEmbeddable> copyLicences(
       StaffVersionEntity existing) {
-		if (existing.getHealthcareProfessionalLicences() == null) {
-			return List.of();
-		}
+    if (existing.getHealthcareProfessionalLicences() == null) {
+      return List.of();
+    }
     return existing.getHealthcareProfessionalLicences().stream()
         .map(l -> new HealthcareProfessionalLicenceEmbeddable(l.getHealthcareProfessionalLicence()))
         .toList();
