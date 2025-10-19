@@ -13,7 +13,6 @@ import static se.inera.intyg.certificateservice.infrastructure.certificate.persi
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffEntitySpecification.equalsIssuedByStaff;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StatusEntitySpecification.containsStatus;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitEntitySpecification.equalsCareUnit;
-import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitEntitySpecification.equalsIssuedOnUnit;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitEntitySpecification.issuedOnUnitIdIn;
 
 import org.springframework.data.jpa.domain.Specification;
@@ -50,9 +49,9 @@ public class CertificateEntitySpecificationFactory {
       );
     }
 
-    if (certificatesRequest.issuedUnitId() != null) {
+    if (certificatesRequest.issuedUnitIds() != null) {
       specification = specification.and(
-          equalsIssuedOnUnit(certificatesRequest.issuedUnitId())
+          issuedOnUnitIdIn(certificatesRequest.issuedUnitIds())
       );
     }
 
@@ -99,13 +98,6 @@ public class CertificateEntitySpecificationFactory {
     if (certificatesRequest.signedTo() != null) {
       specification = specification.and(
           signedEqualsAndLesserThan(certificatesRequest.signedTo())
-      );
-    }
-
-    if (certificatesRequest.issuedByUnitIds() != null && !certificatesRequest.issuedByUnitIds()
-        .isEmpty()) {
-      specification = specification.and(
-          issuedOnUnitIdIn(certificatesRequest.issuedByUnitIds())
       );
     }
 

@@ -62,6 +62,7 @@ public class CertificatesRequestFactory {
                 .map(CertificateType::new)
                 .toList()
         )
+        .issuedUnitIds(request.getIssuedByUnitIds().stream().map(HsaId::new).toList())
         .build();
   }
 

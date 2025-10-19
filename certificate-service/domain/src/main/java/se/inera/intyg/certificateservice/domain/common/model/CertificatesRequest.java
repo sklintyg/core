@@ -22,21 +22,20 @@ public class CertificatesRequest {
   List<CertificateType> types;
   HsaId issuedByStaffId;
   @With
-  HsaId issuedUnitId;
+  List<HsaId> issuedUnitIds;
   @With
   HsaId careUnitId;
   PersonId personId;
   Boolean validCertificates;
   LocalDate signedFrom;
   LocalDate signedTo;
-  List<HsaId> issuedByUnitIds;
 
   public CertificatesRequest apply(ActionEvaluation actionEvaluation) {
-    if (issuedUnitId() == null && actionEvaluation.isIssuingUnitSubUnit()) {
-      return this.withIssuedUnitId(actionEvaluation.subUnit().hsaId());
+    if (issuedUnitIds() == null && actionEvaluation.isIssuingUnitSubUnit()) {
+      return this.withIssuedUnitIds(List.of(actionEvaluation.subUnit().hsaId()));
     }
 
-    if (issuedUnitId() == null && actionEvaluation.isIssuingUnitCareUnit()) {
+    if (issuedUnitIds() == null && actionEvaluation.isIssuingUnitCareUnit()) {
       return this.withCareUnitId(actionEvaluation.careUnit().hsaId());
     }
 

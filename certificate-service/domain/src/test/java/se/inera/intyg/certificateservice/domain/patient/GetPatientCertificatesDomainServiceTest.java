@@ -49,7 +49,7 @@ class GetPatientCertificatesDomainServiceTest {
         .careProvider(ALFA_REGIONEN);
 
     certificatesRequestBuilder = CertificatesRequest.builder()
-        .issuedUnitId(ALFA_ALLERGIMOTTAGNINGEN.hsaId())
+        .issuedUnitIds(List.of(ALFA_ALLERGIMOTTAGNINGEN.hsaId()))
         .personId(ATHENA_REACT_ANDERSSON.id());
   }
 
@@ -70,7 +70,7 @@ class GetPatientCertificatesDomainServiceTest {
         .build();
     final var certificatesRequest = certificatesRequestBuilder
         .careUnitId(ALFA_MEDICINSKT_CENTRUM.hsaId())
-        .issuedUnitId(null)
+        .issuedUnitIds(null)
         .build();
 
     getPatientCertificatesDomainService.get(actionEvaluation);

@@ -71,20 +71,20 @@ class CertificateEntitySpecificationFactoryTest {
     @Test
     void shallIncludeIssuedUnitId() {
       final var certificatesRequest = CertificatesRequest.builder()
-          .issuedUnitId(ALFA_ALLERGIMOTTAGNINGEN.hsaId())
+          .issuedUnitIds(List.of(ALFA_ALLERGIMOTTAGNINGEN.hsaId()))
           .build();
       try (
           MockedStatic<UnitEntitySpecification> specification = mockStatic(
               UnitEntitySpecification.class)
       ) {
         specification.when(
-                () -> UnitEntitySpecification.equalsIssuedOnUnit(certificatesRequest.issuedUnitId()))
+                () -> UnitEntitySpecification.issuedOnUnitIdIn(certificatesRequest.issuedUnitIds()))
             .thenReturn(mock(Specification.class));
 
         assertNotNull(certificateEntitySpecificationFactory.create(certificatesRequest));
 
         specification.verify(
-            () -> UnitEntitySpecification.equalsIssuedOnUnit(certificatesRequest.issuedUnitId())
+            () -> UnitEntitySpecification.issuedOnUnitIdIn(certificatesRequest.issuedUnitIds())
         );
       }
     }

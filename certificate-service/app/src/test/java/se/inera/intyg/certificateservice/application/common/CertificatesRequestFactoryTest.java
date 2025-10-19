@@ -86,7 +86,7 @@ class CertificatesRequestFactoryTest {
       final var queryCriteriaDTO = CertificatesQueryCriteriaDTO.builder()
           .build();
 
-      assertNull(CertificatesRequestFactory.create(queryCriteriaDTO).issuedUnitId());
+      assertNull(CertificatesRequestFactory.create(queryCriteriaDTO).issuedUnitIds());
     }
 
     @Test
