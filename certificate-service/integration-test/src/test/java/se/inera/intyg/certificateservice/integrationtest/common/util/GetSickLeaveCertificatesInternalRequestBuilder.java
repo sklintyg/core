@@ -14,7 +14,7 @@ public class GetSickLeaveCertificatesInternalRequestBuilder {
       .id(ATHENA_REACT_ANDERSSON_PERSON_ID_DTO.getId())
       .type(ATHENA_REACT_ANDERSSON_PERSON_ID_DTO.getType().name())
       .build();
-  private List<String> certificateTypes = List.of("ag7804", "ag1-14");
+  private List<String> certificateTypes = List.of("ag7804", "ag114");
   private LocalDate signedFrom = LocalDate.now().minusYears(1);
   private LocalDate signedTo = LocalDate.now().plusYears(1);
   private List<String> issuedByUnitIds = List.of(ALFA_MEDICINCENTRUM_DTO.getId());
