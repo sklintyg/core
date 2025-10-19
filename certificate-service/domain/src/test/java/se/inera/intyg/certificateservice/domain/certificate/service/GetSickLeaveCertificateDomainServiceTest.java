@@ -44,7 +44,8 @@ class GetSickLeaveCertificateDomainServiceTest {
 
   @Test
   void shouldReturnOptionalOfSickLeaveCertificateBuiltFromSickLeaveProvider() {
-    final var expectedSickLeaveCertificate = SickLeaveCertificate.builder().build();
+    final var expectedSickLeaveCertificate = SickLeaveCertificate.builder()
+        .partOfSickLeaveChain(true).build();
     final var sickLeaveProvider = mock(SickLeaveProvider.class);
     final var certificate = MedicalCertificate.builder()
         .certificateModel(
