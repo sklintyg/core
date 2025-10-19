@@ -36,6 +36,7 @@ public class AG114SickLeaveProvider implements SickLeaveProvider {
 
     return Optional.of(
         SickLeaveCertificate.builder()
+            .partOfSickLeaveChain(false)
             .id(certificate.id())
             .careGiverId(metadata.careProvider().hsaId())
             .careUnitId(metadata.careUnit().hsaId())
@@ -57,7 +58,7 @@ public class AG114SickLeaveProvider implements SickLeaveProvider {
             .workCapacities(List.of(workCapacityDateRange))
             .employment(List.of(
                 ElementValueCode.builder()
-                    .code(NUVARANDE_ARBETE.code())
+                    .code(NUVARANDE_ARBETE.displayName())
                     .build()
             ))
             .build()

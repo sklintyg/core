@@ -62,4 +62,24 @@ class GetSickLeaveCertificateDomainServiceTest {
     final var result = getSickLeaveCertificateDomainService.get(CERTIFICATE_ID);
     assertEquals(Optional.of(expectedSickLeaveCertificate), result);
   }
+
+  @Test
+  void shouldReturnOptionalEmptyIfSickLeaveIsNotPartOfChain() {
+    final var sickLeaveProvider = mock(SickLeaveProvider.class);
+    final var certificate = MedicalCertificate.builder()
+        .certificateModel(
+            CertificateModel.builder()
+                .sickLeaveProvider(sickLeaveProvider)
+                .build()
+        )
+        .build();
+    final var sickLeave = SickLeaveCertificate.builder().partOfSickLeaveChain(false).build();
+
+    when(certificateRepository.getById(CERTIFICATE_ID))
+        .thenReturn(certificate);
+    when(sickLeaveProvider.build(certificate))
+        .thenReturn(Optional.of(sickLeave));
+    final var result = getSickLeaveCertificateDomainService.get(CERTIFICATE_ID);
+    assertTrue(result.isEmpty());
+  }
 }

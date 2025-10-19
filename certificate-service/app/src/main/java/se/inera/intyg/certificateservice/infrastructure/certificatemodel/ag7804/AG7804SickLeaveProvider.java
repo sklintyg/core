@@ -10,11 +10,13 @@ import java.util.Optional;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCodeList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
 import se.inera.intyg.certificateservice.domain.certificate.model.SickLeaveCertificate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SickLeaveProvider;
 
 public class AG7804SickLeaveProvider implements SickLeaveProvider {
@@ -43,6 +45,7 @@ public class AG7804SickLeaveProvider implements SickLeaveProvider {
 
     return Optional.of(
         SickLeaveCertificate.builder()
+            .partOfSickLeaveChain(false)
             .id(certificate.id())
             .careGiverId(metadata.careProvider().hsaId())
             .careUnitId(metadata.careUnit().hsaId())
@@ -72,18 +75,48 @@ public class AG7804SickLeaveProvider implements SickLeaveProvider {
                     .map(ElementValueDateRangeList::dateRangeList)
                     .orElseThrow()
             )
-            .employment(
-                certificate.elementData().stream()
-                    .filter(
-                        elementData -> elementData.id().equals(QUESTION_SYSSELSATTNING_ID))
-                    .findFirst()
-                    .map(ElementData::value)
-                    .map(ElementValueCodeList.class::cast)
-                    .map(ElementValueCodeList::list)
-                    .orElseThrow()
-            )
+            .employment(getEmployment(certificate))
             .build()
     );
+  }
+
+  private static List<ElementValueCode> getEmployment(Certificate certificate) {
+    final var element = certificate.elementData().stream()
+        .filter(
+            elementData -> elementData.id().equals(QUESTION_SYSSELSATTNING_ID))
+        .findFirst();
+
+    if (element.isEmpty()) {
+      throw new IllegalStateException("Employment element is missing when creating sick leave");
+    }
+
+    if (!(element.get().value() instanceof ElementValueCodeList codeList)) {
+      throw new IllegalStateException(
+          "Employment element has wrong type when creating sick leave. Expected ElementValueCodeList.");
+    }
+
+    final var configuration = (ElementConfigurationCheckboxMultipleCode)
+        certificate.certificateModel().elementSpecification(element.get().id()).configuration();
+
+    return codeList.list()
+        .stream()
+        .map(code -> getCodeFromConfig(code, configuration))
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .toList();
+  }
+
+  private static Optional<ElementValueCode> getCodeFromConfig(ElementValueCode code,
+      ElementConfigurationCheckboxMultipleCode configuration) {
+    final var configCode = configuration.list().stream()
+        .filter(config -> code.code().equals(config.code().code())).findFirst();
+
+    if (configCode.isEmpty()) {
+      throw new IllegalStateException(
+          "Employment code not found in configuration when creating sick leave");
+    }
+
+    return Optional.of(code.withCode(configCode.get().label()));
   }
 
   private static List<ElementValueDiagnosis> getElementValueDiagnoses(Certificate certificate) {

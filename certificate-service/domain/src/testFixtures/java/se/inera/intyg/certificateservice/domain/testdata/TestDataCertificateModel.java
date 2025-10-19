@@ -36,6 +36,12 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.Certifi
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateMessageType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleCode;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.model.Subject;
 
@@ -230,6 +236,24 @@ public class TestDataCertificateModel {
         .type(TestDataCertificateModelConstants.AG7804_CODE_TYPE)
         .availableForCitizen(true)
         .ableToCreateDraftForModel(FK7804_CERTIFICATE_MODEL_ID)
+        .elementSpecifications(
+            List.of(
+                ElementSpecification.builder()
+                    .id(new ElementId("28"))
+                    .configuration(
+                        ElementConfigurationCheckboxMultipleCode.builder()
+                            .list(
+                                List.of(
+                                    new ElementConfigurationCode(new FieldId("NUVARANDE_ARBETE"),
+                                        "Nuvarande arbete",
+                                        new Code("NUVARANDE_ARBETE", "CS", "Nuvarande arbete"))
+                                )
+                            )
+                            .build()
+                    )
+                    .build()
+            )
+        )
         .certificateActionFactory(new CertificateActionFactory(null));
   }
 

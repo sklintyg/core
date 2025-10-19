@@ -145,7 +145,7 @@ class AG114SickLeaveProviderTest {
   void shouldMapEmployment() {
     final var expectedEmployment = List.of(
         ElementValueCode.builder()
-            .code("NUVARANDE_ARBETE")
+            .code("Nuvarande arbete")
             .build()
     );
 
