@@ -5,13 +5,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.application.certificate.dto.SickLeaveCertificateItemWorkCapacityDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.SickLeaveCertificateWorkCapacityDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
@@ -55,7 +57,7 @@ class SickLeaveConverterTest {
       .revokedBy(Staff.builder().name(SIGNING_DOCTOR_NAME).hsaId(CARE_UNIT_ID).build())
       .revokedAt(LocalDateTime.of(2050, 1, 1, 1, 1, 0)).build();
   private static final List<DateRange> WORK_CAPACITIES = List.of(
-      DateRange.builder().dateRangeId(new FieldId("25")).from(LocalDate.of(2023, 1, 1))
+      DateRange.builder().dateRangeId(new FieldId("10")).from(LocalDate.of(2023, 1, 1))
           .to(LocalDate.of(2023, 1, 10)).build(),
       DateRange.builder().dateRangeId(new FieldId("HELT_NEDSATT")).from(LocalDate.of(2023, 1, 10))
           .to(LocalDate.of(2023, 1, 15)).build()
@@ -91,176 +93,323 @@ class SickLeaveConverterTest {
         .build();
   }
 
-  @Test
-  void shouldReturnNullIfInputIsNull() {
-    assertNull(converter.convert(null));
+  @Nested
+  class SickLeaveCertificateDTOTest {
+
+    @Test
+    void shouldReturnNullIfInputIsNull() {
+      assertNull(converter.toSickLeaveCertificate(null));
+    }
+
+    @Test
+    void shallConvertId() {
+      final var dto = converter.toSickLeaveCertificate(sickLeaveCertificate);
+      assertNotNull(dto);
+      assertEquals("CERT_ID", dto.getId());
+    }
+
+    @Test
+    void shallConvertType() {
+      final var dto = converter.toSickLeaveCertificate(sickLeaveCertificate);
+      assertEquals("type", dto.getType());
+    }
+
+    @Test
+    void shallConvertSigningDoctorId() {
+      final var dto = converter.toSickLeaveCertificate(sickLeaveCertificate);
+      assertEquals("DOCTOR_ID", dto.getSigningDoctorId());
+    }
+
+    @Test
+    void shallConvertSigningDoctorName() {
+      final var dto = converter.toSickLeaveCertificate(sickLeaveCertificate);
+      assertEquals("FIRST_NAME MIDDLE_NAME LAST_NAME", dto.getSigningDoctorName());
+    }
+
+    @Test
+    void shallConvertSigningDateTime() {
+      final var dto = converter.toSickLeaveCertificate(sickLeaveCertificate);
+      assertEquals(LocalDateTime.of(2023, 1, 1, 10, 0), dto.getSigningDateTime());
+    }
+
+    @Test
+    void shallConvertCareUnitAndCareGiverFields() {
+
+      final var dto = converter.toSickLeaveCertificate(sickLeaveCertificate);
+
+      assertEquals("CU_ID", dto.getCareUnitId());
+      assertEquals("CARE_UNIT_NAME", dto.getCareUnitName());
+      assertEquals("CG_ID", dto.getCareGiverId());
+    }
+
+    @Test
+    void shallConvertPatientFields() {
+
+      final var dto = converter.toSickLeaveCertificate(sickLeaveCertificate);
+
+      assertEquals("19121212-1212", dto.getCivicRegistrationNumber());
+      assertEquals("PATIENT_NAME PATIENT_MIDDLE_NAME PATIENT_NAME", dto.getPatientName());
+    }
+
+    @Test
+    void shallConvertDiagnoseAndBiDiagnoseFields() {
+
+      final var dto = converter.toSickLeaveCertificate(sickLeaveCertificate);
+
+      assertAll(
+          () -> assertEquals("D1", dto.getDiagnoseCode()),
+          () -> assertEquals("B1", dto.getBiDiagnoseCode1()),
+          () -> assertEquals("B2", dto.getBiDiagnoseCode2()));
+
+    }
+
+    @Test
+    void shallConvertEmploymentField() {
+
+      final var dto = converter.toSickLeaveCertificate(sickLeaveCertificate);
+
+      assertEquals("EMP1,EMP2", dto.getEmployment());
+    }
+
+    @Test
+    void shallConvertTestCertificateFields() {
+
+      final var dto = converter.toSickLeaveCertificate(sickLeaveCertificate);
+
+      assertFalse(dto.isTestCertificate());
+    }
+
+    @Test
+    void shallConvertWorkCapacityListSize() {
+
+      final var dto = converter.toSickLeaveCertificate(sickLeaveCertificate);
+
+      assertNotNull(dto.getSjukfallCertificateWorkCapacity());
+      assertEquals(2, dto.getSjukfallCertificateWorkCapacity().size());
+    }
+
+    @Test
+    void shallConvertFirstWorkCapacity() {
+
+      final var dto = converter.toSickLeaveCertificate(sickLeaveCertificate);
+
+      final var wc1 = dto.getSjukfallCertificateWorkCapacity().getFirst();
+      assertEquals(10, wc1.getCapacityPercentage());
+      assertEquals("2023-01-01", wc1.getFromDate());
+      assertEquals("2023-01-10", wc1.getToDate());
+    }
+
+    @Test
+    void shallConvertSecondWorkCapacity() {
+
+      final var dto = converter.toSickLeaveCertificate(sickLeaveCertificate);
+
+      final var wc2 = dto.getSjukfallCertificateWorkCapacity().get(1);
+
+      assertAll(
+          () -> assertEquals(100, wc2.getCapacityPercentage()),
+          () -> assertEquals("2023-01-10", wc2.getFromDate()),
+          () -> assertEquals("2023-01-15", wc2.getToDate()));
+    }
+
+    @Test
+    void shouldHandleNullBiDiagnoseCodes() {
+
+      sickLeaveCertificate = SickLeaveCertificate.builder()
+          .id(CERTIFICATE_ID)
+          .type(TYPE)
+          .signingDoctorId(SIGNING_DOCTOR_ID)
+          .signingDoctorName(SIGNING_DOCTOR_NAME)
+          .signingDateTime(SIGNING_DATE_TIME)
+          .careUnitId(CARE_UNIT_ID)
+          .careUnitName(CARE_UNIT_NAME)
+          .careGiverId(CARE_GIVER_ID)
+          .civicRegistrationNumber(CIVIC_REGISTRATION_NUMBER)
+          .patientName(PATIENT_NAME)
+          .diagnoseCode(DIAGNOSIS_CODE)
+          .biDiagnoseCode1(null)
+          .biDiagnoseCode2(null)
+          .employment(EMPLOYMENT)
+          .deleted(DELETED)
+          .workCapacities(WORK_CAPACITIES)
+          .testCertificate(TEST_CERTIFICATE)
+          .build();
+
+      final var dto = converter.toSickLeaveCertificate(sickLeaveCertificate);
+
+      assertNull(dto.getBiDiagnoseCode1());
+      assertNull(dto.getBiDiagnoseCode2());
+    }
+
+    @Test
+    void shallConvertDeleted() {
+
+      final var dto = converter.toSickLeaveCertificate(sickLeaveCertificate);
+
+      assertTrue(dto.getDeleted());
+    }
+
+    @Test
+    void shouldConvertWorkCapacityEnum() {
+      final var expected = List.of(
+          SickLeaveCertificateWorkCapacityDTO.builder()
+              .capacityPercentage(10)
+              .fromDate("2023-01-01")
+              .toDate("2023-01-10")
+              .build(),
+          SickLeaveCertificateWorkCapacityDTO.builder()
+              .capacityPercentage(100)
+              .fromDate("2023-01-10")
+              .toDate("2023-01-15")
+              .build()
+      );
+
+      final var dto = converter.toSickLeaveCertificate(sickLeaveCertificate);
+
+      assertEquals(expected, dto.getSjukfallCertificateWorkCapacity());
+    }
   }
 
-  @Test
-  void shallConvertId() {
-    final var dto = converter.convert(sickLeaveCertificate);
-    assertNotNull(dto);
-    assertEquals("CERT_ID", dto.getId());
-  }
+  @Nested
+  class SickLeaveCertificateItemDTOTest {
 
-  @Test
-  void shallConvertType() {
-    final var dto = converter.convert(sickLeaveCertificate);
-    assertEquals("type", dto.getType());
-  }
+    @Test
+    void shouldReturnNullIfInputIsNull() {
+      assertNull(converter.toSickLeaveCertificateItem(null));
+    }
 
-  @Test
-  void shallConvertSigningDoctorId() {
-    final var dto = converter.convert(sickLeaveCertificate);
-    assertEquals("DOCTOR_ID", dto.getSigningDoctorId());
-  }
+    @Test
+    void shallConvertId() {
+      final var dto = converter.toSickLeaveCertificateItem(sickLeaveCertificate);
+      assertNotNull(dto);
+      assertEquals("CERT_ID", dto.getCertificateId());
+    }
 
-  @Test
-  void shallConvertSigningDoctorName() {
-    final var dto = converter.convert(sickLeaveCertificate);
-    assertEquals("FIRST_NAME MIDDLE_NAME LAST_NAME", dto.getSigningDoctorName());
-  }
+    @Test
+    void shallConvertType() {
+      final var dto = converter.toSickLeaveCertificateItem(sickLeaveCertificate);
+      assertEquals("type", dto.getCertificateType());
+    }
 
-  @Test
-  void shallConvertSigningDateTime() {
-    final var dto = converter.convert(sickLeaveCertificate);
-    assertEquals(LocalDateTime.of(2023, 1, 1, 10, 0), dto.getSigningDateTime());
-  }
+    @Test
+    void shallConvertSigningDoctorId() {
+      final var dto = converter.toSickLeaveCertificateItem(sickLeaveCertificate);
+      assertEquals("DOCTOR_ID", dto.getPersonalHsaId());
+    }
 
-  @Test
-  void shallConvertCareUnitAndCareGiverFields() {
+    @Test
+    void shallConvertSigningDoctorName() {
+      final var dto = converter.toSickLeaveCertificateItem(sickLeaveCertificate);
+      assertEquals("FIRST_NAME MIDDLE_NAME LAST_NAME", dto.getPersonalFullName());
+    }
 
-    final var dto = converter.convert(sickLeaveCertificate);
+    @Test
+    void shallConvertSigningDateTime() {
+      final var dto = converter.toSickLeaveCertificateItem(sickLeaveCertificate);
+      assertEquals(LocalDateTime.of(2023, 1, 1, 10, 0), dto.getSigningDateTime());
+    }
 
-    assertEquals("CU_ID", dto.getCareUnitId());
-    assertEquals("CARE_UNIT_NAME", dto.getCareUnitName());
-    assertEquals("CG_ID", dto.getCareGiverId());
-  }
+    @Test
+    void shallConvertCareUnitAndCareGiverFields() {
 
-  @Test
-  void shallConvertPatientFields() {
+      final var dto = converter.toSickLeaveCertificateItem(sickLeaveCertificate);
 
-    final var dto = converter.convert(sickLeaveCertificate);
+      assertEquals("CU_ID", dto.getCareUnitId());
+      assertEquals("CARE_UNIT_NAME", dto.getCareUnitName());
+      assertEquals("CG_ID", dto.getCareProviderId());
+    }
 
-    assertEquals("19121212-1212", dto.getCivicRegistrationNumber());
-    assertEquals("PATIENT_NAME PATIENT_MIDDLE_NAME PATIENT_NAME", dto.getPatientName());
-  }
+    @Test
+    void shallConvertPatientFields() {
 
-  @Test
-  void shallConvertDiagnoseAndBiDiagnoseFields() {
+      final var dto = converter.toSickLeaveCertificateItem(sickLeaveCertificate);
 
-    final var dto = converter.convert(sickLeaveCertificate);
+      assertEquals("19121212-1212", dto.getPersonId());
+      assertEquals("PATIENT_NAME PATIENT_MIDDLE_NAME PATIENT_NAME", dto.getPatientFullName());
+    }
 
-    assertAll(
-        () -> assertEquals("D1", dto.getDiagnoseCode()),
-        () -> assertEquals("B1", dto.getBiDiagnoseCode1()),
-        () -> assertEquals("B2", dto.getBiDiagnoseCode2()));
+    @Test
+    void shallConvertDiagnoseAndBiDiagnoseFields() {
 
-  }
+      final var dto = converter.toSickLeaveCertificateItem(sickLeaveCertificate);
 
-  @Test
-  void shallConvertEmploymentField() {
+      assertAll(
+          () -> assertEquals("D1", dto.getDiagnoseCode()),
+          () -> assertEquals("B1", dto.getSecondaryDiagnoseCodes().getFirst()),
+          () -> assertEquals("B2", dto.getSecondaryDiagnoseCodes().get(1)));
 
-    final var dto = converter.convert(sickLeaveCertificate);
+    }
 
-    assertEquals("EMP1,EMP2", dto.getEmployment());
-  }
+    @Test
+    void shallConvertEmploymentField() {
 
-  @Test
-  void shallConvertTestCertificateFields() {
+      final var dto = converter.toSickLeaveCertificateItem(sickLeaveCertificate);
 
-    final var dto = converter.convert(sickLeaveCertificate);
+      assertEquals("EMP1,EMP2", dto.getOccupation());
+    }
 
-    assertFalse(dto.isTestCertificate());
-  }
+    @Test
+    void shallConvertTestCertificateFields() {
 
-  @Test
-  void shallConvertWorkCapacityListSize() {
+      final var dto = converter.toSickLeaveCertificateItem(sickLeaveCertificate);
 
-    final var dto = converter.convert(sickLeaveCertificate);
+      assertFalse(dto.isTestCertificate());
+    }
 
-    assertNotNull(dto.getSjukfallCertificateWorkCapacity());
-    assertEquals(2, dto.getSjukfallCertificateWorkCapacity().size());
-  }
+    @Test
+    void shouldHandleNullBiDiagnoseCodes() {
 
-  @Test
-  void shallConvertFirstWorkCapacity() {
+      sickLeaveCertificate = SickLeaveCertificate.builder()
+          .id(CERTIFICATE_ID)
+          .type(TYPE)
+          .signingDoctorId(SIGNING_DOCTOR_ID)
+          .signingDoctorName(SIGNING_DOCTOR_NAME)
+          .signingDateTime(SIGNING_DATE_TIME)
+          .careUnitId(CARE_UNIT_ID)
+          .careUnitName(CARE_UNIT_NAME)
+          .careGiverId(CARE_GIVER_ID)
+          .civicRegistrationNumber(CIVIC_REGISTRATION_NUMBER)
+          .patientName(PATIENT_NAME)
+          .diagnoseCode(DIAGNOSIS_CODE)
+          .biDiagnoseCode1(null)
+          .biDiagnoseCode2(null)
+          .employment(EMPLOYMENT)
+          .deleted(DELETED)
+          .workCapacities(WORK_CAPACITIES)
+          .testCertificate(TEST_CERTIFICATE)
+          .build();
 
-    final var dto = converter.convert(sickLeaveCertificate);
+      final var dto = converter.toSickLeaveCertificateItem(sickLeaveCertificate);
 
-    final var wc1 = dto.getSjukfallCertificateWorkCapacity().getFirst();
-    assertEquals(25, wc1.getCapacityPercentage());
-    assertEquals("2023-01-01", wc1.getFromDate());
-    assertEquals("2023-01-10", wc1.getToDate());
-  }
+      assertTrue(dto.getSecondaryDiagnoseCodes().isEmpty());
+    }
 
-  @Test
-  void shallConvertSecondWorkCapacity() {
+    @Test
+    void shallConvertDeleted() {
 
-    final var dto = converter.convert(sickLeaveCertificate);
+      final var dto = converter.toSickLeaveCertificateItem(sickLeaveCertificate);
 
-    final var wc2 = dto.getSjukfallCertificateWorkCapacity().get(1);
+      assertTrue(dto.isDeleted());
+    }
 
-    assertAll(
-        () -> assertEquals(100, wc2.getCapacityPercentage()),
-        () -> assertEquals("2023-01-10", wc2.getFromDate()),
-        () -> assertEquals("2023-01-15", wc2.getToDate()));
-  }
+    @Test
+    void shouldConvertWorkCapacity() {
+      final var expected = List.of(
+          SickLeaveCertificateItemWorkCapacityDTO.builder()
+              .reduction(10)
+              .startDate(LocalDate.of(2023, 1, 1))
+              .endDate(LocalDate.of(2023, 1, 10))
+              .build(),
+          SickLeaveCertificateItemWorkCapacityDTO.builder()
+              .reduction(100)
+              .startDate(LocalDate.of(2023, 1, 10))
+              .endDate(LocalDate.of(2023, 1, 15))
+              .build()
+      );
 
-  @Test
-  void shouldHandleNullBiDiagnoseCodes() {
+      final var dto = converter.toSickLeaveCertificateItem(sickLeaveCertificate);
 
-    sickLeaveCertificate = SickLeaveCertificate.builder()
-        .id(CERTIFICATE_ID)
-        .type(TYPE)
-        .signingDoctorId(SIGNING_DOCTOR_ID)
-        .signingDoctorName(SIGNING_DOCTOR_NAME)
-        .signingDateTime(SIGNING_DATE_TIME)
-        .careUnitId(CARE_UNIT_ID)
-        .careUnitName(CARE_UNIT_NAME)
-        .careGiverId(CARE_GIVER_ID)
-        .civicRegistrationNumber(CIVIC_REGISTRATION_NUMBER)
-        .patientName(PATIENT_NAME)
-        .diagnoseCode(DIAGNOSIS_CODE)
-        .biDiagnoseCode1(null)
-        .biDiagnoseCode2(null)
-        .employment(EMPLOYMENT)
-        .deleted(DELETED)
-        .workCapacities(WORK_CAPACITIES)
-        .testCertificate(TEST_CERTIFICATE)
-        .build();
-
-    final var dto = converter.convert(sickLeaveCertificate);
-
-    assertNull(dto.getBiDiagnoseCode1());
-    assertNull(dto.getBiDiagnoseCode2());
-  }
-
-  @Test
-  void shallConvertDeleted() {
-
-    final var dto = converter.convert(sickLeaveCertificate);
-
-    Assertions.assertTrue(dto.getDeleted());
-  }
-
-  @Test
-  void shouldConvertWorkCapacityEnum() {
-    final var expected = List.of(
-        SickLeaveCertificateWorkCapacityDTO.builder()
-            .capacityPercentage(25)
-            .fromDate("2023-01-01")
-            .toDate("2023-01-10")
-            .build(),
-        SickLeaveCertificateWorkCapacityDTO.builder()
-            .capacityPercentage(100)
-            .fromDate("2023-01-10")
-            .toDate("2023-01-15")
-            .build()
-    );
-
-    final var dto = converter.convert(sickLeaveCertificate);
-
-    assertEquals(expected, dto.getSjukfallCertificateWorkCapacity());
+      assertEquals(expected, dto.getWorkCapacityList());
+    }
   }
 }

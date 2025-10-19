@@ -29,7 +29,7 @@ public class GetSickLeaveCertificatesInternalService {
     return GetSickLeaveCertificatesInternalResponse.builder()
         .certificates(
             sickLeaves.stream()
-                .map(sickLeaveConverter::convert)
+                .map(sickLeaveConverter::toSickLeaveCertificateItem)
                 .toList()
         )
         .build();

@@ -60,7 +60,7 @@ class GetSickLeaveCertificateInternalServiceTest {
 
     when(getSickLeaveCertificateDomainService.get(new CertificateId(CERTIFICATE_ID)))
         .thenReturn(Optional.of(sickLeaveCertificate));
-    when(sickLeaveConverter.convert(sickLeaveCertificate))
+    when(sickLeaveConverter.toSickLeaveCertificate(sickLeaveCertificate))
         .thenReturn(expectedSickLeaveDTO);
 
     final var response = getSickLeaveCertificateInternalService.get(

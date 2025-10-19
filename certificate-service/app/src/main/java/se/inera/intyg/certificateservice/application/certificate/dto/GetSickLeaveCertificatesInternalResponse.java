@@ -12,7 +12,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetSickLeav
 @Builder
 public class GetSickLeaveCertificatesInternalResponse {
 
-  List<SickLeaveCertificateDTO> certificates;
+  List<SickLeaveCertificateItemDTO> certificates;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class GetSickLeaveCertificatesInternalResponseBuilder {

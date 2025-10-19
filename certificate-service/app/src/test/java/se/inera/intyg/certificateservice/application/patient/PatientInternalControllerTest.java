@@ -11,7 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetSickLeaveCertificatesInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetSickLeaveCertificatesInternalResponse;
-import se.inera.intyg.certificateservice.application.certificate.dto.SickLeaveCertificateDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.SickLeaveCertificateItemDTO;
 import se.inera.intyg.certificateservice.application.certificate.service.GetSickLeaveCertificatesInternalService;
 
 @ExtendWith(MockitoExtension.class)
@@ -24,7 +24,7 @@ class PatientInternalControllerTest {
 
   @Test
   void shallReturnGetSickLeaveCertificatesInternalResponse() {
-    final var certificates = List.of(SickLeaveCertificateDTO.builder().build());
+    final var certificates = List.of(SickLeaveCertificateItemDTO.builder().build());
     final var expectedResult = GetSickLeaveCertificatesInternalResponse.builder()
         .certificates(certificates)
         .build();

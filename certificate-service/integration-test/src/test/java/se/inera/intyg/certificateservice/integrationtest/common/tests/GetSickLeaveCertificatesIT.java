@@ -33,7 +33,7 @@ public abstract class GetSickLeaveCertificatesIT extends BaseIntegrationIT {
     assertAll(
         () -> assertEquals(1, response.getBody().getCertificates().size()),
         () -> assertEquals(certificateId(testCertificates),
-            response.getBody().getCertificates().getFirst().getId())
+            response.getBody().getCertificates().getFirst().getCertificateId())
     );
   }
 }

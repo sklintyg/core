@@ -25,7 +25,7 @@ import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.Diagnos
 
 class CertificateModelFactoryAG114Test {
 
-  private static final String TYPE = "ag1-14";
+  private static final String TYPE = "ag114";
   private static final String VERSION = "2.0";
 
   @Mock
@@ -56,6 +56,15 @@ class CertificateModelFactoryAG114Test {
     final var certificateModel = certificateModelFactoryAG114.create();
 
     assertEquals(expectedId, certificateModel.id());
+  }
+
+  @Test
+  void shouldIncludeExternalType() {
+    final var expectedExternalType = new CertificateType("ag1-14");
+
+    final var certificateModel = certificateModelFactoryAG114.create();
+
+    assertEquals(expectedExternalType, certificateModel.externalType());
   }
 
   @Test
