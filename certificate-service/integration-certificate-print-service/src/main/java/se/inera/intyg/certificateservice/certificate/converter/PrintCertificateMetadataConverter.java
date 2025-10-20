@@ -45,6 +45,7 @@ public class PrintCertificateMetadataConverter {
         .unitInformation(
             printCertificateUnitInformationConverter.convert(certificate))
         .fileName(fileName)
+        .canSendElectronically(certificate.certificateModel().recipient().canSendElectronically())
         .build();
   }
 
