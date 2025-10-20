@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
@@ -54,18 +55,40 @@ public class ElementConfigurationCheckboxMultipleDate implements ElementConfigur
     if (elementValue.isEmpty()) {
       return Optional.empty();
     }
+
+    final var matchedDates = elementValue.dateList().stream()
+        .map(date -> createLabeledText(
+            date.date() != null ? date.date().toString() : null,
+            findLabelById(date.dateId())
+        ))
+        .toList();
+
+    final var unmatchedDates = dates.stream()
+        .filter(date -> elementValue.dateList().stream()
+            .noneMatch(d -> date.code().code().equals(d.dateId().value()))
+        )
+        .map(checkboxDate -> createLabeledText("Ej angivet", checkboxDate.label()))
+        .toList();
+
     return Optional.of(ElementSimplifiedValueLabeledList.builder()
-        .list(elementValue.dateList().stream()
-            .map(date ->
-                ElementSimplifiedValueLabeledText.builder()
-                    .text(date.date() != null ? date.date().toString() : null)
-                    .label(dates.stream()
-                        .filter(config -> config.id().value().equals(date.dateId().value()))
-                        .findFirst().orElseThrow(() -> new IllegalStateException(
-                            "No matching label found for id: " + date.dateId())).label()
-                    ).build()
-            )
-            .toList())
+        .list(Stream.concat(matchedDates.stream(), unmatchedDates.stream()).toList())
         .build());
+  }
+
+  private String findLabelById(FieldId dateId) {
+    return dates.stream()
+        .filter(config -> config.id().value().equals(dateId.value()))
+        .findFirst()
+        .orElseThrow(() -> new IllegalStateException(
+            "No matching label found for id: " + dateId
+        ))
+        .label();
+  }
+
+  private ElementSimplifiedValueLabeledText createLabeledText(String text, String label) {
+    return ElementSimplifiedValueLabeledText.builder()
+        .label(label)
+        .text(text)
+        .build();
   }
 }
