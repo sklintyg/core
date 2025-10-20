@@ -35,7 +35,7 @@ public class Content {
   public Element create() {
     return element(Tag.DIV)
         .appendChild(ContentElementFactory.hiddenAccessibleHeader(certificateName, certificateType,
-            certificateVersion, recipientName, personId, isDraft, isSent))
+            certificateVersion, recipientName, personId, isDraft, isSent, isCanSendElectronically))
         .appendChildren(content())
         .appendChildren(List.of(
             ContentElementFactory.issuerInfo(issuerName, issuingUnit, issuingUnitInfo,

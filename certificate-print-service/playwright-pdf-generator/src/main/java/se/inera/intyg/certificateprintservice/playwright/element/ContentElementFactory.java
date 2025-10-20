@@ -23,7 +23,7 @@ public class ContentElementFactory {
 
   public static Element hiddenAccessibleHeader(String name, String type, String version,
       String recipientName, String personId, boolean isDraft,
-      boolean isSent) {
+      boolean isSent, boolean isCanSendElectronically) {
     return element(Tag.DIV)
         .appendChildren(List.of(
             element(Tag.P)
@@ -34,7 +34,8 @@ public class ContentElementFactory {
                 .text("%s (%s v%s)".formatted(name, type, version)),
             element(Tag.P)
                 .addClass(INVISIBLE_STYLE)
-                .text(HeaderElementFactory.alertMessage(recipientName, isDraft, isSent))
+                .text(HeaderElementFactory.alertMessage(recipientName, isDraft, isSent,
+                    isCanSendElectronically))
         ));
   }
 
