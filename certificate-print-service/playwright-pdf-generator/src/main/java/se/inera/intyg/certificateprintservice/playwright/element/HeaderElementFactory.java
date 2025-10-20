@@ -57,8 +57,9 @@ public class HeaderElementFactory {
         ));
   }
 
-  public static Element alert(String recipientName, boolean isDraft, boolean isSent) {
-    final var alertMessage = alertMessage(recipientName, isDraft, isSent);
+  public static Element alert(String recipientName, boolean isDraft, boolean isSent,
+      boolean isCanSendElectronically) {
+    final var alertMessage = alertMessage(recipientName, isDraft, isSent, isCanSendElectronically);
     return element(Tag.DIV)
         .attr(STYLE, "margin-top: 5mm; padding: 3mm 5mm; border: red solid 1px;")
         .appendChild(element(Tag.P)
@@ -66,7 +67,11 @@ public class HeaderElementFactory {
             .appendText(alertMessage));
   }
 
-  public static String alertMessage(String recipientName, boolean isDraft, boolean isSent) {
+  public static String alertMessage(String recipientName, boolean isDraft, boolean isSent,
+      boolean isCanSendElectronically) {
+    if (!isCanSendElectronically) {
+      return DRAFT_ALERT_MESSAGE.formatted("skickas till arbetsgivaren");
+    }
     if (isDraft) {
       return DRAFT_ALERT_MESSAGE.formatted(recipientName);
     }
