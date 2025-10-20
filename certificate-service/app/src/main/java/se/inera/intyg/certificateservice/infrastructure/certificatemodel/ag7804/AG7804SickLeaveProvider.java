@@ -4,6 +4,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionNedsattningArbetsformaga.QUESTION_NEDSATTNING_ARBETSFORMAGA_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionSmittbararpenning.QUESTION_SMITTBARARPENNING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionSysselsattning.QUESTION_SYSSELSATTNING_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0002.ARBETSSOKANDE;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +18,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDi
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
 import se.inera.intyg.certificateservice.domain.certificate.model.SickLeaveCertificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleCode;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SickLeaveProvider;
 
 public class AG7804SickLeaveProvider implements SickLeaveProvider {
@@ -116,7 +118,7 @@ public class AG7804SickLeaveProvider implements SickLeaveProvider {
           "Employment code not found in configuration when creating sick leave");
     }
 
-    return Optional.of(code.withCode(configCode.get().label()));
+    return Optional.of(code.withCode(mapEmployment(configCode.get())));
   }
 
   private static List<ElementValueDiagnosis> getElementValueDiagnoses(Certificate certificate) {
@@ -127,5 +129,13 @@ public class AG7804SickLeaveProvider implements SickLeaveProvider {
         .map(ElementValueDiagnosisList.class::cast)
         .map(ElementValueDiagnosisList::diagnoses)
         .orElse(List.of());
+  }
+
+  private static String mapEmployment(ElementConfigurationCode code) {
+    if (code.code() == ARBETSSOKANDE) {
+      return "Arbetssökande";
+    }
+
+    return code.code().displayName();
   }
 }
