@@ -16,6 +16,8 @@ public class ContentElementFactory {
   private static final String SIGN_INFO = "Intyget signerades:";
   private static final String SEND_CERTIFICATE_TEXT = "Skicka intyg till mottagare";
   private static final String HANDLE_CERTIFICATE_TEXT = "Du kan hantera ditt intyg genom att logga in på 1177.se Där kan du till exempel skicka intyget till mottagaren";
+  private static final String SEND_CERTIFICATE_TEXT_HANDLE_CERTIFICATE = "Hantera intyg";
+  private static final String HANDLE_CERTIFICATE_TEXT_HANDLE_CERTIFICATE = "Du kan hantera ditt intyg genom att logga in på 1177.se";
 
   private static final String INVISIBLE_STYLE = "absolute h-px w-[17cm] text-[1px] -z-50 text-white";
 
@@ -80,20 +82,29 @@ public class ContentElementFactory {
             element(Tag.P).text(signDate)));
   }
 
-  public static Element certificateInformation(String name, String description) {
+  public static Element certificateInformation(String name, String description,
+      boolean canSendElectronically) {
     final var certificateInfo = element(Tag.DIV)
         .addClass("break-before-page")
         .appendChildren(List.of(
             element(Tag.STRONG).text(name),
             element(Tag.P).addClass("whitespace-pre-line").append(description),
             element(Tag.BR)))
-        .appendChildren(citizenInfo());
+        .appendChildren(citizenInfo(canSendElectronically));
 
     setLinkColor(certificateInfo);
     return certificateInfo;
   }
 
-  private static List<Element> citizenInfo() {
+  private static List<Element> citizenInfo(boolean canSendElectronically) {
+    if (!canSendElectronically) {
+      return List.of(
+          element(Tag.STRONG).text(SEND_CERTIFICATE_TEXT_HANDLE_CERTIFICATE),
+          element(Tag.P)
+              .addClass("whitespace-pre-line")
+              .append(HANDLE_CERTIFICATE_TEXT_HANDLE_CERTIFICATE));
+
+    }
     return List.of(
         element(Tag.STRONG).text(SEND_CERTIFICATE_TEXT),
         element(Tag.P)

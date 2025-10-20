@@ -19,6 +19,7 @@ public class Metadata {
   String sentDate;
   byte[] recipientLogo;
   String recipientName;
+  boolean canSendElectronically;
   String applicationOrigin;
   String personId;
   String description;

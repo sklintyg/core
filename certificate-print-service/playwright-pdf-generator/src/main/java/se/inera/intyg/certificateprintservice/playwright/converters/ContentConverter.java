@@ -23,6 +23,7 @@ public class ContentConverter {
         .description(metadata.getDescription())
         .isDraft(metadata.isDraft())
         .isSent(metadata.isSent())
+        .isCanSendElectronically(certificate.getMetadata().isCanSendElectronically())
         .build();
   }
 }

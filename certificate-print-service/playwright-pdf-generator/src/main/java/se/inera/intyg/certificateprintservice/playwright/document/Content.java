@@ -30,6 +30,7 @@ public class Content {
   String description;
   boolean isDraft;
   boolean isSent;
+  boolean isCanSendElectronically;
 
   public Element create() {
     return element(Tag.DIV)
@@ -39,7 +40,8 @@ public class Content {
         .appendChildren(List.of(
             ContentElementFactory.issuerInfo(issuerName, issuingUnit, issuingUnitInfo,
                 signDate, isDraft),
-            ContentElementFactory.certificateInformation(certificateName, description)));
+            ContentElementFactory.certificateInformation(certificateName, description,
+                isCanSendElectronically)));
   }
 
   private List<Element> content() {
