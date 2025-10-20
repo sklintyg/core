@@ -1,25 +1,23 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataPatientEntity.ATHENA_REACT_ANDERSSON_ENTITY;
-import static se.inera.intyg.certificateservice.application.testdata.TestDataPatientEntity.athenaReactAnderssonEntityBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.OptimisticLockException;
 import java.util.Optional;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PatientEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.PatientEntityRepository;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.PatientVersionEntityRepository;
 
 @ExtendWith(MockitoExtension.class)
 class PatientRepositoryTest {
@@ -27,11 +25,7 @@ class PatientRepositoryTest {
   @Mock
   private PatientEntityRepository patientEntityRepository;
   @Mock
-  private PatientVersionEntityRepository patientVersionEntityRepository;
-  @Mock
   MetadataVersionRepository metadataVersionRepository;
-  @Mock
-  EntityManager entityManager;
   @InjectMocks
   private PatientRepository patientRepository;
 
@@ -56,23 +50,37 @@ class PatientRepositoryTest {
     );
   }
 
-  @Nested
-  class UpdateEntitiesTest {
+  @Test
+  void shallUpdatePatientWhenPatientHasDifferences() {
 
-    @Test
-    void shallReturnUpdatedEntityIfOptimisticLockIsThrown() {
+    final var updatedPatientEntity = mock(PatientEntity.class);
+    final var existingPatientEntity = mock(PatientEntity.class);
 
-      final var updatedAthena = athenaReactAnderssonEntityBuilder()
-          .middleName("test")
-          .build();
+    doReturn(Optional.of(existingPatientEntity))
+        .when(patientEntityRepository).findById(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH);
+    when(existingPatientEntity.hasDiff(ATHENA_REACT_ANDERSSON_ENTITY)).thenReturn(true);
+    doReturn(updatedPatientEntity)
+        .when(metadataVersionRepository)
+        .savePatientVersion(existingPatientEntity, ATHENA_REACT_ANDERSSON_ENTITY);
+    final var result = patientRepository.patient(ATHENA_REACT_ANDERSSON);
 
-      doReturn(Optional.of(updatedAthena)).when(patientEntityRepository).findById(
-          ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH);
-      doThrow(OptimisticLockException.class).when(metadataVersionRepository)
-          .savePatientVersion(updatedAthena, ATHENA_REACT_ANDERSSON_ENTITY);
+    assertEquals(updatedPatientEntity, result);
+    verify(metadataVersionRepository).savePatientVersion(existingPatientEntity,
+        ATHENA_REACT_ANDERSSON_ENTITY);
+  }
 
-      assertThrows(OptimisticLockException.class,
-          () -> patientRepository.patient(ATHENA_REACT_ANDERSSON));
-    }
+  @Test
+  void shallReturnExistingPatientEntityWhenNoDifferences() {
+    final var existingPatientEntity = mock(PatientEntity.class);
+
+    doReturn(Optional.of(existingPatientEntity))
+        .when(patientEntityRepository).findById(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH);
+    doReturn(false).when(existingPatientEntity).hasDiff(ATHENA_REACT_ANDERSSON_ENTITY);
+
+    final var result = patientRepository.patient(ATHENA_REACT_ANDERSSON);
+
+    assertEquals(existingPatientEntity, result);
+    verify(metadataVersionRepository, never()).savePatientVersion(existingPatientEntity,
+        ATHENA_REACT_ANDERSSON_ENTITY);
   }
 }

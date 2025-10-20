@@ -1,25 +1,22 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffEntity.AJLA_DOKTOR_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffEntity.ALF_DOKTOR_ENTITY;
-import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffEntity.ajlaDoctorEntityBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.ALF_DOKTOR;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HSA_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALF_DOKTOR_HSA_ID;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.OptimisticLockException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,8 +25,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.ReadyForSign;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revoked;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffEntityRepository;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffVersionEntityRepository;
 
 @ExtendWith(MockitoExtension.class)
 class StaffRepositoryTest {
@@ -37,11 +34,7 @@ class StaffRepositoryTest {
   @Mock
   private StaffEntityRepository staffEntityRepository;
   @Mock
-  StaffVersionEntityRepository staffVersionEntityRepository;
-  @Mock
   MetadataVersionRepository metadataVersionRepository;
-  @Mock
-  EntityManager entityManager;
   @InjectMocks
   private StaffRepository staffRepository;
 
@@ -259,26 +252,34 @@ class StaffRepositoryTest {
     assertEquals(expectedStaffs, actualStaffs);
   }
 
-  @Nested
-  class UpdateStaffsTest {
+  @Test
+  void shallUpdateStaffVersionWhenDifferencesExist() {
+    final var existingEntity = mock(StaffEntity.class);
+    final var updatedEntity = mock(StaffEntity.class);
 
-    @Test
-    void shallReturnUpdatedEntityIfOptimisticLockIsThrown() {
+    doReturn(Optional.of(existingEntity))
+        .when(staffEntityRepository).findByHsaId(AJLA_DOCTOR_HSA_ID);
+    doReturn(true).when(existingEntity).hasDiff(AJLA_DOKTOR_ENTITY);
+    doReturn(updatedEntity)
+        .when(metadataVersionRepository).saveStaffVersion(existingEntity, AJLA_DOKTOR_ENTITY);
 
-      final var certificate = fk7210CertificateBuilder().build();
+    final var result = staffRepository.staff(AJLA_DOKTOR);
 
-      final var updatedAlja = ajlaDoctorEntityBuilder()
-          .middleName("test")
-          .build();
-
-      doReturn(List.of(updatedAlja)).when(staffEntityRepository).findStaffEntitiesByHsaIdIn(
-          List.of(AJLA_DOCTOR_HSA_ID));
-      doThrow(OptimisticLockException.class).when(metadataVersionRepository)
-          .saveStaffVersion(updatedAlja, AJLA_DOKTOR_ENTITY);
-
-      assertThrows(OptimisticLockException.class,
-          () -> staffRepository.staffs(certificate));
-    }
+    assertEquals(updatedEntity, result);
+    verify(metadataVersionRepository).saveStaffVersion(existingEntity, AJLA_DOKTOR_ENTITY);
   }
 
+  @Test
+  void shallReturnExistingStaffWhenNoDifferencesExist() {
+    final var existingEntity = mock(StaffEntity.class);
+
+    doReturn(Optional.of(existingEntity))
+        .when(staffEntityRepository).findByHsaId(AJLA_DOCTOR_HSA_ID);
+    doReturn(false).when(existingEntity).hasDiff(AJLA_DOKTOR_ENTITY);
+
+    final var result = staffRepository.staff(AJLA_DOKTOR);
+
+    assertEquals(existingEntity, result);
+    verify(metadataVersionRepository, never()).saveStaffVersion(existingEntity, AJLA_DOKTOR_ENTITY);
+  }
 }

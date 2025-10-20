@@ -55,11 +55,10 @@ public class StaffRepository {
 
     uniqueStaffs.forEach(staff -> {
       if (!staffEntityMap.containsKey(staff.hsaId())) {
-        final var staffEntity = staffEntityRepository.save(toEntity(staff));
-        staffEntityMap.put(HsaId.create(staffEntity.getHsaId()), staffEntity);
-      } else if (!toEntity(staff).equals(staffEntityMap.get(staff.hsaId()))) {
-        final var staffEntity = updateStaffVersion(staffEntityMap.get(staff.hsaId()), staff);
-        staffEntityMap.replace(HsaId.create(staffEntity.getHsaId()), staffEntity);
+        staffEntityMap.put(staff.hsaId(), staffEntityRepository.save(toEntity(staff)));
+      } else {
+        staffEntityMap.replace(staff.hsaId(),
+            updateStaffVersion(staffEntityMap.get(staff.hsaId()), staff));
       }
     });
 
