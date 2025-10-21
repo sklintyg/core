@@ -47,16 +47,16 @@ public class BasicElementFactory {
 
   public static Element labeledList(ElementValueLabeledList list) {
     final var container = element(Tag.DIV)
-        .addClass("mx-[5mm] mb-2");
+        .addClass("mb-2");
     list.getList().stream()
         .map(entry -> {
           final var div = element(Tag.DIV).addClass("mb-2");
           final var label = element(Tag.P)
-              .addClass("font-bold italic block");
+              .addClass("text-sm font-bold pt-[1mm] px-[5mm] text-neutral-600");
           label.appendText(entry.getLabel());
           div.appendChild(label);
           final var value = element(Tag.P)
-              .addClass("text-sm px-[5mm]")
+              .addClass("text-sm italic px-[5mm]")
               .appendText(entry.getText());
           div.appendChild(value);
           return div;
@@ -68,11 +68,11 @@ public class BasicElementFactory {
   public static Element labeledText(String label, String text) {
     final var container = element(Tag.DIV);
     final var labelElement = element(Tag.P)
-        .addClass("pt-[1mm] px-[5mm] text-neutral-600");
+        .addClass("text-sm font-bold pt-[1mm] px-[5mm] text-neutral-600");
     labelElement.appendText(label);
     container.appendChild(labelElement);
     final var valueElement = element(Tag.P)
-        .addClass("text-sm px-[5mm]")
+        .addClass("text-sm italic px-[5mm]")
         .appendText(text);
     container.appendChild(valueElement);
     return container;
