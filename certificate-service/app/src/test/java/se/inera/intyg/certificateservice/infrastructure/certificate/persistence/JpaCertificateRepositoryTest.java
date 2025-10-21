@@ -1017,11 +1017,11 @@ class JpaCertificateRepositoryTest {
 
     @Test
     void shouldReturnListOfCertificates() {
-      final var expectedCertificates = List.of(CERTIFICATE);
+      final var expectedCertificates = List.of(EXPECTED_CERTIFICATE);
       final var request = CertificatesRequest.builder()
           .build();
       doReturn(List.of(CERTIFICATE_ENTITY)).when(certificateEntityRepository).findAll(any());
-      doReturn(CERTIFICATE).when(certificateEntityMapper)
+      doReturn(EXPECTED_CERTIFICATE).when(certificateEntityMapper)
           .toDomain(CERTIFICATE_ENTITY, jpaCertificateRepository);
 
       final var actualCertificates = jpaCertificateRepository.findByCertificatesRequest(request);
