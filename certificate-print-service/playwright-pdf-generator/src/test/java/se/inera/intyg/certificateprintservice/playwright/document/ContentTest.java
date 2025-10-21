@@ -52,7 +52,9 @@ class ContentTest {
   private static final String ISSUER_NAME_HEADER = "Intygsutfärdare:";
   private static final String SIGN_DATE_HEADER = "Intyget signerades:";
   private static final String SKICKA_INTYG_TILL_MOTTAGARE = "Skicka intyg till mottagare";
+  private static final String KAN_EJ_SKICKA_INTYG_TILL_MOTTAGARE = "Hantera intyg";
   private static final String INFO_1177 = "Du kan hantera ditt intyg genom att logga in på 1177.se Där kan du till exempel skicka intyget till mottagaren";
+  private static final String KAN_EJ_SKICKA_INFO_1177 = "Du kan hantera ditt intyg genom att logga in på 1177.se";
   private static final String DRAFT_ALERT_MESSAGE = "Detta är en utskrift av ett elektroniskt intygsutkast och ska INTE skickas till %s.";
   private static final String SENT_ALERT_MESSAGE = "Detta är en utskrift av ett elektroniskt intyg. Intyget har signerats elektroniskt av intygsutfärdaren. Notera att intyget redan har skickats till %s.";
   private static final String SIGNED_ALERT_MESSAGE = "Detta är en utskrift av ett elektroniskt intyg. Intyget har signerats elektroniskt av intygsutfärdaren.";
@@ -159,8 +161,9 @@ class ContentTest {
         }
 
         @Test
-        void alertTextDraft() {
-          final var content = contentBuilder.signDate(null).isDraft(true).isSent(false).build();
+        void alertTextDraftIfCanSendElectronicllyIsTrue() {
+          final var content = contentBuilder.signDate(null).isDraft(true).isSent(false)
+              .isCanSendElectronically(true).build();
           final var element = content.create().child(0).child(2);
           assertAll(
               () -> assertEquals(P, element.tag(), TAG_TYPE),
@@ -174,8 +177,25 @@ class ContentTest {
         }
 
         @Test
+        void alertTextDraftIfCanSendElectronicllyIsFalse() {
+          final var content = contentBuilder.signDate(null).isDraft(true).isSent(false)
+              .isCanSendElectronically(false).build();
+          final var element = content.create().child(0).child(2);
+          assertAll(
+              () -> assertEquals(P, element.tag(), TAG_TYPE),
+              () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
+              () -> assertEquals(1, attributesSize(element), NUM_ATTRIBUTES),
+              () -> assertEquals(DRAFT_ALERT_MESSAGE.formatted("arbetsgivaren"), element.text(),
+                  TEXT),
+              () -> assertEquals("absolute h-px w-[17cm] text-[1px] -z-50 text-white",
+                  attributes(element, CLASS), ATTRIBUTES)
+          );
+        }
+
+        @Test
         void alertTextSigned() {
           final var content = contentBuilder.signDate(SIGN_DATE).isDraft(false).isSent(false)
+              .isCanSendElectronically(true)
               .build();
           final var element = content.create().child(0).child(2);
           assertAll(
@@ -190,6 +210,7 @@ class ContentTest {
         @Test
         void alertTextSent() {
           final var content = contentBuilder.signDate(SIGN_DATE).isDraft(false).isSent(true)
+              .isCanSendElectronically(true)
               .build();
           final var element = content.create().child(0).child(2);
           assertAll(
@@ -553,7 +574,8 @@ class ContentTest {
 
         @Test
         void sendCertificateToRecipientText() {
-          final var content = contentBuilder.isDraft(true).signDate(null).build();
+          final var content = contentBuilder.isDraft(true).signDate(null)
+              .isCanSendElectronically(true).build();
           final var element = content.create().child(3).child(3);
           assertAll(
               () -> assertEquals(STRONG, element.tag(), TAG_TYPE),
@@ -564,8 +586,36 @@ class ContentTest {
         }
 
         @Test
+        void cannotSendCertificateToRecipientText() {
+          final var content = contentBuilder.isDraft(true).signDate(null)
+              .isCanSendElectronically(false).build();
+          final var element = content.create().child(3).child(3);
+          assertAll(
+              () -> assertEquals(STRONG, element.tag(), TAG_TYPE),
+              () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
+              () -> assertEquals(0, attributesSize(element), ATTRIBUTES),
+              () -> assertEquals(KAN_EJ_SKICKA_INTYG_TILL_MOTTAGARE, element.text(), TEXT)
+          );
+        }
+
+        @Test
         void info1177() {
-          final var content = contentBuilder.isDraft(true).signDate(null).build();
+          final var content = contentBuilder.isDraft(true).signDate(null)
+              .isCanSendElectronically(true).build();
+          final var element = content.create().child(3).child(4);
+          assertAll(
+              () -> assertEquals(P, element.tag(), TAG_TYPE),
+              () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
+              () -> assertEquals(1, attributesSize(element), ATTRIBUTES),
+              () -> assertEquals(INFO_1177, element.text(), TEXT),
+              () -> assertEquals("whitespace-pre-line", attributes(element, CLASS), ATTRIBUTES)
+          );
+        }
+
+        @Test
+        void cannotSendInfo1177() {
+          final var content = contentBuilder.isDraft(true).signDate(null)
+              .isCanSendElectronically(true).build();
           final var element = content.create().child(3).child(4);
           assertAll(
               () -> assertEquals(P, element.tag(), TAG_TYPE),

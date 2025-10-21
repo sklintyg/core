@@ -231,9 +231,11 @@ class PrintCertificateQuestionConverterTest {
   void shouldSetValueMultipleDates() {
     final var expected = ElementSimplifiedValueLabeledListDTO.builder()
         .list(List.of(ElementSimplifiedValueLabeledTextDTO.builder()
-            .label("Label 1")
-            .text(DATE.toString())
-            .build()))
+                .label("Label 1")
+                .text(DATE.toString())
+                .build(),
+            ElementSimplifiedValueLabeledTextDTO.builder().label("Label 2").text("Ej angivet")
+                .build()))
         .build();
 
     final var response = printCertificateQuestionConverter.convert(
