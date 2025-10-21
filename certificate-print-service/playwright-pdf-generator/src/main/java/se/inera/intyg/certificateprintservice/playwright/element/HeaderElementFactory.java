@@ -70,7 +70,7 @@ public class HeaderElementFactory {
   public static String alertMessage(String recipientName, boolean isDraft, boolean isSent,
       boolean isCanSendElectronically) {
     if (!isCanSendElectronically) {
-      return DRAFT_ALERT_MESSAGE.formatted("skickas till arbetsgivaren");
+      return DRAFT_ALERT_MESSAGE.formatted("arbetsgivaren");
     }
     if (isDraft) {
       return DRAFT_ALERT_MESSAGE.formatted(recipientName);
