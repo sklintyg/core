@@ -33,7 +33,7 @@ public class GetPatientCertificatesDomainService {
     }
 
     return CertificatesRequest.builder()
-        .issuedUnitId(actionEvaluation.subUnit().hsaId())
+        .issuedUnitIds(List.of(actionEvaluation.subUnit().hsaId()))
         .personId(actionEvaluation.patient().id())
         .build();
   }

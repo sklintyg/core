@@ -51,6 +51,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateExportPage;
@@ -64,6 +65,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PlaceholderCertificateRequest;
+import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.common.model.PersonIdType;
@@ -91,6 +93,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.CertificateModelEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.PlaceholderCertificateEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecificationFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateRelationRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.PatientVersionEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffVersionEntityRepository;
@@ -112,9 +115,9 @@ class JpaCertificateRepositoryTest {
   @Mock
   PatientVersionEntityRepository patientVersionEntityRepository;
   @Mock
-
   UnitVersionEntityRepository unitVersionEntityRepository;
-
+  @Mock
+  CertificateEntitySpecificationFactory certificateEntitySpecificationFactory;
   @InjectMocks
   JpaCertificateRepository jpaCertificateRepository;
 
@@ -994,6 +997,49 @@ class JpaCertificateRepositoryTest {
           () -> assertEquals(ALFA_MEDICINCENTRUM, result.careUnit()),
           () -> assertEquals(ALFA_ALLERGIMOTTAGNINGEN, result.issuingUnit())
       );
+    }
+  }
+
+  @Nested
+  class FindByCertificatesRequestTest {
+
+    @Test
+    void shouldReturnEmptyListIfNoCertificatesAreFound() {
+      final var request = CertificatesRequest.builder()
+          .build();
+
+      doReturn(List.of()).when(certificateEntityRepository).findAll(any());
+
+      final var actualCertificates = jpaCertificateRepository.findByCertificatesRequest(request);
+
+      assertTrue(actualCertificates.isEmpty());
+    }
+
+    @Test
+    void shouldReturnListOfCertificates() {
+      final var expectedCertificates = List.of(CERTIFICATE);
+      final var request = CertificatesRequest.builder()
+          .build();
+      doReturn(List.of(CERTIFICATE_ENTITY)).when(certificateEntityRepository).findAll(any());
+      doReturn(CERTIFICATE).when(certificateEntityMapper)
+          .toDomain(CERTIFICATE_ENTITY, jpaCertificateRepository);
+
+      final var actualCertificates = jpaCertificateRepository.findByCertificatesRequest(request);
+
+      assertEquals(expectedCertificates, actualCertificates);
+    }
+
+    @Test
+    void shouldCallSpecificationFactoryToCreateSpecification() {
+      final var request = CertificatesRequest.builder()
+          .build();
+      final var specification = mock(Specification.class);
+      doReturn(List.of()).when(certificateEntityRepository).findAll(any());
+      when(certificateEntitySpecificationFactory.create(request)).thenReturn(specification);
+
+      jpaCertificateRepository.findByCertificatesRequest(request);
+
+      verify(certificateEntityRepository).findAll(specification);
     }
   }
 }

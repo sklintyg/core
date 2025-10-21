@@ -29,13 +29,14 @@ public class FK7804SickLeaveProvider implements SickLeaveProvider {
         .map(ElementValueBoolean::value)
         .orElse(false);
 
-    if (Boolean.TRUE.equals(isNotSickLeaveCertificate)) {
+    if (isNotSickLeaveCertificate) {
       return Optional.empty();
     }
 
     final var metadata = certificate.certificateMetaData();
     return Optional.of(
         SickLeaveCertificate.builder()
+            .partOfSickLeaveChain(true)
             .id(certificate.id())
             .careGiverId(metadata.careProvider().hsaId())
             .careUnitId(metadata.careUnit().hsaId())

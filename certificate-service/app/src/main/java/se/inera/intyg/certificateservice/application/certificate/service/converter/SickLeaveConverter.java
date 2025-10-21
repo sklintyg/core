@@ -1,19 +1,66 @@
 package se.inera.intyg.certificateservice.application.certificate.service.converter;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.application.certificate.dto.SickLeaveCertificateDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.SickLeaveCertificateItemDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.SickLeaveCertificateItemWorkCapacityDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.SickLeaveCertificateWorkCapacityDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificate.model.SickLeaveCertificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
 @Component
 public class SickLeaveConverter {
 
-  public SickLeaveCertificateDTO convert(SickLeaveCertificate sickLeaveCertificate) {
+  public SickLeaveCertificateItemDTO toSickLeaveCertificateItem(
+      SickLeaveCertificate sickLeaveCertificate) {
+    if (sickLeaveCertificate == null) {
+      return null;
+    }
+
+    final var workCapacities = sickLeaveCertificate.workCapacities().stream()
+        .map(this::mapDateRangeToItemWorkCapacity)
+        .collect(Collectors.toList());
+
+    final var employments = sickLeaveCertificate.employment().stream()
+        .map(ElementValueCode::code)
+        .filter(code -> code != null && !code.isBlank())
+        .collect(Collectors.joining(","));
+
+    return SickLeaveCertificateItemDTO.builder()
+        .certificateId(sickLeaveCertificate.id().id())
+        .certificateType(sickLeaveCertificate.type().code().toLowerCase())
+        .signingDateTime(sickLeaveCertificate.signingDateTime())
+        .personalHsaId(sickLeaveCertificate.signingDoctorId().id())
+        .personalFullName(sickLeaveCertificate.signingDoctorName().fullName())
+        .careUnitId(sickLeaveCertificate.careUnitId().id())
+        .careUnitName(sickLeaveCertificate.careUnitName().name())
+        .careProviderId(sickLeaveCertificate.careGiverId().id())
+        .personId(sickLeaveCertificate.civicRegistrationNumber().idWithDash())
+        .patientFullName(sickLeaveCertificate.patientName().fullName())
+        .diagnoseCode(sickLeaveCertificate.diagnoseCode().code())
+        .secondaryDiagnoseCodes(
+            Stream.of(
+                    sickLeaveCertificate.biDiagnoseCode1(),
+                    sickLeaveCertificate.biDiagnoseCode2()
+                ).filter(Objects::nonNull)
+                .map(ElementValueDiagnosis::code)
+                .toList()
+        )
+        .occupation(employments)
+        .deleted(sickLeaveCertificate.deleted() != null)
+        .workCapacityList(workCapacities)
+        .testCertificate(false)
+        .build();
+  }
+
+  public SickLeaveCertificateDTO toSickLeaveCertificate(SickLeaveCertificate sickLeaveCertificate) {
     if (sickLeaveCertificate == null) {
       return null;
     }
@@ -56,6 +103,17 @@ public class SickLeaveConverter {
         .build();
   }
 
+  private SickLeaveCertificateItemWorkCapacityDTO mapDateRangeToItemWorkCapacity(
+      DateRange dateRange) {
+    final var from = dateRange.from();
+    final var to = dateRange.to();
+    return SickLeaveCertificateItemWorkCapacityDTO.builder()
+        .reduction(toCapacityPercentage(dateRange.dateRangeId()))
+        .startDate(from)
+        .endDate(to)
+        .build();
+  }
+
   private SickLeaveCertificateWorkCapacityDTO mapDateRangeToWorkCapacity(DateRange dateRange) {
     final var from = dateRange.from().format(DateTimeFormatter.ISO_LOCAL_DATE);
     final var to = dateRange.to().format(DateTimeFormatter.ISO_LOCAL_DATE);
@@ -67,12 +125,16 @@ public class SickLeaveConverter {
   }
 
   private int toCapacityPercentage(FieldId fieldId) {
-    return switch (SickLeaveWorkcapacity.valueOf(fieldId.value())) {
-      case EN_FJARDEDEL -> 25;
-      case HALFTEN -> 50;
-      case TRE_FJARDEDEL -> 75;
-      case HELT_NEDSATT -> 100;
-    };
+    try {
+      return Integer.parseInt(fieldId.value());
+    } catch (NumberFormatException e) {
+      return switch (SickLeaveWorkcapacity.valueOf(fieldId.value())) {
+        case EN_FJARDEDEL -> 25;
+        case HALFTEN -> 50;
+        case TRE_FJARDEDEL -> 75;
+        case HELT_NEDSATT -> 100;
+      };
+    }
   }
 
   enum SickLeaveWorkcapacity {

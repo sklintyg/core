@@ -51,7 +51,8 @@ public class CertificateModelFactoryAG114 implements CertificateModelFactory {
 
   private final DiagnosisCodeRepository diagnosisCodeRepository;
 
-  private static final String AG114 = "ag1-14";
+  private static final String AG114 = "ag114";
+  private static final String AG1_14 = "ag1-14";
   private static final String VERSION = "2.0";
   private static final String NAME = "Läkarintyg om arbetsförmåga – sjuklöneperioden";
   private static final String DESCRIPTION = """
@@ -101,6 +102,7 @@ public class CertificateModelFactoryAG114 implements CertificateModelFactory {
                 NAME
             )
         )
+        .typeName(new CertificateType(AG1_14))
         .name(NAME)
         .description(DESCRIPTION)
         .detailedDescription(DETAILED_DESCRIPTION.replaceAll("\\R", ""))
@@ -152,6 +154,7 @@ public class CertificateModelFactoryAG114 implements CertificateModelFactory {
             issuingUnitContactInfo()
         ))
         .certificateActionFactory(certificateActionFactory)
+        .sickLeaveProvider(new AG114SickLeaveProvider())
         .build();
   }
 }

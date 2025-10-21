@@ -30,7 +30,7 @@ public class MessageArbetsformagaAlert {
                     ElementMessage.builder()
                         .content(
                             "Om patienten bedöms vara arbetsoförmögen i mer än 14 dagar ska Läkarintyg om arbetsförmåga – arbetsgivaren (AG7804) användas. Intyget skapas från Försäkringskassans läkarintyg för sjukpenning (FK7804) och innehåller motsvarande information.")
-                        .level(MessageLevel.OBSERVE)
+                        .level(MessageLevel.INFO)
                         .build()
                 )
                 .build()

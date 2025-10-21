@@ -11,6 +11,7 @@ public class TestabilityCertificate {
   String type;
   String code;
   String activeVersion;
+  String externalType;
 
   String recipient;
 

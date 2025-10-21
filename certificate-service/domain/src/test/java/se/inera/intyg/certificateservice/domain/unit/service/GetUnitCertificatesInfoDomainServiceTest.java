@@ -51,7 +51,7 @@ class GetUnitCertificatesInfoDomainServiceTest {
 
     certificatesRequestBuilder = CertificatesRequest.builder()
         .statuses(Status.unsigned())
-        .issuedUnitId(ALFA_ALLERGIMOTTAGNINGEN.hsaId())
+        .issuedUnitIds(List.of(ALFA_ALLERGIMOTTAGNINGEN.hsaId()))
         .personId(ATHENA_REACT_ANDERSSON.id());
   }
 
@@ -104,7 +104,7 @@ class GetUnitCertificatesInfoDomainServiceTest {
   void shallAddIssuedUnitIfNoIssuedUnitProvidedAndIsOnSubUnit() {
     final var actionEvaluation = actionEvaluationBuilder.build();
     final var certificatesRequest = certificatesRequestBuilder
-        .issuedUnitId(null)
+        .issuedUnitIds(null)
         .build();
 
     final var certificateRequestCaptor = ArgumentCaptor.forClass(CertificatesRequest.class);
@@ -113,8 +113,8 @@ class GetUnitCertificatesInfoDomainServiceTest {
 
     verify(certificateRepository).findByCertificatesRequest(certificateRequestCaptor.capture());
 
-    assertEquals(ALFA_ALLERGIMOTTAGNINGEN.hsaId(),
-        certificateRequestCaptor.getValue().issuedUnitId()
+    assertEquals(List.of(ALFA_ALLERGIMOTTAGNINGEN.hsaId()),
+        certificateRequestCaptor.getValue().issuedUnitIds()
     );
   }
 
@@ -125,7 +125,7 @@ class GetUnitCertificatesInfoDomainServiceTest {
         .build();
 
     final var certificatesRequest = certificatesRequestBuilder
-        .issuedUnitId(null)
+        .issuedUnitIds(null)
         .build();
 
     final var certificateRequestCaptor = ArgumentCaptor.forClass(CertificatesRequest.class);

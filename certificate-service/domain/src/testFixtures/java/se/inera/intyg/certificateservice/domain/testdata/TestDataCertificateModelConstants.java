@@ -24,6 +24,7 @@ public class TestDataCertificateModelConstants {
   public static final CertificateType FK7810_TYPE = new CertificateType("fk7810");
   public static final CertificateType FK7804_TYPE = new CertificateType("fk7804");
   public static final CertificateType AG7804_TYPE = new CertificateType("ag7804");
+  public static final CertificateType AG114_TYPE = new CertificateType("ag114");
   public static final CertificateVersion FK7210_VERSION = new CertificateVersion("1.0");
   public static final CertificateVersion FK3226_VERSION = new CertificateVersion("1.0");
   public static final CertificateVersion FK7472_VERSION = new CertificateVersion("1.0");
@@ -34,6 +35,7 @@ public class TestDataCertificateModelConstants {
   public static final CertificateVersion FK7810_VERSION = new CertificateVersion("1.0");
   public static final CertificateVersion FK7804_VERSION = new CertificateVersion("2.0");
   public static final CertificateVersion AG7804_VERSION = new CertificateVersion("2.0");
+  public static final CertificateVersion AG114_VERSION = new CertificateVersion("2.0");
   public static final CertificateModelId FK7210_ID = CertificateModelId.builder()
       .type(FK7210_TYPE)
       .version(FK7210_VERSION)
@@ -92,6 +94,11 @@ public class TestDataCertificateModelConstants {
       "b64ea353-e8f6-4832-b563-fc7d46f29548",
       "Läkarintyg om arbetsförmåga – arbetsgivaren"
   );
+  public static final Code AG114_CODE_TYPE = new Code(
+      "AG114",
+      "b64ea353-e8f6-4832-b563-fc7d46f29548",
+      "Läkarintyg om arbetsförmåga – sjuklöneperioden"
+  );
 
   public static final SchematronPath FK7210_SCHEMATRON_PATH = new SchematronPath(
       "fk7210/schematron/igrav.v1.sch");
@@ -128,7 +135,11 @@ public class TestDataCertificateModelConstants {
   public static final String FK7810_NAME = "Läkarutlåtande för assistansersättning";
   public static final String FK7804_NAME = "Läkarintyg för sjukpenning";
   public static final String AG7804_NAME = "Läkarintyg om arbetsförmåga – arbetsgivaren";
+  public static final String AG114_NAME = "Läkarintyg om arbetsförmåga – sjuklöneperioden";
   public static final Recipient FK_RECIPIENT = new Recipient(
       new RecipientId("FKASSA"), "Försäkringskassan", "Logisk adress"
+  );
+  public static Recipient SKR_RECIPIENT = new Recipient(
+      new RecipientId("SKR"), "Sveriges Kommuner och Regioner", null
   );
 }

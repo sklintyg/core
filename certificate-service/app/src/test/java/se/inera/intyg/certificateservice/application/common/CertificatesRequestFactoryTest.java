@@ -10,23 +10,18 @@ import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetSickLeaveCertificatesInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.PersonIdDTO;
 import se.inera.intyg.certificateservice.application.unit.dto.CertificatesQueryCriteriaDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
+import se.inera.intyg.certificateservice.domain.testdata.TestDataPatient;
 
 class CertificatesRequestFactoryTest {
-
-  private CertificatesRequestFactory certificatesRequestFactory;
-
-  @BeforeEach
-  void setUp() {
-    certificatesRequestFactory = new CertificatesRequestFactory();
-  }
 
   @Test
   void shallCreateDefaultCertificatesRequest() {
@@ -35,7 +30,7 @@ class CertificatesRequestFactoryTest {
         .build();
 
     assertEquals(expectedCertificateRequest,
-        certificatesRequestFactory.create()
+        CertificatesRequestFactory.create()
     );
   }
 
@@ -50,7 +45,7 @@ class CertificatesRequestFactoryTest {
           .build();
 
       assertEquals(expectedFrom,
-          certificatesRequestFactory.create(queryCriteriaDTO).modifiedFrom()
+          CertificatesRequestFactory.create(queryCriteriaDTO).modifiedFrom()
       );
     }
 
@@ -62,7 +57,7 @@ class CertificatesRequestFactoryTest {
           .build();
 
       assertEquals(expectedTo,
-          certificatesRequestFactory.create(queryCriteriaDTO).modifiedTo()
+          CertificatesRequestFactory.create(queryCriteriaDTO).modifiedTo()
       );
     }
 
@@ -74,7 +69,7 @@ class CertificatesRequestFactoryTest {
           .build();
 
       assertEquals(expectedIssuedByStaffId,
-          certificatesRequestFactory.create(queryCriteriaDTO).issuedByStaffId()
+          CertificatesRequestFactory.create(queryCriteriaDTO).issuedByStaffId()
       );
     }
 
@@ -83,7 +78,7 @@ class CertificatesRequestFactoryTest {
       final var queryCriteriaDTO = CertificatesQueryCriteriaDTO.builder()
           .build();
 
-      assertNull(certificatesRequestFactory.create(queryCriteriaDTO).issuedByStaffId());
+      assertNull(CertificatesRequestFactory.create(queryCriteriaDTO).issuedByStaffId());
     }
 
     @Test
@@ -91,7 +86,7 @@ class CertificatesRequestFactoryTest {
       final var queryCriteriaDTO = CertificatesQueryCriteriaDTO.builder()
           .build();
 
-      assertNull(certificatesRequestFactory.create(queryCriteriaDTO).issuedUnitId());
+      assertNull(CertificatesRequestFactory.create(queryCriteriaDTO).issuedUnitIds());
     }
 
     @Test
@@ -107,7 +102,7 @@ class CertificatesRequestFactoryTest {
           .build();
 
       assertEquals(expectedPersonId,
-          certificatesRequestFactory.create(queryCriteriaDTO).personId()
+          CertificatesRequestFactory.create(queryCriteriaDTO).personId()
       );
     }
 
@@ -116,7 +111,7 @@ class CertificatesRequestFactoryTest {
       final var queryCriteriaDTO = CertificatesQueryCriteriaDTO.builder()
           .build();
 
-      assertNull(certificatesRequestFactory.create(queryCriteriaDTO).personId());
+      assertNull(CertificatesRequestFactory.create(queryCriteriaDTO).personId());
     }
 
     @Test
@@ -126,7 +121,7 @@ class CertificatesRequestFactoryTest {
           .build();
 
       assertEquals(Collections.emptyList(),
-          certificatesRequestFactory.create(queryCriteriaDTO).statuses()
+          CertificatesRequestFactory.create(queryCriteriaDTO).statuses()
       );
     }
 
@@ -136,7 +131,7 @@ class CertificatesRequestFactoryTest {
           .build();
 
       assertEquals(Collections.emptyList(),
-          certificatesRequestFactory.create(queryCriteriaDTO).statuses()
+          CertificatesRequestFactory.create(queryCriteriaDTO).statuses()
       );
     }
 
@@ -148,7 +143,7 @@ class CertificatesRequestFactoryTest {
           .build();
 
       assertEquals(expectedStatuses,
-          certificatesRequestFactory.create(queryCriteriaDTO).statuses()
+          CertificatesRequestFactory.create(queryCriteriaDTO).statuses()
       );
     }
 
@@ -160,7 +155,7 @@ class CertificatesRequestFactoryTest {
           .build();
 
       assertEquals(expectedStatuses,
-          certificatesRequestFactory.create(queryCriteriaDTO).statuses()
+          CertificatesRequestFactory.create(queryCriteriaDTO).statuses()
       );
     }
 
@@ -172,7 +167,7 @@ class CertificatesRequestFactoryTest {
           .build();
 
       assertEquals(expectedStatuses,
-          certificatesRequestFactory.create(queryCriteriaDTO).statuses()
+          CertificatesRequestFactory.create(queryCriteriaDTO).statuses()
       );
     }
 
@@ -180,7 +175,7 @@ class CertificatesRequestFactoryTest {
     void shallNotIncludeValidCertificateIfValidForSignIsNull() {
       final var queryCriteriaDTO = CertificatesQueryCriteriaDTO.builder().build();
 
-      assertNull(certificatesRequestFactory.create(queryCriteriaDTO).validCertificates());
+      assertNull(CertificatesRequestFactory.create(queryCriteriaDTO).validCertificates());
     }
 
     @Test
@@ -190,7 +185,7 @@ class CertificatesRequestFactoryTest {
           .build();
 
       Assertions.assertTrue(
-          certificatesRequestFactory.create(queryCriteriaDTO).validCertificates());
+          CertificatesRequestFactory.create(queryCriteriaDTO).validCertificates());
     }
 
     @Test
@@ -200,7 +195,64 @@ class CertificatesRequestFactoryTest {
           .build();
 
       Assertions.assertFalse(
-          certificatesRequestFactory.create(queryCriteriaDTO).validCertificates());
+          CertificatesRequestFactory.create(queryCriteriaDTO).validCertificates());
+    }
+  }
+
+  @Nested
+  class ConvertFromGetSickLeaveCertificatesInternalRequest {
+
+    private static final String TYPE = "type";
+    private static final PersonIdDTO PERSON_ID = PersonIdDTO.builder()
+        .id(TestDataPatient.ATHENA_REACT_ANDERSSON.id().id())
+        .type(TestDataPatient.ATHENA_REACT_ANDERSSON.id().type().name())
+        .build();
+
+    @Test
+    void shouldIncludePersonId() {
+      final var request = GetSickLeaveCertificatesInternalRequest.builder()
+          .personId(
+              PERSON_ID
+          )
+          .build();
+
+      assertEquals(ATHENA_REACT_ANDERSSON.id(),
+          CertificatesRequestFactory.convert(request).personId());
+    }
+
+    @Test
+    void shouldIncludeSignedFrom() {
+      final var expected = LocalDateTime.now().toLocalDate();
+      final var request = GetSickLeaveCertificatesInternalRequest.builder()
+          .personId(PERSON_ID)
+          .signedFrom(expected)
+          .build();
+
+      assertEquals(expected, CertificatesRequestFactory.convert(request).signedFrom());
+    }
+
+    @Test
+    void shouldIncludeSignedTo() {
+      final var expected = LocalDateTime.now().toLocalDate();
+      final var request = GetSickLeaveCertificatesInternalRequest.builder()
+          .personId(PERSON_ID)
+          .signedTo(expected)
+          .build();
+
+      assertEquals(expected, CertificatesRequestFactory.convert(request).signedTo());
+    }
+
+
+    @Test
+    void shouldIncludeCertificateTypes() {
+      final var expected = List.of(new CertificateType(TYPE));
+      final var request = GetSickLeaveCertificatesInternalRequest.builder()
+          .personId(PERSON_ID)
+          .certificateTypes(List.of(TYPE))
+          .build();
+
+      assertEquals(expected, CertificatesRequestFactory.convert(request).types());
     }
   }
 }
+

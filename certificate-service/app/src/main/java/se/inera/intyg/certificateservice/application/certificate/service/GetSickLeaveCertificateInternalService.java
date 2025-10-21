@@ -25,7 +25,8 @@ public class GetSickLeaveCertificateInternalService {
 
     return GetSickLeaveCertificateInternalResponse.builder()
         .available(sickLeaveCertificate.isPresent())
-        .sickLeaveCertificate(sickLeaveConverter.convert(sickLeaveCertificate.orElse(null)))
+        .sickLeaveCertificate(
+            sickLeaveConverter.toSickLeaveCertificate(sickLeaveCertificate.orElse(null)))
         .build();
   }
 }
