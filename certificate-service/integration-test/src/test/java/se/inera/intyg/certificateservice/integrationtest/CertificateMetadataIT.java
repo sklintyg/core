@@ -66,7 +66,7 @@ class CertificateMetadataIT {
   }
 
   @Test
-  @DisplayName("Om patient uppdaterats ska de upptaderade informationen finnas på det nya intyget")
+  @DisplayName("Om patient uppdaterats ska de uppdaterade informationen finnas på det nya intyget")
   void shallUpdatePatient() {
 
     final var updatedAthena = athenaReactAnderssonDtoBuilder()
@@ -98,7 +98,7 @@ class CertificateMetadataIT {
   }
 
   @Test
-  @DisplayName("Om användaren uppdaterats ska den upptaderade informationen finnas på det nya "
+  @DisplayName("Om användaren uppdaterats ska den uppdaterade informationen finnas på det nya "
       + "intyget")
   void shallUpdateStaff() {
 
@@ -131,7 +131,7 @@ class CertificateMetadataIT {
   }
 
   @Test
-  @DisplayName("Om vårdenheten uppdaterats ska den upptaderade informationen finnas på det "
+  @DisplayName("Om vårdenheten uppdaterats ska den uppdaterade informationen finnas på det "
       + "nya intyget")
   void shallUpdateUnit() {
 

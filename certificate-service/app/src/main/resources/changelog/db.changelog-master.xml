@@ -852,19 +852,19 @@
 
   <changeSet id="8" author="ea">
     <addColumn tableName="patient">
-      <column name="version" type="BIGINT" defaultValueNumeric="0">
+      <column name="version" type="mediumint unsigned" defaultValueNumeric="0">
         <constraints nullable="false"/>
       </column>
     </addColumn>
 
     <addColumn tableName="staff">
-      <column name="version" type="BIGINT" defaultValueNumeric="0">
+      <column name="version" type="mediumint unsigned" defaultValueNumeric="0">
         <constraints nullable="false"/>
       </column>
     </addColumn>
 
     <addColumn tableName="unit">
-      <column name="version" type="BIGINT" defaultValueNumeric="0">
+      <column name="version" type="mediumint unsigned" defaultValueNumeric="0">
         <constraints nullable="false"/>
       </column>
     </addColumn>
