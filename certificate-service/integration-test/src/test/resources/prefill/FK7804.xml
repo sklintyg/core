@@ -56,7 +56,7 @@
     <ns2:delsvar id="6.2">
       <ns4:cv>
         <ns4:code>A78</ns4:code>
-        <ns4:codeSystem>1.2.752.116.1.1.1.1.8</ns4:codeSystem>
+        <ns4:codeSystem>1.2.752.116.1.1.1.1.3</ns4:codeSystem>
         <ns4:displayName>Q-feber</ns4:displayName>
       </ns4:cv>
     </ns2:delsvar>
