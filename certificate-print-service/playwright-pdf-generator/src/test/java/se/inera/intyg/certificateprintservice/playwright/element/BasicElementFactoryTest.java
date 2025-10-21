@@ -58,14 +58,14 @@ class BasicElementFactoryTest {
     );
 
     assertEquals("""
-        <div class="mx-[5mm] mb-2">
+        <div class="mb-2">
          <div class="mb-2">
-          <p class="font-bold italic block">L1</p>
-          <p class="text-sm px-[5mm]">T1</p>
+          <p class="text-sm font-bold pt-[1mm] px-[5mm] text-neutral-600">L1</p>
+          <p class="text-sm italic px-[5mm]">T1</p>
          </div>
          <div class="mb-2">
-          <p class="font-bold italic block">L2</p>
-          <p class="text-sm px-[5mm]">T2</p>
+          <p class="text-sm font-bold pt-[1mm] px-[5mm] text-neutral-600">L2</p>
+          <p class="text-sm italic px-[5mm]">T2</p>
          </div>
         </div>""", result.toString());
   }

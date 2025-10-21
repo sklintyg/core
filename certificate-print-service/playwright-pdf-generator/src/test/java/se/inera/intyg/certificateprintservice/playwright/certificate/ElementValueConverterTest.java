@@ -87,14 +87,14 @@ class ElementValueConverterTest {
 
     assertEquals(
         """
-            <div class="mx-[5mm] mb-2">
+            <div class="mb-2">
              <div class="mb-2">
-              <p class="font-bold italic block">Label 1</p>
-              <p class="text-sm px-[5mm]">Example text for value</p>
+              <p class="text-sm font-bold pt-[1mm] px-[5mm] text-neutral-600">Label 1</p>
+              <p class="text-sm italic px-[5mm]">Example text for value</p>
              </div>
              <div class="mb-2">
-              <p class="font-bold italic block">Label 2</p>
-              <p class="text-sm px-[5mm]">Example 2</p>
+              <p class="text-sm font-bold pt-[1mm] px-[5mm] text-neutral-600">Label 2</p>
+              <p class="text-sm italic px-[5mm]">Example 2</p>
              </div>
             </div>""",
         result.toString()
