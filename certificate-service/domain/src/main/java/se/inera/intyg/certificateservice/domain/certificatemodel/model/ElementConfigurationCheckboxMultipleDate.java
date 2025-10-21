@@ -65,7 +65,7 @@ public class ElementConfigurationCheckboxMultipleDate implements ElementConfigur
 
     final var unmatchedDates = dates.stream()
         .filter(date -> elementValue.dateList().stream()
-            .noneMatch(d -> date.code().code().equals(d.dateId().value()))
+            .noneMatch(d -> date.id().value().equals(d.dateId().value()))
         )
         .map(checkboxDate -> createLabeledText("Ej angivet", checkboxDate.label()))
         .toList();
