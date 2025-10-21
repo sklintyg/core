@@ -65,6 +65,19 @@ public class BasicElementFactory {
     return container;
   }
 
+  public static Element labeledText(String label, String text) {
+    final var container = element(Tag.DIV);
+    final var labelElement = element(Tag.P)
+        .addClass("pt-[1mm] px-[5mm] text-neutral-600");
+    labelElement.appendText(label);
+    container.appendChild(labelElement);
+    final var valueElement = element(Tag.P)
+        .addClass("text-sm px-[5mm]")
+        .appendText(text);
+    container.appendChild(valueElement);
+    return container;
+  }
+
   public static Element p(String text) {
     return new Element(Tag.P.toString())
         .addClass("text-sm italic px-[5mm]")
