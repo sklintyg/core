@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.integrationtest.ts8071;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionOvrigBeskrivning.QUESTION_OVRIG_BESKRIVNING_FIELD_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionOvrigBeskrivning.QUESTION_OVRIG_BESKRIVNING_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionOvrigBeskrivning.QUESTION_OVRIG_BESKRIVNING_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionOvrigBeskrivning.QUESTION_OVRIG_BESKRIVNING_ID;
 
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;

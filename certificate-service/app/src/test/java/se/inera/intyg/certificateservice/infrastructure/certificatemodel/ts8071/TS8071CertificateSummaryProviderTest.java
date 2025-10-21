@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.TAXI;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.UTLANDSKT;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionIntygetAvser.QUESTION_INTYGET_AVSER_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionIntygetAvser.questionIntygetAvser;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionIntygetAvserV1.QUESTION_INTYGET_AVSER_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionIntygetAvserV1.questionIntygetAvserV1;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -60,7 +60,7 @@ class TS8071CertificateSummaryProviderTest {
               CertificateModel.builder()
                   .elementSpecifications(
                       List.of(
-                          questionIntygetAvser()
+                          questionIntygetAvserV1()
                       )
                   )
                   .build()
@@ -87,7 +87,7 @@ class TS8071CertificateSummaryProviderTest {
               CertificateModel.builder()
                   .elementSpecifications(
                       List.of(
-                          questionIntygetAvser()
+                          questionIntygetAvserV1()
                       )
                   )
                   .build()
@@ -116,7 +116,7 @@ class TS8071CertificateSummaryProviderTest {
               CertificateModel.builder()
                   .elementSpecifications(
                       List.of(
-                          questionIntygetAvser()
+                          questionIntygetAvserV1()
                       )
                   )
                   .build()
@@ -154,7 +154,7 @@ class TS8071CertificateSummaryProviderTest {
               CertificateModel.builder()
                   .elementSpecifications(
                       List.of(
-                          questionIntygetAvser()
+                          questionIntygetAvserV1()
                       )
                   )
                   .build()

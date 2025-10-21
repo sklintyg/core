@@ -83,6 +83,8 @@ This document describes how a new certificate model is created.
   that fits
 - If a question is a sub question (ElementId is x.x instead of x for example 1.2) it needs to have
   an ElementMapping to the parent question, 1.2 maps to 1 for example.
+- If a question has a show or hide rule, it usually needs a shouldValidate field. This can be set up
+  using ElementDataPredicateFactory.
 
 ### 6. ElementRules
 
@@ -100,3 +102,25 @@ This document describes how a new certificate model is created.
 - A FillService needs to be created for Testability purposes. For example
   `TestabilityCertificateFillServiceFK7804`.
 - For example: `FK7804ActiveIT`, `FK7804CitizenIT` and `FK7804InactiveIT` for integration tests.
+
+### 8. Adding another major version of a certificate
+
+- A new version will be a new CertificateModel with the suffix VX where X is the version number.
+- When a new major version is added we will move common elements that is the same between all
+  versions to a common package.
+- The common elements will have no version suffix.
+- The new version will contain common elements as well as unique elements for that version.
+- The unique elements will have the version suffix.
+- The new version will have its own integration tests.
+- A question is common between versions if everything, mappings, rules, config, texts etc. are the
+  same. If a text is different this is a new question for this version.
+
+Follow these steps:
+
+1. Generate an analysis file described in `major-version-analysis.md` to identify common and unique
+   elements.
+2. Have developer review analysis and make changes if needed
+3. Create new certificate model class for the new version
+4. Add common elements
+5. Create new questions that are unique for the new version (with VX suffix where X is version)
+6. Add the unique elements to the model
