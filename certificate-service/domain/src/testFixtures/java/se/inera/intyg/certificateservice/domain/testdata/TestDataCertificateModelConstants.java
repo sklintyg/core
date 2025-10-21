@@ -139,4 +139,7 @@ public class TestDataCertificateModelConstants {
   public static final Recipient FK_RECIPIENT = new Recipient(
       new RecipientId("FKASSA"), "Försäkringskassan", "Logisk adress"
   );
+  public static Recipient SKR_RECIPIENT = new Recipient(
+      new RecipientId("SKR"), "Sveriges Kommuner och Regioner", null
+  );
 }

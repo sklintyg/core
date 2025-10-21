@@ -236,6 +236,7 @@ public class TestDataCertificateModel {
         .type(TestDataCertificateModelConstants.AG7804_CODE_TYPE)
         .availableForCitizen(true)
         .ableToCreateDraftForModel(FK7804_CERTIFICATE_MODEL_ID)
+        .recipient(TestDataCertificateModelConstants.SKR_RECIPIENT)
         .elementSpecifications(
             List.of(
                 ElementSpecification.builder()
@@ -269,7 +270,7 @@ public class TestDataCertificateModel {
         .name(TestDataCertificateModelConstants.AG114_NAME)
         .type(TestDataCertificateModelConstants.AG114_CODE_TYPE)
         .availableForCitizen(true)
-        .recipient(TestDataCertificateModelConstants.FK_RECIPIENT)
+        .recipient(TestDataCertificateModelConstants.SKR_RECIPIENT)
         .certificateActionFactory(new CertificateActionFactory(null));
   }
 }

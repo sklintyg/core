@@ -102,7 +102,7 @@ public class CertificateModelFactoryAG114 implements CertificateModelFactory {
                 NAME
             )
         )
-        .externalType(new CertificateType(AG1_14))
+        .typeName(new CertificateType(AG1_14))
         .name(NAME)
         .description(DESCRIPTION)
         .detailedDescription(DETAILED_DESCRIPTION.replaceAll("\\R", ""))

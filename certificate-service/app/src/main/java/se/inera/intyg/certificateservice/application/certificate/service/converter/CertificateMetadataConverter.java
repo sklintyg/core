@@ -41,8 +41,8 @@ public class CertificateMetadataConverter {
         .type(certificate.certificateModel().id().type().type())
         .version(certificate.revision().value())
         .typeName(
-            certificate.certificateModel().externalType() != null ? certificate.certificateModel()
-                .externalType().type() : certificate.certificateModel().id().type().type())
+            certificate.certificateModel().typeName() != null ? certificate.certificateModel()
+                .typeName().type() : certificate.certificateModel().id().type().type())
         .typeVersion(certificate.certificateModel().id().version().version())
         .name(certificate.certificateModel().name())
         .description(certificate.certificateModel().detailedDescription())

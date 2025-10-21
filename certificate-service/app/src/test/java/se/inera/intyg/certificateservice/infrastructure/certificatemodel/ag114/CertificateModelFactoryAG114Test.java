@@ -64,7 +64,7 @@ class CertificateModelFactoryAG114Test {
 
     final var certificateModel = certificateModelFactoryAG114.create();
 
-    assertEquals(expectedExternalType, certificateModel.externalType());
+    assertEquals(expectedExternalType, certificateModel.typeName());
   }
 
   @Test
