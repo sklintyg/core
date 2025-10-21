@@ -2,6 +2,8 @@ package se.inera.intyg.certificateservice.application.unit.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -21,7 +23,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
 import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateConverter;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
-import se.inera.intyg.certificateservice.application.common.CertificatesRequestFactory;
 import se.inera.intyg.certificateservice.application.common.converter.ResourceLinkConverter;
 import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkDTO;
 import se.inera.intyg.certificateservice.application.unit.dto.CertificatesQueryCriteriaDTO;
@@ -42,8 +43,6 @@ class GetUnitCertificatesServiceTest {
   @Mock
   private ActionEvaluationFactory actionEvaluationFactory;
   @Mock
-  private CertificatesRequestFactory certificatesRequestFactory;
-  @Mock
   private GetUnitCertificatesDomainService getUnitCertificatesDomainService;
   @Mock
   private ResourceLinkConverter resourceLinkConverter;
@@ -52,8 +51,6 @@ class GetUnitCertificatesServiceTest {
   @InjectMocks
   private GetUnitCertificatesService getUnitCertificatesService;
 
-  private static final CertificatesRequest CERTIFICATES_REQUEST = CertificatesRequest.builder()
-      .build();
   private static final CertificatesQueryCriteriaDTO QUERY_CRITERIA_DTO = CertificatesQueryCriteriaDTO.builder()
       .build();
 
@@ -87,12 +84,10 @@ class GetUnitCertificatesServiceTest {
         ALFA_REGIONEN_DTO
     );
 
-    doReturn(CERTIFICATES_REQUEST).when(certificatesRequestFactory).create(QUERY_CRITERIA_DTO);
-
     final var certificate = mock(MedicalCertificate.class);
     doReturn(List.of(certificate)).when(getUnitCertificatesDomainService).get(
-        CERTIFICATES_REQUEST,
-        actionEvaluation
+        any(CertificatesRequest.class),
+        eq(actionEvaluation)
     );
 
     final var certificateAction = mock(CertificateAction.class);

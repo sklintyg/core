@@ -38,5 +38,4 @@ public interface CertificateEntityRepository extends CrudRepository<CertificateE
 
   @Query("SELECT c FROM CertificateEntity c WHERE c.certificateId = :certificateId AND c.placeholder = true")
   Optional<CertificateEntity> findPlaceholderByCertificateId(String certificateId);
-
 }

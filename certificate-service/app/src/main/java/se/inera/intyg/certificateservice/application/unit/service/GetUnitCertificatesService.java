@@ -18,7 +18,6 @@ public class GetUnitCertificatesService {
 
   private final GetUnitCertificatesRequestValidator getUnitCertificatesRequestValidator;
   private final ActionEvaluationFactory actionEvaluationFactory;
-  private final CertificatesRequestFactory certificatesRequestFactory;
   private final GetUnitCertificatesDomainService getUnitCertificatesDomainService;
   private final CertificateConverter certificateConverter;
   private final ResourceLinkConverter resourceLinkConverter;
@@ -34,7 +33,7 @@ public class GetUnitCertificatesService {
         getUnitCertificatesRequest.getCareProvider()
     );
 
-    final var certificatesRequest = certificatesRequestFactory.create(
+    final var certificatesRequest = CertificatesRequestFactory.create(
         getUnitCertificatesRequest.getCertificatesQueryCriteria()
     );
 

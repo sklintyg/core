@@ -2,6 +2,8 @@ package se.inera.intyg.certificateservice.application.unit.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_ALLERGIMOTTAGNINGEN_DTO;
@@ -17,7 +19,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
-import se.inera.intyg.certificateservice.application.common.CertificatesRequestFactory;
 import se.inera.intyg.certificateservice.application.testdata.TestDataCommonStaffDTO;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesInfoRequest;
 import se.inera.intyg.certificateservice.application.unit.dto.GetUnitCertificatesInfoResponse;
@@ -34,14 +35,9 @@ class GetUnitCertificatesInfoServiceTest {
   @Mock
   private ActionEvaluationFactory actionEvaluationFactory;
   @Mock
-  private CertificatesRequestFactory certificatesRequestFactory;
-  @Mock
   private GetUnitCertificatesInfoDomainService getUnitCertificatesInfoDomainService;
   @InjectMocks
   private GetUnitCertificatesInfoService getUnitCertificatesInfoService;
-
-  private static final CertificatesRequest CERTIFICATES_REQUEST = CertificatesRequest.builder()
-      .build();
 
   @Test
   void shallThrowIfInvalidRequest() {
@@ -68,10 +64,8 @@ class GetUnitCertificatesInfoServiceTest {
         ALFA_REGIONEN_DTO
     );
 
-    doReturn(CERTIFICATES_REQUEST).when(certificatesRequestFactory).create();
-
     doReturn(List.of(AJLA_DOKTOR)).when(getUnitCertificatesInfoDomainService)
-        .get(CERTIFICATES_REQUEST, actionEvaluation);
+        .get(any(CertificatesRequest.class), eq(actionEvaluation));
 
     final var actualResult = getUnitCertificatesInfoService.get(
         GetUnitCertificatesInfoRequest.builder()

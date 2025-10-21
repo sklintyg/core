@@ -38,6 +38,12 @@ public abstract class BaseIntegrationIT {
     return testabilityUtilities().getTestabilityCertificate().getType();
   }
 
+  protected String externalType() {
+    return testabilityUtilities().getTestabilityCertificate().getExternalType() != null
+        ? testabilityUtilities().getTestabilityCertificate().getExternalType()
+        : testabilityUtilities().getTestabilityCertificate().getType();
+  }
+
   protected String typeVersion() {
     return testabilityUtilities().getTestabilityCertificate().getActiveVersion();
   }

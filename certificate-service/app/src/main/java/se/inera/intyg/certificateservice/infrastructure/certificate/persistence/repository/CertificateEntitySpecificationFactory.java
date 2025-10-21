@@ -6,12 +6,14 @@ import static se.inera.intyg.certificateservice.infrastructure.certificate.persi
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecification.modifiedEqualsAndGreaterThan;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecification.modifiedEqualsAndLesserThan;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecification.notPlacerholderCertificate;
+import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecification.signedEqualsAndGreaterThan;
+import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecification.signedEqualsAndLesserThan;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateModelEntitySpecification.containsTypes;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.PatientEntitySpecification.equalsPatient;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffEntitySpecification.equalsIssuedByStaff;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StatusEntitySpecification.containsStatus;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitEntitySpecification.equalsCareUnit;
-import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitEntitySpecification.equalsIssuedOnUnit;
+import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitEntitySpecification.issuedOnUnitIdIn;
 
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
@@ -47,9 +49,9 @@ public class CertificateEntitySpecificationFactory {
       );
     }
 
-    if (certificatesRequest.issuedUnitId() != null) {
+    if (certificatesRequest.issuedUnitIds() != null) {
       specification = specification.and(
-          equalsIssuedOnUnit(certificatesRequest.issuedUnitId())
+          issuedOnUnitIdIn(certificatesRequest.issuedUnitIds())
       );
     }
 
@@ -86,6 +88,18 @@ public class CertificateEntitySpecificationFactory {
     specification = specification.and(
         notPlacerholderCertificate()
     );
+
+    if (certificatesRequest.signedFrom() != null) {
+      specification = specification.and(
+          signedEqualsAndGreaterThan(certificatesRequest.signedFrom())
+      );
+    }
+
+    if (certificatesRequest.signedTo() != null) {
+      specification = specification.and(
+          signedEqualsAndLesserThan(certificatesRequest.signedTo())
+      );
+    }
 
     return specification;
   }

@@ -31,4 +31,5 @@ public class SickLeaveCertificate {
   Revoked deleted;
   List<DateRange> workCapacities;
   boolean testCertificate;
+  boolean partOfSickLeaveChain;
 }

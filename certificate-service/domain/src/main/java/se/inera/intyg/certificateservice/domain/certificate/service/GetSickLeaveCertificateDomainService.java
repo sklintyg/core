@@ -18,6 +18,12 @@ public class GetSickLeaveCertificateDomainService {
       return Optional.empty();
     }
 
-    return certificate.certificateModel().sickLeaveProvider().build(certificate);
+    final var sickLeave = certificate.certificateModel().sickLeaveProvider().build(certificate);
+
+    if (sickLeave.isPresent() && !sickLeave.get().partOfSickLeaveChain()) {
+      return Optional.empty();
+    }
+
+    return sickLeave;
   }
 }
