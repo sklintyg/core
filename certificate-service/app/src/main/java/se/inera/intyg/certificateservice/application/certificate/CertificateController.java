@@ -80,6 +80,7 @@ import se.inera.intyg.certificateservice.application.certificate.service.SignCer
 import se.inera.intyg.certificateservice.application.certificate.service.UpdateCertificateService;
 import se.inera.intyg.certificateservice.application.certificate.service.UpdateWithCertificateCandidateService;
 import se.inera.intyg.certificateservice.application.certificate.service.ValidateCertificateService;
+import se.inera.intyg.certificateservice.infrastructure.errorutil.OptimisticLockErrorHandler;
 import se.inera.intyg.certificateservice.logging.PerformanceLogging;
 
 @RequiredArgsConstructor
@@ -113,6 +114,7 @@ public class CertificateController {
 
   @PostMapping
   @PerformanceLogging(eventAction = "create-certificate", eventType = EVENT_TYPE_CREATION)
+  @OptimisticLockErrorHandler
   CreateCertificateResponse createCertificate(
       @RequestBody CreateCertificateRequest createCertificateRequest) {
     return createCertificateService.create(createCertificateRequest);
@@ -135,6 +137,7 @@ public class CertificateController {
 
   @PutMapping("/{certificateId}")
   @PerformanceLogging(eventAction = "update-certificate", eventType = EVENT_TYPE_CHANGE)
+  @OptimisticLockErrorHandler
   UpdateCertificateResponse updateCertificate(
       @RequestBody UpdateCertificateRequest updateCertificateRequest,
       @PathVariable("certificateId") String certificateId) {
@@ -143,6 +146,7 @@ public class CertificateController {
 
   @DeleteMapping("/{certificateId}/{version}")
   @PerformanceLogging(eventAction = "delete-certificate", eventType = EVENT_TYPE_DELETION)
+  @OptimisticLockErrorHandler
   DeleteCertificateResponse deleteCertificate(
       @RequestBody DeleteCertificateRequest deleteCertificateRequest,
       @PathVariable("certificateId") String certificateId, @PathVariable("version") Long version) {
@@ -167,6 +171,7 @@ public class CertificateController {
 
   @PostMapping("/{certificateId}/sign/{version}")
   @PerformanceLogging(eventAction = "sign-certificate", eventType = EVENT_TYPE_CHANGE)
+  @OptimisticLockErrorHandler
   SignCertificateResponse signCertificate(
       @RequestBody SignCertificateRequest signCertificateRequest,
       @PathVariable("certificateId") String certificateId, @PathVariable("version") Long version) {
@@ -175,6 +180,7 @@ public class CertificateController {
 
   @PostMapping("/{certificateId}/signwithoutsignature/{version}")
   @PerformanceLogging(eventAction = "sign-certificate-without-signature", eventType = EVENT_TYPE_CHANGE)
+  @OptimisticLockErrorHandler
   SignCertificateResponse signCertificateWithoutSignature(
       @RequestBody SignCertificateWithoutSignatureRequest signCertificateRequest,
       @PathVariable("certificateId") String certificateId, @PathVariable("version") Long version) {
@@ -184,6 +190,7 @@ public class CertificateController {
 
   @PostMapping("/{certificateId}/send")
   @PerformanceLogging(eventAction = "send-certificate", eventType = EVENT_TYPE_CHANGE)
+  @OptimisticLockErrorHandler
   SendCertificateResponse sendCertificate(
       @RequestBody SendCertificateRequest sendCertificateRequest,
       @PathVariable("certificateId") String certificateId) {
@@ -200,6 +207,7 @@ public class CertificateController {
 
   @PostMapping("/{certificateId}/revoke")
   @PerformanceLogging(eventAction = "revoke-certificate", eventType = EVENT_TYPE_CHANGE)
+  @OptimisticLockErrorHandler
   RevokeCertificateResponse revokeCertificate(
       @RequestBody RevokeCertificateRequest revokeCertificateRequest,
       @PathVariable("certificateId") String certificateId) {
@@ -208,6 +216,7 @@ public class CertificateController {
 
   @PostMapping("/{certificateId}/replace")
   @PerformanceLogging(eventAction = "replace-certificate", eventType = EVENT_TYPE_CREATION)
+  @OptimisticLockErrorHandler
   ReplaceCertificateResponse replaceCertificate(
       @RequestBody ReplaceCertificateRequest replaceCertificateRequest,
       @PathVariable("certificateId") String certificateId) {
@@ -216,6 +225,7 @@ public class CertificateController {
 
   @PostMapping("/{certificateId}/renew")
   @PerformanceLogging(eventAction = "renew-certificate", eventType = EVENT_TYPE_CREATION)
+  @OptimisticLockErrorHandler
   RenewCertificateResponse renewCertificate(
       @RequestBody RenewCertificateRequest renewCertificateRequest,
       @PathVariable("certificateId") String certificateId) {
@@ -224,6 +234,7 @@ public class CertificateController {
 
   @PostMapping("/{certificateId}/renew/external")
   @PerformanceLogging(eventAction = "renew-external-certificate", eventType = EVENT_TYPE_CREATION)
+  @OptimisticLockErrorHandler
   RenewCertificateResponse renewExternalCertificate(
       @RequestBody RenewExternalCertificateRequest renewExternalCertificateRequest,
       @PathVariable("certificateId") String certificateId) {
@@ -232,6 +243,7 @@ public class CertificateController {
 
   @PostMapping("/{certificateId}/complement")
   @PerformanceLogging(eventAction = "complement-certificate", eventType = EVENT_TYPE_CREATION)
+  @OptimisticLockErrorHandler
   ComplementCertificateResponse complementCertificate(
       @RequestBody ComplementCertificateRequest request,
       @PathVariable("certificateId") String certificateId) {
@@ -248,6 +260,7 @@ public class CertificateController {
 
   @PostMapping("/{certificateId}/forward")
   @PerformanceLogging(eventAction = "forward-certificate", eventType = EVENT_TYPE_CHANGE)
+  @OptimisticLockErrorHandler
   ForwardCertificateResponse forwardCertificate(
       @RequestBody ForwardCertificateRequest forwardCertificateRequest,
       @PathVariable("certificateId") String certificateId) {
@@ -264,6 +277,7 @@ public class CertificateController {
 
   @PostMapping("/{certificateId}/readyForSign")
   @PerformanceLogging(eventAction = "ready-for-sign-certificate", eventType = EVENT_TYPE_CHANGE)
+  @OptimisticLockErrorHandler
   CertificateReadyForSignResponse setCertificateReadyForSign(
       @RequestBody CertificateReadyForSignRequest request,
       @PathVariable("certificateId") String certificateId) {

@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.application.certificate.service;
 
+import jakarta.transaction.Transactional;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ public class SetCertificateReadyForSignService {
   private final CertificateConverter certificateConverter;
   private final ResourceLinkConverter resourceLinkConverter;
 
+  @Transactional
   public CertificateReadyForSignResponse set(CertificateReadyForSignRequest request,
       String certificateId) {
     setCertificateReadyForSignRequestValidator.validate(request, certificateId);

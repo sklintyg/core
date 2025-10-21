@@ -70,7 +70,7 @@ public class TestDataStaffEntity {
                 .toList()
         );
   }
-
+  
   public static StaffEntity.StaffEntityBuilder alfDoktorEntityBuilder() {
     return StaffEntity.builder()
         .hsaId(ALF_DOKTOR_HSA_ID)

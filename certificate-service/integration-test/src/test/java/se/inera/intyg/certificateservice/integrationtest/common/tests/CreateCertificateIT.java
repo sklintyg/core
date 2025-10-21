@@ -195,4 +195,5 @@ public abstract class CreateCertificateIT extends BaseIntegrationIT {
 
     assertEquals(400, response.getStatusCode().value());
   }
+
 }

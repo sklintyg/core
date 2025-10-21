@@ -2,6 +2,9 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffEntity.AJLA_DOKTOR_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffEntity.ALF_DOKTOR_ENTITY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
@@ -22,6 +25,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.ReadyForSign;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revoked;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffEntityRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,8 +33,11 @@ class StaffRepositoryTest {
 
   @Mock
   private StaffEntityRepository staffEntityRepository;
+  @Mock
+  MetadataVersionRepository metadataVersionRepository;
   @InjectMocks
   private StaffRepository staffRepository;
+
 
   @Test
   void shallReturnEntityFromRepositoryIfExists() {
@@ -243,5 +250,36 @@ class StaffRepositoryTest {
     final var actualStaffs = staffRepository.staffs(certificate);
 
     assertEquals(expectedStaffs, actualStaffs);
+  }
+
+  @Test
+  void shallUpdateStaffVersionWhenDifferencesExist() {
+    final var existingEntity = mock(StaffEntity.class);
+    final var updatedEntity = mock(StaffEntity.class);
+
+    doReturn(Optional.of(existingEntity))
+        .when(staffEntityRepository).findByHsaId(AJLA_DOCTOR_HSA_ID);
+    doReturn(true).when(existingEntity).hasDiff(AJLA_DOKTOR_ENTITY);
+    doReturn(updatedEntity)
+        .when(metadataVersionRepository).saveStaffVersion(existingEntity, AJLA_DOKTOR_ENTITY);
+
+    final var result = staffRepository.staff(AJLA_DOKTOR);
+
+    assertEquals(updatedEntity, result);
+    verify(metadataVersionRepository).saveStaffVersion(existingEntity, AJLA_DOKTOR_ENTITY);
+  }
+
+  @Test
+  void shallReturnExistingStaffWhenNoDifferencesExist() {
+    final var existingEntity = mock(StaffEntity.class);
+
+    doReturn(Optional.of(existingEntity))
+        .when(staffEntityRepository).findByHsaId(AJLA_DOCTOR_HSA_ID);
+    doReturn(false).when(existingEntity).hasDiff(AJLA_DOKTOR_ENTITY);
+
+    final var result = staffRepository.staff(AJLA_DOKTOR);
+
+    assertEquals(existingEntity, result);
+    verify(metadataVersionRepository, never()).saveStaffVersion(existingEntity, AJLA_DOKTOR_ENTITY);
   }
 }

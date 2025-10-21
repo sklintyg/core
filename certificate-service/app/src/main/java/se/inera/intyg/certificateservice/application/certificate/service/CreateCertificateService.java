@@ -27,6 +27,7 @@ public class CreateCertificateService {
   private final CertificateConverter certificateConverter;
   private final ResourceLinkConverter resourceLinkConverter;
 
+
   @Transactional
   public CreateCertificateResponse create(CreateCertificateRequest createCertificateRequest) {
     createCertificateRequestValidator.validate(createCertificateRequest);

@@ -144,9 +144,7 @@ class MedicalCertificateTest {
                 .careProvider(ALFA_REGIONEN)
                 .build()
         )
-        .elementData(
-            List.of(DATE)
-        );
+        .elementData(List.of(DATE));
 
     certificate = certificateBuilder.build();
 
@@ -2939,6 +2937,43 @@ class MedicalCertificateTest {
       final var actual = medicalCertificate.candidateForUpdate();
 
       assertEquals(Optional.of(expected), actual);
+    }
+  }
+
+  @Nested
+  class MetadataForPrintTests {
+
+    @Test
+    void shouldReturnCertificateMetaDataWhenUnSigned() {
+      assertEquals(certificate.certificateMetaData(), certificate.getMetadataForPrint());
+    }
+
+    @Test
+    void shouldReturnMetaDataFromSignInstanceWhenSigned() {
+      final var certificateMetaData = mock(CertificateMetaData.class);
+      var certWithLocallyStoredUpdateMetadata = certificateBuilder.signed(LocalDateTime.now())
+          .metaDataFromSignInstance(certificateMetaData)
+          .build();
+      assertEquals(certificateMetaData, certWithLocallyStoredUpdateMetadata.getMetadataForPrint());
+    }
+
+    @Test
+    void shouldCallRepositoryWhenSignedAndMetaDataFromSignInstanceNull() {
+      final var certificateRepo = mock(CertificateRepository.class);
+      final var signed = LocalDateTime.now();
+      final var expected = mock(CertificateMetaData.class);
+      MedicalCertificate certificate = certificateBuilder
+          .signed(signed)
+          .certificateRepository(certificateRepo)
+          .build();
+
+      when(certificateRepo.getMetadataFromSignInstance(certificate.certificateMetaData(),
+          signed)).thenReturn(
+          expected);
+
+      assertEquals(expected, certificate.getMetadataForPrint());
+      verify(certificateRepo).getMetadataFromSignInstance(certificate.certificateMetaData(),
+          signed);
     }
   }
 }
