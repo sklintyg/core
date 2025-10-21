@@ -21,7 +21,7 @@ public class PrintCertificateQuestionConverter {
   public Question convert(PrintCertificateQuestionDTO question) {
     return Question.builder()
         .id(question.getId())
-        .name(question.getName() == null ? "" : question.getName())
+        .name(question.getName())
         .value(getElementValue(question))
         .subQuestions(question.getSubquestions().stream()
             .map(this::convert)
