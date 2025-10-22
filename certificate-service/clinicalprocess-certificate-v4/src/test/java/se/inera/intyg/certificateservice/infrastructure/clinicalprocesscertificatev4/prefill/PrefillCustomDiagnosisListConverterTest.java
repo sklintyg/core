@@ -54,7 +54,7 @@ class PrefillCustomDiagnosisListConverterTest {
               .id(FIELD_ID)
               .terminology(List.of(
                   new ElementDiagnosisTerminology("ICD-10-SE", "ICD-10-SE",
-                      "1.2.752.116.1.1.1.1.8")))
+                      "1.2.752.116.1.1.1.1.3")))
               .list(
                   List.of(
                       new ElementDiagnosisListItem(DIAGNOS_FIELD_ID),

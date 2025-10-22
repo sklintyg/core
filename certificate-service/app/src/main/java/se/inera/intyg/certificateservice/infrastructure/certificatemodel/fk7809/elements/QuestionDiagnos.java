@@ -111,7 +111,7 @@ public class QuestionDiagnos {
                     "Ange diagnoskod med så många positioner som möjligt. Använd inga andra tecken än bokstäver och siffror.")
                 .terminology(
                     List.of(
-                        CodeSystemIcd10Se.terminology()
+                        CodeSystemIcd10Se.deprecatedTerminology()
                     )
                 )
                 .list(
