@@ -19,6 +19,7 @@ public class HeaderElementFactory {
   private static final String SENT_ALERT_MESSAGE = "Detta är en utskrift av ett elektroniskt intyg. Intyget har signerats elektroniskt av intygsutfärdaren. Notera att intyget redan har skickats till %s.";
   private static final String SIGNED_ALERT_MESSAGE = "Detta är en utskrift av ett elektroniskt intyg. Intyget har signerats elektroniskt av intygsutfärdaren.";
   private static final String PERSON_SAMORDNINGS_NR = "Person- /samordningsnr";
+  private static final String EMPLOYER = "arbetsgivaren";
 
   public static Element recipientLogo(byte[] logoBytes, String recipientName) {
     final var logoBase64 = new String(Base64.getEncoder().encode(logoBytes));
@@ -70,7 +71,7 @@ public class HeaderElementFactory {
   public static String alertMessage(String recipientName, boolean isDraft, boolean isSent,
       boolean isCanSendElectronically) {
     if (isDraft && !isCanSendElectronically) {
-      return DRAFT_ALERT_MESSAGE.formatted("arbetsgivaren");
+      return DRAFT_ALERT_MESSAGE.formatted(EMPLOYER);
     }
     if (isDraft) {
       return DRAFT_ALERT_MESSAGE.formatted(recipientName);
