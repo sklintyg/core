@@ -2,11 +2,9 @@ package se.inera.intyg.certificateprintservice.playwright.document;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static se.inera.intyg.certificateprintservice.playwright.document.Constants.A;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.ATTRIBUTES;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.CLASS;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.DIV;
-import static se.inera.intyg.certificateprintservice.playwright.document.Constants.HREF;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.NUM_ATTRIBUTES;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.NUM_CHILDREN;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.P;
@@ -95,11 +93,10 @@ class FooterTest {
           void footerLink() {
             final var element = footer.create().child(0).child(0).child(1);
             assertAll(
-                () -> assertEquals(A, element.tag(), TAG_TYPE),
+                () -> assertEquals(P, element.tag(), TAG_TYPE),
                 () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
                 () -> assertEquals(FOOTER_LINK_TEXT, element.text(), TEXT),
-                () -> assertEquals(1, attributesSize(element), NUM_ATTRIBUTES),
-                () -> assertEquals(FOOTER_LINK_URL, attributes(element, HREF), ATTRIBUTES)
+                () -> assertEquals(1, attributesSize(element), NUM_ATTRIBUTES)
             );
           }
         }
