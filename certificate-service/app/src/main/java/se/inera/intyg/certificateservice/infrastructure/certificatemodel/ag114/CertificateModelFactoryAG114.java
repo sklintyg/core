@@ -99,7 +99,7 @@ public class CertificateModelFactoryAG114 implements CertificateModelFactory {
             new Code(
                 "AG1-14",
                 "b64ea353-e8f6-4832-b563-fc7d46f29548",
-                NAME
+                "Läkarintyg om arbetsförmåga – sjuklöneperiod"
             )
         )
         .typeName(new CertificateType(AG1_14))

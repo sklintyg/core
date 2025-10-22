@@ -149,7 +149,7 @@ class CertificateModelFactoryAG114Test {
     final var expected = new Code(
         "AG1-14",
         "b64ea353-e8f6-4832-b563-fc7d46f29548",
-        "Läkarintyg om arbetsförmåga – sjuklöneperioden"
+        "Läkarintyg om arbetsförmåga – sjuklöneperiod"
     );
 
     final var actual = certificateModelFactoryAG114.create().type();
