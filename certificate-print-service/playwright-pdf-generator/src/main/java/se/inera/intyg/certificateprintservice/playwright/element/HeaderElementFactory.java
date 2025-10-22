@@ -80,7 +80,7 @@ public class HeaderElementFactory {
       return
           SENT_ALERT_MESSAGE.formatted(recipientName);
     }
-    return SIGNED_ALERT_MESSAGE; //TODO: Prata med om detta vid is cansendelectronically
+    return SIGNED_ALERT_MESSAGE;
   }
 
 }
