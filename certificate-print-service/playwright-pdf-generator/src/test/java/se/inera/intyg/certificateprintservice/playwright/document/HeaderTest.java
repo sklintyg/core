@@ -308,21 +308,6 @@ class HeaderTest {
             }
 
             @Test
-            void CannotSendAlertMessageSigned() throws NullPointerException {
-              final var header = headerBuilder.isDraft(false).isSent(false)
-                  .isCanSendElectronically(false).build();
-              final var element = header.create().child(0).child(1).child(1).child(0);
-              assertAll(
-                  () -> assertEquals(P, element.tag(), TAG_TYPE),
-                  () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
-                  () -> assertEquals(1, attributesSize(element), NUM_ATTRIBUTES),
-                  () -> assertEquals(DRAFT_ALERT_MESSAGE.formatted("arbetsgivaren"), element.text(),
-                      TEXT),
-                  () -> assertEquals("margin: 0;", attributes(element, STYLE), ATTRIBUTES)
-              );
-            }
-
-            @Test
             void alertMessageSent() throws NullPointerException {
               final var header = headerBuilder.isDraft(false).isSent(true)
                   .isCanSendElectronically(true).build();
@@ -339,14 +324,14 @@ class HeaderTest {
 
             @Test
             void alertMessageCannotSent() throws NullPointerException {
-              final var header = headerBuilder.isDraft(false).isSent(true)
+              final var header = headerBuilder.isDraft(false).isSent(false)
                   .isCanSendElectronically(false).build();
               final var element = header.create().child(0).child(1).child(1).child(0);
               assertAll(
                   () -> assertEquals(P, element.tag(), TAG_TYPE),
                   () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
                   () -> assertEquals(1, attributesSize(element), NUM_ATTRIBUTES),
-                  () -> assertEquals(DRAFT_ALERT_MESSAGE.formatted("arbetsgivaren"), element.text(),
+                  () -> assertEquals(SIGNED_ALERT_MESSAGE, element.text(),
                       TEXT),
                   () -> assertEquals("margin: 0;", attributes(element, STYLE), ATTRIBUTES)
               );
