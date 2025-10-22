@@ -21,6 +21,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 
 class CertificateModelFactoryAG114Test {
@@ -141,6 +142,19 @@ class CertificateModelFactoryAG114Test {
     final var certificateModel = certificateModelFactoryAG114.create();
 
     assertEquals(certificateActionFactory, certificateModel.certificateActionFactory());
+  }
+
+  @Test
+  void shouldIncludeCorrectType() {
+    final var expected = new Code(
+        "AG1-14",
+        "b64ea353-e8f6-4832-b563-fc7d46f29548",
+        "Läkarintyg om arbetsförmåga – sjuklöneperioden"
+    );
+
+    final var actual = certificateModelFactoryAG114.create().type();
+
+    assertEquals(expected, actual);
   }
 
   @Nested
