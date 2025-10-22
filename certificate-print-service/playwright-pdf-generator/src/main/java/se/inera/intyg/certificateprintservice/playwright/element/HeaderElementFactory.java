@@ -69,7 +69,7 @@ public class HeaderElementFactory {
 
   public static String alertMessage(String recipientName, boolean isDraft, boolean isSent,
       boolean isCanSendElectronically) {
-    if (!isCanSendElectronically) {
+    if (isDraft && !isCanSendElectronically) {
       return DRAFT_ALERT_MESSAGE.formatted("arbetsgivaren");
     }
     if (isDraft) {
@@ -79,7 +79,7 @@ public class HeaderElementFactory {
       return
           SENT_ALERT_MESSAGE.formatted(recipientName);
     }
-    return SIGNED_ALERT_MESSAGE; //TODO: Prata med om detta vid is cansendelectronically
+    return SIGNED_ALERT_MESSAGE;
   }
 
 }
