@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
+import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210.CertificateModelFactoryFK7210;
 import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertificatev4.certificate.XmlGeneratorCertificateV4;
@@ -24,6 +25,8 @@ class SchemaValidatorV4Test {
 
   @Mock
   private CertificateActionFactory certificateActionFactory;
+  @Mock
+  private DiagnosisCodeRepository diagnosisCodeRepository;
   private SchemaValidatorV4 schemaValidatorV4;
   private CertificateModelFactoryFK7210 certificateModelFactoryFK7210;
 
@@ -43,7 +46,8 @@ class SchemaValidatorV4Test {
         new XmlGeneratorValue(
             List.of(new XmlGeneratorDate(), new XmlGeneratorDateRangeList(),
                 new XmlGeneratorText()),
-            List.of(new XmlGeneratorCodeListToBoolean(), new XmlGeneratorUnifiedDiagnosisList())
+            List.of(new XmlGeneratorCodeListToBoolean(),
+                new XmlGeneratorUnifiedDiagnosisList(diagnosisCodeRepository))
         ),
         new XmlValidationService(
             new SchematronValidator(),
