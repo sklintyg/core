@@ -12,6 +12,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
@@ -49,6 +50,15 @@ public class QuestionHorselhjalpmedelV2 {
                 CertificateElementRuleFactory.mandatoryExist(
                     QUESTION_HORSELHJALPMEDEL_ID,
                     QUESTION_HORSELHJALPMEDEL_FIELD_ID
+                ),
+                CertificateElementRuleFactory.show(
+                    QUESTION_INTYGET_AVSER_ID,
+                    new RuleExpression(
+                        String.format(
+                            "exists(%s) || exists(%s) || exists(%s)",
+                            GR_II_III.code(), FORLANG_GR_II_III.code(), TAXI.code()
+                        )
+                    )
                 )
             )
         )

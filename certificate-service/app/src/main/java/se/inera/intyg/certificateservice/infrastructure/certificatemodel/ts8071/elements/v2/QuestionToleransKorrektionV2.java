@@ -30,7 +30,8 @@ public class QuestionToleransKorrektionV2 {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionToleransKorrektionV2() {
+  public static ElementSpecification questionToleransKorrektionV2(
+      ElementSpecification... children) {
     return ElementSpecification.builder()
         .id(QUESTION_TOLERANS_KORREKTION_V2_ID)
         .configuration(
@@ -88,6 +89,7 @@ public class QuestionToleransKorrektionV2 {
         .shouldValidate(
             ElementDataPredicateFactory.visualAcuities(QUESTION_SYNSKARPA_ID, 0.8)
         )
+        .children(List.of(children))
         .build();
   }
 }

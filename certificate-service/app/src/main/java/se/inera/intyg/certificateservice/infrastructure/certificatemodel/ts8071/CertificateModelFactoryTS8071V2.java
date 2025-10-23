@@ -195,8 +195,10 @@ public class CertificateModelFactoryTS8071V2 implements CertificateModelFactory 
                 ),
                 categorySynskarpa(
                     questionSynskarpa(),
-                    questionToleransKorrektionV2(),
-                    questionGlasogonStyrkaV2()
+                    questionToleransKorrektionV2(
+                        questionGlasogonStyrkaV2()
+
+                    )
                 ),
                 categoryAnamnes(
                     questionSjukdomEllerSynnedsattning(
