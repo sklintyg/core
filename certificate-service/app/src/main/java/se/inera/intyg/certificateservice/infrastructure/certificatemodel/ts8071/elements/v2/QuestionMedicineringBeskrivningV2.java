@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionMedicineringV2.QUESTION_MEDICINERING_V2_FIELD_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionMedicineringV2.QUESTION_MEDICINERING_V2_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionMedicinering.QUESTION_MEDICINERING_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionMedicinering.QUESTION_MEDICINERING_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
@@ -34,8 +34,8 @@ public class QuestionMedicineringBeskrivningV2 {
         .rules(
             List.of(
                 CertificateElementRuleFactory.show(
-                    QUESTION_MEDICINERING_V2_ID,
-                    QUESTION_MEDICINERING_V2_FIELD_ID
+                    QUESTION_MEDICINERING_ID,
+                    QUESTION_MEDICINERING_FIELD_ID
                 ),
                 CertificateElementRuleFactory.mandatory(
                     QUESTION_MEDICINERING_BESKRIVNING_V2_ID,
@@ -47,10 +47,10 @@ public class QuestionMedicineringBeskrivningV2 {
             )
         )
         .shouldValidate(
-            ElementDataPredicateFactory.valueBoolean(QUESTION_MEDICINERING_V2_ID)
+            ElementDataPredicateFactory.valueBoolean(QUESTION_MEDICINERING_ID)
         )
         .mapping(
-            new ElementMapping(QUESTION_MEDICINERING_V2_ID, null)
+            new ElementMapping(QUESTION_MEDICINERING_ID, null)
         )
         .validations(
             List.of(

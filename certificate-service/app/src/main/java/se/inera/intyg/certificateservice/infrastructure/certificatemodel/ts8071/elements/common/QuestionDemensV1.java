@@ -11,16 +11,16 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
-public class QuestionDemens {
+public class QuestionDemensV1 {
 
   public static final ElementId QUESTION_DEMENS_ID = new ElementId("16.2");
   public static final FieldId QUESTION_DEMENS_FIELD_ID = new FieldId("16.2");
 
-  private QuestionDemens() {
+  private QuestionDemensV1() {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionDemens(ElementSpecification... children) {
+  public static ElementSpecification questionDemensV1(ElementSpecification... children) {
     return ElementSpecification.builder()
         .id(QUESTION_DEMENS_ID)
         .configuration(

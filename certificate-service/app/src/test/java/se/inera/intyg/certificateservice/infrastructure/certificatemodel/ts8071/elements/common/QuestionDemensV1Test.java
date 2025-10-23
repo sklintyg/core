@@ -13,13 +13,13 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 
-class QuestionDemensTest {
+class QuestionDemensV1Test {
 
   private static final ElementId ELEMENT_ID = new ElementId("16.2");
 
   @Test
   void shallIncludeId() {
-    final var element = QuestionDemens.questionDemens();
+    final var element = QuestionDemensV1.questionDemensV1();
 
     assertEquals(ELEMENT_ID, element.id());
   }
@@ -36,7 +36,7 @@ class QuestionDemensTest {
         .unselectedText("Nej")
         .build();
 
-    final var element = QuestionDemens.questionDemens();
+    final var element = QuestionDemensV1.questionDemensV1();
 
     assertEquals(expectedConfiguration, element.configuration());
   }
@@ -55,7 +55,7 @@ class QuestionDemensTest {
             .build()
     );
 
-    final var element = QuestionDemens.questionDemens();
+    final var element = QuestionDemensV1.questionDemensV1();
 
     assertEquals(expectedRule, element.rules());
   }
@@ -68,14 +68,14 @@ class QuestionDemensTest {
             .build()
     );
 
-    final var element = QuestionDemens.questionDemens();
+    final var element = QuestionDemensV1.questionDemensV1();
 
     assertEquals(expectedValidations, element.validations());
   }
 
   @Test
   void shallIncludeMapping() {
-    final var element = QuestionDemens.questionDemens();
+    final var element = QuestionDemensV1.questionDemensV1();
 
     assertEquals(new ElementMapping(new ElementId("16"), null), element.mapping());
   }

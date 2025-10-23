@@ -40,6 +40,8 @@ public class QuestionMissbrukRemissionV2 {
             ElementConfigurationRadioMultipleCode.builder()
                 .id(QUESTION_MISSBRUK_REMISSION_FIELD_ID)
                 .name("Om diagnos beroende, är beroendet i fullständig långvarig remission?")
+                .description(
+                    "Här avses exempelvis beroende eller skadligt mönster av bruk enligt ICD-11, skadligt bruk enligt ICD-10, missbruk enligt DSM-IV eller substansbrukssyndrom enligt DSM-5.")
                 .elementLayout(ElementLayout.ROWS)
                 .list(radioMultipleCodes)
                 .build()
