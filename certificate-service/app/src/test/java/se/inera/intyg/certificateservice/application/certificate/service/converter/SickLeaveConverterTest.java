@@ -288,7 +288,7 @@ class SickLeaveConverterTest {
     @Test
     void shallConvertType() {
       final var dto = converter.toSickLeaveCertificateItem(sickLeaveCertificate);
-      assertEquals("type", dto.getCertificateType());
+      assertEquals("TYPE", dto.getCertificateType());
     }
 
     @Test
