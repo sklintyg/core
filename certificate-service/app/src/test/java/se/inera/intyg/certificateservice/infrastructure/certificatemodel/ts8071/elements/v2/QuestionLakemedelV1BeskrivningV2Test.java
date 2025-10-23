@@ -25,14 +25,14 @@ class QuestionLakemedelV1BeskrivningV2Test {
   private static final ElementId ELEMENT_ID = new ElementId("18.9");
 
   @Test
-  void shallIncludeId() {
+  void shouldIncludeId() {
     final var element = QuestionLakemedelBeskrivningV2.questionLakemedelBeskrivningV2();
 
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
-  void shallIncludeConfiguration() {
+  void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationTextArea.builder()
         .name("Ange läkemedel och ordinerad dos")
         .id(new FieldId("18.9"))
@@ -44,7 +44,7 @@ class QuestionLakemedelV1BeskrivningV2Test {
   }
 
   @Test
-  void shallIncludeRules() {
+  void shouldIncludeRules() {
     final var expectedRules = List.of(
         ElementRuleExpression.builder()
             .id(new ElementId("18.8"))
@@ -69,7 +69,7 @@ class QuestionLakemedelV1BeskrivningV2Test {
   }
 
   @Test
-  void shallIncludeValidation() {
+  void shouldIncludeValidation() {
     final var expectedValidations = List.of(
         ElementValidationText.builder()
             .mandatory(true)
@@ -83,7 +83,7 @@ class QuestionLakemedelV1BeskrivningV2Test {
   }
 
   @Test
-  void shallIncludeMapping() {
+  void shouldIncludeMapping() {
     final var element = QuestionLakemedelBeskrivningV2.questionLakemedelBeskrivningV2();
 
     assertEquals(new ElementMapping(new ElementId("18"), null), element.mapping());
@@ -93,7 +93,7 @@ class QuestionLakemedelV1BeskrivningV2Test {
   class ShouldValidate {
 
     @Test
-    void shallReturnTrueIfBooleanIsTrue() {
+    void shouldReturnTrueIfBooleanIsTrue() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("18.8"))
@@ -113,7 +113,7 @@ class QuestionLakemedelV1BeskrivningV2Test {
     }
 
     @Test
-    void shallReturnFalseIfElementMissing() {
+    void shouldReturnFalseIfElementMissing() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("7.1"))

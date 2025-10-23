@@ -32,14 +32,14 @@ class QuestionHorselhjalpmedelV2Test {
   private static final ElementId ELEMENT_ID = new ElementId("9.2");
 
   @Test
-  void shallIncludeId() {
+  void shouldIncludeId() {
     final var element = QuestionHorselhjalpmedelV2.questionHorselhjalpmedelV2();
 
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
-  void shallIncludeConfiguration() {
+  void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationRadioBoolean.builder()
         .name(
             "Behöver personen använda hörapparat för att kunna uppfatta vanlig samtalsstämma på fyra meters avstånd?")
@@ -54,7 +54,7 @@ class QuestionHorselhjalpmedelV2Test {
   }
 
   @Test
-  void shallIncludeRules() {
+  void shouldIncludeRules() {
     final var expectedRule = List.of(
         ElementRuleExpression.builder()
             .id(ELEMENT_ID)
@@ -73,7 +73,7 @@ class QuestionHorselhjalpmedelV2Test {
   }
 
   @Test
-  void shallIncludeValidation() {
+  void shouldIncludeValidation() {
     final var expectedValidations = List.of(
         ElementValidationBoolean.builder()
             .mandatory(true)
@@ -86,14 +86,14 @@ class QuestionHorselhjalpmedelV2Test {
   }
 
   @Test
-  void shallIncludeMapping() {
+  void shouldIncludeMapping() {
     final var element = QuestionHorselhjalpmedelV2.questionHorselhjalpmedelV2();
 
     assertEquals(new ElementMapping(new ElementId("9"), null), element.mapping());
   }
 
   @Test
-  void shallIncludeChildren() {
+  void shouldIncludeChildren() {
     final var expectedChild = QuestionHorselhjalpmedelPositionV2.questionHorselhjalpmedelPositionV2();
     final var element = QuestionHorselhjalpmedelV2.questionHorselhjalpmedelV2(expectedChild);
 
@@ -104,7 +104,7 @@ class QuestionHorselhjalpmedelV2Test {
   class ShouldValidate {
 
     @Test
-    void shallReturnTrueIfCodeIsGR23() {
+    void shouldReturnTrueIfCodeIsGR23() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("1"))
@@ -131,7 +131,7 @@ class QuestionHorselhjalpmedelV2Test {
     }
 
     @Test
-    void shallReturnTrueIfCodeIsForlangGR23() {
+    void shouldReturnTrueIfCodeIsForlangGR23() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("1"))
@@ -158,7 +158,7 @@ class QuestionHorselhjalpmedelV2Test {
     }
 
     @Test
-    void shallReturnTrueIfCodeIsTaxi() {
+    void shouldReturnTrueIfCodeIsTaxi() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("1"))
@@ -185,7 +185,7 @@ class QuestionHorselhjalpmedelV2Test {
     }
 
     @Test
-    void shallReturnFalseIfCodeIsGR2() {
+    void shouldReturnFalseIfCodeIsGR2() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("1"))
@@ -212,7 +212,7 @@ class QuestionHorselhjalpmedelV2Test {
     }
 
     @Test
-    void shallReturnFalseIfCodeIsForlangGR2() {
+    void shouldReturnFalseIfCodeIsForlangGR2() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("1"))
@@ -239,7 +239,7 @@ class QuestionHorselhjalpmedelV2Test {
     }
 
     @Test
-    void shallReturnFalseIfCodeIsAnnat() {
+    void shouldReturnFalseIfCodeIsAnnat() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("1"))
@@ -266,7 +266,7 @@ class QuestionHorselhjalpmedelV2Test {
     }
 
     @Test
-    void shallReturnFalseIfCodeIsUtlandsk() {
+    void shouldReturnFalseIfCodeIsUtlandsk() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("1"))
@@ -293,7 +293,7 @@ class QuestionHorselhjalpmedelV2Test {
     }
 
     @Test
-    void shallReturnFalseIfElementMissing() {
+    void shouldReturnFalseIfElementMissing() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("7.1"))

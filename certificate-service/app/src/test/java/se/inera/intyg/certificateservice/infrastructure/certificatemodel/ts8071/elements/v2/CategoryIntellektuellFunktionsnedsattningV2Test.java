@@ -9,7 +9,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId
 class CategoryIntellektuellFunktionsnedsattningV2Test {
 
   @Test
-  void shallIncludeConfiguration() {
+  void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationCategory.builder()
         .name("Intellektuell funktionsnedsättning")
         .build();
@@ -20,7 +20,7 @@ class CategoryIntellektuellFunktionsnedsattningV2Test {
   }
 
   @Test
-  void shallIncludeId() {
+  void shouldIncludeId() {
     final var expectedId = new ElementId("KAT_18");
 
     final var element = CategoryIntellektuellFunktionsnedsattningV2.categoryIntellektuellFunktionsnedsattningV2();

@@ -23,14 +23,14 @@ class QuestionSynkopeV2Test {
   private static final ElementId ELEMENT_ID = new ElementId("11.7");
 
   @Test
-  void shallIncludeId() {
+  void shouldIncludeId() {
     final var element = QuestionSynkopeV2.questionSynkopeV2();
 
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
-  void shallIncludeConfiguration() {
+  void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationRadioBoolean.builder()
         .name("Har personen haft en synkope?")
         .id(new FieldId("11.7"))
@@ -44,7 +44,7 @@ class QuestionSynkopeV2Test {
   }
 
   @Test
-  void shallIncludeRules() {
+  void shouldIncludeRules() {
     final var expectedRule = List.of(
         ElementRuleExpression.builder()
             .id(ELEMENT_ID)
@@ -72,7 +72,7 @@ class QuestionSynkopeV2Test {
   }
 
   @Test
-  void shallIncludeValidation() {
+  void shouldIncludeValidation() {
     final var expectedValidations = List.of(
         ElementValidationBoolean.builder()
             .mandatory(true)
@@ -85,7 +85,7 @@ class QuestionSynkopeV2Test {
   }
 
   @Test
-  void shallIncludeMapping() {
+  void shouldIncludeMapping() {
     final var element = QuestionSynkopeV2.questionSynkopeV2();
 
     assertEquals(new ElementMapping(new ElementId("11"), null), element.mapping());
@@ -95,7 +95,7 @@ class QuestionSynkopeV2Test {
   class ShouldValidate {
 
     @Test
-    void shallReturnTrueIfBooleanIsTrue() {
+    void shouldReturnTrueIfBooleanIsTrue() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("11"))
@@ -115,7 +115,7 @@ class QuestionSynkopeV2Test {
     }
 
     @Test
-    void shallReturnFalseIfElementMissing() {
+    void shouldReturnFalseIfElementMissing() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("8.1"))
@@ -135,7 +135,7 @@ class QuestionSynkopeV2Test {
     }
 
     @Test
-    void shallReturnFalseIfElementFalse() {
+    void shouldReturnFalseIfElementFalse() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("11"))

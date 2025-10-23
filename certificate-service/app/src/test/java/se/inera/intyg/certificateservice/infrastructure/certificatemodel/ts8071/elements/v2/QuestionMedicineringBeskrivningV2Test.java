@@ -12,14 +12,14 @@ class QuestionMedicineringBeskrivningV2Test {
   private static final ElementId ELEMENT_ID = new ElementId("21.2");
 
   @Test
-  void shallIncludeId() {
+  void shouldIncludeId() {
     final var element = QuestionMedicineringBeskrivningV2.questionMedicineringBeskrivningV2();
 
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
-  void shallIncludeConfiguration() {
+  void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationTextArea.builder()
         .name("Ange vilken eller vilka mediciner")
         .id(new FieldId("21.2"))

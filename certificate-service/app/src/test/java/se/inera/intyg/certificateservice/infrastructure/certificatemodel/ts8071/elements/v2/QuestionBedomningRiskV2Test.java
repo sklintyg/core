@@ -12,14 +12,14 @@ class QuestionBedomningRiskV2Test {
   private static final ElementId ELEMENT_ID = new ElementId("23.3");
 
   @Test
-  void shallIncludeId() {
+  void shouldIncludeId() {
     final var element = QuestionBedomningRiskV2.questionBedomningRiskV2();
 
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
-  void shallIncludeConfiguration() {
+  void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationTextArea.builder()
         .name("Du bedömer att det finns en risk, ange orsaken till detta")
         .id(new FieldId("23.3"))

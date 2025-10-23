@@ -25,14 +25,14 @@ class QuestionHorselhjalpmedelPositionV2Test {
   private static final ElementId ELEMENT_ID = new ElementId("9.3");
 
   @Test
-  void shallIncludeId() {
+  void shouldIncludeId() {
     final var element = QuestionHorselhjalpmedelPositionV2.questionHorselhjalpmedelPositionV2();
 
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
-  void shallIncludeConfiguration() {
+  void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationCheckboxMultipleCode.builder()
         .name("Om personen behöver använda hörapparat, ange på vilket öra")
         .id(new FieldId("9.3"))
@@ -59,14 +59,14 @@ class QuestionHorselhjalpmedelPositionV2Test {
   }
 
   @Test
-  void shallIncludeRules() {
+  void shouldIncludeRules() {
     final var element = QuestionHorselhjalpmedelPositionV2.questionHorselhjalpmedelPositionV2();
 
     assertEquals(2, element.rules().size());
   }
 
   @Test
-  void shallIncludeValidations() {
+  void shouldIncludeValidations() {
     final var expectedValidations = List.of(
         ElementValidationCodeList.builder()
             .mandatory(true)
@@ -79,7 +79,7 @@ class QuestionHorselhjalpmedelPositionV2Test {
   }
 
   @Test
-  void shallIncludeMapping() {
+  void shouldIncludeMapping() {
     final var element = QuestionHorselhjalpmedelPositionV2.questionHorselhjalpmedelPositionV2();
 
     assertEquals(new ElementMapping(QUESTION_HORSEL_ID, null), element.mapping());
@@ -89,7 +89,7 @@ class QuestionHorselhjalpmedelPositionV2Test {
   class ShouldValidate {
 
     @Test
-    void shallReturnTrueIfBooleanIsTrue() {
+    void shouldReturnTrueIfBooleanIsTrue() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("9.2"))
@@ -109,7 +109,7 @@ class QuestionHorselhjalpmedelPositionV2Test {
     }
 
     @Test
-    void shallReturnFalseIfElementMissing() {
+    void shouldReturnFalseIfElementMissing() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("9.1"))
@@ -129,7 +129,7 @@ class QuestionHorselhjalpmedelPositionV2Test {
     }
 
     @Test
-    void shallReturnFalseIfElementFalse() {
+    void shouldReturnFalseIfElementFalse() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("9.2"))

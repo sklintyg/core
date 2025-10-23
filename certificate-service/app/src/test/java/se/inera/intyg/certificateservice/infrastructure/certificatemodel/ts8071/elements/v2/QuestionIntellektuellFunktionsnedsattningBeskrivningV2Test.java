@@ -12,14 +12,14 @@ class QuestionIntellektuellFunktionsnedsattningBeskrivningV2Test {
   private static final ElementId ELEMENT_ID = new ElementId("24.2");
 
   @Test
-  void shallIncludeId() {
+  void shouldIncludeId() {
     final var element = QuestionIntellektuellFunktionsnedsattningBeskrivningV2.questionIntellektuellFunktionsnedsattningBeskrivningV2();
 
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
-  void shallIncludeConfiguration() {
+  void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationTextArea.builder()
         .name("Vilken diagnos och grad?")
         .id(new FieldId("24.2"))

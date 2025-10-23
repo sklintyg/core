@@ -11,14 +11,14 @@ class CategoryAlkoholOchLakemedelV2Test {
   private static final ElementId ELEMENT_ID = new ElementId("KAT_12");
 
   @Test
-  void shallIncludeId() {
+  void shouldIncludeId() {
     final var element = CategoryAlkoholOchLakemedelV2.categoryAlkoholOchLakemedelV2();
 
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
-  void shallIncludeConfiguration() {
+  void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationCategory.builder()
         .name("Alkohol, andra psykoaktiva substanser och läkemedel")
         .build();

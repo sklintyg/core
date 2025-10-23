@@ -12,14 +12,14 @@ class QuestionIntellektuellFunktionsnedsattningV2Test {
   private static final ElementId ELEMENT_ID = new ElementId("24");
 
   @Test
-  void shallIncludeId() {
+  void shouldIncludeId() {
     final var element = QuestionIntellektuellFunktionsnedsattningV2.questionIntellektuellFunktionsnedsattningV2();
 
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
-  void shallIncludeConfiguration() {
+  void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationRadioBoolean.builder()
         .name("Har personen någon intellektuell funktionsnedsättning?")
         .id(new FieldId("24.1"))

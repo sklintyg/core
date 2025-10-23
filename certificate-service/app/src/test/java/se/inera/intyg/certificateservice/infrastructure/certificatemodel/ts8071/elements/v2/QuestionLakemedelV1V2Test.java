@@ -12,14 +12,14 @@ class QuestionLakemedelV1V2Test {
   private static final ElementId ELEMENT_ID = new ElementId("18.8");
 
   @Test
-  void shallIncludeId() {
+  void shouldIncludeId() {
     final var element = QuestionLakemedelV2.questionLakemedelV2();
 
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
-  void shallIncludeConfiguration() {
+  void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationRadioBoolean.builder()
         .name("Pågår läkarordinerat bruk av läkemedel som kan innebära en trafiksäkerhetsrisk?")
         .id(new FieldId("18.8"))

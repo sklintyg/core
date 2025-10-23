@@ -18,14 +18,14 @@ class CategoryHorselV2Test {
   private static final ElementId ELEMENT_ID = new ElementId("KAT_3");
 
   @Test
-  void shallIncludeId() {
+  void shouldIncludeId() {
     final var element = CategoryHorselV2.categoryHorselV2();
 
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
-  void shallIncludeConfiguration() {
+  void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationCategory.builder()
         .name("Hörsel")
         .build();
@@ -36,7 +36,7 @@ class CategoryHorselV2Test {
   }
 
   @Test
-  void shallIncludeRules() {
+  void shouldIncludeRules() {
     final var expectedRule = ElementRuleExpression.builder()
         .id(QUESTION_INTYGET_AVSER_ID)
         .type(ElementRuleType.SHOW)
@@ -57,7 +57,7 @@ class CategoryHorselV2Test {
   }
 
   @Test
-  void shallIncludeChildren() {
+  void shouldIncludeChildren() {
     final var expectedChild = CategoryHorselV2.categoryHorselV2();
     final var element = CategoryHorselV2.categoryHorselV2(expectedChild);
 

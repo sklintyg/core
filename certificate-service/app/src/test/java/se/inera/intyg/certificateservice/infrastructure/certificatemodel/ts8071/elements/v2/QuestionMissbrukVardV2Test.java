@@ -17,14 +17,14 @@ class QuestionMissbrukVardV2Test {
   private static final ElementId ELEMENT_ID = new ElementId("18.6");
 
   @Test
-  void shallIncludeId() {
+  void shouldIncludeId() {
     final var element = QuestionMissbrukVardV2.questionMissbrukVardV2();
 
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
-  void shallIncludeConfiguration() {
+  void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationRadioBoolean.builder()
         .id(new FieldId("18.6"))
         .name(
@@ -39,7 +39,7 @@ class QuestionMissbrukVardV2Test {
   }
 
   @Test
-  void shallIncludeRules() {
+  void shouldIncludeRules() {
     final var expectedRules = List.of(
         ElementRuleExpression.builder()
             .id(ELEMENT_ID)
@@ -58,7 +58,7 @@ class QuestionMissbrukVardV2Test {
   }
 
   @Test
-  void shallIncludeValidations() {
+  void shouldIncludeValidations() {
     final var expectedValidations = List.of(
         ElementValidationBoolean.builder()
             .mandatory(true)

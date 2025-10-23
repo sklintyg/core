@@ -12,14 +12,14 @@ class QuestionPsykiskV1V2Test {
   private static final ElementId ELEMENT_ID = new ElementId("19");
 
   @Test
-  void shallIncludeId() {
+  void shouldIncludeId() {
     final var element = QuestionPsykiskV2.questionPsykiskV2();
 
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
-  void shallIncludeConfiguration() {
+  void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationRadioBoolean.builder()
         .name("Har personen eller har personen haft psykisk sjukdom eller störning?")
         .id(new FieldId("19.1"))

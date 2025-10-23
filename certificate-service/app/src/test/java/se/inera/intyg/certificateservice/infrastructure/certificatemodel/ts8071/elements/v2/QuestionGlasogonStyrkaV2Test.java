@@ -21,14 +21,14 @@ class QuestionGlasogonStyrkaV2Test {
   private static final ElementId ELEMENT_ID = new ElementId("25");
 
   @Test
-  void shallIncludeId() {
+  void shouldIncludeId() {
     final var element = QuestionGlasogonStyrkaV2.questionGlasogonStyrkaV2();
 
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
-  void shallIncludeConfiguration() {
+  void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationRadioBoolean.builder()
         .id(new FieldId("25.1"))
         .name(
@@ -43,14 +43,14 @@ class QuestionGlasogonStyrkaV2Test {
   }
 
   @Test
-  void shallIncludeRules() {
+  void shouldIncludeRules() {
     final var element = QuestionGlasogonStyrkaV2.questionGlasogonStyrkaV2();
 
     assertEquals(2, element.rules().size());
   }
 
   @Test
-  void shallIncludeValidations() {
+  void shouldIncludeValidations() {
     final var expectedValidations = List.of(
         ElementValidationBoolean.builder()
             .mandatory(true)
@@ -66,7 +66,7 @@ class QuestionGlasogonStyrkaV2Test {
   class ShouldValidate {
 
     @Test
-    void shallReturnTrueIfRightEyeWithoutCorrectionLessThan08() {
+    void shouldReturnTrueIfRightEyeWithoutCorrectionLessThan08() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("5"))
@@ -124,7 +124,7 @@ class QuestionGlasogonStyrkaV2Test {
     }
 
     @Test
-    void shallReturnTrueIfLeftEyeWithoutCorrectionLessThan08() {
+    void shouldReturnTrueIfLeftEyeWithoutCorrectionLessThan08() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("5"))
@@ -182,7 +182,7 @@ class QuestionGlasogonStyrkaV2Test {
     }
 
     @Test
-    void shallReturnTrueIfBinocularWithoutCorrectionLessThan08() {
+    void shouldReturnTrueIfBinocularWithoutCorrectionLessThan08() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("5"))
@@ -240,7 +240,7 @@ class QuestionGlasogonStyrkaV2Test {
     }
 
     @Test
-    void shallReturnFalseIfElementMissing() {
+    void shouldReturnFalseIfElementMissing() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("4.1"))
@@ -262,7 +262,7 @@ class QuestionGlasogonStyrkaV2Test {
     }
 
     @Test
-    void shallReturnFalseIfAllValuesAreGreaterThanOrEqualTo08() {
+    void shouldReturnFalseIfAllValuesAreGreaterThanOrEqualTo08() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("5"))

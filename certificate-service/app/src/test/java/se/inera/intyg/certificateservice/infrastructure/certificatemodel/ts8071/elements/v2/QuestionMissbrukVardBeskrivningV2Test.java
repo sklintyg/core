@@ -25,14 +25,14 @@ class QuestionMissbrukVardBeskrivningV2Test {
   private static final ElementId ELEMENT_ID = new ElementId("18.7");
 
   @Test
-  void shallIncludeId() {
+  void shouldIncludeId() {
     final var element = QuestionMissbrukVardBeskrivningV2.questionMissbrukVardBeskrivningV2();
 
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
-  void shallIncludeConfiguration() {
+  void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationTextArea.builder()
         .id(new FieldId("18.7"))
         .name("Ange vilken form av hjälp eller vård och när det var")
@@ -44,7 +44,7 @@ class QuestionMissbrukVardBeskrivningV2Test {
   }
 
   @Test
-  void shallIncludeRules() {
+  void shouldIncludeRules() {
     final var expectedRules = List.of(
         ElementRuleExpression.builder()
             .id(new ElementId("18.6"))
@@ -77,7 +77,7 @@ class QuestionMissbrukVardBeskrivningV2Test {
   }
 
   @Test
-  void shallIncludeValidation() {
+  void shouldIncludeValidation() {
     final var expectedValidations = List.of(
         ElementValidationText.builder()
             .mandatory(true)
@@ -91,7 +91,7 @@ class QuestionMissbrukVardBeskrivningV2Test {
   }
 
   @Test
-  void shallIncludeMapping() {
+  void shouldIncludeMapping() {
     final var element = QuestionMissbrukVardBeskrivningV2.questionMissbrukVardBeskrivningV2();
 
     assertEquals(new ElementMapping(new ElementId("18"), null), element.mapping());
@@ -101,7 +101,7 @@ class QuestionMissbrukVardBeskrivningV2Test {
   class ShouldValidate {
 
     @Test
-    void shallReturnTrueIfBooleanIsTrue() {
+    void shouldReturnTrueIfBooleanIsTrue() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("18.6"))
@@ -119,7 +119,7 @@ class QuestionMissbrukVardBeskrivningV2Test {
     }
 
     @Test
-    void shallReturnFalseIfElementMissing() {
+    void shouldReturnFalseIfElementMissing() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("7.1"))

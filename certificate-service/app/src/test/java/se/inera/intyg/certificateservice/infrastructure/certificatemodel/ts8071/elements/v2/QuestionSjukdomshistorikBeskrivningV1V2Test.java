@@ -24,14 +24,14 @@ class QuestionSjukdomshistorikBeskrivningV1V2Test {
   private static final ElementId ELEMENT_ID = new ElementId("7.4");
 
   @Test
-  void shallIncludeId() {
+  void shouldIncludeId() {
     final var element = QuestionSjukdomshistorikBeskrivningV2.questionSjukdomshistorikBeskrivningV2();
 
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
-  void shallIncludeConfiguration() {
+  void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationTextArea.builder()
         .name("Ange vad")
         .id(new FieldId("7.4"))
@@ -43,14 +43,14 @@ class QuestionSjukdomshistorikBeskrivningV1V2Test {
   }
 
   @Test
-  void shallIncludeRules() {
+  void shouldIncludeRules() {
     final var element = QuestionSjukdomshistorikBeskrivningV2.questionSjukdomshistorikBeskrivningV2();
 
     assertEquals(3, element.rules().size());
   }
 
   @Test
-  void shallIncludeTextLimitRule() {
+  void shouldIncludeTextLimitRule() {
     final var expectedRule = ElementRuleLimit.builder()
         .id(ELEMENT_ID)
         .type(ElementRuleType.TEXT_LIMIT)
@@ -63,7 +63,7 @@ class QuestionSjukdomshistorikBeskrivningV1V2Test {
   }
 
   @Test
-  void shallIncludeValidations() {
+  void shouldIncludeValidations() {
     final var expectedValidations = List.of(
         ElementValidationText.builder()
             .mandatory(true)
@@ -77,7 +77,7 @@ class QuestionSjukdomshistorikBeskrivningV1V2Test {
   }
 
   @Test
-  void shallIncludeMapping() {
+  void shouldIncludeMapping() {
     final var element = QuestionSjukdomshistorikBeskrivningV2.questionSjukdomshistorikBeskrivningV2();
 
     assertEquals(new ElementMapping(QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_ID, null),
@@ -88,7 +88,7 @@ class QuestionSjukdomshistorikBeskrivningV1V2Test {
   class ShouldValidate {
 
     @Test
-    void shallReturnTrueIfBooleanIsTrue() {
+    void shouldReturnTrueIfBooleanIsTrue() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("7.3"))
@@ -108,7 +108,7 @@ class QuestionSjukdomshistorikBeskrivningV1V2Test {
     }
 
     @Test
-    void shallReturnFalseIfElementMissing() {
+    void shouldReturnFalseIfElementMissing() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("7.1"))
@@ -128,7 +128,7 @@ class QuestionSjukdomshistorikBeskrivningV1V2Test {
     }
 
     @Test
-    void shallReturnFalseIfElementFalse() {
+    void shouldReturnFalseIfElementFalse() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("7.3"))

@@ -25,14 +25,14 @@ class QuestionEpilepsiMedicinTidpunktV2Test {
   private static final ElementId ELEMENT_ID = new ElementId("14.7");
 
   @Test
-  void shallIncludeId() {
+  void shouldIncludeId() {
     final var element = QuestionEpilepsiMedicinTidpunktV2.questionEpilepsiMedicinTidpunktV2();
 
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
-  void shallIncludeConfiguration() {
+  void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationTextField.builder()
         .id(new FieldId("14.7"))
         .name("Om läkemedelsbehandling har avslutats, ange tidpunkt")
@@ -44,7 +44,7 @@ class QuestionEpilepsiMedicinTidpunktV2Test {
   }
 
   @Test
-  void shallIncludeRules() {
+  void shouldIncludeRules() {
     final var expectedRules = List.of(
         ElementRuleExpression.builder()
             .id(new ElementId("14.6"))
@@ -68,7 +68,7 @@ class QuestionEpilepsiMedicinTidpunktV2Test {
   }
 
   @Test
-  void shallIncludeValidation() {
+  void shouldIncludeValidation() {
     final var expectedValidations = List.of(
         ElementValidationText.builder()
             .limit(50)
@@ -81,7 +81,7 @@ class QuestionEpilepsiMedicinTidpunktV2Test {
   }
 
   @Test
-  void shallIncludeMapping() {
+  void shouldIncludeMapping() {
     final var element = QuestionEpilepsiMedicinTidpunktV2.questionEpilepsiMedicinTidpunktV2();
 
     assertEquals(new ElementMapping(new ElementId("14"), null), element.mapping());
@@ -91,7 +91,7 @@ class QuestionEpilepsiMedicinTidpunktV2Test {
   class ShouldValidate {
 
     @Test
-    void shallReturnTrueIfBooleanIsTrue() {
+    void shouldReturnTrueIfBooleanIsTrue() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("14.6"))
@@ -111,7 +111,7 @@ class QuestionEpilepsiMedicinTidpunktV2Test {
     }
 
     @Test
-    void shallReturnFalseIfElementMissing() {
+    void shouldReturnFalseIfElementMissing() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("14.5"))
@@ -131,7 +131,7 @@ class QuestionEpilepsiMedicinTidpunktV2Test {
     }
 
     @Test
-    void shallReturnFalseIfElementFalse() {
+    void shouldReturnFalseIfElementFalse() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("14.6"))

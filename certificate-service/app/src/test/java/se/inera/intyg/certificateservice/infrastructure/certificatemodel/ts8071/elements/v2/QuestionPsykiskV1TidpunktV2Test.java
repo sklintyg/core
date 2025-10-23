@@ -12,14 +12,14 @@ class QuestionPsykiskV1TidpunktV2Test {
   private static final ElementId ELEMENT_ID = new ElementId("19.3");
 
   @Test
-  void shallIncludeId() {
+  void shouldIncludeId() {
     final var element = QuestionPsykiskTidpunktV2.questionPsykiskTidpunktV2();
 
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
-  void shallIncludeConfiguration() {
+  void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationTextField.builder()
         .name("När hade personen senast läkarkontakt med anledning av sin diagnos?")
         .label("Ange tidpunkt")

@@ -24,14 +24,14 @@ class QuestionToleransKorrektionV2Test {
   private static final ElementId ELEMENT_ID = new ElementId("24");
 
   @Test
-  void shallIncludeId() {
+  void shouldIncludeId() {
     final var element = QuestionToleransKorrektionV2.questionToleransKorrektionV2();
 
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
-  void shallIncludeConfiguration() {
+  void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationTextArea.builder()
         .id(new FieldId("24.1"))
         .name("Ange eventuella problem med tolerans av korrektionen")
@@ -43,14 +43,14 @@ class QuestionToleransKorrektionV2Test {
   }
 
   @Test
-  void shallIncludeRules() {
+  void shouldIncludeRules() {
     final var element = QuestionToleransKorrektionV2.questionToleransKorrektionV2();
 
     assertEquals(2, element.rules().size());
   }
 
   @Test
-  void shallIncludeTextLimitRule() {
+  void shouldIncludeTextLimitRule() {
     final var expectedRule = ElementRuleLimit.builder()
         .id(ELEMENT_ID)
         .type(ElementRuleType.TEXT_LIMIT)
@@ -63,7 +63,7 @@ class QuestionToleransKorrektionV2Test {
   }
 
   @Test
-  void shallIncludeValidations() {
+  void shouldIncludeValidations() {
     final var expectedValidations = List.of(
         ElementValidationText.builder()
             .mandatory(false)
@@ -80,7 +80,7 @@ class QuestionToleransKorrektionV2Test {
   class ShouldValidate {
 
     @Test
-    void shallReturnTrueIfRightEyeWithoutCorrectionLessThan08() {
+    void shouldReturnTrueIfRightEyeWithoutCorrectionLessThan08() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("5"))
@@ -138,7 +138,7 @@ class QuestionToleransKorrektionV2Test {
     }
 
     @Test
-    void shallReturnTrueIfLeftEyeWithoutCorrectionLessThan08() {
+    void shouldReturnTrueIfLeftEyeWithoutCorrectionLessThan08() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("5"))
@@ -196,7 +196,7 @@ class QuestionToleransKorrektionV2Test {
     }
 
     @Test
-    void shallReturnTrueIfBinocularWithoutCorrectionLessThan08() {
+    void shouldReturnTrueIfBinocularWithoutCorrectionLessThan08() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("5"))
@@ -254,7 +254,7 @@ class QuestionToleransKorrektionV2Test {
     }
 
     @Test
-    void shallReturnFalseIfElementMissing() {
+    void shouldReturnFalseIfElementMissing() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("4.1"))
@@ -276,7 +276,7 @@ class QuestionToleransKorrektionV2Test {
     }
 
     @Test
-    void shallReturnFalseIfAllValuesAreGreaterThanOrEqualTo08() {
+    void shouldReturnFalseIfAllValuesAreGreaterThanOrEqualTo08() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("5"))

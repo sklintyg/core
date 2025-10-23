@@ -12,14 +12,14 @@ class QuestionMedicineringV2Test {
   private static final ElementId ELEMENT_ID = new ElementId("21");
 
   @Test
-  void shallIncludeId() {
+  void shouldIncludeId() {
     final var element = QuestionMedicineringV2.questionMedicineringV2();
 
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
-  void shallIncludeConfiguration() {
+  void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationRadioBoolean.builder()
         .name("Har personen någon stadigvarande medicinering som inte nämnts i något avsnitt ovan?")
         .id(new FieldId("21.1"))

@@ -23,14 +23,14 @@ class QuestionDemensBeskrivningV1V2Test {
   private static final ElementId ELEMENT_ID = new ElementId("16.3");
 
   @Test
-  void shallIncludeId() {
+  void shouldIncludeId() {
     final var element = QuestionDemensBeskrivningV2.questionDemensBeskrivningV2();
 
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
-  void shallIncludeConfiguration() {
+  void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationTextArea.builder()
         .name("Ange vilka tecken, eventuell diagnos och grad")
         .id(new FieldId("16.3"))
@@ -42,14 +42,14 @@ class QuestionDemensBeskrivningV1V2Test {
   }
 
   @Test
-  void shallIncludeRules() {
+  void shouldIncludeRules() {
     final var element = QuestionDemensBeskrivningV2.questionDemensBeskrivningV2();
 
     assertEquals(3, element.rules().size());
   }
 
   @Test
-  void shallIncludeTextLimitRule() {
+  void shouldIncludeTextLimitRule() {
     final var expectedRule = ElementRuleLimit.builder()
         .id(ELEMENT_ID)
         .type(ElementRuleType.TEXT_LIMIT)
@@ -62,7 +62,7 @@ class QuestionDemensBeskrivningV1V2Test {
   }
 
   @Test
-  void shallIncludeValidations() {
+  void shouldIncludeValidations() {
     final var expectedValidations = List.of(
         ElementValidationText.builder()
             .mandatory(true)
@@ -76,7 +76,7 @@ class QuestionDemensBeskrivningV1V2Test {
   }
 
   @Test
-  void shallIncludeMapping() {
+  void shouldIncludeMapping() {
     final var element = QuestionDemensBeskrivningV2.questionDemensBeskrivningV2();
 
     assertEquals(new ElementMapping(QuestionKognitivStorningV2.QUESTION_KOGNITIV_STORNING_ID, null),
@@ -87,7 +87,7 @@ class QuestionDemensBeskrivningV1V2Test {
   class ShouldValidate {
 
     @Test
-    void shallReturnTrueIfBooleanIsTrue() {
+    void shouldReturnTrueIfBooleanIsTrue() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("16.2"))
@@ -107,7 +107,7 @@ class QuestionDemensBeskrivningV1V2Test {
     }
 
     @Test
-    void shallReturnFalseIfElementMissing() {
+    void shouldReturnFalseIfElementMissing() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("16.1"))
@@ -127,7 +127,7 @@ class QuestionDemensBeskrivningV1V2Test {
     }
 
     @Test
-    void shallReturnFalseIfElementFalse() {
+    void shouldReturnFalseIfElementFalse() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("16.2"))

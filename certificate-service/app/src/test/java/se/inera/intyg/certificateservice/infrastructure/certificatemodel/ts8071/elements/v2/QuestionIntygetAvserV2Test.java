@@ -23,14 +23,14 @@ class QuestionIntygetAvserV2Test {
   private static final ElementId ELEMENT_ID = new ElementId("1");
 
   @Test
-  void shallIncludeId() {
+  void shouldIncludeId() {
     final var element = QuestionIntygetAvserV2.questionIntygetAvserV2();
 
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
-  void shallIncludeConfiguration() {
+  void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationCheckboxMultipleCode.builder()
         .id(new FieldId("1.1"))
         .name("Intyget avser")
@@ -63,7 +63,7 @@ class QuestionIntygetAvserV2Test {
   }
 
   @Test
-  void shallIncludeRules() {
+  void shouldIncludeRules() {
     final var expectedRules = List.of(
         ElementRuleExpression.builder()
             .id(ELEMENT_ID)
@@ -191,7 +191,7 @@ class QuestionIntygetAvserV2Test {
   }
 
   @Test
-  void shallIncludeValidation() {
+  void shouldIncludeValidation() {
     final var expectedValidations = List.of(
         ElementValidationCodeList.builder()
             .mandatory(true)
