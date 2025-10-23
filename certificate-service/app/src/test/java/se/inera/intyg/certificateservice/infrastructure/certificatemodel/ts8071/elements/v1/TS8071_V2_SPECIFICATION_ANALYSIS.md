@@ -287,19 +287,28 @@ spec requires.
 
 - **ID**: 13 (FRG) - SK-002, Text: "Har personen någon neurologisk sjukdom eller finns tecken på
   neurologisk sjukdom?"
-- **ID**: 13.2 (DFR) - SK-006 (text, 250 chars), Text: "Ange vilken sjukdom och vilka tecken"
+- **Help Text**: "Med neurologisk sjukdom avses exempelvis Parkinson, MS eller motoriska tics. Här
+  avses även andra medfödda och tidigt förvärvade skador i nervsystemet som lett till begränsad
+  rörelseförmåga och där behov av hjälpmedel för anpassat fordon föreligger."
+- **ID**: 13.2 (DFR) - SK-007 (text, 250 chars), Text: "Ange vilken sjukdom och vilka tecken"
 
 **V1 Implementation:**
 
 - **Files**:
-    - `QuestionNeurologiskSjukdom.java` (common) - ✅ 13 Identical
-    - No V1 file for 13.2 (it's in common but needs checking)
+    - `QuestionNeurologiskSjukdom.java` (common) - Has description but INCOMPLETE: Missing
+      examples "Med neurologisk sjukdom avses exempelvis Parkinson, MS eller motoriska tics."
+    - `QuestionNeurologiskSjukdomBeskrivning.java` (common) - TextField, 50 chars
 
 **Decision**:
 
-- ✅ **USE V1 (COMMON)** for 13
-- ❌ **NEED NEW V2 QUESTION** for 13.2 - Spec says SK-006 but with 250 char limit (unusual), likely
-  should be TextArea
+- ❌ **NEED NEW V2 QUESTION** for 13 - Description incomplete (missing examples sentence)
+- ❌ **NEED NEW V2 QUESTION** for 13.2 - Config changed TextField→TextArea, 50→250 chars
+
+**V2 Implementation Created:**
+
+- ✅ `QuestionNeurologiskSjukdomV2.java` - With complete help text including examples
+- ✅ `QuestionNeurologiskSjukdomV2Test.java` - Test file created
+- ✅ Added to `CertificateModelFactoryTS8071V2.java`
 
 ---
 
@@ -390,17 +399,30 @@ spec requires.
 
 - **ID**: 17.1 (FRG) - SK-002, Text: "Har personen en sömn- eller vakenhetsstörning eller symtom på
   sådan problematik?"
+- **Help Text**: "Här avses sömnapné och narkolepsi. Här avses även snarksjukdom som kan utgöra en
+  trafiksäkerhetsrisk och annan sjukdom med sömnstörning. Insomningsbesvär som behandlas med
+  läkemedel och inte utgör en trafiksäkerhetsrisk omfattas inte."
 - **ID**: 17.2 (DFR) - SK-007 (250 chars), Text: "Ange vilken diagnos/vilka symtom"
 - **ID**: 17.3 (FRG) - SK-002, Text: "Förekommer behandling mot sömn- och vakenhetsstörning?"
 
 **V1 Implementation:**
 
 - **Files**:
-    - `QuestionSomn.java` (common) - ✅ 17.1 Identical
+    - `QuestionSomn.java` (common) - Has description but INCORRECT wording: "Insomningsbesvär som
+      läkemedelbehandlas..." instead of "Insomningsbesvär som behandlas med läkemedel..."
     - `QuestionSomnBeskrivning.java` (common) - ✅ 17.2 Identical
     - `QuestionSomnBehandling.java` (common) - ✅ 17.3 Identical
 
-**Decision**: ✅ **USE V1 (COMMON)** - All identical
+**Decision**:
+
+- ❌ **NEED NEW V2 QUESTION** for 17.1 - Description text differs (compound word vs. phrase)
+- ✅ **USE V1 (COMMON)** for 17.2, 17.3
+
+**V2 Implementation Created:**
+
+- ✅ `QuestionSomnV2.java` - With corrected help text wording
+- ✅ `QuestionSomnV2Test.java` - Test file created
+- ✅ Added to `CertificateModelFactoryTS8071V2.java`
 
 ---
 
@@ -415,7 +437,12 @@ spec requires.
 - **ID**: 18.10 (DFR) - **NEW** SK-002 (Radio: Ja/Nej/Vet inte), SR-003 show (18.1=true), Text: "Om
   diagnos beroende, är beroendet i fullständig långvarig remission?"
 - **ID**: 18.3 (FRG) - SK-002, Text: "Finns journaluppgifter, anamnestiska uppgifter, resultat av
-  laboratorieprover eller andra tecken på överkonsumtion av alkohol..."
+  laboratorieprover eller andra tecken på pågående skadligt bruk, missbruk eller beroende av
+  alkohol, narkotika eller läkemedel?"
+- **Help Text**: "Här avses uppgifter om eller tecken på beroende av psykoaktiv substans oavsett när
+  i tid detta förekommit. Här avses också uppgifter om eller tecken på aktuellt skadligt mönster av
+  bruk, skadligt bruk eller överkonsumtion av alkohol som inte är tillfälligt under de senaste tolv
+  månaderna."
 - **ID**: 18.4 (DFR) - SK-007 (250 chars), Text: "Ange vilka uppgifter eller tecken och när det var"
 - **ID**: 18.5 (DFR) - SK-007 (250 chars), Text: "Om provtagning gjorts ska resultatet redovisas
   nedan. Ange datum för provtagning och resultat"
@@ -435,7 +462,9 @@ spec requires.
     - `QuestionMissbrukBeskrivningV1.java` - SK-007 (250 chars), Text: "Ange **vilken**
       diagnos..." (different text, different limit)
     - **NO V1 FILE for 18.10** - This is NEW in V2
-    - `QuestionMissbrukJournaluppgifter.java` (common) - ✅ 18.3 Identical
+    - `QuestionMissbrukJournaluppgifter.java` (common) - Has description but INCOMPLETE: "
+      ...aktuellt skadligt bruk eller missbruk under de senaste tolv månaderna." Missing "skadligt
+      mönster av bruk" and "överkonsumtion av alkohol som inte är tillfälligt"
     - `QuestionMissbrukJournaluppgifterBeskrivning.java` (common) - SK-006 (TextField, 50 chars),
       Text: "Ange vilka uppgifter eller tecken och när **i tid det gäller**"
     - `QuestionMissbrukProvtagning.java` (common) - ✅ 18.5 Identical
@@ -450,11 +479,19 @@ spec requires.
 - ❌ **NEED NEW V2 QUESTION** for 18.1 - Text completely different
 - ❌ **NEED NEW V2 QUESTION** for 18.2 - Text different, limit increased to 400 chars
 - ❌ **NEED NEW V2 QUESTION** for 18.10 - **NEW question in V2**
-- ✅ **USE V1 (COMMON)** for 18.3, 18.5, 18.6
+- ❌ **NEED NEW V2 QUESTION** for 18.3 - Description incomplete, missing spec terminology
+- ✅ **USE V1 (COMMON)** for 18.5
+- ✅ **USE V1 (COMMON)** for 18.6
 - ❌ **NEED NEW V2 QUESTION** for 18.4 - Config changed from SK-006 (50) to SK-007 (250), text
   slightly different
 - ❌ **NEED NEW V2 QUESTION** for 18.7 - Text shortened (removed extra sentence)
 - ✅ **USE V1 (COMMON)** for 18.8, 18.9
+
+**V2 Implementation Created:**
+
+- ✅ `QuestionMissbrukJournaluppgifterV2.java` - With complete help text from spec
+- ✅ `QuestionMissbrukJournaluppgifterV2Test.java` - Test file created
+- ✅ Added to `CertificateModelFactoryTS8071V2.java`
 
 ---
 

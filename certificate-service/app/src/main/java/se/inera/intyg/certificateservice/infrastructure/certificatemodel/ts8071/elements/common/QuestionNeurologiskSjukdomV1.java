@@ -8,16 +8,17 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
-public class QuestionNeurologiskSjukdom {
+public class QuestionNeurologiskSjukdomV1 {
 
   public static final ElementId QUESTION_NEUROLOGISK_SJUKDOM_ID = new ElementId("13");
   public static final FieldId QUESTION_NEUROLOGISK_SJUKDOM_FIELD_ID = new FieldId("13.1");
 
-  private QuestionNeurologiskSjukdom() {
+  private QuestionNeurologiskSjukdomV1() {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionNeurologiskSjukdom(ElementSpecification... children) {
+  public static ElementSpecification questionNeurologiskSjukdomV1(
+      ElementSpecification... children) {
     return ElementSpecification.builder()
         .id(QUESTION_NEUROLOGISK_SJUKDOM_ID)
         .configuration(

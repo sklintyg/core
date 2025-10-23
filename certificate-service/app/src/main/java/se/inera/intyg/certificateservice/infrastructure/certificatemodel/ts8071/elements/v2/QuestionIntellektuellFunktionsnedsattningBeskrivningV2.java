@@ -16,9 +16,9 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 public class QuestionIntellektuellFunktionsnedsattningBeskrivningV2 {
 
   public static final ElementId QUESTION_INTELLEKTUELL_FUNKTIONSNEDSATTNING_BESKRIVNING_V2_ID =
-      new ElementId("24.2");
+      new ElementId("26.2");
   public static final FieldId QUESTION_INTELLEKTUELL_FUNKTIONSNEDSATTNING_BESKRIVNING_V2_FIELD_ID =
-      new FieldId("24.2");
+      new FieldId("26.2");
 
   private QuestionIntellektuellFunktionsnedsattningBeskrivningV2() {
     throw new IllegalStateException("Utility class");

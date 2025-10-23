@@ -1,35 +1,32 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common;
-
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSomn.QUESTION_SOMN_ID;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
-public class QuestionSomnBehandling {
+public class QuestionSomnV2 {
 
-  public static final ElementId QUESTION_SOMN_BEHANDLING_ID = new ElementId("17.3");
-  public static final FieldId QUESTION_SOMN_BEHANDLING_FIELD_ID = new FieldId("17.3");
+  public static final ElementId QUESTION_SOMN_V2_ID = new ElementId("17");
+  public static final FieldId QUESTION_SOMN_V2_FIELD_ID = new FieldId("17.1");
 
-  private QuestionSomnBehandling() {
+  private QuestionSomnV2() {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionSomnBehandling() {
+  public static ElementSpecification questionSomnV2(ElementSpecification... children) {
     return ElementSpecification.builder()
-        .id(QUESTION_SOMN_BEHANDLING_ID)
+        .id(QUESTION_SOMN_V2_ID)
         .configuration(
             ElementConfigurationRadioBoolean.builder()
-                .id(QUESTION_SOMN_BEHANDLING_FIELD_ID)
+                .id(QUESTION_SOMN_V2_FIELD_ID)
                 .name(
-                    "Förekommer behandling mot sömn- och vakenhetsstörning?")
+                    "Har personen en sömn- eller vakenhetsstörning eller symtom på sådan problematik?")
                 .description(
-                    "Här avses behandling för sömnapné med så väl bettskena eller annat hjälpmedel för andning såsom exempelvis CPAP, BiPAP eller APAP. Här avses även läkemedel för narkolepsi eller narkotikaklassade läkemedel för annan sömn- eller vakenhetsstörning.")
+                    "Här avses sömnapné och narkolepsi. Här avses även snarksjukdom som kan utgöra en trafiksäkerhetsrisk och annan sjukdom med sömnstörning. Insomningsbesvär som behandlas med läkemedel och inte utgör en trafiksäkerhetsrisk omfattas inte.")
                 .selectedText("Ja")
                 .unselectedText("Nej")
                 .build()
@@ -44,12 +41,13 @@ public class QuestionSomnBehandling {
         .rules(
             List.of(
                 CertificateElementRuleFactory.mandatoryExist(
-                    QUESTION_SOMN_BEHANDLING_ID,
-                    QUESTION_SOMN_BEHANDLING_FIELD_ID
+                    QUESTION_SOMN_V2_ID,
+                    QUESTION_SOMN_V2_FIELD_ID
                 )
             )
         )
-        .mapping(new ElementMapping(QUESTION_SOMN_ID, null))
+        .children(List.of(children))
         .build();
   }
 }
+
