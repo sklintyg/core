@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -22,15 +22,14 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCode;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionStrokePavarkan;
 
-class QuestionStrokePavarkanTest {
+class QuestionStrokePaverkanV2Test {
 
   private static final ElementId ELEMENT_ID = new ElementId("11.10");
 
   @Test
   void shallIncludeId() {
-    final var element = QuestionStrokePavarkan.questionStrokePavarkan();
+    final var element = QuestionStrokePaverkanV2.questionStrokePavarkanV2();
 
     assertEquals(ELEMENT_ID, element.id());
   }
@@ -40,7 +39,7 @@ class QuestionStrokePavarkanTest {
     final var expectedConfiguration = ElementConfigurationRadioMultipleCode.builder()
         .id(new FieldId("11.10"))
         .name(
-            "Om stroke förekommit, har den inträffat i/påverkat syncentrum (occipitalloben eller synnerven)?")
+            "Om stroke förekommit, har det inträffat eller påverkat syncentrum (occipitalloben eller synnerven)?")
         .elementLayout(ElementLayout.ROWS)
         .list(
             List.of(
@@ -63,7 +62,7 @@ class QuestionStrokePavarkanTest {
         )
         .build();
 
-    final var element = QuestionStrokePavarkan.questionStrokePavarkan();
+    final var element = QuestionStrokePaverkanV2.questionStrokePavarkanV2();
 
     assertEquals(expectedConfiguration, element.configuration());
   }
@@ -87,7 +86,7 @@ class QuestionStrokePavarkanTest {
             .build()
     );
 
-    final var element = QuestionStrokePavarkan.questionStrokePavarkan();
+    final var element = QuestionStrokePaverkanV2.questionStrokePavarkanV2();
 
     assertEquals(expectedRules, element.rules());
   }
@@ -100,15 +99,14 @@ class QuestionStrokePavarkanTest {
             .build()
     );
 
-    final var element = QuestionStrokePavarkan.questionStrokePavarkan();
+    final var element = QuestionStrokePaverkanV2.questionStrokePavarkanV2();
 
     assertEquals(expectedValidations, element.validations());
   }
 
-
   @Test
   void shallIncludeMapping() {
-    final var element = QuestionStrokePavarkan.questionStrokePavarkan();
+    final var element = QuestionStrokePaverkanV2.questionStrokePavarkanV2();
 
     assertEquals(new ElementMapping(new ElementId("11"), null), element.mapping());
   }
@@ -129,7 +127,7 @@ class QuestionStrokePavarkanTest {
               .build()
       );
 
-      final var element = QuestionStrokePavarkan.questionStrokePavarkan();
+      final var element = QuestionStrokePaverkanV2.questionStrokePavarkanV2();
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -149,7 +147,7 @@ class QuestionStrokePavarkanTest {
               .build()
       );
 
-      final var element = QuestionStrokePavarkan.questionStrokePavarkan();
+      final var element = QuestionStrokePaverkanV2.questionStrokePavarkanV2();
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -169,7 +167,7 @@ class QuestionStrokePavarkanTest {
               .build()
       );
 
-      final var element = QuestionStrokePavarkan.questionStrokePavarkan();
+      final var element = QuestionStrokePaverkanV2.questionStrokePavarkanV2();
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -177,3 +175,4 @@ class QuestionStrokePavarkanTest {
     }
   }
 }
+

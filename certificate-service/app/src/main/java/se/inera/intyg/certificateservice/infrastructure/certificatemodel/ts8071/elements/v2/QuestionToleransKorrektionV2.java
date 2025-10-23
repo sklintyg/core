@@ -24,7 +24,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 public class QuestionToleransKorrektionV2 {
 
   public static final ElementId QUESTION_TOLERANS_KORREKTION_V2_ID = new ElementId("24");
-  public static final FieldId QUESTION_TOLERANS_KORREKTION_V2_FIELD_ID = new FieldId("24.1");
+  public static final FieldId QUESTION_TOLERANS_KORREKTION_V2_FIELD_ID = new FieldId("24");
 
   private QuestionToleransKorrektionV2() {
     throw new IllegalStateException("Utility class");

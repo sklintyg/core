@@ -11,7 +11,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 public class QuestionIntellektuellFunktionsnedsattningV2 {
 
   public static final ElementId QUESTION_INTELLEKTUELL_FUNKTIONSNEDSATTNING_V2_ID = new ElementId(
-      "24");
+      "24.1");
   public static final FieldId QUESTION_INTELLEKTUELL_FUNKTIONSNEDSATTNING_V2_FIELD_ID = new FieldId(
       "24.1");
 

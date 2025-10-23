@@ -1,10 +1,11 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.ANNAT;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.FORLANG_GR_II;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.FORLANG_GR_II_III;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.GR_II;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.GR_II_III;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.TAXI;
@@ -26,13 +27,13 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 
-class QuestionHorselhjalpmedelTest {
+class QuestionHorselhjalpmedelV2Test {
 
   private static final ElementId ELEMENT_ID = new ElementId("9.2");
 
   @Test
   void shallIncludeId() {
-    final var element = QuestionHorselhjalpmedel.questionHorselhjalpmedel();
+    final var element = QuestionHorselhjalpmedelV2.questionHorselhjalpmedelV2();
 
     assertEquals(ELEMENT_ID, element.id());
   }
@@ -40,13 +41,14 @@ class QuestionHorselhjalpmedelTest {
   @Test
   void shallIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationRadioBoolean.builder()
-        .name("Behöver hörapparat användas?")
+        .name(
+            "Behöver personen använda hörapparat för att kunna uppfatta vanlig samtalsstämma på fyra meters avstånd?")
         .id(new FieldId("9.2"))
         .selectedText("Ja")
         .unselectedText("Nej")
         .build();
 
-    final var element = QuestionHorselhjalpmedel.questionHorselhjalpmedel();
+    final var element = QuestionHorselhjalpmedelV2.questionHorselhjalpmedelV2();
 
     assertEquals(expectedConfiguration, element.configuration());
   }
@@ -62,16 +64,10 @@ class QuestionHorselhjalpmedelTest {
                     "exists($9.2)"
                 )
             )
-            .build(),
-        ElementRuleExpression.builder()
-            .id(new ElementId("1"))
-            .type(ElementRuleType.SHOW)
-            .expression(new RuleExpression(
-                "exists($gr_II_III) || exists($tax_leg) || exists($utbyt_utl_kk) || exists($forlang_gr_II_III) || exists($int_begar_ts)"))
             .build()
     );
 
-    final var element = QuestionHorselhjalpmedel.questionHorselhjalpmedel();
+    final var element = QuestionHorselhjalpmedelV2.questionHorselhjalpmedelV2();
 
     assertEquals(expectedRule, element.rules());
   }
@@ -84,16 +80,24 @@ class QuestionHorselhjalpmedelTest {
             .build()
     );
 
-    final var element = QuestionHorselhjalpmedel.questionHorselhjalpmedel();
+    final var element = QuestionHorselhjalpmedelV2.questionHorselhjalpmedelV2();
 
     assertEquals(expectedValidations, element.validations());
   }
 
   @Test
   void shallIncludeMapping() {
-    final var element = QuestionHorselhjalpmedel.questionHorselhjalpmedel();
+    final var element = QuestionHorselhjalpmedelV2.questionHorselhjalpmedelV2();
 
     assertEquals(new ElementMapping(new ElementId("9"), null), element.mapping());
+  }
+
+  @Test
+  void shallIncludeChildren() {
+    final var expectedChild = QuestionHorselhjalpmedelPositionV2.questionHorselhjalpmedelPositionV2();
+    final var element = QuestionHorselhjalpmedelV2.questionHorselhjalpmedelV2(expectedChild);
+
+    assertEquals(expectedChild, element.children().getFirst());
   }
 
   @Nested
@@ -119,7 +123,34 @@ class QuestionHorselhjalpmedelTest {
               .build()
       );
 
-      final var element = QuestionHorselhjalpmedel.questionHorselhjalpmedel();
+      final var element = QuestionHorselhjalpmedelV2.questionHorselhjalpmedelV2();
+
+      final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
+
+      assertTrue(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shallReturnTrueIfCodeIsForlangGR23() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId("1"))
+              .value(
+                  ElementValueCodeList.builder()
+                      .list(
+                          List.of(
+                              ElementValueCode.builder()
+                                  .codeId(new FieldId(FORLANG_GR_II_III.code()))
+                                  .code(FORLANG_GR_II_III.code())
+                                  .build()
+                          )
+                      )
+                      .build()
+              )
+              .build()
+      );
+
+      final var element = QuestionHorselhjalpmedelV2.questionHorselhjalpmedelV2();
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -146,7 +177,7 @@ class QuestionHorselhjalpmedelTest {
               .build()
       );
 
-      final var element = QuestionHorselhjalpmedel.questionHorselhjalpmedel();
+      final var element = QuestionHorselhjalpmedelV2.questionHorselhjalpmedelV2();
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -154,27 +185,7 @@ class QuestionHorselhjalpmedelTest {
     }
 
     @Test
-    void shallReturnFalseIfElementMissing() {
-      final var elementData = List.of(
-          ElementData.builder()
-              .id(new ElementId("7.1"))
-              .value(
-                  ElementValueBoolean.builder()
-                      .value(true)
-                      .build()
-              )
-              .build()
-      );
-
-      final var element = QuestionHorselhjalpmedel.questionHorselhjalpmedel();
-
-      final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
-
-      assertFalse(shouldValidate.test(elementData));
-    }
-
-    @Test
-    void shallReturnFalseIfElementCodeIsG2() {
+    void shallReturnFalseIfCodeIsGR2() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("1"))
@@ -193,7 +204,7 @@ class QuestionHorselhjalpmedelTest {
               .build()
       );
 
-      final var element = QuestionHorselhjalpmedel.questionHorselhjalpmedel();
+      final var element = QuestionHorselhjalpmedelV2.questionHorselhjalpmedelV2();
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -201,7 +212,7 @@ class QuestionHorselhjalpmedelTest {
     }
 
     @Test
-    void shallReturnFalseIfElementCodeIsFORLANGG2() {
+    void shallReturnFalseIfCodeIsForlangGR2() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("1"))
@@ -220,7 +231,7 @@ class QuestionHorselhjalpmedelTest {
               .build()
       );
 
-      final var element = QuestionHorselhjalpmedel.questionHorselhjalpmedel();
+      final var element = QuestionHorselhjalpmedelV2.questionHorselhjalpmedelV2();
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -228,7 +239,7 @@ class QuestionHorselhjalpmedelTest {
     }
 
     @Test
-    void shallReturnTrueIfElementCodeIsFromTS() {
+    void shallReturnFalseIfCodeIsAnnat() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("1"))
@@ -247,15 +258,15 @@ class QuestionHorselhjalpmedelTest {
               .build()
       );
 
-      final var element = QuestionHorselhjalpmedel.questionHorselhjalpmedel();
+      final var element = QuestionHorselhjalpmedelV2.questionHorselhjalpmedelV2();
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
-      assertTrue(shouldValidate.test(elementData));
+      assertFalse(shouldValidate.test(elementData));
     }
 
     @Test
-    void shallReturnTrueIfElementCodeIsUtlandskt() {
+    void shallReturnFalseIfCodeIsUtlandsk() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("1"))
@@ -274,11 +285,34 @@ class QuestionHorselhjalpmedelTest {
               .build()
       );
 
-      final var element = QuestionHorselhjalpmedel.questionHorselhjalpmedel();
+      final var element = QuestionHorselhjalpmedelV2.questionHorselhjalpmedelV2();
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
-      assertTrue(shouldValidate.test(elementData));
+      assertFalse(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shallReturnFalseIfElementMissing() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId("7.1"))
+              .value(
+                  ElementValueBoolean.builder()
+                      .value(true)
+                      .build()
+              )
+              .build()
+      );
+
+      final var element = QuestionHorselhjalpmedelV2.questionHorselhjalpmedelV2();
+
+      final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
+
+      assertFalse(shouldValidate.test(elementData));
     }
   }
 }
+
+
+

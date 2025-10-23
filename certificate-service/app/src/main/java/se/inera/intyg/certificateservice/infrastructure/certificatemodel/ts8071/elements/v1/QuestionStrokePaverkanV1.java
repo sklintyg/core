@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1;
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionHjartsjukdom.QUESTION_HJARTSJUKDOM_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionStroke.QUESTION_STROKE_FIELD_ID;
@@ -18,18 +18,18 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs001;
 
-public class QuestionStrokePavarkan {
+public class QuestionStrokePaverkanV1 {
 
   public static final ElementId QUESTION_STROKE_PAVARKAN_ID = new ElementId(
       "11.10");
   public static final FieldId QUESTION_STROKE_PAVARKAN_FIELD_ID = new FieldId(
       "11.10");
 
-  private QuestionStrokePavarkan() {
+  private QuestionStrokePaverkanV1() {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionStrokePavarkan(
+  public static ElementSpecification questionStrokePaverkanV1(
       ElementSpecification... children) {
     final var radioMultipleCodes = List.of(
         CodeFactory.elementConfigurationCode(CodeSystemKvTs001.YES),

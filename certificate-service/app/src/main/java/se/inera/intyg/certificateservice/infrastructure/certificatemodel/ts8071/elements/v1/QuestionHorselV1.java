@@ -1,41 +1,41 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1;
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.ANNAT;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.FORLANG_GR_II_III;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.GR_II_III;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.TAXI;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.UTLANDSKT;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionHorsel.QUESTION_HORSEL_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionIntygetAvserV1.QUESTION_INTYGET_AVSER_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
 
-public class QuestionHorselhjalpmedel {
+public class QuestionHorselV1 {
 
-  public static final ElementId QUESTION_HORSELHJALPMEDEL_ID = new ElementId("9.2");
-  public static final FieldId QUESTION_HORSELHJALPMEDEL_FIELD_ID = new FieldId("9.2");
+  public static final ElementId QUESTION_HORSEL_ID = new ElementId("9");
+  public static final FieldId QUESTION_HORSEL_FIELD_ID = new FieldId("9.1");
 
-  private QuestionHorselhjalpmedel() {
+  private QuestionHorselV1() {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionHorselhjalpmedel(ElementSpecification... children) {
+  public static ElementSpecification questionHorselV1() {
     return ElementSpecification.builder()
-        .id(QUESTION_HORSELHJALPMEDEL_ID)
+        .id(QUESTION_HORSEL_ID)
         .configuration(
             ElementConfigurationRadioBoolean.builder()
-                .id(QUESTION_HORSELHJALPMEDEL_FIELD_ID)
+                .id(QUESTION_HORSEL_FIELD_ID)
                 .selectedText("Ja")
                 .unselectedText("Nej")
-                .name("Behöver hörapparat användas?")
+                .name(
+                    "Har personen svårt att uppfatta vanlig samtalsstämma på fyra meters avstånd? Hörapparat får användas.")
                 .build()
         )
         .validations(
@@ -48,26 +48,27 @@ public class QuestionHorselhjalpmedel {
         .rules(
             List.of(
                 CertificateElementRuleFactory.mandatoryExist(
-                    QUESTION_HORSELHJALPMEDEL_ID,
-                    QUESTION_HORSELHJALPMEDEL_FIELD_ID
+                    QUESTION_HORSEL_ID,
+                    QUESTION_HORSEL_FIELD_ID
                 ),
-                CertificateElementRuleFactory.showOrExist(
+                CertificateElementRuleFactory.show(
                     QUESTION_INTYGET_AVSER_ID,
-                    List.of(
-                        new FieldId(GR_II_III.code()), new FieldId(TAXI.code()),
-                        new FieldId(UTLANDSKT.code()), new FieldId(FORLANG_GR_II_III.code()),
-                        new FieldId(ANNAT.code())
+                    new RuleExpression(
+                        String.format(
+                            "exists(%s) || exists(%s) || exists(%s) || exists(%s) || exists(%s)",
+                            GR_II_III.code(), FORLANG_GR_II_III.code(), TAXI.code(), ANNAT.code(),
+                            UTLANDSKT.code()
+                        )
                     )
                 )
             )
         )
-        .mapping(new ElementMapping(QUESTION_HORSEL_ID, null))
-        .children(List.of(children))
         .shouldValidate(ElementDataPredicateFactory.codeList(
                 QUESTION_INTYGET_AVSER_ID,
-                List.of(new FieldId(GR_II_III.code()), new FieldId(TAXI.code()),
-                    new FieldId(UTLANDSKT.code()), new FieldId(FORLANG_GR_II_III.code()),
-                    new FieldId(ANNAT.code()))
+                List.of(
+                    new FieldId(GR_II_III.code()), new FieldId(FORLANG_GR_II_III.code()),
+                    new FieldId(TAXI.code()), new FieldId(ANNAT.code()), new FieldId(UTLANDSKT.code())
+                )
             )
         )
         .build();
