@@ -14,6 +14,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCo
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
+import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.SickLeaveCertificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SickLeaveProvider;
 
@@ -80,6 +81,8 @@ public class FK7804SickLeaveProvider implements SickLeaveProvider {
                     .map(ElementValueCodeList::list)
                     .orElseThrow()
             )
+            .extendsCertificateId(certificate.hasParent(RelationType.RENEW) ?
+                certificate.parent().certificate().id().id() : null)
             .build()
     );
   }
