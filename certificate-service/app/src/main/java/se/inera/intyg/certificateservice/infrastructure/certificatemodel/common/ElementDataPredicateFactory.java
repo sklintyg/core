@@ -7,6 +7,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBo
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCodeList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueVisualAcuities;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
@@ -82,6 +83,21 @@ public class ElementDataPredicateFactory {
         .map(element -> (ElementValueDateRangeList) element.value())
         .anyMatch(value -> value.dateRangeList().stream().anyMatch(
             valueDate -> fieldIds.contains(valueDate.dateRangeId()))
+        );
+  }
+
+  public static Predicate<List<ElementData>> visualAcuities(ElementId elementId, double limit) {
+    return elementData -> elementData.stream()
+        .filter(data -> data.id().equals(elementId))
+        .map(data -> (ElementValueVisualAcuities) data.value())
+        .anyMatch(
+            visualAcuities ->
+                (visualAcuities.rightEye().withoutCorrection().value() != null
+                    && visualAcuities.rightEye().withoutCorrection().value() < limit)
+                    || (visualAcuities.leftEye().withoutCorrection().value() != null
+                    && visualAcuities.leftEye().withoutCorrection().value() < limit)
+                    || (visualAcuities.binocular().withoutCorrection().value() != null
+                    && visualAcuities.binocular().withoutCorrection().value() < limit)
         );
   }
 

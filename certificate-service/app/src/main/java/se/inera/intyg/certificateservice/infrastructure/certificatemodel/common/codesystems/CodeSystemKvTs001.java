@@ -24,6 +24,12 @@ public class CodeSystemKvTs001 {
       "Vet ej"
   );
 
+  public static final Code NO_KNOWLEDGE_V2 = new Code(
+      "vetinte",
+      CODE_SYSTEM,
+      "Vet inte"
+  );
+
 
   private CodeSystemKvTs001() {
     throw new IllegalStateException("Utility class");

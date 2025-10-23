@@ -68,7 +68,7 @@ class QuestionMissbrukBeskrivningV2Test {
         ElementRuleLimit.builder()
             .id(ELEMENT_ID)
             .type(ElementRuleType.TEXT_LIMIT)
-            .limit(new RuleLimit((short) 250))
+            .limit(new RuleLimit((short) 400))
             .build()
     );
 
@@ -82,7 +82,7 @@ class QuestionMissbrukBeskrivningV2Test {
     final var expectedValidations = List.of(
         ElementValidationText.builder()
             .mandatory(true)
-            .limit(250)
+            .limit(400)
             .build()
     );
 

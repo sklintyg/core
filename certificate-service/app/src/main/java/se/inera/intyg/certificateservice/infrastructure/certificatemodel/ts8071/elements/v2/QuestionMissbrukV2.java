@@ -10,8 +10,8 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionMissbrukV2 {
 
-  public static final ElementId QUESTION_MISSBRUK_ID = new ElementId("18");
-  public static final FieldId QUESTION_MISSBRUK_FIELD_ID = new FieldId("18.1");
+  public static final ElementId QUESTION_MISSBRUK_V2_ID = new ElementId("18");
+  public static final FieldId QUESTION_MISSBRUK_V2_FIELD_ID = new FieldId("18.1");
 
   private QuestionMissbrukV2() {
     throw new IllegalStateException("Utility class");
@@ -19,10 +19,10 @@ public class QuestionMissbrukV2 {
 
   public static ElementSpecification questionMissbrukV2(ElementSpecification... children) {
     return ElementSpecification.builder()
-        .id(QUESTION_MISSBRUK_ID)
+        .id(QUESTION_MISSBRUK_V2_ID)
         .configuration(
             ElementConfigurationRadioBoolean.builder()
-                .id(QUESTION_MISSBRUK_FIELD_ID)
+                .id(QUESTION_MISSBRUK_V2_FIELD_ID)
                 .name(
                     "Har personen eller har personen haft en diagnos avseende alkohol, andra psykoaktiva substanser eller läkemedel?")
                 .selectedText("Ja")
@@ -39,8 +39,8 @@ public class QuestionMissbrukV2 {
         .rules(
             List.of(
                 CertificateElementRuleFactory.mandatoryExist(
-                    QUESTION_MISSBRUK_ID,
-                    QUESTION_MISSBRUK_FIELD_ID
+                    QUESTION_MISSBRUK_V2_ID,
+                    QUESTION_MISSBRUK_V2_FIELD_ID
                 )
             )
         )

@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionMissbrukV2.QUESTION_MISSBRUK_FIELD_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionMissbrukV2.QUESTION_MISSBRUK_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionMissbrukV2.QUESTION_MISSBRUK_V2_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionMissbrukV2.QUESTION_MISSBRUK_V2_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
@@ -19,6 +19,7 @@ public class QuestionMissbrukBeskrivningV2 {
       "18.2");
   public static final FieldId QUESTION_MISSBRUK_BESKRIVNING_FIELD_ID = new FieldId(
       "18.2");
+  private static final int TEXT_LIMIT = 400;
 
   private QuestionMissbrukBeskrivningV2() {
     throw new IllegalStateException("Utility class");
@@ -37,8 +38,8 @@ public class QuestionMissbrukBeskrivningV2 {
         .rules(
             List.of(
                 CertificateElementRuleFactory.show(
-                    QUESTION_MISSBRUK_ID,
-                    QUESTION_MISSBRUK_FIELD_ID
+                    QUESTION_MISSBRUK_V2_ID,
+                    QUESTION_MISSBRUK_V2_FIELD_ID
                 ),
                 CertificateElementRuleFactory.mandatory(
                     QUESTION_MISSBRUK_BESKRIVNING_ID,
@@ -46,20 +47,20 @@ public class QuestionMissbrukBeskrivningV2 {
                 ),
                 CertificateElementRuleFactory.limit(
                     QUESTION_MISSBRUK_BESKRIVNING_ID,
-                    (short) 250)
+                    (short) TEXT_LIMIT)
             )
         )
         .shouldValidate(
-            ElementDataPredicateFactory.valueBoolean(QUESTION_MISSBRUK_ID)
+            ElementDataPredicateFactory.valueBoolean(QUESTION_MISSBRUK_V2_ID)
         )
         .mapping(
-            new ElementMapping(QUESTION_MISSBRUK_ID, null)
+            new ElementMapping(QUESTION_MISSBRUK_V2_ID, null)
         )
         .validations(
             List.of(
                 ElementValidationText.builder()
                     .mandatory(true)
-                    .limit(250)
+                    .limit(TEXT_LIMIT)
                     .build()
             )
         )

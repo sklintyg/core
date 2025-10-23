@@ -31,7 +31,7 @@ public class QuestionMissbrukRemissionV2 {
     final var radioMultipleCodes = List.of(
         CodeFactory.elementConfigurationCode(CodeSystemKvTs001.YES),
         CodeFactory.elementConfigurationCode(CodeSystemKvTs001.NO),
-        CodeFactory.elementConfigurationCode(CodeSystemKvTs001.NO_KNOWLEDGE)
+        CodeFactory.elementConfigurationCode(CodeSystemKvTs001.NO_KNOWLEDGE_V2)
     );
 
     return ElementSpecification.builder()
