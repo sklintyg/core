@@ -758,15 +758,9 @@
       </column>
     </createTable>
 
-    <addPrimaryKey tableName="staff_pa_title_version" columnNames="staff_version_key, code"
-      constraintName="pk_staff_pa_title_version"/>
     <addForeignKeyConstraint constraintName="fk_staff_pa_title_version_staff_version_key"
       baseTableName="staff_pa_title_version" baseColumnNames="staff_version_key"
       referencedTableName="staff_version" referencedColumnNames="key"/>
-    <createIndex indexName="idx_staff_pa_title_version_staff_version_key"
-      tableName="staff_pa_title_version">
-      <column name="staff_version_key"/>
-    </createIndex>
 
     <createTable tableName="staff_speciality_version">
       <column name="speciality" type="varchar(255)">
