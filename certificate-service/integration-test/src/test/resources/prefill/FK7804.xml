@@ -61,6 +61,12 @@
       </ns4:cv>
     </ns2:delsvar>
     <ns2:delsvar id="6.1">Q-feber</ns2:delsvar>
+    <ns2:delsvar id="6.4">
+      <ns4:cv>
+        <ns4:code>A25</ns4:code>
+        <ns4:codeSystem>1.2.752.116.1.1.1.1.3</ns4:codeSystem>
+      </ns4:cv>
+    </ns2:delsvar>
   </ns3:svar>
   <ns3:svar id="35">
     <ns2:delsvar id="35.1">Funktionsnedsättning text</ns2:delsvar>
