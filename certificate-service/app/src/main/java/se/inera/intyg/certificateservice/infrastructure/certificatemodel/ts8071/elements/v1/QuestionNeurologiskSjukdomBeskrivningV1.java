@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1;
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionNeurologiskSjukdomV1.QUESTION_NEUROLOGISK_SJUKDOM_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionNeurologiskSjukdomV1.QUESTION_NEUROLOGISK_SJUKDOM_ID;

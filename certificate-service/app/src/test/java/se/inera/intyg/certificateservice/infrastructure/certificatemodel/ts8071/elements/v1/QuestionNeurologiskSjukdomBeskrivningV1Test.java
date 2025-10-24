@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -9,37 +9,36 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextField;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
-import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionNeuropsykiatriskLakemedelV1;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
+import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 
-class QuestionNeuropsykiatriskLakemedelV1Test {
+class QuestionNeurologiskSjukdomBeskrivningV1Test {
 
-  private static final ElementId ELEMENT_ID = new ElementId("20.4");
+  private static final ElementId ELEMENT_ID = new ElementId("13.2");
 
   @Test
   void shallIncludeId() {
-    final var element = QuestionNeuropsykiatriskLakemedelV1.questionNeuropsykiatriskLakemedelV1();
+    final var element = QuestionNeurologiskSjukdomBeskrivningV1.questionNeurologiskSjukdomBeskrivning();
 
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
   void shallIncludeConfiguration() {
-    final var expectedConfiguration = ElementConfigurationRadioBoolean.builder()
-        .name("Har personen någon läkemedelsbehandling?")
-        .selectedText("Ja")
-        .unselectedText("Nej")
-        .id(new FieldId("20.4"))
+    final var expectedConfiguration = ElementConfigurationTextField.builder()
+        .name("Ange vilken sjukdom och vilka tecken")
+        .id(new FieldId("13.2"))
         .build();
 
-    final var element = QuestionNeuropsykiatriskLakemedelV1.questionNeuropsykiatriskLakemedelV1();
+    final var element = QuestionNeurologiskSjukdomBeskrivningV1.questionNeurologiskSjukdomBeskrivning();
 
     assertEquals(expectedConfiguration, element.configuration());
   }
@@ -48,18 +47,23 @@ class QuestionNeuropsykiatriskLakemedelV1Test {
   void shallIncludeRules() {
     final var expectedRules = List.of(
         ElementRuleExpression.builder()
-            .id(new ElementId("20"))
+            .id(new ElementId("13"))
             .type(ElementRuleType.SHOW)
-            .expression(new RuleExpression("$20.1"))
+            .expression(new RuleExpression("$13.1"))
             .build(),
         ElementRuleExpression.builder()
             .id(ELEMENT_ID)
             .type(ElementRuleType.MANDATORY)
-            .expression(new RuleExpression("exists($20.4)"))
+            .expression(new RuleExpression("$13.2"))
+            .build(),
+        ElementRuleLimit.builder()
+            .id(ELEMENT_ID)
+            .type(ElementRuleType.TEXT_LIMIT)
+            .limit(new RuleLimit((short) 50))
             .build()
     );
 
-    final var element = QuestionNeuropsykiatriskLakemedelV1.questionNeuropsykiatriskLakemedelV1();
+    final var element = QuestionNeurologiskSjukdomBeskrivningV1.questionNeurologiskSjukdomBeskrivning();
 
     assertEquals(expectedRules, element.rules());
   }
@@ -67,21 +71,22 @@ class QuestionNeuropsykiatriskLakemedelV1Test {
   @Test
   void shallIncludeValidations() {
     final var expectedValidations = List.of(
-        ElementValidationBoolean.builder()
+        ElementValidationText.builder()
             .mandatory(true)
+            .limit(50)
             .build()
     );
 
-    final var element = QuestionNeuropsykiatriskLakemedelV1.questionNeuropsykiatriskLakemedelV1();
+    final var element = QuestionNeurologiskSjukdomBeskrivningV1.questionNeurologiskSjukdomBeskrivning();
 
     assertEquals(expectedValidations, element.validations());
   }
 
   @Test
   void shallIncludeMapping() {
-    final var element = QuestionNeuropsykiatriskLakemedelV1.questionNeuropsykiatriskLakemedelV1();
+    final var element = QuestionNeurologiskSjukdomBeskrivningV1.questionNeurologiskSjukdomBeskrivning();
 
-    assertEquals(new ElementMapping(new ElementId("20"), null), element.mapping());
+    assertEquals(new ElementMapping(new ElementId("13"), null), element.mapping());
   }
 
   @Nested
@@ -91,7 +96,7 @@ class QuestionNeuropsykiatriskLakemedelV1Test {
     void shallReturnTrueIfBooleanIsTrue() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("20"))
+              .id(new ElementId("13"))
               .value(
                   ElementValueBoolean.builder()
                       .value(true)
@@ -100,7 +105,7 @@ class QuestionNeuropsykiatriskLakemedelV1Test {
               .build()
       );
 
-      final var element = QuestionNeuropsykiatriskLakemedelV1.questionNeuropsykiatriskLakemedelV1();
+      final var element = QuestionNeurologiskSjukdomBeskrivningV1.questionNeurologiskSjukdomBeskrivning();
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -120,7 +125,7 @@ class QuestionNeuropsykiatriskLakemedelV1Test {
               .build()
       );
 
-      final var element = QuestionNeuropsykiatriskLakemedelV1.questionNeuropsykiatriskLakemedelV1();
+      final var element = QuestionNeurologiskSjukdomBeskrivningV1.questionNeurologiskSjukdomBeskrivning();
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -131,7 +136,7 @@ class QuestionNeuropsykiatriskLakemedelV1Test {
     void shallReturnFalseIfElementFalse() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("20"))
+              .id(new ElementId("13"))
               .value(
                   ElementValueBoolean.builder()
                       .value(false)
@@ -140,7 +145,7 @@ class QuestionNeuropsykiatriskLakemedelV1Test {
               .build()
       );
 
-      final var element = QuestionNeuropsykiatriskLakemedelV1.questionNeuropsykiatriskLakemedelV1();
+      final var element = QuestionNeurologiskSjukdomBeskrivningV1.questionNeurologiskSjukdomBeskrivning();
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
