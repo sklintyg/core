@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionNeurologiskSjukdomV1.QUESTION_NEUROLOGISK_SJUKDOM_FIELD_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionNeurologiskSjukdomV1.QUESTION_NEUROLOGISK_SJUKDOM_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionNeurologiskSjukdomV1.QUESTION_NEUROLOGISK_SJUKDOM_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionNeurologiskSjukdomV1.QUESTION_NEUROLOGISK_SJUKDOM_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextField;
@@ -13,14 +13,14 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
 
-public class QuestionNeurologiskSjukdomBeskrivning {
+public class QuestionNeurologiskSjukdomBeskrivningV1 {
 
   public static final ElementId QUESTION_NEUROLOGISK_SJUKDOM_BESKRIVNING_ID = new ElementId(
       "13.2");
   public static final FieldId QUESTION_NEUROLOGISK_SJUKDOM_BESKRIVNING_FIELD_ID = new FieldId(
       "13.2");
 
-  private QuestionNeurologiskSjukdomBeskrivning() {
+  private QuestionNeurologiskSjukdomBeskrivningV1() {
     throw new IllegalStateException("Utility class");
   }
 

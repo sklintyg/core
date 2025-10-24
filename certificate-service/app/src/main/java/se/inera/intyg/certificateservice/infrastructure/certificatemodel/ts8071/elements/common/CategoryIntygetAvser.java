@@ -7,7 +7,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 
 public class CategoryIntygetAvser {
 
-  private static final ElementId INTYGET_AVSER_CATEGORY_ID = new ElementId("KAT_1");
+  private static final ElementId INTYGET_AVSER_CATEGORY_ID = new ElementId("KAT_0.0");
 
   private CategoryIntygetAvser() {
     throw new IllegalStateException("Utility class");
@@ -28,4 +28,3 @@ public class CategoryIntygetAvser {
         .build();
   }
 }
-

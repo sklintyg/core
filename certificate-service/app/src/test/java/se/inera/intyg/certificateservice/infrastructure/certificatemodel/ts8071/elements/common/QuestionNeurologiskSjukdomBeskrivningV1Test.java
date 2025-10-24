@@ -20,13 +20,13 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpre
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 
-class QuestionNeurologiskSjukdomBeskrivningTest {
+class QuestionNeurologiskSjukdomBeskrivningV1Test {
 
   private static final ElementId ELEMENT_ID = new ElementId("13.2");
 
   @Test
   void shallIncludeId() {
-    final var element = QuestionNeurologiskSjukdomBeskrivning.questionNeurologiskSjukdomBeskrivning();
+    final var element = QuestionNeurologiskSjukdomBeskrivningV1.questionNeurologiskSjukdomBeskrivning();
 
     assertEquals(ELEMENT_ID, element.id());
   }
@@ -38,7 +38,7 @@ class QuestionNeurologiskSjukdomBeskrivningTest {
         .id(new FieldId("13.2"))
         .build();
 
-    final var element = QuestionNeurologiskSjukdomBeskrivning.questionNeurologiskSjukdomBeskrivning();
+    final var element = QuestionNeurologiskSjukdomBeskrivningV1.questionNeurologiskSjukdomBeskrivning();
 
     assertEquals(expectedConfiguration, element.configuration());
   }
@@ -63,7 +63,7 @@ class QuestionNeurologiskSjukdomBeskrivningTest {
             .build()
     );
 
-    final var element = QuestionNeurologiskSjukdomBeskrivning.questionNeurologiskSjukdomBeskrivning();
+    final var element = QuestionNeurologiskSjukdomBeskrivningV1.questionNeurologiskSjukdomBeskrivning();
 
     assertEquals(expectedRules, element.rules());
   }
@@ -77,14 +77,14 @@ class QuestionNeurologiskSjukdomBeskrivningTest {
             .build()
     );
 
-    final var element = QuestionNeurologiskSjukdomBeskrivning.questionNeurologiskSjukdomBeskrivning();
+    final var element = QuestionNeurologiskSjukdomBeskrivningV1.questionNeurologiskSjukdomBeskrivning();
 
     assertEquals(expectedValidations, element.validations());
   }
 
   @Test
   void shallIncludeMapping() {
-    final var element = QuestionNeurologiskSjukdomBeskrivning.questionNeurologiskSjukdomBeskrivning();
+    final var element = QuestionNeurologiskSjukdomBeskrivningV1.questionNeurologiskSjukdomBeskrivning();
 
     assertEquals(new ElementMapping(new ElementId("13"), null), element.mapping());
   }
@@ -105,7 +105,7 @@ class QuestionNeurologiskSjukdomBeskrivningTest {
               .build()
       );
 
-      final var element = QuestionNeurologiskSjukdomBeskrivning.questionNeurologiskSjukdomBeskrivning();
+      final var element = QuestionNeurologiskSjukdomBeskrivningV1.questionNeurologiskSjukdomBeskrivning();
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -125,7 +125,7 @@ class QuestionNeurologiskSjukdomBeskrivningTest {
               .build()
       );
 
-      final var element = QuestionNeurologiskSjukdomBeskrivning.questionNeurologiskSjukdomBeskrivning();
+      final var element = QuestionNeurologiskSjukdomBeskrivningV1.questionNeurologiskSjukdomBeskrivning();
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -145,7 +145,7 @@ class QuestionNeurologiskSjukdomBeskrivningTest {
               .build()
       );
 
-      final var element = QuestionNeurologiskSjukdomBeskrivning.questionNeurologiskSjukdomBeskrivning();
+      final var element = QuestionNeurologiskSjukdomBeskrivningV1.questionNeurologiskSjukdomBeskrivning();
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
