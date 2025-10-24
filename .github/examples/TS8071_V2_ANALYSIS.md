@@ -20,15 +20,15 @@ and which require changes or are new.
 
 **Status**: ✅ **ALREADY CORRECT IN V2**
 
-| Aspect                     | V1 Implementation                                                                       | V2 Spec                                                                                                             | V2 Implementation         | Status          |
-|----------------------------|-----------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------|---------------------------|-----------------|
-| **Element ID**             | 1                                                                                       | 1                                                                                                                   | 1                         | ✅ IDENTICAL     |
-| **Field ID**               | 1.1                                                                                     | 1.1                                                                                                                 | 1.1                       | ✅ IDENTICAL     |
-| **Type**                   | CheckboxMultipleCode                                                                    | SK-004a (checkbox, kodverk)                                                                                         | CheckboxMultipleCode      | ✅ IDENTICAL     |
-| **Codes**                  | gr_II, gr_II_III, forlang_gr_II, forlang_gr_II_III, utbyt_utl_kk, tax_leg, int_begar_ts | Same 7 codes                                                                                                        | Same 7 codes              | ✅ IDENTICAL     |
-| **Multiplicitet**          | 1..7                                                                                    | 1..2                                                                                                                | 1..7 (validated by rules) | ✅ IDENTICAL     |
-| **Alert Message**          | V1: "Välj \"ansökan om taxiförarlegitimation\" endast..."                               | V2: "Endast ett alternativ kan väljas. Undantaget är om intyget avser taxiförarlegitimation, då kan två val göras." | V2 text implemented       | ✅ CORRECT IN V2 |
-| **Disable Rules (SR-008)** | 6 disable rules                                                                         | 5 disable rules per spec                                                                                            | 6 disable rules           | ✅ CORRECT IN V2 |
+| Aspect                     | V1 Implementation                                                                       | V2 Spec                                                                | V2 Implementation         | Status          |
+|----------------------------|-----------------------------------------------------------------------------------------|------------------------------------------------------------------------|---------------------------|-----------------|
+| **Element ID**             | 1                                                                                       | 1                                                                      | 1                         | ✅ IDENTICAL     |
+| **Field ID**               | 1.1                                                                                     | 1.1                                                                    | 1.1                       | ✅ IDENTICAL     |
+| **Type**                   | CheckboxMultipleCode                                                                    | SK-004a (checkbox, kodverk)                                            | CheckboxMultipleCode      | ✅ IDENTICAL     |
+| **Codes**                  | gr_II, gr_II_III, forlang_gr_II, forlang_gr_II_III, utbyt_utl_kk, tax_leg, int_begar_ts | Same 7 codes                                                           | Same 7 codes              | ✅ IDENTICAL     |
+| **Multiplicitet**          | 1..7                                                                                    | 1..2                                                                   | 1..7 (validated by rules) | ✅ IDENTICAL     |
+| **Alert Message**          | V1: "Välj \"ansökan om taxiförarlegitimation\" endast..."                               | V2: "Välj \"ansökan om taxiförarlegitimation\" endast..." (same as V1) | Same as V1                | ✅ IDENTICAL     |
+| **Disable Rules (SR-008)** | 6 disable rules                                                                         | 5 disable rules per spec                                               | 6 disable rules           | ✅ CORRECT IN V2 |
 
 **V2 Disable Rules Analysis:**
 

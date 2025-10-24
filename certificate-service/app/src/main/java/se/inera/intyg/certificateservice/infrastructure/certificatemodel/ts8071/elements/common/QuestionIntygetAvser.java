@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
@@ -14,16 +14,16 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor;
 
-public class QuestionIntygetAvserV2 {
+public class QuestionIntygetAvser {
 
   public static final ElementId QUESTION_INTYGET_AVSER_ID = new ElementId("1");
   public static final FieldId QUESTION_INTYGET_AVSER_FIELD_ID = new FieldId("1.1");
 
-  private QuestionIntygetAvserV2() {
+  private QuestionIntygetAvser() {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionIntygetAvserV2() {
+  public static ElementSpecification questionIntygetAvser() {
     final var checkboxes = List.of(
         CodeFactory.elementConfigurationCode(CodeSystemKvIntygetGallerFor.GR_II),
         CodeFactory.elementConfigurationCode(CodeSystemKvIntygetGallerFor.GR_II_III),
@@ -47,7 +47,7 @@ public class QuestionIntygetAvserV2 {
                         .level(MessageLevel.OBSERVE)
                         .includedForStatuses(List.of(Status.DRAFT))
                         .content(
-                            "Endast ett alternativ kan väljas. Undantaget är om intyget avser taxiförarlegitimation, då kan två val göras.")
+                            "Välj \"ansökan om taxiförarlegitimation\" endast om personen saknar taxiförarlegitimation och ansöker om en sådan i samband med detta intyg.")
                         .build()
                 )
                 .build()

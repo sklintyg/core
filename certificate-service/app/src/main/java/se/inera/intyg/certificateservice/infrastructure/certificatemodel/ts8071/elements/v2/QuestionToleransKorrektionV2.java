@@ -6,7 +6,6 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.withCitation;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.wrapWithNotEmpty;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.wrapWithParenthesis;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSynskarpa.BINOCULAR_WITHOUT_CORRECTION_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSynskarpa.LEFT_EYE_WITHOUT_CORRECTION_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSynskarpa.QUESTION_SYNSKARPA_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSynskarpa.RIGHT_EYE_WITHOUT_CORRECTION_ID;
@@ -55,10 +54,6 @@ public class QuestionToleransKorrektionV2 {
                                     lessThan(
                                         withCitation(LEFT_EYE_WITHOUT_CORRECTION_ID),
                                         "0.8"
-                                    ),
-                                    lessThan(
-                                        withCitation(BINOCULAR_WITHOUT_CORRECTION_ID),
-                                        "0.8"
                                     )
                                 )
                             ),
@@ -67,9 +62,7 @@ public class QuestionToleransKorrektionV2 {
                                     wrapWithNotEmpty(
                                         withCitation(RIGHT_EYE_WITHOUT_CORRECTION_ID)),
                                     wrapWithNotEmpty(
-                                        withCitation(LEFT_EYE_WITHOUT_CORRECTION_ID)),
-                                    wrapWithNotEmpty(
-                                        withCitation(BINOCULAR_WITHOUT_CORRECTION_ID))
+                                        withCitation(LEFT_EYE_WITHOUT_CORRECTION_ID))
                                 )
                             )
                         )

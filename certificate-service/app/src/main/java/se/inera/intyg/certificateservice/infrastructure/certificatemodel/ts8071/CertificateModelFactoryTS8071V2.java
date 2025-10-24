@@ -38,6 +38,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionHjartsjukdom.questionHjartsjukdom;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionHjartsjukdomBehandlad.questionHjartsjukdomBehandlad;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionIdentitet.questionIdentitet;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionIntygetAvser.questionIntygetAvser;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionMedicinering.questionMedicinering;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionMedvetandestorning.questionMedvetandestorning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionMedvetandestorningTidpunkt.questionMedvetandestorningTidpunkt;
@@ -75,7 +76,6 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionHorselhjalpmedelV2.questionHorselhjalpmedelV2;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionIntellektuellFunktionsnedsattningBeskrivningV2.questionIntellektuellFunktionsnedsattningBeskrivningV2;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionIntellektuellFunktionsnedsattningV2.questionIntellektuellFunktionsnedsattningV2;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionIntygetAvserV2.questionIntygetAvserV2;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionKognitivStorningV2.questionKognitivStorningV2;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionLakemedelBeskrivningV2.questionLakemedelBeskrivningV2;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionLakemedelV2.questionLakemedelV2;
@@ -180,7 +180,7 @@ public class CertificateModelFactoryTS8071V2 implements CertificateModelFactory 
         .elementSpecifications(
             List.of(
                 categoryIntygetAvser(
-                    questionIntygetAvserV2()
+                    questionIntygetAvser()
                 ),
                 categoryIntygetBaseratPa(
                     questionBaseratPa(
