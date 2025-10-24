@@ -86,18 +86,23 @@ public class ElementDataPredicateFactory {
         );
   }
 
-  public static Predicate<List<ElementData>> visualAcuities(ElementId elementId, double limit) {
+  public static Predicate<List<ElementData>> visualAcuities(ElementId elementId, double upperLimit,
+      double lowerLimit) {
     return elementData -> elementData.stream()
         .filter(data -> data.id().equals(elementId))
         .map(data -> (ElementValueVisualAcuities) data.value())
         .anyMatch(
             visualAcuities ->
                 (visualAcuities.rightEye().withoutCorrection().value() != null
-                    && visualAcuities.rightEye().withoutCorrection().value() < limit)
-                    || (visualAcuities.leftEye().withoutCorrection().value() != null
-                    && visualAcuities.leftEye().withoutCorrection().value() < limit)
-                    || (visualAcuities.binocular().withoutCorrection().value() != null
-                    && visualAcuities.binocular().withoutCorrection().value() < limit)
+                    && visualAcuities.rightEye().withoutCorrection().value() < upperLimit
+                    && visualAcuities.leftEye().withoutCorrection().value() != null
+                    && visualAcuities.leftEye().withoutCorrection().value() < upperLimit) ||
+                    (
+                        (visualAcuities.rightEye().withoutCorrection().value() != null
+                            && visualAcuities.rightEye().withoutCorrection().value() < lowerLimit)
+                            || (visualAcuities.leftEye().withoutCorrection().value() != null
+                            && visualAcuities.leftEye().withoutCorrection().value() < lowerLimit)
+                    )
         );
   }
 

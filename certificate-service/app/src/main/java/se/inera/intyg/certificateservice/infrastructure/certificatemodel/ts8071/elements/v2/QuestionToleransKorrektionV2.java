@@ -1,11 +1,5 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.lessThan;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.multipleAndExpressions;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.multipleOrExpression;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.withCitation;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.wrapWithNotEmpty;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory.wrapWithParenthesis;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSynskarpa.LEFT_EYE_WITHOUT_CORRECTION_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSynskarpa.QUESTION_SYNSKARPA_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSynskarpa.RIGHT_EYE_WITHOUT_CORRECTION_ID;
@@ -15,7 +9,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
@@ -41,32 +34,10 @@ public class QuestionToleransKorrektionV2 {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.show(
+                CertificateElementRuleFactory.visualAcuities(
                     QUESTION_SYNSKARPA_ID,
-                    new RuleExpression(
-                        multipleAndExpressions(
-                            wrapWithParenthesis(
-                                multipleOrExpression(
-                                    lessThan(
-                                        withCitation(RIGHT_EYE_WITHOUT_CORRECTION_ID),
-                                        "0.8"
-                                    ),
-                                    lessThan(
-                                        withCitation(LEFT_EYE_WITHOUT_CORRECTION_ID),
-                                        "0.8"
-                                    )
-                                )
-                            ),
-                            wrapWithParenthesis(
-                                multipleAndExpressions(
-                                    wrapWithNotEmpty(
-                                        withCitation(RIGHT_EYE_WITHOUT_CORRECTION_ID)),
-                                    wrapWithNotEmpty(
-                                        withCitation(LEFT_EYE_WITHOUT_CORRECTION_ID))
-                                )
-                            )
-                        )
-                    )
+                    new FieldId(LEFT_EYE_WITHOUT_CORRECTION_ID),
+                    new FieldId(RIGHT_EYE_WITHOUT_CORRECTION_ID)
                 ),
                 CertificateElementRuleFactory.limit(QUESTION_TOLERANS_KORREKTION_V2_ID, (short) 250)
             )
@@ -80,7 +51,7 @@ public class QuestionToleransKorrektionV2 {
             )
         )
         .shouldValidate(
-            ElementDataPredicateFactory.visualAcuities(QUESTION_SYNSKARPA_ID, 0.8)
+            ElementDataPredicateFactory.visualAcuities(QUESTION_SYNSKARPA_ID, 0.8, 0.1)
         )
         .children(List.of(children))
         .build();

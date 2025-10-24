@@ -15,17 +15,19 @@ guidelines below to ensure a thorough and accurate analysis.
 
 ## 3. Compare Elements in Detail
 
+You will compare the existing version question here in the code, and the new version question in
+the specification.
+
 For each matched question id for the new version compared to the existing version, verify the
 following:
-(You will compare the existing version question here in the code, and the new version question in
-the specification)
 
 - Are all **text fields** (e.g., name, description, labels) identical?
 - Are the **rules themselves** consistent between the specification and V1 model?
 - Are the text limits the same?
 - Are the validations the same?
-- Are the configurations the same? If the new version has TextArea instead of TextField this needs
-  to be analyzed as need for new question in new version.
+- Are the configurations the same? Example: *If the new version has TextArea instead of TextField
+  this needs
+  to be analyzed as need for new question in new version.*
 - If code config is present, are the codes identical?
 - It's important to remember that the specification will have ids for the config which are mapped in
   `certificate-copilot-instructions.instructions.md`, so you need to map the id for the config in
@@ -41,4 +43,4 @@ the specification)
 
 - Clearly list IDs that are **missing in either source**.
 - For matching IDs, report **any differences** in rules or text content.
-- An example of the file is shown in `TS8071_V2_ANALYSIS.md`
+- Example formats can be found in examples folder in the github folder.
