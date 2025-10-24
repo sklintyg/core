@@ -7,7 +7,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 
 public class CategoryAlkoholOchLakemedelV2 {
 
-  private static final ElementId INTYGET_ALKOHOL_OCH_LAKEMEDEL_CATEGORY_ID = new ElementId(
+  private static final ElementId CATEGORY_ALKOHOL_OCH_LAKEMEDEL_ID = new ElementId(
       "KAT_12");
 
   private CategoryAlkoholOchLakemedelV2() {
@@ -17,7 +17,7 @@ public class CategoryAlkoholOchLakemedelV2 {
   public static ElementSpecification categoryAlkoholOchLakemedelV2(
       ElementSpecification... children) {
     return ElementSpecification.builder()
-        .id(INTYGET_ALKOHOL_OCH_LAKEMEDEL_CATEGORY_ID)
+        .id(CATEGORY_ALKOHOL_OCH_LAKEMEDEL_ID)
         .configuration(
             ElementConfigurationCategory.builder()
                 .name("Alkohol, andra psykoaktiva substanser och läkemedel")

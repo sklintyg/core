@@ -3,7 +3,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.FORLANG_GR_II_III;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.GR_II_III;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.TAXI;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionIntygetAvserV2.QUESTION_INTYGET_AVSER_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionIntygetAvser.QUESTION_INTYGET_AVSER_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
@@ -14,7 +14,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class CategoryHorselV2 {
 
-  private static final ElementId INTYGET_HORSEL_CATEGORY_V2_ID = new ElementId("KAT_3");
+  private static final ElementId CATEGORY_HORSEL_ID = new ElementId("KAT_3");
 
   private CategoryHorselV2() {
     throw new IllegalStateException("Utility class");
@@ -23,7 +23,7 @@ public class CategoryHorselV2 {
   public static ElementSpecification categoryHorselV2(
       ElementSpecification... children) {
     return ElementSpecification.builder()
-        .id(INTYGET_HORSEL_CATEGORY_V2_ID)
+        .id(CATEGORY_HORSEL_ID)
         .configuration(
             ElementConfigurationCategory.builder()
                 .name("Hörsel")
