@@ -26,6 +26,7 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.Certifi
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateTypeName;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
@@ -48,6 +49,7 @@ public class CertificateModelFactoryFK7427 implements CertificateModelFactory {
 
   private static final String TYPE = "fk7427";
   private static final String VERSION = "1.0";
+  private static final CertificateTypeName FK7427_TYPE_NAME = new CertificateTypeName("FK7427");
   private static final String NAME = "Läkarutlåtande tillfällig föräldrapenning barn 12–16 år";
   private static final String DESCRIPTION = """
       När ett barn mellan 12 och 16 år är sjukt kan den förälder som behöver avstå från sitt arbete för att vårda barnet få tillfällig föräldrapenning om barnet har ett särskilt behov av vård eller tillsyn. Läkarutlåtandet behövs från den första dagen i barnets vårdperiod.
@@ -86,6 +88,7 @@ public class CertificateModelFactoryFK7427 implements CertificateModelFactory {
                 NAME
             )
         )
+        .typeName(FK7427_TYPE_NAME)
         .name(NAME)
         .description(DESCRIPTION)
         .detailedDescription(DETAILED_DESCRIPTION)

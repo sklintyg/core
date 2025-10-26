@@ -13,6 +13,7 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.Certifi
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateTypeName;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateLink;
@@ -26,6 +27,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 @RequiredArgsConstructor
 public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
 
+  private static final CertificateTypeName FK7210_TYPE_NAME = new CertificateTypeName("FK7210");
   private final CertificateActionFactory certificateActionFactory;
   @Value("${certificate.model.fk7210.v1_0.active.from}")
   private LocalDateTime activeFrom;
@@ -72,6 +74,7 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
     return CertificateModel.builder()
         .id(FK7210_V1_0)
         .type(IGRAV)
+        .typeName(FK7210_TYPE_NAME)
         .name(NAME)
         .description(DESCRIPTION)
         .detailedDescription(DETAILED_DESCRIPTION)

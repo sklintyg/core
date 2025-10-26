@@ -28,6 +28,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateTypeName;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
@@ -54,6 +55,7 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
 
   private static final String TYPE = "fk3226";
   private static final String VERSION = "1.0";
+  private static final CertificateTypeName FK3226_TYPE_NAME = new CertificateTypeName("FK3226");
   private static final String NAME = "Läkarutlåtande för närståendepenning";
   private static final String DESCRIPTION = """
          <b className="iu-fw-heading">Vad är närståendepenning?</b><br>
@@ -90,6 +92,7 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
                 NAME
             )
         )
+        .typeName(FK3226_TYPE_NAME)
         .name(NAME)
         .description(DESCRIPTION)
         .detailedDescription(DETAILED_DESCRIPTION)

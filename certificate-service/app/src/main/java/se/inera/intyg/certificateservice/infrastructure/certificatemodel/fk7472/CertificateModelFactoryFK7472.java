@@ -15,6 +15,7 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.Certifi
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateTypeName;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
@@ -34,6 +35,7 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
 
   private static final String TYPE = "fk7472";
   private static final String VERSION = "1.0";
+  private static final CertificateTypeName FK7472_TYPE_NAME = new CertificateTypeName("FK7472");
   private static final String NAME = "Intyg om tillfällig föräldrapenning";
   private static final String DESCRIPTION = """
          När ett barn är sjukt kan den förälder som behöver avstå från sitt arbete för att vårda barnet få tillfällig föräldrapenning. Från och med den åttonde dagen i barnets vårdperiod behöver ett intyg från en läkare eller sjuksköterska skickas till Försäkringskassan.                                                                                                                                                         \s
@@ -71,6 +73,7 @@ public class CertificateModelFactoryFK7472 implements CertificateModelFactory {
                 NAME
             )
         )
+        .typeName(FK7472_TYPE_NAME)
         .name(NAME)
         .description(DESCRIPTION)
         .detailedDescription(DETAILED_DESCRIPTION)
