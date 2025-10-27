@@ -100,6 +100,8 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionPsykiskTidpunktV1.questionPsykiskTidpunktV1;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionPsykiskUtvecklingsstorningAllvarligV1.questionPsykiskUtvecklingsstorningAllvarligV1;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionPsykiskUtvecklingsstorningV1.questionPsykiskUtvecklingsstorningV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionPsykiskV1.QUESTION_PSYKISK_FIELD_V1_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionPsykiskV1.QUESTION_PSYKISK_V1_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionPsykiskV1.questionPsykiskV1;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionSjukdomshistorikBeskrivningV1.questionSjukdomshistorikBeskrivningV1;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionStrokePaverkanV1.questionStrokePaverkanV1;
@@ -311,7 +313,10 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
                 ),
                 categoryPsykiskaSjukdomarOchStorningar(
                     questionPsykiskV1(
-                        questionPsykiskBeskrivning(),
+                        questionPsykiskBeskrivning(
+                            QUESTION_PSYKISK_V1_ID,
+                            QUESTION_PSYKISK_FIELD_V1_ID
+                        ),
                         questionPsykiskTidpunktV1()
                     )
                 ),

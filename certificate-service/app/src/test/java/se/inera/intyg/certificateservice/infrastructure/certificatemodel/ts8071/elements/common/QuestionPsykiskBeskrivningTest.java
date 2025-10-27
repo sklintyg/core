@@ -23,10 +23,15 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 class QuestionPsykiskBeskrivningTest {
 
   private static final ElementId ELEMENT_ID = new ElementId("19.2");
+  private static final ElementId PARENT_ELEMENT_ID = new ElementId("19");
+  private static final FieldId PARENT_FIELD_ID = new FieldId("19.1");
 
   @Test
   void shallIncludeId() {
-    final var element = QuestionPsykiskBeskrivning.questionPsykiskBeskrivning();
+    final var element = QuestionPsykiskBeskrivning.questionPsykiskBeskrivning(
+        PARENT_ELEMENT_ID,
+        PARENT_FIELD_ID
+    );
 
     assertEquals(ELEMENT_ID, element.id());
   }
@@ -38,7 +43,10 @@ class QuestionPsykiskBeskrivningTest {
         .id(new FieldId("19.2"))
         .build();
 
-    final var element = QuestionPsykiskBeskrivning.questionPsykiskBeskrivning();
+    final var element = QuestionPsykiskBeskrivning.questionPsykiskBeskrivning(
+        PARENT_ELEMENT_ID,
+        PARENT_FIELD_ID
+    );
 
     assertEquals(expectedConfiguration, element.configuration());
   }
@@ -47,7 +55,7 @@ class QuestionPsykiskBeskrivningTest {
   void shallIncludeRules() {
     final var expectedRules = List.of(
         ElementRuleExpression.builder()
-            .id(new ElementId("19"))
+            .id(PARENT_ELEMENT_ID)
             .type(ElementRuleType.SHOW)
             .expression(new RuleExpression("$19.1"))
             .build(),
@@ -63,7 +71,10 @@ class QuestionPsykiskBeskrivningTest {
             .build()
     );
 
-    final var element = QuestionPsykiskBeskrivning.questionPsykiskBeskrivning();
+    final var element = QuestionPsykiskBeskrivning.questionPsykiskBeskrivning(
+        PARENT_ELEMENT_ID,
+        PARENT_FIELD_ID
+    );
 
     assertEquals(expectedRules, element.rules());
   }
@@ -77,16 +88,22 @@ class QuestionPsykiskBeskrivningTest {
             .build()
     );
 
-    final var element = QuestionPsykiskBeskrivning.questionPsykiskBeskrivning();
+    final var element = QuestionPsykiskBeskrivning.questionPsykiskBeskrivning(
+        PARENT_ELEMENT_ID,
+        PARENT_FIELD_ID
+    );
 
     assertEquals(expectedValidations, element.validations());
   }
 
   @Test
   void shallIncludeMapping() {
-    final var element = QuestionPsykiskBeskrivning.questionPsykiskBeskrivning();
+    final var element = QuestionPsykiskBeskrivning.questionPsykiskBeskrivning(
+        PARENT_ELEMENT_ID,
+        PARENT_FIELD_ID
+    );
 
-    assertEquals(new ElementMapping(new ElementId("19"), null), element.mapping());
+    assertEquals(new ElementMapping(PARENT_ELEMENT_ID, null), element.mapping());
   }
 
   @Nested
@@ -96,7 +113,7 @@ class QuestionPsykiskBeskrivningTest {
     void shallReturnTrueIfBooleanIsTrue() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("19"))
+              .id(PARENT_ELEMENT_ID)
               .value(
                   ElementValueBoolean.builder()
                       .value(true)
@@ -105,7 +122,10 @@ class QuestionPsykiskBeskrivningTest {
               .build()
       );
 
-      final var element = QuestionPsykiskBeskrivning.questionPsykiskBeskrivning();
+      final var element = QuestionPsykiskBeskrivning.questionPsykiskBeskrivning(
+          PARENT_ELEMENT_ID,
+          PARENT_FIELD_ID
+      );
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -125,7 +145,10 @@ class QuestionPsykiskBeskrivningTest {
               .build()
       );
 
-      final var element = QuestionPsykiskBeskrivning.questionPsykiskBeskrivning();
+      final var element = QuestionPsykiskBeskrivning.questionPsykiskBeskrivning(
+          PARENT_ELEMENT_ID,
+          PARENT_FIELD_ID
+      );
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -136,7 +159,7 @@ class QuestionPsykiskBeskrivningTest {
     void shallReturnFalseIfElementFalse() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("19"))
+              .id(PARENT_ELEMENT_ID)
               .value(
                   ElementValueBoolean.builder()
                       .value(false)
@@ -145,7 +168,10 @@ class QuestionPsykiskBeskrivningTest {
               .build()
       );
 
-      final var element = QuestionPsykiskBeskrivning.questionPsykiskBeskrivning();
+      final var element = QuestionPsykiskBeskrivning.questionPsykiskBeskrivning(
+          PARENT_ELEMENT_ID,
+          PARENT_FIELD_ID
+      );
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 

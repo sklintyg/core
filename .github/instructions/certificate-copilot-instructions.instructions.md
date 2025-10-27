@@ -131,5 +131,6 @@ Follow these steps:
    where X is version)
    ***Example: questionHorselV1(), QUESTION_HORSEL_V1_ID***
 6. If a question is common between versions, but an id is used from a version question, then the id
-   needs to be passed as an attribute. See `QuestionMissbrukProvtagning` as example.
+   needs to be passed as an attribute. See `QuestionMissbrukProvtagning` as example. The ids can
+   then be sent in each CertificateModelFactory as attributes.
 7. Add the unique elements to the model

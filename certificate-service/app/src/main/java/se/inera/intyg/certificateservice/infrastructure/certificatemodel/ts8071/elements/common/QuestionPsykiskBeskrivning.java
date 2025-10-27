@@ -1,8 +1,5 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionPsykiskV1.QUESTION_PSYKISK_FIELD_V1_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionPsykiskV1.QUESTION_PSYKISK_V1_ID;
-
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -24,7 +21,8 @@ public class QuestionPsykiskBeskrivning {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionPsykiskBeskrivning() {
+  public static ElementSpecification questionPsykiskBeskrivning(ElementId parentElementId,
+      FieldId parentFieldId) {
     return ElementSpecification.builder()
         .id(QUESTION_PSYKISK_BESKRIVNING_ID)
         .configuration(
@@ -36,8 +34,8 @@ public class QuestionPsykiskBeskrivning {
         .rules(
             List.of(
                 CertificateElementRuleFactory.show(
-                    QUESTION_PSYKISK_V1_ID,
-                    QUESTION_PSYKISK_FIELD_V1_ID
+                    parentElementId,
+                    parentFieldId
                 ),
                 CertificateElementRuleFactory.mandatory(
                     QUESTION_PSYKISK_BESKRIVNING_ID,
@@ -49,10 +47,10 @@ public class QuestionPsykiskBeskrivning {
             )
         )
         .shouldValidate(
-            ElementDataPredicateFactory.valueBoolean(QUESTION_PSYKISK_V1_ID)
+            ElementDataPredicateFactory.valueBoolean(parentElementId)
         )
         .mapping(
-            new ElementMapping(QUESTION_PSYKISK_V1_ID, null)
+            new ElementMapping(parentElementId, null)
         )
         .validations(
             List.of(
