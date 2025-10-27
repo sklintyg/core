@@ -3,7 +3,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionNeurologiskSjukdomV1.QUESTION_NEUROLOGISK_SJUKDOM_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionNeurologiskSjukdomV2.QUESTION_NEUROLOGISK_SJUKDOM_V2_ID;
 
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -80,7 +80,7 @@ class QuestionNeurologiskSjukdomBeskrivningV2Test {
   void shouldIncludeMapping() {
     final var element = QuestionNeurologiskSjukdomBeskrivningV2.questionNeurologiskSjukdomBeskrivningV2();
 
-    assertEquals(new ElementMapping(QUESTION_NEUROLOGISK_SJUKDOM_ID, null), element.mapping());
+    assertEquals(new ElementMapping(QUESTION_NEUROLOGISK_SJUKDOM_V2_ID, null), element.mapping());
   }
 
   @Nested

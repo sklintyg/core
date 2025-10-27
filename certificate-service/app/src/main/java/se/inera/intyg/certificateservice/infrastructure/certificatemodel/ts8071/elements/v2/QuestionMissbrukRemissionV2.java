@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukV1.QUESTION_MISSBRUK_FIELD_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukV1.QUESTION_MISSBRUK_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionMissbrukV2.QUESTION_MISSBRUK_V2_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionMissbrukV2.QUESTION_MISSBRUK_V2_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
@@ -53,13 +53,13 @@ public class QuestionMissbrukRemissionV2 {
                     radioMultipleCodes.stream().map(ElementConfigurationCode::id).toList()
                 ),
                 CertificateElementRuleFactory.show(
-                    QUESTION_MISSBRUK_ID,
-                    QUESTION_MISSBRUK_FIELD_ID
+                    QUESTION_MISSBRUK_V2_ID,
+                    QUESTION_MISSBRUK_V2_FIELD_ID
                 )
             )
         )
-        .shouldValidate(ElementDataPredicateFactory.valueBoolean(QUESTION_MISSBRUK_ID))
-        .mapping(new ElementMapping(QUESTION_MISSBRUK_ID, null))
+        .shouldValidate(ElementDataPredicateFactory.valueBoolean(QUESTION_MISSBRUK_V2_ID))
+        .mapping(new ElementMapping(QUESTION_MISSBRUK_V2_ID, null))
         .validations(
             List.of(
                 ElementValidationCode.builder()

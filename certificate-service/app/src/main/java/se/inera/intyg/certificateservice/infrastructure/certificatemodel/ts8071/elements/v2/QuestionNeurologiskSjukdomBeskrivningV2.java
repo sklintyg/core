@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionNeurologiskSjukdomV1.QUESTION_NEUROLOGISK_SJUKDOM_FIELD_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionNeurologiskSjukdomV1.QUESTION_NEUROLOGISK_SJUKDOM_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionNeurologiskSjukdomV2.QUESTION_NEUROLOGISK_SJUKDOM_V2_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionNeurologiskSjukdomV2.QUESTION_NEUROLOGISK_SJUKDOM_V2_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
@@ -40,8 +40,8 @@ public class QuestionNeurologiskSjukdomBeskrivningV2 {
         .rules(
             List.of(
                 CertificateElementRuleFactory.show(
-                    QUESTION_NEUROLOGISK_SJUKDOM_ID,
-                    QUESTION_NEUROLOGISK_SJUKDOM_FIELD_ID
+                    QUESTION_NEUROLOGISK_SJUKDOM_V2_ID,
+                    QUESTION_NEUROLOGISK_SJUKDOM_V2_FIELD_ID
                 ),
                 CertificateElementRuleFactory.mandatory(
                     QUESTION_NEUROLOGISK_SJUKDOM_BESKRIVNING_V2_ID,
@@ -55,10 +55,10 @@ public class QuestionNeurologiskSjukdomBeskrivningV2 {
             )
         )
         .shouldValidate(
-            ElementDataPredicateFactory.valueBoolean(QUESTION_NEUROLOGISK_SJUKDOM_ID)
+            ElementDataPredicateFactory.valueBoolean(QUESTION_NEUROLOGISK_SJUKDOM_V2_ID)
         )
         .mapping(
-            new ElementMapping(QUESTION_NEUROLOGISK_SJUKDOM_ID, null)
+            new ElementMapping(QUESTION_NEUROLOGISK_SJUKDOM_V2_ID, null)
         )
         .validations(
             List.of(
