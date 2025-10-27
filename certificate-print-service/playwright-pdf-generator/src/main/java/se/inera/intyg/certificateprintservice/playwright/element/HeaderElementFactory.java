@@ -54,7 +54,7 @@ public class HeaderElementFactory {
                 .appendText(name),
             element(Tag.P)
                 .attr(STYLE, "display: inline; margin: 0;")
-                .appendText(" (%s v%s)".formatted(type, version))
+                .appendText(" (%s)".formatted(type))
         ));
   }
 

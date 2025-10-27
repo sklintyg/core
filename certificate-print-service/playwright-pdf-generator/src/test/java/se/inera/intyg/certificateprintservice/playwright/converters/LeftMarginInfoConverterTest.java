@@ -14,6 +14,8 @@ class LeftMarginInfoConverterTest {
   private static final Metadata METADATA = Metadata.builder()
       .typeId(TYPE_ID)
       .recipientName(RECIPIENT_NAME)
+      .recipientId("recipientId")
+      .version("version")
       .build();
 
   @Test
@@ -26,6 +28,18 @@ class LeftMarginInfoConverterTest {
   void shouldSetRecipientName() {
     final var response = leftMarginInfoConverter.convert(METADATA);
     assertEquals(RECIPIENT_NAME, response.getRecipientName());
+  }
+
+  @Test
+  void shouldSetVersion() {
+    final var response = leftMarginInfoConverter.convert(METADATA);
+    assertEquals("version", response.getCertificateVersion());
+  }
+
+  @Test
+  void shouldSetRecipientId() {
+    final var response = leftMarginInfoConverter.convert(METADATA);
+    assertEquals("recipientId", response.getRecipientId());
   }
 
 }
