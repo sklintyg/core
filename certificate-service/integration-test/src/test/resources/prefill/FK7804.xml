@@ -113,8 +113,10 @@
         </ns4:displayName>
       </ns4:cv>
     </ns2:delsvar>
+    <!-- enable depending on code in 39.1
     <ns2:delsvar id="39.4">12</ns2:delsvar>
     <ns2:delsvar id="39.2">Grund för bedömning text</ns2:delsvar>
+       -->
   </ns3:svar>
   <ns3:svar id="44">
     <ns2:delsvar id="44.1">Åtgärder som kan främja återgången i arbete text</ns2:delsvar>

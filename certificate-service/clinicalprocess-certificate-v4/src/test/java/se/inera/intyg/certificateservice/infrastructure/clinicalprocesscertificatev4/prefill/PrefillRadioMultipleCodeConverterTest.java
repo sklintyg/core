@@ -162,6 +162,25 @@ class PrefillRadioMultipleCodeConverterTest {
     }
 
     @Test
+    void shouldMapSubAnswerWithCorrectId() {
+      final var prefill = new Forifyllnad();
+      final var svar = new Svar();
+      svar.setId(SPECIFICATION.id().id());
+      final var delsvar1 = new Delsvar();
+      delsvar1.setId("wrongId");
+      final var delsvar2 = new Delsvar();
+      delsvar2.setId(FIELD_ID.value());
+      delsvar2.getContent().add(createCVTypeElement());
+      svar.getDelsvar().add(delsvar1);
+      svar.getDelsvar().add(delsvar2);
+      prefill.getSvar().add(svar);
+
+      final var result = prefillRadioMultipleCodeConverter.prefillAnswer(SPECIFICATION, prefill);
+
+      assertEquals(CODE_FIELD_ID, ((ElementValueCode) result.getElementData().value()).codeId());
+    }
+
+    @Test
     void shouldReturnPrefillAnswerIfAnswerExists() {
       final var prefill = new Forifyllnad();
       final var svar = new Svar();
