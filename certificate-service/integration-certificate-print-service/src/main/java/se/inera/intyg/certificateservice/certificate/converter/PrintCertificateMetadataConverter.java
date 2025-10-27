@@ -34,6 +34,7 @@ public class PrintCertificateMetadataConverter {
         .certificateId(certificate.id().id())
         .recipientLogo(convertLogo(certificate.certificateModel().recipient().logo()))
         .recipientName(certificate.certificateModel().recipient().name())
+        .recipientId(certificate.certificateModel().recipient().id().id())
         .applicationOrigin(isCitizenFormat
             ? APPLICATION_ORIGIN_1177_INTYG
             : APPLICATION_ORIGIN_WEBCERT)

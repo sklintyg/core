@@ -19,6 +19,7 @@ public class PrintCertificateMetadataConverter {
         .personId(metadata.getPersonId())
         .recipientLogo(metadata.getRecipientLogo())
         .recipientName(metadata.getRecipientName())
+        .recipientId(metadata.getRecipientId())
         .signingDate(metadata.getSigningDate())
         .sentDate(metadata.getSentDate())
         .issuingUnitInfo(metadata.getUnitInformation())

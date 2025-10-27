@@ -130,6 +130,13 @@ class PrintCertificateMetadataConverterTest {
   }
 
   @Test
+  void shouldSetRecipientId() {
+    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false, FILE_NAME);
+    assertEquals(CERTIFICATE.certificateModel().recipient().id().id(),
+        result.getRecipientId());
+  }
+
+  @Test
   void shouldSetApplicationOriginFor1177intyg() {
     final var result = printCertificateMetadataConverter.convert(CERTIFICATE, true, FILE_NAME);
     assertEquals(APPLICATION_ORIGIN_1177_INTYG, result.getApplicationOrigin());

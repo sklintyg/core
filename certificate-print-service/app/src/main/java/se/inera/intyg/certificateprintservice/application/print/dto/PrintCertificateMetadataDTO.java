@@ -21,6 +21,7 @@ public class PrintCertificateMetadataDTO {
   String sentDate;
   byte[] recipientLogo;
   String recipientName;
+  String recipientId;
   boolean canSendElectronically;
   String applicationOrigin;
   String personId;
