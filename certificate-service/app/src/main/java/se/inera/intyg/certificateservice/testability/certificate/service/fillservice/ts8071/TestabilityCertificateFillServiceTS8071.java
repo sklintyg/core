@@ -43,7 +43,6 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSjukdomEllerSynnedsattning.QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSjukdomEllerSynnedsattningBeskrivning.QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_BESKRIVNING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSjukdomshistorik.QUESTION_SJUKDOMSHISTORIK_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSomn.QUESTION_SOMN_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSomnBehandling.QUESTION_SOMN_BEHANDLING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSomnBeskrivning.QUESTION_SOMN_BESKRIVNING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionStroke.QUESTION_STROKE_ID;
@@ -84,6 +83,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionPsykiskUtvecklingsstorningV1.QUESTION_PSYKISK_UTVECKLINGSSTORNING_V1_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionPsykiskV1.QUESTION_PSYKISK_V1_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionSjukdomshistorikBeskrivningV1.QUESTION_SJUKDOMSHISTORIK_BESKRIVNING_V1_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionSomnV1.QUESTION_SOMN_V1_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionStrokePaverkanV1.QUESTION_STROKE_PAVERKAN_V1_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionSynkopeV1.QUESTION_SYNKOPE_V1_ID;
 import static se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityFillTypeDTO.EMPTY;
@@ -147,7 +147,7 @@ public class TestabilityCertificateFillServiceTS8071 implements
       QUESTION_NJURFUNKTION_ID, QUESTION_NJURTRANSPLATATION_ID,
       QUESTION_NJURTRANSPLATATION_TIDPUNKT_ID, QUESTION_KOGNITIV_STORNING_V1_ID,
       QUESTION_DEMENS_V1_ID,
-      QUESTION_DEMENS_BESKRIVNING_V1_ID, QUESTION_SOMN_ID, QUESTION_SOMN_BESKRIVNING_ID,
+      QUESTION_DEMENS_BESKRIVNING_V1_ID, QUESTION_SOMN_V1_ID, QUESTION_SOMN_BESKRIVNING_ID,
       QUESTION_SOMN_BEHANDLING_ID, QUESTION_MISSBRUK_V1_ID, QUESTION_MISSBRUK_BESKRIVNING_V1_ID,
       QUESTION_MISSBRUK_JOURNALUPPGIFTER_V1_ID,
       QUESTION_MISSBRUK_JOURNALUPPGIFTER_BESKRIVNING_V1_ID,
@@ -175,7 +175,7 @@ public class TestabilityCertificateFillServiceTS8071 implements
       QUESTION_MEDVETANDESTORNING_ID,
       QUESTION_NJURFUNKTION_ID, QUESTION_NJURTRANSPLATATION_ID,
       QUESTION_KOGNITIV_STORNING_V1_ID, QUESTION_DEMENS_V1_ID,
-      QUESTION_SOMN_ID, QUESTION_SOMN_BEHANDLING_ID, QUESTION_MISSBRUK_V1_ID,
+      QUESTION_SOMN_V1_ID, QUESTION_SOMN_BEHANDLING_ID, QUESTION_MISSBRUK_V1_ID,
       QUESTION_MISSBRUK_JOURNALUPPGIFTER_V1_ID, QUESTION_MISSBRUK_VARD_V1_ID,
       QUESTION_LAKEMEDEL_V1_ID, QUESTION_PSYKISK_V1_ID, QUESTION_NEUROPSYKIATRISK_V1_ID,
       QUESTION_PSYKISK_UTVECKLINGSSTORNING_V1_ID,
