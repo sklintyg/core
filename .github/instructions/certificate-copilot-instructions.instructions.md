@@ -115,6 +115,11 @@ This document describes how a new certificate model is created.
 - A question is common between versions if everything, mappings, rules, config, texts etc. are the
   same. If a text is different this is a new question for this version.
 
+**V2 files must not import from V1 files**: When V1 and V2 have questions with the same name but
+different versions, the IDs are often named similarly. However, V2 questions/categories can only
+use common or V2 IDs, and must never import anything from V1 files. Always use the corresponding
+V2 version of IDs when they exist.
+
 Follow these steps:
 
 1. Generate an analysis file described in `major-version-analysis.md` to identify common and unique
@@ -122,5 +127,7 @@ Follow these steps:
 2. Have developer review analysis and make changes if needed
 3. Create new certificate model class for the new version
 4. Add common elements
-5. Create new questions that are unique for the new version (with VX suffix where X is version)
+5. Create new questions that are unique for the new version (with VX suffix for methods and ids
+   where X is version)
+   ***Example: questionHorselV1(), QUESTION_HORSEL_V1_ID***
 6. Add the unique elements to the model

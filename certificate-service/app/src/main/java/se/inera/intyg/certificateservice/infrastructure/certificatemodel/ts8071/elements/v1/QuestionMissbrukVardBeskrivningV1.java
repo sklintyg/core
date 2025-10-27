@@ -1,9 +1,8 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1;
 
-
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukV1.QUESTION_MISSBRUK_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukVardV1.QUESTION_MISSBRUK_VARD_FIELD_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukVardV1.QUESTION_MISSBRUK_VARD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukV1.QUESTION_MISSBRUK_V1_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukVardV1.QUESTION_MISSBRUK_VARD_V1_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukVardV1.QUESTION_MISSBRUK_VARD_V1_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
@@ -17,9 +16,9 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionMissbrukVardBeskrivningV1 {
 
-  public static final ElementId QUESTION_MISSBRUK_VARD_BESKRIVNING_ID = new ElementId(
+  public static final ElementId QUESTION_MISSBRUK_VARD_BESKRIVNING_V1_ID = new ElementId(
       "18.7");
-  public static final FieldId QUESTION_MISSBRUK_VARD_BESKRIVNING_FIELD_ID = new FieldId(
+  public static final FieldId QUESTION_MISSBRUK_VARD_BESKRIVNING_V1_FIELD_ID = new FieldId(
       "18.7");
 
   private QuestionMissbrukVardBeskrivningV1() {
@@ -28,34 +27,32 @@ public class QuestionMissbrukVardBeskrivningV1 {
 
   public static ElementSpecification questionMissbrukVardBeskrivningV1() {
     return ElementSpecification.builder()
-        .id(QUESTION_MISSBRUK_VARD_BESKRIVNING_ID)
+        .id(QUESTION_MISSBRUK_VARD_BESKRIVNING_V1_ID)
         .configuration(
             ElementConfigurationTextArea.builder()
-                .id(QUESTION_MISSBRUK_VARD_BESKRIVNING_FIELD_ID)
-                .name(
+                .id(QUESTION_MISSBRUK_VARD_BESKRIVNING_V1_FIELD_ID)
+                .description(
                     "Ange vilken form av hjälp eller vård och när det var. Beskriv vilken typ av insats det rör sig om.")
                 .build()
         )
         .rules(
             List.of(
                 CertificateElementRuleFactory.show(
-                    QUESTION_MISSBRUK_VARD_ID,
-                    QUESTION_MISSBRUK_VARD_FIELD_ID
-                ),
+                    QUESTION_MISSBRUK_VARD_V1_ID,
+                    QUESTION_MISSBRUK_VARD_V1_FIELD_ID),
                 CertificateElementRuleFactory.mandatory(
-                    QUESTION_MISSBRUK_VARD_BESKRIVNING_ID,
-                    QUESTION_MISSBRUK_VARD_BESKRIVNING_FIELD_ID
-                ),
+                    QUESTION_MISSBRUK_VARD_BESKRIVNING_V1_ID,
+                    QUESTION_MISSBRUK_VARD_BESKRIVNING_V1_FIELD_ID),
                 CertificateElementRuleFactory.limit(
-                    QUESTION_MISSBRUK_VARD_BESKRIVNING_ID,
+                    QUESTION_MISSBRUK_VARD_BESKRIVNING_V1_ID,
                     (short) 250)
             )
         )
         .shouldValidate(
-            ElementDataPredicateFactory.valueBoolean(QUESTION_MISSBRUK_VARD_ID)
+            ElementDataPredicateFactory.valueBoolean(QUESTION_MISSBRUK_VARD_V1_ID)
         )
         .mapping(
-            new ElementMapping(QUESTION_MISSBRUK_ID, null)
+            new ElementMapping(QUESTION_MISSBRUK_V1_ID, null)
         )
         .validations(
             List.of(

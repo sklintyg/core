@@ -16,7 +16,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class CategoryHorselV1 {
 
-  private static final ElementId INTYGET_HORSEL_CATEGORY_ID = new ElementId("KAT_3");
+  private static final ElementId INTYGET_HORSEL_CATEGORY_V1_ID = new ElementId("KAT_3");
 
   private CategoryHorselV1() {
     throw new IllegalStateException("Utility class");
@@ -25,7 +25,7 @@ public class CategoryHorselV1 {
   public static ElementSpecification categoryHorselV1(
       ElementSpecification... children) {
     return ElementSpecification.builder()
-        .id(INTYGET_HORSEL_CATEGORY_ID)
+        .id(INTYGET_HORSEL_CATEGORY_V1_ID)
         .configuration(
             ElementConfigurationCategory.builder()
                 .name("Hörsel")

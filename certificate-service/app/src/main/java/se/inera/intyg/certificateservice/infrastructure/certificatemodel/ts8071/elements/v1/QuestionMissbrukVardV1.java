@@ -1,6 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukV1.QUESTION_MISSBRUK_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukV1.QUESTION_MISSBRUK_V1_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
@@ -13,8 +13,8 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionMissbrukVardV1 {
 
-  public static final ElementId QUESTION_MISSBRUK_VARD_ID = new ElementId("18.6");
-  public static final FieldId QUESTION_MISSBRUK_VARD_FIELD_ID = new FieldId("18.6");
+  public static final ElementId QUESTION_MISSBRUK_VARD_V1_ID = new ElementId("18.6");
+  public static final FieldId QUESTION_MISSBRUK_VARD_V1_FIELD_ID = new FieldId("18.6");
 
   private QuestionMissbrukVardV1() {
     throw new IllegalStateException("Utility class");
@@ -22,10 +22,10 @@ public class QuestionMissbrukVardV1 {
 
   public static ElementSpecification questionMissbrukVardV1(ElementSpecification... children) {
     return ElementSpecification.builder()
-        .id(QUESTION_MISSBRUK_VARD_ID)
+        .id(QUESTION_MISSBRUK_VARD_V1_ID)
         .configuration(
             ElementConfigurationRadioBoolean.builder()
-                .id(QUESTION_MISSBRUK_VARD_FIELD_ID)
+                .id(QUESTION_MISSBRUK_VARD_V1_FIELD_ID)
                 .name(
                     "Har personen vid något tillfälle vårdats eller sökt hjälp för missbruk eller beroende av alkohol, narkotika eller läkemedel?")
                 .description(
@@ -44,12 +44,12 @@ public class QuestionMissbrukVardV1 {
         .rules(
             List.of(
                 CertificateElementRuleFactory.mandatoryExist(
-                    QUESTION_MISSBRUK_VARD_ID,
-                    QUESTION_MISSBRUK_VARD_FIELD_ID
+                    QUESTION_MISSBRUK_VARD_V1_ID,
+                    QUESTION_MISSBRUK_VARD_V1_FIELD_ID
                 )
             )
         )
-        .mapping(new ElementMapping(QUESTION_MISSBRUK_ID, null))
+        .mapping(new ElementMapping(QUESTION_MISSBRUK_V1_ID, null))
         .children(List.of(children))
         .build();
   }

@@ -1,8 +1,8 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionHorselV1.QUESTION_HORSEL_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionHorselhjalpmedelV1.QUESTION_HORSELHJALPMEDEL_FIELD_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionHorselhjalpmedelV1.QUESTION_HORSELHJALPMEDEL_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionHorselV1.QUESTION_HORSEL_V1_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionHorselhjalpmedelV1.QUESTION_HORSELHJALPMEDEL_V1_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionHorselhjalpmedelV1.QUESTION_HORSELHJALPMEDEL_V1_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
@@ -20,9 +20,9 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionHorselhjalpmedelPositionV1 {
 
-  public static final ElementId QUESTION_HORSELHJALPMEDEL_POSITION_ID = new ElementId(
+  public static final ElementId QUESTION_HORSELHJALPMEDEL_POSITION_V1_ID = new ElementId(
       "9.3");
-  public static final FieldId QUESTION_HORSELHJALPMEDEL_POSITION_FIELD_ID = new FieldId(
+  public static final FieldId QUESTION_HORSELHJALPMEDEL_POSITION_V1_FIELD_ID = new FieldId(
       "9.3");
 
   private QuestionHorselhjalpmedelPositionV1() {
@@ -39,10 +39,10 @@ public class QuestionHorselhjalpmedelPositionV1 {
     );
 
     return ElementSpecification.builder()
-        .id(QUESTION_HORSELHJALPMEDEL_POSITION_ID)
+        .id(QUESTION_HORSELHJALPMEDEL_POSITION_V1_ID)
         .configuration(
             ElementConfigurationRadioMultipleCode.builder()
-                .id(QUESTION_HORSELHJALPMEDEL_POSITION_FIELD_ID)
+                .id(QUESTION_HORSELHJALPMEDEL_POSITION_V1_FIELD_ID)
                 .name(
                     "Om personen behöver använda hörapparat, ange på vilket öra eller om hörapparat används på båda öronen")
                 .elementLayout(ElementLayout.ROWS)
@@ -52,12 +52,12 @@ public class QuestionHorselhjalpmedelPositionV1 {
         .rules(
             List.of(
                 CertificateElementRuleFactory.mandatoryOrExist(
-                    QUESTION_HORSELHJALPMEDEL_POSITION_ID,
+                    QUESTION_HORSELHJALPMEDEL_POSITION_V1_ID,
                     radioMultipleCodes.stream().map(ElementConfigurationCode::id).toList()
                 ),
                 CertificateElementRuleFactory.show(
-                    QUESTION_HORSELHJALPMEDEL_ID,
-                    QUESTION_HORSELHJALPMEDEL_FIELD_ID
+                    QUESTION_HORSELHJALPMEDEL_V1_ID,
+                    QUESTION_HORSELHJALPMEDEL_V1_FIELD_ID
                 )
             )
         )
@@ -68,8 +68,8 @@ public class QuestionHorselhjalpmedelPositionV1 {
                     .build()
             )
         )
-        .shouldValidate(ElementDataPredicateFactory.valueBoolean(QUESTION_HORSELHJALPMEDEL_ID))
-        .mapping(new ElementMapping(QUESTION_HORSEL_ID, null))
+        .shouldValidate(ElementDataPredicateFactory.valueBoolean(QUESTION_HORSELHJALPMEDEL_V1_ID))
+        .mapping(new ElementMapping(QUESTION_HORSEL_V1_ID, null))
         .children(List.of(children))
         .build();
   }

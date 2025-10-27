@@ -1,6 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionKorrigeringAvSynskarpaV1.QUESTION_KORRIGERING_AV_SYNSKARPA_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionKorrigeringAvSynskarpaV1.QUESTION_KORRIGERING_AV_SYNSKARPA_V1_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
@@ -15,9 +15,9 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionKorrigeringAvSynskarpaKontaktlinserV1 {
 
-  public static final ElementId QUESTION_KONTAKTLINSER_ID = new ElementId(
+  public static final ElementId QUESTION_KONTAKTLINSER_V1_ID = new ElementId(
       "6.6");
-  public static final FieldId QUESTION_KONTAKTLINSER_FIELD_ID = new FieldId(
+  public static final FieldId QUESTION_KONTAKTLINSER_V1_FIELD_ID = new FieldId(
       "6.6");
 
   private QuestionKorrigeringAvSynskarpaKontaktlinserV1() {
@@ -26,10 +26,10 @@ public class QuestionKorrigeringAvSynskarpaKontaktlinserV1 {
 
   public static ElementSpecification questionKorrigeringAvSynskarpaKontaktlinserV1() {
     return ElementSpecification.builder()
-        .id(QUESTION_KONTAKTLINSER_ID)
+        .id(QUESTION_KONTAKTLINSER_V1_ID)
         .configuration(
             ElementConfigurationRadioBoolean.builder()
-                .id(QUESTION_KONTAKTLINSER_FIELD_ID)
+                .id(QUESTION_KONTAKTLINSER_V1_FIELD_ID)
                 .selectedText("Ja")
                 .unselectedText("Nej")
                 .name("Kontaktlinser. Tolereras korrektionen väl?")
@@ -45,11 +45,11 @@ public class QuestionKorrigeringAvSynskarpaKontaktlinserV1 {
         .rules(
             List.of(
                 CertificateElementRuleFactory.mandatoryExist(
-                    QUESTION_KONTAKTLINSER_ID,
-                    QUESTION_KONTAKTLINSER_FIELD_ID
+                    QUESTION_KONTAKTLINSER_V1_ID,
+                    QUESTION_KONTAKTLINSER_V1_FIELD_ID
                 ),
                 CertificateElementRuleFactory.show(
-                    QUESTION_KORRIGERING_AV_SYNSKARPA_ID,
+                    QUESTION_KORRIGERING_AV_SYNSKARPA_V1_ID,
                     new FieldId(
                         CodeSystemKorrigeringAvSynskarpa.KONTAKTLINSER.code()
                     )
@@ -57,12 +57,12 @@ public class QuestionKorrigeringAvSynskarpaKontaktlinserV1 {
             )
         )
         .shouldValidate(
-            ElementDataPredicateFactory.codeList(QUESTION_KORRIGERING_AV_SYNSKARPA_ID, List.of(
+            ElementDataPredicateFactory.codeList(QUESTION_KORRIGERING_AV_SYNSKARPA_V1_ID, List.of(
                 new FieldId(
                     CodeSystemKorrigeringAvSynskarpa.KONTAKTLINSER.code())))
         )
         .mapping(
-            new ElementMapping(QUESTION_KORRIGERING_AV_SYNSKARPA_ID, null)
+            new ElementMapping(QUESTION_KORRIGERING_AV_SYNSKARPA_V1_ID, null)
         )
         .build();
   }

@@ -15,9 +15,9 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionBalanssinneBeskrivningV1 {
 
-  public static final ElementId QUESTION_BALANSSINNE_BESKRIVNING_ID = new ElementId(
+  public static final ElementId QUESTION_BALANSSINNE_BESKRIVNING_V1_ID = new ElementId(
       "8.2");
-  public static final FieldId QUESTION_BALANSSINNE_BESKRIVNING_FIELD_ID = new FieldId(
+  public static final FieldId QUESTION_BALANSSINNE_BESKRIVNING_V1_FIELD_ID = new FieldId(
       "8.2");
 
   private QuestionBalanssinneBeskrivningV1() {
@@ -26,10 +26,10 @@ public class QuestionBalanssinneBeskrivningV1 {
 
   public static ElementSpecification questionBalanssinneBeskrivningV1() {
     return ElementSpecification.builder()
-        .id(QUESTION_BALANSSINNE_BESKRIVNING_ID)
+        .id(QUESTION_BALANSSINNE_BESKRIVNING_V1_ID)
         .configuration(
             ElementConfigurationTextField.builder()
-                .id(QUESTION_BALANSSINNE_BESKRIVNING_FIELD_ID)
+                .id(QUESTION_BALANSSINNE_BESKRIVNING_V1_FIELD_ID)
                 .name("Ange vilken typ av anfall och tidpunkt för senaste anfall")
                 .build()
         )
@@ -40,11 +40,11 @@ public class QuestionBalanssinneBeskrivningV1 {
                     QUESTION_BALANSSINNE_FIELD_ID
                 ),
                 CertificateElementRuleFactory.mandatory(
-                    QUESTION_BALANSSINNE_BESKRIVNING_ID,
-                    QUESTION_BALANSSINNE_BESKRIVNING_FIELD_ID
+                    QUESTION_BALANSSINNE_BESKRIVNING_V1_ID,
+                    QUESTION_BALANSSINNE_BESKRIVNING_V1_FIELD_ID
                 ),
                 CertificateElementRuleFactory.limit(
-                    QUESTION_BALANSSINNE_BESKRIVNING_ID,
+                    QUESTION_BALANSSINNE_BESKRIVNING_V1_ID,
                     (short) 50)
             )
         )

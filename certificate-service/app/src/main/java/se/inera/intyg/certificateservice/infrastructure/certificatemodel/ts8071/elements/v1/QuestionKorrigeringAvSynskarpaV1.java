@@ -28,8 +28,8 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionKorrigeringAvSynskarpaV1 {
 
-  public static final ElementId QUESTION_KORRIGERING_AV_SYNSKARPA_ID = new ElementId("6");
-  public static final FieldId QUESTION_KORRIGERING_AV_SYNSKARPA_FIELD_ID = new FieldId("6");
+  public static final ElementId QUESTION_KORRIGERING_AV_SYNSKARPA_V1_ID = new ElementId("6");
+  public static final FieldId QUESTION_KORRIGERING_AV_SYNSKARPA_V1_FIELD_ID = new FieldId("6");
 
   private QuestionKorrigeringAvSynskarpaV1() {
     throw new IllegalStateException("Utility class");
@@ -46,10 +46,10 @@ public class QuestionKorrigeringAvSynskarpaV1 {
     );
 
     return ElementSpecification.builder()
-        .id(QUESTION_KORRIGERING_AV_SYNSKARPA_ID)
+        .id(QUESTION_KORRIGERING_AV_SYNSKARPA_V1_ID)
         .configuration(
             ElementConfigurationCheckboxMultipleCode.builder()
-                .id(QUESTION_KORRIGERING_AV_SYNSKARPA_FIELD_ID)
+                .id(QUESTION_KORRIGERING_AV_SYNSKARPA_V1_FIELD_ID)
                 .name("Korrigering av synskärpa genom")
                 .elementLayout(ElementLayout.ROWS)
                 .list(checkboxes)
@@ -116,7 +116,7 @@ public class QuestionKorrigeringAvSynskarpaV1 {
                     )
                 ),
                 CertificateElementRuleFactory.mandatoryOrExist(
-                    QUESTION_KORRIGERING_AV_SYNSKARPA_ID,
+                    QUESTION_KORRIGERING_AV_SYNSKARPA_V1_ID,
                     List.of(
                         new FieldId(
                             CodeSystemKorrigeringAvSynskarpa.GLASOGON_MED_STYRKA_OVER_8_DIOPTRIER.code()),
@@ -126,7 +126,7 @@ public class QuestionKorrigeringAvSynskarpaV1 {
                     )
                 ),
                 CertificateElementRuleFactory.disableSubElements(
-                    QUESTION_KORRIGERING_AV_SYNSKARPA_ID,
+                    QUESTION_KORRIGERING_AV_SYNSKARPA_V1_ID,
                     List.of(new FieldId(
                         singleExpression(
                             CodeSystemKorrigeringAvSynskarpa.GLASOGON_MED_STYRKA_OVER_8_DIOPTRIER.code()))),
@@ -136,7 +136,7 @@ public class QuestionKorrigeringAvSynskarpaV1 {
                     )
                 ),
                 CertificateElementRuleFactory.disableSubElements(
-                    QUESTION_KORRIGERING_AV_SYNSKARPA_ID,
+                    QUESTION_KORRIGERING_AV_SYNSKARPA_V1_ID,
                     List.of(new FieldId(
                         singleExpression(
                             CodeSystemKorrigeringAvSynskarpa.GLASOGON_INGEN_STYRKA_OVER_8_DIOPTRIER.code()))),

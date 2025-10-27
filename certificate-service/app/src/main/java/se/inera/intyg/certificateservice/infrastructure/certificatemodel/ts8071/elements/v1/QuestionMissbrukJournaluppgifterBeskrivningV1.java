@@ -2,7 +2,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionMissbrukJournaluppgifter.QUESTION_MISSBRUK_JOURNALUPPGIFTER_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionMissbrukJournaluppgifter.QUESTION_MISSBRUK_JOURNALUPPGIFTER_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukV1.QUESTION_MISSBRUK_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukV1.QUESTION_MISSBRUK_V1_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextField;
@@ -16,9 +16,9 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionMissbrukJournaluppgifterBeskrivningV1 {
 
-  public static final ElementId QUESTION_MISSBRUK_JOURNALUPPGIFTER_BESKRIVNING_ID = new ElementId(
+  public static final ElementId QUESTION_MISSBRUK_JOURNALUPPGIFTER_BESKRIVNING_V1_ID = new ElementId(
       "18.4");
-  public static final FieldId QUESTION_MISSBRUK_JOURNALUPPGIFTER_BESKRIVNING_FIELD_ID = new FieldId(
+  public static final FieldId QUESTION_MISSBRUK_JOURNALUPPGIFTER_BESKRIVNING_V1_FIELD_ID = new FieldId(
       "18.4");
 
   private QuestionMissbrukJournaluppgifterBeskrivningV1() {
@@ -27,10 +27,10 @@ public class QuestionMissbrukJournaluppgifterBeskrivningV1 {
 
   public static ElementSpecification questionMissbrukJournaluppgifterBeskrivningV1() {
     return ElementSpecification.builder()
-        .id(QUESTION_MISSBRUK_JOURNALUPPGIFTER_BESKRIVNING_ID)
+        .id(QUESTION_MISSBRUK_JOURNALUPPGIFTER_BESKRIVNING_V1_ID)
         .configuration(
             ElementConfigurationTextField.builder()
-                .id(QUESTION_MISSBRUK_JOURNALUPPGIFTER_BESKRIVNING_FIELD_ID)
+                .id(QUESTION_MISSBRUK_JOURNALUPPGIFTER_BESKRIVNING_V1_FIELD_ID)
                 .name("Ange vilka uppgifter eller tecken och när i tid det gäller")
                 .build()
         )
@@ -41,11 +41,11 @@ public class QuestionMissbrukJournaluppgifterBeskrivningV1 {
                     QUESTION_MISSBRUK_JOURNALUPPGIFTER_FIELD_ID
                 ),
                 CertificateElementRuleFactory.mandatory(
-                    QUESTION_MISSBRUK_JOURNALUPPGIFTER_BESKRIVNING_ID,
-                    QUESTION_MISSBRUK_JOURNALUPPGIFTER_BESKRIVNING_FIELD_ID
+                    QUESTION_MISSBRUK_JOURNALUPPGIFTER_BESKRIVNING_V1_ID,
+                    QUESTION_MISSBRUK_JOURNALUPPGIFTER_BESKRIVNING_V1_FIELD_ID
                 ),
                 CertificateElementRuleFactory.limit(
-                    QUESTION_MISSBRUK_JOURNALUPPGIFTER_BESKRIVNING_ID,
+                    QUESTION_MISSBRUK_JOURNALUPPGIFTER_BESKRIVNING_V1_ID,
                     (short) 50)
             )
         )
@@ -53,7 +53,7 @@ public class QuestionMissbrukJournaluppgifterBeskrivningV1 {
             ElementDataPredicateFactory.valueBoolean(QUESTION_MISSBRUK_JOURNALUPPGIFTER_ID)
         )
         .mapping(
-            new ElementMapping(QUESTION_MISSBRUK_ID, null)
+            new ElementMapping(QUESTION_MISSBRUK_V1_ID, null)
         )
         .validations(
             List.of(

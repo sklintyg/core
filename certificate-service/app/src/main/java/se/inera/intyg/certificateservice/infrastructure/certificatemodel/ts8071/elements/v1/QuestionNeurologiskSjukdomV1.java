@@ -10,8 +10,8 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionNeurologiskSjukdomV1 {
 
-  public static final ElementId QUESTION_NEUROLOGISK_SJUKDOM_ID = new ElementId("13");
-  public static final FieldId QUESTION_NEUROLOGISK_SJUKDOM_FIELD_ID = new FieldId("13.1");
+  public static final ElementId QUESTION_NEUROLOGISK_SJUKDOM_V1_ID = new ElementId("13");
+  public static final FieldId QUESTION_NEUROLOGISK_SJUKDOM_V1_FIELD_ID = new FieldId("13.1");
 
   private QuestionNeurologiskSjukdomV1() {
     throw new IllegalStateException("Utility class");
@@ -20,10 +20,10 @@ public class QuestionNeurologiskSjukdomV1 {
   public static ElementSpecification questionNeurologiskSjukdomV1(
       ElementSpecification... children) {
     return ElementSpecification.builder()
-        .id(QUESTION_NEUROLOGISK_SJUKDOM_ID)
+        .id(QUESTION_NEUROLOGISK_SJUKDOM_V1_ID)
         .configuration(
             ElementConfigurationRadioBoolean.builder()
-                .id(QUESTION_NEUROLOGISK_SJUKDOM_FIELD_ID)
+                .id(QUESTION_NEUROLOGISK_SJUKDOM_V1_FIELD_ID)
                 .selectedText("Ja")
                 .unselectedText("Nej")
                 .name(
@@ -43,8 +43,8 @@ public class QuestionNeurologiskSjukdomV1 {
         .rules(
             List.of(
                 CertificateElementRuleFactory.mandatoryExist(
-                    QUESTION_NEUROLOGISK_SJUKDOM_ID,
-                    QUESTION_NEUROLOGISK_SJUKDOM_FIELD_ID
+                    QUESTION_NEUROLOGISK_SJUKDOM_V1_ID,
+                    QUESTION_NEUROLOGISK_SJUKDOM_V1_FIELD_ID
                 )
             )
         )

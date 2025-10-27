@@ -1,6 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionKognitivStorningV1.QUESTION_KOGNITIV_STORNING_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionKognitivStorningV1.QUESTION_KOGNITIV_STORNING_V1_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
@@ -13,8 +13,8 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionDemensV1 {
 
-  public static final ElementId QUESTION_DEMENS_ID = new ElementId("16.2");
-  public static final FieldId QUESTION_DEMENS_FIELD_ID = new FieldId("16.2");
+  public static final ElementId QUESTION_DEMENS_V1_ID = new ElementId("16.2");
+  public static final FieldId QUESTION_DEMENS_V1_FIELD_ID = new FieldId("16.2");
 
   private QuestionDemensV1() {
     throw new IllegalStateException("Utility class");
@@ -22,10 +22,10 @@ public class QuestionDemensV1 {
 
   public static ElementSpecification questionDemensV1(ElementSpecification... children) {
     return ElementSpecification.builder()
-        .id(QUESTION_DEMENS_ID)
+        .id(QUESTION_DEMENS_V1_ID)
         .configuration(
             ElementConfigurationRadioBoolean.builder()
-                .id(QUESTION_DEMENS_FIELD_ID)
+                .id(QUESTION_DEMENS_V1_FIELD_ID)
                 .selectedText("Ja")
                 .unselectedText("Nej")
                 .name(
@@ -44,12 +44,12 @@ public class QuestionDemensV1 {
         .rules(
             List.of(
                 CertificateElementRuleFactory.mandatoryExist(
-                    QUESTION_DEMENS_ID,
-                    QUESTION_DEMENS_FIELD_ID
+                    QUESTION_DEMENS_V1_ID,
+                    QUESTION_DEMENS_V1_FIELD_ID
                 )
             )
         )
-        .mapping(new ElementMapping(QUESTION_KOGNITIV_STORNING_ID, null))
+        .mapping(new ElementMapping(QUESTION_KOGNITIV_STORNING_V1_ID, null))
         .children(List.of(children))
         .build();
   }

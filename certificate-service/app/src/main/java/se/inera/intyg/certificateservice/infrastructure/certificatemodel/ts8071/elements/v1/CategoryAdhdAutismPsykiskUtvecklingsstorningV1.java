@@ -7,7 +7,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 
 public class CategoryAdhdAutismPsykiskUtvecklingsstorningV1 {
 
-  private static final ElementId INTYGET_ADHD_AUTISM_PSYKISK_UTVECKLINGSSTORNING_CATEGORY_ID = new ElementId(
+  private static final ElementId INTYGET_ADHD_AUTISM_PSYKISK_UTVECKLINGSSTORNING_CATEGORY_V1_ID = new ElementId(
       "KAT_14");
 
   private CategoryAdhdAutismPsykiskUtvecklingsstorningV1() {
@@ -17,7 +17,7 @@ public class CategoryAdhdAutismPsykiskUtvecklingsstorningV1 {
   public static ElementSpecification categoryAdhdAutismPsykiskUtvecklingsstorningV1(
       ElementSpecification... children) {
     return ElementSpecification.builder()
-        .id(INTYGET_ADHD_AUTISM_PSYKISK_UTVECKLINGSSTORNING_CATEGORY_ID)
+        .id(INTYGET_ADHD_AUTISM_PSYKISK_UTVECKLINGSSTORNING_CATEGORY_V1_ID)
         .configuration(
             ElementConfigurationCategory.builder()
                 .name(

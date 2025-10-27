@@ -1,6 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionKorrigeringAvSynskarpaV1.QUESTION_KORRIGERING_AV_SYNSKARPA_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionKorrigeringAvSynskarpaV1.QUESTION_KORRIGERING_AV_SYNSKARPA_V1_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
@@ -15,9 +15,9 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionKorrigeringAvSynskarpaIngenStyrkaOverV1 {
 
-  public static final ElementId QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_OVER_ID = new ElementId(
+  public static final ElementId QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_OVER_V1_ID = new ElementId(
       "6.2");
-  public static final FieldId QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_OVER_FIELD_ID = new FieldId(
+  public static final FieldId QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_OVER_V1_FIELD_ID = new FieldId(
       "6.2");
 
   private QuestionKorrigeringAvSynskarpaIngenStyrkaOverV1() {
@@ -26,10 +26,10 @@ public class QuestionKorrigeringAvSynskarpaIngenStyrkaOverV1 {
 
   public static ElementSpecification questionKorrigeringAvSynskarpaIngenStyrkaOverV1() {
     return ElementSpecification.builder()
-        .id(QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_OVER_ID)
+        .id(QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_OVER_V1_ID)
         .configuration(
             ElementConfigurationRadioBoolean.builder()
-                .id(QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_OVER_FIELD_ID)
+                .id(QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_OVER_V1_FIELD_ID)
                 .selectedText("Ja")
                 .unselectedText("Nej")
                 .name(
@@ -47,11 +47,11 @@ public class QuestionKorrigeringAvSynskarpaIngenStyrkaOverV1 {
         .rules(
             List.of(
                 CertificateElementRuleFactory.mandatoryExist(
-                    QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_OVER_ID,
-                    QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_OVER_FIELD_ID
+                    QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_OVER_V1_ID,
+                    QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_OVER_V1_FIELD_ID
                 ),
                 CertificateElementRuleFactory.show(
-                    QUESTION_KORRIGERING_AV_SYNSKARPA_ID,
+                    QUESTION_KORRIGERING_AV_SYNSKARPA_V1_ID,
                     new FieldId(
                         CodeSystemKorrigeringAvSynskarpa.GLASOGON_INGEN_STYRKA_OVER_8_DIOPTRIER.code()
                     )
@@ -59,12 +59,12 @@ public class QuestionKorrigeringAvSynskarpaIngenStyrkaOverV1 {
             )
         )
         .shouldValidate(
-            ElementDataPredicateFactory.codeList(QUESTION_KORRIGERING_AV_SYNSKARPA_ID, List.of(
+            ElementDataPredicateFactory.codeList(QUESTION_KORRIGERING_AV_SYNSKARPA_V1_ID, List.of(
                 new FieldId(
                     CodeSystemKorrigeringAvSynskarpa.GLASOGON_INGEN_STYRKA_OVER_8_DIOPTRIER.code())))
         )
         .mapping(
-            new ElementMapping(QUESTION_KORRIGERING_AV_SYNSKARPA_ID, null)
+            new ElementMapping(QUESTION_KORRIGERING_AV_SYNSKARPA_V1_ID, null)
         )
         .build();
   }

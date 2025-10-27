@@ -19,8 +19,8 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionHorselV1 {
 
-  public static final ElementId QUESTION_HORSEL_ID = new ElementId("9");
-  public static final FieldId QUESTION_HORSEL_FIELD_ID = new FieldId("9.1");
+  public static final ElementId QUESTION_HORSEL_V1_ID = new ElementId("9");
+  public static final FieldId QUESTION_HORSEL_V1_FIELD_ID = new FieldId("9.1");
 
   private QuestionHorselV1() {
     throw new IllegalStateException("Utility class");
@@ -28,10 +28,10 @@ public class QuestionHorselV1 {
 
   public static ElementSpecification questionHorselV1() {
     return ElementSpecification.builder()
-        .id(QUESTION_HORSEL_ID)
+        .id(QUESTION_HORSEL_V1_ID)
         .configuration(
             ElementConfigurationRadioBoolean.builder()
-                .id(QUESTION_HORSEL_FIELD_ID)
+                .id(QUESTION_HORSEL_V1_FIELD_ID)
                 .selectedText("Ja")
                 .unselectedText("Nej")
                 .name(
@@ -48,8 +48,8 @@ public class QuestionHorselV1 {
         .rules(
             List.of(
                 CertificateElementRuleFactory.mandatoryExist(
-                    QUESTION_HORSEL_ID,
-                    QUESTION_HORSEL_FIELD_ID
+                    QUESTION_HORSEL_V1_ID,
+                    QUESTION_HORSEL_V1_FIELD_ID
                 ),
                 CertificateElementRuleFactory.show(
                     QUESTION_INTYGET_AVSER_ID,
