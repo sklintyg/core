@@ -8,11 +8,8 @@ import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
@@ -48,11 +45,9 @@ public class QuestionHjartsjukdomBehandladBeskrivningV2 {
                     QUESTION_HJARTSJUKDOM_BEHANDLAD_BESKRIVNING_V2_ID,
                     QUESTION_HJARTSJUKDOM_BEHANDLAD_BESKRIVNING_V2_FIELD_ID
                 ),
-                ElementRuleLimit.builder()
-                    .id(QUESTION_HJARTSJUKDOM_BEHANDLAD_BESKRIVNING_V2_ID)
-                    .type(ElementRuleType.TEXT_LIMIT)
-                    .limit(new RuleLimit((short) TEXT_LIMIT))
-                    .build()
+                CertificateElementRuleFactory.limit(
+                    QUESTION_HJARTSJUKDOM_BEHANDLAD_BESKRIVNING_V2_ID, (short) TEXT_LIMIT
+                )
             )
         )
         .shouldValidate(

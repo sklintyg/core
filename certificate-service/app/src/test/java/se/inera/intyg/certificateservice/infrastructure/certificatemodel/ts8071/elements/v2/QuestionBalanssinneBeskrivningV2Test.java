@@ -19,7 +19,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 
-class QuestionBalanssinneBeskrivningV1V2Test {
+class QuestionBalanssinneBeskrivningV2Test {
 
   private static final ElementId ELEMENT_ID = new ElementId("8.2");
 

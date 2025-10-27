@@ -18,7 +18,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 
-class QuestionDemensBeskrivningV1V2Test {
+class QuestionDemensBeskrivningV2Test {
 
   private static final ElementId ELEMENT_ID = new ElementId("16.3");
 
@@ -79,7 +79,8 @@ class QuestionDemensBeskrivningV1V2Test {
   void shouldIncludeMapping() {
     final var element = QuestionDemensBeskrivningV2.questionDemensBeskrivningV2();
 
-    assertEquals(new ElementMapping(QuestionKognitivStorningV2.QUESTION_KOGNITIV_STORNING_ID, null),
+    assertEquals(
+        new ElementMapping(QuestionKognitivStorningV2.QUESTION_KOGNITIV_STORNING_V2_ID, null),
         element.mapping());
   }
 
