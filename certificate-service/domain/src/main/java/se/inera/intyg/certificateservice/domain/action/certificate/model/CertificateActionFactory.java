@@ -58,7 +58,8 @@ public class CertificateActionFactory {
                   new ActionRuleRole(
                       actionSpecification.allowedRoles()
                   ),
-                  new ActionRuleUserAgreement()
+                  new ActionRuleUserAgreement(),
+                  new ActionRuleInactiveCertificateType(certificateActionConfigurationRepository)
               )
           )
           .build();

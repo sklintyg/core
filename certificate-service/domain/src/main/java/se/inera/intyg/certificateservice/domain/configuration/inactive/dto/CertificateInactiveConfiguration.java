@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import java.util.List;
 import lombok.Builder;
 import lombok.Value;
 import se.inera.intyg.certificateservice.domain.configuration.inactive.dto.CertificateInactiveConfiguration.CertificateInactiveConfigurationBuilder;
@@ -20,7 +19,7 @@ public class CertificateInactiveConfiguration {
   @JsonProperty("version")
   String version;
   @JsonProperty("configuration")
-  List<InactiveCertificateConfiguration> configuration;
+  InactiveCertificateConfiguration configuration;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class CertificateInactiveConfigurationBuilder {

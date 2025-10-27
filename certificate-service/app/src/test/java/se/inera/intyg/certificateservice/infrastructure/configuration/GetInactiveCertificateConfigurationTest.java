@@ -39,11 +39,9 @@ class GetInactiveCertificateConfigurationTest {
             .certificateType("ts8071")
             .version("1.0")
             .configuration(
-                List.of(
-                    InactiveCertificateConfiguration.builder()
-                        .fromDateTime(LocalDateTime.of(2024, 8, 1, 8, 0, 0))
-                        .build()
-                )
+                InactiveCertificateConfiguration.builder()
+                    .fromDateTime(LocalDateTime.of(2024, 8, 1, 8, 0, 0))
+                    .build()
             )
             .build()
     );
