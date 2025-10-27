@@ -90,6 +90,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateSummary;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateSummaryProvider;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateTypeName;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
@@ -113,8 +114,9 @@ class CertificateMetadataConverterTest {
 
   private static final String TYPE = "type";
   private static final String VERSION = "version";
-  private static final String TYPE_NAME = "typeName";
-  private static final String TYPE_DESCRIPTION = "typeDescription";
+  private static final CertificateTypeName TYPE_NAME = new CertificateTypeName("typeName");
+  private static final String MODEL_NAME = "modelName";
+  private static final String MODEL_DESCRIPTION = "modelDescription";
   private static final LocalDateTime CREATED = LocalDateTime.now(ZoneId.systemDefault());
   private static final LocalDateTime SIGNED = LocalDateTime.now(ZoneId.systemDefault());
   private static final LocalDateTime MODIFIED = LocalDateTime.now(ZoneId.systemDefault());
@@ -188,8 +190,9 @@ class CertificateMetadataConverterTest {
                           .version(new CertificateVersion(VERSION))
                           .build()
                   )
-                  .name(TYPE_NAME)
-                  .detailedDescription(TYPE_DESCRIPTION)
+                  .typeName(TYPE_NAME)
+                  .name(MODEL_NAME)
+                  .detailedDescription(MODEL_DESCRIPTION)
                   .recipient(RECIPIENT)
                   .messageTypes(CERTIFICATE_MESSAGE_TYPES)
                   .elementSpecifications(
@@ -373,7 +376,7 @@ class CertificateMetadataConverterTest {
 
     @Test
     void shallIncludeCertificateTypeName() {
-      assertEquals(TYPE,
+      assertEquals(TYPE_NAME.name(),
           certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getTypeName()
       );
     }
@@ -388,14 +391,14 @@ class CertificateMetadataConverterTest {
 
     @Test
     void shallIncludeCertificateName() {
-      assertEquals(TYPE_NAME,
+      assertEquals(MODEL_NAME,
           certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).getName()
       );
     }
 
     @Test
     void shallIncludeCertificateTypeDescription() {
-      assertEquals(TYPE_DESCRIPTION,
+      assertEquals(MODEL_DESCRIPTION,
           certificateMetadataConverter.convert(certificate, ACTION_EVALUATION)
               .getDescription()
       );

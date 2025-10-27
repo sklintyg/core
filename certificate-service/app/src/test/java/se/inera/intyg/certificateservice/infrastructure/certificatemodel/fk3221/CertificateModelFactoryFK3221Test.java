@@ -18,6 +18,7 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.Certifi
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateMessageType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateTypeName;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
@@ -60,6 +61,15 @@ class CertificateModelFactoryFK3221Test {
     final var certificateModel = certificateModelFactoryFK3221.create();
 
     assertEquals(expectedId, certificateModel.id());
+  }
+
+  @Test
+  void shouldIncludeTypeName() {
+    final var expected = new CertificateTypeName("FK3221");
+
+    final var certificateModel = certificateModelFactoryFK3221.create();
+
+    assertEquals(expected, certificateModel.typeName());
   }
 
   @Test

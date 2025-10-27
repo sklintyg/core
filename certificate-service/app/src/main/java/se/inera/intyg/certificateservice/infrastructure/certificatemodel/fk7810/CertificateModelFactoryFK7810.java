@@ -52,6 +52,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateTypeName;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
@@ -78,6 +79,7 @@ public class CertificateModelFactoryFK7810 implements CertificateModelFactory {
 
   private static final String FK_7810 = "fk7810";
   private static final String VERSION = "1.0";
+  private static final CertificateTypeName FK7810_TYPE_NAME = new CertificateTypeName("FK7810");
   private static final String NAME = "Läkarutlåtande för assistansersättning";
   private static final String DESCRIPTION = """
       Vem kan få assistansersättning?
@@ -134,6 +136,7 @@ public class CertificateModelFactoryFK7810 implements CertificateModelFactory {
                 NAME
             )
         )
+        .typeName(FK7810_TYPE_NAME)
         .name(NAME)
         .description(DESCRIPTION)
         .detailedDescription(DETAILED_DESCRIPTION.replaceAll("\\R", ""))
