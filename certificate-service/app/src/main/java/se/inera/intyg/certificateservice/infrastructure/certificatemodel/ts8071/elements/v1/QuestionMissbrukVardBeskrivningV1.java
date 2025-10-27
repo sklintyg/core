@@ -31,7 +31,7 @@ public class QuestionMissbrukVardBeskrivningV1 {
         .configuration(
             ElementConfigurationTextArea.builder()
                 .id(QUESTION_MISSBRUK_VARD_BESKRIVNING_V1_FIELD_ID)
-                .description(
+                .name(
                     "Ange vilken form av hjälp eller vård och när det var. Beskriv vilken typ av insats det rör sig om.")
                 .build()
         )

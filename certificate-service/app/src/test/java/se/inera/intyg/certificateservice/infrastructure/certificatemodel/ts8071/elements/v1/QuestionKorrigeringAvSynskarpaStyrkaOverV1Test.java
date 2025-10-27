@@ -3,9 +3,9 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionKorrigeringAvSynskarpaStyrkaOverV1.QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_UNDER_FIELD_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionKorrigeringAvSynskarpaStyrkaOverV1.QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_UNDER_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionKorrigeringAvSynskarpaV1.QUESTION_KORRIGERING_AV_SYNSKARPA_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionKorrigeringAvSynskarpaStyrkaOverV1.QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_UNDER_V1_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionKorrigeringAvSynskarpaStyrkaOverV1.QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_UNDER_V1_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionKorrigeringAvSynskarpaV1.QUESTION_KORRIGERING_AV_SYNSKARPA_V1_ID;
 
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -21,18 +21,18 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 
-class QuestionKorrigeringAvSynskarpaV1StyrkaOverV1Test {
+class QuestionKorrigeringAvSynskarpaStyrkaOverV1Test {
 
   @Test
   void shallIncludeId() {
     final var element = QuestionKorrigeringAvSynskarpaStyrkaOverV1.questionKorrigeringAvSynskarpaStyrkaOverV1();
-    assertEquals(QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_UNDER_ID, element.id());
+    assertEquals(QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_UNDER_V1_ID, element.id());
   }
 
   @Test
   void shallIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationRadioBoolean.builder()
-        .id(QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_UNDER_FIELD_ID)
+        .id(QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_UNDER_V1_FIELD_ID)
         .selectedText("Ja")
         .unselectedText("Nej")
         .name(
@@ -59,12 +59,12 @@ class QuestionKorrigeringAvSynskarpaV1StyrkaOverV1Test {
   void shallIncludeRules() {
     final var expectedRules = List.of(
         ElementRuleExpression.builder()
-            .id(QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_UNDER_ID)
+            .id(QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_UNDER_V1_ID)
             .expression(new RuleExpression("exists($6.4)"))
             .type(ElementRuleType.MANDATORY)
             .build(),
         ElementRuleExpression.builder()
-            .id(QUESTION_KORRIGERING_AV_SYNSKARPA_ID)
+            .id(QUESTION_KORRIGERING_AV_SYNSKARPA_V1_ID)
             .expression(new RuleExpression("$6.3"))
             .type(ElementRuleType.SHOW)
             .build()
@@ -81,7 +81,7 @@ class QuestionKorrigeringAvSynskarpaV1StyrkaOverV1Test {
     void shallReturnTrueIfContainsCode() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(QUESTION_KORRIGERING_AV_SYNSKARPA_ID)
+              .id(QUESTION_KORRIGERING_AV_SYNSKARPA_V1_ID)
               .value(
                   ElementValueCodeList.builder()
                       .list(
@@ -105,7 +105,7 @@ class QuestionKorrigeringAvSynskarpaV1StyrkaOverV1Test {
     void shallReturnFalseIfNotContainsCode() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(QUESTION_KORRIGERING_AV_SYNSKARPA_ID)
+              .id(QUESTION_KORRIGERING_AV_SYNSKARPA_V1_ID)
               .value(
                   ElementValueCodeList.builder()
                       .list(
@@ -128,7 +128,7 @@ class QuestionKorrigeringAvSynskarpaV1StyrkaOverV1Test {
 
   @Test
   void shallIncludeMapping() {
-    final var expectedMapping = new ElementMapping(QUESTION_KORRIGERING_AV_SYNSKARPA_ID, null);
+    final var expectedMapping = new ElementMapping(QUESTION_KORRIGERING_AV_SYNSKARPA_V1_ID, null);
     final var element = QuestionKorrigeringAvSynskarpaStyrkaOverV1.questionKorrigeringAvSynskarpaStyrkaOverV1();
     assertEquals(expectedMapping, element.mapping());
   }

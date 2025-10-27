@@ -53,7 +53,7 @@ class QuestionSynkopeBeskrivningTest {
         ElementRuleExpression.builder()
             .id(PARENT_ELEMENT_ID)
             .type(ElementRuleType.SHOW)
-            .expression(new RuleExpression("$parent"))
+            .expression(new RuleExpression("$field"))
             .build(),
         ElementRuleExpression.builder()
             .id(ELEMENT_ID)

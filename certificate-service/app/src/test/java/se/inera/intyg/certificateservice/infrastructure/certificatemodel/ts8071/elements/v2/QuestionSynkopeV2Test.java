@@ -33,6 +33,8 @@ class QuestionSynkopeV2Test {
   void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationRadioBoolean.builder()
         .name("Har personen haft en synkope?")
+        .description(
+            "Med synkope avses här sådan som är utlöst av arytmi men även situationsutlöst synkope (till följd av exempelvis hosta, nysning, skratt eller ansträngning) och reflexsynkope (vasovagal synkope) som exempelvis utlösts av rädsla eller smärta.")
         .id(new FieldId("11.7"))
         .selectedText("Ja")
         .unselectedText("Nej")

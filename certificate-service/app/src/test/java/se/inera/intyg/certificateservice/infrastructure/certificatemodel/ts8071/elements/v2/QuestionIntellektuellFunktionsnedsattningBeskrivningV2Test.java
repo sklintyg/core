@@ -9,7 +9,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
 class QuestionIntellektuellFunktionsnedsattningBeskrivningV2Test {
 
-  private static final ElementId ELEMENT_ID = new ElementId("24.2");
+  private static final ElementId ELEMENT_ID = new ElementId("26.2");
 
   @Test
   void shouldIncludeId() {
@@ -22,7 +22,7 @@ class QuestionIntellektuellFunktionsnedsattningBeskrivningV2Test {
   void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationTextArea.builder()
         .name("Vilken diagnos och grad?")
-        .id(new FieldId("24.2"))
+        .id(new FieldId("26.2"))
         .build();
 
     final var element = QuestionIntellektuellFunktionsnedsattningBeskrivningV2.questionIntellektuellFunktionsnedsattningBeskrivningV2();

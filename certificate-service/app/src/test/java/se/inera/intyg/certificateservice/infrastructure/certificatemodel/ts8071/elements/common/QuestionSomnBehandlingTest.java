@@ -16,10 +16,11 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 class QuestionSomnBehandlingTest {
 
   private static final ElementId ELEMENT_ID = new ElementId("17.3");
+  private static final ElementId PARENT = new ElementId("parent");
 
   @Test
   void shallIncludeId() {
-    final var element = QuestionSomnBehandling.questionSomnBehandling();
+    final var element = QuestionSomnBehandling.questionSomnBehandling(PARENT);
 
     assertEquals(ELEMENT_ID, element.id());
   }
@@ -30,13 +31,13 @@ class QuestionSomnBehandlingTest {
         .name(
             "Förekommer behandling mot sömn- och vakenhetsstörning?")
         .description(
-            "Här avses behandling för sömnapné med så väl bettskena eller annat hjälpmedel för andning såsom exempelvis CPAP, BiPAP eller APAP. Här avses även läkemedel för narkolepsi eller narkotikaklassade läkemedel för annan sömn- eller vakenhetsstörning")
+            "Här avses behandling för sömnapné med så väl bettskena eller annat hjälpmedel för andning såsom exempelvis CPAP, BiPAP eller APAP. Här avses även läkemedel för narkolepsi eller narkotikaklassade läkemedel för annan sömn- eller vakenhetsstörning.")
         .id(new FieldId("17.3"))
         .selectedText("Ja")
         .unselectedText("Nej")
         .build();
 
-    final var element = QuestionSomnBehandling.questionSomnBehandling();
+    final var element = QuestionSomnBehandling.questionSomnBehandling(PARENT);
 
     assertEquals(expectedConfiguration, element.configuration());
   }
@@ -55,7 +56,7 @@ class QuestionSomnBehandlingTest {
             .build()
     );
 
-    final var element = QuestionSomnBehandling.questionSomnBehandling();
+    final var element = QuestionSomnBehandling.questionSomnBehandling(PARENT);
 
     assertEquals(expectedRule, element.rules());
   }
@@ -68,15 +69,15 @@ class QuestionSomnBehandlingTest {
             .build()
     );
 
-    final var element = QuestionSomnBehandling.questionSomnBehandling();
+    final var element = QuestionSomnBehandling.questionSomnBehandling(PARENT);
 
     assertEquals(expectedValidations, element.validations());
   }
 
   @Test
   void shallIncludeMapping() {
-    final var element = QuestionSomnBehandling.questionSomnBehandling();
+    final var element = QuestionSomnBehandling.questionSomnBehandling(PARENT);
 
-    assertEquals(new ElementMapping(new ElementId("17"), null), element.mapping());
+    assertEquals(new ElementMapping(PARENT, null), element.mapping());
   }
 }

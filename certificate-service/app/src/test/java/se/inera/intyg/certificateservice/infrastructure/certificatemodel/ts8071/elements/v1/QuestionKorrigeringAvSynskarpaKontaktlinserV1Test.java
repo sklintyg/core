@@ -3,9 +3,9 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionKorrigeringAvSynskarpaIngenStyrkaOverV1.QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_OVER_FIELD_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionKorrigeringAvSynskarpaIngenStyrkaOverV1.QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_OVER_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionKorrigeringAvSynskarpaV1.QUESTION_KORRIGERING_AV_SYNSKARPA_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionKorrigeringAvSynskarpaKontaktlinserV1.QUESTION_KONTAKTLINSER_V1_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionKorrigeringAvSynskarpaKontaktlinserV1.QUESTION_KONTAKTLINSER_V1_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionKorrigeringAvSynskarpaV1.QUESTION_KORRIGERING_AV_SYNSKARPA_V1_ID;
 
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -21,25 +21,25 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 
-class QuestionKorrigeringAvSynskarpaV1IngenStyrkaOverV1Test {
+class QuestionKorrigeringAvSynskarpaKontaktlinserV1Test {
 
   @Test
   void shallIncludeId() {
-    final var element = QuestionKorrigeringAvSynskarpaIngenStyrkaOverV1.questionKorrigeringAvSynskarpaIngenStyrkaOverV1();
-    assertEquals(QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_OVER_ID, element.id());
+    final var element = QuestionKorrigeringAvSynskarpaKontaktlinserV1.questionKorrigeringAvSynskarpaKontaktlinserV1();
+    assertEquals(QUESTION_KONTAKTLINSER_V1_ID, element.id());
   }
 
   @Test
   void shallIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationRadioBoolean.builder()
-        .id(QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_OVER_FIELD_ID)
+        .id(QUESTION_KONTAKTLINSER_V1_FIELD_ID)
         .selectedText("Ja")
         .unselectedText("Nej")
         .name(
-            "Glasögon, inget av glasen har en styrka över plus 8 dioptrier. Tolereras korrektionen väl?"
+            "Kontaktlinser. Tolereras korrektionen väl?"
         )
         .build();
-    final var element = QuestionKorrigeringAvSynskarpaIngenStyrkaOverV1.questionKorrigeringAvSynskarpaIngenStyrkaOverV1();
+    final var element = QuestionKorrigeringAvSynskarpaKontaktlinserV1.questionKorrigeringAvSynskarpaKontaktlinserV1();
     assertEquals(expectedConfiguration, element.configuration());
   }
 
@@ -51,7 +51,7 @@ class QuestionKorrigeringAvSynskarpaV1IngenStyrkaOverV1Test {
             .build()
     );
 
-    final var element = QuestionKorrigeringAvSynskarpaIngenStyrkaOverV1.questionKorrigeringAvSynskarpaIngenStyrkaOverV1();
+    final var element = QuestionKorrigeringAvSynskarpaKontaktlinserV1.questionKorrigeringAvSynskarpaKontaktlinserV1();
     assertEquals(expectedValidation, element.validations());
   }
 
@@ -59,18 +59,18 @@ class QuestionKorrigeringAvSynskarpaV1IngenStyrkaOverV1Test {
   void shallIncludeRules() {
     final var expectedRules = List.of(
         ElementRuleExpression.builder()
-            .id(QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_OVER_ID)
-            .expression(new RuleExpression("exists($6.2)"))
+            .id(QUESTION_KONTAKTLINSER_V1_ID)
+            .expression(new RuleExpression("exists($6.6)"))
             .type(ElementRuleType.MANDATORY)
             .build(),
         ElementRuleExpression.builder()
-            .id(QUESTION_KORRIGERING_AV_SYNSKARPA_ID)
-            .expression(new RuleExpression("$6.1"))
+            .id(QUESTION_KORRIGERING_AV_SYNSKARPA_V1_ID)
+            .expression(new RuleExpression("$6.5"))
             .type(ElementRuleType.SHOW)
             .build()
     );
 
-    final var element = QuestionKorrigeringAvSynskarpaIngenStyrkaOverV1.questionKorrigeringAvSynskarpaIngenStyrkaOverV1();
+    final var element = QuestionKorrigeringAvSynskarpaKontaktlinserV1.questionKorrigeringAvSynskarpaKontaktlinserV1();
     assertEquals(expectedRules, element.rules());
   }
 
@@ -81,14 +81,14 @@ class QuestionKorrigeringAvSynskarpaV1IngenStyrkaOverV1Test {
     void shallReturnTrueIfContainsCode() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(QUESTION_KORRIGERING_AV_SYNSKARPA_ID)
+              .id(QUESTION_KORRIGERING_AV_SYNSKARPA_V1_ID)
               .value(
                   ElementValueCodeList.builder()
                       .list(
                           List.of(
                               ElementValueCode.builder()
-                                  .codeId(new FieldId("6.1"))
-                                  .code("6.1")
+                                  .codeId(new FieldId("6.5"))
+                                  .code("6.5")
                                   .build()
                           )
                       )
@@ -97,7 +97,7 @@ class QuestionKorrigeringAvSynskarpaV1IngenStyrkaOverV1Test {
               .build()
       );
 
-      final var element = QuestionKorrigeringAvSynskarpaIngenStyrkaOverV1.questionKorrigeringAvSynskarpaIngenStyrkaOverV1();
+      final var element = QuestionKorrigeringAvSynskarpaKontaktlinserV1.questionKorrigeringAvSynskarpaKontaktlinserV1();
       assertTrue(element.shouldValidate().test(elementData));
     }
 
@@ -105,14 +105,14 @@ class QuestionKorrigeringAvSynskarpaV1IngenStyrkaOverV1Test {
     void shallReturnFalseIfNotContainsCode() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(QUESTION_KORRIGERING_AV_SYNSKARPA_ID)
+              .id(QUESTION_KORRIGERING_AV_SYNSKARPA_V1_ID)
               .value(
                   ElementValueCodeList.builder()
                       .list(
                           List.of(
                               ElementValueCode.builder()
-                                  .codeId(new FieldId("GLASOGON_MED_STYRKA_OVER_8_DIOPTRIER"))
-                                  .code("GLASOGON_MED_STYRKA_OVER_8_DIOPTRIER")
+                                  .codeId(new FieldId("GLASOGON_INGEN_STYRKA_OVER_8_DIOPTRIER"))
+                                  .code("GLASOGON_INGEN_STYRKA_OVER_8_DIOPTRIER")
                                   .build()
                           )
                       )
@@ -121,15 +121,15 @@ class QuestionKorrigeringAvSynskarpaV1IngenStyrkaOverV1Test {
               .build()
       );
 
-      final var element = QuestionKorrigeringAvSynskarpaIngenStyrkaOverV1.questionKorrigeringAvSynskarpaIngenStyrkaOverV1();
+      final var element = QuestionKorrigeringAvSynskarpaKontaktlinserV1.questionKorrigeringAvSynskarpaKontaktlinserV1();
       assertFalse(element.shouldValidate().test(elementData));
     }
   }
 
   @Test
   void shallIncludeMapping() {
-    final var expectedMapping = new ElementMapping(QUESTION_KORRIGERING_AV_SYNSKARPA_ID, null);
-    final var element = QuestionKorrigeringAvSynskarpaIngenStyrkaOverV1.questionKorrigeringAvSynskarpaIngenStyrkaOverV1();
+    final var expectedMapping = new ElementMapping(QUESTION_KORRIGERING_AV_SYNSKARPA_V1_ID, null);
+    final var element = QuestionKorrigeringAvSynskarpaKontaktlinserV1.questionKorrigeringAvSynskarpaKontaktlinserV1();
     assertEquals(expectedMapping, element.mapping());
   }
 }

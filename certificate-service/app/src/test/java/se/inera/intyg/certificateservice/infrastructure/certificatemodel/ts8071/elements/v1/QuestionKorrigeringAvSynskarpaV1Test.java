@@ -8,8 +8,8 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKorrigeringAvSynskarpa.GLASOGON_MED_STYRKA_OVER_8_DIOPTRIER;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKorrigeringAvSynskarpa.KONTAKTLINSER;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSynskarpa.QUESTION_SYNSKARPA_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionKorrigeringAvSynskarpaV1.QUESTION_KORRIGERING_AV_SYNSKARPA_FIELD_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionKorrigeringAvSynskarpaV1.QUESTION_KORRIGERING_AV_SYNSKARPA_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionKorrigeringAvSynskarpaV1.QUESTION_KORRIGERING_AV_SYNSKARPA_V1_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionKorrigeringAvSynskarpaV1.QUESTION_KORRIGERING_AV_SYNSKARPA_V1_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionKorrigeringAvSynskarpaV1.questionKorrigeringAvSynskarpaV1;
 
 import java.util.List;
@@ -35,14 +35,14 @@ class QuestionKorrigeringAvSynskarpaV1Test {
 
   @Test
   void shallIncludeId() {
-    Assertions.assertEquals(QUESTION_KORRIGERING_AV_SYNSKARPA_ID,
+    Assertions.assertEquals(QUESTION_KORRIGERING_AV_SYNSKARPA_V1_ID,
         QuestionKorrigeringAvSynskarpaV1.questionKorrigeringAvSynskarpaV1().id());
   }
 
   @Test
   void shallIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationCheckboxMultipleCode.builder()
-        .id(QUESTION_KORRIGERING_AV_SYNSKARPA_FIELD_ID)
+        .id(QUESTION_KORRIGERING_AV_SYNSKARPA_V1_FIELD_ID)
         .name("Korrigering av synskärpa genom")
         .elementLayout(ElementLayout.ROWS)
         .list(
@@ -83,7 +83,7 @@ class QuestionKorrigeringAvSynskarpaV1Test {
             )
             .build(),
         ElementRuleExpression.builder()
-            .id(QUESTION_KORRIGERING_AV_SYNSKARPA_ID)
+            .id(QUESTION_KORRIGERING_AV_SYNSKARPA_V1_ID)
             .type(ElementRuleType.MANDATORY)
             .expression(
                 new RuleExpression(
@@ -92,7 +92,7 @@ class QuestionKorrigeringAvSynskarpaV1Test {
             )
             .build(),
         ElementRuleExpression.builder()
-            .id(QUESTION_KORRIGERING_AV_SYNSKARPA_ID)
+            .id(QUESTION_KORRIGERING_AV_SYNSKARPA_V1_ID)
             .type(ElementRuleType.DISABLE_SUB_ELEMENT)
             .expression(
                 new RuleExpression(
@@ -104,7 +104,7 @@ class QuestionKorrigeringAvSynskarpaV1Test {
             )
             .build(),
         ElementRuleExpression.builder()
-            .id(QUESTION_KORRIGERING_AV_SYNSKARPA_ID)
+            .id(QUESTION_KORRIGERING_AV_SYNSKARPA_V1_ID)
             .type(ElementRuleType.DISABLE_SUB_ELEMENT)
             .expression(
                 new RuleExpression(

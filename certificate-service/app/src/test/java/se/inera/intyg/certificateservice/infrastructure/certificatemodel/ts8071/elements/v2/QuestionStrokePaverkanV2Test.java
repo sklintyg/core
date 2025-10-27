@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs001.NO;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs001.NO_KNOWLEDGE;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs001.NO_KNOWLEDGE_V2;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs001.YES;
 
 import java.util.List;
@@ -29,7 +29,7 @@ class QuestionStrokePaverkanV2Test {
 
   @Test
   void shouldIncludeId() {
-    final var element = QuestionStrokePaverkanV2.questionStrokePavarkanV2();
+    final var element = QuestionStrokePaverkanV2.questionStrokePaverkanV2();
 
     assertEquals(ELEMENT_ID, element.id());
   }
@@ -54,15 +54,15 @@ class QuestionStrokePaverkanV2Test {
                     NO
                 ),
                 new ElementConfigurationCode(
-                    new FieldId(NO_KNOWLEDGE.code()),
-                    NO_KNOWLEDGE.displayName(),
-                    NO_KNOWLEDGE
+                    new FieldId(NO_KNOWLEDGE_V2.code()),
+                    NO_KNOWLEDGE_V2.displayName(),
+                    NO_KNOWLEDGE_V2
                 )
             )
         )
         .build();
 
-    final var element = QuestionStrokePaverkanV2.questionStrokePavarkanV2();
+    final var element = QuestionStrokePaverkanV2.questionStrokePaverkanV2();
 
     assertEquals(expectedConfiguration, element.configuration());
   }
@@ -75,7 +75,7 @@ class QuestionStrokePaverkanV2Test {
             .type(ElementRuleType.MANDATORY)
             .expression(
                 new RuleExpression(
-                    "exists($ja) || exists($nej) || exists($vetej)"
+                    "exists($ja) || exists($nej) || exists($vetinte)"
                 )
             )
             .build(),
@@ -86,7 +86,7 @@ class QuestionStrokePaverkanV2Test {
             .build()
     );
 
-    final var element = QuestionStrokePaverkanV2.questionStrokePavarkanV2();
+    final var element = QuestionStrokePaverkanV2.questionStrokePaverkanV2();
 
     assertEquals(expectedRules, element.rules());
   }
@@ -99,14 +99,14 @@ class QuestionStrokePaverkanV2Test {
             .build()
     );
 
-    final var element = QuestionStrokePaverkanV2.questionStrokePavarkanV2();
+    final var element = QuestionStrokePaverkanV2.questionStrokePaverkanV2();
 
     assertEquals(expectedValidations, element.validations());
   }
 
   @Test
   void shouldIncludeMapping() {
-    final var element = QuestionStrokePaverkanV2.questionStrokePavarkanV2();
+    final var element = QuestionStrokePaverkanV2.questionStrokePaverkanV2();
 
     assertEquals(new ElementMapping(new ElementId("11"), null), element.mapping());
   }
@@ -127,7 +127,7 @@ class QuestionStrokePaverkanV2Test {
               .build()
       );
 
-      final var element = QuestionStrokePaverkanV2.questionStrokePavarkanV2();
+      final var element = QuestionStrokePaverkanV2.questionStrokePaverkanV2();
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -147,7 +147,7 @@ class QuestionStrokePaverkanV2Test {
               .build()
       );
 
-      final var element = QuestionStrokePaverkanV2.questionStrokePavarkanV2();
+      final var element = QuestionStrokePaverkanV2.questionStrokePaverkanV2();
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -167,7 +167,7 @@ class QuestionStrokePaverkanV2Test {
               .build()
       );
 
-      final var element = QuestionStrokePaverkanV2.questionStrokePavarkanV2();
+      final var element = QuestionStrokePaverkanV2.questionStrokePaverkanV2();
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 

@@ -7,7 +7,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
-class QuestionPsykiskV1TidpunktV2Test {
+class QuestionPsykiskTidpunktV2Test {
 
   private static final ElementId ELEMENT_ID = new ElementId("19.3");
 

@@ -37,6 +37,8 @@ class QuestionMissbrukRemissionV2Test {
     final var expectedConfiguration = ElementConfigurationRadioMultipleCode.builder()
         .id(new FieldId("18.10"))
         .name("Om diagnos beroende, är beroendet i fullständig långvarig remission?")
+        .description(
+            "Här avses exempelvis beroende eller skadligt mönster av bruk enligt ICD-11, skadligt bruk enligt ICD-10, missbruk enligt DSM-IV eller substansbrukssyndrom enligt DSM-5.")
         .elementLayout(ElementLayout.ROWS)
         .list(
             List.of(
@@ -60,7 +62,7 @@ class QuestionMissbrukRemissionV2Test {
             .type(ElementRuleType.MANDATORY)
             .expression(
                 new RuleExpression(
-                    "exists($JA) || exists($NEJ) || exists($UPPGIFT_SAKNAS)"
+                    "exists($ja) || exists($nej) || exists($vetinte)"
                 )
             )
             .build(),

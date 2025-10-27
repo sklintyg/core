@@ -99,7 +99,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionSomnV2.QUESTION_SOMN_V2_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionSomnV2.QUESTION_SOMN_V2_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionSomnV2.questionSomnV2;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionStrokePaverkanV2.questionStrokePavarkanV2;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionStrokePaverkanV2.questionStrokePaverkanV2;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionSynkopeV2.QUESTION_SYNKOPE_V2_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionSynkopeV2.QUESTION_SYNKOPE_V2_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionSynkopeV2.questionSynkopeV2;
@@ -247,7 +247,7 @@ public class CertificateModelFactoryTS8071V2 implements CertificateModelFactory 
                             QUESTION_SYNKOPE_V2_FIELD_ID)
                     ),
                     questionStroke(
-                        questionStrokePavarkanV2()
+                        questionStrokePaverkanV2()
                     )
                 ),
                 categoryDiabetes(
@@ -290,7 +290,7 @@ public class CertificateModelFactoryTS8071V2 implements CertificateModelFactory 
                     questionSomnV2(
                         questionSomnBeskrivning(QUESTION_SOMN_V2_ID, QUESTION_SOMN_V2_FIELD_ID)
                     ),
-                    questionSomnBehandling()
+                    questionSomnBehandling(QUESTION_SOMN_V2_ID)
                 ),
                 categoryAlkoholOchLakemedelV2(
                     questionMissbrukV2(

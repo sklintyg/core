@@ -27,7 +27,7 @@ public class QuestionStrokePaverkanV2 {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionStrokePavarkanV2(
+  public static ElementSpecification questionStrokePaverkanV2(
       ElementSpecification... children) {
     final var radioMultipleCodes = List.of(
         CodeFactory.elementConfigurationCode(CodeSystemKvTs001.YES),

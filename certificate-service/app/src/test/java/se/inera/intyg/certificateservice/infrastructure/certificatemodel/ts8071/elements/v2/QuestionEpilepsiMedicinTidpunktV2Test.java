@@ -47,11 +47,11 @@ class QuestionEpilepsiMedicinTidpunktV2Test {
   void shouldIncludeRules() {
     final var expectedRules = List.of(
         ElementRuleExpression.builder()
-            .id(new ElementId("14.6"))
+            .id(new ElementId("14.5"))
             .type(ElementRuleType.SHOW)
             .expression(
                 new RuleExpression(
-                    "$14.6"
+                    "$14.5"
                 )
             )
             .build(),
@@ -94,7 +94,7 @@ class QuestionEpilepsiMedicinTidpunktV2Test {
     void shouldReturnTrueIfBooleanIsTrue() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("14.6"))
+              .id(new ElementId("14.5"))
               .value(
                   ElementValueBoolean.builder()
                       .value(true)
@@ -114,7 +114,7 @@ class QuestionEpilepsiMedicinTidpunktV2Test {
     void shouldReturnFalseIfElementMissing() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("14.5"))
+              .id(new ElementId("14.4"))
               .value(
                   ElementValueBoolean.builder()
                       .value(true)
@@ -134,7 +134,7 @@ class QuestionEpilepsiMedicinTidpunktV2Test {
     void shouldReturnFalseIfElementFalse() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("14.6"))
+              .id(new ElementId("14.5"))
               .value(
                   ElementValueBoolean.builder()
                       .value(false)

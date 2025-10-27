@@ -4,7 +4,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionPsykiskV2.QUESTION_PSYKISK_V2_ID;
 
 import java.util.List;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextField;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
@@ -26,10 +26,10 @@ public class QuestionPsykiskTidpunktV2 {
     return ElementSpecification.builder()
         .id(QUESTION_PSYKISK_TIDPUNKT_V2_ID)
         .configuration(
-            ElementConfigurationTextArea.builder()
+            ElementConfigurationTextField.builder()
                 .id(QUESTION_PSYKISK_TIDPUNKT_V2_FIELD_ID)
-                .name(
-                    "När hade personen senast läkarkontakt med anledning av sin diagnos? Ange tidpunkt")
+                .name("När hade personen senast läkarkontakt med anledning av sin diagnos?")
+                .label("Ange tidpunkt")
                 .build()
         )
         .rules(

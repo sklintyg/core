@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvAnatomiskLokalisationHorapparat.HOGER;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvAnatomiskLokalisationHorapparat.VANSTER;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionHorselV2.QUESTION_HORSEL_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionHorselV2.QUESTION_HORSEL_V2_ID;
 
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -40,14 +40,14 @@ class QuestionHorselhjalpmedelPositionV2Test {
         .list(
             List.of(
                 new ElementConfigurationCode(
-                    new FieldId(VANSTER.code()),
-                    VANSTER.displayName(),
-                    VANSTER
-                ),
-                new ElementConfigurationCode(
                     new FieldId(HOGER.code()),
                     HOGER.displayName(),
                     HOGER
+                ),
+                new ElementConfigurationCode(
+                    new FieldId(VANSTER.code()),
+                    VANSTER.displayName(),
+                    VANSTER
                 )
             )
         )
@@ -82,7 +82,7 @@ class QuestionHorselhjalpmedelPositionV2Test {
   void shouldIncludeMapping() {
     final var element = QuestionHorselhjalpmedelPositionV2.questionHorselhjalpmedelPositionV2();
 
-    assertEquals(new ElementMapping(QUESTION_HORSEL_ID, null), element.mapping());
+    assertEquals(new ElementMapping(QUESTION_HORSEL_V2_ID, null), element.mapping());
   }
 
   @Nested

@@ -32,7 +32,7 @@ public class QuestionHjartsjukdomBehandladBeskrivningV2 {
         .configuration(
             ElementConfigurationTextArea.builder()
                 .id(QUESTION_HJARTSJUKDOM_BEHANDLAD_BESKRIVNING_V2_FIELD_ID)
-                .name("Ange när och hur")
+                .name("Ange när och hur tillståndet behandlats")
                 .build()
         )
         .rules(

@@ -1,7 +1,5 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSomn.QUESTION_SOMN_ID;
-
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -20,7 +18,7 @@ public class QuestionSomnBehandling {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionSomnBehandling() {
+  public static ElementSpecification questionSomnBehandling(ElementId parentElementId) {
     return ElementSpecification.builder()
         .id(QUESTION_SOMN_BEHANDLING_ID)
         .configuration(
@@ -49,7 +47,7 @@ public class QuestionSomnBehandling {
                 )
             )
         )
-        .mapping(new ElementMapping(QUESTION_SOMN_ID, null))
+        .mapping(new ElementMapping(parentElementId, null))
         .build();
   }
 }

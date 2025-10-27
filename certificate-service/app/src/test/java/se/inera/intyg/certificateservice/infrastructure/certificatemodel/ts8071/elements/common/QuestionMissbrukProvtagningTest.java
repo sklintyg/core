@@ -52,9 +52,9 @@ class QuestionMissbrukProvtagningTest {
   void shallIncludeRules() {
     final var expectedRules = List.of(
         ElementRuleExpression.builder()
-            .id(new ElementId("18.3"))
+            .id(PARENT_ELEMENT_ID)
             .type(ElementRuleType.SHOW)
-            .expression(new RuleExpression("$18.3"))
+            .expression(new RuleExpression("$field"))
             .build(),
         ElementRuleExpression.builder()
             .id(ELEMENT_ID)
@@ -94,7 +94,7 @@ class QuestionMissbrukProvtagningTest {
     final var element = QuestionMissbrukProvtagning.questionMissbrukProvtagning(PARENT_ELEMENT_ID,
         PARENT_FIELD_ID);
 
-    assertEquals(new ElementMapping(new ElementId("18"), null), element.mapping());
+    assertEquals(new ElementMapping(PARENT_ELEMENT_ID, null), element.mapping());
   }
 
   @Nested
@@ -104,7 +104,7 @@ class QuestionMissbrukProvtagningTest {
     void shallReturnTrueIfBooleanIsTrue() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("18.3"))
+              .id(PARENT_ELEMENT_ID)
               .value(
                   ElementValueBoolean.builder()
                       .value(true)

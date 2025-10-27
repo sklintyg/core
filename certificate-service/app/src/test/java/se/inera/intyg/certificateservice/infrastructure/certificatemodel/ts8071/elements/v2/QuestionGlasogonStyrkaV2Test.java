@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSynskarpa.QUESTION_SYNSKARPA_ID;
 
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -66,206 +67,10 @@ class QuestionGlasogonStyrkaV2Test {
   class ShouldValidate {
 
     @Test
-    void shouldReturnTrueIfRightEyeWithoutCorrectionLessThan08() {
+    void shallReturnTrueIfSightWithoutCorrectionForBestEyeIs08AndWorstIs00() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("5"))
-              .value(
-                  ElementValueVisualAcuities.builder()
-                      .rightEye(
-                          VisualAcuity.builder()
-                              .withoutCorrection(
-                                  Correction.builder()
-                                      .value(0.7)
-                                      .build()
-                              )
-                              .withCorrection(
-                                  Correction.builder()
-                                      .build()
-                              )
-                              .build()
-                      )
-                      .leftEye(
-                          VisualAcuity.builder()
-                              .withoutCorrection(
-                                  Correction.builder()
-                                      .value(1.0)
-                                      .build()
-                              )
-                              .withCorrection(
-                                  Correction.builder()
-                                      .build()
-                              )
-                              .build()
-                      )
-                      .binocular(
-                          VisualAcuity.builder()
-                              .withoutCorrection(
-                                  Correction.builder()
-                                      .value(1.0)
-                                      .build()
-                              )
-                              .withCorrection(
-                                  Correction.builder()
-                                      .build()
-                              )
-                              .build()
-                      )
-                      .build()
-              )
-              .build()
-      );
-
-      final var element = QuestionGlasogonStyrkaV2.questionGlasogonStyrkaV2();
-
-      final var shouldValidate = element.shouldValidate();
-
-      assertTrue(shouldValidate.test(elementData));
-    }
-
-    @Test
-    void shouldReturnTrueIfLeftEyeWithoutCorrectionLessThan08() {
-      final var elementData = List.of(
-          ElementData.builder()
-              .id(new ElementId("5"))
-              .value(
-                  ElementValueVisualAcuities.builder()
-                      .rightEye(
-                          VisualAcuity.builder()
-                              .withoutCorrection(
-                                  Correction.builder()
-                                      .value(1.0)
-                                      .build()
-                              )
-                              .withCorrection(
-                                  Correction.builder()
-                                      .build()
-                              )
-                              .build()
-                      )
-                      .leftEye(
-                          VisualAcuity.builder()
-                              .withoutCorrection(
-                                  Correction.builder()
-                                      .value(0.5)
-                                      .build()
-                              )
-                              .withCorrection(
-                                  Correction.builder()
-                                      .build()
-                              )
-                              .build()
-                      )
-                      .binocular(
-                          VisualAcuity.builder()
-                              .withoutCorrection(
-                                  Correction.builder()
-                                      .value(1.0)
-                                      .build()
-                              )
-                              .withCorrection(
-                                  Correction.builder()
-                                      .build()
-                              )
-                              .build()
-                      )
-                      .build()
-              )
-              .build()
-      );
-
-      final var element = QuestionGlasogonStyrkaV2.questionGlasogonStyrkaV2();
-
-      final var shouldValidate = element.shouldValidate();
-
-      assertTrue(shouldValidate.test(elementData));
-    }
-
-    @Test
-    void shouldReturnTrueIfBinocularWithoutCorrectionLessThan08() {
-      final var elementData = List.of(
-          ElementData.builder()
-              .id(new ElementId("5"))
-              .value(
-                  ElementValueVisualAcuities.builder()
-                      .rightEye(
-                          VisualAcuity.builder()
-                              .withoutCorrection(
-                                  Correction.builder()
-                                      .value(1.0)
-                                      .build()
-                              )
-                              .withCorrection(
-                                  Correction.builder()
-                                      .build()
-                              )
-                              .build()
-                      )
-                      .leftEye(
-                          VisualAcuity.builder()
-                              .withoutCorrection(
-                                  Correction.builder()
-                                      .value(1.0)
-                                      .build()
-                              )
-                              .withCorrection(
-                                  Correction.builder()
-                                      .build()
-                              )
-                              .build()
-                      )
-                      .binocular(
-                          VisualAcuity.builder()
-                              .withoutCorrection(
-                                  Correction.builder()
-                                      .value(0.6)
-                                      .build()
-                              )
-                              .withCorrection(
-                                  Correction.builder()
-                                      .build()
-                              )
-                              .build()
-                      )
-                      .build()
-              )
-              .build()
-      );
-
-      final var element = QuestionGlasogonStyrkaV2.questionGlasogonStyrkaV2();
-
-      final var shouldValidate = element.shouldValidate();
-
-      assertTrue(shouldValidate.test(elementData));
-    }
-
-    @Test
-    void shouldReturnFalseIfElementMissing() {
-      final var elementData = List.of(
-          ElementData.builder()
-              .id(new ElementId("4.1"))
-              .value(
-                  ElementValueVisualAcuities.builder()
-                      .rightEye(VisualAcuity.builder().build())
-                      .leftEye(VisualAcuity.builder().build())
-                      .binocular(VisualAcuity.builder().build())
-                      .build()
-              )
-              .build()
-      );
-
-      final var element = QuestionGlasogonStyrkaV2.questionGlasogonStyrkaV2();
-
-      final var shouldValidate = element.shouldValidate();
-
-      assertFalse(shouldValidate.test(elementData));
-    }
-
-    @Test
-    void shouldReturnFalseIfAllValuesAreGreaterThanOrEqualTo08() {
-      final var elementData = List.of(
-          ElementData.builder()
-              .id(new ElementId("5"))
+              .id(QUESTION_SYNSKARPA_ID)
               .value(
                   ElementValueVisualAcuities.builder()
                       .rightEye(
@@ -275,34 +80,13 @@ class QuestionGlasogonStyrkaV2Test {
                                       .value(0.8)
                                       .build()
                               )
-                              .withCorrection(
-                                  Correction.builder()
-                                      .build()
-                              )
                               .build()
                       )
                       .leftEye(
                           VisualAcuity.builder()
                               .withoutCorrection(
                                   Correction.builder()
-                                      .value(1.0)
-                                      .build()
-                              )
-                              .withCorrection(
-                                  Correction.builder()
-                                      .build()
-                              )
-                              .build()
-                      )
-                      .binocular(
-                          VisualAcuity.builder()
-                              .withoutCorrection(
-                                  Correction.builder()
-                                      .value(1.0)
-                                      .build()
-                              )
-                              .withCorrection(
-                                  Correction.builder()
+                                      .value(0.0)
                                       .build()
                               )
                               .build()
@@ -313,10 +97,143 @@ class QuestionGlasogonStyrkaV2Test {
       );
 
       final var element = QuestionGlasogonStyrkaV2.questionGlasogonStyrkaV2();
+      assertTrue(element.shouldValidate().test(elementData));
+    }
 
-      final var shouldValidate = element.shouldValidate();
+    @Test
+    void shallReturnTrueIfSightWithoutCorrectionForBestEyeIs07AndWorstIs01() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(QUESTION_SYNSKARPA_ID)
+              .value(
+                  ElementValueVisualAcuities.builder()
+                      .rightEye(
+                          VisualAcuity.builder()
+                              .withoutCorrection(
+                                  Correction.builder()
+                                      .value(0.1)
+                                      .build()
+                              )
+                              .build()
+                      )
+                      .leftEye(
+                          VisualAcuity.builder()
+                              .withoutCorrection(
+                                  Correction.builder()
+                                      .value(0.7)
+                                      .build()
+                              )
+                              .build()
+                      )
+                      .build()
+              )
+              .build()
+      );
 
-      assertFalse(shouldValidate.test(elementData));
+      final var element = QuestionGlasogonStyrkaV2.questionGlasogonStyrkaV2();
+      assertTrue(element.shouldValidate().test(elementData));
+    }
+
+    @Test
+    void shallReturnFalseIfSightWithoutCorrectionForBestEyeIs08AndWorstIs01() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(QUESTION_SYNSKARPA_ID)
+              .value(
+                  ElementValueVisualAcuities.builder()
+                      .rightEye(
+                          VisualAcuity.builder()
+                              .withoutCorrection(
+                                  Correction.builder()
+                                      .value(0.1)
+                                      .build()
+                              )
+                              .build()
+                      )
+                      .leftEye(
+                          VisualAcuity.builder()
+                              .withoutCorrection(
+                                  Correction.builder()
+                                      .value(0.8)
+                                      .build()
+                              )
+                              .build()
+                      )
+                      .build()
+              )
+              .build()
+      );
+
+      final var element = QuestionGlasogonStyrkaV2.questionGlasogonStyrkaV2();
+      assertFalse(element.shouldValidate().test(elementData));
+    }
+
+    @Test
+    void shallReturnFalseIfSightWithoutCorrectionForLeftEyeIsNullAndRightEyeIs08() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(QUESTION_SYNSKARPA_ID)
+              .value(
+                  ElementValueVisualAcuities.builder()
+                      .rightEye(
+                          VisualAcuity.builder()
+                              .withoutCorrection(
+                                  Correction.builder()
+                                      .value(0.8)
+                                      .build()
+                              )
+                              .build()
+                      )
+                      .leftEye(
+                          VisualAcuity.builder()
+                              .withoutCorrection(
+                                  Correction.builder()
+                                      .value(null)
+                                      .build()
+                              )
+                              .build()
+                      )
+                      .build()
+              )
+              .build()
+      );
+
+      final var element = QuestionGlasogonStyrkaV2.questionGlasogonStyrkaV2();
+      assertFalse(element.shouldValidate().test(elementData));
+    }
+
+    @Test
+    void shallReturnFalseIfSightForRightEyeIsNullAndLeftEyeIs08() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(QUESTION_SYNSKARPA_ID)
+              .value(
+                  ElementValueVisualAcuities.builder()
+                      .rightEye(
+                          VisualAcuity.builder()
+                              .withoutCorrection(
+                                  Correction.builder()
+                                      .value(null)
+                                      .build()
+                              )
+                              .build()
+                      )
+                      .leftEye(
+                          VisualAcuity.builder()
+                              .withoutCorrection(
+                                  Correction.builder()
+                                      .value(0.8)
+                                      .build()
+                              )
+                              .build()
+                      )
+                      .build()
+              )
+              .build()
+      );
+
+      final var element = QuestionGlasogonStyrkaV2.questionGlasogonStyrkaV2();
+      assertFalse(element.shouldValidate().test(elementData));
     }
   }
 }

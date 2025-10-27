@@ -90,7 +90,7 @@ class QuestionNeurologiskSjukdomBeskrivningV2Test {
     void shouldReturnTrueIfBooleanIsTrue() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("13.1"))
+              .id(new ElementId("13"))
               .value(
                   ElementValueBoolean.builder()
                       .value(true)
@@ -110,7 +110,7 @@ class QuestionNeurologiskSjukdomBeskrivningV2Test {
     void shouldReturnFalseIfElementMissing() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("13"))
+              .id(new ElementId("13.1"))
               .value(
                   ElementValueBoolean.builder()
                       .value(true)
@@ -130,7 +130,7 @@ class QuestionNeurologiskSjukdomBeskrivningV2Test {
     void shouldReturnFalseIfElementFalse() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("13.1"))
+              .id(new ElementId("13"))
               .value(
                   ElementValueBoolean.builder()
                       .value(false)

@@ -298,7 +298,7 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
                     questionSomnV1(
                         questionSomnBeskrivning(QUESTION_SOMN_V1_ID, QUESTION_SOMN_V1_FIELD_ID)
                     ),
-                    questionSomnBehandling()
+                    questionSomnBehandling(QUESTION_SOMN_V1_ID)
                 ),
                 categoryAlkoholNarkotikaOchLakemedelV1(
                     questionMissbrukV1(
