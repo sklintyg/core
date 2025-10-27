@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionDemensV2.QUESTION_DEMENS_FIELD_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionDemensV2.QUESTION_DEMENS_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionDemensV2.QUESTION_DEMENS_V2_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionDemensV2.QUESTION_DEMENS_V2_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
@@ -40,8 +40,8 @@ public class QuestionDemensBeskrivningV2 {
         .rules(
             List.of(
                 CertificateElementRuleFactory.show(
-                    QUESTION_DEMENS_ID,
-                    QUESTION_DEMENS_FIELD_ID
+                    QUESTION_DEMENS_V2_ID,
+                    QUESTION_DEMENS_V2_FIELD_ID
                 ),
                 CertificateElementRuleFactory.mandatory(
                     QUESTION_DEMENS_BESKRIVNING_V2_ID,
@@ -55,10 +55,10 @@ public class QuestionDemensBeskrivningV2 {
             )
         )
         .shouldValidate(
-            ElementDataPredicateFactory.valueBoolean(QUESTION_DEMENS_ID)
+            ElementDataPredicateFactory.valueBoolean(QUESTION_DEMENS_V2_ID)
         )
         .mapping(
-            new ElementMapping(QuestionKognitivStorningV2.QUESTION_KOGNITIV_STORNING_ID, null)
+            new ElementMapping(QuestionKognitivStorningV2.QUESTION_KOGNITIV_STORNING_V2_ID, null)
         )
         .validations(
             List.of(

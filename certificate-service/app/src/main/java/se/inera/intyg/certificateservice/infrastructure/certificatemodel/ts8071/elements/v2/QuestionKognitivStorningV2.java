@@ -10,8 +10,8 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionKognitivStorningV2 {
 
-  public static final ElementId QUESTION_KOGNITIV_STORNING_ID = new ElementId("16");
-  public static final FieldId QUESTION_KOGNITIV_STORNING_FIELD_ID = new FieldId("16.1");
+  public static final ElementId QUESTION_KOGNITIV_STORNING_V2_ID = new ElementId("16");
+  public static final FieldId QUESTION_KOGNITIV_STORNING_V2_FIELD_ID = new FieldId("16.1");
 
   private QuestionKognitivStorningV2() {
     throw new IllegalStateException("Utility class");
@@ -19,10 +19,10 @@ public class QuestionKognitivStorningV2 {
 
   public static ElementSpecification questionKognitivStorningV2(ElementSpecification... children) {
     return ElementSpecification.builder()
-        .id(QUESTION_KOGNITIV_STORNING_ID)
+        .id(QUESTION_KOGNITIV_STORNING_V2_ID)
         .configuration(
             ElementConfigurationRadioBoolean.builder()
-                .id(QUESTION_KOGNITIV_STORNING_FIELD_ID)
+                .id(QUESTION_KOGNITIV_STORNING_V2_FIELD_ID)
                 .selectedText("Ja")
                 .unselectedText("Nej")
                 .name("Har personen allvarlig kognitiv störning?")
@@ -38,8 +38,8 @@ public class QuestionKognitivStorningV2 {
         .rules(
             List.of(
                 CertificateElementRuleFactory.mandatoryExist(
-                    QUESTION_KOGNITIV_STORNING_ID,
-                    QUESTION_KOGNITIV_STORNING_FIELD_ID
+                    QUESTION_KOGNITIV_STORNING_V2_ID,
+                    QUESTION_KOGNITIV_STORNING_V2_FIELD_ID
                 )
             )
         )

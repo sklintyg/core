@@ -17,9 +17,9 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionLakemedelBeskrivningV2 {
 
-  public static final ElementId QUESTION_LAKEMEDEL_BESKRIVNING_ID = new ElementId(
+  public static final ElementId QUESTION_LAKEMEDEL_BESKRIVNING_V2_ID = new ElementId(
       "18.9");
-  public static final FieldId QUESTION_LAKEMEDEL_BESKRIVNING_FIELD_ID = new FieldId(
+  public static final FieldId QUESTION_LAKEMEDEL_BESKRIVNING_V2_FIELD_ID = new FieldId(
       "18.9");
 
   private QuestionLakemedelBeskrivningV2() {
@@ -28,10 +28,10 @@ public class QuestionLakemedelBeskrivningV2 {
 
   public static ElementSpecification questionLakemedelBeskrivningV2() {
     return ElementSpecification.builder()
-        .id(QUESTION_LAKEMEDEL_BESKRIVNING_ID)
+        .id(QUESTION_LAKEMEDEL_BESKRIVNING_V2_ID)
         .configuration(
             ElementConfigurationTextArea.builder()
-                .id(QUESTION_LAKEMEDEL_BESKRIVNING_FIELD_ID)
+                .id(QUESTION_LAKEMEDEL_BESKRIVNING_V2_FIELD_ID)
                 .name("Ange läkemedel och ordinerad dos")
                 .build()
         )
@@ -42,11 +42,11 @@ public class QuestionLakemedelBeskrivningV2 {
                     QUESTION_LAKEMEDEL_V2_FIELD_ID
                 ),
                 CertificateElementRuleFactory.mandatory(
-                    QUESTION_LAKEMEDEL_BESKRIVNING_ID,
-                    QUESTION_LAKEMEDEL_BESKRIVNING_FIELD_ID
+                    QUESTION_LAKEMEDEL_BESKRIVNING_V2_ID,
+                    QUESTION_LAKEMEDEL_BESKRIVNING_V2_FIELD_ID
                 ),
                 CertificateElementRuleFactory.limit(
-                    QUESTION_LAKEMEDEL_BESKRIVNING_ID,
+                    QUESTION_LAKEMEDEL_BESKRIVNING_V2_ID,
                     (short) 250)
             )
         )

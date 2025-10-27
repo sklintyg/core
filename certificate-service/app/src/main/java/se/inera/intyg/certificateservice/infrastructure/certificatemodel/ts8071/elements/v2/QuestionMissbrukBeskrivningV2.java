@@ -15,9 +15,9 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionMissbrukBeskrivningV2 {
 
-  public static final ElementId QUESTION_MISSBRUK_BESKRIVNING_ID = new ElementId(
+  public static final ElementId QUESTION_MISSBRUK_BESKRIVNING_V2_ID = new ElementId(
       "18.2");
-  public static final FieldId QUESTION_MISSBRUK_BESKRIVNING_FIELD_ID = new FieldId(
+  public static final FieldId QUESTION_MISSBRUK_BESKRIVNING_V2_FIELD_ID = new FieldId(
       "18.2");
   private static final int TEXT_LIMIT = 400;
 
@@ -27,10 +27,10 @@ public class QuestionMissbrukBeskrivningV2 {
 
   public static ElementSpecification questionMissbrukBeskrivningV2() {
     return ElementSpecification.builder()
-        .id(QUESTION_MISSBRUK_BESKRIVNING_ID)
+        .id(QUESTION_MISSBRUK_BESKRIVNING_V2_ID)
         .configuration(
             ElementConfigurationTextArea.builder()
-                .id(QUESTION_MISSBRUK_BESKRIVNING_FIELD_ID)
+                .id(QUESTION_MISSBRUK_BESKRIVNING_V2_FIELD_ID)
                 .name(
                     "Ange diagnos, tidpunkt för när diagnosen ställdes och för vilken/vilka substanser")
                 .build()
@@ -42,11 +42,11 @@ public class QuestionMissbrukBeskrivningV2 {
                     QUESTION_MISSBRUK_V2_FIELD_ID
                 ),
                 CertificateElementRuleFactory.mandatory(
-                    QUESTION_MISSBRUK_BESKRIVNING_ID,
-                    QUESTION_MISSBRUK_BESKRIVNING_FIELD_ID
+                    QUESTION_MISSBRUK_BESKRIVNING_V2_ID,
+                    QUESTION_MISSBRUK_BESKRIVNING_V2_FIELD_ID
                 ),
                 CertificateElementRuleFactory.limit(
-                    QUESTION_MISSBRUK_BESKRIVNING_ID,
+                    QUESTION_MISSBRUK_BESKRIVNING_V2_ID,
                     (short) TEXT_LIMIT)
             )
         )

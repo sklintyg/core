@@ -16,9 +16,9 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionEpilepsiMedicinTidpunktV2 {
 
-  public static final ElementId QUESTION_EPILEPSI_MEDICIN_TIDPUNKT_ID = new ElementId(
+  public static final ElementId QUESTION_EPILEPSI_MEDICIN_TIDPUNKT_V2_ID = new ElementId(
       "14.7");
-  public static final FieldId QUESTION_EPILEPSI_MEDICIN_TIDPUNKT_FIELD_ID = new FieldId(
+  public static final FieldId QUESTION_EPILEPSI_MEDICIN_TIDPUNKT_V2_FIELD_ID = new FieldId(
       "14.7");
 
   private QuestionEpilepsiMedicinTidpunktV2() {
@@ -27,10 +27,10 @@ public class QuestionEpilepsiMedicinTidpunktV2 {
 
   public static ElementSpecification questionEpilepsiMedicinTidpunktV2() {
     return ElementSpecification.builder()
-        .id(QUESTION_EPILEPSI_MEDICIN_TIDPUNKT_ID)
+        .id(QUESTION_EPILEPSI_MEDICIN_TIDPUNKT_V2_ID)
         .configuration(
             ElementConfigurationTextField.builder()
-                .id(QUESTION_EPILEPSI_MEDICIN_TIDPUNKT_FIELD_ID)
+                .id(QUESTION_EPILEPSI_MEDICIN_TIDPUNKT_V2_FIELD_ID)
                 .name("Om läkemedelsbehandling har avslutats, ange tidpunkt")
                 .build()
         )
@@ -41,7 +41,7 @@ public class QuestionEpilepsiMedicinTidpunktV2 {
                     QUESTION_EPILEPSI_MEDICIN_FIELD_ID
                 ),
                 CertificateElementRuleFactory.limit(
-                    QUESTION_EPILEPSI_MEDICIN_TIDPUNKT_ID,
+                    QUESTION_EPILEPSI_MEDICIN_TIDPUNKT_V2_ID,
                     (short) 50)
             )
         )

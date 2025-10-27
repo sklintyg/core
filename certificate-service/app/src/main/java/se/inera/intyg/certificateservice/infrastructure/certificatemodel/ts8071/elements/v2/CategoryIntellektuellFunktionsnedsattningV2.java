@@ -7,7 +7,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 
 public class CategoryIntellektuellFunktionsnedsattningV2 {
 
-  private static final ElementId CATEGORY_INTELLEKTUELL_FUNKTIONSNEDSATTNING_ID = new ElementId(
+  private static final ElementId CATEGORY_INTELLEKTUELL_FUNKTIONSNEDSATTNING_V2_ID = new ElementId(
       "KAT_18");
 
   private CategoryIntellektuellFunktionsnedsattningV2() {
@@ -17,7 +17,7 @@ public class CategoryIntellektuellFunktionsnedsattningV2 {
   public static ElementSpecification categoryIntellektuellFunktionsnedsattningV2(
       ElementSpecification... children) {
     return ElementSpecification.builder()
-        .id(CATEGORY_INTELLEKTUELL_FUNKTIONSNEDSATTNING_ID)
+        .id(CATEGORY_INTELLEKTUELL_FUNKTIONSNEDSATTNING_V2_ID)
         .configuration(
             ElementConfigurationCategory.builder()
                 .name("Intellektuell funktionsnedsättning")

@@ -3,8 +3,8 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.FORLANG_GR_II_III;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.GR_II_III;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.TAXI;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionHorselV2.QUESTION_HORSEL_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionIntygetAvserV2.QUESTION_INTYGET_AVSER_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionIntygetAvser.QUESTION_INTYGET_AVSER_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionHorselV2.QUESTION_HORSEL_V2_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
@@ -19,8 +19,8 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionHorselhjalpmedelV2 {
 
-  public static final ElementId QUESTION_HORSELHJALPMEDEL_ID = new ElementId("9.2");
-  public static final FieldId QUESTION_HORSELHJALPMEDEL_FIELD_ID = new FieldId("9.2");
+  public static final ElementId QUESTION_HORSELHJALPMEDEL_V2_ID = new ElementId("9.2");
+  public static final FieldId QUESTION_HORSELHJALPMEDEL_V2_FIELD_ID = new FieldId("9.2");
 
   private QuestionHorselhjalpmedelV2() {
     throw new IllegalStateException("Utility class");
@@ -28,10 +28,10 @@ public class QuestionHorselhjalpmedelV2 {
 
   public static ElementSpecification questionHorselhjalpmedelV2(ElementSpecification... children) {
     return ElementSpecification.builder()
-        .id(QUESTION_HORSELHJALPMEDEL_ID)
+        .id(QUESTION_HORSELHJALPMEDEL_V2_ID)
         .configuration(
             ElementConfigurationRadioBoolean.builder()
-                .id(QUESTION_HORSELHJALPMEDEL_FIELD_ID)
+                .id(QUESTION_HORSELHJALPMEDEL_V2_FIELD_ID)
                 .selectedText("Ja")
                 .unselectedText("Nej")
                 .name(
@@ -48,8 +48,8 @@ public class QuestionHorselhjalpmedelV2 {
         .rules(
             List.of(
                 CertificateElementRuleFactory.mandatoryExist(
-                    QUESTION_HORSELHJALPMEDEL_ID,
-                    QUESTION_HORSELHJALPMEDEL_FIELD_ID
+                    QUESTION_HORSELHJALPMEDEL_V2_ID,
+                    QUESTION_HORSELHJALPMEDEL_V2_FIELD_ID
                 ),
                 CertificateElementRuleFactory.show(
                     QUESTION_INTYGET_AVSER_ID,
@@ -63,7 +63,7 @@ public class QuestionHorselhjalpmedelV2 {
             )
         )
         .mapping(
-            new ElementMapping(QUESTION_HORSEL_ID, null)
+            new ElementMapping(QUESTION_HORSEL_V2_ID, null)
         )
         .shouldValidate(ElementDataPredicateFactory.codeList(
                 QUESTION_INTYGET_AVSER_ID,

@@ -19,8 +19,8 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionMissbrukRemissionV2 {
 
-  public static final ElementId QUESTION_MISSBRUK_REMISSION_ID = new ElementId("18.10");
-  public static final FieldId QUESTION_MISSBRUK_REMISSION_FIELD_ID = new FieldId("18.10");
+  public static final ElementId QUESTION_MISSBRUK_REMISSION_V2_ID = new ElementId("18.10");
+  public static final FieldId QUESTION_MISSBRUK_REMISSION_V2_FIELD_ID = new FieldId("18.10");
 
   private QuestionMissbrukRemissionV2() {
     throw new IllegalStateException("Utility class");
@@ -35,10 +35,10 @@ public class QuestionMissbrukRemissionV2 {
     );
 
     return ElementSpecification.builder()
-        .id(QUESTION_MISSBRUK_REMISSION_ID)
+        .id(QUESTION_MISSBRUK_REMISSION_V2_ID)
         .configuration(
             ElementConfigurationRadioMultipleCode.builder()
-                .id(QUESTION_MISSBRUK_REMISSION_FIELD_ID)
+                .id(QUESTION_MISSBRUK_REMISSION_V2_FIELD_ID)
                 .name("Om diagnos beroende, är beroendet i fullständig långvarig remission?")
                 .description(
                     "Här avses exempelvis beroende eller skadligt mönster av bruk enligt ICD-11, skadligt bruk enligt ICD-10, missbruk enligt DSM-IV eller substansbrukssyndrom enligt DSM-5.")
@@ -49,7 +49,7 @@ public class QuestionMissbrukRemissionV2 {
         .rules(
             List.of(
                 CertificateElementRuleFactory.mandatoryOrExist(
-                    QUESTION_MISSBRUK_REMISSION_ID,
+                    QUESTION_MISSBRUK_REMISSION_V2_ID,
                     radioMultipleCodes.stream().map(ElementConfigurationCode::id).toList()
                 ),
                 CertificateElementRuleFactory.show(

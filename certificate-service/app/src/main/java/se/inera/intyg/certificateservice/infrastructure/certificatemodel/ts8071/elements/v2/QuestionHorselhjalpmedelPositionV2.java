@@ -1,8 +1,8 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionHorselV2.QUESTION_HORSEL_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionHorselhjalpmedelV2.QUESTION_HORSELHJALPMEDEL_FIELD_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionHorselhjalpmedelV2.QUESTION_HORSELHJALPMEDEL_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionHorselV2.QUESTION_HORSEL_V2_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionHorselhjalpmedelV2.QUESTION_HORSELHJALPMEDEL_V2_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionHorselhjalpmedelV2.QUESTION_HORSELHJALPMEDEL_V2_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleCode;
@@ -53,8 +53,8 @@ public class QuestionHorselhjalpmedelPositionV2 {
                     checkboxes.stream().map(ElementConfigurationCode::id).toList()
                 ),
                 CertificateElementRuleFactory.show(
-                    QUESTION_HORSELHJALPMEDEL_ID,
-                    QUESTION_HORSELHJALPMEDEL_FIELD_ID
+                    QUESTION_HORSELHJALPMEDEL_V2_ID,
+                    QUESTION_HORSELHJALPMEDEL_V2_FIELD_ID
                 )
             )
         )
@@ -65,8 +65,8 @@ public class QuestionHorselhjalpmedelPositionV2 {
                     .build()
             )
         )
-        .shouldValidate(ElementDataPredicateFactory.valueBoolean(QUESTION_HORSELHJALPMEDEL_ID))
-        .mapping(new ElementMapping(QUESTION_HORSEL_ID, null))
+        .shouldValidate(ElementDataPredicateFactory.valueBoolean(QUESTION_HORSELHJALPMEDEL_V2_ID))
+        .mapping(new ElementMapping(QUESTION_HORSEL_V2_ID, null))
         .children(List.of(children))
         .build();
   }

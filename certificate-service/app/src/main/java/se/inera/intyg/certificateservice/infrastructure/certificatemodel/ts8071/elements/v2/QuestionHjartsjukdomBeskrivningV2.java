@@ -15,9 +15,9 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionHjartsjukdomBeskrivningV2 {
 
-  public static final ElementId QUESTION_HJARTSJUKDOM_BESKRIVNING_ID = new ElementId(
+  public static final ElementId QUESTION_HJARTSJUKDOM_BESKRIVNING_V2_ID = new ElementId(
       "11.2");
-  public static final FieldId QUESTION_HJARTSJUKDOM_BESKRIVNING_FIELD_ID = new FieldId(
+  public static final FieldId QUESTION_HJARTSJUKDOM_BESKRIVNING_V2_FIELD_ID = new FieldId(
       "11.2");
 
   private QuestionHjartsjukdomBeskrivningV2() {
@@ -26,10 +26,10 @@ public class QuestionHjartsjukdomBeskrivningV2 {
 
   public static ElementSpecification questionHjartsjukdomBeskrivningV2() {
     return ElementSpecification.builder()
-        .id(QUESTION_HJARTSJUKDOM_BESKRIVNING_ID)
+        .id(QUESTION_HJARTSJUKDOM_BESKRIVNING_V2_ID)
         .configuration(
             ElementConfigurationTextArea.builder()
-                .id(QUESTION_HJARTSJUKDOM_BESKRIVNING_FIELD_ID)
+                .id(QUESTION_HJARTSJUKDOM_BESKRIVNING_V2_FIELD_ID)
                 .name("Ange vilken sjukdom och tidpunkt för diagnos")
                 .build()
         )
@@ -40,11 +40,11 @@ public class QuestionHjartsjukdomBeskrivningV2 {
                     QUESTION_HJARTSJUKDOM_FIELD_ID
                 ),
                 CertificateElementRuleFactory.mandatory(
-                    QUESTION_HJARTSJUKDOM_BESKRIVNING_ID,
-                    QUESTION_HJARTSJUKDOM_BESKRIVNING_FIELD_ID
+                    QUESTION_HJARTSJUKDOM_BESKRIVNING_V2_ID,
+                    QUESTION_HJARTSJUKDOM_BESKRIVNING_V2_FIELD_ID
                 ),
                 CertificateElementRuleFactory.limit(
-                    QUESTION_HJARTSJUKDOM_BESKRIVNING_ID,
+                    QUESTION_HJARTSJUKDOM_BESKRIVNING_V2_ID,
                     (short) 250)
             )
         )
