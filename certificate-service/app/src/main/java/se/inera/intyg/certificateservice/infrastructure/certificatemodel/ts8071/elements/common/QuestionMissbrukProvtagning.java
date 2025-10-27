@@ -1,7 +1,5 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukV1.QUESTION_MISSBRUK_V1_ID;
-
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -53,7 +51,7 @@ public class QuestionMissbrukProvtagning {
             ElementDataPredicateFactory.valueBoolean(parentElementId)
         )
         .mapping(
-            new ElementMapping(QUESTION_MISSBRUK_V1_ID, null)
+            new ElementMapping(parentElementId, null)
         )
         .validations(
             List.of(
