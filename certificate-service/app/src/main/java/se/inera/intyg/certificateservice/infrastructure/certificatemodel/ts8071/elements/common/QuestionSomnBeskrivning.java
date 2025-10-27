@@ -1,8 +1,5 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSomn.QUESTION_SOMN_FIELD_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSomn.QUESTION_SOMN_ID;
-
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -15,16 +12,15 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionSomnBeskrivning {
 
-  public static final ElementId QUESTION_SOMN_BESKRIVNING_ID = new ElementId(
-      "17.2");
-  public static final FieldId QUESTION_SOMN_BESKRIVNING_FIELD_ID = new FieldId(
-      "17.2");
+  public static final ElementId QUESTION_SOMN_BESKRIVNING_ID = new ElementId("17.2");
+  public static final FieldId QUESTION_SOMN_BESKRIVNING_FIELD_ID = new FieldId("17.2");
 
   private QuestionSomnBeskrivning() {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionSomnBeskrivning() {
+  public static ElementSpecification questionSomnBeskrivning(ElementId parentElementId,
+      FieldId parentFieldId) {
     return ElementSpecification.builder()
         .id(QUESTION_SOMN_BESKRIVNING_ID)
         .configuration(
@@ -36,8 +32,8 @@ public class QuestionSomnBeskrivning {
         .rules(
             List.of(
                 CertificateElementRuleFactory.show(
-                    QUESTION_SOMN_ID,
-                    QUESTION_SOMN_FIELD_ID
+                    parentElementId,
+                    parentFieldId
                 ),
                 CertificateElementRuleFactory.mandatory(
                     QUESTION_SOMN_BESKRIVNING_ID,
@@ -49,10 +45,10 @@ public class QuestionSomnBeskrivning {
             )
         )
         .shouldValidate(
-            ElementDataPredicateFactory.valueBoolean(QUESTION_SOMN_ID)
+            ElementDataPredicateFactory.valueBoolean(parentElementId)
         )
         .mapping(
-            new ElementMapping(QUESTION_SOMN_ID, null)
+            new ElementMapping(parentElementId, null)
         )
         .validations(
             List.of(
@@ -65,3 +61,5 @@ public class QuestionSomnBeskrivning {
         .build();
   }
 }
+
+

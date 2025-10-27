@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -12,13 +12,13 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 
-class QuestionSomnTest {
+class QuestionSomnV1Test {
 
   private static final ElementId ELEMENT_ID = new ElementId("17");
 
   @Test
   void shallIncludeId() {
-    final var element = QuestionSomn.questionSomn();
+    final var element = QuestionSomnV1.questionSomnV1();
 
     assertEquals(ELEMENT_ID, element.id());
   }
@@ -35,7 +35,7 @@ class QuestionSomnTest {
         .unselectedText("Nej")
         .build();
 
-    final var element = QuestionSomn.questionSomn();
+    final var element = QuestionSomnV1.questionSomnV1();
 
     assertEquals(expectedConfiguration, element.configuration());
   }
@@ -54,7 +54,7 @@ class QuestionSomnTest {
             .build()
     );
 
-    final var element = QuestionSomn.questionSomn();
+    final var element = QuestionSomnV1.questionSomnV1();
 
     assertEquals(expectedRule, element.rules());
   }
@@ -67,8 +67,9 @@ class QuestionSomnTest {
             .build()
     );
 
-    final var element = QuestionSomn.questionSomn();
+    final var element = QuestionSomnV1.questionSomnV1();
 
     assertEquals(expectedValidations, element.validations());
   }
 }
+

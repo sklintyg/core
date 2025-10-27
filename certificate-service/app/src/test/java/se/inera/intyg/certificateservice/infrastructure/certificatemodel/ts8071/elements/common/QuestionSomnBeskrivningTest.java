@@ -23,10 +23,13 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 class QuestionSomnBeskrivningTest {
 
   private static final ElementId ELEMENT_ID = new ElementId("17.2");
+  private static final ElementId PARENT_ELEMENT_ID = new ElementId("17");
+  private static final FieldId PARENT_FIELD_ID = new FieldId("17.1");
 
   @Test
   void shallIncludeId() {
-    final var element = QuestionSomnBeskrivning.questionSomnBeskrivning();
+    final var element = QuestionSomnBeskrivning.questionSomnBeskrivning(PARENT_ELEMENT_ID,
+        PARENT_FIELD_ID);
 
     assertEquals(ELEMENT_ID, element.id());
   }
@@ -38,7 +41,8 @@ class QuestionSomnBeskrivningTest {
         .id(new FieldId("17.2"))
         .build();
 
-    final var element = QuestionSomnBeskrivning.questionSomnBeskrivning();
+    final var element = QuestionSomnBeskrivning.questionSomnBeskrivning(PARENT_ELEMENT_ID,
+        PARENT_FIELD_ID);
 
     assertEquals(expectedConfiguration, element.configuration());
   }
@@ -47,7 +51,7 @@ class QuestionSomnBeskrivningTest {
   void shallIncludeRules() {
     final var expectedRules = List.of(
         ElementRuleExpression.builder()
-            .id(new ElementId("17"))
+            .id(PARENT_ELEMENT_ID)
             .type(ElementRuleType.SHOW)
             .expression(new RuleExpression("$17.1"))
             .build(),
@@ -63,7 +67,8 @@ class QuestionSomnBeskrivningTest {
             .build()
     );
 
-    final var element = QuestionSomnBeskrivning.questionSomnBeskrivning();
+    final var element = QuestionSomnBeskrivning.questionSomnBeskrivning(PARENT_ELEMENT_ID,
+        PARENT_FIELD_ID);
 
     assertEquals(expectedRules, element.rules());
   }
@@ -77,16 +82,18 @@ class QuestionSomnBeskrivningTest {
             .build()
     );
 
-    final var element = QuestionSomnBeskrivning.questionSomnBeskrivning();
+    final var element = QuestionSomnBeskrivning.questionSomnBeskrivning(PARENT_ELEMENT_ID,
+        PARENT_FIELD_ID);
 
     assertEquals(expectedValidations, element.validations());
   }
 
   @Test
   void shallIncludeMapping() {
-    final var element = QuestionSomnBeskrivning.questionSomnBeskrivning();
+    final var element = QuestionSomnBeskrivning.questionSomnBeskrivning(PARENT_ELEMENT_ID,
+        PARENT_FIELD_ID);
 
-    assertEquals(new ElementMapping(new ElementId("17"), null), element.mapping());
+    assertEquals(new ElementMapping(PARENT_ELEMENT_ID, null), element.mapping());
   }
 
   @Nested
@@ -96,7 +103,7 @@ class QuestionSomnBeskrivningTest {
     void shallReturnTrueIfBooleanIsTrue() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("17"))
+              .id(PARENT_ELEMENT_ID)
               .value(
                   ElementValueBoolean.builder()
                       .value(true)
@@ -105,7 +112,8 @@ class QuestionSomnBeskrivningTest {
               .build()
       );
 
-      final var element = QuestionSomnBeskrivning.questionSomnBeskrivning();
+      final var element = QuestionSomnBeskrivning.questionSomnBeskrivning(PARENT_ELEMENT_ID,
+          PARENT_FIELD_ID);
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -125,7 +133,8 @@ class QuestionSomnBeskrivningTest {
               .build()
       );
 
-      final var element = QuestionSomnBeskrivning.questionSomnBeskrivning();
+      final var element = QuestionSomnBeskrivning.questionSomnBeskrivning(PARENT_ELEMENT_ID,
+          PARENT_FIELD_ID);
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -136,7 +145,7 @@ class QuestionSomnBeskrivningTest {
     void shallReturnFalseIfElementFalse() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("17"))
+              .id(PARENT_ELEMENT_ID)
               .value(
                   ElementValueBoolean.builder()
                       .value(false)
@@ -145,7 +154,8 @@ class QuestionSomnBeskrivningTest {
               .build()
       );
 
-      final var element = QuestionSomnBeskrivning.questionSomnBeskrivning();
+      final var element = QuestionSomnBeskrivning.questionSomnBeskrivning(PARENT_ELEMENT_ID,
+          PARENT_FIELD_ID);
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -153,3 +163,4 @@ class QuestionSomnBeskrivningTest {
     }
   }
 }
+

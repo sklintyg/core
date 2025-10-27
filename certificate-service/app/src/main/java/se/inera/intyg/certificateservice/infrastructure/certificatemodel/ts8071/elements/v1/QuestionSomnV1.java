@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
@@ -8,21 +8,21 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
-public class QuestionSomn {
+public class QuestionSomnV1 {
 
-  public static final ElementId QUESTION_SOMN_ID = new ElementId("17");
-  public static final FieldId QUESTION_SOMN_FIELD_ID = new FieldId("17.1");
+  public static final ElementId QUESTION_SOMN_V1_ID = new ElementId("17");
+  public static final FieldId QUESTION_SOMN_V1_FIELD_ID = new FieldId("17.1");
 
-  private QuestionSomn() {
+  private QuestionSomnV1() {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionSomn(ElementSpecification... children) {
+  public static ElementSpecification questionSomnV1(ElementSpecification... children) {
     return ElementSpecification.builder()
-        .id(QUESTION_SOMN_ID)
+        .id(QUESTION_SOMN_V1_ID)
         .configuration(
             ElementConfigurationRadioBoolean.builder()
-                .id(QUESTION_SOMN_FIELD_ID)
+                .id(QUESTION_SOMN_V1_FIELD_ID)
                 .name(
                     "Har personen en sömn- eller vakenhetsstörning eller symtom på sådan problematik?")
                 .description(
@@ -41,8 +41,8 @@ public class QuestionSomn {
         .rules(
             List.of(
                 CertificateElementRuleFactory.mandatoryExist(
-                    QUESTION_SOMN_ID,
-                    QUESTION_SOMN_FIELD_ID
+                    QUESTION_SOMN_V1_ID,
+                    QUESTION_SOMN_V1_FIELD_ID
                 )
             )
         )
@@ -50,3 +50,4 @@ public class QuestionSomn {
         .build();
   }
 }
+
