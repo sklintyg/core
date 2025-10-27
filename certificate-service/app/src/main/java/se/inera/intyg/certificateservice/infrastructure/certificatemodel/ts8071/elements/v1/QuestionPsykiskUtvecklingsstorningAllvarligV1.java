@@ -1,8 +1,8 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionNeuropsykiatriskV1.QUESTION_NEUROPSYKIATRISK_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionPsykiskUtvecklingsstorningV1.QUESTION_PSYKISK_UTVECKLINGSSTORNING_FIELD_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionPsykiskUtvecklingsstorningV1.QUESTION_PSYKISK_UTVECKLINGSSTORNING_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionNeuropsykiatriskV1.QUESTION_NEUROPSYKIATRISK_V1_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionPsykiskUtvecklingsstorningV1.QUESTION_PSYKISK_UTVECKLINGSSTORNING_FIELD_V1_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionPsykiskUtvecklingsstorningV1.QUESTION_PSYKISK_UTVECKLINGSSTORNING_V1_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
@@ -16,9 +16,9 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionPsykiskUtvecklingsstorningAllvarligV1 {
 
-  public static final ElementId QUESTION_PSYKISK_UTVECKLINGSSTORNING_ALLVARLIG_ID = new ElementId(
+  public static final ElementId QUESTION_PSYKISK_UTVECKLINGSSTORNING_ALLVARLIG_V1_ID = new ElementId(
       "20.7");
-  public static final FieldId QUESTION_PSYKISK_UTVECKLINGSSTORNING_ALLVARLIG_FIELD_ID = new FieldId(
+  public static final FieldId QUESTION_PSYKISK_UTVECKLINGSSTORNING_ALLVARLIG_FIELD_V1_ID = new FieldId(
       "20.7");
 
   private QuestionPsykiskUtvecklingsstorningAllvarligV1() {
@@ -27,10 +27,10 @@ public class QuestionPsykiskUtvecklingsstorningAllvarligV1 {
 
   public static ElementSpecification questionPsykiskUtvecklingsstorningAllvarligV1() {
     return ElementSpecification.builder()
-        .id(QUESTION_PSYKISK_UTVECKLINGSSTORNING_ALLVARLIG_ID)
+        .id(QUESTION_PSYKISK_UTVECKLINGSSTORNING_ALLVARLIG_V1_ID)
         .configuration(
             ElementConfigurationRadioBoolean.builder()
-                .id(QUESTION_PSYKISK_UTVECKLINGSSTORNING_ALLVARLIG_FIELD_ID)
+                .id(QUESTION_PSYKISK_UTVECKLINGSSTORNING_ALLVARLIG_FIELD_V1_ID)
                 .name("Är det en allvarlig psykisk utvecklingsstörning?")
                 .description(
                     "Med allvarlig psykisk utvecklingsstörning avses mental retardation enligt DSM-IV. Det avser även grav, svår eller medelsvår psykisk utvecklingsstörning enligt ICD-10. Intellektuell funktionsnedsättning enligt DSM-5 av djupgående, svår eller måttlig grad är att jämställa med ovan.")
@@ -41,20 +41,20 @@ public class QuestionPsykiskUtvecklingsstorningAllvarligV1 {
         .rules(
             List.of(
                 CertificateElementRuleFactory.show(
-                    QUESTION_PSYKISK_UTVECKLINGSSTORNING_ID,
-                    QUESTION_PSYKISK_UTVECKLINGSSTORNING_FIELD_ID
+                    QUESTION_PSYKISK_UTVECKLINGSSTORNING_V1_ID,
+                    QUESTION_PSYKISK_UTVECKLINGSSTORNING_FIELD_V1_ID
                 ),
                 CertificateElementRuleFactory.mandatoryExist(
-                    QUESTION_PSYKISK_UTVECKLINGSSTORNING_ALLVARLIG_ID,
-                    QUESTION_PSYKISK_UTVECKLINGSSTORNING_ALLVARLIG_FIELD_ID
+                    QUESTION_PSYKISK_UTVECKLINGSSTORNING_ALLVARLIG_V1_ID,
+                    QUESTION_PSYKISK_UTVECKLINGSSTORNING_ALLVARLIG_FIELD_V1_ID
                 )
             )
         )
         .shouldValidate(
-            ElementDataPredicateFactory.valueBoolean(QUESTION_PSYKISK_UTVECKLINGSSTORNING_ID)
+            ElementDataPredicateFactory.valueBoolean(QUESTION_PSYKISK_UTVECKLINGSSTORNING_V1_ID)
         )
         .mapping(
-            new ElementMapping(QUESTION_NEUROPSYKIATRISK_ID, null)
+            new ElementMapping(QUESTION_NEUROPSYKIATRISK_V1_ID, null)
         )
         .validations(
             List.of(

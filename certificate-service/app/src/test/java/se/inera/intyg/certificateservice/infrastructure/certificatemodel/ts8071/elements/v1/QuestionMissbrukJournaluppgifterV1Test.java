@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -13,13 +13,13 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 
-class QuestionMissbrukJournaluppgifterTest {
+class QuestionMissbrukJournaluppgifterV1Test {
 
   private static final ElementId ELEMENT_ID = new ElementId("18.3");
 
   @Test
   void shallIncludeId() {
-    final var element = QuestionMissbrukJournaluppgifter.questionMissbrukJournaluppgifter();
+    final var element = QuestionMissbrukJournaluppgifterV1.questionMissbrukJournaluppgifterV1();
 
     assertEquals(ELEMENT_ID, element.id());
   }
@@ -36,7 +36,7 @@ class QuestionMissbrukJournaluppgifterTest {
         .unselectedText("Nej")
         .build();
 
-    final var element = QuestionMissbrukJournaluppgifter.questionMissbrukJournaluppgifter();
+    final var element = QuestionMissbrukJournaluppgifterV1.questionMissbrukJournaluppgifterV1();
 
     assertEquals(expectedConfiguration, element.configuration());
   }
@@ -55,7 +55,7 @@ class QuestionMissbrukJournaluppgifterTest {
             .build()
     );
 
-    final var element = QuestionMissbrukJournaluppgifter.questionMissbrukJournaluppgifter();
+    final var element = QuestionMissbrukJournaluppgifterV1.questionMissbrukJournaluppgifterV1();
 
     assertEquals(expectedRule, element.rules());
   }
@@ -68,14 +68,14 @@ class QuestionMissbrukJournaluppgifterTest {
             .build()
     );
 
-    final var element = QuestionMissbrukJournaluppgifter.questionMissbrukJournaluppgifter();
+    final var element = QuestionMissbrukJournaluppgifterV1.questionMissbrukJournaluppgifterV1();
 
     assertEquals(expectedValidations, element.validations());
   }
 
   @Test
   void shallIncludeMapping() {
-    final var element = QuestionMissbrukJournaluppgifter.questionMissbrukJournaluppgifter();
+    final var element = QuestionMissbrukJournaluppgifterV1.questionMissbrukJournaluppgifterV1();
 
     assertEquals(new ElementMapping(new ElementId("18"), null), element.mapping());
   }

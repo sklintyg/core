@@ -82,6 +82,8 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionMedicineringBeskrivningV2.questionMedicineringBeskrivningV2;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionMissbrukBeskrivningV2.questionMissbrukBeskrivningV2;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionMissbrukJournaluppgifterBeskrivningV2.questionMissbrukJournaluppgifterBeskrivningV2;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionMissbrukJournaluppgifterV2.QUESTION_MISSBRUK_JOURNALUPPGIFTER_V2_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionMissbrukJournaluppgifterV2.QUESTION_MISSBRUK_JOURNALUPPGIFTER_V2_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionMissbrukJournaluppgifterV2.questionMissbrukJournaluppgifterV2;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionMissbrukRemissionV2.questionMissbrukRemissionV2;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionMissbrukV2.questionMissbrukV2;
@@ -291,7 +293,8 @@ public class CertificateModelFactoryTS8071V2 implements CertificateModelFactory 
                     ),
                     questionMissbrukJournaluppgifterV2(
                         questionMissbrukJournaluppgifterBeskrivningV2(),
-                        questionMissbrukProvtagning()
+                        questionMissbrukProvtagning(QUESTION_MISSBRUK_JOURNALUPPGIFTER_V2_ID,
+                            QUESTION_MISSBRUK_JOURNALUPPGIFTER_V2_FIELD_ID)
                     ),
                     questionMissbrukVardV2(
                         questionMissbrukVardBeskrivningV2()

@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionPsykiskV1.QUESTION_PSYKISK_FIELD_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionPsykiskV1.QUESTION_PSYKISK_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionPsykiskV1.QUESTION_PSYKISK_FIELD_V1_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionPsykiskV1.QUESTION_PSYKISK_V1_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
@@ -36,8 +36,8 @@ public class QuestionPsykiskBeskrivning {
         .rules(
             List.of(
                 CertificateElementRuleFactory.show(
-                    QUESTION_PSYKISK_ID,
-                    QUESTION_PSYKISK_FIELD_ID
+                    QUESTION_PSYKISK_V1_ID,
+                    QUESTION_PSYKISK_FIELD_V1_ID
                 ),
                 CertificateElementRuleFactory.mandatory(
                     QUESTION_PSYKISK_BESKRIVNING_ID,
@@ -49,10 +49,10 @@ public class QuestionPsykiskBeskrivning {
             )
         )
         .shouldValidate(
-            ElementDataPredicateFactory.valueBoolean(QUESTION_PSYKISK_ID)
+            ElementDataPredicateFactory.valueBoolean(QUESTION_PSYKISK_V1_ID)
         )
         .mapping(
-            new ElementMapping(QUESTION_PSYKISK_ID, null)
+            new ElementMapping(QUESTION_PSYKISK_V1_ID, null)
         )
         .validations(
             List.of(

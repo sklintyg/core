@@ -130,4 +130,6 @@ Follow these steps:
 5. Create new questions that are unique for the new version (with VX suffix for methods and ids
    where X is version)
    ***Example: questionHorselV1(), QUESTION_HORSEL_V1_ID***
-6. Add the unique elements to the model
+6. If a question is common between versions, but an id is used from a version question, then the id
+   needs to be passed as an attribute. See `QuestionMissbrukProvtagning` as example.
+7. Add the unique elements to the model

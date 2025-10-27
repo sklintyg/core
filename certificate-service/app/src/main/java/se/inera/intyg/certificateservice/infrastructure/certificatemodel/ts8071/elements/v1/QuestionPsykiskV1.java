@@ -10,8 +10,8 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionPsykiskV1 {
 
-  public static final ElementId QUESTION_PSYKISK_ID = new ElementId("19");
-  public static final FieldId QUESTION_PSYKISK_FIELD_ID = new FieldId("19.1");
+  public static final ElementId QUESTION_PSYKISK_V1_ID = new ElementId("19");
+  public static final FieldId QUESTION_PSYKISK_FIELD_V1_ID = new FieldId("19.1");
 
   private QuestionPsykiskV1() {
     throw new IllegalStateException("Utility class");
@@ -19,10 +19,10 @@ public class QuestionPsykiskV1 {
 
   public static ElementSpecification questionPsykiskV1(ElementSpecification... children) {
     return ElementSpecification.builder()
-        .id(QUESTION_PSYKISK_ID)
+        .id(QUESTION_PSYKISK_V1_ID)
         .configuration(
             ElementConfigurationRadioBoolean.builder()
-                .id(QUESTION_PSYKISK_FIELD_ID)
+                .id(QUESTION_PSYKISK_FIELD_V1_ID)
                 .name(
                     "Har personen eller har personen haft psykisk sjukdom eller störning, till exempel schizofreni, annan psykos eller bipolär (manodepressiv) sjukdom?")
                 .description(
@@ -41,8 +41,8 @@ public class QuestionPsykiskV1 {
         .rules(
             List.of(
                 CertificateElementRuleFactory.mandatoryExist(
-                    QUESTION_PSYKISK_ID,
-                    QUESTION_PSYKISK_FIELD_ID
+                    QUESTION_PSYKISK_V1_ID,
+                    QUESTION_PSYKISK_FIELD_V1_ID
                 )
             )
         )

@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionPsykiskV1.QUESTION_PSYKISK_FIELD_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionPsykiskV1.QUESTION_PSYKISK_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionPsykiskV1.QUESTION_PSYKISK_FIELD_V1_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionPsykiskV1.QUESTION_PSYKISK_V1_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextField;
@@ -15,9 +15,9 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionPsykiskTidpunktV1 {
 
-  public static final ElementId QUESTION_PSYKISK_TIDPUNKT_ID = new ElementId(
+  public static final ElementId QUESTION_PSYKISK_TIDPUNKT_V1_ID = new ElementId(
       "19.3");
-  public static final FieldId QUESTION_PSYKISK_TIDPUNKT_FIELD_ID = new FieldId(
+  public static final FieldId QUESTION_PSYKISK_TIDPUNKT_FIELD_V1_ID = new FieldId(
       "19.3");
 
   private QuestionPsykiskTidpunktV1() {
@@ -26,10 +26,10 @@ public class QuestionPsykiskTidpunktV1 {
 
   public static ElementSpecification questionPsykiskTidpunktV1() {
     return ElementSpecification.builder()
-        .id(QUESTION_PSYKISK_TIDPUNKT_ID)
+        .id(QUESTION_PSYKISK_TIDPUNKT_V1_ID)
         .configuration(
             ElementConfigurationTextField.builder()
-                .id(QUESTION_PSYKISK_TIDPUNKT_FIELD_ID)
+                .id(QUESTION_PSYKISK_TIDPUNKT_FIELD_V1_ID)
                 .name("När hade personen senast läkarkontakt med anledning av sin diagnos?")
                 .label("Ange tidpunkt")
                 .build()
@@ -37,23 +37,23 @@ public class QuestionPsykiskTidpunktV1 {
         .rules(
             List.of(
                 CertificateElementRuleFactory.show(
-                    QUESTION_PSYKISK_ID,
-                    QUESTION_PSYKISK_FIELD_ID
+                    QUESTION_PSYKISK_V1_ID,
+                    QUESTION_PSYKISK_FIELD_V1_ID
                 ),
                 CertificateElementRuleFactory.mandatory(
-                    QUESTION_PSYKISK_TIDPUNKT_ID,
-                    QUESTION_PSYKISK_TIDPUNKT_FIELD_ID
+                    QUESTION_PSYKISK_TIDPUNKT_V1_ID,
+                    QUESTION_PSYKISK_TIDPUNKT_FIELD_V1_ID
                 ),
                 CertificateElementRuleFactory.limit(
-                    QUESTION_PSYKISK_TIDPUNKT_ID,
+                    QUESTION_PSYKISK_TIDPUNKT_V1_ID,
                     (short) 50)
             )
         )
         .shouldValidate(
-            ElementDataPredicateFactory.valueBoolean(QUESTION_PSYKISK_ID)
+            ElementDataPredicateFactory.valueBoolean(QUESTION_PSYKISK_V1_ID)
         )
         .mapping(
-            new ElementMapping(QUESTION_PSYKISK_ID, null)
+            new ElementMapping(QUESTION_PSYKISK_V1_ID, null)
         )
         .validations(
             List.of(

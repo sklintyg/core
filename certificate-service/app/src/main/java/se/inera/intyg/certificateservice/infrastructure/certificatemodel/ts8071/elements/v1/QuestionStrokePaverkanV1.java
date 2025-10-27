@@ -20,9 +20,9 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionStrokePaverkanV1 {
 
-  public static final ElementId QUESTION_STROKE_PAVARKAN_ID = new ElementId(
+  public static final ElementId QUESTION_STROKE_PAVERKAN_V1_ID = new ElementId(
       "11.10");
-  public static final FieldId QUESTION_STROKE_PAVARKAN_FIELD_ID = new FieldId(
+  public static final FieldId QUESTION_STROKE_PAVERKAN_FIELD_V1_ID = new FieldId(
       "11.10");
 
   private QuestionStrokePaverkanV1() {
@@ -38,10 +38,10 @@ public class QuestionStrokePaverkanV1 {
     );
 
     return ElementSpecification.builder()
-        .id(QUESTION_STROKE_PAVARKAN_ID)
+        .id(QUESTION_STROKE_PAVERKAN_V1_ID)
         .configuration(
             ElementConfigurationRadioMultipleCode.builder()
-                .id(QUESTION_STROKE_PAVARKAN_FIELD_ID)
+                .id(QUESTION_STROKE_PAVERKAN_FIELD_V1_ID)
                 .name(
                     "Om stroke förekommit, har den inträffat i/påverkat syncentrum (occipitalloben eller synnerven)?")
                 .elementLayout(ElementLayout.ROWS)
@@ -51,7 +51,7 @@ public class QuestionStrokePaverkanV1 {
         .rules(
             List.of(
                 CertificateElementRuleFactory.mandatoryOrExist(
-                    QUESTION_STROKE_PAVARKAN_ID,
+                    QUESTION_STROKE_PAVERKAN_V1_ID,
                     radioMultipleCodes.stream().map(ElementConfigurationCode::id).toList()
                 ),
                 CertificateElementRuleFactory.show(

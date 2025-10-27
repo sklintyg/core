@@ -1,8 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionMissbrukJournaluppgifter.QUESTION_MISSBRUK_JOURNALUPPGIFTER_FIELD_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionMissbrukJournaluppgifter.QUESTION_MISSBRUK_JOURNALUPPGIFTER_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukV1.QUESTION_MISSBRUK_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukV1.QUESTION_MISSBRUK_V1_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
@@ -25,7 +23,8 @@ public class QuestionMissbrukProvtagning {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionMissbrukProvtagning() {
+  public static ElementSpecification questionMissbrukProvtagning(ElementId parentElementId,
+      FieldId parentFieldId) {
     return ElementSpecification.builder()
         .id(QUESTION_MISSBRUK_PROVTAGNING_ID)
         .configuration(
@@ -38,8 +37,8 @@ public class QuestionMissbrukProvtagning {
         .rules(
             List.of(
                 CertificateElementRuleFactory.show(
-                    QUESTION_MISSBRUK_JOURNALUPPGIFTER_ID,
-                    QUESTION_MISSBRUK_JOURNALUPPGIFTER_FIELD_ID
+                    parentElementId,
+                    parentFieldId
                 ),
                 CertificateElementRuleFactory.mandatory(
                     QUESTION_MISSBRUK_PROVTAGNING_ID,
@@ -51,10 +50,10 @@ public class QuestionMissbrukProvtagning {
             )
         )
         .shouldValidate(
-            ElementDataPredicateFactory.valueBoolean(QUESTION_MISSBRUK_JOURNALUPPGIFTER_ID)
+            ElementDataPredicateFactory.valueBoolean(parentElementId)
         )
         .mapping(
-            new ElementMapping(QUESTION_MISSBRUK_ID, null)
+            new ElementMapping(QUESTION_MISSBRUK_V1_ID, null)
         )
         .validations(
             List.of(

@@ -1,8 +1,8 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common;
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionHjartsjukdom.QUESTION_HJARTSJUKDOM_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionSynkopeV1.QUESTION_SYNKOPE_FIELD_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionSynkopeV1.QUESTION_SYNKOPE_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionSynkopeV1.QUESTION_SYNKOPE_FIELD_V1_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionSynkopeV1.QUESTION_SYNKOPE_V1_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextField;
@@ -37,8 +37,8 @@ public class QuestionSynkopeBeskrivning {
         .rules(
             List.of(
                 CertificateElementRuleFactory.show(
-                    QUESTION_SYNKOPE_ID,
-                    QUESTION_SYNKOPE_FIELD_ID
+                    QUESTION_SYNKOPE_V1_ID,
+                    QUESTION_SYNKOPE_FIELD_V1_ID
                 ),
                 CertificateElementRuleFactory.mandatory(
                     QUESTION_SYNKOPE_BESKRIVNING_ID,
@@ -50,7 +50,7 @@ public class QuestionSynkopeBeskrivning {
             )
         )
         .shouldValidate(
-            ElementDataPredicateFactory.valueBoolean(QUESTION_SYNKOPE_ID)
+            ElementDataPredicateFactory.valueBoolean(QUESTION_SYNKOPE_V1_ID)
         )
         .mapping(new ElementMapping(QUESTION_HJARTSJUKDOM_ID, null))
         .validations(

@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionMissbrukJournaluppgifter.QUESTION_MISSBRUK_JOURNALUPPGIFTER_FIELD_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionMissbrukJournaluppgifter.QUESTION_MISSBRUK_JOURNALUPPGIFTER_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionMissbrukJournaluppgifterV2.QUESTION_MISSBRUK_JOURNALUPPGIFTER_V2_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionMissbrukJournaluppgifterV2.QUESTION_MISSBRUK_JOURNALUPPGIFTER_V2_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
@@ -40,8 +40,8 @@ public class QuestionMissbrukJournaluppgifterBeskrivningV2 {
         .rules(
             List.of(
                 CertificateElementRuleFactory.show(
-                    QUESTION_MISSBRUK_JOURNALUPPGIFTER_ID,
-                    QUESTION_MISSBRUK_JOURNALUPPGIFTER_FIELD_ID
+                    QUESTION_MISSBRUK_JOURNALUPPGIFTER_V2_ID,
+                    QUESTION_MISSBRUK_JOURNALUPPGIFTER_V2_FIELD_ID
                 ),
                 CertificateElementRuleFactory.mandatory(
                     QUESTION_MISSBRUK_JOURNALUPPGIFTER_BESKRIVNING_V2_ID,
@@ -55,7 +55,7 @@ public class QuestionMissbrukJournaluppgifterBeskrivningV2 {
             )
         )
         .shouldValidate(
-            ElementDataPredicateFactory.valueBoolean(QUESTION_MISSBRUK_JOURNALUPPGIFTER_ID)
+            ElementDataPredicateFactory.valueBoolean(QUESTION_MISSBRUK_JOURNALUPPGIFTER_V2_ID)
         )
         .mapping(
             new ElementMapping(QuestionMissbrukV2.QUESTION_MISSBRUK_V2_ID, null)

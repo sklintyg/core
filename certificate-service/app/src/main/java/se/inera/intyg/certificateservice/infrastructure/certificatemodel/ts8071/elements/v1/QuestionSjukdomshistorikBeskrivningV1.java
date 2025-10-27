@@ -16,9 +16,9 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionSjukdomshistorikBeskrivningV1 {
 
-  public static final ElementId QUESTION_SJUKDOMSHISTORIK_BESKRIVNING_ID = new ElementId(
+  public static final ElementId QUESTION_SJUKDOMSHISTORIK_BESKRIVNING_V1_ID = new ElementId(
       "7.4");
-  public static final FieldId QUESTION_SJUKDOMSHISTORIK_BESKRIVNING_FIELD_ID = new FieldId(
+  public static final FieldId QUESTION_SJUKDOMSHISTORIK_BESKRIVNING_FIELD_V1_ID = new FieldId(
       "7.4");
 
   private QuestionSjukdomshistorikBeskrivningV1() {
@@ -27,10 +27,10 @@ public class QuestionSjukdomshistorikBeskrivningV1 {
 
   public static ElementSpecification questionSjukdomshistorikBeskrivningV1() {
     return ElementSpecification.builder()
-        .id(QUESTION_SJUKDOMSHISTORIK_BESKRIVNING_ID)
+        .id(QUESTION_SJUKDOMSHISTORIK_BESKRIVNING_V1_ID)
         .configuration(
             ElementConfigurationTextField.builder()
-                .id(QUESTION_SJUKDOMSHISTORIK_BESKRIVNING_FIELD_ID)
+                .id(QUESTION_SJUKDOMSHISTORIK_BESKRIVNING_FIELD_V1_ID)
                 .name("Ange vad")
                 .build()
         )
@@ -41,11 +41,11 @@ public class QuestionSjukdomshistorikBeskrivningV1 {
                     QUESTION_SJUKDOMSHISTORIK_FIELD_ID
                 ),
                 CertificateElementRuleFactory.mandatory(
-                    QUESTION_SJUKDOMSHISTORIK_BESKRIVNING_ID,
-                    QUESTION_SJUKDOMSHISTORIK_BESKRIVNING_FIELD_ID
+                    QUESTION_SJUKDOMSHISTORIK_BESKRIVNING_V1_ID,
+                    QUESTION_SJUKDOMSHISTORIK_BESKRIVNING_FIELD_V1_ID
                 ),
                 CertificateElementRuleFactory.limit(
-                    QUESTION_SJUKDOMSHISTORIK_BESKRIVNING_ID,
+                    QUESTION_SJUKDOMSHISTORIK_BESKRIVNING_V1_ID,
                     (short) 50)
             )
         )

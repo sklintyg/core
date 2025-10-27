@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionNeuropsykiatriskV1.QUESTION_NEUROPSYKIATRISK_FIELD_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionNeuropsykiatriskV1.QUESTION_NEUROPSYKIATRISK_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionNeuropsykiatriskV1.QUESTION_NEUROPSYKIATRISK_FIELD_V1_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionNeuropsykiatriskV1.QUESTION_NEUROPSYKIATRISK_V1_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
@@ -15,9 +15,9 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionNeuropsykiatriskLakemedelV1 {
 
-  public static final ElementId QUESTION_NEUROPSYKIATRISK_LAKEMEDEL_ID = new ElementId(
+  public static final ElementId QUESTION_NEUROPSYKIATRISK_LAKEMEDEL_V1_ID = new ElementId(
       "20.4");
-  public static final FieldId QUESTION_NEUROPSYKIATRISK_LAKEMEDEL_FIELD_ID = new FieldId(
+  public static final FieldId QUESTION_NEUROPSYKIATRISK_LAKEMEDEL_FIELD_V1_ID = new FieldId(
       "20.4");
 
   private QuestionNeuropsykiatriskLakemedelV1() {
@@ -27,10 +27,10 @@ public class QuestionNeuropsykiatriskLakemedelV1 {
   public static ElementSpecification questionNeuropsykiatriskLakemedelV1(
       ElementSpecification... children) {
     return ElementSpecification.builder()
-        .id(QUESTION_NEUROPSYKIATRISK_LAKEMEDEL_ID)
+        .id(QUESTION_NEUROPSYKIATRISK_LAKEMEDEL_V1_ID)
         .configuration(
             ElementConfigurationRadioBoolean.builder()
-                .id(QUESTION_NEUROPSYKIATRISK_LAKEMEDEL_FIELD_ID)
+                .id(QUESTION_NEUROPSYKIATRISK_LAKEMEDEL_FIELD_V1_ID)
                 .name("Har personen någon läkemedelsbehandling?")
                 .selectedText("Ja")
                 .unselectedText("Nej")
@@ -39,20 +39,20 @@ public class QuestionNeuropsykiatriskLakemedelV1 {
         .rules(
             List.of(
                 CertificateElementRuleFactory.show(
-                    QUESTION_NEUROPSYKIATRISK_ID,
-                    QUESTION_NEUROPSYKIATRISK_FIELD_ID
+                    QUESTION_NEUROPSYKIATRISK_V1_ID,
+                    QUESTION_NEUROPSYKIATRISK_FIELD_V1_ID
                 ),
                 CertificateElementRuleFactory.mandatoryExist(
-                    QUESTION_NEUROPSYKIATRISK_LAKEMEDEL_ID,
-                    QUESTION_NEUROPSYKIATRISK_LAKEMEDEL_FIELD_ID
+                    QUESTION_NEUROPSYKIATRISK_LAKEMEDEL_V1_ID,
+                    QUESTION_NEUROPSYKIATRISK_LAKEMEDEL_FIELD_V1_ID
                 )
             )
         )
         .shouldValidate(
-            ElementDataPredicateFactory.valueBoolean(QUESTION_NEUROPSYKIATRISK_ID)
+            ElementDataPredicateFactory.valueBoolean(QUESTION_NEUROPSYKIATRISK_V1_ID)
         )
         .mapping(
-            new ElementMapping(QUESTION_NEUROPSYKIATRISK_ID, null)
+            new ElementMapping(QUESTION_NEUROPSYKIATRISK_V1_ID, null)
         )
         .validations(
             List.of(

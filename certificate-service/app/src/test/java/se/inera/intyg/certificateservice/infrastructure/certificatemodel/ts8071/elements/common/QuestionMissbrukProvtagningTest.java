@@ -22,11 +22,14 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 
 class QuestionMissbrukProvtagningTest {
 
+  private static final ElementId PARENT_ELEMENT_ID = new ElementId("parent");
+  private static final FieldId PARENT_FIELD_ID = new FieldId("field");
   private static final ElementId ELEMENT_ID = new ElementId("18.5");
 
   @Test
   void shallIncludeId() {
-    final var element = QuestionMissbrukProvtagning.questionMissbrukProvtagning();
+    final var element = QuestionMissbrukProvtagning.questionMissbrukProvtagning(PARENT_ELEMENT_ID,
+        PARENT_FIELD_ID);
 
     assertEquals(ELEMENT_ID, element.id());
   }
@@ -39,7 +42,8 @@ class QuestionMissbrukProvtagningTest {
         .id(new FieldId("18.5"))
         .build();
 
-    final var element = QuestionMissbrukProvtagning.questionMissbrukProvtagning();
+    final var element = QuestionMissbrukProvtagning.questionMissbrukProvtagning(PARENT_ELEMENT_ID,
+        PARENT_FIELD_ID);
 
     assertEquals(expectedConfiguration, element.configuration());
   }
@@ -64,7 +68,8 @@ class QuestionMissbrukProvtagningTest {
             .build()
     );
 
-    final var element = QuestionMissbrukProvtagning.questionMissbrukProvtagning();
+    final var element = QuestionMissbrukProvtagning.questionMissbrukProvtagning(PARENT_ELEMENT_ID,
+        PARENT_FIELD_ID);
 
     assertEquals(expectedRules, element.rules());
   }
@@ -78,14 +83,16 @@ class QuestionMissbrukProvtagningTest {
             .build()
     );
 
-    final var element = QuestionMissbrukProvtagning.questionMissbrukProvtagning();
+    final var element = QuestionMissbrukProvtagning.questionMissbrukProvtagning(PARENT_ELEMENT_ID,
+        PARENT_FIELD_ID);
 
     assertEquals(expectedValidations, element.validations());
   }
 
   @Test
   void shallIncludeMapping() {
-    final var element = QuestionMissbrukProvtagning.questionMissbrukProvtagning();
+    final var element = QuestionMissbrukProvtagning.questionMissbrukProvtagning(PARENT_ELEMENT_ID,
+        PARENT_FIELD_ID);
 
     assertEquals(new ElementMapping(new ElementId("18"), null), element.mapping());
   }
@@ -106,7 +113,8 @@ class QuestionMissbrukProvtagningTest {
               .build()
       );
 
-      final var element = QuestionMissbrukProvtagning.questionMissbrukProvtagning();
+      final var element = QuestionMissbrukProvtagning.questionMissbrukProvtagning(PARENT_ELEMENT_ID,
+          PARENT_FIELD_ID);
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -126,7 +134,8 @@ class QuestionMissbrukProvtagningTest {
               .build()
       );
 
-      final var element = QuestionMissbrukProvtagning.questionMissbrukProvtagning();
+      final var element = QuestionMissbrukProvtagning.questionMissbrukProvtagning(PARENT_ELEMENT_ID,
+          PARENT_FIELD_ID);
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -146,7 +155,8 @@ class QuestionMissbrukProvtagningTest {
               .build()
       );
 
-      final var element = QuestionMissbrukProvtagning.questionMissbrukProvtagning();
+      final var element = QuestionMissbrukProvtagning.questionMissbrukProvtagning(PARENT_ELEMENT_ID,
+          PARENT_FIELD_ID);
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 

@@ -15,8 +15,8 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 
 public class QuestionSynkopeV1 {
 
-  public static final ElementId QUESTION_SYNKOPE_ID = new ElementId("11.7");
-  public static final FieldId QUESTION_SYNKOPE_FIELD_ID = new FieldId("11.7");
+  public static final ElementId QUESTION_SYNKOPE_V1_ID = new ElementId("11.7");
+  public static final FieldId QUESTION_SYNKOPE_FIELD_V1_ID = new FieldId("11.7");
 
   private QuestionSynkopeV1() {
     throw new IllegalStateException("Utility class");
@@ -25,10 +25,10 @@ public class QuestionSynkopeV1 {
   public static ElementSpecification questionSynkopeV1(
       ElementSpecification... children) {
     return ElementSpecification.builder()
-        .id(QUESTION_SYNKOPE_ID)
+        .id(QUESTION_SYNKOPE_V1_ID)
         .configuration(
             ElementConfigurationRadioBoolean.builder()
-                .id(QUESTION_SYNKOPE_FIELD_ID)
+                .id(QUESTION_SYNKOPE_FIELD_V1_ID)
                 .selectedText("Ja")
                 .unselectedText("Nej")
                 .name("Har personen eller har personen haft någon synkope?")
@@ -46,8 +46,8 @@ public class QuestionSynkopeV1 {
         .rules(
             List.of(
                 CertificateElementRuleFactory.mandatoryExist(
-                    QUESTION_SYNKOPE_ID,
-                    QUESTION_SYNKOPE_FIELD_ID
+                    QUESTION_SYNKOPE_V1_ID,
+                    QUESTION_SYNKOPE_FIELD_V1_ID
                 ),
                 CertificateElementRuleFactory.show(
                     QUESTION_HJARTSJUKDOM_ID,

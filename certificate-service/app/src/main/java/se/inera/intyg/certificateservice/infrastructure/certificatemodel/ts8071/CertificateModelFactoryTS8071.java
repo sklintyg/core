@@ -44,7 +44,6 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionMedicineringBeskrivning.questionMedicineringBeskrivning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionMedvetandestorning.questionMedvetandestorning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionMedvetandestorningTidpunkt.questionMedvetandestorningTidpunkt;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionMissbrukJournaluppgifter.questionMissbrukJournaluppgifter;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionMissbrukProvtagning.questionMissbrukProvtagning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionNjurfunktion.questionNjurfunktion;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionNjurtransplatation.questionNjurtransplatation;
@@ -85,6 +84,9 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionLakemedelV1.questionLakemedelV1;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukBeskrivningV1.questionMissbrukBeskrivningV1;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukJournaluppgifterBeskrivningV1.questionMissbrukJournaluppgifterBeskrivningV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukJournaluppgifterV1.QUESTION_MISSBRUK_JOURNALUPPGIFTER_V1_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukJournaluppgifterV1.QUESTION_MISSBRUK_JOURNALUPPGIFTER_V1_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukJournaluppgifterV1.questionMissbrukJournaluppgifterV1;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukV1.questionMissbrukV1;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukVardBeskrivningV1.questionMissbrukVardBeskrivningV1;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukVardV1.questionMissbrukVardV1;
@@ -295,9 +297,10 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
                     questionMissbrukV1(
                         questionMissbrukBeskrivningV1()
                     ),
-                    questionMissbrukJournaluppgifter(
+                    questionMissbrukJournaluppgifterV1(
                         questionMissbrukJournaluppgifterBeskrivningV1(),
-                        questionMissbrukProvtagning()
+                        questionMissbrukProvtagning(QUESTION_MISSBRUK_JOURNALUPPGIFTER_V1_ID,
+                            QUESTION_MISSBRUK_JOURNALUPPGIFTER_V1_FIELD_ID)
                     ),
                     questionMissbrukVardV1(
                         questionMissbrukVardBeskrivningV1()
