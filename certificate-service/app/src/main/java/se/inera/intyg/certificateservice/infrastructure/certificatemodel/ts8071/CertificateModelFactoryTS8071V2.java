@@ -205,7 +205,6 @@ public class CertificateModelFactoryTS8071V2 implements CertificateModelFactory 
                     questionSynskarpa(),
                     questionToleransKorrektionV2(
                         questionGlasogonStyrkaV2()
-
                     )
                 ),
                 categoryAnamnes(

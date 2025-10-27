@@ -28,7 +28,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpre
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 
-class QuestionPsykiskV1FunktionMotiveringTest {
+class QuestionPsykiskFunktionMotiveringTest {
 
   private static final ElementId ELEMENT_ID = new ElementId("11");
 

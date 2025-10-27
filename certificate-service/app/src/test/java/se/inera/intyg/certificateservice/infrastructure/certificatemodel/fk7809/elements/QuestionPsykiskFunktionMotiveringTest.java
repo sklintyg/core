@@ -1,11 +1,9 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.FK3221PdfSpecification.PDF_TEXT_FIELD_LENGTH;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk3221.elements.QuestionPsykiskFunktionMotivering.questionPsykiskFunktionMotivering;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.elements.QuestionFunktionsnedsattning.FUNKTIONSNEDSATTNING_PSYKISK_FUNKTION_ID;
 
 import java.util.List;
@@ -27,13 +25,13 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpre
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 
-class QuestionPsykiskV1FunktionMotiveringTest {
+class QuestionPsykiskFunktionMotiveringTest {
 
   private static final ElementId ELEMENT_ID = new ElementId("11");
 
   @Test
   void shallIncludeId() {
-    final var element = questionPsykiskFunktionMotivering();
+    final var element = QuestionPsykiskFunktionMotivering.questionPsykiskFunktionMotivering();
 
     assertEquals(ELEMENT_ID, element.id());
   }
@@ -43,18 +41,18 @@ class QuestionPsykiskV1FunktionMotiveringTest {
     final var expectedConfiguration = ElementConfigurationTextArea.builder()
         .name("Annan psykisk funktion")
         .label(
-            "Beskriv funktionsnedsättningen, om möjligt med grad. Ange även undersökningsfynd.")
+            "Beskriv funktionsnedsättningen, om möjligt med grad. Ange även eventuella undersökningsfynd.")
         .description(
             """
-                Med annan psykisk funktion menas exempelvis:
+                Med annan psykisk funktion menas exempelvis
                 <ul>
-                <li>stämningsläge, depressivitet, ångest och reglering av affekter</li><li>motivation, energinivå, impulskontroll och initiativförmåga</li><li>kognitiv flexibilitet, omdöme och insikt</li><li>minnesfunktioner</li><li>sömnfunktioner</li><li>vanföreställningar och tvångstankar</li><li>språklig funktion</li><li>orientering i tid samt till plats, situation och person.</li></ul>
+                <li>stämningsläge, depressivitet, ångest och reglering av affekter</li><li>motivation, energinivå, impulskontroll och initiativförmåga</li><li>kognitiv flexibilitet, omdöme och insikt</li><li>minnesfunktioner</li><li>sömnfunktioner</li><li>vanföreställningar och tvångstankar</li><li>psykiska språkfunktioner</li><li>orientering i tid samt till plats, situation och person.</li></ul>
                 """
         )
         .id(new FieldId("11.1"))
         .build();
 
-    final var element = questionPsykiskFunktionMotivering();
+    final var element = QuestionPsykiskFunktionMotivering.questionPsykiskFunktionMotivering();
 
     assertEquals(expectedConfiguration, element.configuration());
   }
@@ -79,7 +77,7 @@ class QuestionPsykiskV1FunktionMotiveringTest {
             .build()
     );
 
-    final var element = questionPsykiskFunktionMotivering();
+    final var element = QuestionPsykiskFunktionMotivering.questionPsykiskFunktionMotivering();
 
     assertEquals(expectedRules, element.rules());
   }
@@ -93,7 +91,7 @@ class QuestionPsykiskV1FunktionMotiveringTest {
             .build()
     );
 
-    final var element = questionPsykiskFunktionMotivering();
+    final var element = QuestionPsykiskFunktionMotivering.questionPsykiskFunktionMotivering();
 
     assertEquals(expectedValidations, element.validations());
   }
@@ -102,11 +100,11 @@ class QuestionPsykiskV1FunktionMotiveringTest {
   void shallIncludePdfConfiguration() {
     final var expected = PdfConfigurationText.builder()
         .pdfFieldId(new PdfFieldId("form1[0].#subform[1].flt_txtIntellektuellFunktion[3]"))
-        .maxLength(PDF_TEXT_FIELD_LENGTH * 4)
+        .maxLength(265)
         .overflowSheetFieldId(new PdfFieldId(("form1[0].#subform[4].flt_txtFortsattningsblad[0]")))
         .build();
 
-    final var element = questionPsykiskFunktionMotivering();
+    final var element = QuestionPsykiskFunktionMotivering.questionPsykiskFunktionMotivering();
 
     assertEquals(expected, element.pdfConfiguration());
   }
@@ -133,7 +131,7 @@ class QuestionPsykiskV1FunktionMotiveringTest {
               .build()
       );
 
-      final var element = questionPsykiskFunktionMotivering();
+      final var element = QuestionPsykiskFunktionMotivering.questionPsykiskFunktionMotivering();
 
       final var shouldValidate = element.shouldValidate();
 
@@ -159,7 +157,7 @@ class QuestionPsykiskV1FunktionMotiveringTest {
               .build()
       );
 
-      final var element = questionPsykiskFunktionMotivering();
+      final var element = QuestionPsykiskFunktionMotivering.questionPsykiskFunktionMotivering();
 
       final var shouldValidate = element.shouldValidate();
 
@@ -174,7 +172,7 @@ class QuestionPsykiskV1FunktionMotiveringTest {
         .fieldId(FUNKTIONSNEDSATTNING_PSYKISK_FUNKTION_ID)
         .build();
 
-    final var element = questionPsykiskFunktionMotivering();
+    final var element = QuestionPsykiskFunktionMotivering.questionPsykiskFunktionMotivering();
 
     assertEquals(element.visibilityConfiguration(), expectedVisibilityConfiguration);
   }
