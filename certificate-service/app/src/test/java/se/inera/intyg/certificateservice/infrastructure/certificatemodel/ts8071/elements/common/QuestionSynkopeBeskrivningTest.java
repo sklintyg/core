@@ -22,11 +22,14 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 
 class QuestionSynkopeBeskrivningTest {
 
+  private static final ElementId PARENT_ELEMENT_ID = new ElementId("parent");
+  private static final FieldId PARENT_FIELD_ID = new FieldId("field");
   private static final ElementId ELEMENT_ID = new ElementId("11.8");
 
   @Test
   void shallIncludeId() {
-    final var element = QuestionSynkopeBeskrivning.questionSynkopeBeskrivning();
+    final var element = QuestionSynkopeBeskrivning.questionSynkopeBeskrivning(PARENT_ELEMENT_ID,
+        PARENT_FIELD_ID);
 
     assertEquals(ELEMENT_ID, element.id());
   }
@@ -38,7 +41,8 @@ class QuestionSynkopeBeskrivningTest {
         .id(new FieldId("11.8"))
         .build();
 
-    final var element = QuestionSynkopeBeskrivning.questionSynkopeBeskrivning();
+    final var element = QuestionSynkopeBeskrivning.questionSynkopeBeskrivning(PARENT_ELEMENT_ID,
+        PARENT_FIELD_ID);
 
     assertEquals(expectedConfiguration, element.configuration());
   }
@@ -47,9 +51,9 @@ class QuestionSynkopeBeskrivningTest {
   void shallIncludeRules() {
     final var expectedRules = List.of(
         ElementRuleExpression.builder()
-            .id(new ElementId("11.7"))
+            .id(PARENT_ELEMENT_ID)
             .type(ElementRuleType.SHOW)
-            .expression(new RuleExpression("$11.7"))
+            .expression(new RuleExpression("$parent"))
             .build(),
         ElementRuleExpression.builder()
             .id(ELEMENT_ID)
@@ -63,7 +67,8 @@ class QuestionSynkopeBeskrivningTest {
             .build()
     );
 
-    final var element = QuestionSynkopeBeskrivning.questionSynkopeBeskrivning();
+    final var element = QuestionSynkopeBeskrivning.questionSynkopeBeskrivning(PARENT_ELEMENT_ID,
+        PARENT_FIELD_ID);
 
     assertEquals(expectedRules, element.rules());
   }
@@ -77,14 +82,16 @@ class QuestionSynkopeBeskrivningTest {
             .build()
     );
 
-    final var element = QuestionSynkopeBeskrivning.questionSynkopeBeskrivning();
+    final var element = QuestionSynkopeBeskrivning.questionSynkopeBeskrivning(PARENT_ELEMENT_ID,
+        PARENT_FIELD_ID);
 
     assertEquals(expectedValidations, element.validations());
   }
 
   @Test
   void shallIncludeMapping() {
-    final var element = QuestionSynkopeBeskrivning.questionSynkopeBeskrivning();
+    final var element = QuestionSynkopeBeskrivning.questionSynkopeBeskrivning(PARENT_ELEMENT_ID,
+        PARENT_FIELD_ID);
 
     assertEquals(new ElementMapping(new ElementId("11"), null), element.mapping());
   }
@@ -96,7 +103,7 @@ class QuestionSynkopeBeskrivningTest {
     void shallReturnTrueIfBooleanIsTrue() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("11.7"))
+              .id(PARENT_ELEMENT_ID)
               .value(
                   ElementValueBoolean.builder()
                       .value(true)
@@ -105,7 +112,8 @@ class QuestionSynkopeBeskrivningTest {
               .build()
       );
 
-      final var element = QuestionSynkopeBeskrivning.questionSynkopeBeskrivning();
+      final var element = QuestionSynkopeBeskrivning.questionSynkopeBeskrivning(PARENT_ELEMENT_ID,
+          PARENT_FIELD_ID);
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -125,7 +133,8 @@ class QuestionSynkopeBeskrivningTest {
               .build()
       );
 
-      final var element = QuestionSynkopeBeskrivning.questionSynkopeBeskrivning();
+      final var element = QuestionSynkopeBeskrivning.questionSynkopeBeskrivning(PARENT_ELEMENT_ID,
+          PARENT_FIELD_ID);
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -136,7 +145,7 @@ class QuestionSynkopeBeskrivningTest {
     void shallReturnFalseIfElementFalse() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("11.7"))
+              .id(PARENT_ELEMENT_ID)
               .value(
                   ElementValueBoolean.builder()
                       .value(false)
@@ -145,7 +154,8 @@ class QuestionSynkopeBeskrivningTest {
               .build()
       );
 
-      final var element = QuestionSynkopeBeskrivning.questionSynkopeBeskrivning();
+      final var element = QuestionSynkopeBeskrivning.questionSynkopeBeskrivning(PARENT_ELEMENT_ID,
+          PARENT_FIELD_ID);
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 

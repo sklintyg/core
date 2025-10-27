@@ -105,6 +105,8 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionPsykiskV1.questionPsykiskV1;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionSjukdomshistorikBeskrivningV1.questionSjukdomshistorikBeskrivningV1;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionStrokePaverkanV1.questionStrokePaverkanV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionSynkopeV1.QUESTION_SYNKOPE_FIELD_V1_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionSynkopeV1.QUESTION_SYNKOPE_V1_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionSynkopeV1.questionSynkopeV1;
 
 import java.time.LocalDateTime;
@@ -247,7 +249,8 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
                         questionArytmiBeskrivning()
                     ),
                     questionSynkopeV1(
-                        questionSynkopeBeskrivning()
+                        questionSynkopeBeskrivning(QUESTION_SYNKOPE_V1_ID,
+                            QUESTION_SYNKOPE_FIELD_V1_ID)
                     ),
                     questionStroke(
                         questionStrokePaverkanV1()
