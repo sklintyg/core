@@ -24,7 +24,7 @@ public class QuestionNeurologiskSjukdomBeskrivningV1 {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionNeurologiskSjukdomBeskrivning() {
+  public static ElementSpecification questionNeurologiskSjukdomBeskrivningV1() {
     return ElementSpecification.builder()
         .id(QUESTION_NEUROLOGISK_SJUKDOM_BESKRIVNING_V1_ID)
         .configuration(

@@ -90,7 +90,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukV1.questionMissbrukV1;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukVardBeskrivningV1.questionMissbrukVardBeskrivningV1;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukVardV1.questionMissbrukVardV1;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionNeurologiskSjukdomBeskrivningV1.questionNeurologiskSjukdomBeskrivning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionNeurologiskSjukdomBeskrivningV1.questionNeurologiskSjukdomBeskrivningV1;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionNeurologiskSjukdomV1.questionNeurologiskSjukdomV1;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionNeuropsykiatriskLakemedelBeskrivningV1.questionNeuropsykiatriskLakemedelBeskrivningV1;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionNeuropsykiatriskLakemedelV1.questionNeuropsykiatriskLakemedelV1;
@@ -262,7 +262,7 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
                 ),
                 categoryNeurologiskaSjukdomar(
                     questionNeurologiskSjukdomV1(
-                        questionNeurologiskSjukdomBeskrivning()
+                        questionNeurologiskSjukdomBeskrivningV1()
                     )
                 ),
                 categoryEpilepsi(
