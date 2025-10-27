@@ -25,8 +25,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
-import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessConfiguration;
-import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessUnitConfiguration;
+import se.inera.intyg.certificateservice.domain.configuration.unitaccess.dto.CertificateAccessConfiguration;
+import se.inera.intyg.certificateservice.domain.configuration.unitaccess.dto.CertificateAccessUnitConfiguration;
 
 @ExtendWith(MockitoExtension.class)
 class ActionRuleCertificateTypeActiveForUnitTest {
@@ -81,7 +81,7 @@ class ActionRuleCertificateTypeActiveForUnitTest {
   @Test
   void shallReturnTrueIfNoConfigurationForTypeExists() {
     doReturn(Collections.emptyList()).when(certificateActionConfigurationRepository)
-        .find(CERTIFICATE_TYPE);
+        .findAccessConfiguration(CERTIFICATE_TYPE);
     final var result = actionRuleCertificateTypeActiveForUnit.evaluate(Optional.of(certificate),
         Optional.of(actionEvaluation));
 
@@ -116,7 +116,7 @@ class ActionRuleCertificateTypeActiveForUnitTest {
       );
 
       doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
-          .find(CERTIFICATE_TYPE);
+          .findAccessConfiguration(CERTIFICATE_TYPE);
 
       final var result = actionRuleCertificateTypeActiveForUnit.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -149,7 +149,7 @@ class ActionRuleCertificateTypeActiveForUnitTest {
       );
 
       doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
-          .find(CERTIFICATE_TYPE);
+          .findAccessConfiguration(CERTIFICATE_TYPE);
 
       final var result = actionRuleCertificateTypeActiveForUnit.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -184,7 +184,7 @@ class ActionRuleCertificateTypeActiveForUnitTest {
       );
 
       doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
-          .find(CERTIFICATE_TYPE);
+          .findAccessConfiguration(CERTIFICATE_TYPE);
 
       final var result = actionRuleCertificateTypeActiveForUnit.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -218,7 +218,7 @@ class ActionRuleCertificateTypeActiveForUnitTest {
       );
 
       doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
-          .find(CERTIFICATE_TYPE);
+          .findAccessConfiguration(CERTIFICATE_TYPE);
 
       final var result = actionRuleCertificateTypeActiveForUnit.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -252,7 +252,7 @@ class ActionRuleCertificateTypeActiveForUnitTest {
       );
 
       doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
-          .find(CERTIFICATE_TYPE);
+          .findAccessConfiguration(CERTIFICATE_TYPE);
 
       final var result = actionRuleCertificateTypeActiveForUnit.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -286,7 +286,7 @@ class ActionRuleCertificateTypeActiveForUnitTest {
       );
 
       doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
-          .find(CERTIFICATE_TYPE);
+          .findAccessConfiguration(CERTIFICATE_TYPE);
 
       final var result = actionRuleCertificateTypeActiveForUnit.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -320,7 +320,7 @@ class ActionRuleCertificateTypeActiveForUnitTest {
       );
 
       doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
-          .find(CERTIFICATE_TYPE);
+          .findAccessConfiguration(CERTIFICATE_TYPE);
 
       final var result = actionRuleCertificateTypeActiveForUnit.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -354,7 +354,7 @@ class ActionRuleCertificateTypeActiveForUnitTest {
       );
 
       doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
-          .find(CERTIFICATE_TYPE);
+          .findAccessConfiguration(CERTIFICATE_TYPE);
 
       final var result = actionRuleCertificateTypeActiveForUnit.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -388,7 +388,7 @@ class ActionRuleCertificateTypeActiveForUnitTest {
       );
 
       doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
-          .find(CERTIFICATE_TYPE);
+          .findAccessConfiguration(CERTIFICATE_TYPE);
 
       final var result = actionRuleCertificateTypeActiveForUnit.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -422,7 +422,7 @@ class ActionRuleCertificateTypeActiveForUnitTest {
       );
 
       doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
-          .find(CERTIFICATE_TYPE);
+          .findAccessConfiguration(CERTIFICATE_TYPE);
 
       final var result = actionRuleCertificateTypeActiveForUnit.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -460,7 +460,7 @@ class ActionRuleCertificateTypeActiveForUnitTest {
       );
 
       doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
-          .find(CERTIFICATE_TYPE);
+          .findAccessConfiguration(CERTIFICATE_TYPE);
 
       final var result = actionRuleCertificateTypeActiveForUnit.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -494,7 +494,7 @@ class ActionRuleCertificateTypeActiveForUnitTest {
       );
 
       doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
-          .find(CERTIFICATE_TYPE);
+          .findAccessConfiguration(CERTIFICATE_TYPE);
 
       final var result = actionRuleCertificateTypeActiveForUnit.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -529,7 +529,7 @@ class ActionRuleCertificateTypeActiveForUnitTest {
       );
 
       doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
-          .find(CERTIFICATE_TYPE);
+          .findAccessConfiguration(CERTIFICATE_TYPE);
 
       final var result = actionRuleCertificateTypeActiveForUnit.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -563,7 +563,7 @@ class ActionRuleCertificateTypeActiveForUnitTest {
       );
 
       doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
-          .find(CERTIFICATE_TYPE);
+          .findAccessConfiguration(CERTIFICATE_TYPE);
 
       final var result = actionRuleCertificateTypeActiveForUnit.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -597,7 +597,7 @@ class ActionRuleCertificateTypeActiveForUnitTest {
       );
 
       doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
-          .find(CERTIFICATE_TYPE);
+          .findAccessConfiguration(CERTIFICATE_TYPE);
 
       final var result = actionRuleCertificateTypeActiveForUnit.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -631,7 +631,7 @@ class ActionRuleCertificateTypeActiveForUnitTest {
       );
 
       doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
-          .find(CERTIFICATE_TYPE);
+          .findAccessConfiguration(CERTIFICATE_TYPE);
 
       final var result = actionRuleCertificateTypeActiveForUnit.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -665,7 +665,7 @@ class ActionRuleCertificateTypeActiveForUnitTest {
       );
 
       doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
-          .find(CERTIFICATE_TYPE);
+          .findAccessConfiguration(CERTIFICATE_TYPE);
 
       final var result = actionRuleCertificateTypeActiveForUnit.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -699,7 +699,7 @@ class ActionRuleCertificateTypeActiveForUnitTest {
       );
 
       doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
-          .find(CERTIFICATE_TYPE);
+          .findAccessConfiguration(CERTIFICATE_TYPE);
 
       final var result = actionRuleCertificateTypeActiveForUnit.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -733,7 +733,7 @@ class ActionRuleCertificateTypeActiveForUnitTest {
       );
 
       doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
-          .find(CERTIFICATE_TYPE);
+          .findAccessConfiguration(CERTIFICATE_TYPE);
 
       final var result = actionRuleCertificateTypeActiveForUnit.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -772,7 +772,7 @@ class ActionRuleCertificateTypeActiveForUnitTest {
       );
 
       doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
-          .find(CERTIFICATE_TYPE);
+          .findAccessConfiguration(CERTIFICATE_TYPE);
 
       final var result = actionRuleCertificateTypeActiveForUnit.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -816,7 +816,7 @@ class ActionRuleCertificateTypeActiveForUnitTest {
       );
 
       doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
-          .find(CERTIFICATE_TYPE);
+          .findAccessConfiguration(CERTIFICATE_TYPE);
 
       final var result = actionRuleCertificateTypeActiveForUnit.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -856,7 +856,7 @@ class ActionRuleCertificateTypeActiveForUnitTest {
       );
 
       doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
-          .find(CERTIFICATE_TYPE);
+          .findAccessConfiguration(CERTIFICATE_TYPE);
 
       final var result = actionRuleCertificateTypeActiveForUnit.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -897,7 +897,7 @@ class ActionRuleCertificateTypeActiveForUnitTest {
       );
 
       doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
-          .find(CERTIFICATE_TYPE);
+          .findAccessConfiguration(CERTIFICATE_TYPE);
 
       final var result = actionRuleCertificateTypeActiveForUnit.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -937,7 +937,7 @@ class ActionRuleCertificateTypeActiveForUnitTest {
       );
 
       doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
-          .find(CERTIFICATE_TYPE);
+          .findAccessConfiguration(CERTIFICATE_TYPE);
 
       final var result = actionRuleCertificateTypeActiveForUnit.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -977,7 +977,7 @@ class ActionRuleCertificateTypeActiveForUnitTest {
       );
 
       doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
-          .find(CERTIFICATE_TYPE);
+          .findAccessConfiguration(CERTIFICATE_TYPE);
 
       final var result = actionRuleCertificateTypeActiveForUnit.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -1017,7 +1017,7 @@ class ActionRuleCertificateTypeActiveForUnitTest {
       );
 
       doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
-          .find(CERTIFICATE_TYPE);
+          .findAccessConfiguration(CERTIFICATE_TYPE);
 
       final var result = actionRuleCertificateTypeActiveForUnit.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));
@@ -1057,7 +1057,7 @@ class ActionRuleCertificateTypeActiveForUnitTest {
       );
 
       doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
-          .find(CERTIFICATE_TYPE);
+          .findAccessConfiguration(CERTIFICATE_TYPE);
 
       final var result = actionRuleCertificateTypeActiveForUnit.evaluate(Optional.of(certificate),
           Optional.of(actionEvaluation));

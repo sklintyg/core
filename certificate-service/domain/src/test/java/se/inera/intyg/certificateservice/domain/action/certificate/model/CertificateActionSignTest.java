@@ -41,8 +41,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.repository.Cert
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
-import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessConfiguration;
-import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessUnitConfiguration;
+import se.inera.intyg.certificateservice.domain.configuration.unitaccess.dto.CertificateAccessConfiguration;
+import se.inera.intyg.certificateservice.domain.configuration.unitaccess.dto.CertificateAccessUnitConfiguration;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateActionSignTest {
@@ -296,7 +296,7 @@ class CertificateActionSignTest {
     @BeforeEach
     void setUp() {
       doReturn(Collections.emptyList()).when(certificateActionConfigurationRepository)
-          .find(CERTIFICATE_TYPE);
+          .findAccessConfiguration(CERTIFICATE_TYPE);
       certificateActionSign = (CertificateActionSign) certificateActionFactory.create(
           CERTIFICATE_ACTION_SPECIFICATION);
       certificateBuilder = MedicalCertificate.builder()
@@ -550,7 +550,7 @@ class CertificateActionSignTest {
               .build()
       );
       doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
-          .find(CERTIFICATE_TYPE);
+          .findAccessConfiguration(CERTIFICATE_TYPE);
       final var certificateActionSign = (CertificateActionSign) certificateActionFactory.create(
           CERTIFICATE_ACTION_SPECIFICATION
       );
@@ -583,7 +583,7 @@ class CertificateActionSignTest {
               .build()
       );
       doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
-          .find(CERTIFICATE_TYPE);
+          .findAccessConfiguration(CERTIFICATE_TYPE);
       final var certificateActionSign = (CertificateActionSign) certificateActionFactory.create(
           CERTIFICATE_ACTION_SPECIFICATION
       );

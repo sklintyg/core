@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.domain.unitaccess.dto;
+package se.inera.intyg.certificateservice.domain.configuration.unitaccess.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import java.util.List;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessConfiguration.CertificateAccessConfigurationBuilder;
+import se.inera.intyg.certificateservice.domain.configuration.unitaccess.dto.CertificateAccessConfiguration.CertificateAccessConfigurationBuilder;
 
 @JsonInclude
 @JsonDeserialize(builder = CertificateAccessConfigurationBuilder.class)

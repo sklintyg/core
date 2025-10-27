@@ -37,11 +37,11 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
+import se.inera.intyg.certificateservice.domain.configuration.unitaccess.dto.CertificateAccessConfiguration;
+import se.inera.intyg.certificateservice.domain.configuration.unitaccess.dto.CertificateAccessUnitConfiguration;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
-import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessConfiguration;
-import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessUnitConfiguration;
 
 @ExtendWith(MockitoExtension.class)
 class CreateCertificateDomainServiceTest {
@@ -79,7 +79,7 @@ class CreateCertificateDomainServiceTest {
     void setUp() {
       doReturn(CERTIFICATE_MODEL_ID).when(certificateModel).id();
       doReturn(Collections.emptyList()).when(certificateActionConfigurationRepository)
-          .find(CERTIFICATE_MODEL_ID.type());
+          .findAccessConfiguration(CERTIFICATE_MODEL_ID.type());
       doReturn(certificateModel).when(certificateModelRepository).getById(CERTIFICATE_MODEL_ID);
       doReturn(certificate).when(certificateRepository).create(certificateModel);
       doReturn(true).when(certificateModel)
@@ -200,7 +200,7 @@ class CreateCertificateDomainServiceTest {
         );
         doReturn(CERTIFICATE_MODEL_ID).when(certificateModel).id();
         doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
-            .find(CERTIFICATE_MODEL_ID.type());
+            .findAccessConfiguration(CERTIFICATE_MODEL_ID.type());
         doReturn(certificateModel).when(certificateModelRepository).getById(CERTIFICATE_MODEL_ID);
         doReturn(true).when(certificateModel)
             .allowTo(CertificateActionType.CREATE, Optional.of(ACTION_EVALUATION));

@@ -23,8 +23,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
-import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessConfiguration;
-import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessUnitConfiguration;
+import se.inera.intyg.certificateservice.domain.configuration.unitaccess.dto.CertificateAccessConfiguration;
+import se.inera.intyg.certificateservice.domain.configuration.unitaccess.dto.CertificateAccessUnitConfiguration;
 
 @ExtendWith(MockitoExtension.class)
 class ListAvailableCertificateModelsDomainServiceTest {
@@ -115,9 +115,9 @@ class ListAvailableCertificateModelsDomainServiceTest {
     );
 
     doReturn(Collections.emptyList()).when(certificateActionConfigurationRepository)
-        .find(CERTIFICATE_TYPE_1);
+        .findAccessConfiguration(CERTIFICATE_TYPE_1);
     doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
-        .find(CERTIFICATE_TYPE_2);
+        .findAccessConfiguration(CERTIFICATE_TYPE_2);
 
     final var actualCertificateModels = listAvailableCertificateModelsDomainService.get(
         actionEvaluation);
