@@ -30,13 +30,14 @@ class HeaderTest {
   private static final byte[] RECIPIENT_LOGO = "recipientLogo".getBytes();
   private static final String PERSON_ID = "personId";
   private static final String RECIPIENT_NAME = "recipientName";
-  private static final String TYPE_VERSION_TEXT = "(%s v%s)";
+  private static final String TYPE_VERSION_TEXT = "(%s)";
   private static final String DRAFT_ALERT_MESSAGE = "Detta är en utskrift av ett elektroniskt intygsutkast och ska INTE skickas till %s.";
   private static final String SENT_ALERT_MESSAGE = "Detta är en utskrift av ett elektroniskt intyg. Intyget har signerats elektroniskt av intygsutfärdaren. Notera att intyget redan har skickats till %s.";
   private static final String SIGNED_ALERT_MESSAGE = "Detta är en utskrift av ett elektroniskt intyg. Intyget har signerats elektroniskt av intygsutfärdaren.";
-  private static final String LEFT_MARGIN_TEXT = "%s - Fastställd av %s";
+  private static final String LEFT_MARGIN_TEXT = "%s %s %s - Fastställd av %s";
   private static final String CERTIFICATE_ID = "certificateId";
   private static final String RIGHT_MARGIN_TEXT = "Intygs-ID: %s";
+  private static final String RECIPIENT_ID = "recipientId";
 
   private final Header.HeaderBuilder headerBuilder = Header.builder()
       .certificateName(CERTIFICATE_NAME)
@@ -46,8 +47,10 @@ class HeaderTest {
       .recipientLogo(RECIPIENT_LOGO)
       .recipientName(RECIPIENT_NAME)
       .leftMarginInfo(LeftMarginInfo.builder()
-          .certificateType(CERTIFICATE_TYPE).
-          recipientName(RECIPIENT_NAME)
+          .certificateType(CERTIFICATE_TYPE)
+          .recipientName(RECIPIENT_NAME)
+          .recipientId(RECIPIENT_ID)
+          .certificateVersion(CERTIFICATE_VERSION)
           .build())
       .rightMarginInfo(RightMarginInfo.builder().certificateId(CERTIFICATE_ID).build())
       .watermark(Watermark.builder().build());
@@ -245,8 +248,7 @@ class HeaderTest {
 
             @Test
             void certificateType() throws NullPointerException {
-              final var expectedText = TYPE_VERSION_TEXT.formatted(CERTIFICATE_TYPE,
-                  CERTIFICATE_VERSION);
+              final var expectedText = TYPE_VERSION_TEXT.formatted(CERTIFICATE_TYPE);
               final var header = headerBuilder.isDraft(true).isSent(false).build();
               final var element = header.create().child(0).child(1).child(0).child(1);
               assertAll(
@@ -398,7 +400,9 @@ class HeaderTest {
     @Nested
     class LeftMarginInfo {
 
-      String expectedText = LEFT_MARGIN_TEXT.formatted(CERTIFICATE_TYPE, RECIPIENT_NAME);
+      String expectedText = LEFT_MARGIN_TEXT.formatted(RECIPIENT_ID, CERTIFICATE_TYPE,
+          CERTIFICATE_VERSION,
+          RECIPIENT_NAME);
 
       @Test
       void leftMarginInfoDraft() {
