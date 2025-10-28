@@ -53,7 +53,7 @@ class QuestionDiagnosTest {
         .terminology(
             List.of(
                 new ElementDiagnosisTerminology("ICD_10_SE", "ICD-10-SE", "1.2.752.116.1.1.1",
-                    List.of("1.2.752.116.1.1.1", "1.2.752.116.1.1.1.1.8", "1.2.752.116.1.1.1.1.3"))
+                    List.of("1.2.752.116.1.1.1.1.8", "1.2.752.116.1.1.1.1.3"))
             )
         )
         .list(

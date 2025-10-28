@@ -25,8 +25,10 @@ public class CodeSystemIcd10Se {
         DIAGNOS_ICD_10_ID,
         DIAGNOS_ICD_10_LABEL,
         DEPRECATED_ICD_10_SE_CODE_SYSTEM,
-        acceptedCodeSystemOids()
-    );
+        List.of(
+            ICD_10_SE_CODE_SYSTEM,
+            DEPRECATED_LEGACY_ICD_10_SE_CODE_SYSTEM
+        ));
   }
 
   public static ElementDiagnosisTerminology terminology() {
@@ -34,15 +36,10 @@ public class CodeSystemIcd10Se {
         DIAGNOS_ICD_10_ID,
         DIAGNOS_ICD_10_LABEL,
         ICD_10_SE_CODE_SYSTEM,
-        acceptedCodeSystemOids()
-    );
-  }
-
-  public static List<String> acceptedCodeSystemOids() {
-    return List.of(
-        ICD_10_SE_CODE_SYSTEM,
-        DEPRECATED_ICD_10_SE_CODE_SYSTEM,
-        DEPRECATED_LEGACY_ICD_10_SE_CODE_SYSTEM
+        List.of(
+            DEPRECATED_ICD_10_SE_CODE_SYSTEM,
+            DEPRECATED_LEGACY_ICD_10_SE_CODE_SYSTEM
+        )
     );
   }
 }
