@@ -78,7 +78,7 @@ public class TestDataCertificateModel {
         .schematronPath(FK7210_SCHEMATRON_PATH)
         .recipient(FK_RECIPIENT)
         .pdfSpecification(FK7210_PDF_SPECIFICATION)
-        .certificateActionFactory(new CertificateActionFactory(null, null));
+        .certificateActionFactory(new CertificateActionFactory(null));
   }
 
   public static CertificateModel.CertificateModelBuilder fk3226certificateModelBuilder() {
@@ -96,7 +96,7 @@ public class TestDataCertificateModel {
         .schematronPath(FK3226_SCHEMATRON_PATH)
         .recipient(FK_RECIPIENT)
         .pdfSpecification(FK3226_PDF_SPECIFICATION)
-        .certificateActionFactory(new CertificateActionFactory(null, null));
+        .certificateActionFactory(new CertificateActionFactory(null));
   }
 
 
@@ -115,7 +115,7 @@ public class TestDataCertificateModel {
         .schematronPath(FK7472_SCHEMATRON_PATH)
         .recipient(FK_RECIPIENT)
         .pdfSpecification(FK7472_PDF_SPECIFICATION)
-        .certificateActionFactory(new CertificateActionFactory(null, null));
+        .certificateActionFactory(new CertificateActionFactory(null));
   }
 
   public static CertificateModel.CertificateModelBuilder fk7809certificateModelBuilder() {
@@ -133,7 +133,7 @@ public class TestDataCertificateModel {
         .schematronPath(FK7809_SCHEMATRON_PATH)
         .pdfSpecification(FK7809_PDF_SPECIFICATION)
         .recipient(FK_RECIPIENT)
-        .certificateActionFactory(new CertificateActionFactory(null, null));
+        .certificateActionFactory(new CertificateActionFactory(null));
   }
 
   public static CertificateModel.CertificateModelBuilder fk7427certificateModelBuilder() {
@@ -149,7 +149,7 @@ public class TestDataCertificateModel {
         .type(FK7427_CODE_TYPE)
         .availableForCitizen(false)
         .recipient(FK_RECIPIENT)
-        .certificateActionFactory(new CertificateActionFactory(null, null));
+        .certificateActionFactory(new CertificateActionFactory(null));
   }
 
   public static CertificateModel.CertificateModelBuilder fk7426certificateModelBuilder() {
@@ -166,7 +166,7 @@ public class TestDataCertificateModel {
         .availableForCitizen(false)
         .schematronPath(TestDataCertificateModelConstants.FK7426_SCHEMATRON_PATH)
         .recipient(TestDataCertificateModelConstants.FK_RECIPIENT)
-        .certificateActionFactory(new CertificateActionFactory(null, null));
+        .certificateActionFactory(new CertificateActionFactory(null));
   }
 
   public static CertificateModel.CertificateModelBuilder fk3221certificateModelBuilder() {
@@ -183,7 +183,7 @@ public class TestDataCertificateModel {
         .availableForCitizen(false)
         .schematronPath(TestDataCertificateModelConstants.FK3221_SCHEMATRON_PATH)
         .recipient(TestDataCertificateModelConstants.FK_RECIPIENT)
-        .certificateActionFactory(new CertificateActionFactory(null, null));
+        .certificateActionFactory(new CertificateActionFactory(null));
   }
 
   public static CertificateModel.CertificateModelBuilder fk7810certificateModelBuilder() {
@@ -200,7 +200,7 @@ public class TestDataCertificateModel {
         .availableForCitizen(true)
         .schematronPath(TestDataCertificateModelConstants.FK7810_SCHEMATRON_PATH)
         .recipient(TestDataCertificateModelConstants.FK_RECIPIENT)
-        .certificateActionFactory(new CertificateActionFactory(null, null))
+        .certificateActionFactory(new CertificateActionFactory(null))
         .messageTypes(
             List.of(
                 CertificateMessageType.builder()
@@ -220,7 +220,7 @@ public class TestDataCertificateModel {
         .availableForCitizen(true)
         .schematronPath(TestDataCertificateModelConstants.FK7804_SCHEMATRON_PATH)
         .recipient(TestDataCertificateModelConstants.FK_RECIPIENT)
-        .certificateActionFactory(new CertificateActionFactory(null, null));
+        .certificateActionFactory(new CertificateActionFactory(null));
   }
 
   public static CertificateModel.CertificateModelBuilder ag7804certificateModelBuilder() {
@@ -255,7 +255,7 @@ public class TestDataCertificateModel {
                     .build()
             )
         )
-        .certificateActionFactory(new CertificateActionFactory(null, null));
+        .certificateActionFactory(new CertificateActionFactory(null));
   }
 
   public static CertificateModel.CertificateModelBuilder ag114certificateModelBuilder() {
@@ -271,6 +271,6 @@ public class TestDataCertificateModel {
         .type(TestDataCertificateModelConstants.AG114_CODE_TYPE)
         .availableForCitizen(true)
         .recipient(TestDataCertificateModelConstants.SKR_RECIPIENT)
-        .certificateActionFactory(new CertificateActionFactory(null, null));
+        .certificateActionFactory(new CertificateActionFactory(null));
   }
 }
