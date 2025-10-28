@@ -20,6 +20,8 @@ public class GetSickLeaveCertificatesInternalRequest {
   LocalDate signedTo;
   @Builder.Default
   List<String> issuedByUnitIds = List.of();
+  @Builder.Default
+  List<String> issuedByStaffIds = List.of();
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class GetSickLeaveCertificatesInternalRequestBuilder {
