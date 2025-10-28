@@ -93,7 +93,8 @@ class XmlGeneratorUnifiedDiagnosisListTest {
                   .id(new FieldId(FIELD_ID))
                   .terminology(
                       List.of(
-                          new ElementDiagnosisTerminology(ICD_10_SE, "label", CODE_SYSTEM)
+                          new ElementDiagnosisTerminology(ICD_10_SE, "label", CODE_SYSTEM,
+                              List.of())
                       )
                   )
                   .build()
@@ -159,7 +160,7 @@ class XmlGeneratorUnifiedDiagnosisListTest {
 
     @Test
     void shallExcludeDescriptionIfMissingDiagnosisCodeInRepository() {
-      final var data = ElementData.builder()
+      final var elementData = ElementData.builder()
           .id(new ElementId(QUESTION_ID))
           .value(
               ElementValueDiagnosisList.builder()
@@ -177,7 +178,7 @@ class XmlGeneratorUnifiedDiagnosisListTest {
           )
           .build();
 
-      final var response = xmlGenerator.generate(data, elementSpecification);
+      final var response = xmlGenerator.generate(elementData, elementSpecification);
 
       final var delsvar = response.getFirst().getDelsvar();
       final var delsvarCode = response.getFirst().getDelsvar().getLast();
@@ -230,7 +231,8 @@ class XmlGeneratorUnifiedDiagnosisListTest {
                   .id(new FieldId(FIELD_ID))
                   .terminology(
                       List.of(
-                          new ElementDiagnosisTerminology(ICD_10_SE, "label", CODE_SYSTEM)
+                          new ElementDiagnosisTerminology(ICD_10_SE, "label", CODE_SYSTEM,
+                              List.of())
                       )
                   )
                   .build()
@@ -315,7 +317,7 @@ class XmlGeneratorUnifiedDiagnosisListTest {
     @Test
     void shallMapEmptyIfNoValue() {
 
-      final var data = ElementData.builder()
+      final var elementData = ElementData.builder()
           .id(new ElementId(QUESTION_ID))
           .value(
               ElementValueDiagnosis.builder()
@@ -324,14 +326,14 @@ class XmlGeneratorUnifiedDiagnosisListTest {
           )
           .build();
 
-      final var response = xmlGenerator.generate(data, elementSpecification);
+      final var response = xmlGenerator.generate(elementData, elementSpecification);
 
       assertTrue(response.isEmpty());
     }
 
     @Test
     void shallThrowIfIncorrectConfiguration() {
-      final var data = ElementData.builder()
+      final var elementData = ElementData.builder()
           .id(new ElementId(QUESTION_ID))
           .value(
               ElementValueDiagnosisList.builder()
@@ -355,13 +357,13 @@ class XmlGeneratorUnifiedDiagnosisListTest {
           .build();
 
       assertThrows(IllegalArgumentException.class,
-          () -> xmlGenerator.generate(data, elementSpecification)
+          () -> xmlGenerator.generate(elementData, elementSpecification)
       );
     }
 
     @Test
     void shallMapEmptyIfValueIsNotDiagnosis() {
-      final var data = ElementData.builder()
+      final var elementData = ElementData.builder()
           .id(new ElementId(QUESTION_ID))
           .value(
               ElementValueUnitContactInformation.builder()
@@ -369,7 +371,7 @@ class XmlGeneratorUnifiedDiagnosisListTest {
           )
           .build();
 
-      final var response = xmlGenerator.generate(data, elementSpecification);
+      final var response = xmlGenerator.generate(elementData, elementSpecification);
 
       assertTrue(response.isEmpty());
     }
@@ -381,7 +383,7 @@ class XmlGeneratorUnifiedDiagnosisListTest {
               ElementConfigurationDiagnosis.builder().build()
           )
           .build();
-      final var data = ElementData.builder()
+      final var elementData = ElementData.builder()
           .id(new ElementId(QUESTION_ID))
           .value(
               ElementValueDiagnosisList.builder()
@@ -390,7 +392,7 @@ class XmlGeneratorUnifiedDiagnosisListTest {
           )
           .build();
 
-      final var response = xmlGenerator.generate(data, elementSpecification);
+      final var response = xmlGenerator.generate(elementData, elementSpecification);
 
       assertTrue(response.isEmpty());
     }
@@ -402,7 +404,7 @@ class XmlGeneratorUnifiedDiagnosisListTest {
               ElementConfigurationDiagnosis.builder().build()
           )
           .build();
-      final var data = ElementData.builder()
+      final var elementData = ElementData.builder()
           .id(new ElementId(QUESTION_ID))
           .value(
               ElementValueDiagnosisList.builder()
@@ -411,7 +413,7 @@ class XmlGeneratorUnifiedDiagnosisListTest {
           )
           .build();
 
-      final var response = xmlGenerator.generate(data, elementSpecification);
+      final var response = xmlGenerator.generate(elementData, elementSpecification);
 
       assertTrue(response.isEmpty());
     }

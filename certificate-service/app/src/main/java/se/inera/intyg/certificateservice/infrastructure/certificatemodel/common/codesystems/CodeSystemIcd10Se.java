@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems;
 
+import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDiagnosisTerminology;
 
 public class CodeSystemIcd10Se {
@@ -9,7 +10,8 @@ public class CodeSystemIcd10Se {
   }
 
   private static final String DEPRECATED_ICD_10_SE_CODE_SYSTEM = "1.2.752.116.1.1.1.1.8";
-  public static final String ICD_10_SE_CODE_SYSTEM = "1.2.752.116.1.1.1.1.3";
+  private static final String DEPRECATED_LEGACY_ICD_10_SE_CODE_SYSTEM = "1.2.752.116.1.1.1.1.3";
+  public static final String ICD_10_SE_CODE_SYSTEM = "1.2.752.116.1.1.1";
   public static final String DIAGNOS_ICD_10_ID = "ICD_10_SE";
   private static final String DIAGNOS_ICD_10_LABEL = "ICD-10-SE";
 
@@ -22,7 +24,8 @@ public class CodeSystemIcd10Se {
     return new ElementDiagnosisTerminology(
         DIAGNOS_ICD_10_ID,
         DIAGNOS_ICD_10_LABEL,
-        DEPRECATED_ICD_10_SE_CODE_SYSTEM
+        DEPRECATED_ICD_10_SE_CODE_SYSTEM,
+        acceptedCodeSystemOids()
     );
   }
 
@@ -30,7 +33,16 @@ public class CodeSystemIcd10Se {
     return new ElementDiagnosisTerminology(
         DIAGNOS_ICD_10_ID,
         DIAGNOS_ICD_10_LABEL,
-        ICD_10_SE_CODE_SYSTEM
+        ICD_10_SE_CODE_SYSTEM,
+        acceptedCodeSystemOids()
+    );
+  }
+
+  public static List<String> acceptedCodeSystemOids() {
+    return List.of(
+        ICD_10_SE_CODE_SYSTEM,
+        DEPRECATED_ICD_10_SE_CODE_SYSTEM,
+        DEPRECATED_LEGACY_ICD_10_SE_CODE_SYSTEM
     );
   }
 }

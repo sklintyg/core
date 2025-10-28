@@ -31,7 +31,7 @@ class ElementConfigurationDiagnosisTest {
     final var configurationDiagnosis = ElementConfigurationDiagnosis.builder()
         .terminology(
             List.of(
-                new ElementDiagnosisTerminology(ID, "label", expectedCodeSystem)
+                new ElementDiagnosisTerminology(ID, "label", expectedCodeSystem, List.of())
             )
         )
         .build();

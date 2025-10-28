@@ -48,8 +48,8 @@ class QuestionDiagnosTest {
             "Ange vilken eller vilka sjukdomar som orsakar nedsatt arbetsförmåga. Den sjukdom som påverkar arbetsförmågan mest anges först. Diagnoskoden anges alltid med så många positioner som möjligt.")
         .terminology(
             List.of(
-                new ElementDiagnosisTerminology("ICD_10_SE", "ICD-10-SE",
-                    "1.2.752.116.1.1.1.1.3")
+                new ElementDiagnosisTerminology("ICD_10_SE", "ICD-10-SE", "1.2.752.116.1.1.1",
+                    List.of("1.2.752.116.1.1.1", "1.2.752.116.1.1.1.1.8", "1.2.752.116.1.1.1.1.3"))
             )
         )
         .list(

@@ -277,6 +277,58 @@ class PrefillDiagnosisConverterTest {
     }
   }
 
+  @Test
+  void shouldMapEquivalentCodeSystemsOids() {
+
+    final var prefill = new Forifyllnad();
+    final var svar = new Svar();
+    final var svar2 = new Svar();
+
+    svar.setId(SPECIFICATION.id().id());
+    svar.setInstans(1);
+    svar2.setId(SPECIFICATION.id().id());
+    svar2.setInstans(2);
+
+    final var delsvar1Code = new Delsvar();
+    final var delsvar1Description = new Delsvar();
+    final var delsvar2Code = new Delsvar();
+    final var delsvar2Description = new Delsvar();
+
+    delsvar1Code.setId("%s.2".formatted(SPECIFICATION.id().id()));
+    delsvar2Code.setId("%s.2".formatted(SPECIFICATION.id().id()));
+    delsvar1Description.setId("%s.1".formatted(SPECIFICATION.id().id()));
+    delsvar2Description.setId("%s.1".formatted(SPECIFICATION.id().id()));
+
+    delsvar1Code.getContent()
+        .add(createCVTypeElement(DIAGNOS_CODE, "1.2.752.116.1.1.1.1.8"));
+    delsvar2Code.getContent()
+        .add(createCVTypeElement(DIAGNOS_CODE_2, "1.2.752.116.1.1.1.1.3"));
+    delsvar1Description.getContent().add(DIAGNOS_DESCRIPTION);
+    delsvar2Description.getContent().add(DIAGNOS_DESCRIPTION_2);
+
+    svar.getDelsvar().add(delsvar1Code);
+    svar.getDelsvar().add(delsvar1Description);
+    svar2.getDelsvar().add(delsvar2Code);
+    svar2.getDelsvar().add(delsvar2Description);
+
+    prefill.getSvar().add(svar);
+    prefill.getSvar().add(svar2);
+
+    doReturn(Optional.of(Diagnosis.builder().build()))
+        .when(diagnosisCodeRepository).findByCode(new DiagnosisCode(DIAGNOS_CODE));
+
+    doReturn(Optional.of(Diagnosis.builder().build()))
+        .when(diagnosisCodeRepository).findByCode(new DiagnosisCode(DIAGNOS_CODE_2));
+
+    final var result = prefillDiagnosisConverter.prefillAnswer(SPECIFICATION, prefill);
+
+    final var expected = PrefillAnswer.builder()
+        .elementData(EXPECTED_ELEMENT_DATA)
+        .build();
+
+    assertEquals(expected, result);
+  }
+
   private static Forifyllnad getPrefill() {
     final var prefill = new Forifyllnad();
     final var svar = new Svar();
@@ -313,10 +365,14 @@ class PrefillDiagnosisConverterTest {
   }
 
   private static Element createCVTypeElement(String code) {
+    return createCVTypeElement(code, ICD_10_SE_CODE_SYSTEM);
+  }
+
+  private static Element createCVTypeElement(String code, String codeSystem) {
     final var cvType = new CVType();
     cvType.setCode(code);
     cvType.setDisplayName("displayName");
-    cvType.setCodeSystem(ICD_10_SE_CODE_SYSTEM);
+    cvType.setCodeSystem(codeSystem);
     final var factory = new ObjectFactory();
     return getElement(cvType, factory::createCv);
   }
