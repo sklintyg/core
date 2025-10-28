@@ -29,6 +29,10 @@ public class ActionRuleInactiveCertificateType implements ActionRule {
       return true;
     }
 
-    return false;
+    final var inactiveConfiguration = certificateActionConfigurationRepository.findInactiveConfiguration(
+        evaluatedCertificate.certificateModel().id()
+    );
+
+    return inactiveConfiguration.isEmpty();
   }
 }
