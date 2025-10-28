@@ -140,7 +140,7 @@ class InMemoryCertificateActionConfigurationRepositoryTest {
 
       final var expectedConfiguration = CertificateInactiveConfiguration.builder()
           .certificateType(TYPE)
-          .version(VERSION)
+          .version(List.of(VERSION))
           .build();
 
       final var certificateInactiveConfigurations = List.of(
@@ -170,7 +170,7 @@ class InMemoryCertificateActionConfigurationRepositoryTest {
       final var certificateInactiveConfigurations = List.of(
           CertificateInactiveConfiguration.builder()
               .certificateType(TYPE)
-              .version(VERSION)
+              .version(List.of(VERSION))
               .build()
       );
 

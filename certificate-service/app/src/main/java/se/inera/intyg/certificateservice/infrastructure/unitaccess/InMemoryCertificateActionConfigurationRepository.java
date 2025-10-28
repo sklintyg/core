@@ -49,9 +49,7 @@ public class InMemoryCertificateActionConfigurationRepository implements
 
     return inactiveCertificateConfigurations.stream()
         .filter(
-            configuration ->
-                configuration.certificateType().equals(certificateModelId.type().type())
-                    && configuration.version().equals(certificateModelId.version().version())
+            config -> certificateModelId.matches(config.certificateType(), config.version())
         )
         .toList();
   }
