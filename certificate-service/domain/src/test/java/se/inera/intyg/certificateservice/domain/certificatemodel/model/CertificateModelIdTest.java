@@ -44,19 +44,17 @@ class CertificateModelIdTest {
   }
 
   @Nested
-  class IsSameVersionTest {
+  class IsLatestActiveVersionTests {
 
     @Test
     void shouldReturnTrueIfVersionMatches() {
       final var certificateModelId = CertificateModelId.builder()
           .type(new CertificateType("type"))
-          .version(new CertificateVersion("version"))
+          .version(new CertificateVersion("1.0"))
           .build();
 
-      assertTrue(certificateModelId.isSameVersion(
-          CertificateModelId.builder()
-              .version(new CertificateVersion("version"))
-              .build()
+      assertTrue(certificateModelId.version().isLastestActiveVersion(
+          List.of(new CertificateVersion("1.0"))
       ));
     }
 
@@ -64,13 +62,11 @@ class CertificateModelIdTest {
     void shouldReturnFalseIfVersionDoesNotMatch() {
       final var certificateModelId = CertificateModelId.builder()
           .type(new CertificateType("type"))
-          .version(new CertificateVersion("version"))
+          .version(new CertificateVersion("1.0"))
           .build();
 
-      assertFalse(certificateModelId.isSameVersion(
-          CertificateModelId.builder()
-              .version(new CertificateVersion("notSameVersion"))
-              .build()
+      assertFalse(certificateModelId.version().isLastestActiveVersion(
+          List.of(new CertificateVersion("2.0"))
       ));
     }
   }
