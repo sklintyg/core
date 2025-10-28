@@ -309,7 +309,6 @@ public class TestabilityCertificateFillServiceTS8071V2 implements
       return elementId == QUESTION_SYNFUNKTIONER_ID;
     }
 
-    // For MAXIMAL, return false for questions where the answer should be "No" (healthy person)
     return elementId != QUESTION_SYNFUNKTIONER_ID
         && elementId != QUESTION_MISSBRUK_JOURNALUPPGIFTER_V2_ID;
   }
