@@ -4,27 +4,31 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 
 @RequiredArgsConstructor
 public class ActionRuleInactiveCertificateType implements ActionRule {
 
   private final CertificateActionConfigurationRepository certificateActionConfigurationRepository;
+  private final CertificateModelRepository certificateModelRepository;
 
   @Override
   public boolean evaluate(Optional<Certificate> certificate,
       Optional<ActionEvaluation> actionEvaluation) {
-    //Implementera så att vi bara bryr oss om konfigurationen, om ett senare majorintyg finns.
     //Se över namngivning på ActionRulen så att den bättre matchar "begränsad funktionalitet"
     //Hantera konfiguration kopplat till olika actions
 
-    final var inactiveConfiguration = certificateActionConfigurationRepository.findInactiveConfiguration(
-        certificate.orElseThrow().certificateModel().id()
-    );
+    final var evaluatedCertificate = certificate.orElseThrow(() -> new IllegalStateException(
+        "Certificate is required for evaluating ActionRuleInactiveCertificateType"));
 
-    if (inactiveConfiguration.isEmpty()) {
+    final var latestMajorModelId = certificateModelRepository.findLatestActiveByType(
+        evaluatedCertificate.certificateModel().typeName()
+    ).orElseThrow().id();
+
+    if (latestMajorModelId.isSameVersion(evaluatedCertificate.certificateModel().id())) {
       return true;
     }
 
-    return true;
+    return false;
   }
 }

@@ -14,4 +14,8 @@ public class CertificateModelId {
   public boolean matches(String type, List<String> versions) {
     return this.type.type().equals(type) && versions.contains(this.version.version());
   }
+
+  public boolean isSameVersion(CertificateModelId modelId) {
+    return this.version.equals(modelId.version);
+  }
 }
