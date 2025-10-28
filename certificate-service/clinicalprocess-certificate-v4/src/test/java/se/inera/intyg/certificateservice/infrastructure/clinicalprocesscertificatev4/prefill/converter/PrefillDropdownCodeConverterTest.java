@@ -122,6 +122,24 @@ class PrefillDropdownCodeConverterTest {
     void shouldReturnPrefillAnswerIfSubAnswerExists() {
       final var prefill = new Forifyllnad();
       final var svar = new Svar();
+      svar.setId(ELEMENT_ID.id());
+      final var delsvar1 = new Delsvar();
+      delsvar1.setId("other");
+      final var delsvar2 = new Delsvar();
+      delsvar2.setId(FIELD_ID.value());
+      delsvar2.getContent().add(createCVTypeElement());
+      svar.getDelsvar().add(delsvar1);
+      svar.getDelsvar().add(delsvar2);
+      prefill.getSvar().add(svar);
+
+      final var result = prefillDropdownCodeConverter.prefillAnswer(SPECIFICATION, prefill);
+      assertEquals(CODE_FIELD_ID, ((ElementValueCode) result.getElementData().value()).codeId());
+    }
+
+    @Test
+    void shouldReturnPrefillAnswerWithCorrectId() {
+      final var prefill = new Forifyllnad();
+      final var svar = new Svar();
       svar.setId("other");
       final var delsvar = new Delsvar();
       delsvar.setId(FIELD_ID.value());
