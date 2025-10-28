@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.persistence;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
 
@@ -17,11 +18,11 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
-import se.inera.intyg.certificateservice.domain.configuration.inactive.dto.LimitedFunctionalityConfiguration;
+import se.inera.intyg.certificateservice.domain.configuration.limitedfunctionality.dto.LimitedFunctionalityConfiguration;
 import se.inera.intyg.certificateservice.domain.configuration.unitaccess.dto.CertificateAccessConfiguration;
+import se.inera.intyg.certificateservice.infrastructure.certificateaction.InMemoryCertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.infrastructure.configuration.GetLimitedFunctionalityConfiguration;
 import se.inera.intyg.certificateservice.infrastructure.configuration.UnitAccessConfiguration;
-import se.inera.intyg.certificateservice.infrastructure.unitaccess.InMemoryCertificateActionConfigurationRepository;
 
 @ExtendWith(MockitoExtension.class)
 class InMemoryCertificateActionConfigurationRepositoryTest {
@@ -124,7 +125,7 @@ class InMemoryCertificateActionConfigurationRepositoryTest {
           certificateModel.id()
       );
 
-      assertTrue(result.isEmpty());
+      assertNull(result);
     }
 
     @Test
@@ -153,7 +154,7 @@ class InMemoryCertificateActionConfigurationRepositoryTest {
           certificateModel.id()
       );
 
-      assertEquals(List.of(expectedConfiguration), result);
+      assertEquals(expectedConfiguration, result);
     }
 
     @Test
@@ -180,7 +181,7 @@ class InMemoryCertificateActionConfigurationRepositoryTest {
           certificateModel.id()
       );
 
-      assertTrue(result.isEmpty());
+      assertNull(result);
     }
   }
 }

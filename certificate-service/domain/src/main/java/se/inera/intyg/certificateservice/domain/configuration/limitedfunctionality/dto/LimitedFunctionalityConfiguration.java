@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.domain.configuration.inactive.dto;
+package se.inera.intyg.certificateservice.domain.configuration.limitedfunctionality.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -7,10 +7,10 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import java.util.List;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.certificateservice.domain.configuration.inactive.dto.LimitedFunctionalityConfiguration.CertificateInactiveConfigurationBuilder;
+import se.inera.intyg.certificateservice.domain.configuration.limitedfunctionality.dto.LimitedFunctionalityConfiguration.LimitedFunctionalityConfigurationBuilder;
 
 @JsonInclude
-@JsonDeserialize(builder = CertificateInactiveConfigurationBuilder.class)
+@JsonDeserialize(builder = LimitedFunctionalityConfigurationBuilder.class)
 @Builder
 @Value
 public class LimitedFunctionalityConfiguration {
@@ -20,10 +20,10 @@ public class LimitedFunctionalityConfiguration {
   @JsonProperty("version")
   List<String> version;
   @JsonProperty("configuration")
-  InactiveCertificateConfiguration configuration;
+  LimitedFunctionalityActionsConfiguration configuration;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class CertificateInactiveConfigurationBuilder {
+  public static class LimitedFunctionalityConfigurationBuilder {
 
   }
 }

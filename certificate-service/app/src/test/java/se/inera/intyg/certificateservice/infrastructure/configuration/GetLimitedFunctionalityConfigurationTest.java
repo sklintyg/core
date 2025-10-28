@@ -11,9 +11,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
-import se.inera.intyg.certificateservice.domain.configuration.inactive.dto.InactiveCertificateActionConfiguration;
-import se.inera.intyg.certificateservice.domain.configuration.inactive.dto.InactiveCertificateConfiguration;
-import se.inera.intyg.certificateservice.domain.configuration.inactive.dto.LimitedFunctionalityConfiguration;
+import se.inera.intyg.certificateservice.domain.configuration.limitedfunctionality.dto.LimitedActionConfiguration;
+import se.inera.intyg.certificateservice.domain.configuration.limitedfunctionality.dto.LimitedFunctionalityActionsConfiguration;
+import se.inera.intyg.certificateservice.domain.configuration.limitedfunctionality.dto.LimitedFunctionalityConfiguration;
 
 @ExtendWith(MockitoExtension.class)
 class GetLimitedFunctionalityConfigurationTest {
@@ -46,10 +46,10 @@ class GetLimitedFunctionalityConfigurationTest {
             .certificateType("ts8071")
             .version(List.of("1.0"))
             .configuration(
-                InactiveCertificateConfiguration.builder()
+                LimitedFunctionalityActionsConfiguration.builder()
                     .actions(
                         List.of(
-                            InactiveCertificateActionConfiguration.builder()
+                            LimitedActionConfiguration.builder()
                                 .type("SEND")
                                 .untilDateTime(LocalDateTime.of(2024, 8, 1, 8, 0, 0))
                                 .build()
@@ -75,7 +75,7 @@ class GetLimitedFunctionalityConfigurationTest {
             .certificateType("ts8071")
             .version(List.of("1.0"))
             .configuration(
-                InactiveCertificateConfiguration.builder()
+                LimitedFunctionalityActionsConfiguration.builder()
                     .actions(Collections.emptyList())
                     .build()
             )

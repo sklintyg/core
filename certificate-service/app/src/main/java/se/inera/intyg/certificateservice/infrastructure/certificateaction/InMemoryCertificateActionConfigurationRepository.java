@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.unitaccess;
+package se.inera.intyg.certificateservice.infrastructure.certificateaction;
 
 import java.util.Collections;
 import java.util.List;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
-import se.inera.intyg.certificateservice.domain.configuration.inactive.dto.LimitedFunctionalityConfiguration;
+import se.inera.intyg.certificateservice.domain.configuration.limitedfunctionality.dto.LimitedFunctionalityConfiguration;
 import se.inera.intyg.certificateservice.domain.configuration.unitaccess.dto.CertificateAccessConfiguration;
 import se.inera.intyg.certificateservice.infrastructure.configuration.GetLimitedFunctionalityConfiguration;
 import se.inera.intyg.certificateservice.infrastructure.configuration.UnitAccessConfiguration;
@@ -39,17 +39,18 @@ public class InMemoryCertificateActionConfigurationRepository implements
   }
 
   @Override
-  public List<LimitedFunctionalityConfiguration> findLimitedFunctionalityConfiguration(
+  public LimitedFunctionalityConfiguration findLimitedFunctionalityConfiguration(
       CertificateModelId certificateModelId) {
     final var limitedFunctionalityConfigurations = getLimitedFunctionalityConfiguration.get();
     if (limitedFunctionalityConfigurations.isEmpty()) {
-      return Collections.emptyList();
+      return null;
     }
 
     return limitedFunctionalityConfigurations.stream()
         .filter(
             config -> certificateModelId.matches(config.certificateType(), config.version())
         )
-        .toList();
+        .findFirst()
+        .orElse(null);
   }
 }
