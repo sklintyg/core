@@ -389,10 +389,10 @@ class InMemoryCertificateModelRepositoryTest {
           .id(
               CertificateModelId.builder()
                   .type(new CertificateType(TYPE_ONE))
-                  .version(new CertificateVersion(VERSION_TWO))
+                  .version(new CertificateVersion(VERSION_ONE))
                   .build()
           )
-          .certificateVersions(List.of(new CertificateVersion(VERSION_TWO)))
+          .certificateVersions(List.of(new CertificateVersion(VERSION_ONE)))
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(5))
           .build();
 
