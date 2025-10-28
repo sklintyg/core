@@ -51,9 +51,7 @@ public class CertificateModel implements Comparator<ElementId> {
   CitizenAvailableFunctionsProvider citizenAvailableFunctionsProvider;
   CertificateModelId ableToCreateDraftForModel;
   @With
-  @Builder.Default
-  //TODO: FIX ME
-  List<CertificateVersion> certificateVersions = Collections.emptyList();
+  List<CertificateVersion> certificateVersions;
 
   public List<CertificateAction> actions() {
     return certificateActionSpecifications.stream()
