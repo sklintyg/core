@@ -14,9 +14,11 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 
@@ -45,22 +47,27 @@ class QuestionBedomningRiskV2Test {
 
   @Test
   void shouldIncludeRules() {
+    final var expectedRules = List.of(
+        ElementRuleExpression.builder()
+            .id(ELEMENT_ID)
+            .type(ElementRuleType.MANDATORY)
+            .expression(new RuleExpression("$23.3"))
+            .build(),
+        ElementRuleExpression.builder()
+            .id(QUESTION_BEDOMNING_ID)
+            .type(ElementRuleType.SHOW)
+            .expression(new RuleExpression("$ja"))
+            .build(),
+        ElementRuleLimit.builder()
+            .id(ELEMENT_ID)
+            .type(ElementRuleType.TEXT_LIMIT)
+            .limit(new RuleLimit((short) 250))
+            .build()
+    );
+
     final var element = QuestionBedomningRiskV2.questionBedomningRiskV2();
 
-    assertEquals(3, element.rules().size());
-  }
-
-  @Test
-  void shouldIncludeTextLimitRule() {
-    final var expectedRule = ElementRuleLimit.builder()
-        .id(ELEMENT_ID)
-        .type(ElementRuleType.TEXT_LIMIT)
-        .limit(new RuleLimit((short) 250))
-        .build();
-
-    final var element = QuestionBedomningRiskV2.questionBedomningRiskV2();
-
-    assertEquals(expectedRule, element.rules().get(2));
+    assertEquals(expectedRules, element.rules());
   }
 
   @Test
