@@ -30,6 +30,8 @@ public class HeaderConverter {
         .isDraft(metadata.isDraft())
         .isSent(metadata.isSent())
         .isCanSendElectronically(metadata.isCanSendElectronically())
+        .draftAlertInfoText(metadata.getGeneralPrintText() != null ? metadata.getGeneralPrintText()
+            .getDraftAlertInfoText() : null)
         .build();
   }
 

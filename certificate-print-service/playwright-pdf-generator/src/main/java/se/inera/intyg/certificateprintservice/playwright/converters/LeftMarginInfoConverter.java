@@ -13,6 +13,8 @@ public class LeftMarginInfoConverter {
         .recipientName(metadata.getRecipientName())
         .certificateVersion(metadata.getVersion())
         .recipientId(metadata.getRecipientId())
+        .leftMarginText(metadata.getGeneralPrintText() != null ? metadata.getGeneralPrintText()
+            .getLeftMarginInfoText() : null)
         .build();
   }
 

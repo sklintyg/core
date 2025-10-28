@@ -42,7 +42,7 @@ public class ElementConfigurationDateRange implements ElementConfiguration {
 
     return Optional.of(
         ElementSimplifiedValueTable.builder()
-            .headings(List.of("Period då arbetsförmågan bedöms vara nedsatt", labelFrom, labelTo))
+            .headings(List.of(name, labelFrom, labelTo))
             .values(List.of(
                 List.of(
                     elementValue.fromDate() != null ? elementValue.fromDate().toString() : "",

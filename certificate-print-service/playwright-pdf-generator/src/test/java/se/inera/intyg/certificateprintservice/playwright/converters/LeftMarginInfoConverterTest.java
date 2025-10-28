@@ -3,6 +3,7 @@ package se.inera.intyg.certificateprintservice.playwright.converters;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateprintservice.pdfgenerator.api.GeneralPrintText;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.Metadata;
 
 class LeftMarginInfoConverterTest {
@@ -16,6 +17,10 @@ class LeftMarginInfoConverterTest {
       .recipientName(RECIPIENT_NAME)
       .recipientId("recipientId")
       .version("version")
+      .generalPrintText(GeneralPrintText.builder()
+          .leftMarginInfoText("left margin text")
+          .draftAlertInfoText("draft alert text")
+          .build())
       .build();
 
   @Test
@@ -40,6 +45,12 @@ class LeftMarginInfoConverterTest {
   void shouldSetRecipientId() {
     final var response = leftMarginInfoConverter.convert(METADATA);
     assertEquals("recipientId", response.getRecipientId());
+  }
+
+  @Test
+  void shouldSetLeftMarginText() {
+    final var response = leftMarginInfoConverter.convert(METADATA);
+    assertEquals("left margin text", response.getLeftMarginText());
   }
 
 }

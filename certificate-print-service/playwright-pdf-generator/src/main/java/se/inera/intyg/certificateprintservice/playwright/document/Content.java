@@ -31,11 +31,13 @@ public class Content {
   boolean isDraft;
   boolean isSent;
   boolean isCanSendElectronically;
+  String draftAlertInfoText;
 
   public Element create() {
     return element(Tag.DIV)
         .appendChild(ContentElementFactory.hiddenAccessibleHeader(certificateName, certificateType,
-            certificateVersion, recipientName, personId, isDraft, isSent, isCanSendElectronically))
+            certificateVersion, recipientName, personId, isDraft, isSent, isCanSendElectronically,
+            draftAlertInfoText))
         .appendChildren(content())
         .appendChildren(List.of(
             ContentElementFactory.issuerInfo(issuerName, issuingUnit, issuingUnitInfo,

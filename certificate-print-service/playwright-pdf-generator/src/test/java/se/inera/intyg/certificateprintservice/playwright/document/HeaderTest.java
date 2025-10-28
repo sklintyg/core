@@ -38,6 +38,7 @@ class HeaderTest {
   private static final String CERTIFICATE_ID = "certificateId";
   private static final String RIGHT_MARGIN_TEXT = "Intygs-ID: %s";
   private static final String RECIPIENT_ID = "recipientId";
+  private static final String DRAFT_ALERT_INFO_TEXT = "arbetsgivaren";
 
   private final Header.HeaderBuilder headerBuilder = Header.builder()
       .certificateName(CERTIFICATE_NAME)
@@ -46,11 +47,13 @@ class HeaderTest {
       .personId(PERSON_ID)
       .recipientLogo(RECIPIENT_LOGO)
       .recipientName(RECIPIENT_NAME)
+      .draftAlertInfoText(DRAFT_ALERT_INFO_TEXT)
       .leftMarginInfo(LeftMarginInfo.builder()
           .certificateType(CERTIFICATE_TYPE)
           .recipientName(RECIPIENT_NAME)
           .recipientId(RECIPIENT_ID)
           .certificateVersion(CERTIFICATE_VERSION)
+          .leftMarginText(LEFT_MARGIN_TEXT)
           .build())
       .rightMarginInfo(RightMarginInfo.builder().certificateId(CERTIFICATE_ID).build())
       .watermark(Watermark.builder().build());

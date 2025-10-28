@@ -20,20 +20,21 @@ class LeftMarginInfoTest {
 
   private static final String CERTIFICATE_TYPE = "certificateType";
   private static final String RECIPIENT_NAME = "recipientName";
-  private static final String LEFT_MARGIN_TEXT = "%s %s %s - Fastställd av %s";
-  private static final String LEFT_MARGIN_TEXT_TS = "%s %s - Fastställd av %s";
+  private static final String LEFT_MARGIN_TEXT_SKR = "%s %s %s - Fastställd av %s";
+  private static final String LEFT_MARGIN_TEXT = "%s %s - Fastställd av %s";
   public static final String VERSION = "version";
   public static final String RECIPIENT_ID = "recipientId";
   public static final String RECIPIENT_ID_TS = "TRANSP";
 
-  private final LeftMarginInfo leftMarginInfo = LeftMarginInfo.builder()
+  private final LeftMarginInfo leftMarginInfoSKR = LeftMarginInfo.builder()
       .certificateType(CERTIFICATE_TYPE)
       .recipientName(RECIPIENT_NAME)
       .certificateVersion(VERSION)
       .recipientId(RECIPIENT_ID)
+      .leftMarginText(LEFT_MARGIN_TEXT_SKR)
       .build();
 
-  private final LeftMarginInfo leftMarginInfoTransp = LeftMarginInfo.builder()
+  private final LeftMarginInfo leftMarginInfo = LeftMarginInfo.builder()
       .certificateType(CERTIFICATE_TYPE)
       .recipientName(RECIPIENT_NAME)
       .certificateVersion(VERSION)
@@ -60,10 +61,11 @@ class LeftMarginInfoTest {
     class WrapperElements {
 
       @Test
-      void leftMarginInfo() {
-        final var expectedText = LEFT_MARGIN_TEXT.formatted(RECIPIENT_ID, CERTIFICATE_TYPE, VERSION,
+      void leftMarginInfoSKR() {
+        final var expectedText = LEFT_MARGIN_TEXT_SKR.formatted(RECIPIENT_ID, CERTIFICATE_TYPE,
+            VERSION,
             RECIPIENT_NAME);
-        final var element = leftMarginInfo.create().child(0);
+        final var element = leftMarginInfoSKR.create().child(0);
         assertAll(
             () -> assertEquals(P, element.tag(), TAG_TYPE),
             () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
@@ -74,10 +76,10 @@ class LeftMarginInfoTest {
       }
 
       @Test
-      void leftMarginInfoTransp() {
-        final var expectedText = LEFT_MARGIN_TEXT_TS.formatted(CERTIFICATE_TYPE, VERSION,
+      void leftMarginInfoDefault() {
+        final var expectedText = LEFT_MARGIN_TEXT.formatted(CERTIFICATE_TYPE, VERSION,
             RECIPIENT_NAME);
-        final var element = leftMarginInfoTransp.create().child(0);
+        final var element = leftMarginInfo.create().child(0);
         assertAll(
             () -> assertEquals(P, element.tag(), TAG_TYPE),
             () -> assertEquals(0, element.children().size(), NUM_CHILDREN),

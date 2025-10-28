@@ -58,6 +58,7 @@ class ContentTest {
   private static final String DRAFT_ALERT_MESSAGE = "Detta är en utskrift av ett elektroniskt intygsutkast och ska INTE skickas till %s.";
   private static final String SENT_ALERT_MESSAGE = "Detta är en utskrift av ett elektroniskt intyg. Intyget har signerats elektroniskt av intygsutfärdaren. Notera att intyget redan har skickats till %s.";
   private static final String SIGNED_ALERT_MESSAGE = "Detta är en utskrift av ett elektroniskt intyg. Intyget har signerats elektroniskt av intygsutfärdaren.";
+  private static final String DRAFT_ALERT_TEXT = "arbetsgivaren";
 
   private static final List<Question> SUB_QUESTIONS = List.of(Question.builder()
       .id(SUB_QUESTION_ID)
@@ -97,6 +98,7 @@ class ContentTest {
       .issuingUnit(ISSUING_UNIT)
       .issuingUnitInfo(List.of(ADDRESS, ZIP_CODE, CITY))
       .certificateName(CERTIFICATE_NAME)
+      .draftAlertInfoText(DRAFT_ALERT_TEXT)
       .description(DESCRIPTION);
 
   @Nested

@@ -25,4 +25,5 @@ public class PrintCertificateMetadataDTO {
   String issuerName;
   String issuingUnit;
   List<String> unitInformation;
+  GeneralPrintTextDTO generalPrintText;
 }

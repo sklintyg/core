@@ -156,6 +156,7 @@ public class CertificateModelFactoryAG114 implements CertificateModelFactory {
         ))
         .certificateActionFactory(certificateActionFactory)
         .sickLeaveProvider(new AG114SickLeaveProvider())
+        .generalPrintProvider(new AG114CertificateGeneralPrintProvider())
         .build();
   }
 }

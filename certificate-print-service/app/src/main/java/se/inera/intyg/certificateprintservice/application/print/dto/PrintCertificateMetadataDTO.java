@@ -29,6 +29,7 @@ public class PrintCertificateMetadataDTO {
   String issuerName;
   String issuingUnit;
   List<String> unitInformation;
+  GeneralPrintTextDTO generalPrintText;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class PrintCertificateMetadataDTOBuilder {
