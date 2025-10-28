@@ -30,7 +30,8 @@ public class GetCertificateTypeInfoService {
         getCertificateTypeInfoRequest.getCareProvider()
     );
 
-    final var certificateModels = availableCertificateModelsDomainService.get(actionEvaluation);
+    final var certificateModels = availableCertificateModelsDomainService.getLatestVersions(
+        actionEvaluation);
     return GetCertificateTypeInfoResponse.builder()
         .list(
             certificateModels.stream()
