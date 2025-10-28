@@ -20,7 +20,7 @@ public class CertificatesRequest {
   LocalDateTime createdTo;
   List<Status> statuses;
   List<CertificateType> types;
-  HsaId issuedByStaffId;
+  List<HsaId> issuedByStaffIds;
   @With
   List<HsaId> issuedUnitIds;
   @With

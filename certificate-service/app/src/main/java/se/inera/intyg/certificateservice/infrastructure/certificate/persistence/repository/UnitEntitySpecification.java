@@ -16,14 +16,6 @@ public class UnitEntitySpecification {
   private UnitEntitySpecification() {
   }
 
-  public static Specification<CertificateEntity> equalsIssuedOnUnit(HsaId issuedOnUnit) {
-    return (root, query, criteriaBuilder) ->
-    {
-      Join<UnitEntity, CertificateEntity> certificateIssuedOn = root.join(ISSUED_ON_UNIT);
-      return criteriaBuilder.equal(certificateIssuedOn.get(HSA_ID), issuedOnUnit.id());
-    };
-  }
-
   public static Specification<MessageEntity> inIssuedOnUnitIds(List<HsaId> unitIds) {
     return (root, query, criteriaBuilder) ->
     {
@@ -54,14 +46,6 @@ public class UnitEntitySpecification {
     {
       Join<UnitEntity, CertificateEntity> certificateCareUnit = root.join("careUnit");
       return criteriaBuilder.equal(certificateCareUnit.get(HSA_ID), careUnit.id());
-    };
-  }
-
-  public static Specification<CertificateEntity> equalsCareProvider(HsaId careProvider) {
-    return (root, query, criteriaBuilder) ->
-    {
-      Join<UnitEntity, CertificateEntity> certificateCareUnit = root.join("careProvider");
-      return criteriaBuilder.equal(certificateCareUnit.get(HSA_ID), careProvider.id());
     };
   }
 }
