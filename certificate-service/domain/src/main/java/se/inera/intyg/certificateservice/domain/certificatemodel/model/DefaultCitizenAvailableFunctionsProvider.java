@@ -1,8 +1,10 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
 import java.util.List;
+import lombok.Value;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 
+@Value
 public class DefaultCitizenAvailableFunctionsProvider implements CitizenAvailableFunctionsProvider {
 
   public static final String AVAILABLE_FUNCTION_PRINT_NAME = "Intyget kan skrivas ut";
