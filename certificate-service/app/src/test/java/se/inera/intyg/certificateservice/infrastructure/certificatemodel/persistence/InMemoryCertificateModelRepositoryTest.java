@@ -59,6 +59,7 @@ class InMemoryCertificateModelRepositoryTest {
                   .version(new CertificateVersion(VERSION_ONE))
                   .build()
           )
+          .certificateVersions(List.of(new CertificateVersion(VERSION_ONE)))
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
           .build();
 
@@ -107,6 +108,7 @@ class InMemoryCertificateModelRepositoryTest {
                   .version(new CertificateVersion(VERSION_ONE))
                   .build()
           )
+          .certificateVersions(List.of(new CertificateVersion(VERSION_ONE)))
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
           .build();
 
@@ -119,6 +121,7 @@ class InMemoryCertificateModelRepositoryTest {
                   .version(new CertificateVersion(VERSION_ONE))
                   .build()
           )
+          .certificateVersions(List.of(new CertificateVersion(VERSION_ONE)))
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
           .build();
 
@@ -164,6 +167,7 @@ class InMemoryCertificateModelRepositoryTest {
                   .version(new CertificateVersion(VERSION_ONE))
                   .build()
           )
+          .certificateVersions(List.of(new CertificateVersion(VERSION_ONE)))
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
           .build();
 
@@ -189,6 +193,7 @@ class InMemoryCertificateModelRepositoryTest {
                   .version(new CertificateVersion(VERSION_ONE))
                   .build()
           )
+          .certificateVersions(List.of(new CertificateVersion(VERSION_ONE)))
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).plusMinutes(1))
           .build();
 
@@ -219,6 +224,7 @@ class InMemoryCertificateModelRepositoryTest {
           .type(
               new Code(CODE_1, CODE_SYSTEM_1, null)
           )
+          .certificateVersions(List.of(new CertificateVersion(VERSION_ONE)))
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
           .build();
 
@@ -246,6 +252,7 @@ class InMemoryCertificateModelRepositoryTest {
                   .version(new CertificateVersion(VERSION_ONE))
                   .build()
           )
+          .certificateVersions(List.of(new CertificateVersion(VERSION_ONE)))
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(5))
           .build();
 
@@ -256,6 +263,8 @@ class InMemoryCertificateModelRepositoryTest {
                   .version(new CertificateVersion(VERSION_TWO))
                   .build()
           )
+          .certificateVersions(
+              List.of(new CertificateVersion(VERSION_ONE), new CertificateVersion(VERSION_TWO)))
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
           .build();
 
@@ -299,6 +308,7 @@ class InMemoryCertificateModelRepositoryTest {
                   .version(new CertificateVersion(VERSION_ONE))
                   .build()
           )
+          .certificateVersions(List.of(new CertificateVersion(VERSION_ONE)))
           .type(new Code(TYPE_ONE, CODE_SYSTEM_1, null))
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
           .build();
@@ -325,6 +335,7 @@ class InMemoryCertificateModelRepositoryTest {
                   .version(new CertificateVersion(VERSION_ONE))
                   .build()
           )
+          .certificateVersions(List.of(new CertificateVersion(VERSION_ONE)))
           .type(new Code(TYPE_ONE, CODE_SYSTEM_1, null))
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).plusMinutes(1))
           .build();
@@ -378,9 +389,10 @@ class InMemoryCertificateModelRepositoryTest {
           .id(
               CertificateModelId.builder()
                   .type(new CertificateType(TYPE_ONE))
-                  .version(new CertificateVersion(VERSION_ONE))
+                  .version(new CertificateVersion(VERSION_TWO))
                   .build()
           )
+          .certificateVersions(List.of(new CertificateVersion(VERSION_TWO)))
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(5))
           .build();
 
@@ -391,6 +403,7 @@ class InMemoryCertificateModelRepositoryTest {
                   .version(new CertificateVersion(VERSION_TWO))
                   .build()
           )
+          .certificateVersions(List.of(new CertificateVersion(VERSION_TWO)))
           .type(new Code(TYPE_ONE, CODE_SYSTEM_1, null))
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
           .build();
@@ -422,6 +435,7 @@ class InMemoryCertificateModelRepositoryTest {
                   .version(new CertificateVersion(VERSION_ONE))
                   .build()
           )
+          .certificateVersions(List.of(new CertificateVersion(VERSION_ONE)))
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
           .build();
 
@@ -446,6 +460,7 @@ class InMemoryCertificateModelRepositoryTest {
                   .version(new CertificateVersion(VERSION_ONE))
                   .build()
           )
+          .certificateVersions(List.of(new CertificateVersion(VERSION_ONE)))
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
           .build();
 
@@ -531,6 +546,7 @@ class InMemoryCertificateModelRepositoryTest {
                   .version(new CertificateVersion(VERSION_ONE))
                   .build()
           )
+          .certificateVersions(List.of(new CertificateVersion(VERSION_ONE)))
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
           .build();
 
@@ -543,6 +559,7 @@ class InMemoryCertificateModelRepositoryTest {
                   .version(new CertificateVersion(VERSION_ONE))
                   .build()
           )
+          .certificateVersions(List.of(new CertificateVersion(VERSION_ONE)))
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).plusMinutes(1))
           .build();
 
