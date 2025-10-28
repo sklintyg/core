@@ -22,7 +22,7 @@ public class QuestionMissbrukProvtagning {
   }
 
   public static ElementSpecification questionMissbrukProvtagning(ElementId parentElementId,
-      FieldId parentFieldId) {
+      FieldId parentFieldId, ElementId mappingElementId) {
     return ElementSpecification.builder()
         .id(QUESTION_MISSBRUK_PROVTAGNING_ID)
         .configuration(
@@ -51,7 +51,7 @@ public class QuestionMissbrukProvtagning {
             ElementDataPredicateFactory.valueBoolean(parentElementId)
         )
         .mapping(
-            new ElementMapping(parentElementId, null)
+            new ElementMapping(mappingElementId, null)
         )
         .validations(
             List.of(

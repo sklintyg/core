@@ -24,12 +24,13 @@ class QuestionMissbrukProvtagningTest {
 
   private static final ElementId PARENT_ELEMENT_ID = new ElementId("parent");
   private static final FieldId PARENT_FIELD_ID = new FieldId("field");
+  private static final ElementId MAPPING_ELEMENT_ID = new ElementId("mapping");
   private static final ElementId ELEMENT_ID = new ElementId("18.5");
 
   @Test
   void shallIncludeId() {
     final var element = QuestionMissbrukProvtagning.questionMissbrukProvtagning(PARENT_ELEMENT_ID,
-        PARENT_FIELD_ID);
+        PARENT_FIELD_ID, MAPPING_ELEMENT_ID);
 
     assertEquals(ELEMENT_ID, element.id());
   }
@@ -43,7 +44,7 @@ class QuestionMissbrukProvtagningTest {
         .build();
 
     final var element = QuestionMissbrukProvtagning.questionMissbrukProvtagning(PARENT_ELEMENT_ID,
-        PARENT_FIELD_ID);
+        PARENT_FIELD_ID, MAPPING_ELEMENT_ID);
 
     assertEquals(expectedConfiguration, element.configuration());
   }
@@ -69,7 +70,7 @@ class QuestionMissbrukProvtagningTest {
     );
 
     final var element = QuestionMissbrukProvtagning.questionMissbrukProvtagning(PARENT_ELEMENT_ID,
-        PARENT_FIELD_ID);
+        PARENT_FIELD_ID, MAPPING_ELEMENT_ID);
 
     assertEquals(expectedRules, element.rules());
   }
@@ -84,7 +85,7 @@ class QuestionMissbrukProvtagningTest {
     );
 
     final var element = QuestionMissbrukProvtagning.questionMissbrukProvtagning(PARENT_ELEMENT_ID,
-        PARENT_FIELD_ID);
+        PARENT_FIELD_ID, MAPPING_ELEMENT_ID);
 
     assertEquals(expectedValidations, element.validations());
   }
@@ -92,9 +93,9 @@ class QuestionMissbrukProvtagningTest {
   @Test
   void shallIncludeMapping() {
     final var element = QuestionMissbrukProvtagning.questionMissbrukProvtagning(PARENT_ELEMENT_ID,
-        PARENT_FIELD_ID);
+        PARENT_FIELD_ID, MAPPING_ELEMENT_ID);
 
-    assertEquals(new ElementMapping(PARENT_ELEMENT_ID, null), element.mapping());
+    assertEquals(new ElementMapping(MAPPING_ELEMENT_ID, null), element.mapping());
   }
 
   @Nested
@@ -114,7 +115,7 @@ class QuestionMissbrukProvtagningTest {
       );
 
       final var element = QuestionMissbrukProvtagning.questionMissbrukProvtagning(PARENT_ELEMENT_ID,
-          PARENT_FIELD_ID);
+          PARENT_FIELD_ID, MAPPING_ELEMENT_ID);
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -135,7 +136,7 @@ class QuestionMissbrukProvtagningTest {
       );
 
       final var element = QuestionMissbrukProvtagning.questionMissbrukProvtagning(PARENT_ELEMENT_ID,
-          PARENT_FIELD_ID);
+          PARENT_FIELD_ID, MAPPING_ELEMENT_ID);
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -156,7 +157,7 @@ class QuestionMissbrukProvtagningTest {
       );
 
       final var element = QuestionMissbrukProvtagning.questionMissbrukProvtagning(PARENT_ELEMENT_ID,
-          PARENT_FIELD_ID);
+          PARENT_FIELD_ID, MAPPING_ELEMENT_ID);
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 

@@ -1,10 +1,11 @@
-package se.inera.intyg.certificateservice.integrationtest.ts8071;
+package se.inera.intyg.certificateservice.integrationtest.ts8071.v2;
 
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.AJLA_DOCTOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ALVA_VARDADMINISTRATOR_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.ANNA_SJUKSKOTERSKA_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUserDTO.BERTIL_BARNMORSKA_DTO;
-import static se.inera.intyg.certificateservice.integrationtest.ts8071.TS8071TestSetup.ts8071TestSetup;
+import static se.inera.intyg.certificateservice.integrationtest.ts8071.v2.TS8071V2TestSetup.ACTIVE_CERTIFICATE_TYPE_VERSION;
+import static se.inera.intyg.certificateservice.integrationtest.ts8071.v2.TS8071V2TestSetup.ts8071V2TestSetup;
 
 import java.util.stream.Stream;
 import org.junit.jupiter.api.AfterEach;
@@ -46,8 +47,9 @@ import se.inera.intyg.certificateservice.integrationtest.common.tests.SignCertif
 import se.inera.intyg.certificateservice.integrationtest.common.tests.UnitStatisticsIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.UpdateCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.ValidateCertificateIT;
+import se.inera.intyg.certificateservice.integrationtest.ts8071.v1.TS8071TestSetup;
 
-public class TS8071ActiveIT extends ActiveCertificatesIT {
+public class TS8071V2ActiveIT extends ActiveCertificatesIT {
 
   public static final String TYPE = TS8071TestSetup.TYPE;
 
@@ -55,7 +57,7 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
   void setUp() {
     super.setUpBaseIT();
 
-    baseTestabilityUtilities = ts8071TestSetup()
+    baseTestabilityUtilities = ts8071V2TestSetup()
         .testabilityUtilities(
             TestabilityUtilities.builder()
                 .api(api)
@@ -72,7 +74,8 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Utökad behörighet vid djupintegration utan SVOD")
+  @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION
+      + "Utökad behörighet vid djupintegration utan SVOD")
   class AccessLevelsDeepIntegration extends AccessLevelsDeepIntegrationIT {
 
     @Override
@@ -82,7 +85,8 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Utökad behörighet vid djupintegration och SVOD (sjf=true)")
+  @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION
+      + "Utökad behörighet vid djupintegration och SVOD (sjf=true)")
   class AccessLevelsSVOD extends AccessLevelsSVODIT {
 
     @Override
@@ -92,7 +96,7 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Hämta generell intygspdf")
+  @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION + " " + "Hämta generell intygspdf")
   class GetCertificateGeneralPdf extends GetCertificateGeneralPdfIT {
 
     @Override
@@ -108,7 +112,7 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Skapa utkast")
+  @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION + " " + "Skapa utkast")
   class CreateCertificate extends CreateCertificateIT {
 
     @Override
@@ -124,7 +128,7 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Ta bort utkast")
+  @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION + " " + "Ta bort utkast")
   class DeleteCertificate extends DeleteCertificateIT {
 
     @Override
@@ -134,7 +138,7 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Finns intyget i tjänsten")
+  @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION + " " + "Finns intyget i tjänsten")
   class ExistsCertificate extends ExistsCertificateIT {
 
     @Override
@@ -144,7 +148,7 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Aktiva versioner")
+  @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION + " " + "Aktiva versioner")
   class ExistsCertificateTypeInfo extends ExistsCertificateTypeInfoIT {
 
     @Override
@@ -154,7 +158,7 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Hämta intyg")
+  @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION + " " + "Hämta intyg")
   class GetCertificate extends GetCertificateIT {
 
     @Override
@@ -178,7 +182,7 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Hämta intygets händelser")
+  @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION + " " + "Hämta intygets händelser")
   class GetCertificateEvents extends GetCertificateEventsIT {
 
     @Override
@@ -196,7 +200,7 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Hämta intygstyp när den är aktiv")
+  @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION + " " + "Hämta intygstyp när den är aktiv")
   class GetCertificateTypeInfo extends GetCertificateTypeInfoIT {
 
     @Override
@@ -206,7 +210,7 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Hämta intygsxml")
+  @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION + " " + "Hämta intygsxml")
   class GetCertificateXml extends GetCertificateXmlIT {
 
     @Override
@@ -224,7 +228,7 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Hämta tidigare intyg för patient")
+  @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION + " " + "Hämta tidigare intyg för patient")
   class GetPatientCertificates extends GetPatientCertificatesIT {
 
     @Override
@@ -248,7 +252,8 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Hämta ej signerade utkast sökkriterier")
+  @DisplayName(
+      TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION + " " + "Hämta ej signerade utkast sökkriterier")
   class GetUnitCertificatesInfo extends GetUnitCertificatesInfoIT {
 
     @Override
@@ -258,7 +263,7 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Hämta ej signerade utkast")
+  @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION + " " + "Hämta ej signerade utkast")
   class GetUnitCertificates extends GetUnitCertificatesIT {
 
     @Override
@@ -268,7 +273,7 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Hämta signerade intyg")
+  @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION + " " + "Hämta signerade intyg")
   class GetUnitCertificatesWhenSigned extends GetUnitCertificatesWhenSignedIT {
 
     @Override
@@ -278,7 +283,7 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Intern api")
+  @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION + " " + "Intern api")
   class InternalApi extends InternalApiIT {
 
     @Override
@@ -288,7 +293,8 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Ärendekommunikation skall ej vara tillgänglig")
+  @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION
+      + "Ärendekommunikation skall ej vara tillgänglig")
   class MessagingNotAvailable extends MessagingNotAvailableIT {
 
     @Override
@@ -298,7 +304,7 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Förnya skall ej vara tillgänglig")
+  @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION + " " + "Förnya skall ej vara tillgänglig")
   class RenewNotAvailable extends RenewNotAvailableIT {
 
     @Override
@@ -308,7 +314,7 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Ersätta")
+  @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION + " " + "Ersätta")
   class ReplaceCertificate extends ReplaceCertificateIT {
 
     @Override
@@ -318,7 +324,7 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Makulera")
+  @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION + " " + "Makulera")
   class RevokeCertificate extends RevokeCertificateIT {
 
     @Override
@@ -328,7 +334,7 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Skicka")
+  @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION + " " + "Skicka")
   class SendCertificate extends SendCertificateIT {
 
     @Override
@@ -338,7 +344,7 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Markera klar för signering")
+  @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION + " " + "Markera klar för signering")
   class ReadyForSignCertificate extends CertificateReadyForSignIT {
 
     @Override
@@ -348,7 +354,7 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Signera")
+  @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION + " " + "Signera")
   class SignCertificate extends SignCertificateIT {
 
     @Override
@@ -358,7 +364,7 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Uppdatera svarsalternativ")
+  @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION + " " + "Uppdatera svarsalternativ")
   class UpdateCertificate extends UpdateCertificateIT {
 
     @Override
@@ -368,7 +374,7 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Validera utkast")
+  @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION + " " + "Validera utkast")
   class ValidateCertificate extends ValidateCertificateIT {
 
     @Override
@@ -378,7 +384,7 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Vidarebefodra utkast")
+  @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION + " " + "Vidarebefodra utkast")
   class ForwardCertificate extends ForwardCertificateIT {
 
     @Override
@@ -388,7 +394,7 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "ListCertificatesForCareWithQA")
+  @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION + " " + "ListCertificatesForCareWithQA")
   class IncludeCerificatesWithQA extends CertificatesWithQAForCareIT {
 
     @Override
@@ -398,7 +404,7 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Hämta statistik")
+  @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION + " " + "Hämta statistik")
   class IncludeUnitStatistics extends UnitStatisticsIT {
 
     @Override
@@ -422,7 +428,8 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Aktiva versioner utifrån intygstyp och kodsystem")
+  @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION
+      + "Aktiva versioner utifrån intygstyp och kodsystem")
   class IncludeExistsCertificateExternalTypeInfo extends ExistsCertificateExternalTypeInfoIT {
 
     @Override
@@ -432,7 +439,8 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Skicka intyg som invånare från 1177 Intyg")
+  @DisplayName(
+      TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION + " " + "Skicka intyg som invånare från 1177 Intyg")
   class IncludeSendCitizenCertificateIT extends SendCitizenCertificateIT {
 
     @Override
@@ -442,7 +450,7 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
   }
 
   @Nested
-  @DisplayName(TYPE + "Förnya intyg från extern källa")
+  @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION + " " + "Förnya intyg från extern källa")
   class RenewExternalCertificate extends RenewExternalCertificateIT {
 
     @Override

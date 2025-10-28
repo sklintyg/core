@@ -1,4 +1,4 @@
-# Please note that this analysis is AI generated using Github Copilot
+# Generated using AI support with model: Claude Sonnet 4.5
 
 # TS8071 V2.0 Specification vs V1 Implementation Analysis
 

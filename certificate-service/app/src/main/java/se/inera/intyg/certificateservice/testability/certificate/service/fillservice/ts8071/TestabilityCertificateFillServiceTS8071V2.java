@@ -157,7 +157,8 @@ public class TestabilityCertificateFillServiceTS8071V2 implements
       QUESTION_BASERAT_PA_ID, QUESTION_INTYGET_AVSER_ID,
       QUESTION_IDENTITET_ID, QUESTION_SYNFUNKTIONER_ID, QUESTION_BALANSSINNE_ID,
       QUESTION_HORSEL_V2_ID,
-      QUESTION_HORSELHJALPMEDEL_V2_ID, QUESTION_RORLIGHET_ID,
+      QUESTION_HORSELHJALPMEDEL_V2_ID, QUESTION_HORSELHJALPMEDEL_POSITION_V2_ID,
+      QUESTION_RORLIGHET_ID,
       QUESTION_RORLIGHET_HJALPA_PASSAGERARE_ID, QUESTION_HJARTSJUKDOM_ID, QUESTION_DIABETES_ID,
       QUESTION_NEUROLOGISK_SJUKDOM_V2_ID,
       QUESTION_EPILEPSI_ID, QUESTION_EPILEPSI_ANFALL_ID,
@@ -168,7 +169,7 @@ public class TestabilityCertificateFillServiceTS8071V2 implements
       QUESTION_MISSBRUK_JOURNALUPPGIFTER_V2_ID, QUESTION_MISSBRUK_VARD_V2_ID,
       QUESTION_LAKEMEDEL_V2_ID, QUESTION_PSYKISK_V2_ID,
       QUESTION_INTELLEKTUELL_FUNKTIONSNEDSATTNING_V2_ID,
-      QUESTION_MEDICINERING_ID, QUESTION_BEDOMNING_ID
+      QUESTION_MEDICINERING_ID, QUESTION_BEDOMNING_ID, QUESTION_GLASOGON_STYRKA_V2_ID
   );
 
   @Override
@@ -308,7 +309,9 @@ public class TestabilityCertificateFillServiceTS8071V2 implements
       return elementId == QUESTION_SYNFUNKTIONER_ID;
     }
 
-    return elementId != QUESTION_SYNFUNKTIONER_ID;
+    // For MAXIMAL, return false for questions where the answer should be "No" (healthy person)
+    return elementId != QUESTION_SYNFUNKTIONER_ID
+        && elementId != QUESTION_MISSBRUK_JOURNALUPPGIFTER_V2_ID;
   }
 
 
@@ -346,7 +349,14 @@ public class TestabilityCertificateFillServiceTS8071V2 implements
     }
 
     if (elementId == QUESTION_HORSELHJALPMEDEL_POSITION_V2_ID) {
-      return CodeSystemKvAnatomiskLokalisationHorapparat.BADA_ORONEN;
+      return CodeSystemKvAnatomiskLokalisationHorapparat.HOGER;
+    }
+
+    if (elementId == QUESTION_MISSBRUK_REMISSION_V2_ID) {
+      if (fillType == MINIMAL) {
+        return CodeSystemKvTs001.NO;
+      }
+      return CodeSystemKvTs001.YES;
     }
 
     throw new IllegalStateException(

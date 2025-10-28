@@ -33,7 +33,9 @@ public abstract class CreateCertificateIT extends BaseIntegrationIT {
 
   // Generated using AI support with model: Claude Sonnet 4
   private String loadResourceAsString() throws IOException {
-    final var resourceName = "prefill/%s.xml".formatted(type().toUpperCase());
+    final var majorVersion = typeVersion().split("\\.")[0];
+    final var versionSuffix = "1".equals(majorVersion) ? "" : "_V" + majorVersion;
+    final var resourceName = "prefill/%s%s.xml".formatted(type().toUpperCase(), versionSuffix);
     try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(resourceName)) {
       if (inputStream == null) {
         throw new IllegalArgumentException("Resource not found: " + resourceName);
