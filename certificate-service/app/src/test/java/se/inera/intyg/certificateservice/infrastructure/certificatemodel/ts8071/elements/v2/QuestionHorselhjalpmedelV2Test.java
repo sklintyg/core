@@ -10,6 +10,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.GR_II_III;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.TAXI;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.UTLANDSKT;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionIntygetAvser.QUESTION_INTYGET_AVSER_ID;
 
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -21,7 +22,10 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 
 class QuestionHorselhjalpmedelV2Test {
@@ -52,9 +56,24 @@ class QuestionHorselhjalpmedelV2Test {
 
   @Test
   void shouldIncludeRules() {
+    final var expectedRules = List.of(
+        ElementRuleExpression.builder()
+            .id(ELEMENT_ID)
+            .type(ElementRuleType.MANDATORY)
+            .expression(new RuleExpression("exists($9.2)"))
+            .build(),
+        ElementRuleExpression.builder()
+            .id(QUESTION_INTYGET_AVSER_ID)
+            .type(ElementRuleType.SHOW)
+            .expression(new RuleExpression(
+                String.format("exists(%s) || exists(%s) || exists(%s)",
+                    GR_II_III.code(), FORLANG_GR_II_III.code(), TAXI.code())))
+            .build()
+    );
+
     final var element = QuestionHorselhjalpmedelV2.questionHorselhjalpmedelV2();
 
-    assertEquals(2, element.rules().size());
+    assertEquals(expectedRules, element.rules());
   }
 
   @Test

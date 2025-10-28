@@ -3,7 +3,9 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSynskarpa.LEFT_EYE_WITHOUT_CORRECTION_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSynskarpa.QUESTION_SYNSKARPA_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSynskarpa.RIGHT_EYE_WITHOUT_CORRECTION_ID;
 
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -14,9 +16,11 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueVi
 import se.inera.intyg.certificateservice.domain.certificate.model.VisualAcuity;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 
@@ -45,22 +49,36 @@ class QuestionToleransKorrektionV2Test {
 
   @Test
   void shouldIncludeRules() {
+    final var expectedRules = List.of(
+        ElementRuleExpression.builder()
+            .id(QUESTION_SYNSKARPA_ID)
+            .type(ElementRuleType.SHOW)
+            .expression(
+                new RuleExpression(
+                    String.format(
+                        "(('%s' < 0.8 && '%s' < 0.8) && (!empty('%s') && !empty('%s'))) || (('%s' < 0.1 || '%s' < 0.1) && (!empty('%s') && !empty('%s')))",
+                        LEFT_EYE_WITHOUT_CORRECTION_ID,
+                        RIGHT_EYE_WITHOUT_CORRECTION_ID,
+                        LEFT_EYE_WITHOUT_CORRECTION_ID,
+                        RIGHT_EYE_WITHOUT_CORRECTION_ID,
+                        LEFT_EYE_WITHOUT_CORRECTION_ID,
+                        RIGHT_EYE_WITHOUT_CORRECTION_ID,
+                        LEFT_EYE_WITHOUT_CORRECTION_ID,
+                        RIGHT_EYE_WITHOUT_CORRECTION_ID
+                    )
+                )
+            )
+            .build(),
+        ElementRuleLimit.builder()
+            .id(ELEMENT_ID)
+            .type(ElementRuleType.TEXT_LIMIT)
+            .limit(new RuleLimit((short) 250))
+            .build()
+    );
+
     final var element = QuestionToleransKorrektionV2.questionToleransKorrektionV2();
 
-    assertEquals(2, element.rules().size());
-  }
-
-  @Test
-  void shouldIncludeTextLimitRule() {
-    final var expectedRule = ElementRuleLimit.builder()
-        .id(ELEMENT_ID)
-        .type(ElementRuleType.TEXT_LIMIT)
-        .limit(new RuleLimit((short) 250))
-        .build();
-
-    final var element = QuestionToleransKorrektionV2.questionToleransKorrektionV2();
-
-    assertEquals(expectedRule, element.rules().get(1));
+    assertEquals(expectedRules, element.rules());
   }
 
   @Test

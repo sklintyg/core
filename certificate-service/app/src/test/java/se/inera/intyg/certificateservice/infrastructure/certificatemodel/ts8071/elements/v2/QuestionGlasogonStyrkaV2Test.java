@@ -3,7 +3,9 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSynskarpa.LEFT_EYE_WITHOUT_CORRECTION_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSynskarpa.QUESTION_SYNSKARPA_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSynskarpa.RIGHT_EYE_WITHOUT_CORRECTION_ID;
 
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -14,7 +16,10 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueVi
 import se.inera.intyg.certificateservice.domain.certificate.model.VisualAcuity;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 
 class QuestionGlasogonStyrkaV2Test {
@@ -45,9 +50,36 @@ class QuestionGlasogonStyrkaV2Test {
 
   @Test
   void shouldIncludeRules() {
+    final var expectedRules = List.of(
+        ElementRuleExpression.builder()
+            .id(QUESTION_SYNSKARPA_ID)
+            .type(ElementRuleType.SHOW)
+            .expression(
+                new RuleExpression(
+                    String.format(
+                        "(('%s' < 0.8 && '%s' < 0.8) && (!empty('%s') && !empty('%s'))) || (('%s' < 0.1 || '%s' < 0.1) && (!empty('%s') && !empty('%s')))",
+                        LEFT_EYE_WITHOUT_CORRECTION_ID,
+                        RIGHT_EYE_WITHOUT_CORRECTION_ID,
+                        LEFT_EYE_WITHOUT_CORRECTION_ID,
+                        RIGHT_EYE_WITHOUT_CORRECTION_ID,
+                        LEFT_EYE_WITHOUT_CORRECTION_ID,
+                        RIGHT_EYE_WITHOUT_CORRECTION_ID,
+                        LEFT_EYE_WITHOUT_CORRECTION_ID,
+                        RIGHT_EYE_WITHOUT_CORRECTION_ID
+                    )
+                )
+            )
+            .build(),
+        ElementRuleExpression.builder()
+            .id(ELEMENT_ID)
+            .type(ElementRuleType.MANDATORY)
+            .expression(new RuleExpression("exists($25.1)"))
+            .build()
+    );
+
     final var element = QuestionGlasogonStyrkaV2.questionGlasogonStyrkaV2();
 
-    assertEquals(2, element.rules().size());
+    assertEquals(expectedRules, element.rules());
   }
 
   @Test

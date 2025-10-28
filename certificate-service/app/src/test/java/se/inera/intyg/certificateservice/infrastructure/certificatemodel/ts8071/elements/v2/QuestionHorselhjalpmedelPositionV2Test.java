@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvAnatomiskLokalisationHorapparat.HOGER;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvAnatomiskLokalisationHorapparat.VANSTER;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionHorselV2.QUESTION_HORSEL_V2_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionHorselhjalpmedelV2.QUESTION_HORSELHJALPMEDEL_V2_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionHorselhjalpmedelV2.QUESTION_HORSELHJALPMEDEL_V2_ID;
 
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -17,7 +19,10 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementLayout;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationCodeList;
 
 class QuestionHorselhjalpmedelPositionV2Test {
@@ -60,9 +65,23 @@ class QuestionHorselhjalpmedelPositionV2Test {
 
   @Test
   void shouldIncludeRules() {
+    final var expectedRules = List.of(
+        ElementRuleExpression.builder()
+            .id(ELEMENT_ID)
+            .type(ElementRuleType.MANDATORY)
+            .expression(new RuleExpression(
+                String.format("exists($%s) || exists($%s)", HOGER.code(), VANSTER.code())))
+            .build(),
+        ElementRuleExpression.builder()
+            .id(QUESTION_HORSELHJALPMEDEL_V2_ID)
+            .type(ElementRuleType.SHOW)
+            .expression(new RuleExpression("$" + QUESTION_HORSELHJALPMEDEL_V2_FIELD_ID.value()))
+            .build()
+    );
+
     final var element = QuestionHorselhjalpmedelPositionV2.questionHorselhjalpmedelPositionV2();
 
-    assertEquals(2, element.rules().size());
+    assertEquals(expectedRules, element.rules());
   }
 
   @Test
