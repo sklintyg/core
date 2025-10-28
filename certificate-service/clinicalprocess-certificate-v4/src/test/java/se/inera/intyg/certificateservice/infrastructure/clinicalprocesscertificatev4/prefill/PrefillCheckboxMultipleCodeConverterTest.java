@@ -29,11 +29,13 @@ class PrefillCheckboxMultipleCodeConverterTest {
 
   private static final ObjectFactory OBJECT_FACTORY = new ObjectFactory();
   private static final ElementId ELEMENT_ID = new ElementId("1");
-  private static final FieldId CODE_FIELD_ID = new FieldId("F1");
   private static final FieldId FIELD_ID = new FieldId("F");
-  private static final FieldId CODE_2_FIELD_ID = new FieldId("F2");
-  private static final String CODE = "code1";
+  private static final String CODE_1 = "code1";
   private static final String CODE_2 = "code2";
+  private static final String D_1 = "D1";
+  private static final String D_2 = "D2";
+  private static final FieldId CODE_2_ID = new FieldId(CODE_2);
+  private static final FieldId CODE_ID = new FieldId(CODE_1);
   private static final ElementSpecification SPECIFICATION = ElementSpecification.builder()
       .id(ELEMENT_ID)
       .configuration(
@@ -42,9 +44,9 @@ class PrefillCheckboxMultipleCodeConverterTest {
               .list(
                   List.of(
                       new ElementConfigurationCode(
-                          CODE_FIELD_ID, "Code 1", new Code(CODE, "S1", "D1")),
+                          CODE_ID, "Code 1", new Code(CODE_1, "S1", D_1)),
                       new ElementConfigurationCode(
-                          CODE_2_FIELD_ID, "Code 2", new Code(CODE_2, "S1", "D2"))
+                          CODE_2_ID, "Code 2", new Code(CODE_2, "S1", D_2))
                   )
               )
               .build()
@@ -58,11 +60,11 @@ class PrefillCheckboxMultipleCodeConverterTest {
               .list(
                   List.of(
                       ElementValueCode.builder()
-                          .codeId(CODE_FIELD_ID)
-                          .code(CODE)
+                          .codeId(CODE_ID)
+                          .code(CODE_1)
                           .build(),
                       ElementValueCode.builder()
-                          .codeId(CODE_2_FIELD_ID)
+                          .codeId(CODE_2_ID)
                           .code(CODE_2)
                           .build()
                   )
@@ -127,7 +129,7 @@ class PrefillCheckboxMultipleCodeConverterTest {
       answer.setId(SPECIFICATION.id().id());
 
       final var subAnswer = new Delsvar();
-      subAnswer.setId("other");
+      subAnswer.setId(FIELD_ID.value());
 
       final var content = List.of("invalid-checkboxMultipleCode-format");
       subAnswer.getContent().add(content);
@@ -153,7 +155,7 @@ class PrefillCheckboxMultipleCodeConverterTest {
       answer.setId(SPECIFICATION.id().id());
 
       final var subAnswer = new Delsvar();
-      subAnswer.setId("other");
+      subAnswer.setId(FIELD_ID.value());
 
       final var content = List.of("invalid-checkboxMultipleCode-format");
       subAnswer.getContent().add(content);
@@ -169,6 +171,29 @@ class PrefillCheckboxMultipleCodeConverterTest {
           () -> assertEquals(1, result.getErrors().size()),
           () -> assertEquals(PrefillErrorType.INVALID_FORMAT, result.getErrors().getFirst().type())
       );
+    }
+
+    @Test
+    void shouldReturnElementDataFromMatchingSubAnswer() {
+      final var prefill = new Forifyllnad();
+
+      final var svar = new Svar();
+      svar.setId(SPECIFICATION.id().id());
+
+      final var delsvar = new Delsvar();
+      final var delsvar2 = new Delsvar();
+
+      delsvar.setId("other");
+      delsvar2.setId(FIELD_ID.value());
+      delsvar2.getContent().add(getElement(getCvType(CODE_2, D_2), OBJECT_FACTORY::createCv));
+
+      svar.getDelsvar().add(delsvar);
+      svar.getDelsvar().add(delsvar2);
+      prefill.getSvar().add(svar);
+
+      final var result = prefillCheckboxMultipleCodeConverter.prefillAnswer(SPECIFICATION, prefill);
+      assertEquals(CODE_2,
+          ((ElementValueCodeList) result.getElementData().value()).list().getFirst().code());
     }
 
     @Test
@@ -197,12 +222,12 @@ class PrefillCheckboxMultipleCodeConverterTest {
                   .list(
                       List.of(
                           ElementValueCode.builder()
-                              .codeId(CODE_FIELD_ID)
-                              .code(CODE_FIELD_ID.value())
+                              .codeId(CODE_ID)
+                              .code(CODE_1)
                               .build(),
                           ElementValueCode.builder()
-                              .codeId(CODE_2_FIELD_ID)
-                              .code(CODE_2_FIELD_ID.value())
+                              .codeId(CODE_2_ID)
+                              .code(CODE_2)
                               .build()
                       )
                   )
@@ -218,9 +243,9 @@ class PrefillCheckboxMultipleCodeConverterTest {
                   .list(
                       List.of(
                           new ElementConfigurationCode(
-                              CODE_FIELD_ID, "Code 1", new Code(CODE, "S1", "D1")),
+                              CODE_ID, "Code 1", new Code(CODE_1, "S1", D_1)),
                           new ElementConfigurationCode(
-                              CODE_2_FIELD_ID, "Code 2", new Code(CODE_2, "S1", "D2"))
+                              CODE_2_ID, "Code 2", new Code(CODE_2, "S1", D_2))
                       )
                   )
                   .build()
@@ -246,18 +271,10 @@ class PrefillCheckboxMultipleCodeConverterTest {
     final var delsvar = new Delsvar();
     final var delsvar2 = new Delsvar();
 
-    delsvar.setId("other");
-    delsvar2.setId("other2");
-    final var cvType1 = new CVType();
-    cvType1.setCode(CODE);
-    cvType1.setCodeSystem("S1");
-    cvType1.setDisplayName("D1");
-    final var cvType2 = new CVType();
-    cvType2.setCode(CODE_2);
-    cvType2.setDisplayName("D2");
-    cvType2.setCodeSystem("S1");
-    delsvar.getContent().add(getElement(cvType1, OBJECT_FACTORY::createCv));
-    delsvar2.getContent().add(getElement(cvType2, OBJECT_FACTORY::createCv));
+    delsvar.setId(FIELD_ID.value());
+    delsvar2.setId(FIELD_ID.value());
+    delsvar.getContent().add(getElement(getCvType(CODE_1, D_1), OBJECT_FACTORY::createCv));
+    delsvar2.getContent().add(getElement(getCvType(CODE_2, D_2), OBJECT_FACTORY::createCv));
 
     svar.getDelsvar().add(delsvar);
     svar2.getDelsvar().add(delsvar2);
@@ -265,5 +282,13 @@ class PrefillCheckboxMultipleCodeConverterTest {
     prefill.getSvar().add(svar);
     prefill.getSvar().add(svar2);
     return prefill;
+  }
+
+  private static CVType getCvType(String code, String display) {
+    final var cvType2 = new CVType();
+    cvType2.setCode(code);
+    cvType2.setDisplayName(display);
+    cvType2.setCodeSystem("S1");
+    return cvType2;
   }
 }

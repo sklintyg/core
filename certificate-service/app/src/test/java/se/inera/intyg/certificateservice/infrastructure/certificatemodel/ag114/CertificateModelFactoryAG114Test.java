@@ -19,8 +19,10 @@ import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateTypeName;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 
 class CertificateModelFactoryAG114Test {
@@ -59,12 +61,12 @@ class CertificateModelFactoryAG114Test {
   }
 
   @Test
-  void shouldIncludeExternalType() {
-    final var expectedExternalType = new CertificateType("ag1-14");
+  void shouldIncludeTypeName() {
+    final var expected = new CertificateTypeName("AG1-14");
 
     final var certificateModel = certificateModelFactoryAG114.create();
 
-    assertEquals(expectedExternalType, certificateModel.typeName());
+    assertEquals(expected, certificateModel.typeName());
   }
 
   @Test
@@ -141,6 +143,19 @@ class CertificateModelFactoryAG114Test {
     final var certificateModel = certificateModelFactoryAG114.create();
 
     assertEquals(certificateActionFactory, certificateModel.certificateActionFactory());
+  }
+
+  @Test
+  void shouldIncludeCorrectType() {
+    final var expected = new Code(
+        "AG1-14",
+        "b64ea353-e8f6-4832-b563-fc7d46f29548",
+        "Läkarintyg om arbetsförmåga – sjuklöneperiod"
+    );
+
+    final var actual = certificateModelFactoryAG114.create().type();
+
+    assertEquals(expected, actual);
   }
 
   @Nested

@@ -44,28 +44,7 @@ class SchematronValidationFK7804Test {
   private DiagnosisCodeRepository diagnosisCodeRepository;
 
   private SchematronValidator schematronValidator;
-  private final XmlGeneratorCertificateV4 generator = new XmlGeneratorCertificateV4(
-      new XmlGeneratorValue(
-          List.of(
-              new XmlGeneratorDateRangeList(),
-              new XmlGeneratorText(),
-              new XmlGeneratorBoolean(),
-              new XmlGeneratorCode(),
-              new XmlGeneratorCodeList(),
-              new XmlGeneratorDateList(),
-              new XmlGeneratorDiagnosisList(),
-              new XmlGeneratorIcfValue(),
-              new XmlGeneratorInteger()
-          ),
-          List.of(
-              new XmlGeneratorUnifiedDiagnosisList()
-          )
-      ),
-      new XmlValidationService(
-          new SchematronValidator(),
-          new SchemaValidatorV4()
-      )
-  );
+  private XmlGeneratorCertificateV4 generator;
   private CertificateModelFactoryFK7804 certificateModelFactoryFK7804;
 
   @BeforeEach
@@ -73,10 +52,33 @@ class SchematronValidationFK7804Test {
     schematronValidator = new SchematronValidator();
     certificateModelFactoryFK7804 = new CertificateModelFactoryFK7804(certificateActionFactory,
         diagnosisCodeRepository);
+    generator = new XmlGeneratorCertificateV4(
+        new XmlGeneratorValue(
+            List.of(
+                new XmlGeneratorDateRangeList(),
+                new XmlGeneratorText(),
+                new XmlGeneratorBoolean(),
+                new XmlGeneratorCode(),
+                new XmlGeneratorCodeList(),
+                new XmlGeneratorDateList(),
+                new XmlGeneratorDiagnosisList(),
+                new XmlGeneratorIcfValue(),
+                new XmlGeneratorInteger()
+            ),
+            List.of(
+                new XmlGeneratorUnifiedDiagnosisList(diagnosisCodeRepository)
+            )
+        ),
+        new XmlValidationService(
+            new SchematronValidator(),
+            new SchemaValidatorV4()
+        )
+    );
   }
 
   @Test
   void shallReturnTrueIfAllFieldsHaveValues() {
+
     final var certificate = TestDataCertificate.fk7804CertificateBuilder()
         .certificateModel(certificateModelFactoryFK7804.create())
         .build();
@@ -361,3 +363,4 @@ class SchematronValidationFK7804Test {
     }
   }
 }
+

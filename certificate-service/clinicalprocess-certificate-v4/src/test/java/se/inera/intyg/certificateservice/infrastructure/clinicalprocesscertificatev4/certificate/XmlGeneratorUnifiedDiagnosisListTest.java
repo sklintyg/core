@@ -2,16 +2,23 @@ package se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertific
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.certificate.model.CustomMapperId.UNIFIED_DIAGNOSIS_LIST;
 
 import jakarta.xml.bind.JAXBElement;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
@@ -22,8 +29,13 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementDi
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.diagnosiscode.model.Diagnosis;
+import se.inera.intyg.certificateservice.domain.diagnosiscode.model.DiagnosisCode;
+import se.inera.intyg.certificateservice.domain.diagnosiscode.model.DiagnosisDescription;
+import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.CVType;
 
+@ExtendWith(MockitoExtension.class)
 class XmlGeneratorUnifiedDiagnosisListTest {
 
   private static final String QUESTION_ID = "QUESTION_ID";
@@ -38,10 +50,12 @@ class XmlGeneratorUnifiedDiagnosisListTest {
   private static ElementData data;
 
   private XmlGeneratorUnifiedDiagnosisList xmlGenerator;
+  @Mock
+  private DiagnosisCodeRepository diagnosisCodeRepository;
 
   @BeforeEach
   void setUp() {
-    xmlGenerator = new XmlGeneratorUnifiedDiagnosisList();
+    xmlGenerator = new XmlGeneratorUnifiedDiagnosisList(diagnosisCodeRepository);
   }
 
   @Test
@@ -85,6 +99,18 @@ class XmlGeneratorUnifiedDiagnosisListTest {
                   .build()
           )
           .build();
+
+      when(diagnosisCodeRepository.findByCode(any(DiagnosisCode.class)))
+          .thenAnswer(invocation -> {
+            DiagnosisCode code = invocation.getArgument(0, DiagnosisCode.class);
+            if (CODE_ONE.equals(code.value())) {
+              return Optional.of(Diagnosis.builder()
+                  .code(new DiagnosisCode(CODE_ONE))
+                  .description(new DiagnosisDescription(DESCRIPTION_ONE))
+                  .build());
+            }
+            return Optional.empty();
+          });
     }
 
     @Test
@@ -128,6 +154,42 @@ class XmlGeneratorUnifiedDiagnosisListTest {
           () -> assertEquals(2, delsvar.size()),
           () -> assertEquals(QUESTION_ID + ".1", delsvarDescription.getId()),
           () -> assertEquals(DESCRIPTION_ONE, delsvarDescriptionAsStr)
+      );
+    }
+
+    @Test
+    void shallExcludeDescriptionIfMissingDiagnosisCodeInRepository() {
+      final var data = ElementData.builder()
+          .id(new ElementId(QUESTION_ID))
+          .value(
+              ElementValueDiagnosisList.builder()
+                  .diagnoses(
+                      List.of(
+                          ElementValueDiagnosis.builder()
+                              .code(CODE_TWO)
+                              .id(new FieldId(CODE_SYSTEM))
+                              .description(DESCRIPTION_ONE)
+                              .terminology(ICD_10_SE)
+                              .build()
+                      )
+                  )
+                  .build()
+          )
+          .build();
+
+      final var response = xmlGenerator.generate(data, elementSpecification);
+
+      final var delsvar = response.getFirst().getDelsvar();
+      final var delsvarCode = response.getFirst().getDelsvar().getLast();
+      final var jaxbElement = (JAXBElement<CVType>) delsvarCode.getContent().getFirst();
+      final var cvType = jaxbElement.getValue();
+
+      assertAll(
+          () -> assertEquals(2, delsvar.size()),
+          () -> assertEquals(QUESTION_ID + ".2", delsvarCode.getId()),
+          () -> assertEquals(CODE_TWO, cvType.getCode()),
+          () -> assertEquals(CODE_SYSTEM, cvType.getCodeSystem()),
+          () -> assertNull(cvType.getDisplayName())
       );
     }
   }
@@ -174,6 +236,21 @@ class XmlGeneratorUnifiedDiagnosisListTest {
                   .build()
           )
           .build();
+
+      when(diagnosisCodeRepository.findByCode(any(DiagnosisCode.class)))
+          .thenAnswer(invocation -> {
+            DiagnosisCode code = invocation.getArgument(0, DiagnosisCode.class);
+            if (CODE_ONE.equals(code.value())) {
+              return Optional.of(Diagnosis.builder()
+                  .code(new DiagnosisCode(CODE_ONE))
+                  .description(new DiagnosisDescription(DESCRIPTION_ONE))
+                  .build());
+            }
+            return Optional.of(Diagnosis.builder()
+                .code(new DiagnosisCode(CODE_TWO))
+                .description(new DiagnosisDescription(DESCRIPTION_TWO))
+                .build());
+          });
     }
 
     @Test

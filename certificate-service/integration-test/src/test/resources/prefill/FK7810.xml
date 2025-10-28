@@ -113,7 +113,7 @@
     <ns2:delsvar id="58.2">
       <ns4:cv>
         <ns4:code>A78</ns4:code>
-        <ns4:codeSystem>1.2.752.116.1.1.1.1.8</ns4:codeSystem>
+        <ns4:codeSystem>1.2.752.116.1.1.1.1.3</ns4:codeSystem>
         <ns4:displayName>Q-feber</ns4:displayName>
       </ns4:cv>
     </ns2:delsvar>
@@ -124,7 +124,7 @@
     <ns2:delsvar id="58.2">
       <ns4:cv>
         <ns4:code>A25</ns4:code>
-        <ns4:codeSystem>1.2.752.116.1.1.1.1.8</ns4:codeSystem>
+        <ns4:codeSystem>1.2.752.116.1.1.1.1.3</ns4:codeSystem>
         <ns4:displayName>Råttbettsfeber</ns4:displayName>
       </ns4:cv>
     </ns2:delsvar>
@@ -135,7 +135,7 @@
     <ns2:delsvar id="58.2">
       <ns4:cv>
         <ns4:code>A23</ns4:code>
-        <ns4:codeSystem>1.2.752.116.1.1.1.1.8</ns4:codeSystem>
+        <ns4:codeSystem>1.2.752.116.1.1.1.1.3</ns4:codeSystem>
         <ns4:displayName>Undulantfeber</ns4:displayName>
       </ns4:cv>
     </ns2:delsvar>
@@ -146,7 +146,7 @@
     <ns2:delsvar id="58.2">
       <ns4:cv>
         <ns4:code>A984</ns4:code>
-        <ns4:codeSystem>1.2.752.116.1.1.1.1.8</ns4:codeSystem>
+        <ns4:codeSystem>1.2.752.116.1.1.1.1.3</ns4:codeSystem>
         <ns4:displayName>Ebolafeber</ns4:displayName>
       </ns4:cv>
     </ns2:delsvar>
@@ -157,7 +157,7 @@
     <ns2:delsvar id="58.2">
       <ns4:cv>
         <ns4:code>A010</ns4:code>
-        <ns4:codeSystem>1.2.752.116.1.1.1.1.8</ns4:codeSystem>
+        <ns4:codeSystem>1.2.752.116.1.1.1.1.3</ns4:codeSystem>
         <ns4:displayName>Tyfoidfeber</ns4:displayName>
       </ns4:cv>
     </ns2:delsvar>

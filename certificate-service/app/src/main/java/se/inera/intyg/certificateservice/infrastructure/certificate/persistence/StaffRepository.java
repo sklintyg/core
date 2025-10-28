@@ -7,26 +7,27 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.StaffEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffEntityRepository;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class StaffRepository {
 
   private final StaffEntityRepository staffEntityRepository;
+  private final MetadataVersionRepository metadataVersionRepository;
 
   public StaffEntity staff(Staff issuer) {
     return staffEntityRepository.findByHsaId(issuer.hsaId().id())
-        .orElseGet(
-            () -> staffEntityRepository.save(
-                toEntity(issuer)
-            )
-        );
+        .map(staffEntity -> updateStaffVersion(staffEntity, issuer))
+        .orElseGet(() -> staffEntityRepository.save(toEntity(issuer)));
   }
 
   public Map<HsaId, StaffEntity> staffs(Certificate certificate) {
@@ -44,24 +45,31 @@ public class StaffRepository {
       staffs.add(certificate.readyForSign().readyForSignBy());
     }
 
+    final var uniqueStaffs = staffs.stream().distinct().toList();
+
     final var staffEntities = staffEntityRepository.findStaffEntitiesByHsaIdIn(
-        staffs.stream()
-            .map(staff -> staff.hsaId().id())
-            .distinct()
-            .toList()
-    );
+        uniqueStaffs.stream().map(s -> s.hsaId().id()).toList());
 
     final var staffEntityMap = staffEntities.stream()
         .collect(Collectors.toMap(staff -> HsaId.create(staff.getHsaId()), Function.identity()));
 
-    staffs.forEach(staff -> {
-          if (!staffEntityMap.containsKey(staff.hsaId())) {
-            final var staffEntity = staffEntityRepository.save(toEntity(staff));
-            staffEntityMap.put(HsaId.create(staffEntity.getHsaId()), staffEntity);
-          }
-        }
-    );
+    uniqueStaffs.forEach(staff -> {
+      if (!staffEntityMap.containsKey(staff.hsaId())) {
+        staffEntityMap.put(staff.hsaId(), staffEntityRepository.save(toEntity(staff)));
+      } else {
+        staffEntityMap.replace(staff.hsaId(),
+            updateStaffVersion(staffEntityMap.get(staff.hsaId()), staff));
+      }
+    });
 
     return staffEntityMap;
+  }
+
+  private StaffEntity updateStaffVersion(StaffEntity staffEntity, Staff staff) {
+    final var newStaffEntity = StaffEntityMapper.toEntity(staff);
+    if (staffEntity.hasDiff(newStaffEntity)) {
+      return metadataVersionRepository.saveStaffVersion(staffEntity, newStaffEntity);
+    }
+    return staffEntity;
   }
 }

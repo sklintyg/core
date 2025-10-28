@@ -45,7 +45,7 @@ class QuestionDiagnosTest {
         .name("Barnets diagnos")
         .terminology(
             List.of(
-                new ElementDiagnosisTerminology("ICD_10_SE", "ICD-10-SE", "1.2.752.116.1.1.1.1.8")
+                new ElementDiagnosisTerminology("ICD_10_SE", "ICD-10-SE", "1.2.752.116.1.1.1.1.3")
             )
         )
         .list(

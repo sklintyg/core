@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_META_DATA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementData.contactInfoElementDataBuilder;
 
@@ -23,13 +24,13 @@ class PdfUnitValueGeneratorTest {
   @Test
   void shouldSetContactInformationOfUnitToField() {
     final var certificate = buildCertificate();
-    final var unit = certificate.certificateMetaData().issuingUnit();
     final var elementData = certificate.getElementDataById(
         new ElementId("UNIT_CONTACT_INFORMATION")
     );
     final var unitValue = (ElementValueUnitContactInformation) elementData.get().value();
     final var expectedAddress =
-        unit.name().name() + "\n" + unitValue.address() + ", " + unitValue.zipCode() + " "
+        CERTIFICATE_META_DATA.issuingUnit().name().name() + "\n" + unitValue.address() + ", "
+            + unitValue.zipCode() + " "
             + unitValue.city() + "\nTelefon: " + unitValue.phoneNumber();
 
     final var expected = List.of(
@@ -46,6 +47,8 @@ class PdfUnitValueGeneratorTest {
 
   private Certificate buildCertificate() {
     return fk7210CertificateBuilder()
+        .certificateMetaData(null)
+        .metaDataFromSignInstance(CERTIFICATE_META_DATA)
         .elementData(List.of(contactInfoElementDataBuilder().build()))
         .build();
   }

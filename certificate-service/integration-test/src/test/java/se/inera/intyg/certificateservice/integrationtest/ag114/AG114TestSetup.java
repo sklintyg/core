@@ -14,9 +14,8 @@ public class AG114TestSetup {
   public static final String TYPE = "AG114 - ";
 
   private static final String CERTIFICATE_TYPE = "ag114";
-  private static final String EXTERNAL_TYPE = "ag1-14";
   private static final String ACTIVE_CERTIFICATE_TYPE_VERSION = "2.0";
-  private static final String CODE = "AG114";
+  private static final String CODE = "AG1-14";
   private static final String VALUE = "Svarstext för sysselsättning";
 
   public static BaseTestabilityUtilities.BaseTestabilityUtilitiesBuilder ag114TestSetup() {
@@ -24,7 +23,6 @@ public class AG114TestSetup {
         .testabilityCertificate(
             TestabilityCertificate.builder()
                 .type(CERTIFICATE_TYPE)
-                .externalType(EXTERNAL_TYPE)
                 .code(CODE)
                 .activeVersion(ACTIVE_CERTIFICATE_TYPE_VERSION)
                 .valueForTest(

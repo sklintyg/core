@@ -35,7 +35,7 @@ public class SickLeaveConverter {
 
     return SickLeaveCertificateItemDTO.builder()
         .certificateId(sickLeaveCertificate.id().id())
-        .certificateType(sickLeaveCertificate.type().code().toLowerCase())
+        .certificateType(sickLeaveCertificate.type().code().toUpperCase())
         .signingDateTime(sickLeaveCertificate.signingDateTime())
         .personalHsaId(sickLeaveCertificate.signingDoctorId().id())
         .personalFullName(sickLeaveCertificate.signingDoctorName().fullName())

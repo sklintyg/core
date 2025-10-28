@@ -5,19 +5,26 @@ import static se.inera.intyg.certificateservice.domain.certificate.model.CustomM
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.CustomMapperId;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
+import se.inera.intyg.certificateservice.domain.diagnosiscode.model.DiagnosisCode;
+import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.CVType;
 import se.riv.clinicalprocess.healthcond.certificate.types.v3.ObjectFactory;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar;
 import se.riv.clinicalprocess.healthcond.certificate.v3.Svar.Delsvar;
 
 @Component
+@RequiredArgsConstructor
 public class XmlGeneratorUnifiedDiagnosisList implements XmlGeneratorCustomMapper {
+
+  private final DiagnosisCodeRepository diagnosisCodeRepository;
 
   @Override
   public CustomMapperId id() {
@@ -58,7 +65,7 @@ public class XmlGeneratorUnifiedDiagnosisList implements XmlGeneratorCustomMappe
 
           final var cvType = new CVType();
           cvType.setCode(diagnosis.code());
-          cvType.setDisplayName(diagnosis.description());
+          cvType.setDisplayName(getDisplayName(diagnosis));
           cvType.setCodeSystem(configuration.codeSystem(diagnosis.terminology()));
 
           final var convertedCvType = objectFactory.createCv(cvType);
@@ -70,6 +77,12 @@ public class XmlGeneratorUnifiedDiagnosisList implements XmlGeneratorCustomMappe
     );
 
     return List.of(diagnosisAnswer);
+  }
+
+  private String getDisplayName(ElementValueDiagnosis diagnosis) {
+    return diagnosisCodeRepository.findByCode(new DiagnosisCode(diagnosis.code()))
+        .map(diagnosis1 -> diagnosis1.description().description())
+        .orElse(null);
   }
 
   private static String getIdDescription(ElementData data, int id) {

@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.domain.testdata;
 
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateTypeName;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
@@ -36,6 +37,17 @@ public class TestDataCertificateModelConstants {
   public static final CertificateVersion FK7804_VERSION = new CertificateVersion("2.0");
   public static final CertificateVersion AG7804_VERSION = new CertificateVersion("2.0");
   public static final CertificateVersion AG114_VERSION = new CertificateVersion("2.0");
+  public static final CertificateTypeName FK7210_TYPE_NAME = new CertificateTypeName("FK7210");
+  public static final CertificateTypeName FK3226_TYPE_NAME = new CertificateTypeName("FK3226");
+  public static final CertificateTypeName FK7472_TYPE_NAME = new CertificateTypeName("FK7472");
+  public static final CertificateTypeName FK7809_TYPE_NAME = new CertificateTypeName("FK7809");
+  public static final CertificateTypeName FK7427_TYPE_NAME = new CertificateTypeName("FK7427");
+  public static final CertificateTypeName FK7426_TYPE_NAME = new CertificateTypeName("FK7426");
+  public static final CertificateTypeName FK3221_TYPE_NAME = new CertificateTypeName("FK3221");
+  public static final CertificateTypeName FK7810_TYPE_NAME = new CertificateTypeName("FK7810");
+  public static final CertificateTypeName FK7804_TYPE_NAME = new CertificateTypeName("FK7804");
+  public static final CertificateTypeName AG7804_TYPE_NAME = new CertificateTypeName("AG7804");
+  public static final CertificateTypeName AG114_TYPE_NAME = new CertificateTypeName("AG1-14");
   public static final CertificateModelId FK7210_ID = CertificateModelId.builder()
       .type(FK7210_TYPE)
       .version(FK7210_VERSION)

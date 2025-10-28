@@ -130,7 +130,13 @@ public class PrefillCheckboxMultipleCodeConverter implements PrefillStandardConv
 
   private static ElementValueCode getCodes(List<Delsvar> subAnswer,
       ElementConfigurationCheckboxMultipleCode configuration) {
-    final var cvType = PrefillUnmarshaller.cvType(subAnswer.getFirst().getContent());
+    final var filteredSubAnswer = subAnswer.stream()
+        .filter(delsvar -> delsvar.getId().equals(configuration.id().value()))
+        .findFirst()
+        .orElseThrow(() -> new IllegalStateException(
+            "Could not find delsvar with id: " + configuration.id().value()));
+
+    final var cvType = PrefillUnmarshaller.cvType(filteredSubAnswer.getContent());
 
     if (cvType.isEmpty()) {
       throw new IllegalStateException("Invalid format cvType is empty");

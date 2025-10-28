@@ -119,7 +119,7 @@ public class QuestionDiagnos {
                 )
                 .terminology(
                     List.of(
-                        CodeSystemIcd10Se.terminology()
+                        CodeSystemIcd10Se.deprecatedTerminology()
                     )
                 )
                 .list(

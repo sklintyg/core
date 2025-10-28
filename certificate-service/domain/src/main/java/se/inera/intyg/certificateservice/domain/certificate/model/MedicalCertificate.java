@@ -73,10 +73,11 @@ public class MedicalCertificate implements Certificate {
   @Builder.Default
   private List<Message> messages = Collections.emptyList();
   private Forwarded forwarded;
-
   @Getter(AccessLevel.NONE)
   @EqualsAndHashCode.Exclude
   private CertificateRepository certificateRepository;
+  @Getter(AccessLevel.NONE)
+  private CertificateMetaData metaDataFromSignInstance;
 
   @Override
   public List<CertificateAction> actions(Optional<ActionEvaluation> actionEvaluation) {
@@ -652,5 +653,18 @@ public class MedicalCertificate implements Certificate {
 
     return certificates.stream()
         .max(Comparator.comparing(Certificate::signed));
+  }
+
+  public CertificateMetaData getMetadataForPrint() {
+    if (this.signed == null) {
+      return this.certificateMetaData;
+    }
+
+    if (metaDataFromSignInstance != null) {
+      return metaDataFromSignInstance;
+    }
+
+    return this.certificateRepository.getMetadataFromSignInstance(this.certificateMetaData,
+        this.signed);
   }
 }

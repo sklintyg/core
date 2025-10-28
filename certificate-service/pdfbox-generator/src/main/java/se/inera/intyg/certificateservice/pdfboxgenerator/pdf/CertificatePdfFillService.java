@@ -134,7 +134,7 @@ public class CertificatePdfFillService {
     try {
       final var patientField = PdfField.builder()
           .id(pdfSpecification.patientIdFieldIds().getLast().id())
-          .value(certificate.certificateMetaData().patient().id().idWithoutDash())
+          .value(certificate.getMetadataForPrint().patient().id().idWithoutDash())
           .build();
       setFieldValuesAppendix(document, pdfSpecification.overFlowPageIndex().value(), appendedFields,
           patientField, mcid, pdfSpecification);

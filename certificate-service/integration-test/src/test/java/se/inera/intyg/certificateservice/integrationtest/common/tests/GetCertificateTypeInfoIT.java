@@ -30,8 +30,8 @@ public abstract class GetCertificateTypeInfoIT extends BaseIntegrationIT {
     );
 
     assertNotNull(
-        certificateTypeInfo(response.getBody(), externalType()),
-        "Should contain %s as it is active!".formatted(externalType())
+        certificateTypeInfo(response.getBody(), type()),
+        "Should contain %s as it is active!".formatted(type())
     );
   }
 
@@ -46,13 +46,13 @@ public abstract class GetCertificateTypeInfoIT extends BaseIntegrationIT {
 
     if (canDentistsUseType()) {
       assertNotNull(
-          certificateTypeInfo(response.getBody(), externalType()),
-          "Should contain %s as user is dentist and can use type!".formatted(externalType())
+          certificateTypeInfo(response.getBody(), type()),
+          "Should contain %s as user is dentist and can use type!".formatted(type())
       );
     } else {
       assertNull(
-          certificateTypeInfo(response.getBody(), externalType()),
-          "Should not contain %s as user is dentist!".formatted(externalType())
+          certificateTypeInfo(response.getBody(), type()),
+          "Should not contain %s as user is dentist!".formatted(type())
       );
     }
   }
@@ -64,7 +64,7 @@ public abstract class GetCertificateTypeInfoIT extends BaseIntegrationIT {
         defaultCertificateTypeInfoRequest()
     );
 
-    final var resourceLink = resourceLink(certificateTypeInfo(response.getBody(), externalType()),
+    final var resourceLink = resourceLink(certificateTypeInfo(response.getBody(), type()),
         ResourceLinkTypeDTO.CREATE_CERTIFICATE);
 
     assertNotNull(resourceLink,
@@ -81,7 +81,7 @@ public abstract class GetCertificateTypeInfoIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var resourceLink = resourceLink(certificateTypeInfo(response.getBody(), externalType()),
+    final var resourceLink = resourceLink(certificateTypeInfo(response.getBody(), type()),
         ResourceLinkTypeDTO.CREATE_CERTIFICATE);
 
     assertNotNull(resourceLink,
@@ -102,7 +102,7 @@ public abstract class GetCertificateTypeInfoIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var resourceLink = resourceLink(certificateTypeInfo(response.getBody(), externalType()),
+    final var resourceLink = resourceLink(certificateTypeInfo(response.getBody(), type()),
         ResourceLinkTypeDTO.CREATE_CERTIFICATE);
 
     assertNotNull(resourceLink,
@@ -124,7 +124,7 @@ public abstract class GetCertificateTypeInfoIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var resourceLink = resourceLink(certificateTypeInfo(response.getBody(), externalType()),
+    final var resourceLink = resourceLink(certificateTypeInfo(response.getBody(), type()),
         ResourceLinkTypeDTO.CREATE_CERTIFICATE);
 
     assertNotNull(resourceLink,
@@ -142,7 +142,7 @@ public abstract class GetCertificateTypeInfoIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var resourceLink = resourceLink(certificateTypeInfo(response.getBody(), externalType()),
+    final var resourceLink = resourceLink(certificateTypeInfo(response.getBody(), type()),
         ResourceLinkTypeDTO.CREATE_CERTIFICATE);
 
     assertNotNull(resourceLink,
@@ -160,7 +160,7 @@ public abstract class GetCertificateTypeInfoIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var resourceLink = resourceLink(certificateTypeInfo(response.getBody(), externalType()),
+    final var resourceLink = resourceLink(certificateTypeInfo(response.getBody(), type()),
         ResourceLinkTypeDTO.CREATE_CERTIFICATE);
 
     assertNotNull(resourceLink,

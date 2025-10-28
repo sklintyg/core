@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
+import se.inera.intyg.certificateservice.infrastructure.errorutil.OptimisticLockErrorHandler;
 import se.inera.intyg.certificateservice.testability.certificate.dto.SupportedCertificateTypesResponse;
 import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityCertificateRequest;
 import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityResetCertificateRequest;
@@ -26,6 +27,7 @@ public class TestabilityCertificateController {
   private final TestabilityCertificateService testabilityCertificateService;
 
   @PostMapping
+  @OptimisticLockErrorHandler
   CreateCertificateResponse createCertificate(
       @RequestBody TestabilityCertificateRequest testabilityCertificateRequest) {
     return testabilityCertificateService.create(testabilityCertificateRequest);
