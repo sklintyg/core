@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionHjartsjukdom.QUESTION_HJARTSJUKDOM_ID;
 
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -12,21 +13,19 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 
-class QuestionLakemedelV1BeskrivningV2Test {
+class QuestionHjartsjukdomBehandladBeskrivningV2Test {
 
-  private static final ElementId ELEMENT_ID = new ElementId("18.9");
+  private static final ElementId ELEMENT_ID = new ElementId("11.4");
 
   @Test
   void shouldIncludeId() {
-    final var element = QuestionLakemedelBeskrivningV2.questionLakemedelBeskrivningV2();
+    final var element = QuestionHjartsjukdomBehandladBeskrivningV2.questionHjartsjukdomBehandladBeskrivningV2();
 
     assertEquals(ELEMENT_ID, element.id());
   }
@@ -34,42 +33,37 @@ class QuestionLakemedelV1BeskrivningV2Test {
   @Test
   void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationTextArea.builder()
-        .name("Ange läkemedel och ordinerad dos")
-        .id(new FieldId("18.9"))
+        .name("Ange när och hur tillståndet behandlats")
+        .id(new FieldId("11.4"))
         .build();
 
-    final var element = QuestionLakemedelBeskrivningV2.questionLakemedelBeskrivningV2();
+    final var element = QuestionHjartsjukdomBehandladBeskrivningV2.questionHjartsjukdomBehandladBeskrivningV2();
 
     assertEquals(expectedConfiguration, element.configuration());
   }
 
   @Test
   void shouldIncludeRules() {
-    final var expectedRules = List.of(
-        ElementRuleExpression.builder()
-            .id(new ElementId("18.8"))
-            .type(ElementRuleType.SHOW)
-            .expression(new RuleExpression("$18.8"))
-            .build(),
-        ElementRuleExpression.builder()
-            .id(ELEMENT_ID)
-            .type(ElementRuleType.MANDATORY)
-            .expression(new RuleExpression("$18.9"))
-            .build(),
-        ElementRuleLimit.builder()
-            .id(ELEMENT_ID)
-            .type(ElementRuleType.TEXT_LIMIT)
-            .limit(new RuleLimit((short) 250))
-            .build()
-    );
+    final var element = QuestionHjartsjukdomBehandladBeskrivningV2.questionHjartsjukdomBehandladBeskrivningV2();
 
-    final var element = QuestionLakemedelBeskrivningV2.questionLakemedelBeskrivningV2();
-
-    assertEquals(expectedRules, element.rules());
+    assertEquals(3, element.rules().size());
   }
 
   @Test
-  void shouldIncludeValidation() {
+  void shouldIncludeTextLimitRule() {
+    final var expectedRule = ElementRuleLimit.builder()
+        .id(ELEMENT_ID)
+        .type(ElementRuleType.TEXT_LIMIT)
+        .limit(new RuleLimit((short) 250))
+        .build();
+
+    final var element = QuestionHjartsjukdomBehandladBeskrivningV2.questionHjartsjukdomBehandladBeskrivningV2();
+
+    assertEquals(expectedRule, element.rules().get(2));
+  }
+
+  @Test
+  void shouldIncludeValidations() {
     final var expectedValidations = List.of(
         ElementValidationText.builder()
             .mandatory(true)
@@ -77,16 +71,16 @@ class QuestionLakemedelV1BeskrivningV2Test {
             .build()
     );
 
-    final var element = QuestionLakemedelBeskrivningV2.questionLakemedelBeskrivningV2();
+    final var element = QuestionHjartsjukdomBehandladBeskrivningV2.questionHjartsjukdomBehandladBeskrivningV2();
 
     assertEquals(expectedValidations, element.validations());
   }
 
   @Test
   void shouldIncludeMapping() {
-    final var element = QuestionLakemedelBeskrivningV2.questionLakemedelBeskrivningV2();
+    final var element = QuestionHjartsjukdomBehandladBeskrivningV2.questionHjartsjukdomBehandladBeskrivningV2();
 
-    assertEquals(new ElementMapping(new ElementId("18"), null), element.mapping());
+    assertEquals(new ElementMapping(QUESTION_HJARTSJUKDOM_ID, null), element.mapping());
   }
 
   @Nested
@@ -96,7 +90,7 @@ class QuestionLakemedelV1BeskrivningV2Test {
     void shouldReturnTrueIfBooleanIsTrue() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("18.8"))
+              .id(new ElementId("11.3"))
               .value(
                   ElementValueBoolean.builder()
                       .value(true)
@@ -105,7 +99,7 @@ class QuestionLakemedelV1BeskrivningV2Test {
               .build()
       );
 
-      final var element = QuestionLakemedelBeskrivningV2.questionLakemedelBeskrivningV2();
+      final var element = QuestionHjartsjukdomBehandladBeskrivningV2.questionHjartsjukdomBehandladBeskrivningV2();
 
       final var shouldValidate = element.shouldValidate();
 
@@ -116,7 +110,7 @@ class QuestionLakemedelV1BeskrivningV2Test {
     void shouldReturnFalseIfElementMissing() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("7.1"))
+              .id(new ElementId("11.1"))
               .value(
                   ElementValueBoolean.builder()
                       .value(true)
@@ -125,7 +119,27 @@ class QuestionLakemedelV1BeskrivningV2Test {
               .build()
       );
 
-      final var element = QuestionLakemedelBeskrivningV2.questionLakemedelBeskrivningV2();
+      final var element = QuestionHjartsjukdomBehandladBeskrivningV2.questionHjartsjukdomBehandladBeskrivningV2();
+
+      final var shouldValidate = element.shouldValidate();
+
+      assertFalse(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shouldReturnFalseIfElementFalse() {
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId("11.3"))
+              .value(
+                  ElementValueBoolean.builder()
+                      .value(false)
+                      .build()
+              )
+              .build()
+      );
+
+      final var element = QuestionHjartsjukdomBehandladBeskrivningV2.questionHjartsjukdomBehandladBeskrivningV2();
 
       final var shouldValidate = element.shouldValidate();
 
@@ -133,3 +147,4 @@ class QuestionLakemedelV1BeskrivningV2Test {
     }
   }
 }
+

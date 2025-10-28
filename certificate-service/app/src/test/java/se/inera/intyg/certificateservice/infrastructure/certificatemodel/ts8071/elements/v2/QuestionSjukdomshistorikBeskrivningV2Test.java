@@ -3,7 +3,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionHjartsjukdom.QUESTION_HJARTSJUKDOM_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSjukdomEllerSynnedsattning.QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_ID;
 
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -19,13 +19,13 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 
-class QuestionHjartsjukdomBehandladBeskrivningV1V2Test {
+class QuestionSjukdomshistorikBeskrivningV2Test {
 
-  private static final ElementId ELEMENT_ID = new ElementId("11.4");
+  private static final ElementId ELEMENT_ID = new ElementId("7.4");
 
   @Test
   void shouldIncludeId() {
-    final var element = QuestionHjartsjukdomBehandladBeskrivningV2.questionHjartsjukdomBehandladBeskrivningV2();
+    final var element = QuestionSjukdomshistorikBeskrivningV2.questionSjukdomshistorikBeskrivningV2();
 
     assertEquals(ELEMENT_ID, element.id());
   }
@@ -33,18 +33,18 @@ class QuestionHjartsjukdomBehandladBeskrivningV1V2Test {
   @Test
   void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationTextArea.builder()
-        .name("Ange när och hur tillståndet behandlats")
-        .id(new FieldId("11.4"))
+        .name("Ange vad")
+        .id(new FieldId("7.4"))
         .build();
 
-    final var element = QuestionHjartsjukdomBehandladBeskrivningV2.questionHjartsjukdomBehandladBeskrivningV2();
+    final var element = QuestionSjukdomshistorikBeskrivningV2.questionSjukdomshistorikBeskrivningV2();
 
     assertEquals(expectedConfiguration, element.configuration());
   }
 
   @Test
   void shouldIncludeRules() {
-    final var element = QuestionHjartsjukdomBehandladBeskrivningV2.questionHjartsjukdomBehandladBeskrivningV2();
+    final var element = QuestionSjukdomshistorikBeskrivningV2.questionSjukdomshistorikBeskrivningV2();
 
     assertEquals(3, element.rules().size());
   }
@@ -57,7 +57,7 @@ class QuestionHjartsjukdomBehandladBeskrivningV1V2Test {
         .limit(new RuleLimit((short) 250))
         .build();
 
-    final var element = QuestionHjartsjukdomBehandladBeskrivningV2.questionHjartsjukdomBehandladBeskrivningV2();
+    final var element = QuestionSjukdomshistorikBeskrivningV2.questionSjukdomshistorikBeskrivningV2();
 
     assertEquals(expectedRule, element.rules().get(2));
   }
@@ -71,16 +71,17 @@ class QuestionHjartsjukdomBehandladBeskrivningV1V2Test {
             .build()
     );
 
-    final var element = QuestionHjartsjukdomBehandladBeskrivningV2.questionHjartsjukdomBehandladBeskrivningV2();
+    final var element = QuestionSjukdomshistorikBeskrivningV2.questionSjukdomshistorikBeskrivningV2();
 
     assertEquals(expectedValidations, element.validations());
   }
 
   @Test
   void shouldIncludeMapping() {
-    final var element = QuestionHjartsjukdomBehandladBeskrivningV2.questionHjartsjukdomBehandladBeskrivningV2();
+    final var element = QuestionSjukdomshistorikBeskrivningV2.questionSjukdomshistorikBeskrivningV2();
 
-    assertEquals(new ElementMapping(QUESTION_HJARTSJUKDOM_ID, null), element.mapping());
+    assertEquals(new ElementMapping(QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_ID, null),
+        element.mapping());
   }
 
   @Nested
@@ -90,7 +91,7 @@ class QuestionHjartsjukdomBehandladBeskrivningV1V2Test {
     void shouldReturnTrueIfBooleanIsTrue() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("11.3"))
+              .id(new ElementId("7.3"))
               .value(
                   ElementValueBoolean.builder()
                       .value(true)
@@ -99,7 +100,7 @@ class QuestionHjartsjukdomBehandladBeskrivningV1V2Test {
               .build()
       );
 
-      final var element = QuestionHjartsjukdomBehandladBeskrivningV2.questionHjartsjukdomBehandladBeskrivningV2();
+      final var element = QuestionSjukdomshistorikBeskrivningV2.questionSjukdomshistorikBeskrivningV2();
 
       final var shouldValidate = element.shouldValidate();
 
@@ -110,7 +111,7 @@ class QuestionHjartsjukdomBehandladBeskrivningV1V2Test {
     void shouldReturnFalseIfElementMissing() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("11.1"))
+              .id(new ElementId("7.1"))
               .value(
                   ElementValueBoolean.builder()
                       .value(true)
@@ -119,7 +120,7 @@ class QuestionHjartsjukdomBehandladBeskrivningV1V2Test {
               .build()
       );
 
-      final var element = QuestionHjartsjukdomBehandladBeskrivningV2.questionHjartsjukdomBehandladBeskrivningV2();
+      final var element = QuestionSjukdomshistorikBeskrivningV2.questionSjukdomshistorikBeskrivningV2();
 
       final var shouldValidate = element.shouldValidate();
 
@@ -130,7 +131,7 @@ class QuestionHjartsjukdomBehandladBeskrivningV1V2Test {
     void shouldReturnFalseIfElementFalse() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("11.3"))
+              .id(new ElementId("7.3"))
               .value(
                   ElementValueBoolean.builder()
                       .value(false)
@@ -139,7 +140,7 @@ class QuestionHjartsjukdomBehandladBeskrivningV1V2Test {
               .build()
       );
 
-      final var element = QuestionHjartsjukdomBehandladBeskrivningV2.questionHjartsjukdomBehandladBeskrivningV2();
+      final var element = QuestionSjukdomshistorikBeskrivningV2.questionSjukdomshistorikBeskrivningV2();
 
       final var shouldValidate = element.shouldValidate();
 
