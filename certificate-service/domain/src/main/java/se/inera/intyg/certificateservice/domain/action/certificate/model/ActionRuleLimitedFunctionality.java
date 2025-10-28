@@ -7,7 +7,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.repository.Cert
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 
 @RequiredArgsConstructor
-public class ActionRuleInactiveCertificateType implements ActionRule {
+public class ActionRuleLimitedFunctionality implements ActionRule {
 
   private final CertificateActionConfigurationRepository certificateActionConfigurationRepository;
   private final CertificateModelRepository certificateModelRepository;
@@ -15,8 +15,7 @@ public class ActionRuleInactiveCertificateType implements ActionRule {
   @Override
   public boolean evaluate(Optional<Certificate> certificate,
       Optional<ActionEvaluation> actionEvaluation) {
-    //Se över namngivning på ActionRulen så att den bättre matchar "begränsad funktionalitet"
-    //Hantera konfiguration kopplat till olika actions
+    //Hantera konfiguration kopplat till olika actions ActionRuleLimitedFunctionality
 
     final var evaluatedCertificate = certificate.orElseThrow(() -> new IllegalStateException(
         "Certificate is required for evaluating ActionRuleInactiveCertificateType"));
@@ -29,7 +28,7 @@ public class ActionRuleInactiveCertificateType implements ActionRule {
       return true;
     }
 
-    final var inactiveConfiguration = certificateActionConfigurationRepository.findInactiveConfiguration(
+    final var inactiveConfiguration = certificateActionConfigurationRepository.findLimitedFunctionalityConfiguration(
         evaluatedCertificate.certificateModel().id()
     );
 

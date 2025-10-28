@@ -456,8 +456,10 @@ public class AppConfig {
 
   @Bean
   public CertificateActionFactory certificateActionFactory(
-      CertificateActionConfigurationRepository certificateActionConfigurationRepository) {
-    return new CertificateActionFactory(certificateActionConfigurationRepository);
+      CertificateActionConfigurationRepository certificateActionConfigurationRepository,
+      CertificateModelRepository certificateModelRepository) {
+    return new CertificateActionFactory(certificateActionConfigurationRepository,
+        certificateModelRepository);
   }
 
   @Bean

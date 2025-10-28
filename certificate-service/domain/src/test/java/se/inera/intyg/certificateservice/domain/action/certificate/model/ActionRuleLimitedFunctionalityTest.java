@@ -20,10 +20,10 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
-import se.inera.intyg.certificateservice.domain.configuration.inactive.dto.CertificateInactiveConfiguration;
+import se.inera.intyg.certificateservice.domain.configuration.inactive.dto.LimitedFunctionalityConfiguration;
 
 @ExtendWith(MockitoExtension.class)
-class ActionRuleInactiveCertificateTypeTest {
+class ActionRuleLimitedFunctionalityTest {
 
   @Mock
   private CertificateActionConfigurationRepository certificateActionConfigurationRepository;
@@ -31,12 +31,12 @@ class ActionRuleInactiveCertificateTypeTest {
   private CertificateModelRepository certificateModelRepository;
 
   @InjectMocks
-  private ActionRuleInactiveCertificateType actionRuleInactiveCertificateType;
+  private ActionRuleLimitedFunctionality actionRuleLimitedFunctionality;
 
   @Test
   void shouldThrowIllegalStateExceptionWhenCertificateIsMissing() {
     final var illegalStateException = assertThrows(IllegalStateException.class,
-        () -> actionRuleInactiveCertificateType.evaluate(Optional.empty(), Optional.empty()));
+        () -> actionRuleLimitedFunctionality.evaluate(Optional.empty(), Optional.empty()));
 
     assertEquals("Certificate is required for evaluating ActionRuleInactiveCertificateType",
         illegalStateException.getMessage());
@@ -48,7 +48,7 @@ class ActionRuleInactiveCertificateTypeTest {
         AG7804_CERTIFICATE.certificateModel().typeName())).thenReturn(
         Optional.of(AG7804_CERTIFICATE.certificateModel()));
 
-    final var result = actionRuleInactiveCertificateType.evaluate(Optional.of(AG7804_CERTIFICATE)
+    final var result = actionRuleLimitedFunctionality.evaluate(Optional.of(AG7804_CERTIFICATE)
         , Optional.empty());
 
     assertTrue(result);
@@ -57,7 +57,7 @@ class ActionRuleInactiveCertificateTypeTest {
   @Test
   void shouldReturnFalseWhenCertificateIsNotLatestMajorVersionAndHasConfiguration() {
     final var inactiveConfigurations = List.of(
-        CertificateInactiveConfiguration.builder()
+        LimitedFunctionalityConfiguration.builder()
             .certificateType("type")
             .version(List.of("1.0"))
             .build()
@@ -74,11 +74,11 @@ class ActionRuleInactiveCertificateTypeTest {
         AG7804_CERTIFICATE.certificateModel().typeName())).thenReturn(
         Optional.of(modelWithNewerVersion)
     );
-    when(certificateActionConfigurationRepository.findInactiveConfiguration(
+    when(certificateActionConfigurationRepository.findLimitedFunctionalityConfiguration(
         AG7804_CERTIFICATE.certificateModel().id()))
         .thenReturn(inactiveConfigurations);
 
-    final var result = actionRuleInactiveCertificateType.evaluate(Optional.of(AG7804_CERTIFICATE)
+    final var result = actionRuleLimitedFunctionality.evaluate(Optional.of(AG7804_CERTIFICATE)
         , Optional.empty());
     assertFalse(result);
   }
@@ -97,11 +97,11 @@ class ActionRuleInactiveCertificateTypeTest {
         AG7804_CERTIFICATE.certificateModel().typeName())).thenReturn(
         Optional.of(modelWithNewerVersion)
     );
-    when(certificateActionConfigurationRepository.findInactiveConfiguration(
+    when(certificateActionConfigurationRepository.findLimitedFunctionalityConfiguration(
         AG7804_CERTIFICATE.certificateModel().id()))
         .thenReturn(Collections.emptyList());
 
-    final var result = actionRuleInactiveCertificateType.evaluate(Optional.of(AG7804_CERTIFICATE)
+    final var result = actionRuleLimitedFunctionality.evaluate(Optional.of(AG7804_CERTIFICATE)
         , Optional.empty());
     assertTrue(result);
   }

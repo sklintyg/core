@@ -11,38 +11,38 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
-import se.inera.intyg.certificateservice.domain.configuration.inactive.dto.CertificateInactiveConfiguration;
 import se.inera.intyg.certificateservice.domain.configuration.inactive.dto.InactiveCertificateActionConfiguration;
 import se.inera.intyg.certificateservice.domain.configuration.inactive.dto.InactiveCertificateConfiguration;
+import se.inera.intyg.certificateservice.domain.configuration.inactive.dto.LimitedFunctionalityConfiguration;
 
 @ExtendWith(MockitoExtension.class)
-class GetInactiveCertificateConfigurationTest {
+class GetLimitedFunctionalityConfigurationTest {
 
-  private static final String INACTIVE_CERTIFICATE_WITH_SEND_CONFIG = Paths.get("src", "test",
+  private static final String LIMITED_FUNCTIONALITY_WITH_SEND_CONFIG = Paths.get("src", "test",
       "resources",
-      "inactive",
-      "inactive-certificate-with-send-config.json").toString();
+      "limitedfunctionality",
+      "limited-functionality-with-send-config.json").toString();
 
-  private static final String INACTIVE_CERTIFICATE_WITHOUT_ACTIONS = Paths.get("src", "test",
+  private static final String LIMITED_FUNCTIONALITY_WITHOUT_ACTIONS = Paths.get("src", "test",
       "resources",
-      "inactive",
-      "inactive-certificate-without-actions.json").toString();
+      "limitedfunctionality",
+      "limited-functionality-without-actions.json").toString();
 
-  private GetInactiveCertificateConfiguration getInactiveCertificateConfiguration;
+  private GetLimitedFunctionalityConfiguration getLimitedFunctionalityConfiguration;
 
   @BeforeEach
   void setUp() {
-    getInactiveCertificateConfiguration = new GetInactiveCertificateConfiguration();
+    getLimitedFunctionalityConfiguration = new GetLimitedFunctionalityConfiguration();
   }
 
   @Test
   void shallParseFileWithActionSend() {
-    ReflectionTestUtils.setField(getInactiveCertificateConfiguration,
-        "inactiveCertificateConfigurationPath",
-        INACTIVE_CERTIFICATE_WITH_SEND_CONFIG);
+    ReflectionTestUtils.setField(getLimitedFunctionalityConfiguration,
+        "limitedFunctionalityConfigurationPath",
+        LIMITED_FUNCTIONALITY_WITH_SEND_CONFIG);
 
     final var expectedInactiveCertificateConfiguration = List.of(
-        CertificateInactiveConfiguration.builder()
+        LimitedFunctionalityConfiguration.builder()
             .certificateType("ts8071")
             .version(List.of("1.0"))
             .configuration(
@@ -60,18 +60,18 @@ class GetInactiveCertificateConfigurationTest {
             .build()
     );
 
-    final var actualCertificateAccessConfigurations = getInactiveCertificateConfiguration.get();
+    final var actualCertificateAccessConfigurations = getLimitedFunctionalityConfiguration.get();
     assertEquals(expectedInactiveCertificateConfiguration, actualCertificateAccessConfigurations);
   }
 
   @Test
   void shallParseFileWithoutActions() {
-    ReflectionTestUtils.setField(getInactiveCertificateConfiguration,
-        "inactiveCertificateConfigurationPath",
-        INACTIVE_CERTIFICATE_WITHOUT_ACTIONS);
+    ReflectionTestUtils.setField(getLimitedFunctionalityConfiguration,
+        "limitedFunctionalityConfigurationPath",
+        LIMITED_FUNCTIONALITY_WITHOUT_ACTIONS);
 
     final var expectedInactiveCertificateConfiguration = List.of(
-        CertificateInactiveConfiguration.builder()
+        LimitedFunctionalityConfiguration.builder()
             .certificateType("ts8071")
             .version(List.of("1.0"))
             .configuration(
@@ -82,7 +82,7 @@ class GetInactiveCertificateConfigurationTest {
             .build()
     );
 
-    final var actualCertificateAccessConfigurations = getInactiveCertificateConfiguration.get();
+    final var actualCertificateAccessConfigurations = getLimitedFunctionalityConfiguration.get();
     assertEquals(expectedInactiveCertificateConfiguration, actualCertificateAccessConfigurations);
   }
 }

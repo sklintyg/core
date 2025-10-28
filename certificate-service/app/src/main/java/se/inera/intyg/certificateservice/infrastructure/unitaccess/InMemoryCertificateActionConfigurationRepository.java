@@ -8,9 +8,9 @@ import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
-import se.inera.intyg.certificateservice.domain.configuration.inactive.dto.CertificateInactiveConfiguration;
+import se.inera.intyg.certificateservice.domain.configuration.inactive.dto.LimitedFunctionalityConfiguration;
 import se.inera.intyg.certificateservice.domain.configuration.unitaccess.dto.CertificateAccessConfiguration;
-import se.inera.intyg.certificateservice.infrastructure.configuration.GetInactiveCertificateConfiguration;
+import se.inera.intyg.certificateservice.infrastructure.configuration.GetLimitedFunctionalityConfiguration;
 import se.inera.intyg.certificateservice.infrastructure.configuration.UnitAccessConfiguration;
 
 @Slf4j
@@ -20,7 +20,7 @@ public class InMemoryCertificateActionConfigurationRepository implements
     CertificateActionConfigurationRepository {
 
   private final UnitAccessConfiguration unitAccessConfiguration;
-  private final GetInactiveCertificateConfiguration inactiveCertificateConfiguration;
+  private final GetLimitedFunctionalityConfiguration getLimitedFunctionalityConfiguration;
 
   @Override
   public List<CertificateAccessConfiguration> findAccessConfiguration(
@@ -39,15 +39,14 @@ public class InMemoryCertificateActionConfigurationRepository implements
   }
 
   @Override
-  public List<CertificateInactiveConfiguration> findInactiveConfiguration(
+  public List<LimitedFunctionalityConfiguration> findLimitedFunctionalityConfiguration(
       CertificateModelId certificateModelId) {
-    final var inactiveCertificateConfigurations = inactiveCertificateConfiguration.get();
-
-    if (inactiveCertificateConfigurations.isEmpty()) {
+    final var limitedFunctionalityConfigurations = getLimitedFunctionalityConfiguration.get();
+    if (limitedFunctionalityConfigurations.isEmpty()) {
       return Collections.emptyList();
     }
 
-    return inactiveCertificateConfigurations.stream()
+    return limitedFunctionalityConfigurations.stream()
         .filter(
             config -> certificateModelId.matches(config.certificateType(), config.version())
         )

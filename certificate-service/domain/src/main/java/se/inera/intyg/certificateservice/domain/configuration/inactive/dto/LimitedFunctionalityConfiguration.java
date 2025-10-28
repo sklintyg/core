@@ -7,13 +7,13 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import java.util.List;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.certificateservice.domain.configuration.inactive.dto.CertificateInactiveConfiguration.CertificateInactiveConfigurationBuilder;
+import se.inera.intyg.certificateservice.domain.configuration.inactive.dto.LimitedFunctionalityConfiguration.CertificateInactiveConfigurationBuilder;
 
 @JsonInclude
 @JsonDeserialize(builder = CertificateInactiveConfigurationBuilder.class)
 @Builder
 @Value
-public class CertificateInactiveConfiguration {
+public class LimitedFunctionalityConfiguration {
 
   @JsonProperty("certificateType")
   String certificateType;

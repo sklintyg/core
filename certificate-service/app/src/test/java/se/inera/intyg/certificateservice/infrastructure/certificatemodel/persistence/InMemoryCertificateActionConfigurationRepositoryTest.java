@@ -17,9 +17,9 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
-import se.inera.intyg.certificateservice.domain.configuration.inactive.dto.CertificateInactiveConfiguration;
+import se.inera.intyg.certificateservice.domain.configuration.inactive.dto.LimitedFunctionalityConfiguration;
 import se.inera.intyg.certificateservice.domain.configuration.unitaccess.dto.CertificateAccessConfiguration;
-import se.inera.intyg.certificateservice.infrastructure.configuration.GetInactiveCertificateConfiguration;
+import se.inera.intyg.certificateservice.infrastructure.configuration.GetLimitedFunctionalityConfiguration;
 import se.inera.intyg.certificateservice.infrastructure.configuration.UnitAccessConfiguration;
 import se.inera.intyg.certificateservice.infrastructure.unitaccess.InMemoryCertificateActionConfigurationRepository;
 
@@ -29,7 +29,7 @@ class InMemoryCertificateActionConfigurationRepositoryTest {
   private static final String TYPE = "type";
   private static final String VERSION = "1.0";
   @Mock
-  GetInactiveCertificateConfiguration getInactiveCertificateConfiguration;
+  GetLimitedFunctionalityConfiguration getLimitedFunctionalityConfiguration;
   @Mock
   UnitAccessConfiguration unitAccessConfiguration;
   @InjectMocks
@@ -118,9 +118,9 @@ class InMemoryCertificateActionConfigurationRepositoryTest {
     void shallReturnEmptyConfigurationIfNoConfigurationIsFound() {
       final var certificateModel = certificateModelBuilder.build();
 
-      doReturn(Collections.emptyList()).when(getInactiveCertificateConfiguration).get();
+      doReturn(Collections.emptyList()).when(getLimitedFunctionalityConfiguration).get();
 
-      final var result = inMemoryCertificateActionConfigurationRepository.findInactiveConfiguration(
+      final var result = inMemoryCertificateActionConfigurationRepository.findLimitedFunctionalityConfiguration(
           certificateModel.id()
       );
 
@@ -138,7 +138,7 @@ class InMemoryCertificateActionConfigurationRepositoryTest {
           )
           .build();
 
-      final var expectedConfiguration = CertificateInactiveConfiguration.builder()
+      final var expectedConfiguration = LimitedFunctionalityConfiguration.builder()
           .certificateType(TYPE)
           .version(List.of(VERSION))
           .build();
@@ -147,9 +147,9 @@ class InMemoryCertificateActionConfigurationRepositoryTest {
           expectedConfiguration
       );
 
-      doReturn(certificateInactiveConfigurations).when(getInactiveCertificateConfiguration).get();
+      doReturn(certificateInactiveConfigurations).when(getLimitedFunctionalityConfiguration).get();
 
-      final var result = inMemoryCertificateActionConfigurationRepository.findInactiveConfiguration(
+      final var result = inMemoryCertificateActionConfigurationRepository.findLimitedFunctionalityConfiguration(
           certificateModel.id()
       );
 
@@ -168,15 +168,15 @@ class InMemoryCertificateActionConfigurationRepositoryTest {
           .build();
 
       final var certificateInactiveConfigurations = List.of(
-          CertificateInactiveConfiguration.builder()
+          LimitedFunctionalityConfiguration.builder()
               .certificateType(TYPE)
               .version(List.of(VERSION))
               .build()
       );
 
-      doReturn(certificateInactiveConfigurations).when(getInactiveCertificateConfiguration).get();
+      doReturn(certificateInactiveConfigurations).when(getLimitedFunctionalityConfiguration).get();
 
-      final var result = inMemoryCertificateActionConfigurationRepository.findInactiveConfiguration(
+      final var result = inMemoryCertificateActionConfigurationRepository.findLimitedFunctionalityConfiguration(
           certificateModel.id()
       );
 
