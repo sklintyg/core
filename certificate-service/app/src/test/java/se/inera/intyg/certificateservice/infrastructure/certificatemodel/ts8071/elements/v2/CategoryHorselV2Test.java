@@ -6,6 +6,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.TAXI;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionIntygetAvser.QUESTION_INTYGET_AVSER_ID;
 
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -53,7 +54,7 @@ class CategoryHorselV2Test {
 
     final var element = CategoryHorselV2.categoryHorselV2();
 
-    assertEquals(expectedRule, element.rules().getFirst());
+    assertEquals(List.of(expectedRule), element.rules());
   }
 
   @Test
