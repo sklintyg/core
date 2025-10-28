@@ -5,13 +5,11 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
-import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 
 @RequiredArgsConstructor
 public class ActionRuleLimitedFunctionality implements ActionRule {
 
   private final CertificateActionConfigurationRepository certificateActionConfigurationRepository;
-  private final CertificateModelRepository certificateModelRepository;
   private final CertificateActionType certificateActionType;
 
   @Override
@@ -20,12 +18,7 @@ public class ActionRuleLimitedFunctionality implements ActionRule {
     final var evaluatedCertificate = certificate.orElseThrow(() -> new IllegalStateException(
         "Certificate is required for evaluating ActionRuleInactiveCertificateType"));
 
-    final var latestMajorModelId = certificateModelRepository.findLatestActiveByType(
-            evaluatedCertificate.certificateModel().typeName()
-        )
-        .orElseThrow().id();
-
-    if (latestMajorModelId.isSameVersion(evaluatedCertificate.certificateModel().id())) {
+    if (isLastestActiveVersion(evaluatedCertificate)) {
       return true;
     }
 
@@ -44,5 +37,10 @@ public class ActionRuleLimitedFunctionality implements ActionRule {
         .map(config -> LocalDateTime.now().isBefore(config.untilDateTime()))
         .findFirst()
         .orElse(false);
+  }
+
+  private static boolean isLastestActiveVersion(Certificate evaluatedCertificate) {
+    return evaluatedCertificate.certificateModel().id().version()
+        .isLastestActiveVersion(evaluatedCertificate.certificateModel().certificateVersions());
   }
 }

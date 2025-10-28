@@ -50,6 +50,10 @@ public class CertificateModel implements Comparator<ElementId> {
   SickLeaveProvider sickLeaveProvider;
   CitizenAvailableFunctionsProvider citizenAvailableFunctionsProvider;
   CertificateModelId ableToCreateDraftForModel;
+  @With
+  @Builder.Default
+  //TODO: FIX ME
+  List<CertificateVersion> certificateVersions = Collections.emptyList();
 
   public List<CertificateAction> actions() {
     return certificateActionSpecifications.stream()

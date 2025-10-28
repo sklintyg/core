@@ -6,14 +6,12 @@ import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
-import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 import se.inera.intyg.certificateservice.domain.common.model.AccessScope;
 
 @RequiredArgsConstructor
 public class CertificateActionFactory {
 
   private final CertificateActionConfigurationRepository certificateActionConfigurationRepository;
-  private final CertificateModelRepository certificateModelRepository;
 
   public CertificateAction create(CertificateActionSpecification actionSpecification) {
     return switch (actionSpecification.certificateActionType()) {
@@ -63,7 +61,6 @@ public class CertificateActionFactory {
                   new ActionRuleUserAgreement(),
                   new ActionRuleLimitedFunctionality(
                       certificateActionConfigurationRepository,
-                      certificateModelRepository,
                       actionSpecification.certificateActionType()
                   )
               )

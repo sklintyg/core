@@ -20,7 +20,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
-import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 import se.inera.intyg.certificateservice.domain.configuration.limitedfunctionality.dto.LimitedActionConfiguration;
 import se.inera.intyg.certificateservice.domain.configuration.limitedfunctionality.dto.LimitedFunctionalityActionsConfiguration;
 import se.inera.intyg.certificateservice.domain.configuration.limitedfunctionality.dto.LimitedFunctionalityConfiguration;
@@ -30,15 +29,13 @@ class ActionRuleLimitedFunctionalityTest {
 
   @Mock
   private CertificateActionConfigurationRepository certificateActionConfigurationRepository;
-  @Mock
-  private CertificateModelRepository certificateModelRepository;
 
   private ActionRuleLimitedFunctionality actionRuleLimitedFunctionality;
 
   @BeforeEach
   void setUp() {
     actionRuleLimitedFunctionality = new ActionRuleLimitedFunctionality(
-        certificateActionConfigurationRepository, certificateModelRepository, SEND);
+        certificateActionConfigurationRepository, SEND);
   }
 
   @Test
@@ -52,10 +49,6 @@ class ActionRuleLimitedFunctionalityTest {
 
   @Test
   void shouldReturnTrueWhenCertificateIsLatestMajorVersion() {
-    when(certificateModelRepository.findLatestActiveByType(
-        AG7804_CERTIFICATE.certificateModel().typeName())).thenReturn(
-        Optional.of(AG7804_CERTIFICATE.certificateModel()));
-
     final var result = actionRuleLimitedFunctionality.evaluate(Optional.of(AG7804_CERTIFICATE)
         , Optional.empty());
 
@@ -82,10 +75,6 @@ class ActionRuleLimitedFunctionalityTest {
         )
         .build();
 
-    when(certificateModelRepository.findLatestActiveByType(
-        AG7804_CERTIFICATE.certificateModel().typeName())).thenReturn(
-        Optional.of(modelWithNewerVersion)
-    );
     when(certificateActionConfigurationRepository.findLimitedFunctionalityConfiguration(
         AG7804_CERTIFICATE.certificateModel().id()))
         .thenReturn(inactiveConfigurations);
@@ -105,10 +94,6 @@ class ActionRuleLimitedFunctionalityTest {
         )
         .build();
 
-    when(certificateModelRepository.findLatestActiveByType(
-        AG7804_CERTIFICATE.certificateModel().typeName())).thenReturn(
-        Optional.of(modelWithNewerVersion)
-    );
     when(certificateActionConfigurationRepository.findLimitedFunctionalityConfiguration(
         AG7804_CERTIFICATE.certificateModel().id()))
         .thenReturn(null);
@@ -138,18 +123,6 @@ class ActionRuleLimitedFunctionalityTest {
             )
             .build();
 
-    final var modelWithNewerVersion = CertificateModel.builder()
-        .id(
-            CertificateModelId.builder()
-                .version(new CertificateVersion("3.0"))
-                .build()
-        )
-        .build();
-
-    when(certificateModelRepository.findLatestActiveByType(
-        AG7804_CERTIFICATE.certificateModel().typeName())).thenReturn(
-        Optional.of(modelWithNewerVersion)
-    );
     when(certificateActionConfigurationRepository.findLimitedFunctionalityConfiguration(
         AG7804_CERTIFICATE.certificateModel().id()))
         .thenReturn(limitedFunctionalityConfigurations);
@@ -187,10 +160,6 @@ class ActionRuleLimitedFunctionalityTest {
         )
         .build();
 
-    when(certificateModelRepository.findLatestActiveByType(
-        AG7804_CERTIFICATE.certificateModel().typeName())).thenReturn(
-        Optional.of(modelWithNewerVersion)
-    );
     when(certificateActionConfigurationRepository.findLimitedFunctionalityConfiguration(
         AG7804_CERTIFICATE.certificateModel().id()))
         .thenReturn(limitedFunctionalityConfigurations);
@@ -219,11 +188,7 @@ class ActionRuleLimitedFunctionalityTest {
                 .build()
         )
         .build();
-
-    when(certificateModelRepository.findLatestActiveByType(
-        AG7804_CERTIFICATE.certificateModel().typeName())).thenReturn(
-        Optional.of(modelWithNewerVersion)
-    );
+    
     when(certificateActionConfigurationRepository.findLimitedFunctionalityConfiguration(
         AG7804_CERTIFICATE.certificateModel().id()))
         .thenReturn(limitedFunctionalityConfigurations);

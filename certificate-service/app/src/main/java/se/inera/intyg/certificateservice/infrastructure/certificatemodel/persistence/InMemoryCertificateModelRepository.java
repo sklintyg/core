@@ -9,12 +9,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
@@ -37,6 +39,29 @@ public class InMemoryCertificateModelRepository implements CertificateModelRepos
       final var certificateModel = certificateModelFactory.create();
       certificateModelMap.put(certificateModel.id(), certificateModel);
       log.info("Loaded certificate model '{}' to repository", certificateModel.id());
+    });
+
+    final var certificateTypeToVersionReference = certificateModelMap.values().stream()
+        .filter(filterActiveCertificateModels())
+        .collect(
+            Collectors.groupingBy(
+                model -> model.id().type(),
+                Collectors.mapping(model -> new CertificateVersion(model.id().version().version()),
+                    Collectors.toList())
+            )
+        );
+
+    certificateModelMap.forEach((key, certificateModel) -> {
+      if (!certificateTypeToVersionReference.containsKey(certificateModel.id().type())) {
+        return;
+      }
+
+      certificateModelMap.put(
+          key,
+          certificateModel.withCertificateVersions(
+              certificateTypeToVersionReference.get(certificateModel.id().type())
+          )
+      );
     });
   }
 
