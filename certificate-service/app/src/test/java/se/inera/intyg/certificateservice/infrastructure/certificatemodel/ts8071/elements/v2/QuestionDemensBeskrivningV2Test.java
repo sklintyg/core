@@ -12,9 +12,11 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleLimit;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 
@@ -43,22 +45,26 @@ class QuestionDemensBeskrivningV2Test {
 
   @Test
   void shouldIncludeRules() {
+    final var expectedRules = List.of(
+        ElementRuleExpression.builder()
+            .id(new ElementId("16.2"))
+            .type(ElementRuleType.SHOW)
+            .expression(new RuleExpression("$16.2"))
+            .build(),
+        ElementRuleExpression.builder()
+            .id(ELEMENT_ID)
+            .type(ElementRuleType.MANDATORY)
+            .expression(new RuleExpression("$16.3"))
+            .build(),
+        ElementRuleLimit.builder()
+            .id(ELEMENT_ID)
+            .type(ElementRuleType.TEXT_LIMIT)
+            .limit(new RuleLimit((short) 250))
+            .build()
+    );
     final var element = QuestionDemensBeskrivningV2.questionDemensBeskrivningV2();
 
-    assertEquals(3, element.rules().size());
-  }
-
-  @Test
-  void shouldIncludeTextLimitRule() {
-    final var expectedRule = ElementRuleLimit.builder()
-        .id(ELEMENT_ID)
-        .type(ElementRuleType.TEXT_LIMIT)
-        .limit(new RuleLimit((short) 250))
-        .build();
-
-    final var element = QuestionDemensBeskrivningV2.questionDemensBeskrivningV2();
-
-    assertEquals(expectedRule, element.rules().get(2));
+    assertEquals(expectedRules, element.rules());
   }
 
   @Test
