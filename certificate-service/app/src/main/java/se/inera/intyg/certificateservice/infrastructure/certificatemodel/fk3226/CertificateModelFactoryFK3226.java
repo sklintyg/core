@@ -33,12 +33,12 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
-import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.model.Subject;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateRecipientFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygstyp;
 
 @Component
 @RequiredArgsConstructor
@@ -53,10 +53,9 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
   @Value("${sendmessagetofk.logicaladdress}")
   private String fkLogicalAddress;
 
-  private static final String TYPE = "fk3226";
+  private static final String FK_3226 = "fk3226";
   private static final String VERSION = "1.0";
   private static final CertificateTypeName FK3226_TYPE_NAME = new CertificateTypeName("FK3226");
-  private static final String NAME = "Läkarutlåtande för närståendepenning";
   private static final String DESCRIPTION = """
          <b className="iu-fw-heading">Vad är närståendepenning?</b><br>
          <p>Närståendepenning är en ersättning för den som avstår från förvärvsarbete, arbetslöshetsersättning (a-kassa) eller föräldrapenning för att vara med en patient som är svårt sjuk i lagens mening. I lagen definierar man svårt sjuk som att patientens hälsotillstånd är så nedsatt att det finns ett påtagligt hot mot hens liv i nuläget eller på viss tids sikt. Sjukdomstillstånd som på flera års sikt utvecklas till livshotande tillstånd ger däremot inte rätt till närståendepenning.</p>
@@ -74,7 +73,7 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
       """;
 
   public static final CertificateModelId FK3226_V1_0 = CertificateModelId.builder()
-      .type(new CertificateType(TYPE))
+      .type(new CertificateType(FK_3226))
       .version(new CertificateVersion(VERSION))
       .build();
 
@@ -85,15 +84,9 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
   public CertificateModel create() {
     return CertificateModel.builder()
         .id(FK3226_V1_0)
-        .type(
-            new Code(
-                "LUNSP",
-                "b64ea353-e8f6-4832-b563-fc7d46f29548",
-                NAME
-            )
-        )
+        .type(CodeSystemKvIntygstyp.FK3226)
         .typeName(FK3226_TYPE_NAME)
-        .name(NAME)
+        .name(CodeSystemKvIntygstyp.FK3226.displayName())
         .description(DESCRIPTION)
         .detailedDescription(DETAILED_DESCRIPTION)
         .activeFrom(activeFrom)

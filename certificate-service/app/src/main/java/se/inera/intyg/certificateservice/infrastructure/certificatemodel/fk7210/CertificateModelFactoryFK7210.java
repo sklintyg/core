@@ -19,9 +19,9 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Schematro
 import se.inera.intyg.certificateservice.domain.common.model.CertificateLink;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
-import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateRecipientFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygstyp;
 
 @Component
 @RequiredArgsConstructor
@@ -37,13 +37,6 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
 
   private static final String FK_7210 = "fk7210";
   private static final String VERSION = "1.0";
-  private static final String NAME = "Intyg om graviditet";
-
-  private static final Code IGRAV = new Code(
-      "IGRAV",
-      "b64ea353-e8f6-4832-b563-fc7d46f29548",
-      NAME
-  );
 
   private static final String DESCRIPTION = """
           När en person är gravid ska hen få ett intyg om graviditet av hälso- och sjukvården. Intyget behövs om den gravida begär ersättning från Försäkringskassan innan barnet är fött.
@@ -73,9 +66,9 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
   public CertificateModel create() {
     return CertificateModel.builder()
         .id(FK7210_V1_0)
-        .type(IGRAV)
+        .type(CodeSystemKvIntygstyp.FK7210)
         .typeName(FK7210_TYPE_NAME)
-        .name(NAME)
+        .name(CodeSystemKvIntygstyp.FK7210.displayName())
         .description(DESCRIPTION)
         .detailedDescription(DETAILED_DESCRIPTION)
         .activeFrom(activeFrom)

@@ -29,10 +29,10 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateTypeName;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
-import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateRecipientFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygstyp;
 
 @Component
 @RequiredArgsConstructor
@@ -47,10 +47,9 @@ public class CertificateModelFactoryFK7427 implements CertificateModelFactory {
 
   private final DiagnosisCodeRepository diagnosisCodeRepository;
 
-  private static final String TYPE = "fk7427";
+  private static final String FK_7427 = "fk7427";
   private static final String VERSION = "1.0";
   private static final CertificateTypeName FK7427_TYPE_NAME = new CertificateTypeName("FK7427");
-  private static final String NAME = "Läkarutlåtande tillfällig föräldrapenning barn 12–16 år";
   private static final String DESCRIPTION = """
       När ett barn mellan 12 och 16 år är sjukt kan den förälder som behöver avstå från sitt arbete för att vårda barnet få tillfällig föräldrapenning om barnet har ett särskilt behov av vård eller tillsyn. Läkarutlåtandet behövs från den första dagen i barnets vårdperiod.
       """;
@@ -68,7 +67,7 @@ public class CertificateModelFactoryFK7427 implements CertificateModelFactory {
       """;
 
   public static final CertificateModelId FK7427_V1_0 = CertificateModelId.builder()
-      .type(new CertificateType(TYPE))
+      .type(new CertificateType(FK_7427))
       .version(new CertificateVersion(VERSION))
       .build();
 
@@ -81,15 +80,9 @@ public class CertificateModelFactoryFK7427 implements CertificateModelFactory {
   public CertificateModel create() {
     return CertificateModel.builder()
         .id(FK7427_V1_0)
-        .type(
-            new Code(
-                "LU_TFP_B12_16",
-                "b64ea353-e8f6-4832-b563-fc7d46f29548",
-                NAME
-            )
-        )
+        .type(CodeSystemKvIntygstyp.FK7427)
         .typeName(FK7427_TYPE_NAME)
-        .name(NAME)
+        .name(CodeSystemKvIntygstyp.FK7427.displayName())
         .description(DESCRIPTION)
         .detailedDescription(DETAILED_DESCRIPTION)
         .activeFrom(activeFrom)

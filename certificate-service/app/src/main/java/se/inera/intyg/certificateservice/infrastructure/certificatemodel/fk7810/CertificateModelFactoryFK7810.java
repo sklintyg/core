@@ -57,12 +57,12 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
-import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.model.Subject;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateRecipientFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygstyp;
 
 @Component
 @RequiredArgsConstructor
@@ -80,7 +80,6 @@ public class CertificateModelFactoryFK7810 implements CertificateModelFactory {
   private static final String FK_7810 = "fk7810";
   private static final String VERSION = "1.0";
   private static final CertificateTypeName FK7810_TYPE_NAME = new CertificateTypeName("FK7810");
-  private static final String NAME = "Läkarutlåtande för assistansersättning";
   private static final String DESCRIPTION = """
       Vem kan få assistansersättning?
       
@@ -129,15 +128,9 @@ public class CertificateModelFactoryFK7810 implements CertificateModelFactory {
   public CertificateModel create() {
     return CertificateModel.builder()
         .id(FK7810_V1_0)
-        .type(
-            new Code(
-                "LUAS",
-                "b64ea353-e8f6-4832-b563-fc7d46f29548",
-                NAME
-            )
-        )
+        .type(CodeSystemKvIntygstyp.FK7810)
         .typeName(FK7810_TYPE_NAME)
-        .name(NAME)
+        .name(CodeSystemKvIntygstyp.FK7810.displayName())
         .description(DESCRIPTION)
         .detailedDescription(DETAILED_DESCRIPTION.replaceAll("\\R", ""))
         .activeFrom(activeFrom)

@@ -120,9 +120,9 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
-import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateRecipientFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygstyp;
 
 @Component
 @RequiredArgsConstructor
@@ -139,7 +139,6 @@ public class CertificateModelFactoryTS8071V2 implements CertificateModelFactory 
   private static final String TS_8071 = "ts8071";
   private static final String VERSION = "2.0";
   private static final CertificateTypeName TS8071_TYPE_NAME = new CertificateTypeName("TS8071");
-  private static final String NAME = "Läkarintyg för högre körkortsbehörigheter, taxiförarlegitimation och på begäran av Transportstyrelsen";
   private static final String DESCRIPTION = """
       Transportstyrelsens läkarintyg ska användas vid förlängd giltighet av högre behörighet från 45 år, ansökan om körkortstillstånd för grupp II och III och vid ansökan om taxiförarlegitimation. Transportstyrelsens läkarintyg kan även användas när Transportstyrelsen i annat fall begärt ett allmänt läkarintyg avseende lämplighet att inneha körkort.
       
@@ -166,15 +165,9 @@ public class CertificateModelFactoryTS8071V2 implements CertificateModelFactory 
   public CertificateModel create() {
     return CertificateModel.builder()
         .id(TS8071_V2_0)
-        .type(
-            new Code(
-                TS_8071.toUpperCase(),
-                "b64ea353-e8f6-4832-b563-fc7d46f29548",
-                NAME
-            )
-        )
+        .type(CodeSystemKvIntygstyp.TS8071)
         .typeName(TS8071_TYPE_NAME)
-        .name(NAME)
+        .name(CodeSystemKvIntygstyp.TS8071.displayName())
         .description(DESCRIPTION)
         .detailedDescription(DETAILED_DESCRIPTION)
         .activeFrom(activeFrom)

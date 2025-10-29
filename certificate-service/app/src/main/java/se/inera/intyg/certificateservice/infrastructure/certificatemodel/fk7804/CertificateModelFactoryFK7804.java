@@ -53,12 +53,12 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Schematro
 import se.inera.intyg.certificateservice.domain.common.model.CertificateLink;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
-import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.model.Subject;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateRecipientFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygstyp;
 
 @Component
 @RequiredArgsConstructor
@@ -79,7 +79,6 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
   private static final String FK_7804 = "fk7804";
   private static final String VERSION = "2.0";
   private static final CertificateTypeName FK7804_TYPE_NAME = new CertificateTypeName("FK7804");
-  private static final String NAME = "Läkarintyg för sjukpenning";
   private static final String DESCRIPTION = """
       <b>Vad är sjukpenning?</b>
       Sjukpenning är en ersättning för personer som arbetar i Sverige och har en nedsatt arbetsförmåga på grund av sjukdom. Beroende på hur mycket arbetsförmågan är nedsatt kan man få en fjärdedels, halv, tre fjärdedels eller hel sjukpenning.\s
@@ -126,15 +125,9 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
   public CertificateModel create() {
     return CertificateModel.builder()
         .id(FK7804_V2_0)
-        .type(
-            new Code(
-                "LISJP",
-                "b64ea353-e8f6-4832-b563-fc7d46f29548",
-                NAME
-            )
-        )
+        .type(CodeSystemKvIntygstyp.FK7804)
         .typeName(FK7804_TYPE_NAME)
-        .name(NAME)
+        .name(CodeSystemKvIntygstyp.FK7804.displayName())
         .description(DESCRIPTION)
         .detailedDescription(DETAILED_DESCRIPTION.replaceAll("\\R", ""))
         .activeFrom(activeFrom)

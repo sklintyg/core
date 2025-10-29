@@ -42,12 +42,12 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateTypeName;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
-import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.model.Subject;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateRecipientFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygstyp;
 
 @Component
 @RequiredArgsConstructor
@@ -65,7 +65,6 @@ public class CertificateModelFactoryFK3221 implements CertificateModelFactory {
   private static final String FK_3221 = "fk3221";
   private static final String VERSION = "1.0";
   private static final CertificateTypeName FK3221_TYPE_NAME = new CertificateTypeName("FK3221");
-  private static final String NAME = "Läkarutlåtande för omvårdnadsbidrag eller merkostnadsersättning";
   private static final String DESCRIPTION = """
       <b className="iu-fw-heading">Vem kan få omvårdnadsbidrag eller merkostnadsersättning för barn?</b>
       
@@ -100,15 +99,9 @@ public class CertificateModelFactoryFK3221 implements CertificateModelFactory {
   public CertificateModel create() {
     return CertificateModel.builder()
         .id(FK3221_V1_0)
-        .type(
-            new Code(
-                "LU_OMV_MEK",
-                "b64ea353-e8f6-4832-b563-fc7d46f29548",
-                NAME
-            )
-        )
+        .type(CodeSystemKvIntygstyp.FK3221)
         .typeName(FK3221_TYPE_NAME)
-        .name(NAME)
+        .name(CodeSystemKvIntygstyp.FK3221.displayName())
         .description(DESCRIPTION)
         .detailedDescription(DETAILED_DESCRIPTION)
         .activeFrom(activeFrom)
