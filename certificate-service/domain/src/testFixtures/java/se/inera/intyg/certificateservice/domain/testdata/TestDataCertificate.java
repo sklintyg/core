@@ -3,6 +3,8 @@ package se.inera.intyg.certificateservice.domain.testdata;
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationUnitContactInformation.UNIT_CONTACT_INFORMATION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.AG114_CERTIFICATE_MODEL;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.AG7804_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK3221_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK3226_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7210_CERTIFICATE_MODEL;
@@ -12,7 +14,6 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7804_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7809_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7810_CERTIFICATE_MODEL;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.ag7804certificateModelBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.SUBJECT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
@@ -525,7 +526,7 @@ public class TestDataCertificate {
         )
         .certificateMetaData(CERTIFICATE_META_DATA);
   }
-  
+
   public static MedicalCertificate.MedicalCertificateBuilder fk7426CertificateBuilder() {
     return MedicalCertificate.builder()
         .id(CERTIFICATE_ID)
@@ -1236,10 +1237,7 @@ public class TestDataCertificate {
         .id(CERTIFICATE_ID)
         .revision(REVISION)
         .created(LocalDateTime.now(ZoneId.systemDefault()))
-        .certificateModel(
-            ag7804certificateModelBuilder()
-                .build()
-        )
+        .certificateModel(AG7804_CERTIFICATE_MODEL)
         .xml(XML)
         .externalReference(EXTERNAL_REFERENCE)
         .elementData(
@@ -1464,7 +1462,7 @@ public class TestDataCertificate {
         .id(new CertificateId("AG114_CERTIFICATE_ID"))
         .revision(REVISION)
         .created(LocalDateTime.now(ZoneId.systemDefault()))
-        .certificateModel(TestDataCertificateModel.ag114certificateModelBuilder().build())
+        .certificateModel(AG114_CERTIFICATE_MODEL)
         .xml(XML)
         .sent(SENT)
         .revoked(REVOKED)

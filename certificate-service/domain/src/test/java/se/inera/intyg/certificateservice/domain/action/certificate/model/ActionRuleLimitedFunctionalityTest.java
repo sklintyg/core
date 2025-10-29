@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.SEND;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.AG7804_CERTIFICATE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.ag7804CertificateBuilder;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
@@ -67,38 +69,27 @@ class ActionRuleLimitedFunctionalityTest {
             )
             .build();
 
-    final var modelWithNewerVersion = CertificateModel.builder()
-        .id(
-            CertificateModelId.builder()
-                .version(new CertificateVersion("3.0"))
-                .build()
-        )
-        .build();
+    final var certificate = buildNotLatestMajorVersionCertificate();
 
     when(certificateActionConfigurationRepository.findLimitedFunctionalityConfiguration(
-        AG7804_CERTIFICATE.certificateModel().id()))
+        certificate.certificateModel().id()))
         .thenReturn(inactiveConfigurations);
 
-    final var result = actionRuleLimitedFunctionality.evaluate(Optional.of(AG7804_CERTIFICATE)
+    final var result = actionRuleLimitedFunctionality.evaluate(Optional.of(certificate)
         , Optional.empty());
     assertFalse(result);
   }
 
   @Test
   void shouldReturnTrueWhenCertificateIsNotLatestMajorVersionAndDoesNotHaveConfiguration() {
-    final var modelWithNewerVersion = CertificateModel.builder()
-        .id(
-            CertificateModelId.builder()
-                .version(new CertificateVersion("3.0"))
-                .build()
-        )
-        .build();
+
+    final var certificate = buildNotLatestMajorVersionCertificate();
 
     when(certificateActionConfigurationRepository.findLimitedFunctionalityConfiguration(
-        AG7804_CERTIFICATE.certificateModel().id()))
+        certificate.certificateModel().id()))
         .thenReturn(null);
 
-    final var result = actionRuleLimitedFunctionality.evaluate(Optional.of(AG7804_CERTIFICATE)
+    final var result = actionRuleLimitedFunctionality.evaluate(Optional.of(certificate)
         , Optional.empty());
     assertTrue(result);
   }
@@ -123,11 +114,13 @@ class ActionRuleLimitedFunctionalityTest {
             )
             .build();
 
+    final var certificate = buildNotLatestMajorVersionCertificate();
+
     when(certificateActionConfigurationRepository.findLimitedFunctionalityConfiguration(
-        AG7804_CERTIFICATE.certificateModel().id()))
+        certificate.certificateModel().id()))
         .thenReturn(limitedFunctionalityConfigurations);
 
-    final var result = actionRuleLimitedFunctionality.evaluate(Optional.of(AG7804_CERTIFICATE)
+    final var result = actionRuleLimitedFunctionality.evaluate(Optional.of(certificate)
         , Optional.empty());
     assertTrue(result);
   }
@@ -151,20 +144,13 @@ class ActionRuleLimitedFunctionalityTest {
                     .build()
             )
             .build();
-
-    final var modelWithNewerVersion = CertificateModel.builder()
-        .id(
-            CertificateModelId.builder()
-                .version(new CertificateVersion("3.0"))
-                .build()
-        )
-        .build();
+    final var certificate = buildNotLatestMajorVersionCertificate();
 
     when(certificateActionConfigurationRepository.findLimitedFunctionalityConfiguration(
-        AG7804_CERTIFICATE.certificateModel().id()))
+        certificate.certificateModel().id()))
         .thenReturn(limitedFunctionalityConfigurations);
 
-    final var result = actionRuleLimitedFunctionality.evaluate(Optional.of(AG7804_CERTIFICATE)
+    final var result = actionRuleLimitedFunctionality.evaluate(Optional.of(certificate)
         , Optional.empty());
     assertFalse(result);
   }
@@ -181,20 +167,30 @@ class ActionRuleLimitedFunctionalityTest {
             )
             .build();
 
-    final var modelWithNewerVersion = CertificateModel.builder()
-        .id(
-            CertificateModelId.builder()
-                .version(new CertificateVersion("3.0"))
+    final var certificate = buildNotLatestMajorVersionCertificate();
+
+    when(certificateActionConfigurationRepository.findLimitedFunctionalityConfiguration(
+        certificate.certificateModel().id()))
+        .thenReturn(limitedFunctionalityConfigurations);
+
+    final var result = actionRuleLimitedFunctionality.evaluate(Optional.of(certificate)
+        , Optional.empty());
+    assertFalse(result);
+  }
+
+  private static MedicalCertificate buildNotLatestMajorVersionCertificate() {
+    final var certificate = ag7804CertificateBuilder()
+        .certificateModel(
+            CertificateModel.builder()
+                .certificateVersions(List.of(new CertificateVersion("3.0")))
+                .id(
+                    CertificateModelId.builder()
+                        .version(new CertificateVersion("2.0"))
+                        .build()
+                )
                 .build()
         )
         .build();
-    
-    when(certificateActionConfigurationRepository.findLimitedFunctionalityConfiguration(
-        AG7804_CERTIFICATE.certificateModel().id()))
-        .thenReturn(limitedFunctionalityConfigurations);
-
-    final var result = actionRuleLimitedFunctionality.evaluate(Optional.of(AG7804_CERTIFICATE)
-        , Optional.empty());
-    assertFalse(result);
+    return certificate;
   }
 }

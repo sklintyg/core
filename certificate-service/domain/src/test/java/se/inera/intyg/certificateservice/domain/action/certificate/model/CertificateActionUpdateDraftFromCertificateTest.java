@@ -52,6 +52,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionContentProvider;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.common.model.AccessScope;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
 import se.inera.intyg.certificateservice.domain.common.model.HsaId;
@@ -68,6 +69,8 @@ class CertificateActionUpdateDraftFromCertificateTest {
   CertificateActionContentProvider certificateActionContentProvider;
   @Mock
   CertificateRepository certificateRepository;
+  @Mock
+  CertificateActionConfigurationRepository certificateActionConfigurationRepository;
   @InjectMocks
   CertificateActionFactory certificateActionFactory;
 
