@@ -63,15 +63,17 @@
         </ns4:displayName>
       </ns4:cv>
     </ns2:delsvar>
-    <ns2:delsvar id="6.3">
+    <!-- <ns2:delsvar id="6.4">true</ns2:delsvar> (Sätts för kod 6.3) -->
+    <ns2:delsvar id="6.2">true</ns2:delsvar>
+  </ns3:svar>
+  <ns3:svar id="6">
+    <ns2:delsvar id="6.1">
       <ns4:cv>
-        <ns4:code>6.3</ns4:code>
+        <ns4:code>6.5</ns4:code>
         <ns4:codeSystem>KORRIGERING_AV_SYNSKARPA</ns4:codeSystem>
         <ns4:displayName>Kontaktlinser</ns4:displayName>
       </ns4:cv>
     </ns2:delsvar>
-    <ns2:delsvar id="6.5">true</ns2:delsvar>
-    <ns2:delsvar id="6.2">true</ns2:delsvar>
     <ns2:delsvar id="6.6">true</ns2:delsvar>
   </ns3:svar>
   <ns3:svar id="7">

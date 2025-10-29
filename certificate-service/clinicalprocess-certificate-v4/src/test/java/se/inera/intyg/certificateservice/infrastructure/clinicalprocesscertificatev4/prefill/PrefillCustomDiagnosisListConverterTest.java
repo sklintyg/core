@@ -53,8 +53,9 @@ class PrefillCustomDiagnosisListConverterTest {
           ElementConfigurationDiagnosis.builder()
               .id(FIELD_ID)
               .terminology(List.of(
-                  new ElementDiagnosisTerminology("ICD-10-SE", "ICD-10-SE",
-                      "1.2.752.116.1.1.1.1.8")))
+                  new ElementDiagnosisTerminology("ICD-10-SE", "ICD-10-SE", "1.2.752.116.1.1.1",
+                      List.of("1.2.752.116.1.1.1", "1.2.752.116.1.1.1.1.8",
+                          "1.2.752.116.1.1.1.1.3"))))
               .list(
                   List.of(
                       new ElementDiagnosisListItem(DIAGNOS_FIELD_ID),
@@ -182,24 +183,75 @@ class PrefillCustomDiagnosisListConverterTest {
 
   @Test
   void shouldReturnPrefillAnswerWithDescriptionFromDiagnosisRepository() {
-    final var expectedDescription = "expectedDescription";
+    final var expectedDescription = "expectedDescription_code2";
     final var prefill = getPrefillMissingDescription();
-    doReturn(Optional.of(Diagnosis.builder().build()))
-        .when(diagnosisCodeRepository).findByCode(new DiagnosisCode(DIAGNOS_CODE));
-    doReturn(Optional.of(Diagnosis.builder().build()))
-        .when(diagnosisCodeRepository).findByCode(new DiagnosisCode(DIAGNOS_CODE_2));
-    doReturn(
-        Diagnosis.builder()
-            .description(
-                new DiagnosisDescription(expectedDescription)
-            )
-            .build()
-    ).when(diagnosisCodeRepository).getByCode(new DiagnosisCode(DIAGNOS_CODE_2));
 
+    doReturn(Optional.of(Diagnosis.builder().build()))
+        .when(diagnosisCodeRepository)
+        .findByCode(new DiagnosisCode(DIAGNOS_CODE));
+
+    doReturn(Optional.of(Diagnosis.builder().build()))
+        .when(diagnosisCodeRepository)
+        .findByCode(new DiagnosisCode(DIAGNOS_CODE_2));
+
+    doReturn(Diagnosis.builder()
+        .description(new DiagnosisDescription(expectedDescription))
+        .build())
+        .when(diagnosisCodeRepository)
+        .getByCode(new DiagnosisCode(DIAGNOS_CODE_2));
     final var result = converter.prefillAnswer(SPECIFICATION, prefill);
 
     final var value = (ElementValueDiagnosisList) result.getElementData().value();
-    assertEquals(expectedDescription, value.diagnoses().get(1).description());
+
+    assertEquals(expectedDescription,
+        value.diagnoses().stream()
+            .filter(d -> DIAGNOS_CODE_2.equals(d.code()))
+            .findFirst()
+            .get()
+            .description());
+  }
+
+
+  @Test
+  void shouldMapEquivalentCodeSystemsOids() {
+
+    final var prefill = new Forifyllnad();
+    final var svar = new Svar();
+    svar.setId(SPECIFICATION.id().id());
+
+    final var delsvar1Description = new Delsvar();
+    delsvar1Description.setId("4.1");
+    final var delsvar1Code = new Delsvar();
+    delsvar1Code.setId("4.2");
+    final var delsvar2Description = new Delsvar();
+    delsvar2Description.setId("4.3");
+    final var delsvar2Code = new Delsvar();
+    delsvar2Code.setId("4.4");
+
+    delsvar1Description.getContent().add(DIAGNOS_DESCRIPTION);
+    delsvar1Code.getContent()
+        .add(createCVTypeElement(DIAGNOS_CODE, "1.2.752.116.1.1.1.1.8"));
+
+    delsvar2Description.getContent().add(DIAGNOS_DESCRIPTION_2);
+    delsvar2Code.getContent()
+        .add(createCVTypeElement(DIAGNOS_CODE_2, "1.2.752.116.1.1.1.1.3"));
+
+    svar.getDelsvar().add(delsvar1Description);
+    svar.getDelsvar().add(delsvar1Code);
+
+    svar.getDelsvar().add(delsvar2Description);
+    svar.getDelsvar().add(delsvar2Code);
+
+    prefill.getSvar().add(svar);
+
+    doReturn(Optional.of(Diagnosis.builder().build())).when(diagnosisCodeRepository)
+        .findByCode(new DiagnosisCode(DIAGNOS_CODE));
+    doReturn(Optional.of(Diagnosis.builder().build())).when(diagnosisCodeRepository)
+        .findByCode(new DiagnosisCode(DIAGNOS_CODE_2));
+
+    final var result = converter.prefillAnswer(SPECIFICATION, prefill);
+
+    assertEquals(EXPECTED_ELEMENT_DATA, result.getElementData());
   }
 
   private static Forifyllnad getPrefill() {
@@ -239,8 +291,6 @@ class PrefillCustomDiagnosisListConverterTest {
 
     final var delsvar1Description = new Delsvar();
     delsvar1Description.setId("4.1");
-    final var delsvar2Description = new Delsvar();
-    delsvar2Description.setId("4.3");
     final var delsvar1Code = new Delsvar();
     delsvar1Code.setId("4.2");
     final var delsvar2Code = new Delsvar();
@@ -254,7 +304,6 @@ class PrefillCustomDiagnosisListConverterTest {
     svar.getDelsvar().add(delsvar1Description);
     svar.getDelsvar().add(delsvar1Code);
 
-    svar.getDelsvar().add(delsvar2Description);
     svar.getDelsvar().add(delsvar2Code);
 
     prefill.getSvar().add(svar);
@@ -262,10 +311,14 @@ class PrefillCustomDiagnosisListConverterTest {
   }
 
   private static Element createCVTypeElement(String code) {
+    return createCVTypeElement(code, ICD_10_SE_CODE_SYSTEM);
+  }
+
+  private static Element createCVTypeElement(String code, String codeSystem) {
     final var cvType = new CVType();
     cvType.setCode(code);
     cvType.setDisplayName("displayName");
-    cvType.setCodeSystem(ICD_10_SE_CODE_SYSTEM);
+    cvType.setCodeSystem(codeSystem);
     final var factory = new ObjectFactory();
     return getElement(cvType, factory::createCv);
   }

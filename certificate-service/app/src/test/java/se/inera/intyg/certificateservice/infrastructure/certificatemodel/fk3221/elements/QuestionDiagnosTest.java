@@ -51,8 +51,8 @@ class QuestionDiagnosTest {
             "Ange diagnoskod med så många positioner som möjligt. Använd inga andra tecken än bokstäver och siffror.")
         .terminology(
             List.of(
-                new ElementDiagnosisTerminology("ICD_10_SE", "ICD-10-SE",
-                    "1.2.752.116.1.1.1.1.8")
+                new ElementDiagnosisTerminology("ICD_10_SE", "ICD-10-SE", "1.2.752.116.1.1.1",
+                    List.of("1.2.752.116.1.1.1.1.8", "1.2.752.116.1.1.1.1.3"))
             )
         )
         .list(

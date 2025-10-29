@@ -1,10 +1,13 @@
 package se.inera.intyg.certificateprintservice.application.print.converter;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateprintservice.application.print.dto.GeneralPrintTextDTO;
 import se.inera.intyg.certificateprintservice.application.print.dto.PrintCertificateMetadataDTO;
 
 class PrintCertificateMetadataConverterTest {
@@ -18,6 +21,7 @@ class PrintCertificateMetadataConverterTest {
   private static final String SIGNING_DATE = "signingDate";
   private static final byte[] RECIPIENT_LOGO = "logo".getBytes(StandardCharsets.UTF_8);
   private static final String RECIPIENT_NAME = "recipientName";
+  private static final String RECIPIENT_ID = "recipientId";
   private static final String APPLICATION_ORIGIN = "applicationOrigin";
   private static final String PERSON_ID = "personId";
   private static final String DESCRIPTION = "description";
@@ -31,9 +35,31 @@ class PrintCertificateMetadataConverterTest {
       .signingDate(SIGNING_DATE)
       .recipientLogo(RECIPIENT_LOGO)
       .recipientName(RECIPIENT_NAME)
+      .recipientId(RECIPIENT_ID)
       .applicationOrigin(APPLICATION_ORIGIN)
       .personId(PERSON_ID)
       .description(DESCRIPTION)
+      .generalPrintText(GeneralPrintTextDTO.builder()
+          .leftMarginInfoText("leftMarginInfoText")
+          .draftAlertInfoText("draftAlertInfoText")
+          .build())
+      .build();
+  private static final PrintCertificateMetadataDTO METADATA_DTO_GENERAL_TEXT_MISSING = PrintCertificateMetadataDTO.builder()
+      .name(NAME)
+      .fileName(FILE_NAME)
+      .version(VERSION)
+      .typeId(TYPE_ID)
+      .certificateId(CERTIFICATE_ID)
+      .sentDate(SENT_DATE)
+      .signingDate(SIGNING_DATE)
+      .recipientLogo(RECIPIENT_LOGO)
+      .recipientName(RECIPIENT_NAME)
+      .recipientId(RECIPIENT_ID)
+      .applicationOrigin(APPLICATION_ORIGIN)
+      .personId(PERSON_ID)
+      .description(DESCRIPTION)
+      .generalPrintText(GeneralPrintTextDTO.builder()
+          .build())
       .build();
 
   PrintCertificateMetadataConverter printCertificateMetadataConverter;
@@ -94,6 +120,12 @@ class PrintCertificateMetadataConverterTest {
   }
 
   @Test
+  void shallConvertRecipientId() {
+    assertEquals(RECIPIENT_ID,
+        printCertificateMetadataConverter.convert(METADATA_DTO).getRecipientId());
+  }
+
+  @Test
   void shallConvertApplicationOrigin() {
     assertEquals(APPLICATION_ORIGIN,
         printCertificateMetadataConverter.convert(METADATA_DTO).getApplicationOrigin());
@@ -108,5 +140,23 @@ class PrintCertificateMetadataConverterTest {
   void shallConvertDescription() {
     assertEquals(DESCRIPTION,
         printCertificateMetadataConverter.convert(METADATA_DTO).getDescription());
+  }
+
+  @Test
+  void shallConvertGeneralPrintText() {
+    assertAll(() -> {
+      assertEquals("leftMarginInfoText",
+          printCertificateMetadataConverter.convert(METADATA_DTO).getGeneralPrintText()
+              .getLeftMarginInfoText());
+      assertEquals("draftAlertInfoText",
+          printCertificateMetadataConverter.convert(METADATA_DTO).getGeneralPrintText()
+              .getDraftAlertInfoText());
+    });
+  }
+
+  @Test
+  void shallConvertGeneralPrintTextWhenMissing() {
+    assertNull(printCertificateMetadataConverter.convert(METADATA_DTO_GENERAL_TEXT_MISSING)
+        .getGeneralPrintText());
   }
 }

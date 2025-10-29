@@ -21,6 +21,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateTypeName;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
@@ -62,6 +63,15 @@ class CertificateModelFactoryFK3226Test {
     final var certificateModel = certificateModelFactoryFK3226.create();
 
     assertEquals(expectedId, certificateModel.id());
+  }
+
+  @Test
+  void shouldIncludeTypeName() {
+    final var expected = new CertificateTypeName("FK3226");
+
+    final var certificateModel = certificateModelFactoryFK3226.create();
+
+    assertEquals(expected, certificateModel.typeName());
   }
 
   @Test

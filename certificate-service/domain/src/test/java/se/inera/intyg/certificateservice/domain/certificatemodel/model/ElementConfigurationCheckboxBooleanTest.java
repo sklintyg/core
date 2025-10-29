@@ -1,9 +1,10 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueLabeledText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 
 class ElementConfigurationCheckboxBooleanTest {
@@ -15,14 +16,15 @@ class ElementConfigurationCheckboxBooleanTest {
         .build();
 
     final var config = ElementConfigurationCheckboxBoolean.builder()
+        .label("Label 1")
         .selectedText("Ja")
         .unselectedText("Ej angivet")
         .build();
 
-    assertEquals(
-        config.selectedText(),
-        ((ElementSimplifiedValueText) config.simplified(value).get()).text()
-    );
+    assertAll(() -> assertEquals(config.selectedText(),
+            ((ElementSimplifiedValueLabeledText) config.simplified(value).get()).text()),
+        () -> assertEquals(config.label(),
+            ((ElementSimplifiedValueLabeledText) config.simplified(value).get()).label()));
   }
 
   @Test
@@ -33,13 +35,16 @@ class ElementConfigurationCheckboxBooleanTest {
         .build();
 
     final var config = ElementConfigurationCheckboxBoolean.builder()
+        .label("Label 1")
         .selectedText(text)
         .unselectedText("Ej angivet")
         .build();
 
-    assertEquals(
-        config.unselectedText(),
-        ((ElementSimplifiedValueText) config.simplified(value).get()).text()
+    assertAll(
+        () -> assertEquals("Ej angivet",
+            ((ElementSimplifiedValueLabeledText) config.simplified(value).get()).text()),
+        () -> assertEquals(config.label(),
+            ((ElementSimplifiedValueLabeledText) config.simplified(value).get()).label())
     );
   }
 

@@ -47,6 +47,7 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.Certifi
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateTypeName;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
@@ -68,6 +69,7 @@ public class CertificateModelFactoryAG7804 implements CertificateModelFactory {
 
   private static final String AG_7804 = "ag7804";
   private static final String VERSION = "2.0";
+  private static final CertificateTypeName AG7804_TYPE_NAME = new CertificateTypeName("AG7804");
   private static final String NAME = "Läkarintyg om arbetsförmåga – arbetsgivaren";
   private static final String DESCRIPTION = """
       Läkarintyg om arbetsförmåga – arbetsgivaren skapas från Försäkringskassans läkarintyg för sjukpenning (FK 7804) och används i följande situationer:
@@ -115,6 +117,7 @@ public class CertificateModelFactoryAG7804 implements CertificateModelFactory {
                 NAME
             )
         )
+        .typeName(AG7804_TYPE_NAME)
         .name(NAME)
         .description(DESCRIPTION)
         .detailedDescription(DETAILED_DESCRIPTION.replaceAll("\\R", ""))
@@ -190,6 +193,7 @@ public class CertificateModelFactoryAG7804 implements CertificateModelFactory {
         .certificateActionFactory(certificateActionFactory)
         .recipient(CertificateRecipientFactory.skr())
         .sickLeaveProvider(new AG7804SickLeaveProvider())
+        .generalPrintProvider(new AG7804CertificateGeneralPrintProvider())
         .build();
   }
 }

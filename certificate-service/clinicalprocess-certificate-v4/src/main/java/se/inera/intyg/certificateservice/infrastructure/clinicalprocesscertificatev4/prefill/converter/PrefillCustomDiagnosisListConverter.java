@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -62,7 +63,7 @@ public class PrefillCustomDiagnosisListConverter implements PrefillCustomConvert
         ));
 
     final var delsvarList = answer.getDelsvar();
-    final var diagnoses = getDiagnosisIndexStream(delsvarList)
+    final var diagnoses = getDiagnosisIndexStream(delsvarList, answer.getId())
         .mapToObj(diagnosisIndex -> {
           try {
             return extractAndValidateDiagnosis(
@@ -140,22 +141,22 @@ public class PrefillCustomDiagnosisListConverter implements PrefillCustomConvert
     return elementConfigurationDiagnosis.list().get(diagnosisIndex).id();
   }
 
-  private String getDescription(Delsvar descriptionDelsvar, String code) {
-    return descriptionDelsvar.getContent().isEmpty()
+  private String getDescription(Optional<Delsvar> descriptionDelsvar, String code) {
+    return descriptionDelsvar.isEmpty() || descriptionDelsvar.get().getContent().isEmpty()
         ? diagnosisCodeRepository.getByCode(new DiagnosisCode(code)).description().description()
-        : (String) descriptionDelsvar.getContent().getFirst();
+        : (String) descriptionDelsvar.get().getContent().getFirst();
   }
 
   private static String getTerminology(ElementConfigurationDiagnosis elementConfigurationDiagnosis,
       CVType cvType) {
     return elementConfigurationDiagnosis.terminology().stream()
-        .filter(terminology -> terminology.codeSystem().equals(cvType.getCodeSystem()))
+        .filter(terminology -> terminology.isValidCodeSystem(cvType.getCodeSystem()))
         .findFirst()
         .orElseThrow()
         .id();
   }
 
-  private Delsvar getDelsvarByOffset(final ElementSpecification elementSpecification,
+  private Optional<Delsvar> getDelsvarByOffset(final ElementSpecification elementSpecification,
       final List<Delsvar> delsvarList,
       final int diagnosisIndex,
       final int offset) {
@@ -163,11 +164,10 @@ public class PrefillCustomDiagnosisListConverter implements PrefillCustomConvert
         .filter(delsvar -> delsvar.getId()
             .equals(String.format("%s.%s", elementSpecification.id().id(),
                 offset + diagnosisIndex * 2)))
-        .findFirst()
-        .orElseThrow();
+        .findFirst();
   }
 
-  private Delsvar getDescriptionDelsvar(final ElementSpecification elementSpecification,
+  private Optional<Delsvar> getDescriptionDelsvar(final ElementSpecification elementSpecification,
       final List<Delsvar> delsvarList,
       final int diagnosisIndex) {
     return getDelsvarByOffset(elementSpecification, delsvarList, diagnosisIndex, 1);
@@ -176,11 +176,15 @@ public class PrefillCustomDiagnosisListConverter implements PrefillCustomConvert
   private Delsvar getCodeDelsvar(final ElementSpecification elementSpecification,
       final List<Delsvar> delsvarList,
       final int diagnosisIndex) {
-    return getDelsvarByOffset(elementSpecification, delsvarList, diagnosisIndex, 2);
+    return getDelsvarByOffset(elementSpecification, delsvarList, diagnosisIndex, 2).orElseThrow();
   }
 
-  private static IntStream getDiagnosisIndexStream(List<Delsvar> delsvarList) {
-    return IntStream.range(0,
-        (int) Math.ceil(delsvarList.size() / 2.0));
+  private static IntStream getDiagnosisIndexStream(List<Delsvar> delsvarList, String answerId) {
+    final var diagnosisCount = (int) delsvarList.stream()
+        .filter(delsvar -> delsvar.getId()
+            .matches(String.format("%s\\.(\\d*[02468])$", answerId)))
+        .count();
+    return IntStream.range(0, diagnosisCount);
+
   }
 }

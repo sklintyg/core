@@ -28,7 +28,7 @@ public class CertificateModel implements Comparator<ElementId> {
 
   CertificateModelId id;
   Code type;
-  CertificateType typeName;
+  CertificateTypeName typeName;
   String name;
   String description;
   String detailedDescription;
@@ -50,6 +50,7 @@ public class CertificateModel implements Comparator<ElementId> {
   SickLeaveProvider sickLeaveProvider;
   CitizenAvailableFunctionsProvider citizenAvailableFunctionsProvider;
   CertificateModelId ableToCreateDraftForModel;
+  CertificateGenerelPrintProvider generalPrintProvider;
 
   public List<CertificateAction> actions() {
     return certificateActionSpecifications.stream()

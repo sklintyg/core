@@ -59,6 +59,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AL
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_HUDMOTTAGNINGEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.alfaAllergimottagningenBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.alfaHudmottagningenBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_HUDMOTTAGNINGEN_ADDRESS;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_HUDMOTTAGNINGEN_CITY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_HUDMOTTAGNINGEN_EMAIL;
@@ -109,6 +110,7 @@ import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.domain.testdata.TestDataStaff;
+import se.inera.intyg.certificateservice.domain.unit.model.UnitContactInfo;
 import se.inera.intyg.certificateservice.domain.validation.model.ErrorMessage;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationError;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationResult;
@@ -1810,6 +1812,58 @@ class MedicalCertificateTest {
               signedCertificate.children().getFirst().created().toLocalDate())
       );
     }
+
+    @Test
+    void shallReturnCopiedContactInfoIfIssuedUnitIsSame() {
+      final var expectedElementData = List.of(
+          CONTACT_INFO
+      );
+
+      final var actionEvaluation = actionEvaluationBuilder
+          .subUnit(
+              alfaAllergimottagningenBuilder()
+                  .contactInfo(
+                      UnitContactInfo.builder()
+                          .build()
+                  )
+                  .build()
+          )
+          .build();
+
+      final var signedCertificate = certificateBuilder
+          .elementData(
+              List.of(CONTACT_INFO)
+          )
+          .status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.replace(actionEvaluation);
+
+      assertEquals(expectedElementData, actualCertificate.elementData());
+    }
+
+    @Test
+    void shallReturnNoUnitContactIfIssuedUnitIsDifferent() {
+      final var expectedElementData = List.of();
+
+      final var actionEvaluation = actionEvaluationBuilder
+          .subUnit(
+              alfaHudmottagningenBuilder()
+                  .build()
+          )
+          .build();
+
+      final var signedCertificate = certificateBuilder
+          .elementData(
+              List.of(CONTACT_INFO)
+          )
+          .status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.replace(actionEvaluation);
+
+      assertEquals(expectedElementData, actualCertificate.elementData());
+    }
   }
 
   @Nested
@@ -2041,6 +2095,58 @@ class MedicalCertificateTest {
               signedCertificate.children().getFirst().created().toLocalDate())
       );
     }
+
+    @Test
+    void shallReturnCopiedContactInfoIfIssuedUnitIsSame() {
+      final var expectedElementData = List.of(
+          CONTACT_INFO
+      );
+
+      final var actionEvaluation = actionEvaluationBuilder
+          .subUnit(
+              alfaAllergimottagningenBuilder()
+                  .contactInfo(
+                      UnitContactInfo.builder()
+                          .build()
+                  )
+                  .build()
+          )
+          .build();
+
+      final var signedCertificate = certificateBuilder
+          .elementData(
+              List.of(CONTACT_INFO)
+          )
+          .status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.complement(actionEvaluation);
+
+      assertEquals(expectedElementData, actualCertificate.elementData());
+    }
+
+    @Test
+    void shallReturnNoUnitContactIfIssuedUnitIsDifferent() {
+      final var expectedElementData = List.of();
+
+      final var actionEvaluation = actionEvaluationBuilder
+          .subUnit(
+              alfaHudmottagningenBuilder()
+                  .build()
+          )
+          .build();
+
+      final var signedCertificate = certificateBuilder
+          .elementData(
+              List.of(CONTACT_INFO)
+          )
+          .status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.complement(actionEvaluation);
+
+      assertEquals(expectedElementData, actualCertificate.elementData());
+    }
   }
 
   @Nested
@@ -2265,6 +2371,58 @@ class MedicalCertificateTest {
           () -> assertEquals(expectedRelation.created().toLocalDate(),
               signedCertificate.children().getFirst().created().toLocalDate())
       );
+    }
+
+    @Test
+    void shallReturnCopiedContactInfoIfIssuedUnitIsSame() {
+      final var expectedElementData = List.of(
+          CONTACT_INFO
+      );
+
+      final var actionEvaluation = actionEvaluationBuilder
+          .subUnit(
+              alfaAllergimottagningenBuilder()
+                  .contactInfo(
+                      UnitContactInfo.builder()
+                          .build()
+                  )
+                  .build()
+          )
+          .build();
+
+      final var signedCertificate = certificateBuilder
+          .elementData(
+              List.of(CONTACT_INFO)
+          )
+          .status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.renew(actionEvaluation);
+
+      assertEquals(expectedElementData, actualCertificate.elementData());
+    }
+
+    @Test
+    void shallReturnNoUnitContactIfIssuedUnitIsDifferent() {
+      final var expectedElementData = List.of();
+
+      final var actionEvaluation = actionEvaluationBuilder
+          .subUnit(
+              alfaHudmottagningenBuilder()
+                  .build()
+          )
+          .build();
+
+      final var signedCertificate = certificateBuilder
+          .elementData(
+              List.of(CONTACT_INFO)
+          )
+          .status(Status.SIGNED)
+          .build();
+
+      final var actualCertificate = signedCertificate.renew(actionEvaluation);
+
+      assertEquals(expectedElementData, actualCertificate.elementData());
     }
   }
 

@@ -17,6 +17,7 @@ public class CertificateTypeInfoDTO {
   String type;
   String name;
   String description;
+  String typeName;
   List<ResourceLinkDTO> links;
   CertificateConfirmationModalDTO confirmationModal;
 

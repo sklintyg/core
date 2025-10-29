@@ -3,6 +3,7 @@ package se.inera.intyg.certificateprintservice.application.print.converter;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateprintservice.application.print.dto.PrintCertificateQuestionDTO;
 import se.inera.intyg.certificateprintservice.application.print.dto.value.ElementSimplifiedValueLabeledList;
+import se.inera.intyg.certificateprintservice.application.print.dto.value.ElementSimplifiedValueLabeledText;
 import se.inera.intyg.certificateprintservice.application.print.dto.value.ElementSimplifiedValueList;
 import se.inera.intyg.certificateprintservice.application.print.dto.value.ElementSimplifiedValueTable;
 import se.inera.intyg.certificateprintservice.application.print.dto.value.ElementSimplifiedValueText;
@@ -52,6 +53,11 @@ public class PrintCertificateQuestionConverter {
               )
               .toList()
           )
+          .build();
+    } else if (question.getValue() instanceof ElementSimplifiedValueLabeledText text) {
+      return ElementValueLabeledText.builder()
+          .label(text.getLabel())
+          .text(text.getText())
           .build();
     }
 

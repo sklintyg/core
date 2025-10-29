@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.application.common;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetSickLeaveCertificatesInternalRequest;
@@ -24,9 +25,9 @@ public class CertificatesRequestFactory {
     return CertificatesRequest.builder()
         .modifiedFrom(queryCriteria.getFrom())
         .modifiedTo(queryCriteria.getTo())
-        .issuedByStaffId(
+        .issuedByStaffIds(
             queryCriteria.getIssuedByStaffId() != null
-                ? new HsaId(queryCriteria.getIssuedByStaffId())
+                ? List.of(new HsaId(queryCriteria.getIssuedByStaffId()))
                 : null
         )
         .personId(
@@ -63,6 +64,7 @@ public class CertificatesRequestFactory {
                 .toList()
         )
         .issuedUnitIds(request.getIssuedByUnitIds().stream().map(HsaId::new).toList())
+        .issuedByStaffIds(request.getIssuedByStaffIds().stream().map(HsaId::new).toList())
         .build();
   }
 

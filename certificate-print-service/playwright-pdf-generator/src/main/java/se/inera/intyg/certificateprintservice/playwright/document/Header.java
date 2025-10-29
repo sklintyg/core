@@ -31,6 +31,8 @@ public class Header {
   byte[] recipientLogo;
   boolean isDraft;
   boolean isSent;
+  boolean isCanSendElectronically;
+  String draftAlertInfoText;
 
   public Element create() {
     final var headerElements = new ArrayList<>(List.of(header(), leftMarginInfo.create()));
@@ -66,7 +68,8 @@ public class Header {
         .attr(STYLE, "margin-bottom: 5mm")
         .appendChildren(List.of(
             HeaderElementFactory.title(certificateName, certificateType, certificateVersion),
-            HeaderElementFactory.alert(recipientName, isDraft, isSent)
+            HeaderElementFactory.alert(recipientName, isDraft, isSent, isCanSendElectronically,
+                draftAlertInfoText)
         ));
   }
 

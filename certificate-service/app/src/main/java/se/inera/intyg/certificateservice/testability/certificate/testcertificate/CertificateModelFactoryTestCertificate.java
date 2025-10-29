@@ -27,6 +27,7 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.Certifi
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateTypeName;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
@@ -43,7 +44,7 @@ public class CertificateModelFactoryTestCertificate implements CertificateModelF
   @Value("${sendmessagetofake.logicaladdress:FAKE}")
   private String fakeLogicalAddress;
 
-  private static final String CERTIFICATE_ID = "CS";
+  private static final String CERTIFICATE_MODEL_ID = "CS";
   private static final String VERSION = "1.0";
   private static final String NAME = "Komponenter som stöds av Certificate Service";
   private static final String DESCRIPTION = """
@@ -71,7 +72,7 @@ public class CertificateModelFactoryTestCertificate implements CertificateModelF
       """;
 
   public static final CertificateModelId TEST_CERTIFICATE_V1 = CertificateModelId.builder()
-      .type(new CertificateType(CERTIFICATE_ID))
+      .type(new CertificateType(CERTIFICATE_MODEL_ID))
       .version(new CertificateVersion(VERSION))
       .build();
 
@@ -86,6 +87,7 @@ public class CertificateModelFactoryTestCertificate implements CertificateModelF
                 NAME
             )
         )
+        .typeName(new CertificateTypeName(CERTIFICATE_MODEL_ID))
         .name(NAME)
         .description(DESCRIPTION)
         .detailedDescription(DETAILED_DESCRIPTION)
