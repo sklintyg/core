@@ -42,32 +42,4 @@ class CertificateModelIdTest {
       assertFalse(certificateModelId.matches("anotherType", List.of("version")));
     }
   }
-
-  @Nested
-  class IsLatestActiveVersionTests {
-
-    @Test
-    void shouldReturnTrueIfVersionMatches() {
-      final var certificateModelId = CertificateModelId.builder()
-          .type(new CertificateType("type"))
-          .version(new CertificateVersion("1.0"))
-          .build();
-
-      assertTrue(certificateModelId.version().isLastestActiveVersion(
-          List.of(new CertificateVersion("1.0"))
-      ));
-    }
-
-    @Test
-    void shouldReturnFalseIfVersionDoesNotMatch() {
-      final var certificateModelId = CertificateModelId.builder()
-          .type(new CertificateType("type"))
-          .version(new CertificateVersion("1.0"))
-          .build();
-
-      assertFalse(certificateModelId.version().isLastestActiveVersion(
-          List.of(new CertificateVersion("2.0"))
-      ));
-    }
-  }
 }

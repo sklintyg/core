@@ -18,7 +18,7 @@ public class ActionRuleLimitedFunctionality implements ActionRule {
     final var evaluatedCertificate = certificate.orElseThrow(() -> new IllegalStateException(
         "Certificate is required for evaluating ActionRuleInactiveCertificateType"));
 
-    if (isLastestActiveVersion(evaluatedCertificate)) {
+    if (evaluatedCertificate.certificateModel().isLastestActiveVersion()) {
       return true;
     }
 
@@ -37,10 +37,5 @@ public class ActionRuleLimitedFunctionality implements ActionRule {
         .map(config -> LocalDateTime.now().isBefore(config.untilDateTime()))
         .findFirst()
         .orElse(false);
-  }
-
-  private static boolean isLastestActiveVersion(Certificate evaluatedCertificate) {
-    return evaluatedCertificate.certificateModel().id().version()
-        .isLastestActiveVersion(evaluatedCertificate.certificateModel().certificateVersions());
   }
 }

@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Comparator;
@@ -173,5 +174,16 @@ public class CertificateModel implements Comparator<ElementId> {
         .replace("–", "")
         .replace("__", "_")
         .toLowerCase();
+  }
+
+  public boolean isLastestActiveVersion() {
+    final var version = id.version().version();
+    return certificateVersions.stream()
+        .map(CertificateVersion::version)
+        .filter(Objects::nonNull)
+        .map(BigDecimal::new)
+        .max(Comparator.naturalOrder())
+        .map(max -> max.compareTo(new BigDecimal(version)) == 0)
+        .orElse(false);
   }
 }
