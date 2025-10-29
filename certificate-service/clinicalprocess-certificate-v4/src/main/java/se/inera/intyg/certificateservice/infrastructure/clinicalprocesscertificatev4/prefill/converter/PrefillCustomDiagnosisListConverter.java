@@ -150,7 +150,7 @@ public class PrefillCustomDiagnosisListConverter implements PrefillCustomConvert
   private static String getTerminology(ElementConfigurationDiagnosis elementConfigurationDiagnosis,
       CVType cvType) {
     return elementConfigurationDiagnosis.terminology().stream()
-        .filter(terminology -> terminology.codeSystem().equals(cvType.getCodeSystem()))
+        .filter(terminology -> terminology.isValidCodeSystem(cvType.getCodeSystem()))
         .findFirst()
         .orElseThrow()
         .id();

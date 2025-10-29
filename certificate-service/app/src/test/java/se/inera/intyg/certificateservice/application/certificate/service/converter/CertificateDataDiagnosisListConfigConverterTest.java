@@ -142,7 +142,8 @@ class CertificateDataDiagnosisListConfigConverterTest {
             ElementConfigurationDiagnosis.builder()
                 .terminology(
                     List.of(
-                        new ElementDiagnosisTerminology(EXPECTED_ID, EXPECTED_LABEL, CODE_SYSTEM)
+                        new ElementDiagnosisTerminology(EXPECTED_ID, EXPECTED_LABEL, CODE_SYSTEM,
+                            List.of())
                     )
                 )
                 .build()

@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_MEDICINSKT_CENTRUM;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -62,23 +63,23 @@ class CertificatesRequestFactoryTest {
     }
 
     @Test
-    void shallIncludeIssuedByStaffId() {
-      final var expectedIssuedByStaffId = AJLA_DOKTOR.hsaId();
+    void shallIncludeIssuedByStaffIds() {
+      final var expectedIssuedByStaffId = List.of(AJLA_DOKTOR.hsaId());
       final var queryCriteriaDTO = CertificatesQueryCriteriaDTO.builder()
-          .issuedByStaffId(expectedIssuedByStaffId.id())
+          .issuedByStaffId(AJLA_DOKTOR.hsaId().id())
           .build();
 
       assertEquals(expectedIssuedByStaffId,
-          CertificatesRequestFactory.create(queryCriteriaDTO).issuedByStaffId()
+          CertificatesRequestFactory.create(queryCriteriaDTO).issuedByStaffIds()
       );
     }
 
     @Test
-    void shallNotIncludeIssuedByStaffId() {
+    void shallNotIncludeIssuedByStaffIds() {
       final var queryCriteriaDTO = CertificatesQueryCriteriaDTO.builder()
           .build();
 
-      assertNull(CertificatesRequestFactory.create(queryCriteriaDTO).issuedByStaffId());
+      assertNull(CertificatesRequestFactory.create(queryCriteriaDTO).issuedByStaffIds());
     }
 
     @Test
@@ -242,7 +243,6 @@ class CertificatesRequestFactoryTest {
       assertEquals(expected, CertificatesRequestFactory.convert(request).signedTo());
     }
 
-
     @Test
     void shouldIncludeCertificateTypes() {
       final var expected = List.of(new CertificateType(TYPE));
@@ -252,6 +252,28 @@ class CertificatesRequestFactoryTest {
           .build();
 
       assertEquals(expected, CertificatesRequestFactory.convert(request).types());
+    }
+
+    @Test
+    void shouldIncludeIssuedByUnitIds() {
+      final var expected = List.of(ALFA_MEDICINSKT_CENTRUM.hsaId());
+      final var request = GetSickLeaveCertificatesInternalRequest.builder()
+          .personId(PERSON_ID)
+          .issuedByUnitIds(List.of(ALFA_MEDICINSKT_CENTRUM.hsaId().id()))
+          .build();
+
+      assertEquals(expected, CertificatesRequestFactory.convert(request).issuedUnitIds());
+    }
+
+    @Test
+    void shouldIncludeIssuedByStaffIds() {
+      final var expected = List.of(AJLA_DOKTOR.hsaId());
+      final var request = GetSickLeaveCertificatesInternalRequest.builder()
+          .personId(PERSON_ID)
+          .issuedByStaffIds(List.of(AJLA_DOKTOR.hsaId().id()))
+          .build();
+
+      assertEquals(expected, CertificatesRequestFactory.convert(request).issuedByStaffIds());
     }
   }
 }
