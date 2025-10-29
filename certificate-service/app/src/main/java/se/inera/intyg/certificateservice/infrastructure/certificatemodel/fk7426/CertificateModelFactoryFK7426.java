@@ -60,6 +60,7 @@ public class CertificateModelFactoryFK7426 implements CertificateModelFactory {
   private static final String FK_7426 = "fk7426";
   private static final String VERSION = "1.0";
   private static final CertificateTypeName FK7426_TYPE_NAME = new CertificateTypeName("FK7426");
+  private static final String NAME = "Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har fyllt 18 år";
   private static final String DESCRIPTION = """
           När ett barn är allvarligt sjukt kan föräldrar som behöver avstå från sitt arbete få tillfällig föräldrapenning under ett obegränsat antal dagar. Läkarutlåtandet behövs från den första dagen som barnet bedöms vara allvarligt sjukt.
       """;
@@ -89,7 +90,7 @@ public class CertificateModelFactoryFK7426 implements CertificateModelFactory {
         .id(FK7426_V1_0)
         .type(CodeSystemKvIntygstyp.FK7426)
         .typeName(FK7426_TYPE_NAME)
-        .name(CodeSystemKvIntygstyp.FK7426.displayName())
+        .name(NAME)
         .description(DESCRIPTION)
         .detailedDescription(DETAILED_DESCRIPTION)
         .activeFrom(activeFrom)

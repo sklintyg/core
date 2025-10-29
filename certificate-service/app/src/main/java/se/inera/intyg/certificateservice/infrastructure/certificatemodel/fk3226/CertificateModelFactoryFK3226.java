@@ -56,6 +56,7 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
   private static final String FK_3226 = "fk3226";
   private static final String VERSION = "1.0";
   private static final CertificateTypeName FK3226_TYPE_NAME = new CertificateTypeName("FK3226");
+  private static final String NAME = "Läkarutlåtande för närståendepenning";
   private static final String DESCRIPTION = """
          <b className="iu-fw-heading">Vad är närståendepenning?</b><br>
          <p>Närståendepenning är en ersättning för den som avstår från förvärvsarbete, arbetslöshetsersättning (a-kassa) eller föräldrapenning för att vara med en patient som är svårt sjuk i lagens mening. I lagen definierar man svårt sjuk som att patientens hälsotillstånd är så nedsatt att det finns ett påtagligt hot mot hens liv i nuläget eller på viss tids sikt. Sjukdomstillstånd som på flera års sikt utvecklas till livshotande tillstånd ger däremot inte rätt till närståendepenning.</p>
@@ -86,7 +87,7 @@ public class CertificateModelFactoryFK3226 implements CertificateModelFactory {
         .id(FK3226_V1_0)
         .type(CodeSystemKvIntygstyp.FK3226)
         .typeName(FK3226_TYPE_NAME)
-        .name(CodeSystemKvIntygstyp.FK3226.displayName())
+        .name(NAME)
         .description(DESCRIPTION)
         .detailedDescription(DETAILED_DESCRIPTION)
         .activeFrom(activeFrom)

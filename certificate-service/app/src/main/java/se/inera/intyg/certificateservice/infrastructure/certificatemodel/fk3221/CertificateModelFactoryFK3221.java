@@ -65,6 +65,7 @@ public class CertificateModelFactoryFK3221 implements CertificateModelFactory {
   private static final String FK_3221 = "fk3221";
   private static final String VERSION = "1.0";
   private static final CertificateTypeName FK3221_TYPE_NAME = new CertificateTypeName("FK3221");
+  private static final String NAME = "Läkarutlåtande för omvårdnadsbidrag eller merkostnadsersättning";
   private static final String DESCRIPTION = """
       <b className="iu-fw-heading">Vem kan få omvårdnadsbidrag eller merkostnadsersättning för barn?</b>
       
@@ -101,7 +102,7 @@ public class CertificateModelFactoryFK3221 implements CertificateModelFactory {
         .id(FK3221_V1_0)
         .type(CodeSystemKvIntygstyp.FK3221)
         .typeName(FK3221_TYPE_NAME)
-        .name(CodeSystemKvIntygstyp.FK3221.displayName())
+        .name(NAME)
         .description(DESCRIPTION)
         .detailedDescription(DETAILED_DESCRIPTION)
         .activeFrom(activeFrom)

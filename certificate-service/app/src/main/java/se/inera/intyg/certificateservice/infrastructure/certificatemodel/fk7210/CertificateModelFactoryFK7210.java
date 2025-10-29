@@ -37,6 +37,7 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
 
   private static final String FK_7210 = "fk7210";
   private static final String VERSION = "1.0";
+  private static final String NAME = "Intyg om graviditet";
 
   private static final String DESCRIPTION = """
           När en person är gravid ska hen få ett intyg om graviditet av hälso- och sjukvården. Intyget behövs om den gravida begär ersättning från Försäkringskassan innan barnet är fött.
@@ -68,7 +69,7 @@ public class CertificateModelFactoryFK7210 implements CertificateModelFactory {
         .id(FK7210_V1_0)
         .type(CodeSystemKvIntygstyp.FK7210)
         .typeName(FK7210_TYPE_NAME)
-        .name(CodeSystemKvIntygstyp.FK7210.displayName())
+        .name(NAME)
         .description(DESCRIPTION)
         .detailedDescription(DETAILED_DESCRIPTION)
         .activeFrom(activeFrom)

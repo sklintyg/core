@@ -80,6 +80,7 @@ public class CertificateModelFactoryFK7810 implements CertificateModelFactory {
   private static final String FK_7810 = "fk7810";
   private static final String VERSION = "1.0";
   private static final CertificateTypeName FK7810_TYPE_NAME = new CertificateTypeName("FK7810");
+  private static final String NAME = "Läkarutlåtande för assistansersättning";
   private static final String DESCRIPTION = """
       Vem kan få assistansersättning?
       
@@ -130,7 +131,7 @@ public class CertificateModelFactoryFK7810 implements CertificateModelFactory {
         .id(FK7810_V1_0)
         .type(CodeSystemKvIntygstyp.FK7810)
         .typeName(FK7810_TYPE_NAME)
-        .name(CodeSystemKvIntygstyp.FK7810.displayName())
+        .name(NAME)
         .description(DESCRIPTION)
         .detailedDescription(DETAILED_DESCRIPTION.replaceAll("\\R", ""))
         .activeFrom(activeFrom)
