@@ -68,9 +68,9 @@
     <ns2:delsvar id="9.2">true</ns2:delsvar>
     <ns2:delsvar id="9.3">
       <ns4:cv>
-        <ns4:code>89644007</ns4:code>
+        <ns4:code>25577004</ns4:code>
         <ns4:codeSystem>1.2.752.129.5.1.68</ns4:codeSystem>
-        <ns4:displayName>Vänster</ns4:displayName>
+        <ns4:displayName>Höger</ns4:displayName>
       </ns4:cv>
     </ns2:delsvar>
   </ns3:svar>

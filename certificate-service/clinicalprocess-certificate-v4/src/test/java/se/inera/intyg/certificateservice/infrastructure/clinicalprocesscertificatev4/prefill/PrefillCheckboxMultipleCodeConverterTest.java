@@ -15,6 +15,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
@@ -256,6 +257,94 @@ class PrefillCheckboxMultipleCodeConverterTest {
 
       final var result = prefillCheckboxMultipleCodeConverter.prefillAnswer(specification, prefill);
       assertEquals(expectedElementData, result.getElementData());
+    }
+
+    @Test
+    void shouldUseElementMappingIdWhenMappingExists() {
+      final var mappedElementId = new ElementId("9");
+      final var specification = ElementSpecification.builder()
+          .id(ELEMENT_ID)
+          .mapping(
+              new ElementMapping(
+                  mappedElementId,
+                  null
+              ))
+          .configuration(
+              ElementConfigurationCheckboxMultipleCode.builder()
+                  .id(FIELD_ID)
+                  .list(
+                      List.of(
+                          new ElementConfigurationCode(
+                              CODE_ID, "Code 1", new Code(CODE_1, "S1", D_1))
+                      )
+                  )
+                  .build()
+          )
+          .build();
+
+      final var prefill = new Forifyllnad();
+      final var svar = new Svar();
+      svar.setId(mappedElementId.id());
+
+      final var delsvar = new Delsvar();
+      delsvar.setId(FIELD_ID.value());
+      delsvar.getContent().add(getElement(getCvType(CODE_1, D_1), OBJECT_FACTORY::createCv));
+
+      svar.getDelsvar().add(delsvar);
+      prefill.getSvar().add(svar);
+
+      final var result = prefillCheckboxMultipleCodeConverter.prefillAnswer(specification, prefill);
+
+      final var expectedElementData = ElementData.builder()
+          .id(ELEMENT_ID)
+          .value(
+              ElementValueCodeList.builder()
+                  .id(FIELD_ID)
+                  .list(
+                      List.of(
+                          ElementValueCode.builder()
+                              .codeId(CODE_ID)
+                              .code(CODE_1)
+                              .build()
+                      )
+                  )
+                  .build()
+          ).build();
+
+      assertEquals(expectedElementData, result.getElementData());
+    }
+
+    @Test
+    void shouldNotMatchWhenMappingDoesNotExistAndSvarIdDoesNotMatchElementId() {
+      final var specification = ElementSpecification.builder()
+          .id(ELEMENT_ID)
+          .configuration(
+              ElementConfigurationCheckboxMultipleCode.builder()
+                  .id(FIELD_ID)
+                  .list(
+                      List.of(
+                          new ElementConfigurationCode(
+                              CODE_ID, "Code 1", new Code(CODE_1, "S1", D_1))
+                      )
+                  )
+                  .build()
+          )
+          .build();
+
+      final var prefill = new Forifyllnad();
+      final var svar = new Svar();
+      svar.setId("9");
+
+      final var delsvar = new Delsvar();
+      delsvar.setId(FIELD_ID.value());
+      delsvar.getContent().add(getElement(getCvType(CODE_1, D_1), OBJECT_FACTORY::createCv));
+
+      svar.getDelsvar().add(delsvar);
+      prefill.getSvar().add(svar);
+
+      final var result = prefillCheckboxMultipleCodeConverter.prefillAnswer(specification, prefill);
+
+      assertNull(result); // Should return null when no matching svar found
     }
   }
 

@@ -39,7 +39,7 @@ public class PrefillCheckboxMultipleCodeConverter implements PrefillStandardConv
     }
 
     final var answers = prefill.getSvar().stream()
-        .filter(svar -> svar.getId().equals(specification.id().id()))
+        .filter(svar -> svar.getId().equals(getId(specification)))
         .toList();
 
     if (!specification.includeInXml()) {
@@ -127,6 +127,11 @@ public class PrefillCheckboxMultipleCodeConverter implements PrefillStandardConv
         .build();
   }
 
+  private static String getId(ElementSpecification specification) {
+    return specification.mapping() != null && specification.mapping().elementId() != null
+        ? specification.mapping().elementId().id()
+        : specification.id().id();
+  }
 
   private static ElementValueCode getCodes(List<Delsvar> subAnswer,
       ElementConfigurationCheckboxMultipleCode configuration) {
