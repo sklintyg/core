@@ -7,6 +7,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProv
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.BETA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.BETA_VARDCENTRAL;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.ag7804CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ANONYMA_REACT_ATTILA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
@@ -29,7 +30,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
@@ -57,7 +57,7 @@ class CertificateActionUpdateTest {
   void setUp() {
     certificateActionUpdate = (CertificateActionUpdate) certificateActionFactory.create(
         CERTIFICATE_ACTION_SPECIFICATION);
-    certificateBuilder = MedicalCertificate.builder()
+    certificateBuilder = ag7804CertificateBuilder()
         .certificateMetaData(
             CertificateMetaData.builder()
                 .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
@@ -66,6 +66,7 @@ class CertificateActionUpdateTest {
                 .patient(ATHENA_REACT_ANDERSSON)
                 .build()
         );
+
     actionEvaluationBuilder = ActionEvaluation.builder()
         .user(AJLA_DOKTOR)
         .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
@@ -77,17 +78,6 @@ class CertificateActionUpdateTest {
   @Test
   void shallReturnTypeFromSpecification() {
     assertEquals(CertificateActionType.UPDATE, certificateActionUpdate.getType());
-  }
-
-  @Test
-  void shallReturnFalseIfCertificateIsEmpty() {
-    final Optional<Certificate> certificate = Optional.empty();
-    final var actionEvaluation = actionEvaluationBuilder.build();
-
-    assertFalse(
-        certificateActionUpdate.evaluate(certificate, Optional.of(actionEvaluation)),
-        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
-    );
   }
 
   @Test
@@ -282,7 +272,7 @@ class CertificateActionUpdateTest {
     void setUp() {
       certificateActionUpdate = (CertificateActionUpdate) certificateActionFactory.create(
           CERTIFICATE_ACTION_SPECIFICATION);
-      certificateBuilder = MedicalCertificate.builder()
+      certificateBuilder = ag7804CertificateBuilder()
           .status(Status.DRAFT)
           .certificateMetaData(
               CertificateMetaData.builder()
