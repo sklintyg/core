@@ -73,8 +73,8 @@ class XmlGeneratorDiagnosisListTest {
                   .id(new FieldId(FIELD_ID))
                   .terminology(
                       List.of(
-                          new ElementDiagnosisTerminology(ICD_10_SE, "label", CODE_SYSTEM)
-                      )
+                          new ElementDiagnosisTerminology(ICD_10_SE, "label", CODE_SYSTEM,
+                              List.of()))
                   )
                   .build()
           )
@@ -162,7 +162,8 @@ class XmlGeneratorDiagnosisListTest {
                   .id(new FieldId(FIELD_ID))
                   .terminology(
                       List.of(
-                          new ElementDiagnosisTerminology(ICD_10_SE, "label", CODE_SYSTEM)
+                          new ElementDiagnosisTerminology(ICD_10_SE, "label", CODE_SYSTEM,
+                              List.of())
                       )
                   )
                   .build()
@@ -240,7 +241,7 @@ class XmlGeneratorDiagnosisListTest {
     @Test
     void shallMapEmptyIfNoValue() {
 
-      final var data = ElementData.builder()
+      final var elementData = ElementData.builder()
           .id(new ElementId(QUESTION_ID))
           .value(
               ElementValueDiagnosis.builder()
@@ -249,14 +250,14 @@ class XmlGeneratorDiagnosisListTest {
           )
           .build();
 
-      final var response = xmlGenerator.generate(data, elementSpecification);
+      final var response = xmlGenerator.generate(elementData, elementSpecification);
 
       assertTrue(response.isEmpty());
     }
 
     @Test
     void shallThrowIfIncorrectConfiguration() {
-      final var data = ElementData.builder()
+      final var elementData = ElementData.builder()
           .id(new ElementId(QUESTION_ID))
           .value(
               ElementValueDiagnosisList.builder()
@@ -280,13 +281,13 @@ class XmlGeneratorDiagnosisListTest {
           .build();
 
       assertThrows(IllegalArgumentException.class,
-          () -> xmlGenerator.generate(data, elementSpecification)
+          () -> xmlGenerator.generate(elementData, elementSpecification)
       );
     }
 
     @Test
     void shallMapEmptyIfValueIsNotDiagnosis() {
-      final var data = ElementData.builder()
+      final var elementData = ElementData.builder()
           .id(new ElementId(QUESTION_ID))
           .value(
               ElementValueUnitContactInformation.builder()
@@ -294,7 +295,7 @@ class XmlGeneratorDiagnosisListTest {
           )
           .build();
 
-      final var response = xmlGenerator.generate(data, elementSpecification);
+      final var response = xmlGenerator.generate(elementData, elementSpecification);
 
       assertTrue(response.isEmpty());
     }
@@ -306,7 +307,7 @@ class XmlGeneratorDiagnosisListTest {
               ElementConfigurationDiagnosis.builder().build()
           )
           .build();
-      final var data = ElementData.builder()
+      final var elementData = ElementData.builder()
           .id(new ElementId(QUESTION_ID))
           .value(
               ElementValueDiagnosisList.builder()
@@ -315,7 +316,7 @@ class XmlGeneratorDiagnosisListTest {
           )
           .build();
 
-      final var response = xmlGenerator.generate(data, elementSpecification);
+      final var response = xmlGenerator.generate(elementData, elementSpecification);
 
       assertTrue(response.isEmpty());
     }
@@ -327,7 +328,7 @@ class XmlGeneratorDiagnosisListTest {
               ElementConfigurationDiagnosis.builder().build()
           )
           .build();
-      final var data = ElementData.builder()
+      final var elementData = ElementData.builder()
           .id(new ElementId(QUESTION_ID))
           .value(
               ElementValueDiagnosisList.builder()
@@ -336,7 +337,7 @@ class XmlGeneratorDiagnosisListTest {
           )
           .build();
 
-      final var response = xmlGenerator.generate(data, elementSpecification);
+      final var response = xmlGenerator.generate(elementData, elementSpecification);
 
       assertTrue(response.isEmpty());
     }

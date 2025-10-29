@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateprintservice.playwright.element;
 
-import static se.inera.intyg.certificateprintservice.playwright.document.Constants.HREF;
 import static se.inera.intyg.certificateprintservice.playwright.document.Constants.STYLE;
 import static se.inera.intyg.certificateprintservice.playwright.element.ElementProvider.element;
 
@@ -13,7 +12,6 @@ import org.jsoup.nodes.Element;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FooterElementFactory {
 
-  private static final String LINK_URL = "https://inera.se";
   private static final String LINK_TEXT = "www.inera.se";
   private static final String FOOTER_INFO_TEXT = "Utskriften skapades med %s - en tjänst som drivs av Inera AB";
 
@@ -23,8 +21,9 @@ public class FooterElementFactory {
             element(Tag.P)
                 .attr(STYLE, "display: block margin-top: 5mm; margind-bottom: 2mm;")
                 .text(FOOTER_INFO_TEXT.formatted(origin)),
-            element(Tag.A)
-                .attr(HREF, LINK_URL).text(LINK_TEXT)));
+            element(Tag.P)
+                .attr(STYLE, "display: block margin-top: 5mm; margind-bottom: 2mm;")
+                .text(LINK_TEXT)));
   }
 
   public static Element pageNumber() {

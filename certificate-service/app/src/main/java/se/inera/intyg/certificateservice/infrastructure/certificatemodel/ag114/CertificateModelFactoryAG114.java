@@ -32,6 +32,7 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.Certifi
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateTypeName;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
@@ -52,7 +53,7 @@ public class CertificateModelFactoryAG114 implements CertificateModelFactory {
   private final DiagnosisCodeRepository diagnosisCodeRepository;
 
   private static final String AG114 = "ag114";
-  private static final String AG1_14 = "ag1-14";
+  private static final CertificateTypeName AG114_TYPE_NAME = new CertificateTypeName("AG1-14");
   private static final String VERSION = "2.0";
   private static final String NAME = "Läkarintyg om arbetsförmåga – sjuklöneperioden";
   private static final String DESCRIPTION = """
@@ -102,7 +103,7 @@ public class CertificateModelFactoryAG114 implements CertificateModelFactory {
                 "Läkarintyg om arbetsförmåga – sjuklöneperiod"
             )
         )
-        .typeName(new CertificateType(AG1_14))
+        .typeName(AG114_TYPE_NAME)
         .name(NAME)
         .description(DESCRIPTION)
         .detailedDescription(DETAILED_DESCRIPTION.replaceAll("\\R", ""))
@@ -155,6 +156,7 @@ public class CertificateModelFactoryAG114 implements CertificateModelFactory {
         ))
         .certificateActionFactory(certificateActionFactory)
         .sickLeaveProvider(new AG114SickLeaveProvider())
+        .generalPrintProvider(new AG114CertificateGeneralPrintProvider())
         .build();
   }
 }

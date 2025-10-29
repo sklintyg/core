@@ -47,6 +47,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateTypeName;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SchematronPath;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateLink;
@@ -77,6 +78,7 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
 
   private static final String FK_7804 = "fk7804";
   private static final String VERSION = "2.0";
+  private static final CertificateTypeName FK7804_TYPE_NAME = new CertificateTypeName("FK7804");
   private static final String NAME = "Läkarintyg för sjukpenning";
   private static final String DESCRIPTION = """
       <b>Vad är sjukpenning?</b>
@@ -131,6 +133,7 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
                 NAME
             )
         )
+        .typeName(FK7804_TYPE_NAME)
         .name(NAME)
         .description(DESCRIPTION)
         .detailedDescription(DETAILED_DESCRIPTION.replaceAll("\\R", ""))

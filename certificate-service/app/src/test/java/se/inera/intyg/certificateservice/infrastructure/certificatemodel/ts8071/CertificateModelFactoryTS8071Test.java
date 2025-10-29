@@ -212,4 +212,11 @@ class CertificateModelFactoryTS8071Test {
 
     assertEquals(certificateActionFactory, certificateModel.certificateActionFactory());
   }
+
+  @Test
+  void shallNotIncludeCertificateGeneralPrintProvider() {
+    final var certificateModel = certificateModelFactoryTS8071.create();
+
+    assertNull(certificateModel.generalPrintProvider());
+  }
 }

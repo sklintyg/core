@@ -10,7 +10,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificate.persi
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntitySpecification.signedEqualsAndLesserThan;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateModelEntitySpecification.containsTypes;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.PatientEntitySpecification.equalsPatient;
-import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffEntitySpecification.equalsIssuedByStaff;
+import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffEntitySpecification.issuedByStaffIdIn;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StatusEntitySpecification.containsStatus;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitEntitySpecification.equalsCareUnit;
 import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitEntitySpecification.issuedOnUnitIdIn;
@@ -61,9 +61,10 @@ public class CertificateEntitySpecificationFactory {
       );
     }
 
-    if (certificatesRequest.issuedByStaffId() != null) {
+    if (certificatesRequest.issuedByStaffIds() != null && !certificatesRequest.issuedByStaffIds()
+        .isEmpty()) {
       specification = specification.and(
-          equalsIssuedByStaff(certificatesRequest.issuedByStaffId())
+          issuedByStaffIdIn(certificatesRequest.issuedByStaffIds())
       );
     }
 

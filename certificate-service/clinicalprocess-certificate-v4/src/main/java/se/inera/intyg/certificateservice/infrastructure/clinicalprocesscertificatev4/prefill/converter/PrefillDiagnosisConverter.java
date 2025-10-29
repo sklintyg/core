@@ -170,8 +170,8 @@ public class PrefillDiagnosisConverter implements PrefillStandardConverter {
   private static String getTerminology(ElementConfigurationDiagnosis elementConfigurationDiagnosis,
       CVType cvType) {
     return elementConfigurationDiagnosis.terminology().stream()
-        .filter(elementDiagnosisTerminology -> elementDiagnosisTerminology.codeSystem()
-            .equals(cvType.getCodeSystem()))
+        .filter(elementDiagnosisTerminology -> elementDiagnosisTerminology.isValidCodeSystem(
+            cvType.getCodeSystem()))
         .findFirst()
         .orElseThrow()
         .id();

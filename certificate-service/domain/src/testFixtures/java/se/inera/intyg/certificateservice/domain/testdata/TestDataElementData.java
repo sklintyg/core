@@ -19,6 +19,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBo
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueUnitContactInformation.ElementValueUnitContactInformationBuilder;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 
@@ -72,5 +73,13 @@ public class TestDataElementData {
                 .phoneNumber(ALFA_ALLERGIMOTTAGNINGEN_PHONENUMBER)
                 .build()
         );
+  }
+
+  public static ElementValueUnitContactInformationBuilder contactInfoElementValueBuilder() {
+    return ElementValueUnitContactInformation.builder()
+        .address(ALFA_ALLERGIMOTTAGNINGEN_ADDRESS)
+        .zipCode(ALFA_ALLERGIMOTTAGNINGEN_ZIP_CODE)
+        .city(ALFA_ALLERGIMOTTAGNINGEN_CITY)
+        .phoneNumber(ALFA_ALLERGIMOTTAGNINGEN_PHONENUMBER);
   }
 }

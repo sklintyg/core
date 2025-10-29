@@ -19,6 +19,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateTypeName;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
@@ -60,12 +61,12 @@ class CertificateModelFactoryAG114Test {
   }
 
   @Test
-  void shouldIncludeExternalType() {
-    final var expectedExternalType = new CertificateType("ag1-14");
+  void shouldIncludeTypeName() {
+    final var expected = new CertificateTypeName("AG1-14");
 
     final var certificateModel = certificateModelFactoryAG114.create();
 
-    assertEquals(expectedExternalType, certificateModel.typeName());
+    assertEquals(expected, certificateModel.typeName());
   }
 
   @Test
@@ -180,5 +181,12 @@ class CertificateModelFactoryAG114Test {
     final var certificateModel = certificateModelFactoryAG114.create();
 
     assertNotNull(certificateModel.citizenAvailableFunctionsProvider());
+  }
+
+  @Test
+  void shouldIncludeGeneralPrintProvider() {
+    final var certificateModel = certificateModelFactoryAG114.create();
+
+    assertNotNull(certificateModel.generalPrintProvider());
   }
 }

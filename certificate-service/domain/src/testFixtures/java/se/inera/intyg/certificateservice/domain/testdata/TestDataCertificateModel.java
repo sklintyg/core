@@ -3,32 +3,43 @@ package se.inera.intyg.certificateservice.domain.testdata;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.AG114_VERSION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.AG7804_VERSION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK3221_VERSION;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.AG114_TYPE_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.AG7804_TYPE_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK3221_TYPE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK3226_CODE_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK3226_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK3226_SCHEMATRON_PATH;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK3226_TYPE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK3226_TYPE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK3226_VERSION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_CODE_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_SCHEMATRON_PATH;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_TYPE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_TYPE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_VERSION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7426_VERSION;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7426_TYPE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7427_CODE_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7427_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7427_TYPE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7427_TYPE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7427_VERSION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_CODE_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_SCHEMATRON_PATH;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_TYPE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_TYPE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_VERSION;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7804_TYPE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7809_CODE_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7809_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7809_SCHEMATRON_PATH;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7809_TYPE;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7809_TYPE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7809_VERSION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7810_VERSION;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7810_TYPE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK_RECIPIENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecification.FK3226_PDF_SPECIFICATION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecification.FK7210_PDF_SPECIFICATION;
@@ -78,6 +89,7 @@ public class TestDataCertificateModel {
         )
         .name(FK7210_NAME)
         .type(FK7210_CODE_TYPE)
+        .typeName(FK7210_TYPE_NAME)
         .availableForCitizen(true)
         .certificateActionSpecifications(Collections.emptyList())
         .certificateVersions(List.of(FK7210_VERSION))
@@ -99,6 +111,7 @@ public class TestDataCertificateModel {
         .certificateVersions(List.of(FK3226_VERSION))
         .name(FK3226_NAME)
         .type(FK3226_CODE_TYPE)
+        .typeName(FK3226_TYPE_NAME)
         .availableForCitizen(true)
         .schematronPath(FK3226_SCHEMATRON_PATH)
         .recipient(FK_RECIPIENT)
@@ -119,6 +132,7 @@ public class TestDataCertificateModel {
         .certificateActionSpecifications(Collections.emptyList())
         .certificateVersions(List.of(FK7472_VERSION))
         .type(FK7472_CODE_TYPE)
+        .typeName(FK7472_TYPE_NAME)
         .availableForCitizen(false)
         .schematronPath(FK7472_SCHEMATRON_PATH)
         .recipient(FK_RECIPIENT)
@@ -138,6 +152,7 @@ public class TestDataCertificateModel {
         .certificateVersions(List.of(FK7809_VERSION))
         .name(FK7809_NAME)
         .type(FK7809_CODE_TYPE)
+        .typeName(FK7809_TYPE_NAME)
         .availableForCitizen(true)
         .schematronPath(FK7809_SCHEMATRON_PATH)
         .pdfSpecification(FK7809_PDF_SPECIFICATION)
@@ -157,6 +172,7 @@ public class TestDataCertificateModel {
         .certificateVersions(List.of(FK7427_VERSION))
         .name(FK7427_NAME)
         .type(FK7427_CODE_TYPE)
+        .typeName(FK7427_TYPE_NAME)
         .availableForCitizen(false)
         .recipient(FK_RECIPIENT)
         .certificateActionFactory(new CertificateActionFactory(null));
@@ -174,6 +190,7 @@ public class TestDataCertificateModel {
         .certificateVersions(List.of(FK7426_VERSION))
         .name(TestDataCertificateModelConstants.FK7426_NAME)
         .type(TestDataCertificateModelConstants.FK7426_CODE_TYPE)
+        .typeName(FK7426_TYPE_NAME)
         .availableForCitizen(false)
         .schematronPath(TestDataCertificateModelConstants.FK7426_SCHEMATRON_PATH)
         .recipient(TestDataCertificateModelConstants.FK_RECIPIENT)
@@ -192,6 +209,7 @@ public class TestDataCertificateModel {
         .certificateVersions(List.of(FK3221_VERSION))
         .name(TestDataCertificateModelConstants.FK3221_NAME)
         .type(TestDataCertificateModelConstants.FK3221_CODE_TYPE)
+        .typeName(FK3221_TYPE_NAME)
         .availableForCitizen(false)
         .schematronPath(TestDataCertificateModelConstants.FK3221_SCHEMATRON_PATH)
         .recipient(TestDataCertificateModelConstants.FK_RECIPIENT)
@@ -210,6 +228,7 @@ public class TestDataCertificateModel {
         .certificateVersions(List.of(FK7810_VERSION))
         .name(TestDataCertificateModelConstants.FK7810_NAME)
         .type(TestDataCertificateModelConstants.FK7810_CODE_TYPE)
+        .typeName(FK7810_TYPE_NAME)
         .availableForCitizen(true)
         .schematronPath(TestDataCertificateModelConstants.FK7810_SCHEMATRON_PATH)
         .recipient(TestDataCertificateModelConstants.FK_RECIPIENT)
@@ -230,6 +249,7 @@ public class TestDataCertificateModel {
         .certificateActionSpecifications(Collections.emptyList())
         .name(TestDataCertificateModelConstants.FK7804_NAME)
         .type(TestDataCertificateModelConstants.FK7804_CODE_TYPE)
+        .typeName(FK7804_TYPE_NAME)
         .availableForCitizen(true)
         .schematronPath(TestDataCertificateModelConstants.FK7804_SCHEMATRON_PATH)
         .recipient(TestDataCertificateModelConstants.FK_RECIPIENT)
@@ -248,6 +268,7 @@ public class TestDataCertificateModel {
         .certificateVersions(List.of(AG7804_VERSION))
         .name(TestDataCertificateModelConstants.AG7804_NAME)
         .type(TestDataCertificateModelConstants.AG7804_CODE_TYPE)
+        .typeName(AG7804_TYPE_NAME)
         .availableForCitizen(true)
         .ableToCreateDraftForModel(FK7804_CERTIFICATE_MODEL_ID)
         .recipient(TestDataCertificateModelConstants.SKR_RECIPIENT)
@@ -284,6 +305,7 @@ public class TestDataCertificateModel {
         .certificateVersions(List.of(AG114_VERSION))
         .name(TestDataCertificateModelConstants.AG114_NAME)
         .type(TestDataCertificateModelConstants.AG114_CODE_TYPE)
+        .typeName(AG114_TYPE_NAME)
         .availableForCitizen(true)
         .recipient(TestDataCertificateModelConstants.SKR_RECIPIENT)
         .certificateActionFactory(new CertificateActionFactory(null));

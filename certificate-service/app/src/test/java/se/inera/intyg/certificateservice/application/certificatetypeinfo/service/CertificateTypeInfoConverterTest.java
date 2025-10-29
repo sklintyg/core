@@ -26,11 +26,13 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateTypeName;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateTypeInfoConverterTest {
 
   private static final String TYPE = "TYPE";
+  private static final String TYPE_NAME = "TYPE_NAME";
   private static final String NAME = "NAME";
   private static final String DESCRIPTION = "DESCRIPTION";
   private static final CertificateActionSpecification CERTIFICATE_ACTION_SPECIFICATION =
@@ -61,6 +63,7 @@ class CertificateTypeInfoConverterTest {
                 .type(new CertificateType(TYPE))
                 .build()
         )
+        .typeName(new CertificateTypeName(TYPE_NAME))
         .name(NAME)
         .description(DESCRIPTION)
         .certificateActionSpecifications(
@@ -87,6 +90,13 @@ class CertificateTypeInfoConverterTest {
     final var result = certificateTypeInfoConverter.convert(certificateModel, CERTIFICATE_ACTIONS,
         ACTION_EVALUATION);
     assertEquals(TYPE, result.getType());
+  }
+
+  @Test
+  void shallIncludeTypeName() {
+    final var result = certificateTypeInfoConverter.convert(certificateModel, CERTIFICATE_ACTIONS,
+        ACTION_EVALUATION);
+    assertEquals(TYPE_NAME, result.getTypeName());
   }
 
   @Test

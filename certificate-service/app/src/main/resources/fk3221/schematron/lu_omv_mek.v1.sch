@@ -284,7 +284,7 @@
   <iso:pattern id="q58.2">
     <iso:rule context="//gn:delsvar[@id='58.2']">
       <iso:extends rule="cv"/>
-      <iso:assert test="matches(normalize-space(tp:cv/tp:codeSystem), '(1.2.752.116.1.1.1.1.3)')">
+      <iso:assert test="matches(normalize-space(tp:cv/tp:codeSystem), '(1.2.752.116.1.1.1)')">
         Diagnoskodsystem måste vara OID för ICD-10-SE
       </iso:assert>
       <iso:assert

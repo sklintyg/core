@@ -29,7 +29,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 public class QuestionKorrigeringAvSynskarpa {
 
   public static final ElementId QUESTION_KORRIGERING_AV_SYNSKARPA_ID = new ElementId("6");
-  public static final FieldId QUESTION_KORRIGERING_AV_SYNSKARPA_FIELD_ID = new FieldId("6");
+  public static final FieldId QUESTION_KORRIGERING_AV_SYNSKARPA_FIELD_ID = new FieldId("6.1");
 
   private QuestionKorrigeringAvSynskarpa() {
     throw new IllegalStateException("Utility class");

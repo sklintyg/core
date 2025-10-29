@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValue;
-import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueLabeledText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 
@@ -42,14 +42,16 @@ public class ElementConfigurationCheckboxBoolean implements ElementConfiguration
 
     if (elementValue.isEmpty()) {
       return Optional.of(
-          ElementSimplifiedValueText.builder()
+          ElementSimplifiedValueLabeledText.builder()
+              .label(label)
               .text("Ej angivet")
               .build()
       );
     }
 
     return Optional.of(
-        ElementSimplifiedValueText.builder()
+        ElementSimplifiedValueLabeledText.builder()
+            .label(label)
             .text(Boolean.TRUE.equals(elementValue.value()) ? selectedText : unselectedText)
             .build()
     );

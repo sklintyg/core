@@ -16,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateprintservice.pdfgenerator.api.GeneralPrintText;
 import se.inera.intyg.certificateprintservice.pdfgenerator.api.Metadata;
 import se.inera.intyg.certificateprintservice.playwright.document.LeftMarginInfo;
 import se.inera.intyg.certificateprintservice.playwright.document.RightMarginInfo;
@@ -54,6 +55,10 @@ class HeaderConverterTest {
       .recipientName(RECIPIENT_NAME)
       .signingDate(SIGNING_DATE)
       .sentDate(SENT_DATE)
+      .generalPrintText(GeneralPrintText.builder()
+          .leftMarginInfoText("leftMarginInfoText")
+          .draftAlertInfoText("draftAlertInfoText")
+          .build())
       .build();
 
   @Test

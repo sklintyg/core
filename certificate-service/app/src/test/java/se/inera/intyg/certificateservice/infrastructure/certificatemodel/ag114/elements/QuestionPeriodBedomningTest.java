@@ -27,8 +27,8 @@ class QuestionPeriodBedomningTest {
     final var expectedConfiguration = ElementConfigurationDateRange.builder()
         .id(QUESTION_PERIOD_BEDOMNING_FIELD_ID)
         .name("Period då arbetsförmågan bedöms vara nedsatt")
-        .labelFrom("Fr.o.m")
-        .labelTo("T.o.m")
+        .labelFrom("Från och med")
+        .labelTo("Till och med")
         .build();
 
     final var element = QuestionPeriodBedomning.questionPeriodBedomning();

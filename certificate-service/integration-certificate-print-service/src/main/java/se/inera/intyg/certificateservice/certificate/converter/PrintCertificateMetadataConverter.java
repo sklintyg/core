@@ -3,11 +3,14 @@ package se.inera.intyg.certificateservice.certificate.converter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import javax.imageio.ImageIO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import se.inera.intyg.certificateservice.certificate.dto.GeneralPrintTextDTO;
 import se.inera.intyg.certificateservice.certificate.dto.PrintCertificateMetadataDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateGeneralPrintText;
 
 @Component
 @RequiredArgsConstructor
@@ -34,6 +37,7 @@ public class PrintCertificateMetadataConverter {
         .certificateId(certificate.id().id())
         .recipientLogo(convertLogo(certificate.certificateModel().recipient().logo()))
         .recipientName(certificate.certificateModel().recipient().name())
+        .recipientId(certificate.certificateModel().recipient().id().id())
         .applicationOrigin(isCitizenFormat
             ? APPLICATION_ORIGIN_1177_INTYG
             : APPLICATION_ORIGIN_WEBCERT)
@@ -47,6 +51,20 @@ public class PrintCertificateMetadataConverter {
         .unitInformation(
             printCertificateUnitInformationConverter.convert(certificate))
         .fileName(fileName)
+        .canSendElectronically(certificate.certificateModel().recipient().canSendElectronically())
+        .generalPrintText(convertGeneralPrintText(certificate.getGeneralPrintText()))
+        .build();
+  }
+
+  private static GeneralPrintTextDTO convertGeneralPrintText(
+      Optional<CertificateGeneralPrintText> text) {
+    if (text.isEmpty()) {
+      return GeneralPrintTextDTO.builder()
+          .build();
+    }
+    return GeneralPrintTextDTO.builder()
+        .leftMarginInfoText(text.get().leftMarginInfoText())
+        .draftAlertInfoText(text.get().draftAlertInfoText())
         .build();
   }
 

@@ -7,6 +7,7 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.Certifi
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.service.PrefillProcessor;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateGeneralPrintText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
@@ -141,5 +142,7 @@ public interface Certificate {
   Optional<Certificate> candidateForUpdate();
 
   CertificateMetaData getMetadataForPrint();
+
+  Optional<CertificateGeneralPrintText> getGeneralPrintText();
 
 }

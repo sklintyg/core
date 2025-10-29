@@ -21,7 +21,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
-import se.inera.intyg.certificateservice.testability.certificate.service.repository.TestabilityCertificateModelRepository;
 
 @ExtendWith(MockitoExtension.class)
 class InMemoryCertificateModelRepositoryTest {
@@ -146,8 +145,8 @@ class InMemoryCertificateModelRepositoryTest {
           "initCertificateModelMap");
       postConstruct.setAccessible(true);
       postConstruct.invoke(repository);
-    } catch (Exception ignored) {
-
+    } catch (Exception ex) {
+      throw new IllegalStateException(ex);
     }
   }
 
@@ -204,7 +203,7 @@ class InMemoryCertificateModelRepositoryTest {
           new CertificateType(TYPE_ONE));
 
       assertTrue(actualModel.isEmpty(),
-          () -> "Expect model to be empty but retured %s".formatted(actualModel.orElseThrow())
+          () -> "Expect model to be empty but returned %s".formatted(actualModel.orElseThrow())
       );
     }
 
@@ -235,7 +234,7 @@ class InMemoryCertificateModelRepositoryTest {
           new CertificateType(TYPE_ONE));
 
       assertTrue(actualModel.isEmpty(),
-          () -> "Expect model to be empty but retured %s".formatted(actualModel.orElseThrow())
+          () -> "Expect model to be empty but returned %s".formatted(actualModel.orElseThrow())
       );
     }
 
@@ -289,133 +288,6 @@ class InMemoryCertificateModelRepositoryTest {
       );
 
       assertEquals("CertificateType is null!", illegalArgumentException.getMessage());
-    }
-  }
-
-  @Nested
-  class FindLastestActiveByCode {
-
-    @Test
-    void shallReturnCertificateModelIfActiveAndMatchCode() {
-      inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
-          List.of(certificateModelFactoryOne)
-      );
-
-      final var expectedModel = CertificateModel.builder()
-          .id(
-              CertificateModelId.builder()
-                  .type(new CertificateType(TYPE_TWO))
-                  .version(new CertificateVersion(VERSION_ONE))
-                  .build()
-          )
-          .certificateVersions(List.of(new CertificateVersion(VERSION_ONE)))
-          .type(new Code(TYPE_ONE, CODE_SYSTEM_1, null))
-          .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
-          .build();
-
-      doReturn(expectedModel).when(certificateModelFactoryOne).create();
-      initCertificateModelMap(inMemoryCertificateModelRepository);
-
-      final var actualModel = inMemoryCertificateModelRepository.findLatestActiveByType(
-          new CertificateType(TYPE_ONE));
-
-      assertEquals(expectedModel, actualModel.orElse(null));
-    }
-
-    @Test
-    void shallReturnEmptyIfNotActiveAndMatchCode() {
-      inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
-          List.of(certificateModelFactoryOne)
-      );
-
-      final var model = CertificateModel.builder()
-          .id(
-              CertificateModelId.builder()
-                  .type(new CertificateType(TYPE_TWO))
-                  .version(new CertificateVersion(VERSION_ONE))
-                  .build()
-          )
-          .certificateVersions(List.of(new CertificateVersion(VERSION_ONE)))
-          .type(new Code(TYPE_ONE, CODE_SYSTEM_1, null))
-          .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).plusMinutes(1))
-          .build();
-
-      doReturn(model).when(certificateModelFactoryOne).create();
-      initCertificateModelMap(inMemoryCertificateModelRepository);
-
-      final var actualModel = inMemoryCertificateModelRepository.findLatestActiveByType(
-          new CertificateType(TYPE_ONE));
-
-      assertTrue(actualModel.isEmpty(),
-          () -> "Expect model to be empty but retured %s".formatted(actualModel.orElseThrow())
-      );
-    }
-
-    @Test
-    void shallReturnEmptyIfActiveAndDifferentCode() {
-      inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
-          List.of(certificateModelFactoryOne)
-      );
-
-      final var model = CertificateModel.builder()
-          .id(
-              CertificateModelId.builder()
-                  .type(new CertificateType(TYPE_TWO))
-                  .version(new CertificateVersion(VERSION_ONE))
-                  .build()
-          )
-          .type(new Code(CODE_1, CODE_SYSTEM_1, null))
-          .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
-          .build();
-
-      doReturn(model).when(certificateModelFactoryOne).create();
-      initCertificateModelMap(inMemoryCertificateModelRepository);
-
-      final var actualModel = inMemoryCertificateModelRepository.findLatestActiveByType(
-          new CertificateType(TYPE_ONE));
-
-      assertTrue(actualModel.isEmpty(),
-          () -> "Expect model to be empty but retured %s".formatted(actualModel.orElseThrow())
-      );
-    }
-
-    @Test
-    void shallReturnLatestCertificateModelIfActiveAndMatchCode() {
-      inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
-          List.of(certificateModelFactoryOne, certificateModelFactoryTwo)
-      );
-
-      final var modelOne = CertificateModel.builder()
-          .id(
-              CertificateModelId.builder()
-                  .type(new CertificateType(TYPE_ONE))
-                  .version(new CertificateVersion(VERSION_ONE))
-                  .build()
-          )
-          .certificateVersions(List.of(new CertificateVersion(VERSION_ONE)))
-          .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(5))
-          .build();
-
-      final var expectedModel = CertificateModel.builder()
-          .id(
-              CertificateModelId.builder()
-                  .type(new CertificateType(TYPE_TWO))
-                  .version(new CertificateVersion(VERSION_TWO))
-                  .build()
-          )
-          .certificateVersions(List.of(new CertificateVersion(VERSION_TWO)))
-          .type(new Code(TYPE_ONE, CODE_SYSTEM_1, null))
-          .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
-          .build();
-
-      doReturn(modelOne).when(certificateModelFactoryOne).create();
-      doReturn(expectedModel).when(certificateModelFactoryTwo).create();
-      initCertificateModelMap(inMemoryCertificateModelRepository);
-
-      final var actualModel = inMemoryCertificateModelRepository.findLatestActiveByType(
-          new CertificateType(TYPE_ONE));
-
-      assertEquals(expectedModel, actualModel.orElse(null));
     }
   }
 
@@ -531,11 +403,10 @@ class InMemoryCertificateModelRepositoryTest {
   @Nested
   class TestTestabilityCertificateModelRepository {
 
-    private TestabilityCertificateModelRepository testabilityCertificateModelRepository;
 
     @Test
     void shallReturnListOfAllCertificateModelsEvenIfTheyAreNotActive() {
-      testabilityCertificateModelRepository = new InMemoryCertificateModelRepository(
+      final var testabilityCertificateModelRepository = new InMemoryCertificateModelRepository(
           List.of(certificateModelFactoryOne, certificateModelFactoryTwo)
       );
 
@@ -631,7 +502,7 @@ class InMemoryCertificateModelRepositoryTest {
       );
 
       assertTrue(actualModel.isEmpty(),
-          () -> "Expect model to be empty but retured %s".formatted(actualModel.orElseThrow())
+          () -> "Expect model to be empty but returned %s".formatted(actualModel.orElseThrow())
       );
     }
 
@@ -653,7 +524,7 @@ class InMemoryCertificateModelRepositoryTest {
           new Code(CODE_2, CODE_SYSTEM_1, null)
       );
       assertTrue(actualModel.isEmpty(),
-          () -> "Expect model to be empty but retured %s".formatted(actualModel.orElseThrow())
+          () -> "Expect model to be empty but returned %s".formatted(actualModel.orElseThrow())
       );
     }
 
@@ -675,7 +546,7 @@ class InMemoryCertificateModelRepositoryTest {
           new Code(CODE_1, CODE_SYSTEM_2, null)
       );
       assertTrue(actualModel.isEmpty(),
-          () -> "Expect model to be empty but retured %s".formatted(actualModel.orElseThrow())
+          () -> "Expect model to be empty but returned %s".formatted(actualModel.orElseThrow())
       );
     }
   }

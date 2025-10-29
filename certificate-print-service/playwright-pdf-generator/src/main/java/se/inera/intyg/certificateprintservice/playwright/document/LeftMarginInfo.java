@@ -17,8 +17,11 @@ public class LeftMarginInfo {
 
   String certificateType;
   String recipientName;
+  String certificateVersion;
+  String recipientId;
+  String leftMarginText;
 
-  private static final String LEFT_MARGIN_TEXT = "%s - Fastställd av %s";
+  private static final String LEFT_MARGIN_TEXT = "%s %s - Fastställd av %s";
 
   public Element create() {
     return element(Tag.DIV)
@@ -27,10 +30,24 @@ public class LeftMarginInfo {
   }
 
   private Element leftMarginInfo() {
-    final var info = LEFT_MARGIN_TEXT.formatted(certificateType, recipientName);
+
+    if (isLeftMarginTextPresent()) {
+      final var info = leftMarginText.formatted(recipientId, certificateType, certificateVersion,
+          recipientName);
+      return element(Tag.P)
+          .attr(STYLE, "margin: 0;")
+          .text(info);
+    }
+
+    final var info = LEFT_MARGIN_TEXT.formatted(certificateType, certificateVersion,
+        recipientName);
     return element(Tag.P)
         .attr(STYLE, "margin: 0;")
         .text(info);
+  }
+
+  private boolean isLeftMarginTextPresent() {
+    return leftMarginText != null && !leftMarginText.isBlank();
   }
 
 }

@@ -53,12 +53,14 @@ public class HeaderElementFactory {
                 .appendText(name),
             element(Tag.P)
                 .attr(STYLE, "display: inline; margin: 0;")
-                .appendText(" (%s v%s)".formatted(type, version))
+                .appendText(" (%s)".formatted(type))
         ));
   }
 
-  public static Element alert(String recipientName, boolean isDraft, boolean isSent) {
-    final var alertMessage = alertMessage(recipientName, isDraft, isSent);
+  public static Element alert(String recipientName, boolean isDraft, boolean isSent,
+      boolean isCanSendElectronically, String draftAlertInfoText) {
+    final var alertMessage = alertMessage(recipientName, isDraft, isSent, isCanSendElectronically,
+        draftAlertInfoText);
     return element(Tag.DIV)
         .attr(STYLE, "margin-top: 5mm; padding: 3mm 5mm; border: red solid 1px;")
         .appendChild(element(Tag.P)
@@ -66,7 +68,11 @@ public class HeaderElementFactory {
             .appendText(alertMessage));
   }
 
-  public static String alertMessage(String recipientName, boolean isDraft, boolean isSent) {
+  public static String alertMessage(String recipientName, boolean isDraft, boolean isSent,
+      boolean isCanSendElectronically, String draftAlertInfoText) {
+    if (isDraft && !isCanSendElectronically && draftAlertInfoText != null) {
+      return DRAFT_ALERT_MESSAGE.formatted(draftAlertInfoText);
+    }
     if (isDraft) {
       return DRAFT_ALERT_MESSAGE.formatted(recipientName);
     }
