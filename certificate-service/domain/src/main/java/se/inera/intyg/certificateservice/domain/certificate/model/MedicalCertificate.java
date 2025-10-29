@@ -371,7 +371,7 @@ public class MedicalCertificate implements Certificate {
 
     newCertificate.elementData = Stream.concat(
         newCertificate.elementData.stream(),
-        handleElementUnitData(actionEvaluation.subUnit()).stream()
+        handleUnitContactInformation(actionEvaluation.subUnit()).stream()
     ).toList();
 
     return newCertificate;
@@ -387,7 +387,7 @@ public class MedicalCertificate implements Certificate {
 
     newCertificate.elementData = Stream.concat(
         newCertificate.elementData.stream(),
-        handleElementUnitData(actionEvaluation.subUnit()).stream()
+        handleUnitContactInformation(actionEvaluation.subUnit()).stream()
     ).toList();
 
     return newCertificate;
@@ -407,13 +407,13 @@ public class MedicalCertificate implements Certificate {
 
     newCertificate.elementData = Stream.concat(
         newCertificate.elementData.stream(),
-        handleElementUnitData(actionEvaluation.subUnit()).stream()
+        handleUnitContactInformation(actionEvaluation.subUnit()).stream()
     ).toList();
 
     return newCertificate;
   }
 
-  private Optional<ElementData> handleElementUnitData(IssuingUnit issuingUnit) {
+  private Optional<ElementData> handleUnitContactInformation(IssuingUnit issuingUnit) {
     if (!certificateMetaData.issuingUnit().hsaId().equals(issuingUnit.hsaId())) {
       return Optional.empty();
     }
