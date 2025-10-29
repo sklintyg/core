@@ -49,6 +49,7 @@ public class CertificateMetadataDTO {
   StaffDTO createdBy;
   LocalDateTime revokedAt;
   StaffDTO revokedBy;
+  boolean isInactiveCertificateType;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class CertificateMetadataDTOBuilder {

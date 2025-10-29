@@ -29,7 +29,6 @@ public class CertificateMetadataConverter {
   /**
    * Default values until functionality has been implemented in domain model
    */
-  private static final boolean LATEST_MAJOR_VERSION = true;
   private final CertificateUnitConverter certificateUnitConverter;
   private final CertificateMessageTypeConverter certificateMessageTypeConverter;
   private final CertificateConfirmationModalConverter confirmationModalConverter;
@@ -108,6 +107,7 @@ public class CertificateMetadataConverter {
         )
         .forwarded(certificate.forwarded() != null && certificate.forwarded().value())
         .latestMajorVersion(certificate.certificateModel().isLastestActiveVersion())
+        .isInactiveCertificateType(!certificate.certificateModel().isLastestActiveVersion())
         .sent(certificate.sent() != null)
         .sentTo(certificate.sent() != null ? certificate.sent().recipient().name() : null)
         .recipient(toCertificateRecipientDTO(certificate))

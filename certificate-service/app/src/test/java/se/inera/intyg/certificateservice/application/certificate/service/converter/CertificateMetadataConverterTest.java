@@ -443,6 +443,20 @@ class CertificateMetadataConverterTest {
       );
     }
 
+    @Test
+    void shallIncludeIsLatestMajorVersion() {
+      assertTrue(certificateMetadataConverter.convert(certificate, ACTION_EVALUATION)
+          .isLatestMajorVersion()
+      );
+    }
+
+    @Test
+    void shallIncludeIsInactiveCertificateType() {
+      assertFalse(certificateMetadataConverter.convert(certificate, ACTION_EVALUATION)
+          .isInactiveCertificateType()
+      );
+    }
+
     @Nested
     class PatientConvert {
 
