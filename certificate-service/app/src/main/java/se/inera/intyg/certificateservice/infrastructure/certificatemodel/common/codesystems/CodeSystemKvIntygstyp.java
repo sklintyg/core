@@ -39,13 +39,13 @@ public class CodeSystemKvIntygstyp {
   public static final Code FK7426 = new Code(
       "LU_TFP_ASB18",
       CODE_SYSTEM,
-      "Läkarutlåtande tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har fyllt 18 år"
+      "Läkarutlåtande Tillfällig föräldrapenning för ett allvarligt sjukt barn som inte har fyllt 18"
   );
 
   public static final Code FK7427 = new Code(
       "LU_TFP_B12_16",
       CODE_SYSTEM,
-      "Läkarutlåtande tillfällig föräldrapenning barn 12–16 år"
+      "Läkarutlåtande Tillfällig föräldrapenning Barn 12-16 år"
   );
 
   public static final Code FK7472 = new Code(
@@ -63,7 +63,7 @@ public class CodeSystemKvIntygstyp {
   public static final Code FK7809 = new Code(
       "LUMEK",
       CODE_SYSTEM,
-      "Lärutlåtande för merkostnadsersättning" // Note typo but correct according to code system
+      "Läkarutlåtande för merkostnadsersättning"
   );
 
   public static final Code FK7810 = new Code(
