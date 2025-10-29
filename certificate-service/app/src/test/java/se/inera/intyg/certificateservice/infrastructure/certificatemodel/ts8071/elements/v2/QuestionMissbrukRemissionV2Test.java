@@ -42,9 +42,9 @@ class QuestionMissbrukRemissionV2Test {
         .elementLayout(ElementLayout.ROWS)
         .list(
             List.of(
-                CodeFactory.elementConfigurationCode(CodeSystemKvTs001.YES),
-                CodeFactory.elementConfigurationCode(CodeSystemKvTs001.NO),
-                CodeFactory.elementConfigurationCode(CodeSystemKvTs001.NO_KNOWLEDGE_V2)
+                CodeFactory.elementConfigurationCode(CodeSystemKvTs001.JA),
+                CodeFactory.elementConfigurationCode(CodeSystemKvTs001.NEJ),
+                CodeFactory.elementConfigurationCode(CodeSystemKvTs001.VET_INTE)
             )
         )
         .build();

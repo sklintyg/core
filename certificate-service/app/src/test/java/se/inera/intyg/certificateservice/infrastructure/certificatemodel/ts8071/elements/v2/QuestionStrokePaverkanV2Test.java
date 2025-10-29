@@ -3,9 +3,9 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs001.NO;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs001.NO_KNOWLEDGE_V2;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs001.YES;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs001.JA;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs001.NEJ;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs001.VET_INTE;
 
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -44,19 +44,19 @@ class QuestionStrokePaverkanV2Test {
         .list(
             List.of(
                 new ElementConfigurationCode(
-                    new FieldId(YES.code()),
-                    YES.displayName(),
-                    YES
+                    new FieldId(JA.code()),
+                    JA.displayName(),
+                    JA
                 ),
                 new ElementConfigurationCode(
-                    new FieldId(NO.code()),
-                    NO.displayName(),
-                    NO
+                    new FieldId(NEJ.code()),
+                    NEJ.displayName(),
+                    NEJ
                 ),
                 new ElementConfigurationCode(
-                    new FieldId(NO_KNOWLEDGE_V2.code()),
-                    NO_KNOWLEDGE_V2.displayName(),
-                    NO_KNOWLEDGE_V2
+                    new FieldId(VET_INTE.code()),
+                    VET_INTE.displayName(),
+                    VET_INTE
                 )
             )
         )

@@ -29,9 +29,9 @@ public class QuestionMissbrukRemissionV2 {
   public static ElementSpecification questionMissbrukRemissionV2(
       ElementSpecification... children) {
     final var radioMultipleCodes = List.of(
-        CodeFactory.elementConfigurationCode(CodeSystemKvTs001.YES),
-        CodeFactory.elementConfigurationCode(CodeSystemKvTs001.NO),
-        CodeFactory.elementConfigurationCode(CodeSystemKvTs001.NO_KNOWLEDGE_V2)
+        CodeFactory.elementConfigurationCode(CodeSystemKvTs001.JA),
+        CodeFactory.elementConfigurationCode(CodeSystemKvTs001.NEJ),
+        CodeFactory.elementConfigurationCode(CodeSystemKvTs001.VET_INTE)
     );
 
     return ElementSpecification.builder()

@@ -32,9 +32,9 @@ public class QuestionStrokePaverkanV1 {
   public static ElementSpecification questionStrokePaverkanV1(
       ElementSpecification... children) {
     final var radioMultipleCodes = List.of(
-        CodeFactory.elementConfigurationCode(CodeSystemKvTs001.YES),
-        CodeFactory.elementConfigurationCode(CodeSystemKvTs001.NO),
-        CodeFactory.elementConfigurationCode(CodeSystemKvTs001.NO_KNOWLEDGE)
+        CodeFactory.elementConfigurationCode(CodeSystemKvTs001.JA),
+        CodeFactory.elementConfigurationCode(CodeSystemKvTs001.NEJ),
+        CodeFactory.elementConfigurationCode(CodeSystemKvTs001.VET_EJ)
     );
 
     return ElementSpecification.builder()

@@ -5,7 +5,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvInformationskallaForIntyg.JOURNALUPPGIFTER;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.GR_II;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygetGallerFor.TAXI;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs001.YES;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs001.JA;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs002.NO;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.CertificateModelFactoryTS8071.TS8071_V1_0;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionArytmi.QUESTION_ARYTMI_ID;
@@ -334,7 +334,7 @@ public class TestabilityCertificateFillServiceTS8071 implements
         return NO;
       }
 
-      return YES;
+      return JA;
     }
 
     if (elementId == QUESTION_BASERAT_PA_ID) {
@@ -354,7 +354,7 @@ public class TestabilityCertificateFillServiceTS8071 implements
     }
 
     if (elementId == QUESTION_STROKE_PAVERKAN_V1_ID) {
-      return CodeSystemKvTs001.NO;
+      return CodeSystemKvTs001.NEJ;
     }
 
     if (elementId == QUESTION_HORSELHJALPMEDEL_POSITION_V1_ID) {

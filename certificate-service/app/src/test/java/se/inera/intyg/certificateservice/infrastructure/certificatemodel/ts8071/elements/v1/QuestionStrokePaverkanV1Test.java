@@ -3,9 +3,9 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs001.NO;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs001.NO_KNOWLEDGE;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs001.YES;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs001.JA;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs001.NEJ;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvTs001.VET_EJ;
 
 import java.util.List;
 import org.junit.jupiter.api.Nested;
@@ -44,19 +44,19 @@ class QuestionStrokePaverkanV1Test {
         .list(
             List.of(
                 new ElementConfigurationCode(
-                    new FieldId(YES.code()),
-                    YES.displayName(),
-                    YES
+                    new FieldId(JA.code()),
+                    JA.displayName(),
+                    JA
                 ),
                 new ElementConfigurationCode(
-                    new FieldId(NO.code()),
-                    NO.displayName(),
-                    NO
+                    new FieldId(NEJ.code()),
+                    NEJ.displayName(),
+                    NEJ
                 ),
                 new ElementConfigurationCode(
-                    new FieldId(NO_KNOWLEDGE.code()),
-                    NO_KNOWLEDGE.displayName(),
-                    NO_KNOWLEDGE
+                    new FieldId(VET_EJ.code()),
+                    VET_EJ.displayName(),
+                    VET_EJ
                 )
             )
         )
