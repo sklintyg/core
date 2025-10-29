@@ -235,7 +235,7 @@ class CertificateActionForwardCertificateTest {
 
     @BeforeEach
     void setUp() {
-      certificateBuilder = MedicalCertificate.builder()
+      certificateBuilder = ag7804CertificateBuilder()
           .status(Status.DRAFT)
           .certificateMetaData(
               CertificateMetaData.builder()
