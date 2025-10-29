@@ -42,6 +42,7 @@ import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
+import se.inera.intyg.certificateservice.domain.unit.model.IssuingUnit;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationResult;
 
 @Slf4j
@@ -365,7 +366,14 @@ public class MedicalCertificate implements Certificate {
   public Certificate replace(ActionEvaluation actionEvaluation) {
     final var newCertificate = createCertificate(actionEvaluation, RelationType.REPLACE);
 
-    newCertificate.elementData = this.elementData().stream().toList();
+    newCertificate.elementData = this.elementData().stream()
+        .filter(data -> !UNIT_CONTACT_INFORMATION.equals(data.id()))
+        .toList();
+
+    newCertificate.elementData = Stream.concat(
+        newCertificate.elementData.stream(),
+        handleUnitContactInformation(actionEvaluation.subUnit()).stream()
+    ).toList();
 
     return newCertificate;
   }
@@ -374,7 +382,14 @@ public class MedicalCertificate implements Certificate {
   public Certificate complement(ActionEvaluation actionEvaluation) {
     final var newCertificate = createCertificate(actionEvaluation, RelationType.COMPLEMENT);
 
-    newCertificate.elementData = this.elementData().stream().toList();
+    newCertificate.elementData = this.elementData().stream()
+        .filter(data -> !UNIT_CONTACT_INFORMATION.equals(data.id()))
+        .toList();
+
+    newCertificate.elementData = Stream.concat(
+        newCertificate.elementData.stream(),
+        handleUnitContactInformation(actionEvaluation.subUnit()).stream()
+    ).toList();
 
     return newCertificate;
   }
@@ -384,13 +399,36 @@ public class MedicalCertificate implements Certificate {
     final var newCertificate = createCertificate(actionEvaluation, RelationType.RENEW);
 
     newCertificate.elementData = this.elementData().stream()
+        .filter(data -> !UNIT_CONTACT_INFORMATION.equals(data.id()))
         .filter(data ->
             !certificateModel.elementSpecificationExists(data.id())
                 || certificateModel.elementSpecification(data.id()).includeWhenRenewing()
         )
         .toList();
 
+    newCertificate.elementData = Stream.concat(
+        newCertificate.elementData.stream(),
+        handleUnitContactInformation(actionEvaluation.subUnit()).stream()
+    ).toList();
+
     return newCertificate;
+  }
+
+  private Optional<ElementData> handleUnitContactInformation(IssuingUnit issuingUnit) {
+    if (!certificateMetaData.issuingUnit().hsaId().equals(issuingUnit.hsaId())) {
+      return Optional.empty();
+    }
+
+    return elementData.stream()
+        .filter(data -> data.id().equals(UNIT_CONTACT_INFORMATION))
+        .map(data -> (ElementValueUnitContactInformation) data.value())
+        .map(elementValue -> elementValue.copy(issuingUnit))
+        .map(updatedElementValue -> ElementData.builder()
+            .id(UNIT_CONTACT_INFORMATION)
+            .value(updatedElementValue)
+            .build()
+        )
+        .findFirst();
   }
 
   private MedicalCertificate createCertificate(ActionEvaluation actionEvaluation,
