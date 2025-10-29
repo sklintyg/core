@@ -1,107 +1,116 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071;
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.elements.ElementUnitContactInformation.issuingUnitContactInfo;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryAdhdAutismPsykiskUtvecklingsstorning.categoryAdhdAutismPsykiskUtvecklingsstorning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryAlkoholNarkotikaOchLakemedel.categoryAlkoholNarkotikaOchLakemedel;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryAnamnes.categoryAnamnes;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryBalanssinne.categoryBalanssinne;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryBedomning.categoryBedomning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryDemensOchAndraKognitivaStorningar.categoryDemensOchAndraKognitivaStorningar;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryDiabetes.categoryDiabetes;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryEpilepsi.categoryEpilepsi;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryHjartOchKarlsjukdomar.categoryHjartOchKarlsjukdomar;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryHorsel.categoryHorsel;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryIdentitet.categoryIdentitet;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryIntygetAvser.categoryIntygetAvser;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryIntygetBaseratPa.categoryIntygetBaseratPa;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryNeurologiskaSjukdomar.categoryNeurologiskaSjukdomar;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryNjursjukdomar.categoryNjursjukdomar;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryOvrigKommentar.categoryOvrigKommentar;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryOvrigMedicinering.categoryOvrigMedicinering;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryPsykiskaSjukdomarOchStorningar.categoryPsykiskaSjukdomarOchStorningar;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategoryRorelseorganensFunktioner.categoryRorelseorganensFunktioner;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategorySomnOchVakenhetsstorningar.categorySomnOchVakenhetsstorningar;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategorySynfunktion.categorySynfunktion;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.CategorySynskarpa.categorySynskarpa;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.MessageDiabetes.messageDiabetes;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionArytmi.questionArytmi;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionArytmiBeskrivning.questionArytmiBeskrivning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionBalanssinne.questionBalanssinne;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionBalanssinneBeskrivning.questionBalanssinneBeskrivning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionBaseratPa.questionBaseratPa;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionBaseratPaDatum.questionBaseratPaDatum;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionBedomning.questionBedomning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionBedomningOkand.questionBedomningOkand;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionBedomningRisk.questionBedomningRisk;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionDemens.questionDemens;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionDemensBeskrivning.questionDemensBeskrivning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionDiabetes.questionDiabetes;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionEpilepsi.questionEpilepsi;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionEpilepsiAnfall.questionEpilepsiAnfall;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionEpilepsiAnfallBeskrivning.questionEpilepsiAnfallBeskrivning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionEpilepsiBeskrivning.questionEpilepsiBeskrivning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionEpilepsiMedicin.questionEpilepsiMedicin;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionEpilepsiMedicinBeskrivning.questionEpilepsiMedicinBeskrivning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionEpilepsiMedicinTidpunkt.questionEpilepsiMedicinTidpunkt;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionHjartsjukdom.questionHjartsjukdom;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionHjartsjukdomBehandlad.questionHjartsjukdomBehandlad;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionHjartsjukdomBehandladBeskrivning.questionHjartsjukdomBehandladBeskrivning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionHjartsjukdomBeskrivning.questionHjartsjukdomBeskrivning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionHorsel.questionHorsel;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionHorselhjalpmedel.questionHorselhjalpmedel;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionHorselhjalpmedelPosition.questionHorselhjalpmedelPosition;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionIdentitet.questionIdentitet;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionIntygetAvser.questionIntygetAvser;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionKognitivStorning.questionKognitivStorning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionKorrigeringAvSynskarpa.questionKorrigeringAvSynskarpa;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionKorrigeringAvSynskarpaIngenStyrkaOver.questionKorrigeringAvSynskarpaIngenStyrkaOver;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionKorrigeringAvSynskarpaKontaktlinser.questionKorrigeringAvSynskarpaKontaktlinser;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionKorrigeringAvSynskarpaStyrkaOver.questionKorrigeringAvSynskarpaStyrkaOver;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionLakemedel.questionLakemedel;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionLakemedelBeskrivning.questionLakemedelBeskrivning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMedicinering.questionMedicinering;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMedicineringBeskrivning.questionMedicineringBeskrivning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMedvetandestorning.questionMedvetandestorning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMedvetandestorningTidpunkt.questionMedvetandestorningTidpunkt;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMissbruk.questionMissbruk;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMissbrukBeskrivning.questionMissbrukBeskrivning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMissbrukJournaluppgifter.questionMissbrukJournaluppgifter;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMissbrukJournaluppgifterBeskrivning.questionMissbrukJournaluppgifterBeskrivning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMissbrukProvtagning.questionMissbrukProvtagning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMissbrukVard.questionMissbrukVard;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionMissbrukVardBeskrivning.questionMissbrukVardBeskrivning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNeurologiskSjukdom.questionNeurologiskSjukdom;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNeurologiskSjukdomBeskrivning.questionNeurologiskSjukdomBeskrivning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNeuropsykiatrisk.questionNeuropsykiatrisk;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNeuropsykiatriskLakemedel.questionNeuropsykiatriskLakemedel;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNeuropsykiatriskLakemedelBeskrivning.questionNeuropsykiatriskLakemedelBeskrivning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNeuropsykiatriskTidpunkt.questionNeuropsykiatriskTidpunkt;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNeuropsykiatriskTrafikrisk.questionNeuropsykiatriskTrafikrisk;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNjurfunktion.questionNjurfunktion;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNjurtransplatation.questionNjurtransplatation;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionNjurtransplatationTidpunkt.questionNjurtransplatationTidpunkt;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionOvrigBeskrivning.questionOvrigBeskrivning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionPsykisk.questionPsykisk;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionPsykiskBeskrivning.questionPsykiskBeskrivning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionPsykiskTidpunkt.questionPsykiskTidpunkt;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionPsykiskUtvecklingsstorning.questionPsykiskUtvecklingsstorning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionPsykiskUtvecklingsstorningAllvarlig.questionPsykiskUtvecklingsstorningAllvarlig;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionRorlighet.questionRorlighet;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionRorlighetBeskrivning.questionRorlighetBeskrivning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionRorlighetHjalpaPassagerare.questionRorlighetHjalpaPassagerare;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSjukdomEllerSynnedsattning.questionSjukdomEllerSynnedsattning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSjukdomEllerSynnedsattningBeskrivning.questionSjukdomEllerSynnedsattningBeskrivning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSjukdomshistorik.questionSjukdomshistorik;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSjukdomshistorikBeskrivning.questionSjukdomshistorikBeskrivning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSomn.questionSomn;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSomnBehandling.questionSomnBehandling;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSomnBeskrivning.questionSomnBeskrivning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionStroke.questionStroke;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionStrokePavarkan.questionStrokePavarkan;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynfunktioner.questionSynfunktioner;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynkope.questionSynkope;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynkopeBeskrivning.questionSynkopeBeskrivning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.QuestionSynskarpa.questionSynskarpa;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.CategoryAnamnes.categoryAnamnes;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.CategoryBalanssinne.categoryBalanssinne;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.CategoryBedomning.categoryBedomning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.CategoryDemensOchAndraKognitivaStorningar.categoryDemensOchAndraKognitivaStorningar;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.CategoryDiabetes.categoryDiabetes;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.CategoryEpilepsi.categoryEpilepsi;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.CategoryHjartOchKarlsjukdomar.categoryHjartOchKarlsjukdomar;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.CategoryIdentitet.categoryIdentitet;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.CategoryIntygetAvser.categoryIntygetAvser;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.CategoryIntygetBaseratPa.categoryIntygetBaseratPa;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.CategoryNeurologiskaSjukdomar.categoryNeurologiskaSjukdomar;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.CategoryNjursjukdomar.categoryNjursjukdomar;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.CategoryOvrigKommentar.categoryOvrigKommentar;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.CategoryOvrigMedicinering.categoryOvrigMedicinering;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.CategoryPsykiskaSjukdomarOchStorningar.categoryPsykiskaSjukdomarOchStorningar;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.CategoryRorelseorganensFunktioner.categoryRorelseorganensFunktioner;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.CategorySomnOchVakenhetsstorningar.categorySomnOchVakenhetsstorningar;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.CategorySynfunktion.categorySynfunktion;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.CategorySynskarpa.categorySynskarpa;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.MessageDiabetes.messageDiabetes;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionArytmi.questionArytmi;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionArytmiBeskrivning.questionArytmiBeskrivning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionBalanssinne.questionBalanssinne;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionBaseratPa.questionBaseratPa;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionBaseratPaDatum.questionBaseratPaDatum;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionBedomning.questionBedomning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionBedomningOkand.questionBedomningOkand;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionBedomningRisk.questionBedomningRisk;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionDiabetes.questionDiabetes;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionEpilepsi.questionEpilepsi;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionEpilepsiAnfall.questionEpilepsiAnfall;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionEpilepsiAnfallBeskrivning.questionEpilepsiAnfallBeskrivning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionEpilepsiBeskrivning.questionEpilepsiBeskrivning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionEpilepsiMedicin.questionEpilepsiMedicin;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionEpilepsiMedicinBeskrivning.questionEpilepsiMedicinBeskrivning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionHjartsjukdom.questionHjartsjukdom;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionHjartsjukdomBehandlad.questionHjartsjukdomBehandlad;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionIdentitet.questionIdentitet;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionIntygetAvser.questionIntygetAvser;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionMedicinering.questionMedicinering;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionMedicineringBeskrivning.questionMedicineringBeskrivning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionMedvetandestorning.questionMedvetandestorning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionMedvetandestorningTidpunkt.questionMedvetandestorningTidpunkt;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionMissbrukProvtagning.questionMissbrukProvtagning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionNjurfunktion.questionNjurfunktion;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionNjurtransplatation.questionNjurtransplatation;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionNjurtransplatationTidpunkt.questionNjurtransplatationTidpunkt;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionOvrigBeskrivning.questionOvrigBeskrivning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionPsykiskBeskrivning.questionPsykiskBeskrivning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionRorlighet.questionRorlighet;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionRorlighetBeskrivning.questionRorlighetBeskrivning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionRorlighetHjalpaPassagerare.questionRorlighetHjalpaPassagerare;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSjukdomEllerSynnedsattning.questionSjukdomEllerSynnedsattning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSjukdomEllerSynnedsattningBeskrivning.questionSjukdomEllerSynnedsattningBeskrivning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSjukdomshistorik.questionSjukdomshistorik;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSomnBehandling.questionSomnBehandling;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSomnBeskrivning.questionSomnBeskrivning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionStroke.questionStroke;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSynfunktioner.questionSynfunktioner;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSynkopeBeskrivning.questionSynkopeBeskrivning;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSynskarpa.questionSynskarpa;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.CategoryAdhdAutismPsykiskUtvecklingsstorningV1.categoryAdhdAutismPsykiskUtvecklingsstorningV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.CategoryAlkoholNarkotikaOchLakemedelV1.categoryAlkoholNarkotikaOchLakemedelV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.CategoryHorselV1.categoryHorselV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionBalanssinneBeskrivningV1.questionBalanssinneBeskrivningV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionDemensBeskrivningV1.questionDemensBeskrivningV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionDemensV1.questionDemensV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionEpilepsiMedicinTidpunktV1.questionEpilepsiMedicinTidpunktV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionHjartsjukdomBehandladBeskrivningV1.questionHjartsjukdomBehandladBeskrivningV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionHjartsjukdomBeskrivningV1.questionHjartsjukdomBeskrivningV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionHorselV1.questionHorselV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionHorselhjalpmedelPositionV1.questionHorselhjalpmedelPositionV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionHorselhjalpmedelV1.questionHorselhjalpmedelV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionKognitivStorningV1.questionKognitivStorningV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionKorrigeringAvSynskarpaIngenStyrkaOverV1.questionKorrigeringAvSynskarpaIngenStyrkaOverV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionKorrigeringAvSynskarpaKontaktlinserV1.questionKorrigeringAvSynskarpaKontaktlinserV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionKorrigeringAvSynskarpaStyrkaOverV1.questionKorrigeringAvSynskarpaStyrkaOverV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionKorrigeringAvSynskarpaV1.questionKorrigeringAvSynskarpaV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionLakemedelBeskrivningV1.questionLakemedelBeskrivningV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionLakemedelV1.questionLakemedelV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukBeskrivningV1.questionMissbrukBeskrivningV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukJournaluppgifterBeskrivningV1.questionMissbrukJournaluppgifterBeskrivningV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukJournaluppgifterV1.QUESTION_MISSBRUK_JOURNALUPPGIFTER_V1_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukJournaluppgifterV1.QUESTION_MISSBRUK_JOURNALUPPGIFTER_V1_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukJournaluppgifterV1.questionMissbrukJournaluppgifterV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukV1.QUESTION_MISSBRUK_V1_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukV1.questionMissbrukV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukVardBeskrivningV1.questionMissbrukVardBeskrivningV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionMissbrukVardV1.questionMissbrukVardV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionNeurologiskSjukdomBeskrivningV1.questionNeurologiskSjukdomBeskrivningV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionNeurologiskSjukdomV1.questionNeurologiskSjukdomV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionNeuropsykiatriskLakemedelBeskrivningV1.questionNeuropsykiatriskLakemedelBeskrivningV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionNeuropsykiatriskLakemedelV1.questionNeuropsykiatriskLakemedelV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionNeuropsykiatriskTidpunktV1.questionNeuropsykiatriskTidpunktV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionNeuropsykiatriskTrafikriskV1.questionNeuropsykiatriskTrafikriskV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionNeuropsykiatriskV1.questionNeuropsykiatriskV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionPsykiskTidpunktV1.questionPsykiskTidpunktV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionPsykiskUtvecklingsstorningAllvarligV1.questionPsykiskUtvecklingsstorningAllvarligV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionPsykiskUtvecklingsstorningV1.questionPsykiskUtvecklingsstorningV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionPsykiskV1.QUESTION_PSYKISK_FIELD_V1_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionPsykiskV1.QUESTION_PSYKISK_V1_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionPsykiskV1.questionPsykiskV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionSjukdomshistorikBeskrivningV1.questionSjukdomshistorikBeskrivningV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionSomnV1.QUESTION_SOMN_V1_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionSomnV1.QUESTION_SOMN_V1_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionSomnV1.questionSomnV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionStrokePaverkanV1.questionStrokePaverkanV1;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionSynkopeV1.QUESTION_SYNKOPE_FIELD_V1_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionSynkopeV1.QUESTION_SYNKOPE_V1_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionSynkopeV1.questionSynkopeV1;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -117,9 +126,9 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
-import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateRecipientFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygstyp;
 
 @Component
 @RequiredArgsConstructor
@@ -163,13 +172,7 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
   public CertificateModel create() {
     return CertificateModel.builder()
         .id(TS8071_V1_0)
-        .type(
-            new Code(
-                TS_8071.toUpperCase(),
-                "b64ea353-e8f6-4832-b563-fc7d46f29548",
-                NAME
-            )
-        )
+        .type(CodeSystemKvIntygstyp.TS8071)
         .typeName(TS8071_TYPE_NAME)
         .name(NAME)
         .description(DESCRIPTION)
@@ -204,10 +207,10 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
                 ),
                 categorySynskarpa(
                     questionSynskarpa(),
-                    questionKorrigeringAvSynskarpa(
-                        questionKorrigeringAvSynskarpaIngenStyrkaOver(),
-                        questionKorrigeringAvSynskarpaStyrkaOver(),
-                        questionKorrigeringAvSynskarpaKontaktlinser()
+                    questionKorrigeringAvSynskarpaV1(
+                        questionKorrigeringAvSynskarpaIngenStyrkaOverV1(),
+                        questionKorrigeringAvSynskarpaStyrkaOverV1(),
+                        questionKorrigeringAvSynskarpaKontaktlinserV1()
                     )
                 ),
                 categoryAnamnes(
@@ -215,18 +218,18 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
                         questionSjukdomEllerSynnedsattningBeskrivning()
                     ),
                     questionSjukdomshistorik(
-                        questionSjukdomshistorikBeskrivning()
+                        questionSjukdomshistorikBeskrivningV1()
                     )
                 ),
                 categoryBalanssinne(
                     questionBalanssinne(
-                        questionBalanssinneBeskrivning()
+                        questionBalanssinneBeskrivningV1()
                     )
                 ),
-                categoryHorsel(
-                    questionHorsel(),
-                    questionHorselhjalpmedel(
-                        questionHorselhjalpmedelPosition()
+                categoryHorselV1(
+                    questionHorselV1(),
+                    questionHorselhjalpmedelV1(
+                        questionHorselhjalpmedelPositionV1()
                     )
                 ),
                 categoryRorelseorganensFunktioner(
@@ -237,19 +240,20 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
                 ),
                 categoryHjartOchKarlsjukdomar(
                     questionHjartsjukdom(
-                        questionHjartsjukdomBeskrivning()
+                        questionHjartsjukdomBeskrivningV1()
                     ),
                     questionHjartsjukdomBehandlad(
-                        questionHjartsjukdomBehandladBeskrivning()
+                        questionHjartsjukdomBehandladBeskrivningV1()
                     ),
                     questionArytmi(
                         questionArytmiBeskrivning()
                     ),
-                    questionSynkope(
-                        questionSynkopeBeskrivning()
+                    questionSynkopeV1(
+                        questionSynkopeBeskrivning(QUESTION_SYNKOPE_V1_ID,
+                            QUESTION_SYNKOPE_FIELD_V1_ID)
                     ),
                     questionStroke(
-                        questionStrokePavarkan()
+                        questionStrokePaverkanV1()
                     )
                 ),
                 categoryDiabetes(
@@ -257,8 +261,8 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
                     messageDiabetes()
                 ),
                 categoryNeurologiskaSjukdomar(
-                    questionNeurologiskSjukdom(
-                        questionNeurologiskSjukdomBeskrivning()
+                    questionNeurologiskSjukdomV1(
+                        questionNeurologiskSjukdomBeskrivningV1()
                     )
                 ),
                 categoryEpilepsi(
@@ -270,7 +274,7 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
                     ),
                     questionEpilepsiMedicin(
                         questionEpilepsiMedicinBeskrivning(),
-                        questionEpilepsiMedicinTidpunkt()
+                        questionEpilepsiMedicinTidpunktV1()
                     ),
                     questionMedvetandestorning(
                         questionMedvetandestorningTidpunkt()
@@ -283,48 +287,53 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
                     )
                 ),
                 categoryDemensOchAndraKognitivaStorningar(
-                    questionKognitivStorning(),
-                    questionDemens(
-                        questionDemensBeskrivning()
+                    questionKognitivStorningV1(),
+                    questionDemensV1(
+                        questionDemensBeskrivningV1()
                     )
                 ),
                 categorySomnOchVakenhetsstorningar(
-                    questionSomn(
-                        questionSomnBeskrivning()
+                    questionSomnV1(
+                        questionSomnBeskrivning(QUESTION_SOMN_V1_ID, QUESTION_SOMN_V1_FIELD_ID)
                     ),
-                    questionSomnBehandling()
+                    questionSomnBehandling(QUESTION_SOMN_V1_ID)
                 ),
-                categoryAlkoholNarkotikaOchLakemedel(
-                    questionMissbruk(
-                        questionMissbrukBeskrivning()
+                categoryAlkoholNarkotikaOchLakemedelV1(
+                    questionMissbrukV1(
+                        questionMissbrukBeskrivningV1()
                     ),
-                    questionMissbrukJournaluppgifter(
-                        questionMissbrukJournaluppgifterBeskrivning(),
-                        questionMissbrukProvtagning()
+                    questionMissbrukJournaluppgifterV1(
+                        questionMissbrukJournaluppgifterBeskrivningV1(),
+                        questionMissbrukProvtagning(QUESTION_MISSBRUK_JOURNALUPPGIFTER_V1_ID,
+                            QUESTION_MISSBRUK_JOURNALUPPGIFTER_V1_FIELD_ID,
+                            QUESTION_MISSBRUK_V1_ID)
                     ),
-                    questionMissbrukVard(
-                        questionMissbrukVardBeskrivning()
+                    questionMissbrukVardV1(
+                        questionMissbrukVardBeskrivningV1()
                     ),
-                    questionLakemedel(
-                        questionLakemedelBeskrivning()
+                    questionLakemedelV1(
+                        questionLakemedelBeskrivningV1()
                     )
                 ),
                 categoryPsykiskaSjukdomarOchStorningar(
-                    questionPsykisk(
-                        questionPsykiskBeskrivning(),
-                        questionPsykiskTidpunkt()
+                    questionPsykiskV1(
+                        questionPsykiskBeskrivning(
+                            QUESTION_PSYKISK_V1_ID,
+                            QUESTION_PSYKISK_FIELD_V1_ID
+                        ),
+                        questionPsykiskTidpunktV1()
                     )
                 ),
-                categoryAdhdAutismPsykiskUtvecklingsstorning(
-                    questionNeuropsykiatrisk(
-                        questionNeuropsykiatriskTrafikrisk(),
-                        questionNeuropsykiatriskTidpunkt(),
-                        questionNeuropsykiatriskLakemedel(
-                            questionNeuropsykiatriskLakemedelBeskrivning()
+                categoryAdhdAutismPsykiskUtvecklingsstorningV1(
+                    questionNeuropsykiatriskV1(
+                        questionNeuropsykiatriskTrafikriskV1(),
+                        questionNeuropsykiatriskTidpunktV1(),
+                        questionNeuropsykiatriskLakemedelV1(
+                            questionNeuropsykiatriskLakemedelBeskrivningV1()
                         )
                     ),
-                    questionPsykiskUtvecklingsstorning(
-                        questionPsykiskUtvecklingsstorningAllvarlig()
+                    questionPsykiskUtvecklingsstorningV1(
+                        questionPsykiskUtvecklingsstorningAllvarligV1()
                     )
                 ),
                 categoryOvrigMedicinering(

@@ -21,6 +21,7 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionE
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessConfiguration;
@@ -37,7 +38,6 @@ class ListAvailableCertificateModelsDomainServiceTest {
   private static final CertificateModelId CERTIFICATE_MODEL_ID_2 = CertificateModelId.builder()
       .type(CERTIFICATE_TYPE_2)
       .build();
-  private static final String BLOCK = "block";
   @Mock
   CertificateModel certificateModelOne;
   @Mock
@@ -123,5 +123,79 @@ class ListAvailableCertificateModelsDomainServiceTest {
         actionEvaluation);
 
     assertEquals(List.of(certificateModelOne), actualCertificateModels);
+  }
+
+  @Test
+  void shallReturnOnlyLatestVersionWhenMultipleMajorVersionsExist() {
+    final var actionEvaluation = ActionEvaluation.builder()
+        .user(AJLA_DOKTOR)
+        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
+        .careProvider(ALFA_REGIONEN)
+        .careUnit(ALFA_VARDCENTRAL)
+        .build();
+
+    doReturn(List.of(certificateModelOne, certificateModelTwo)).when(certificateModelRepository)
+        .findAllActive();
+
+    doReturn(CertificateModelId.builder()
+        .type(CERTIFICATE_TYPE_1)
+        .version(new CertificateVersion("1.0"))
+        .build()).when(certificateModelOne).id();
+
+    doReturn(CertificateModelId.builder()
+        .type(CERTIFICATE_TYPE_1)
+        .version(new CertificateVersion("2.0"))
+        .build()).when(certificateModelTwo).id();
+
+    doReturn(true).when(certificateModelOne)
+        .allowTo(LIST_CERTIFICATE_TYPE, Optional.of(actionEvaluation));
+    doReturn(true).when(certificateModelTwo)
+        .allowTo(LIST_CERTIFICATE_TYPE, Optional.of(actionEvaluation));
+
+    doReturn(Collections.emptyList()).when(certificateActionConfigurationRepository)
+        .find(CERTIFICATE_TYPE_1);
+
+    final var actualCertificateModels = listAvailableCertificateModelsDomainService.getLatestVersions(
+        actionEvaluation);
+
+    assertEquals(1, actualCertificateModels.size());
+    assertEquals("2.0", actualCertificateModels.getFirst().id().version().version());
+  }
+
+  @Test
+  void shallReturnOnlyLatestVersionWhenMultipleMinorVersionsExist() {
+    final var actionEvaluation = ActionEvaluation.builder()
+        .user(AJLA_DOKTOR)
+        .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
+        .careProvider(ALFA_REGIONEN)
+        .careUnit(ALFA_VARDCENTRAL)
+        .build();
+
+    doReturn(List.of(certificateModelOne, certificateModelTwo)).when(certificateModelRepository)
+        .findAllActive();
+
+    doReturn(CertificateModelId.builder()
+        .type(CERTIFICATE_TYPE_1)
+        .version(new CertificateVersion("1.0"))
+        .build()).when(certificateModelOne).id();
+
+    doReturn(CertificateModelId.builder()
+        .type(CERTIFICATE_TYPE_1)
+        .version(new CertificateVersion("1.5"))
+        .build()).when(certificateModelTwo).id();
+
+    doReturn(true).when(certificateModelOne)
+        .allowTo(LIST_CERTIFICATE_TYPE, Optional.of(actionEvaluation));
+    doReturn(true).when(certificateModelTwo)
+        .allowTo(LIST_CERTIFICATE_TYPE, Optional.of(actionEvaluation));
+
+    doReturn(Collections.emptyList()).when(certificateActionConfigurationRepository)
+        .find(CERTIFICATE_TYPE_1);
+
+    final var actualCertificateModels = listAvailableCertificateModelsDomainService.getLatestVersions(
+        actionEvaluation);
+
+    assertEquals(1, actualCertificateModels.size());
+    assertEquals("1.5", actualCertificateModels.getFirst().id().version().version());
   }
 }

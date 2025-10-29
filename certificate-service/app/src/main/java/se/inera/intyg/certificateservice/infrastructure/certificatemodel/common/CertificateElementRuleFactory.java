@@ -241,15 +241,75 @@ public class CertificateElementRuleFactory {
         .build();
   }
 
+  public static ElementRule visualAcuities(ElementId parent, FieldId leftEye,
+      FieldId rightEye) {
+    return CertificateElementRuleFactory.show(parent,
+        new RuleExpression(
+            multipleOrExpression(
+                wrapWithParenthesis(
+                    multipleAndExpressions(
+                        wrapWithParenthesis(
+                            multipleAndExpressions(
+                                lessThan(
+                                    withCitation(leftEye.value()),
+                                    "0.8"
+                                ),
+                                lessThan(
+                                    withCitation(rightEye.value()),
+                                    "0.8"
+                                )
+                            )
+                        ),
+                        wrapWithParenthesis(
+                            multipleAndExpressions(
+                                wrapWithNotEmpty(
+                                    withCitation(leftEye.value())),
+                                wrapWithNotEmpty(
+                                    withCitation(rightEye.value()))
+                            )
+                        )
+                    )
+                ),
+                wrapWithParenthesis(
+                    multipleAndExpressions(
+                        multipleAndExpressions(
+                            wrapWithParenthesis(
+                                multipleOrExpression(
+                                    lessThan(
+                                        withCitation(leftEye.value()),
+                                        "0.1"
+                                    ),
+                                    lessThan(
+                                        withCitation(rightEye.value()),
+                                        "0.1"
+                                    )
+                                )
+                            )
+                        ),
+                        wrapWithParenthesis(
+                            multipleAndExpressions(
+                                wrapWithNotEmpty(
+                                    withCitation(leftEye.value())),
+                                wrapWithNotEmpty(
+                                    withCitation(rightEye.value()))
+                            )
+                        )
+                    )
+                )
+            )
+        )
+    );
+  }
+
   public static String singleExpression(String id) {
     return "$" + id;
   }
 
   public static String multipleOrExpression(String... expression) {
-    return multipleOrExpression(null, expression);
+    return multipleOrExpressionWithWrapsWith(null, expression);
   }
 
-  private static String multipleOrExpression(String wrapWith, String... expression) {
+  private static String multipleOrExpressionWithWrapsWith(String wrapWith, String... expression) {
     return Arrays.stream(expression).reduce("", (s, s2) -> {
       if (!s.isEmpty()) {
         s += " || ";
@@ -288,11 +348,11 @@ public class CertificateElementRuleFactory {
   }
 
   public static String multipleOrExpressionWithExists(String... expression) {
-    return multipleOrExpression("exists", expression);
+    return multipleOrExpressionWithWrapsWith("exists", expression);
   }
 
   public static String multipleOrExpressionWithNotEmpty(String... expression) {
-    return multipleOrExpression("!empty", expression);
+    return multipleOrExpressionWithWrapsWith("!empty", expression);
   }
 
   public static String not(String s) {

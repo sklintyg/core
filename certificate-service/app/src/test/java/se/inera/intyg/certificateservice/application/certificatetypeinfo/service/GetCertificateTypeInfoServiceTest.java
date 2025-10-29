@@ -107,7 +107,7 @@ class GetCertificateTypeInfoServiceTest {
         certificateTypeInfoRequest.getCareUnit(),
         certificateTypeInfoRequest.getCareProvider()
     )).thenReturn(ACTION_EVALUATION);
-    when(availableCertificateModelsDomainService.get(ACTION_EVALUATION)).thenReturn(
+    when(availableCertificateModelsDomainService.getLatestVersions(ACTION_EVALUATION)).thenReturn(
         certificateModels);
     when(certificateTypeInfoConverter.convert(certificateModels.get(0),
         CERTIFICATE_ACTIONS, ACTION_EVALUATION)).thenReturn(

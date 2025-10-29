@@ -36,10 +36,10 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
-import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateRecipientFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygstyp;
 
 @Component
 @RequiredArgsConstructor
@@ -54,8 +54,8 @@ public class CertificateModelFactoryAG114 implements CertificateModelFactory {
 
   private static final String AG114 = "ag114";
   private static final CertificateTypeName AG114_TYPE_NAME = new CertificateTypeName("AG1-14");
-  private static final String VERSION = "2.0";
   private static final String NAME = "Läkarintyg om arbetsförmåga – sjuklöneperioden";
+  private static final String VERSION = "2.0";
   private static final String DESCRIPTION = """
       Läkarintyg om arbetsförmåga – sjuklöneperioden ska användas när patienten har en anställning och behöver ett läkarintyg i förhållande till sin arbetsgivare. Intyget används under sjuklöneperioden, det vill säga under de 14 första dagarna i sjukfallet.
       """;
@@ -96,13 +96,7 @@ public class CertificateModelFactoryAG114 implements CertificateModelFactory {
   public CertificateModel create() {
     return CertificateModel.builder()
         .id(AG114_V2_0)
-        .type(
-            new Code(
-                "AG1-14",
-                "b64ea353-e8f6-4832-b563-fc7d46f29548",
-                "Läkarintyg om arbetsförmåga – sjuklöneperiod"
-            )
-        )
+        .type(CodeSystemKvIntygstyp.AG114)
         .typeName(AG114_TYPE_NAME)
         .name(NAME)
         .description(DESCRIPTION)

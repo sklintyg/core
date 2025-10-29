@@ -51,10 +51,10 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
-import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.domain.diagnosiscode.repository.DiagnosisCodeRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateRecipientFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvIntygstyp;
 
 @Component
 @RequiredArgsConstructor
@@ -110,13 +110,7 @@ public class CertificateModelFactoryAG7804 implements CertificateModelFactory {
   public CertificateModel create() {
     return CertificateModel.builder()
         .id(AG7804_V2_0)
-        .type(
-            new Code(
-                "AG7804",
-                "b64ea353-e8f6-4832-b563-fc7d46f29548",
-                NAME
-            )
-        )
+        .type(CodeSystemKvIntygstyp.AG7804)
         .typeName(AG7804_TYPE_NAME)
         .name(NAME)
         .description(DESCRIPTION)
