@@ -469,8 +469,15 @@ class InMemoryCertificateModelRepositoryTest {
       );
 
       final var expectedModel = CertificateModel.builder()
+          .id(
+              CertificateModelId.builder()
+                  .type(new CertificateType(TYPE_ONE))
+                  .version(new CertificateVersion(VERSION_ONE))
+                  .build()
+          )
           .type(new Code(CODE_1, CODE_SYSTEM_1, DISPLAY_NAME))
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
+          .certificateVersions(List.of(new CertificateVersion(VERSION_ONE)))
           .build();
 
       doReturn(expectedModel).when(certificateModelFactoryOne).create();
@@ -490,8 +497,15 @@ class InMemoryCertificateModelRepositoryTest {
       );
 
       final var expectedModel = CertificateModel.builder()
+          .id(
+              CertificateModelId.builder()
+                  .type(new CertificateType(TYPE_ONE))
+                  .version(new CertificateVersion(VERSION_ONE))
+                  .build()
+          )
           .type(new Code(CODE_1, CODE_SYSTEM_1, DISPLAY_NAME))
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).plusMinutes(1))
+          .certificateVersions(List.of(new CertificateVersion(VERSION_ONE)))
           .build();
 
       doReturn(expectedModel).when(certificateModelFactoryOne).create();
@@ -513,8 +527,15 @@ class InMemoryCertificateModelRepositoryTest {
       );
 
       final var expectedModel = CertificateModel.builder()
+          .id(
+              CertificateModelId.builder()
+                  .type(new CertificateType(TYPE_ONE))
+                  .version(new CertificateVersion(VERSION_ONE))
+                  .build()
+          )
           .type(new Code(CODE_1, CODE_SYSTEM_1, DISPLAY_NAME))
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
+          .certificateVersions(List.of(new CertificateVersion(VERSION_ONE)))
           .build();
 
       doReturn(expectedModel).when(certificateModelFactoryOne).create();
@@ -535,8 +556,15 @@ class InMemoryCertificateModelRepositoryTest {
       );
 
       final var expectedModel = CertificateModel.builder()
+          .id(
+              CertificateModelId.builder()
+                  .type(new CertificateType(TYPE_ONE))
+                  .version(new CertificateVersion(VERSION_ONE))
+                  .build()
+          )
           .type(new Code(CODE_1, CODE_SYSTEM_1, DISPLAY_NAME))
           .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
+          .certificateVersions(List.of(new CertificateVersion(VERSION_ONE)))
           .build();
 
       doReturn(expectedModel).when(certificateModelFactoryOne).create();
