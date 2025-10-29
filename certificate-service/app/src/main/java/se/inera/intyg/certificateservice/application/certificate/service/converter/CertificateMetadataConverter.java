@@ -107,7 +107,7 @@ public class CertificateMetadataConverter {
                     .build() : null
         )
         .forwarded(certificate.forwarded() != null && certificate.forwarded().value())
-        .latestMajorVersion(LATEST_MAJOR_VERSION)
+        .latestMajorVersion(certificate.certificateModel().isLastestActiveVersion())
         .sent(certificate.sent() != null)
         .sentTo(certificate.sent() != null ? certificate.sent().recipient().name() : null)
         .recipient(toCertificateRecipientDTO(certificate))

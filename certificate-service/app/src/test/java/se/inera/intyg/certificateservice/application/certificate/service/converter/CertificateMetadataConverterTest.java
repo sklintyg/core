@@ -112,7 +112,7 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 class CertificateMetadataConverterTest {
 
   private static final String TYPE = "type";
-  private static final String VERSION = "version";
+  private static final String VERSION = "2.0";
   private static final String TYPE_NAME = "typeName";
   private static final String TYPE_DESCRIPTION = "typeDescription";
   private static final LocalDateTime CREATED = LocalDateTime.now(ZoneId.systemDefault());
@@ -188,6 +188,7 @@ class CertificateMetadataConverterTest {
                           .version(new CertificateVersion(VERSION))
                           .build()
                   )
+                  .certificateVersions(List.of(new CertificateVersion(VERSION)))
                   .name(TYPE_NAME)
                   .detailedDescription(TYPE_DESCRIPTION)
                   .recipient(RECIPIENT)

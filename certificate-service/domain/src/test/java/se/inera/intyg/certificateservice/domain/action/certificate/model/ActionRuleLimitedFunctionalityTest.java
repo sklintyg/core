@@ -45,7 +45,7 @@ class ActionRuleLimitedFunctionalityTest {
     final var illegalStateException = assertThrows(IllegalStateException.class,
         () -> actionRuleLimitedFunctionality.evaluate(Optional.empty(), Optional.empty()));
 
-    assertEquals("Certificate is required for evaluating ActionRuleInactiveCertificateType",
+    assertEquals("Certificate is required for evaluating LimitedFunctionality action rule",
         illegalStateException.getMessage());
   }
 
@@ -179,7 +179,7 @@ class ActionRuleLimitedFunctionalityTest {
   }
 
   private static MedicalCertificate buildNotLatestMajorVersionCertificate() {
-    final var certificate = ag7804CertificateBuilder()
+    return ag7804CertificateBuilder()
         .certificateModel(
             CertificateModel.builder()
                 .certificateVersions(List.of(new CertificateVersion("3.0")))
@@ -191,6 +191,5 @@ class ActionRuleLimitedFunctionalityTest {
                 .build()
         )
         .build();
-    return certificate;
   }
 }

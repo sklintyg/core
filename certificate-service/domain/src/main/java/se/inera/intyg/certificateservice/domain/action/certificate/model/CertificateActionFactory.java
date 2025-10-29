@@ -94,7 +94,11 @@ public class CertificateActionFactory {
                   new ActionRuleCertificateTypeActiveForUnit(
                       certificateActionConfigurationRepository
                   ),
-                  new ActionRuleUserAgreement()
+                  new ActionRuleUserAgreement(),
+                  new ActionRuleLimitedFunctionality(
+                      certificateActionConfigurationRepository,
+                      actionSpecification.certificateActionType()
+                  )
               )
           )
           .build();
@@ -112,7 +116,11 @@ public class CertificateActionFactory {
                   new ActionRuleProtectedPerson(
                       actionSpecification.allowedRolesForProtectedPersons()
                   ),
-                  new ActionRuleUserAgreement()
+                  new ActionRuleUserAgreement(),
+                  new ActionRuleLimitedFunctionality(
+                      certificateActionConfigurationRepository,
+                      actionSpecification.certificateActionType()
+                  )
               )
           )
           .build();
@@ -377,7 +385,11 @@ public class CertificateActionFactory {
                   new ActionRuleUserHasAccessScope(
                       List.of(AccessScope.WITHIN_CARE_UNIT)
                   ),
-                  new ActionRuleUserAgreement()
+                  new ActionRuleUserAgreement(),
+                  new ActionRuleLimitedFunctionality(
+                      certificateActionConfigurationRepository,
+                      actionSpecification.certificateActionType()
+                  )
               )
           )
           .build();
@@ -559,7 +571,11 @@ public class CertificateActionFactory {
                   new ActionRuleUserHasAccessScope(
                       List.of(AccessScope.WITHIN_CARE_UNIT)
                   ),
-                  new ActionRuleUserAgreement()
+                  new ActionRuleUserAgreement(),
+                  new ActionRuleLimitedFunctionality(
+                      certificateActionConfigurationRepository,
+                      actionSpecification.certificateActionType()
+                  )
               )
           )
           .build();
