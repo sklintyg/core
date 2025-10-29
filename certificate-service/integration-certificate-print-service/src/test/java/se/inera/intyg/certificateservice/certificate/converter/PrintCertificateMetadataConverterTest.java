@@ -6,7 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_META_DATA;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.ag7804CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.ag7804certificateModelBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.fk7210certificateModelBuilder;
 
 import java.time.LocalDateTime;
@@ -18,11 +20,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.certificate.dto.GeneralPrintTextDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.AG7804CertificateGeneralPrintProvider;
 
 @ExtendWith(MockitoExtension.class)
 class PrintCertificateMetadataConverterTest {
@@ -38,6 +42,24 @@ class PrintCertificateMetadataConverterTest {
 
   private static final Certificate CERTIFICATE = fk7210CertificateBuilder()
       .certificateModel(fk7210certificateModelBuilder()
+          .recipient(new Recipient(new RecipientId("ts"), "ts", "ts", "transportstyrelsen-logo.png",
+              "Läkarintyg Transportstyrelsen")
+          ).build()
+      )
+      .status(Status.SIGNED)
+      .sent(
+          Sent.builder()
+              .sentAt(LocalDateTime.now())
+              .build()
+      )
+      .signed(LocalDateTime.now())
+      .metaDataFromSignInstance(CERTIFICATE_META_DATA)
+      .certificateMetaData(null)
+      .build();
+
+  private static final Certificate CERTIFICATE_SKR = ag7804CertificateBuilder()
+      .certificateModel(ag7804certificateModelBuilder()
+          .generalPrintProvider(new AG7804CertificateGeneralPrintProvider())
           .recipient(new Recipient(new RecipientId("ts"), "ts", "ts", "transportstyrelsen-logo.png",
               "Läkarintyg Transportstyrelsen")
           ).build()
@@ -127,6 +149,29 @@ class PrintCertificateMetadataConverterTest {
     final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false, FILE_NAME);
     assertEquals(CERTIFICATE.certificateModel().recipient().name(),
         result.getRecipientName());
+  }
+
+  @Test
+  void shouldSetRecipientId() {
+    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false, FILE_NAME);
+    assertEquals(CERTIFICATE.certificateModel().recipient().id().id(),
+        result.getRecipientId());
+  }
+
+  @Test
+  void shouldSetGeneralPrintTextEmpty() {
+    final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false, FILE_NAME);
+    final var expect = GeneralPrintTextDTO.builder().build();
+    assertEquals(expect, result.getGeneralPrintText());
+  }
+
+  @Test
+  void shouldSetGeneralPrintText() {
+    final var result = printCertificateMetadataConverter.convert(CERTIFICATE_SKR, false, FILE_NAME);
+    final var expect = GeneralPrintTextDTO.builder()
+        .leftMarginInfoText("%s %s %s - Fastställd av %s").draftAlertInfoText("arbetsgivaren")
+        .build();
+    assertEquals(expect, result.getGeneralPrintText());
   }
 
   @Test

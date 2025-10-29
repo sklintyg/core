@@ -12,6 +12,7 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.Certifi
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.service.PrefillProcessor;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateGeneralPrintText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
@@ -319,5 +320,10 @@ public class PlaceholderCertificate implements Certificate {
   public CertificateMetaData getMetadataForPrint() {
     throw new IllegalStateException(
         "Cannot get metadata for print for a placeholder certificate");
+  }
+
+  @Override
+  public Optional<CertificateGeneralPrintText> getGeneralPrintText() {
+    throw new IllegalStateException("Cannot get general print text for a placeholder certificate");
   }
 }

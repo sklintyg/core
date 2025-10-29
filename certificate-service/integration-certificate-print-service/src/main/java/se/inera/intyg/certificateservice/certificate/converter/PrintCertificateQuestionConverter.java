@@ -12,6 +12,7 @@ import se.inera.intyg.certificateservice.certificate.dto.PrintCertificateQuestio
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueLabeledList;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueLabeledText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueTable;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
@@ -76,6 +77,13 @@ public class PrintCertificateQuestionConverter {
                   )
                   .toList()
           )
+          .build();
+    }
+
+    if (elementSimplifiedValue instanceof ElementSimplifiedValueLabeledText valueText) {
+      return ElementSimplifiedValueLabeledTextDTO.builder()
+          .label(valueText.label())
+          .text(valueText.text())
           .build();
     }
 

@@ -1,8 +1,12 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
+import java.util.List;
+import java.util.Optional;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValue;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueTable;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRange;
 
@@ -25,5 +29,25 @@ public class ElementConfigurationDateRange implements ElementConfiguration {
     return ElementValueDateRange.builder()
         .id(id)
         .build();
+  }
+
+  @Override
+  public Optional<ElementSimplifiedValue> simplified(ElementValue value) {
+    if (!(value instanceof ElementValueDateRange elementValue)) {
+      throw new IllegalStateException("Wrong value type");
+    }
+    if (elementValue.isEmpty()) {
+      return Optional.empty();
+    }
+
+    return Optional.of(
+        ElementSimplifiedValueTable.builder()
+            .headings(List.of(name, labelFrom, labelTo))
+            .values(List.of(
+                List.of(
+                    elementValue.fromDate() != null ? elementValue.fromDate().toString() : "",
+                    elementValue.toDate() != null ? elementValue.toDate().toString() : ""
+                ))
+            ).build());
   }
 }

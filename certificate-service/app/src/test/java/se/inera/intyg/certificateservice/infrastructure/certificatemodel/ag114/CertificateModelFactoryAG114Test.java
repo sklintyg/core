@@ -182,4 +182,11 @@ class CertificateModelFactoryAG114Test {
 
     assertNotNull(certificateModel.citizenAvailableFunctionsProvider());
   }
+
+  @Test
+  void shouldIncludeGeneralPrintProvider() {
+    final var certificateModel = certificateModelFactoryAG114.create();
+
+    assertNotNull(certificateModel.generalPrintProvider());
+  }
 }

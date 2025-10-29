@@ -19,13 +19,17 @@ class ElementConfigurationCheckboxMultipleDateTest {
   private static final String FIELD_ID = "FIELD_ID";
   private static final String DATE_FIELD_ID = "DATE_FIELD_ID";
   private static final String DATE_FIELD_ID_TWO = "DATE_FIELD_ID_TWO";
+  private static final String DATE_FIELD_ID_THREE = "DATE_FIELD_ID_THREE";
   private static final String LABEL = "LABEL";
   private static final String LABEL_TWO = "LABEL_TWO";
+  private static final String LABEL_THREE = "LABEL_THREE";
   private static final String CODE_SYSTEM = "CODE_SYSTEM";
   private static final String CODE = "CODE";
   private static final String DISPLAY_NAME = "DISPLAY_NAME";
   private static final String CODE_TWO = "CODE_TWO";
+  private static final String CODE_THREE = "CODE_THREE";
   private static final String DISPLAY_NAME_TWO = "DISPLAY_NAME_TWO";
+  private static final String DISPLAY_NAME_THREE = "DISPLAY_NAME_THREE";
 
   @Test
   void shallReturnEmptyValue() {
@@ -114,6 +118,11 @@ class ElementConfigurationCheckboxMultipleDateTest {
                     .id(new FieldId(DATE_FIELD_ID_TWO))
                     .label(LABEL_TWO)
                     .code(new Code(CODE_TWO, CODE_SYSTEM, DISPLAY_NAME_TWO))
+                    .build(),
+                CheckboxDate.builder()
+                    .id(new FieldId(DATE_FIELD_ID_THREE))
+                    .label(LABEL_THREE)
+                    .code(new Code(CODE_THREE, CODE_SYSTEM, DISPLAY_NAME_THREE))
                     .build()
             )
         )
@@ -144,6 +153,10 @@ class ElementConfigurationCheckboxMultipleDateTest {
                         ElementSimplifiedValueLabeledText.builder()
                             .label(LABEL_TWO)
                             .text(date2.toString())
+                            .build(),
+                        ElementSimplifiedValueLabeledText.builder()
+                            .label(LABEL_THREE)
+                            .text("Ej angivet")
                             .build()
                     )
                 )

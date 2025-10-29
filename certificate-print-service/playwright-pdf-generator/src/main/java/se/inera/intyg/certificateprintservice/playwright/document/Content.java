@@ -30,16 +30,20 @@ public class Content {
   String description;
   boolean isDraft;
   boolean isSent;
+  boolean isCanSendElectronically;
+  String draftAlertInfoText;
 
   public Element create() {
     return element(Tag.DIV)
         .appendChild(ContentElementFactory.hiddenAccessibleHeader(certificateName, certificateType,
-            certificateVersion, recipientName, personId, isDraft, isSent))
+            certificateVersion, recipientName, personId, isDraft, isSent, isCanSendElectronically,
+            draftAlertInfoText))
         .appendChildren(content())
         .appendChildren(List.of(
             ContentElementFactory.issuerInfo(issuerName, issuingUnit, issuingUnitInfo,
                 signDate, isDraft),
-            ContentElementFactory.certificateInformation(certificateName, description)));
+            ContentElementFactory.certificateInformation(certificateName, description,
+                isCanSendElectronically)));
   }
 
   private List<Element> content() {

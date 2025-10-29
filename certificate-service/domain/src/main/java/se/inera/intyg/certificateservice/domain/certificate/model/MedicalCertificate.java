@@ -25,6 +25,7 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.Certifi
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificate.service.PrefillProcessor;
 import se.inera.intyg.certificateservice.domain.certificate.service.XmlGenerator;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateGeneralPrintText;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModificationException;
@@ -666,5 +667,12 @@ public class MedicalCertificate implements Certificate {
 
     return this.certificateRepository.getMetadataFromSignInstance(this.certificateMetaData,
         this.signed);
+  }
+
+  @Override
+  public Optional<CertificateGeneralPrintText> getGeneralPrintText() {
+    return certificateModel.generalPrintProvider() != null ? Optional.of(
+        certificateModel.generalPrintProvider()
+            .generalPrintText()) : Optional.empty();
   }
 }
