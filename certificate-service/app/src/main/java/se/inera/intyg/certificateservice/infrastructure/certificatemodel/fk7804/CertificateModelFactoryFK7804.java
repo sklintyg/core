@@ -79,6 +79,7 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
   private static final String FK_7804 = "fk7804";
   private static final String VERSION = "2.0";
   private static final CertificateTypeName FK7804_TYPE_NAME = new CertificateTypeName("FK7804");
+  private static final String NAME = "Läkarintyg för sjukpenning";
   private static final String DESCRIPTION = """
       <b>Vad är sjukpenning?</b>
       Sjukpenning är en ersättning för personer som arbetar i Sverige och har en nedsatt arbetsförmåga på grund av sjukdom. Beroende på hur mycket arbetsförmågan är nedsatt kan man få en fjärdedels, halv, tre fjärdedels eller hel sjukpenning.\s
@@ -127,7 +128,7 @@ public class CertificateModelFactoryFK7804 implements CertificateModelFactory {
         .id(FK7804_V2_0)
         .type(CodeSystemKvIntygstyp.FK7804)
         .typeName(FK7804_TYPE_NAME)
-        .name(CodeSystemKvIntygstyp.FK7804.displayName())
+        .name(NAME)
         .description(DESCRIPTION)
         .detailedDescription(DETAILED_DESCRIPTION.replaceAll("\\R", ""))
         .activeFrom(activeFrom)

@@ -54,6 +54,7 @@ public class CertificateModelFactoryAG114 implements CertificateModelFactory {
 
   private static final String AG114 = "ag114";
   private static final CertificateTypeName AG114_TYPE_NAME = new CertificateTypeName("AG1-14");
+  private static final String NAME = "Läkarintyg om arbetsförmåga – sjuklöneperioden";
   private static final String VERSION = "2.0";
   private static final String DESCRIPTION = """
       Läkarintyg om arbetsförmåga – sjuklöneperioden ska användas när patienten har en anställning och behöver ett läkarintyg i förhållande till sin arbetsgivare. Intyget används under sjuklöneperioden, det vill säga under de 14 första dagarna i sjukfallet.
@@ -97,7 +98,7 @@ public class CertificateModelFactoryAG114 implements CertificateModelFactory {
         .id(AG114_V2_0)
         .type(CodeSystemKvIntygstyp.AG114)
         .typeName(AG114_TYPE_NAME)
-        .name(CodeSystemKvIntygstyp.AG114.displayName())
+        .name(NAME)
         .description(DESCRIPTION)
         .detailedDescription(DETAILED_DESCRIPTION.replaceAll("\\R", ""))
         .activeFrom(activeFrom)

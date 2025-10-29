@@ -9,13 +9,13 @@ public class CodeSystemKvIntygstyp {
   public static final Code AG114 = new Code(
       "AG1-14",
       CODE_SYSTEM,
-      "Läkarintyg om arbetsförmåga – sjuklöneperioden"
+      "Läkarintyg om arbetsförmåga – sjuklöneperiod"
   );
 
   public static final Code AG7804 = new Code(
       "AG7804",
       CODE_SYSTEM,
-      "Läkarintyg om arbetsförmåga – arbetsgivaren"
+      "Läkarintyg om arbetsförmåga – arbetsgivare"
   );
 
   public static final Code FK3221 = new Code(
@@ -51,19 +51,19 @@ public class CodeSystemKvIntygstyp {
   public static final Code FK7472 = new Code(
       "ITFP",
       CODE_SYSTEM,
-      "Intyg om tillfällig föräldrapenning"
+      "Intyg tillfällig föräldrapenning"
   );
 
   public static final Code FK7804 = new Code(
       "LISJP",
       CODE_SYSTEM,
-      "Läkarintyg för sjukpenning"
+      "Läkarintyg sjukpenning"
   );
 
   public static final Code FK7809 = new Code(
       "LUMEK",
       CODE_SYSTEM,
-      "Läkarutlåtande för merkostnadsersättning"
+      "Lärutlåtande för merkostnadsersättning" // Note typo but correct according to code system
   );
 
   public static final Code FK7810 = new Code(
@@ -75,7 +75,7 @@ public class CodeSystemKvIntygstyp {
   public static final Code TS8071 = new Code(
       "TS8071",
       CODE_SYSTEM,
-      "Läkarintyg för högre körkortsbehörigheter, taxiförarlegitimation och på begäran av Transportstyrelsen"
+      "Läkarintyg- avseende högre körkortsbehörigheter eller taxiförarlegitimation- på begäran från Transportstyrelsen"
   );
 
   private CodeSystemKvIntygstyp() {

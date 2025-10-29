@@ -145,6 +145,7 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
   private static final String TS_8071 = "ts8071";
   private static final String VERSION = "1.0";
   private static final CertificateTypeName TS8071_TYPE_NAME = new CertificateTypeName("TS8071");
+  private static final String NAME = "Läkarintyg för högre körkortsbehörigheter, taxiförarlegitimation och på begäran av Transportstyrelsen";
   private static final String DESCRIPTION = """
       Transportstyrelsens läkarintyg ska användas vid förlängd giltighet av högre behörighet från 45 år, ansökan om körkortstillstånd för grupp II och III och vid ansökan om taxiförarlegitimation. Transportstyrelsens läkarintyg kan även användas när Transportstyrelsen i annat fall begärt ett allmänt läkarintyg avseende lämplighet att inneha körkort.
       
@@ -173,7 +174,7 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
         .id(TS8071_V1_0)
         .type(CodeSystemKvIntygstyp.TS8071)
         .typeName(TS8071_TYPE_NAME)
-        .name(CodeSystemKvIntygstyp.TS8071.displayName())
+        .name(NAME)
         .description(DESCRIPTION)
         .detailedDescription(DETAILED_DESCRIPTION)
         .activeFrom(activeFrom)

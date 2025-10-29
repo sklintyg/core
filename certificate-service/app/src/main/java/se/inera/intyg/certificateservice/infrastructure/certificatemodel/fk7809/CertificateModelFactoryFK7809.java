@@ -70,6 +70,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
   private static final String FK_7809 = "fk7809";
   private static final String VERSION = "1.0";
   private static final CertificateTypeName FK7809_TYPE_NAME = new CertificateTypeName("FK7809");
+  private static final String NAME = "Läkarutlåtande för merkostnadsersättning";
   private static final String DESCRIPTION = """
       <b className="iu-fw-heading">Vem kan få merkostnadsersättning?</b>
       
@@ -108,7 +109,7 @@ public class CertificateModelFactoryFK7809 implements CertificateModelFactory {
         .id(FK7809_V1_0)
         .type(CodeSystemKvIntygstyp.FK7809)
         .typeName(FK7809_TYPE_NAME)
-        .name(CodeSystemKvIntygstyp.FK7809.displayName())
+        .name(NAME)
         .description(DESCRIPTION)
         .detailedDescription(DETAILED_DESCRIPTION)
         .schematronPath(SCHEMATRON_PATH)
