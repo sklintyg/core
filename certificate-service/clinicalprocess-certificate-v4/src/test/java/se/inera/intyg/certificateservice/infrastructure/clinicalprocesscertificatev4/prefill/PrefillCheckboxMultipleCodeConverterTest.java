@@ -344,7 +344,7 @@ class PrefillCheckboxMultipleCodeConverterTest {
 
       final var result = prefillCheckboxMultipleCodeConverter.prefillAnswer(specification, prefill);
 
-      assertNull(result); // Should return null when no matching svar found
+      assertNull(result);
     }
   }
 
