@@ -29,19 +29,18 @@ class TS8071CitizenAvailableFunctionsProviderTest {
   private TS8071CitizenAvailableFunctionsProvider provider;
 
   @Mock
-  private Certificate certificate;
-  @Mock
   private CertificateActionConfigurationRepository certificateActionConfigurationRepository;
+  private Certificate certificate;
 
   @BeforeEach
   void setUp() {
     provider = new TS8071CitizenAvailableFunctionsProvider(
         certificateActionConfigurationRepository);
-    certificate = getNotLatestMajorVersionCertificate();
   }
 
   @Test
   void shouldShowAttentionFunctionWhenCertificateDoesNotHaveFullFunctionality() {
+    certificate = getNotLatestMajorVersionCertificate();
     final var expectedAttentionFunction = CitizenAvailableFunction.builder()
         .type(ATTENTION)
         .enabled(true)
