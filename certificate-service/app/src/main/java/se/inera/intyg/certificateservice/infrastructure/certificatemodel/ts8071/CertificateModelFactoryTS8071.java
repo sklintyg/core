@@ -124,6 +124,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateTypeName;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
@@ -135,6 +136,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.
 public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
 
   private final CertificateActionFactory certificateActionFactory;
+  private final CertificateActionConfigurationRepository certificateActionConfigurationRepository;
 
   @Value("${certificate.model.ts8071.v1_0.active.from}")
   private LocalDateTime activeFrom;
@@ -180,6 +182,8 @@ public class CertificateModelFactoryTS8071 implements CertificateModelFactory {
         .activeFrom(activeFrom)
         .availableForCitizen(true)
         .summaryProvider(new TS8071CertificateSummaryProvider())
+        .citizenAvailableFunctionsProvider(
+            new TS8071CitizenAvailableFunctionsProvider(certificateActionConfigurationRepository))
         .texts(
             List.of(
                 CertificateText.builder()
