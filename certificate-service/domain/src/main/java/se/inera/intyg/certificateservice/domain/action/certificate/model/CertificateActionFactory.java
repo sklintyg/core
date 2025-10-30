@@ -171,7 +171,11 @@ public class CertificateActionFactory {
                   ),
                   new ActionRuleInactiveUnit(),
                   new ActionRulePatientAlive(),
-                  new ActionRuleUserAgreement()
+                  new ActionRuleUserAgreement(),
+                  new ActionRuleLimitedFunctionality(
+                      certificateActionConfigurationRepository,
+                      actionSpecification.certificateActionType()
+                  )
               )
           )
           .build();

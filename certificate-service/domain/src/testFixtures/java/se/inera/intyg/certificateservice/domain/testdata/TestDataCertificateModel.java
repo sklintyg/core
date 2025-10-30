@@ -1,11 +1,11 @@
 package se.inera.intyg.certificateservice.domain.testdata;
 
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.AG114_VERSION;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.AG7804_VERSION;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK3221_VERSION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.AG114_TYPE_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.AG114_VERSION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.AG7804_TYPE_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.AG7804_VERSION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK3221_TYPE_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK3221_VERSION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK3226_CODE_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK3226_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK3226_SCHEMATRON_PATH;
@@ -18,8 +18,8 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_TYPE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7210_VERSION;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7426_VERSION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7426_TYPE_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7426_VERSION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7427_CODE_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7427_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7427_TYPE;
@@ -32,14 +32,15 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_TYPE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7472_VERSION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7804_TYPE_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7804_VERSION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7809_CODE_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7809_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7809_SCHEMATRON_PATH;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7809_TYPE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7809_TYPE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7809_VERSION;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7810_VERSION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7810_TYPE_NAME;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK7810_VERSION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants.FK_RECIPIENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecification.FK3226_PDF_SPECIFICATION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecification.FK7210_PDF_SPECIFICATION;
@@ -76,7 +77,7 @@ public class TestDataCertificateModel {
   public static final CertificateModel AG114_CERTIFICATE_MODEL = ag114certificateModelBuilder().build();
   public static final CertificateModelId FK7804_CERTIFICATE_MODEL_ID = CertificateModelId.builder()
       .type(TestDataCertificateModelConstants.FK7804_TYPE)
-      .version(TestDataCertificateModelConstants.FK7804_VERSION)
+      .version(FK7804_VERSION)
       .build();
 
   public static CertificateModel.CertificateModelBuilder fk7210certificateModelBuilder() {
@@ -253,7 +254,8 @@ public class TestDataCertificateModel {
         .availableForCitizen(true)
         .schematronPath(TestDataCertificateModelConstants.FK7804_SCHEMATRON_PATH)
         .recipient(TestDataCertificateModelConstants.FK_RECIPIENT)
-        .certificateActionFactory(new CertificateActionFactory(null));
+        .certificateActionFactory(new CertificateActionFactory(null))
+        .certificateVersions(List.of(FK7804_VERSION));
   }
 
   public static CertificateModel.CertificateModelBuilder ag7804certificateModelBuilder() {
