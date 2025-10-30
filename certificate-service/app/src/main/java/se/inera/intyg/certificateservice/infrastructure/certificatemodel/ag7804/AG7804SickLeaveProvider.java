@@ -29,7 +29,7 @@ public class AG7804SickLeaveProvider implements SickLeaveProvider {
       .build();
 
   @Override
-  public Optional<SickLeaveCertificate> build(Certificate certificate) {
+  public Optional<SickLeaveCertificate> build(Certificate certificate, boolean ignoreModuleRules) {
     final var isNotSickLeaveCertificate = certificate.elementData().stream()
         .filter(elementData -> elementData.id().equals(QUESTION_SMITTBARARPENNING_ID))
         .findFirst()

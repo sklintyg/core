@@ -39,100 +39,100 @@ class FK7804SickLeaveProviderTest {
         .elementData(List.of(element))
         .build();
 
-    final var result = provider.build(certificate);
+    final var result = provider.build(certificate, false);
     assertTrue(result.isEmpty());
   }
 
   @Test
   void shallMapId() {
-    final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE);
+    final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE, false);
     assertEquals(FK7804_CERTIFICATE.id(), sickLeaveCertificate.orElseThrow().id());
   }
 
   @Test
   void shallMapCareGiverId() {
-    final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE);
+    final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE, false);
     assertEquals(FK7804_CERTIFICATE.certificateMetaData().careProvider().hsaId(),
         sickLeaveCertificate.orElseThrow().careGiverId());
   }
 
   @Test
   void shallMapCareUnitId() {
-    final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE);
+    final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE, false);
     assertEquals(FK7804_CERTIFICATE.certificateMetaData().careUnit().hsaId(),
         sickLeaveCertificate.orElseThrow().careUnitId());
   }
 
   @Test
   void shallMapCareUnitName() {
-    final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE);
+    final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE, false);
     assertEquals(FK7804_CERTIFICATE.certificateMetaData().careUnit().name(),
         sickLeaveCertificate.orElseThrow().careUnitName());
   }
 
   @Test
   void shallMapType() {
-    final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE);
+    final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE, false);
     assertEquals(FK7804_CERTIFICATE.certificateModel().type(),
         sickLeaveCertificate.orElseThrow().type());
   }
 
   @Test
   void shallMapCivicRegistrationNumber() {
-    final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE);
+    final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE, false);
     assertEquals(FK7804_CERTIFICATE.certificateMetaData().patient().id(),
         sickLeaveCertificate.orElseThrow().civicRegistrationNumber());
   }
 
   @Test
   void shallMapSigningDoctorName() {
-    final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE);
+    final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE, false);
     assertEquals(FK7804_CERTIFICATE.certificateMetaData().issuer().name(),
         sickLeaveCertificate.orElseThrow().signingDoctorName());
   }
 
   @Test
   void shallMapPatientName() {
-    final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE);
+    final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE, false);
     assertEquals(FK7804_CERTIFICATE.certificateMetaData().patient().name(),
         sickLeaveCertificate.orElseThrow().patientName());
   }
 
   @Test
   void shallMapDiagnoseCode() {
-    final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE);
+    final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE, false);
     assertEquals("A013", sickLeaveCertificate.orElseThrow().diagnoseCode().code());
   }
 
   @Test
   void shallNotMapBiDiagnoseCode1IfMissing() {
-    final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE);
+    final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE, false);
     assertNull(sickLeaveCertificate.orElseThrow().biDiagnoseCode1());
   }
 
   @Test
   void shallNotMapBiDiagnoseCode2IfMissing() {
-    final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE);
+    final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE, false);
     assertNull(sickLeaveCertificate.orElseThrow().biDiagnoseCode2());
   }
 
 
   @Test
   void shallMapSigningDoctorId() {
-    final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE);
+    final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE, false);
     assertEquals(FK7804_CERTIFICATE.certificateMetaData().issuer().hsaId(),
         sickLeaveCertificate.orElseThrow().signingDoctorId());
   }
 
   @Test
   void shallMapSigningDateTime() {
-    final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE);
+    final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE, false);
     assertEquals(FK7804_CERTIFICATE.signed(), sickLeaveCertificate.orElseThrow().signingDateTime());
   }
 
   @Test
   void shallMapDeleted() {
-    final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE);
+    final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE, false);
     assertEquals(FK7804_CERTIFICATE.revoked(), sickLeaveCertificate.orElseThrow().deleted());
   }
 
@@ -144,7 +144,7 @@ class FK7804SickLeaveProviderTest {
         .to(LocalDate.now().plusDays(30))
         .build();
 
-    final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE);
+    final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE, false);
     assertEquals(List.of(expectedDateRange), sickLeaveCertificate.orElseThrow().workCapacities());
   }
 
@@ -157,7 +157,7 @@ class FK7804SickLeaveProviderTest {
             .build()
     );
 
-    final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE);
+    final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE, false);
     assertEquals(expectedEmployment, sickLeaveCertificate.orElseThrow().employment());
   }
 }

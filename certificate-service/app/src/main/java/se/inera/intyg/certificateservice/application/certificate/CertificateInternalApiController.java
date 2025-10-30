@@ -20,6 +20,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.ExportInter
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetSickLeaveCertificateInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetSickLeaveCertificateInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.LockDraftsRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.LockDraftsResponse;
@@ -87,8 +88,10 @@ public class CertificateInternalApiController {
   @PostMapping("/{certificateId}/sickleave")
   @PerformanceLogging(eventAction = "internal-retrieve-sick-leave-certificate", eventType = EVENT_TYPE_ACCESSED)
   GetSickLeaveCertificateInternalResponse getSickLeaveCertificate(
-      @PathVariable("certificateId") String certificateId) {
-    return getSickLeaveCertificateInternalService.get(certificateId);
+      @PathVariable("certificateId") String certificateId,
+      @RequestBody(required = false) GetSickLeaveCertificateInternalRequest request) {
+    return getSickLeaveCertificateInternalService.get(certificateId,
+        request != null ? request.isIgnoreModelRules() : false);
   }
 
   @PostMapping("/lock")

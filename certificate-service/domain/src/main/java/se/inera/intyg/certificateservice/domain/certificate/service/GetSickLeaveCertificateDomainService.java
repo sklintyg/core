@@ -12,18 +12,26 @@ public class GetSickLeaveCertificateDomainService {
 
   private final CertificateRepository certificateRepository;
 
-  public Optional<SickLeaveCertificate> get(CertificateId certificateId) {
-    Certificate certificate;
-    try {
+  public Optional<SickLeaveCertificate> get(CertificateId certificateId,
+      boolean ignoreModuleRules) {
+    final Certificate certificate;
+
+    if (ignoreModuleRules) {
+      try {
+        certificate = certificateRepository.getById(certificateId);
+      } catch (Exception e) {
+        return Optional.empty();
+      }
+    } else {
       certificate = certificateRepository.getById(certificateId);
-    } catch (Exception e) {
-      return Optional.empty();
     }
+
     if (certificate.certificateModel().sickLeaveProvider() == null) {
       return Optional.empty();
     }
 
-    final var sickLeave = certificate.certificateModel().sickLeaveProvider().build(certificate);
+    final var sickLeave = certificate.certificateModel().sickLeaveProvider()
+        .build(certificate, ignoreModuleRules);
 
     if (sickLeave.isPresent() && !sickLeave.get().partOfSickLeaveChain()) {
       return Optional.empty();

@@ -31,23 +31,24 @@ class GetSickLeaveCertificateInternalServiceTest {
   @Test
   void shallThrowIfCertificateIdIsNull() {
     assertThrows(IllegalArgumentException.class,
-        () -> getSickLeaveCertificateInternalService.get(null));
+        () -> getSickLeaveCertificateInternalService.get(null, false));
   }
 
 
   @Test
   void shallThrowIfCertificateIdIsBlank() {
     assertThrows(IllegalArgumentException.class,
-        () -> getSickLeaveCertificateInternalService.get(""));
+        () -> getSickLeaveCertificateInternalService.get("", false));
   }
 
   @Test
   void shallReturnGetSickLeaveCertificateInternalResponseWithAvailableTrue() {
-    when(getSickLeaveCertificateDomainService.get(new CertificateId(CERTIFICATE_ID)))
+    when(getSickLeaveCertificateDomainService.get(new CertificateId(CERTIFICATE_ID), false))
         .thenReturn(Optional.of(SickLeaveCertificate.builder().build()));
 
     final var response = getSickLeaveCertificateInternalService.get(
-        CERTIFICATE_ID
+        CERTIFICATE_ID,
+        false
     );
 
     assertTrue(response.isAvailable());
@@ -58,13 +59,14 @@ class GetSickLeaveCertificateInternalServiceTest {
     final var sickLeaveCertificate = SickLeaveCertificate.builder().build();
     final var expectedSickLeaveDTO = SickLeaveCertificateDTO.builder().build();
 
-    when(getSickLeaveCertificateDomainService.get(new CertificateId(CERTIFICATE_ID)))
+    when(getSickLeaveCertificateDomainService.get(new CertificateId(CERTIFICATE_ID), false))
         .thenReturn(Optional.of(sickLeaveCertificate));
     when(sickLeaveConverter.toSickLeaveCertificate(sickLeaveCertificate))
         .thenReturn(expectedSickLeaveDTO);
 
     final var response = getSickLeaveCertificateInternalService.get(
-        CERTIFICATE_ID
+        CERTIFICATE_ID,
+        false
     );
 
     assertEquals(expectedSickLeaveDTO, response.getSickLeaveCertificate());

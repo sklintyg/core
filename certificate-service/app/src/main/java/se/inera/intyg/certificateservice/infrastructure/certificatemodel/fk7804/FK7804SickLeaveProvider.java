@@ -21,7 +21,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.SickLeave
 public class FK7804SickLeaveProvider implements SickLeaveProvider {
 
   @Override
-  public Optional<SickLeaveCertificate> build(Certificate certificate) {
+  public Optional<SickLeaveCertificate> build(Certificate certificate, boolean ignoreModuleRules) {
     final var isNotSickLeaveCertificate = certificate.elementData().stream()
         .filter(elementData -> elementData.id().equals(QUESTION_SMITTBARARPENNING_ID))
         .findFirst()
@@ -30,9 +30,14 @@ public class FK7804SickLeaveProvider implements SickLeaveProvider {
         .map(ElementValueBoolean::value)
         .orElse(false);
 
-    if (isNotSickLeaveCertificate) {
+    if (isNotSickLeaveCertificate && !ignoreModuleRules) {
       return Optional.empty();
     }
+    return buildSickLeaveCertificate(certificate, ignoreModuleRules);
+  }
+
+  public Optional<SickLeaveCertificate> buildSickLeaveCertificate(Certificate certificate,
+      boolean ignoreModuleRules) {
 
     final var metadata = certificate.certificateMetaData();
     return Optional.of(
@@ -60,7 +65,7 @@ public class FK7804SickLeaveProvider implements SickLeaveProvider {
             .signingDoctorId(metadata.issuer().hsaId())
             .signingDateTime(certificate.signed())
             .deleted(certificate.revoked())
-            .workCapacities(
+            .workCapacities(ignoreModuleRules ? null :
                 certificate.elementData().stream()
                     .filter(
                         elementData -> elementData.id()
@@ -71,7 +76,7 @@ public class FK7804SickLeaveProvider implements SickLeaveProvider {
                     .map(ElementValueDateRangeList::dateRangeList)
                     .orElseThrow()
             )
-            .employment(
+            .employment(ignoreModuleRules ? null :
                 certificate.elementData().stream()
                     .filter(
                         elementData -> elementData.id().equals(QUESTION_SYSSELSATTNING_ID))

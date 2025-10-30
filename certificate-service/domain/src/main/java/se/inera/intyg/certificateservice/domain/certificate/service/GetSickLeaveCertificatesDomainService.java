@@ -20,7 +20,7 @@ public class GetSickLeaveCertificatesDomainService {
     return sickLeaves.stream()
         .filter(certificate -> certificate.certificateModel().sickLeaveProvider() != null)
         .map(certificate -> certificate.certificateModel().sickLeaveProvider()
-            .build(certificate))
+            .build(certificate, false))
         .filter(Optional::isPresent)
         .map(Optional::get)
         .toList();

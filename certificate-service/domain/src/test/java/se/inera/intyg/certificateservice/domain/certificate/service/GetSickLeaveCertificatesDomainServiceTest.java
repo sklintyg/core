@@ -58,7 +58,7 @@ class GetSickLeaveCertificatesDomainServiceTest {
 
     when(certificateRepository.findByCertificatesRequest(SICK_LEAVES_REQUEST))
         .thenReturn(List.of(certificate));
-    when(sickLeaveProvider.build(certificate))
+    when(sickLeaveProvider.build(certificate, false))
         .thenReturn(Optional.of(expectedSickLeaveCertificate));
 
     final var result = getSickLeaveCertificatesDomainService.get(SICK_LEAVES_REQUEST);

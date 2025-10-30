@@ -130,10 +130,11 @@ class CertificateInternalApiControllerTest {
         .sickLeaveCertificate(SickLeaveCertificateDTO.builder().build())
         .build();
 
-    doReturn(expectedResult).when(getSickLeaveCertificateInternalService).get(CERTIFICATE_ID);
+    doReturn(expectedResult).when(getSickLeaveCertificateInternalService)
+        .get(CERTIFICATE_ID, false);
 
     final var actualResult = certificateInternalApiController.getSickLeaveCertificate(
-        CERTIFICATE_ID);
+        CERTIFICATE_ID, null);
 
     assertEquals(expectedResult, actualResult);
   }

@@ -27,7 +27,7 @@ public class AG114SickLeaveProvider implements SickLeaveProvider {
       .build();
 
   @Override
-  public Optional<SickLeaveCertificate> build(Certificate certificate) {
+  public Optional<SickLeaveCertificate> build(Certificate certificate, boolean ignoreModuleRules) {
     final var metadata = certificate.certificateMetaData();
     final var diagnoses = getElementValueDiagnoses(certificate);
 
