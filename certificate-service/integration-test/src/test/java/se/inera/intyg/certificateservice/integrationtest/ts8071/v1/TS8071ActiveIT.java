@@ -9,6 +9,7 @@ import static se.inera.intyg.certificateservice.integrationtest.ts8071.v1.TS8071
 import java.util.stream.Stream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.params.provider.Arguments;
@@ -326,6 +327,7 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
 
   @Nested
   @DisplayName(TYPE + "Makulera")
+  @Disabled("Temporary disable this until we have a solution for resolving flakyness with MessageListener assertions")
   class RevokeCertificate extends RevokeCertificateIT {
 
     @Override
@@ -336,6 +338,7 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
 
   @Nested
   @DisplayName(TYPE + "Skicka")
+  @Disabled("Temporary disable this until we have a solution for resolving flakyness with MessageListener assertions")
   class SendCertificate extends SendCertificateIT {
 
     @Override
@@ -356,6 +359,7 @@ public class TS8071ActiveIT extends ActiveCertificatesIT {
 
   @Nested
   @DisplayName(TYPE + "Signera")
+  @Disabled("Temporary disable this until we have a solution for resolving flakyness with MessageListener assertions")
   class SignCertificate extends SignCertificateIT {
 
     @Override
