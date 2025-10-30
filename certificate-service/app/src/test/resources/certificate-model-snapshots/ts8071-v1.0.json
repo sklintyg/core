@@ -5240,7 +5240,11 @@
   "confirmationModalProvider" : null,
   "certificateActionFactory" : null,
   "sickLeaveProvider" : null,
-  "citizenAvailableFunctionsProvider" : null,
+  "citizenAvailableFunctionsProvider" : {
+    "certificateActionConfigurationRepository" : null
+  },
   "ableToCreateDraftForModel" : null,
-  "generalPrintProvider" : null
+  "certificateVersions" : [ ],
+  "generalPrintProvider" : null,
+  "lastestActiveVersion" : false
 }

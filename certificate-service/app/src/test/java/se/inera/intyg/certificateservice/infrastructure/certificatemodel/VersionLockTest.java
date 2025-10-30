@@ -19,6 +19,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.CertificateModelFactoryTS8071;
 
 /**
@@ -53,9 +54,12 @@ class VersionLockTest {
   @Mock
   private static CertificateActionFactory certificateActionFactory;
 
+  @Mock
+  private static CertificateActionConfigurationRepository certificateActionConfigurationRepository;
+
   private ObjectMapper objectMapper;
   private static final CertificateModelFactory ts8071FactoryV1 = new CertificateModelFactoryTS8071(
-      certificateActionFactory
+      certificateActionFactory, certificateActionConfigurationRepository
   );
 
   @BeforeEach
