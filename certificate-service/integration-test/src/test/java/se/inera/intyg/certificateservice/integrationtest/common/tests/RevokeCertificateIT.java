@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.integrationtest.common.tests;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO.SIGNED;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ANONYMA_REACT_ATTILA_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_HUDMOTTAGNINGEN_DTO;
@@ -101,6 +102,8 @@ public abstract class RevokeCertificateIT extends BaseIntegrationIT {
         expectedCertificateId);
 
     assertAll(
+        () -> assertNotNull(message,
+            "Expected to receive a message for certificateId: " + expectedCertificateId),
         () -> assertEquals(
             expectedCertificateId, message.getStringProperty("certificateId"),
             "Expected to receive a message for certificateId: " + expectedCertificateId
