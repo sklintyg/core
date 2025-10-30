@@ -540,7 +540,11 @@ public class CertificateActionFactory {
                       List.of(AccessScope.WITHIN_CARE_PROVIDER, AccessScope.ALL_CARE_PROVIDERS)
                   ),
                   new ActionRuleRole(actionSpecification.allowedRoles()),
-                  new ActionRuleUserAgreement()
+                  new ActionRuleUserAgreement(),
+                  new ActionRuleLimitedFunctionality(
+                      certificateActionConfigurationRepository,
+                      actionSpecification.certificateActionType()
+                  )
               )
           )
           .build();

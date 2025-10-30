@@ -14,7 +14,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7804CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7809CertificateBuilder;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.ag7804certificateModelBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.fk7804certificateModelBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.COMPLEMENT_MESSAGE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.complementMessageBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ANONYMA_REACT_ATTILA;
@@ -848,7 +848,7 @@ class CertificateActionReplaceTest {
 
       final var certificate = certificateBuilder
           .certificateModel(
-              ag7804certificateModelBuilder()
+              fk7804certificateModelBuilder()
                   .certificateVersions(List.of(new CertificateVersion("3.0")))
                   .build()
           )
@@ -872,7 +872,7 @@ class CertificateActionReplaceTest {
 
       final var certificate = certificateBuilder
           .certificateModel(
-              ag7804certificateModelBuilder()
+              fk7804certificateModelBuilder()
                   .certificateVersions(List.of(new CertificateVersion("3.0")))
                   .build()
           )
