@@ -468,7 +468,12 @@ public class AppConfig {
   }
 
   @Bean
-  public RestClient restClient() {
+  public RestClient cpsRestClient() {
+    return RestClient.create();
+  }
+
+  @Bean
+  public RestClient ipsRestClient() {
     return RestClient.create();
   }
 
