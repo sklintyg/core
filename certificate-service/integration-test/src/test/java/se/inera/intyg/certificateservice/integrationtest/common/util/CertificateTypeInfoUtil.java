@@ -5,6 +5,10 @@ import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.Get
 
 public class CertificateTypeInfoUtil {
 
+  private CertificateTypeInfoUtil() {
+    throw new IllegalStateException("Utility class");
+  }
+
   public static CertificateTypeInfoDTO certificateTypeInfo(
       GetCertificateTypeInfoResponse response, String type) {
     if (response == null || response.getList() == null) {
