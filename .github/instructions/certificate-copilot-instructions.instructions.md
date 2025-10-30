@@ -142,11 +142,8 @@ Follow these steps:
 previous version (e.g., V1) to prevent accidental modifications.**
 
 Version lock tests use snapshot testing to ensure that older certificate versions remain exactly as
-they were when released. This is critical because:
-
-- Existing certificates in production use the old version
-- Any changes to old versions could break existing certificates
-- We need to maintain stability for historical data
+they were when released to avoid unintended changes when adding new versions and having common
+elements.
 
 **How to create a version lock test:**
 
@@ -157,6 +154,5 @@ they were when released. This is critical because:
 4. Run the test again - it should now pass
 
 **What happens if someone modifies a locked version:**
-
 The test will fail and show exactly what changed, preventing accidental modifications from being
 merged.
