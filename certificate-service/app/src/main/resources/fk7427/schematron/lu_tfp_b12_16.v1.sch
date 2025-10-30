@@ -26,7 +26,7 @@
         Ett 'Läkarutlåtande tillfällig föräldrapenning barn 12–16 år' får ha max 5 'Grund för
         medicinskt underlag'
       </iso:assert>
-      <iso:assert test="count(gn:svar[@id='58']) = 1 or count(gn:svar[@id='55']) = 1">
+      <iso:assert test="count(gn:svar[@id='58']) ge 1 or count(gn:svar[@id='55']) = 1">
         Ett 'Läkarutlåtande tillfällig föräldrapenning barn 12–16 år' måste minst ha ett svar på
         någon av frågorna 'Barnets diagnos' eller 'Fyll i vilka symtom barnet har om diagnos inte är
         fastställd'
