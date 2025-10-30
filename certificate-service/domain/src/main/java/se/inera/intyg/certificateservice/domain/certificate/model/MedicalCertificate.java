@@ -129,18 +129,19 @@ public class MedicalCertificate implements Certificate {
 
   @Override
   public void updateMetadata(ActionEvaluation actionEvaluation) {
-    certificateMetaData = CertificateMetaData.builder()
-        .patient(
-            actionEvaluation.patient() == null
-                ? certificateMetaData.patient()
-                : actionEvaluation.patient()
-        )
-        .issuer(Staff.create(actionEvaluation.user()))
-        .careUnit(actionEvaluation.careUnit())
-        .careProvider(actionEvaluation.careProvider())
-        .issuingUnit(actionEvaluation.subUnit())
-        .responsibleIssuer(actionEvaluation.user().responsibleIssuer())
-        .build();
+    if (certificateMetaData == null) {
+      certificateMetaData = CertificateMetaData.builder()
+          .patient(actionEvaluation.patient())
+          .issuer(Staff.create(actionEvaluation.user()))
+          .careUnit(actionEvaluation.careUnit())
+          .careProvider(actionEvaluation.careProvider())
+          .issuingUnit(actionEvaluation.subUnit())
+          .responsibleIssuer(actionEvaluation.user().responsibleIssuer())
+          .build();
+      return;
+    }
+
+    certificateMetaData = certificateMetaData.updated(actionEvaluation);
   }
 
   @Override
@@ -441,7 +442,6 @@ public class MedicalCertificate implements Certificate {
         .certificateRepository(this.certificateRepository)
         .build();
 
-    newCertificate.certificateMetaData = this.certificateMetaData();
     newCertificate.updateMetadata(actionEvaluation);
 
     newCertificate.parent = Relation.builder()
@@ -652,7 +652,6 @@ public class MedicalCertificate implements Certificate {
       );
     }
 
-    this.certificateMetaData = certificate.certificateMetaData();
     this.elementData = certificate.elementData().stream()
         .filter(data -> this.certificateModel.elementSpecificationExists(data.id()))
         .map(convertElementDataWithModelSpecification(certificate))
