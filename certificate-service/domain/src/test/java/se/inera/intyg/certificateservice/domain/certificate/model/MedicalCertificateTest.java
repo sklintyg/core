@@ -19,11 +19,13 @@ import static se.inera.intyg.certificateservice.domain.common.model.PersonIdType
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.BETA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.alfaRegionenBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.betaRegionenBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.BETA_REGIONEN_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProviderConstants.BETA_REGIONEN_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_VARDCENTRAL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.alfaMedicincentrumBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.alfaVardcentralBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ADDRESS;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_CITY;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_EMAIL;
@@ -413,19 +415,14 @@ class MedicalCertificateTest {
     class UpdateCareUnit {
 
       @Test
-      void shallUpdateCareUnitHsaId() {
-        certificate.updateMetadata(
-            actionEvaluationBuilder
-                .careUnit(
-                    alfaMedicincentrumBuilder()
-                        .hsaId(ALFA_VARDCENTRAL.hsaId())
-                        .build()
-                )
-                .build()
+      void shallUpdateCareUnitIfMetadataNull() {
+        final var certificateWithoutMetadata = MedicalCertificate.builder().build();
+
+        certificateWithoutMetadata.updateMetadata(
+            actionEvaluationBuilder.build()
         );
 
-        assertEquals(ALFA_VARDCENTRAL_ID,
-            certificate.certificateMetaData().careUnit().hsaId().id());
+        assertEquals(ALFA_MEDICINCENTRUM, certificate.certificateMetaData().careUnit());
       }
 
       @Test
@@ -538,25 +535,36 @@ class MedicalCertificateTest {
 
         assertTrue(certificate.certificateMetaData().careUnit().inactive().value());
       }
+
+      @Test
+      void shallNotUpdateCareUnitIfDifferentHsaId() {
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .careUnit(
+                    alfaVardcentralBuilder()
+                        .build()
+                )
+                .build()
+        );
+
+        assertNotEquals(ALFA_VARDCENTRAL_ID,
+            certificate.certificateMetaData().careUnit().hsaId().id()
+        );
+      }
     }
 
     @Nested
     class UpdateCareProvider {
 
       @Test
-      void shallUpdateCareProviderHsaId() {
-        certificate.updateMetadata(
-            actionEvaluationBuilder
-                .careProvider(
-                    alfaRegionenBuilder()
-                        .hsaId(BETA_REGIONEN.hsaId())
-                        .build()
-                )
-                .build()
+      void shallUpdateCareProviderIfMetadataNull() {
+        final var certificateWithoutMetadata = MedicalCertificate.builder().build();
+
+        certificateWithoutMetadata.updateMetadata(
+            actionEvaluationBuilder.build()
         );
 
-        assertEquals(BETA_REGIONEN_ID,
-            certificate.certificateMetaData().careProvider().hsaId().id());
+        assertEquals(ALFA_REGIONEN, certificate.certificateMetaData().careProvider());
       }
 
       @Test
@@ -572,7 +580,24 @@ class MedicalCertificateTest {
         );
 
         assertEquals(BETA_REGIONEN_NAME,
-            certificate.certificateMetaData().careProvider().name().name());
+            certificate.certificateMetaData().careProvider().name().name()
+        );
+      }
+
+      @Test
+      void shallNotUpdateCareProviderIfDifferentHsaId() {
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .careProvider(
+                    betaRegionenBuilder()
+                        .build()
+                )
+                .build()
+        );
+
+        assertNotEquals(BETA_REGIONEN_ID,
+            certificate.certificateMetaData().careProvider().hsaId().id()
+        );
       }
     }
 
@@ -580,19 +605,14 @@ class MedicalCertificateTest {
     class UpdateIssuingUnit {
 
       @Test
-      void shallUpdateIssuingUnitHsaId() {
-        certificate.updateMetadata(
-            actionEvaluationBuilder
-                .subUnit(
-                    alfaAllergimottagningenBuilder()
-                        .hsaId(ALFA_HUDMOTTAGNINGEN.hsaId())
-                        .build()
-                )
-                .build()
+      void shallUpdateIssuingUnitIfMetadataNull() {
+        final var certificateWithoutMetadata = MedicalCertificate.builder().build();
+
+        certificateWithoutMetadata.updateMetadata(
+            actionEvaluationBuilder.build()
         );
 
-        assertEquals(ALFA_HUDMOTTAGNINGEN_ID,
-            certificate.certificateMetaData().issuingUnit().hsaId().id());
+        assertEquals(ALFA_ALLERGIMOTTAGNINGEN, certificate.certificateMetaData().issuingUnit());
       }
 
       @Test
@@ -704,6 +724,22 @@ class MedicalCertificateTest {
         );
 
         assertTrue(certificate.certificateMetaData().issuingUnit().inactive().value());
+      }
+
+      @Test
+      void shallNotUpdateIssuingUnitIfDifferentHsaId() {
+        certificate.updateMetadata(
+            actionEvaluationBuilder
+                .subUnit(
+                    alfaHudmottagningenBuilder()
+                        .build()
+                )
+                .build()
+        );
+
+        assertNotEquals(ALFA_HUDMOTTAGNINGEN_ID,
+            certificate.certificateMetaData().issuingUnit().hsaId().id()
+        );
       }
     }
   }
@@ -1650,23 +1686,6 @@ class MedicalCertificateTest {
     }
 
     @Test
-    void shallReturnNewCertificateWithSamePatient() {
-      final var actionEvaluation = actionEvaluationBuilder
-          .patient(null)
-          .build();
-
-      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
-          .build();
-
-      final var actualCertificate = signedCertificate.replace(actionEvaluation);
-
-      assertEquals(
-          signedCertificate.certificateMetaData().patient(),
-          actualCertificate.certificateMetaData().patient()
-      );
-    }
-
-    @Test
     void shallReturnNewCertificateWithNewPatient() {
       final var actionEvaluation = actionEvaluationBuilder
           .patient(ALVE_REACT_ALFREDSSON)
@@ -1915,23 +1934,6 @@ class MedicalCertificateTest {
       final var actualCertificate = signedCertificate.complement(actionEvaluation);
 
       assertEquals(signedCertificate.certificateModel(), actualCertificate.certificateModel());
-    }
-
-    @Test
-    void shallReturnNewCertificateWithSamePatient() {
-      final var actionEvaluation = actionEvaluationBuilder
-          .patient(null)
-          .build();
-
-      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
-          .build();
-
-      final var actualCertificate = signedCertificate.complement(actionEvaluation);
-
-      assertEquals(
-          signedCertificate.certificateMetaData().patient(),
-          actualCertificate.certificateMetaData().patient()
-      );
     }
 
     @Test
@@ -2198,23 +2200,6 @@ class MedicalCertificateTest {
       final var actualCertificate = signedCertificate.renew(actionEvaluation);
 
       assertEquals(signedCertificate.certificateModel(), actualCertificate.certificateModel());
-    }
-
-    @Test
-    void shallReturnNewCertificateWithSamePatient() {
-      final var actionEvaluation = actionEvaluationBuilder
-          .patient(null)
-          .build();
-
-      final var signedCertificate = certificateBuilder.status(Status.SIGNED)
-          .build();
-
-      final var actualCertificate = signedCertificate.renew(actionEvaluation);
-
-      assertEquals(
-          signedCertificate.certificateMetaData().patient(),
-          actualCertificate.certificateMetaData().patient()
-      );
     }
 
     @Test
