@@ -27,8 +27,8 @@ public class QuestionPeriodBedomning {
             ElementConfigurationDateRange.builder()
                 .id(QUESTION_PERIOD_BEDOMNING_FIELD_ID)
                 .name("Period då arbetsförmågan bedöms vara nedsatt")
-                .labelFrom("Från och med")
-                .labelTo("Till och med")
+                .labelFrom("Fr.o.m")
+                .labelTo("T.o.m")
                 .build()
         )
         .rules(
