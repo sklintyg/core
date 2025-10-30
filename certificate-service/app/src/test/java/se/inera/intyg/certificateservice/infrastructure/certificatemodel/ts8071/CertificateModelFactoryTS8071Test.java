@@ -24,6 +24,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
@@ -37,13 +38,15 @@ class CertificateModelFactoryTS8071Test {
 
   @Mock
   private CertificateActionFactory certificateActionFactory;
+  @Mock
+  private CertificateActionConfigurationRepository certificateActionConfigurationRepository;
 
   private CertificateModelFactoryTS8071 certificateModelFactoryTS8071;
 
   @BeforeEach
   void setUp() {
     certificateModelFactoryTS8071 = new CertificateModelFactoryTS8071(
-        certificateActionFactory);
+        certificateActionFactory, certificateActionConfigurationRepository);
 
     ReflectionTestUtils.setField(certificateModelFactoryTS8071, "tsLogicalAddress",
         LOGICAL_ADDRESS);
