@@ -17,7 +17,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.context.ActiveProfiles;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.CertificateModelFactoryTS8071;
@@ -49,7 +48,6 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.
  * <p>
  */
 @ExtendWith(MockitoExtension.class)
-@ActiveProfiles({"test", "testability"})
 class VersionLockTest {
 
   @Mock
@@ -102,10 +100,10 @@ class VersionLockTest {
   private void assertVersionLocked(CertificateModel certificateModel, String snapshotFileName) {
     try {
       final var actualJson = objectMapper.writeValueAsString(certificateModel);
-      final var snapshotPath = VersionLockTestUtil.getSnapshotPath(snapshotFileName);
+      final var snapshotPath = SnapshotTestUtil.getSnapshotPath(snapshotFileName);
 
       if (!Files.exists(snapshotPath)) {
-        VersionLockTestUtil.generateSnapshot(actualJson, snapshotFileName);
+        SnapshotTestUtil.generateSnapshot(actualJson, snapshotFileName);
         fail(String.format(
             "Snapshot file did not exist and has been created at: %s%n"
                 + "Review the generated snapshot file to ensure it looks correct.%n"
@@ -148,7 +146,7 @@ class VersionLockTest {
     final var expectedTree = objectMapper.readTree(expectedJson);
     final var actualTree = objectMapper.readTree(actualJson);
 
-    final var differences = VersionLockTestUtil.compareTrees("", expectedTree, actualTree);
+    final var differences = JsonTreeTestUtil.compareTrees("", expectedTree, actualTree);
 
     return !differences.isEmpty() ? differences.toString() : "No specific differences found";
   }

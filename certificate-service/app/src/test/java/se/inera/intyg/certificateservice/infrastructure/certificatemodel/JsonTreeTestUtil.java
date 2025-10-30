@@ -1,21 +1,13 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.stream.IntStream;
 import java.util.stream.StreamSupport;
 
-public class VersionLockTestUtil {
+public class JsonTreeTestUtil {
 
-  // TODO: Add AI-label
-
-  private static final String SNAPSHOT_RESOURCE_DIR = "certificate-snapshots";
-
-  private VersionLockTestUtil() {
+  private JsonTreeTestUtil() {
     throw new IllegalStateException("Utility class");
   }
 
@@ -25,14 +17,6 @@ public class VersionLockTestUtil {
     final var differences = new StringBuilder();
 
     if (expected.equals(actual)) {
-      return differences;
-    }
-
-    if (expected.getNodeType() != actual.getNodeType()) {
-      differences.append(String.format("  %s: type changed from %s to %s%n",
-          path.isEmpty() ? "root" : path,
-          expected.getNodeType(),
-          actual.getNodeType()));
       return differences;
     }
 
@@ -54,6 +38,7 @@ public class VersionLockTestUtil {
     return differences;
   }
 
+  // Generated using AI support with model: Claude Sonnet 4.5
   private static void compareObjectFields(String path, JsonNode expected, JsonNode actual,
       StringBuilder differences) {
     StreamSupport.stream(((Iterable<String>) expected::fieldNames).spliterator(), false)
@@ -77,6 +62,7 @@ public class VersionLockTestUtil {
         });
   }
 
+  // Generated using AI support with model: Claude Sonnet 4.5
   private static void compareArrayElements(String path, JsonNode expected, JsonNode actual,
       StringBuilder differences) {
     if (expected.size() != actual.size()) {
@@ -95,14 +81,8 @@ public class VersionLockTestUtil {
         });
   }
 
-  public static String buildPath(String currentPath, String fieldName) {
-    if (currentPath.isEmpty()) {
-      return fieldName;
-    }
-    return currentPath + "." + fieldName;
-  }
-
-  public static String getElementId(JsonNode node) {
+  // Generated using AI support with model: Claude Sonnet 4.5
+  private static String getElementId(JsonNode node) {
     if (!node.isObject() || !node.has("id")) {
       return null;
     }
@@ -114,27 +94,15 @@ public class VersionLockTestUtil {
         .orElse(null);
   }
 
-  public static String formatValue(JsonNode node) {
+  private static String formatValue(JsonNode node) {
     return node.isTextual() ? node.asText() : node.toString();
   }
 
-  public static Path getSnapshotPath(String snapshotFileName) {
-    final var resourceUrl = VersionLockTestUtil.class.getClassLoader()
-        .getResource(SNAPSHOT_RESOURCE_DIR + "/" + snapshotFileName);
 
-    if (resourceUrl != null) {
-      return Paths.get(resourceUrl.getPath().substring(1));
+  private static String buildPath(String currentPath, String fieldName) {
+    if (currentPath.isEmpty()) {
+      return fieldName;
     }
-
-    return Paths.get("src/test/resources", SNAPSHOT_RESOURCE_DIR, snapshotFileName);
+    return currentPath + "." + fieldName;
   }
-
-  public static void generateSnapshot(String json, String snapshotFileName) throws IOException {
-    final var resourceDir = Paths.get("src/test/resources", SNAPSHOT_RESOURCE_DIR);
-    Files.createDirectories(resourceDir);
-
-    final var snapshotPath = resourceDir.resolve(snapshotFileName);
-    Files.writeString(snapshotPath, json);
-  }
-
 }
