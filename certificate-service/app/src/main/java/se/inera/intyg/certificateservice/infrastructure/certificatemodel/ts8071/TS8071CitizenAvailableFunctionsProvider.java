@@ -36,18 +36,6 @@ public class TS8071CitizenAvailableFunctionsProvider implements CitizenAvailable
         certificateActionConfigurationRepository,
         SEND);
 
-    if (!certificateHasFullFunctionality(certificate, actionRuleLimitedCertificateFunctionality)) {
-      citizenAvailableFunctions.add(
-          CitizenAvailableFunction.builder()
-              .type(CitizenAvailableFunctionType.ATTENTION)
-              .enabled(true)
-              .title(OLD_VERSION_LIMITED_FUNCTIONALITY_INFO_TITLE)
-              .name(OLD_VERSION_LIMITED_FUNCTIONALITY_INFO_NAME)
-              .body(OLD_VERSION_LIMITED_FUNCTIONALITY_INFO_BODY)
-              .build()
-      );
-    }
-
     if (certificateHasFullFunctionality(certificate, actionRuleLimitedCertificateFunctionality)) {
       citizenAvailableFunctions.add(
           CitizenAvailableFunction.builder()
@@ -56,6 +44,16 @@ public class TS8071CitizenAvailableFunctionsProvider implements CitizenAvailable
               .title(SEND_CERTIFICATE_TITLE)
               .name(SEND_CERTIFICATE_NAME)
               .body(SEND_CERTIFICATE_BODY)
+              .build()
+      );
+    } else {
+      citizenAvailableFunctions.add(
+          CitizenAvailableFunction.builder()
+              .type(CitizenAvailableFunctionType.ATTENTION)
+              .enabled(true)
+              .title(OLD_VERSION_LIMITED_FUNCTIONALITY_INFO_TITLE)
+              .name(OLD_VERSION_LIMITED_FUNCTIONALITY_INFO_NAME)
+              .body(OLD_VERSION_LIMITED_FUNCTIONALITY_INFO_BODY)
               .build()
       );
     }
