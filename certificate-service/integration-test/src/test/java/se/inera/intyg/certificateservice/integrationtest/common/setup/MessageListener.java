@@ -1,10 +1,13 @@
 package se.inera.intyg.certificateservice.integrationtest.common.setup;
 
+import static org.awaitility.Awaitility.await;
+
 import jakarta.jms.Message;
 import java.time.Duration;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jms.annotation.JmsListener;
+import org.testcontainers.shaded.org.awaitility.core.ConditionTimeoutException;
 
 @Slf4j
 public class MessageListener {
@@ -25,15 +28,15 @@ public class MessageListener {
   }
 
   public Message awaitByCertificateId(Duration timeout, String certificateId) {
-    final var deadline = System.currentTimeMillis() + timeout.toMillis();
-
-    while (System.currentTimeMillis() < deadline) {
-      final var message = CERTIFICATE_INDEX.get(certificateId);
-      if (message != null) {
-        return message;
-      }
+    try {
+      await()
+          .atMost(timeout)
+          .pollInterval(Duration.ofMillis(200))
+          .until(() -> CERTIFICATE_INDEX.containsKey(certificateId));
+      return CERTIFICATE_INDEX.get(certificateId);
+    } catch (ConditionTimeoutException e) {
+      log.debug("Timeout waiting for message with certificateId: {}", certificateId);
+      return null;
     }
-
-    return null;
   }
 }
