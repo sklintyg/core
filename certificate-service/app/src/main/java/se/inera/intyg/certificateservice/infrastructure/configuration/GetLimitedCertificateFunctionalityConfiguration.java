@@ -11,34 +11,34 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import se.inera.intyg.certificateservice.domain.configuration.limitedfunctionality.dto.LimitedFunctionalityConfiguration;
+import se.inera.intyg.certificateservice.domain.configuration.limitedcertificatefunctionality.dto.LimitedCertificateFunctionalityConfiguration;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class GetLimitedFunctionalityConfiguration {
+public class GetLimitedCertificateFunctionalityConfiguration {
 
-  @Value("${limited.functionality.configuration.path:}")
-  private String limitedFunctionalityConfigurationPath;
+  @Value("${limited.certificate.functionality.configuration.path:}")
+  private String limitedCertificateFunctionalityConfigurationPath;
 
-  private List<LimitedFunctionalityConfiguration> limitedFunctionalityConfigurations;
+  private List<LimitedCertificateFunctionalityConfiguration> limitedCertificateFunctionalityConfigurations;
 
-  public List<LimitedFunctionalityConfiguration> get() {
-    if (limitedFunctionalityConfigurations == null) {
+  public List<LimitedCertificateFunctionalityConfiguration> get() {
+    if (limitedCertificateFunctionalityConfigurations == null) {
       final var objectMapper = new ObjectMapper();
       objectMapper.registerModule(new JavaTimeModule());
-      limitedFunctionalityConfigurations = new ArrayList<>();
+      limitedCertificateFunctionalityConfigurations = new ArrayList<>();
       try (final var resourceAsStream = new FileInputStream(
-          limitedFunctionalityConfigurationPath)) {
-        limitedFunctionalityConfigurations = objectMapper.readValue(
+          limitedCertificateFunctionalityConfigurationPath)) {
+        limitedCertificateFunctionalityConfigurations = objectMapper.readValue(
             resourceAsStream,
             new TypeReference<>() {
             });
         log.info("Limited Functionality configuration loaded: {}",
-            limitedFunctionalityConfigurations);
+            limitedCertificateFunctionalityConfigurations);
       } catch (FileNotFoundException e) {
         log.warn("File not found: {}. Returning empty configuration.",
-            limitedFunctionalityConfigurationPath);
+            limitedCertificateFunctionalityConfigurationPath);
       } catch (Exception e) {
         log.error(
             String.format("Failed to load Limited Functionality configuration. Reason: %s",
@@ -46,6 +46,6 @@ public class GetLimitedFunctionalityConfiguration {
         );
       }
     }
-    return limitedFunctionalityConfigurations;
+    return limitedCertificateFunctionalityConfigurations;
   }
 }

@@ -54,7 +54,7 @@ tasks.register("appRunDebug") {
                     "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=18031",
                     "-Dlogging.config=${rootProject.projectDir}/devops/dev/config/logback-spring.xml",
                     "-Dunit.access.configuration.path=${rootProject.projectDir}/devops/dev/config/certificate-unit-access-config.json",
-                    "-Dlimited.functionality.configuration.path=${rootProject.projectDir}/devops/dev/config/limited-functionality-config.json"
+                    "-Dlimited.certificate.functionality.configuration.path=${rootProject.projectDir}/devops/dev/config/limited-certificate-functionality-config.json"
             ]
         }
     }

@@ -22,36 +22,39 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
-import se.inera.intyg.certificateservice.domain.configuration.limitedfunctionality.dto.LimitedActionConfiguration;
-import se.inera.intyg.certificateservice.domain.configuration.limitedfunctionality.dto.LimitedFunctionalityActionsConfiguration;
-import se.inera.intyg.certificateservice.domain.configuration.limitedfunctionality.dto.LimitedFunctionalityConfiguration;
+import se.inera.intyg.certificateservice.domain.configuration.limitedcertificatefunctionality.dto.LimitedActionConfiguration;
+import se.inera.intyg.certificateservice.domain.configuration.limitedcertificatefunctionality.dto.LimitedCertificateFunctionalityActionsConfiguration;
+import se.inera.intyg.certificateservice.domain.configuration.limitedcertificatefunctionality.dto.LimitedCertificateFunctionalityConfiguration;
 
 @ExtendWith(MockitoExtension.class)
-class ActionRuleLimitedFunctionalityTest {
+class ActionRuleLimitedCertificateFunctionalityTest {
 
   @Mock
   private CertificateActionConfigurationRepository certificateActionConfigurationRepository;
 
-  private ActionRuleLimitedFunctionality actionRuleLimitedFunctionality;
+  private ActionRuleLimitedCertificateFunctionality actionRuleLimitedCertificateFunctionality;
 
   @BeforeEach
   void setUp() {
-    actionRuleLimitedFunctionality = new ActionRuleLimitedFunctionality(
+    actionRuleLimitedCertificateFunctionality = new ActionRuleLimitedCertificateFunctionality(
         certificateActionConfigurationRepository, SEND);
   }
 
   @Test
   void shouldThrowIllegalStateExceptionWhenCertificateIsMissing() {
     final var illegalStateException = assertThrows(IllegalStateException.class,
-        () -> actionRuleLimitedFunctionality.evaluate(Optional.empty(), Optional.empty()));
+        () -> actionRuleLimitedCertificateFunctionality.evaluate(Optional.empty(),
+            Optional.empty()));
 
-    assertEquals("Certificate is required for evaluating LimitedFunctionality action rule",
+    assertEquals(
+        "Certificate is required for evaluating LimitedCertificateFunctionality action rule",
         illegalStateException.getMessage());
   }
 
   @Test
   void shouldReturnTrueWhenCertificateIsLatestMajorVersion() {
-    final var result = actionRuleLimitedFunctionality.evaluate(Optional.of(AG7804_CERTIFICATE)
+    final var result = actionRuleLimitedCertificateFunctionality.evaluate(
+        Optional.of(AG7804_CERTIFICATE)
         , Optional.empty());
 
     assertTrue(result);
@@ -60,22 +63,22 @@ class ActionRuleLimitedFunctionalityTest {
   @Test
   void shouldReturnFalseWhenCertificateIsNotLatestMajorVersionAndHasConfiguration() {
     final var inactiveConfigurations =
-        LimitedFunctionalityConfiguration.builder()
+        LimitedCertificateFunctionalityConfiguration.builder()
             .certificateType("type")
             .version(List.of("1.0"))
             .configuration(
-                LimitedFunctionalityActionsConfiguration.builder()
+                LimitedCertificateFunctionalityActionsConfiguration.builder()
                     .build()
             )
             .build();
 
     final var certificate = buildNotLatestMajorVersionCertificate();
 
-    when(certificateActionConfigurationRepository.findLimitedFunctionalityConfiguration(
+    when(certificateActionConfigurationRepository.findLimitedCertificateFunctionalityConfiguration(
         certificate.certificateModel().id()))
         .thenReturn(inactiveConfigurations);
 
-    final var result = actionRuleLimitedFunctionality.evaluate(Optional.of(certificate)
+    final var result = actionRuleLimitedCertificateFunctionality.evaluate(Optional.of(certificate)
         , Optional.empty());
     assertFalse(result);
   }
@@ -85,11 +88,11 @@ class ActionRuleLimitedFunctionalityTest {
 
     final var certificate = buildNotLatestMajorVersionCertificate();
 
-    when(certificateActionConfigurationRepository.findLimitedFunctionalityConfiguration(
+    when(certificateActionConfigurationRepository.findLimitedCertificateFunctionalityConfiguration(
         certificate.certificateModel().id()))
         .thenReturn(null);
 
-    final var result = actionRuleLimitedFunctionality.evaluate(Optional.of(certificate)
+    final var result = actionRuleLimitedCertificateFunctionality.evaluate(Optional.of(certificate)
         , Optional.empty());
     assertTrue(result);
   }
@@ -97,11 +100,11 @@ class ActionRuleLimitedFunctionalityTest {
   @Test
   void shouldReturnTrueWhenCertificateIsNotLatestMajorVersionAndHasConfigurationWithActionDateInFuture() {
     final var limitedFunctionalityConfigurations =
-        LimitedFunctionalityConfiguration.builder()
+        LimitedCertificateFunctionalityConfiguration.builder()
             .certificateType("type")
             .version(List.of("2.0"))
             .configuration(
-                LimitedFunctionalityActionsConfiguration.builder()
+                LimitedCertificateFunctionalityActionsConfiguration.builder()
                     .actions(
                         List.of(
                             LimitedActionConfiguration.builder()
@@ -116,11 +119,11 @@ class ActionRuleLimitedFunctionalityTest {
 
     final var certificate = buildNotLatestMajorVersionCertificate();
 
-    when(certificateActionConfigurationRepository.findLimitedFunctionalityConfiguration(
+    when(certificateActionConfigurationRepository.findLimitedCertificateFunctionalityConfiguration(
         certificate.certificateModel().id()))
         .thenReturn(limitedFunctionalityConfigurations);
 
-    final var result = actionRuleLimitedFunctionality.evaluate(Optional.of(certificate)
+    final var result = actionRuleLimitedCertificateFunctionality.evaluate(Optional.of(certificate)
         , Optional.empty());
     assertTrue(result);
   }
@@ -128,11 +131,11 @@ class ActionRuleLimitedFunctionalityTest {
   @Test
   void shouldReturnFalseWhenCertificateIsNotLatestMajorVersionAndHasConfigurationWithActionDateInPast() {
     final var limitedFunctionalityConfigurations =
-        LimitedFunctionalityConfiguration.builder()
+        LimitedCertificateFunctionalityConfiguration.builder()
             .certificateType("type")
             .version(List.of("2.0"))
             .configuration(
-                LimitedFunctionalityActionsConfiguration.builder()
+                LimitedCertificateFunctionalityActionsConfiguration.builder()
                     .actions(
                         List.of(
                             LimitedActionConfiguration.builder()
@@ -146,11 +149,11 @@ class ActionRuleLimitedFunctionalityTest {
             .build();
     final var certificate = buildNotLatestMajorVersionCertificate();
 
-    when(certificateActionConfigurationRepository.findLimitedFunctionalityConfiguration(
+    when(certificateActionConfigurationRepository.findLimitedCertificateFunctionalityConfiguration(
         certificate.certificateModel().id()))
         .thenReturn(limitedFunctionalityConfigurations);
 
-    final var result = actionRuleLimitedFunctionality.evaluate(Optional.of(certificate)
+    final var result = actionRuleLimitedCertificateFunctionality.evaluate(Optional.of(certificate)
         , Optional.empty());
     assertFalse(result);
   }
@@ -158,22 +161,22 @@ class ActionRuleLimitedFunctionalityTest {
   @Test
   void shouldReturnFalseWhenCertificateIsNotLatestMajorVersionAndHasConfigurationWithoutActions() {
     final var limitedFunctionalityConfigurations =
-        LimitedFunctionalityConfiguration.builder()
+        LimitedCertificateFunctionalityConfiguration.builder()
             .certificateType("type")
             .version(List.of("2.0"))
             .configuration(
-                LimitedFunctionalityActionsConfiguration.builder()
+                LimitedCertificateFunctionalityActionsConfiguration.builder()
                     .build()
             )
             .build();
 
     final var certificate = buildNotLatestMajorVersionCertificate();
 
-    when(certificateActionConfigurationRepository.findLimitedFunctionalityConfiguration(
+    when(certificateActionConfigurationRepository.findLimitedCertificateFunctionalityConfiguration(
         certificate.certificateModel().id()))
         .thenReturn(limitedFunctionalityConfigurations);
 
-    final var result = actionRuleLimitedFunctionality.evaluate(Optional.of(certificate)
+    final var result = actionRuleLimitedCertificateFunctionality.evaluate(Optional.of(certificate)
         , Optional.empty());
     assertFalse(result);
   }

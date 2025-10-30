@@ -59,7 +59,7 @@ public class CertificateActionFactory {
                       actionSpecification.allowedRoles()
                   ),
                   new ActionRuleUserAgreement(),
-                  new ActionRuleLimitedFunctionality(
+                  new ActionRuleLimitedCertificateFunctionality(
                       certificateActionConfigurationRepository,
                       actionSpecification.certificateActionType()
                   )
@@ -95,7 +95,7 @@ public class CertificateActionFactory {
                       certificateActionConfigurationRepository
                   ),
                   new ActionRuleUserAgreement(),
-                  new ActionRuleLimitedFunctionality(
+                  new ActionRuleLimitedCertificateFunctionality(
                       certificateActionConfigurationRepository,
                       actionSpecification.certificateActionType()
                   )
@@ -117,7 +117,7 @@ public class CertificateActionFactory {
                       actionSpecification.allowedRolesForProtectedPersons()
                   ),
                   new ActionRuleUserAgreement(),
-                  new ActionRuleLimitedFunctionality(
+                  new ActionRuleLimitedCertificateFunctionality(
                       certificateActionConfigurationRepository,
                       actionSpecification.certificateActionType()
                   )
@@ -172,7 +172,7 @@ public class CertificateActionFactory {
                   new ActionRuleInactiveUnit(),
                   new ActionRulePatientAlive(),
                   new ActionRuleUserAgreement(),
-                  new ActionRuleLimitedFunctionality(
+                  new ActionRuleLimitedCertificateFunctionality(
                       certificateActionConfigurationRepository,
                       actionSpecification.certificateActionType()
                   )
@@ -390,7 +390,7 @@ public class CertificateActionFactory {
                       List.of(AccessScope.WITHIN_CARE_UNIT)
                   ),
                   new ActionRuleUserAgreement(),
-                  new ActionRuleLimitedFunctionality(
+                  new ActionRuleLimitedCertificateFunctionality(
                       certificateActionConfigurationRepository,
                       actionSpecification.certificateActionType()
                   )
@@ -541,7 +541,7 @@ public class CertificateActionFactory {
                   ),
                   new ActionRuleRole(actionSpecification.allowedRoles()),
                   new ActionRuleUserAgreement(),
-                  new ActionRuleLimitedFunctionality(
+                  new ActionRuleLimitedCertificateFunctionality(
                       certificateActionConfigurationRepository,
                       actionSpecification.certificateActionType()
                   )
@@ -580,7 +580,7 @@ public class CertificateActionFactory {
                       List.of(AccessScope.WITHIN_CARE_UNIT)
                   ),
                   new ActionRuleUserAgreement(),
-                  new ActionRuleLimitedFunctionality(
+                  new ActionRuleLimitedCertificateFunctionality(
                       certificateActionConfigurationRepository,
                       actionSpecification.certificateActionType()
                   )

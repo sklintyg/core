@@ -41,8 +41,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.repository.Cert
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
-import se.inera.intyg.certificateservice.domain.configuration.limitedfunctionality.dto.LimitedFunctionalityActionsConfiguration;
-import se.inera.intyg.certificateservice.domain.configuration.limitedfunctionality.dto.LimitedFunctionalityConfiguration;
+import se.inera.intyg.certificateservice.domain.configuration.limitedcertificatefunctionality.dto.LimitedCertificateFunctionalityActionsConfiguration;
+import se.inera.intyg.certificateservice.domain.configuration.limitedcertificatefunctionality.dto.LimitedCertificateFunctionalityConfiguration;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 import se.inera.intyg.certificateservice.domain.patient.model.ProtectedPerson;
 import se.inera.intyg.certificateservice.domain.patient.model.TestIndicated;
@@ -106,7 +106,8 @@ class CertificateActionSendTest {
         () -> certificateActionSend.evaluate(Optional.empty(),
             Optional.of(actionEvaluation)));
 
-    assertEquals("Certificate is required for evaluating LimitedFunctionality action rule",
+    assertEquals(
+        "Certificate is required for evaluating LimitedCertificateFunctionality action rule",
         illegalStateException.getMessage());
   }
 
@@ -704,11 +705,11 @@ class CertificateActionSendTest {
     @Test
     void shallReturnFalseIfCertificateIsNotMajorVersionWithLimitedFunctionalityConfiguration() {
       final var inactiveConfigurations =
-          LimitedFunctionalityConfiguration.builder()
+          LimitedCertificateFunctionalityConfiguration.builder()
               .certificateType("type")
               .version(List.of("1.0"))
               .configuration(
-                  LimitedFunctionalityActionsConfiguration.builder()
+                  LimitedCertificateFunctionalityActionsConfiguration.builder()
                       .build()
               )
               .build();
@@ -724,8 +725,9 @@ class CertificateActionSendTest {
           )
           .build();
 
-      when(certificateActionConfigurationRepository.findLimitedFunctionalityConfiguration(
-          certificate.certificateModel().id()))
+      when(
+          certificateActionConfigurationRepository.findLimitedCertificateFunctionalityConfiguration(
+              certificate.certificateModel().id()))
           .thenReturn(inactiveConfigurations);
 
       assertFalse(
@@ -747,8 +749,9 @@ class CertificateActionSendTest {
           )
           .build();
 
-      when(certificateActionConfigurationRepository.findLimitedFunctionalityConfiguration(
-          certificate.certificateModel().id()))
+      when(
+          certificateActionConfigurationRepository.findLimitedCertificateFunctionalityConfiguration(
+              certificate.certificateModel().id()))
           .thenReturn(null);
 
       assertTrue(

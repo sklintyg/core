@@ -39,8 +39,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
-import se.inera.intyg.certificateservice.domain.configuration.limitedfunctionality.dto.LimitedFunctionalityActionsConfiguration;
-import se.inera.intyg.certificateservice.domain.configuration.limitedfunctionality.dto.LimitedFunctionalityConfiguration;
+import se.inera.intyg.certificateservice.domain.configuration.limitedcertificatefunctionality.dto.LimitedCertificateFunctionalityActionsConfiguration;
+import se.inera.intyg.certificateservice.domain.configuration.limitedcertificatefunctionality.dto.LimitedCertificateFunctionalityConfiguration;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateActionUpdateTest {
@@ -485,11 +485,11 @@ class CertificateActionUpdateTest {
     @Test
     void shallReturnFalseIfCertificateIsNotMajorVersionWithLimitedFunctionalityConfiguration() {
       final var inactiveConfigurations =
-          LimitedFunctionalityConfiguration.builder()
+          LimitedCertificateFunctionalityConfiguration.builder()
               .certificateType("type")
               .version(List.of("1.0"))
               .configuration(
-                  LimitedFunctionalityActionsConfiguration.builder()
+                  LimitedCertificateFunctionalityActionsConfiguration.builder()
                       .build()
               )
               .build();
@@ -505,8 +505,9 @@ class CertificateActionUpdateTest {
           )
           .build();
 
-      when(certificateActionConfigurationRepository.findLimitedFunctionalityConfiguration(
-          certificate.certificateModel().id()))
+      when(
+          certificateActionConfigurationRepository.findLimitedCertificateFunctionalityConfiguration(
+              certificate.certificateModel().id()))
           .thenReturn(inactiveConfigurations);
 
       assertFalse(
@@ -528,8 +529,9 @@ class CertificateActionUpdateTest {
           )
           .build();
 
-      when(certificateActionConfigurationRepository.findLimitedFunctionalityConfiguration(
-          certificate.certificateModel().id()))
+      when(
+          certificateActionConfigurationRepository.findLimitedCertificateFunctionalityConfiguration(
+              certificate.certificateModel().id()))
           .thenReturn(null);
 
       assertTrue(

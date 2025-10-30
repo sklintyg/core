@@ -7,7 +7,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 
 @RequiredArgsConstructor
-public class ActionRuleLimitedFunctionality implements ActionRule {
+public class ActionRuleLimitedCertificateFunctionality implements ActionRule {
 
   private final CertificateActionConfigurationRepository certificateActionConfigurationRepository;
   private final CertificateActionType certificateActionType;
@@ -16,21 +16,21 @@ public class ActionRuleLimitedFunctionality implements ActionRule {
   public boolean evaluate(Optional<Certificate> certificate,
       Optional<ActionEvaluation> actionEvaluation) {
     final var evaluatedCertificate = certificate.orElseThrow(() -> new IllegalStateException(
-        "Certificate is required for evaluating LimitedFunctionality action rule"));
+        "Certificate is required for evaluating LimitedCertificateFunctionality action rule"));
 
     if (evaluatedCertificate.certificateModel().isLastestActiveVersion()) {
       return true;
     }
 
-    final var limitedFunctionalityConfiguration = certificateActionConfigurationRepository.findLimitedFunctionalityConfiguration(
+    final var limitedCertificateFunctionalityConfiguration = certificateActionConfigurationRepository.findLimitedCertificateFunctionalityConfiguration(
         evaluatedCertificate.certificateModel().id()
     );
 
-    if (limitedFunctionalityConfiguration == null) {
+    if (limitedCertificateFunctionalityConfiguration == null) {
       return true;
     }
 
-    return limitedFunctionalityConfiguration.configuration().actions().stream()
+    return limitedCertificateFunctionalityConfiguration.configuration().actions().stream()
         .filter(limitedActionConfiguration ->
             limitedActionConfiguration.type().equals(certificateActionType.name())
         )

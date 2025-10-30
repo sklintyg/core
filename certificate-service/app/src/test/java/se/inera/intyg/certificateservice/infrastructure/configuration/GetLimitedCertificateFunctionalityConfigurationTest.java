@@ -11,12 +11,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
-import se.inera.intyg.certificateservice.domain.configuration.limitedfunctionality.dto.LimitedActionConfiguration;
-import se.inera.intyg.certificateservice.domain.configuration.limitedfunctionality.dto.LimitedFunctionalityActionsConfiguration;
-import se.inera.intyg.certificateservice.domain.configuration.limitedfunctionality.dto.LimitedFunctionalityConfiguration;
+import se.inera.intyg.certificateservice.domain.configuration.limitedcertificatefunctionality.dto.LimitedActionConfiguration;
+import se.inera.intyg.certificateservice.domain.configuration.limitedcertificatefunctionality.dto.LimitedCertificateFunctionalityActionsConfiguration;
+import se.inera.intyg.certificateservice.domain.configuration.limitedcertificatefunctionality.dto.LimitedCertificateFunctionalityConfiguration;
 
 @ExtendWith(MockitoExtension.class)
-class GetLimitedFunctionalityConfigurationTest {
+class GetLimitedCertificateFunctionalityConfigurationTest {
 
   private static final String LIMITED_FUNCTIONALITY_WITH_SEND_CONFIG = Paths.get("src", "test",
       "resources",
@@ -28,25 +28,25 @@ class GetLimitedFunctionalityConfigurationTest {
       "limitedfunctionality",
       "limited-functionality-without-actions.json").toString();
 
-  private GetLimitedFunctionalityConfiguration getLimitedFunctionalityConfiguration;
+  private GetLimitedCertificateFunctionalityConfiguration getLimitedCertificateFunctionalityConfiguration;
 
   @BeforeEach
   void setUp() {
-    getLimitedFunctionalityConfiguration = new GetLimitedFunctionalityConfiguration();
+    getLimitedCertificateFunctionalityConfiguration = new GetLimitedCertificateFunctionalityConfiguration();
   }
 
   @Test
   void shallParseFileWithActionSend() {
-    ReflectionTestUtils.setField(getLimitedFunctionalityConfiguration,
-        "limitedFunctionalityConfigurationPath",
+    ReflectionTestUtils.setField(getLimitedCertificateFunctionalityConfiguration,
+        "limitedCertificateFunctionalityConfigurationPath",
         LIMITED_FUNCTIONALITY_WITH_SEND_CONFIG);
 
     final var expectedInactiveCertificateConfiguration = List.of(
-        LimitedFunctionalityConfiguration.builder()
+        LimitedCertificateFunctionalityConfiguration.builder()
             .certificateType("ts8071")
             .version(List.of("1.0"))
             .configuration(
-                LimitedFunctionalityActionsConfiguration.builder()
+                LimitedCertificateFunctionalityActionsConfiguration.builder()
                     .actions(
                         List.of(
                             LimitedActionConfiguration.builder()
@@ -60,29 +60,29 @@ class GetLimitedFunctionalityConfigurationTest {
             .build()
     );
 
-    final var actualCertificateAccessConfigurations = getLimitedFunctionalityConfiguration.get();
+    final var actualCertificateAccessConfigurations = getLimitedCertificateFunctionalityConfiguration.get();
     assertEquals(expectedInactiveCertificateConfiguration, actualCertificateAccessConfigurations);
   }
 
   @Test
   void shallParseFileWithoutActions() {
-    ReflectionTestUtils.setField(getLimitedFunctionalityConfiguration,
-        "limitedFunctionalityConfigurationPath",
+    ReflectionTestUtils.setField(getLimitedCertificateFunctionalityConfiguration,
+        "limitedCertificateFunctionalityConfigurationPath",
         LIMITED_FUNCTIONALITY_WITHOUT_ACTIONS);
 
     final var expectedInactiveCertificateConfiguration = List.of(
-        LimitedFunctionalityConfiguration.builder()
+        LimitedCertificateFunctionalityConfiguration.builder()
             .certificateType("ts8071")
             .version(List.of("1.0"))
             .configuration(
-                LimitedFunctionalityActionsConfiguration.builder()
+                LimitedCertificateFunctionalityActionsConfiguration.builder()
                     .actions(Collections.emptyList())
                     .build()
             )
             .build()
     );
 
-    final var actualCertificateAccessConfigurations = getLimitedFunctionalityConfiguration.get();
+    final var actualCertificateAccessConfigurations = getLimitedCertificateFunctionalityConfiguration.get();
     assertEquals(expectedInactiveCertificateConfiguration, actualCertificateAccessConfigurations);
   }
 }
