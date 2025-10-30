@@ -84,6 +84,7 @@ class TS8071CitizenAvailableFunctionsProviderTest {
 
   @Test
   void shouldShowPrintFunctionWhenCertificateDoesNotHaveFullFunctionality() {
+    certificate = getNotLatestMajorVersionCertificate();
     final var expectedPrintFunction = CitizenAvailableFunction.builder()
         .type(CitizenAvailableFunctionType.PRINT_CERTIFICATE)
         .enabled(true)
