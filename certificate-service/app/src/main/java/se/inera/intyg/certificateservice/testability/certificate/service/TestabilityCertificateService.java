@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CreateCertificateResponse;
 import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateConverter;
+import se.inera.intyg.certificateservice.application.certificatetypeinfo.dto.CertificateModelIdDTO;
 import se.inera.intyg.certificateservice.application.common.ActionEvaluationFactory;
 import se.inera.intyg.certificateservice.application.common.converter.ResourceLinkConverter;
 import se.inera.intyg.certificateservice.application.common.dto.UnitDTO;
@@ -30,6 +31,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.testability.certificate.dto.GetCertificateTypeVersionsResponse;
 import se.inera.intyg.certificateservice.testability.certificate.dto.SupportedCertificateTypesResponse;
 import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityCertificateRequest;
 import se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityFillTypeDTO;
@@ -189,5 +191,24 @@ public class TestabilityCertificateService {
             }
         ));
     return List.copyOf(supportedCertificateTypesResponseMap.values());
+  }
+
+  public GetCertificateTypeVersionsResponse getCertificateTypeVersions(String type) {
+    final var models = testabilityCertificateModelRepository.all().stream()
+        .filter(certificateModel -> certificateModel.id().type().type().equalsIgnoreCase(type))
+        .toList();
+
+    return GetCertificateTypeVersionsResponse.builder()
+        .certificateModelIds(
+            models.stream()
+                .map(model ->
+                    CertificateModelIdDTO.builder()
+                        .type(model.id().type().type())
+                        .version(model.id().version().version())
+                        .build()
+                )
+                .toList()
+        )
+        .build();
   }
 }
