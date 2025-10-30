@@ -125,12 +125,34 @@ Follow these steps:
 1. Generate an analysis file described in `major-version-analysis.md` to identify common and unique
    elements.
 2. Have developer review analysis and make changes if needed
-3. Create new certificate model class for the new version
-4. Add common elements
-5. Create new questions that are unique for the new version (with VX suffix for methods and ids
+3. **IMPORTANT: Create a version lock test for the previous version** (see section 9 below)
+4. Create new certificate model class for the new version
+5. Add common elements
+6. Create new questions that are unique for the new version (with VX suffix for methods and ids
    where X is version)
    ***Example: questionHorselV1(), QUESTION_HORSEL_V1_ID***
-6. If a question is common between versions, but an id is used from a version question, then the id
+7. If a question is common between versions, but an id is used from a version question, then the id
    needs to be passed as an attribute. See `QuestionMissbrukProvtagning` as example. The ids can
    then be sent in each CertificateModelFactory as attributes.
-7. Add the unique elements to the model
+8. Add the unique elements to the model
+
+### 9. Version Lock Testing (Critical for Major Versions)
+
+**When creating a new major version (e.g., V2), you MUST create a version lock test for the
+previous version (e.g., V1) to prevent accidental modifications.**
+
+Version lock tests use snapshot testing to ensure that older certificate versions remain exactly as
+they were when released. The test will help avoid unintended changes when adding new versions and
+having common elements.
+
+**How to create a version lock test:**
+
+1. In `VersionLockTest.java`, add a test for the previous version.
+2. Run the test - it will fail and generate a snapshot in
+   `src/test/resources/certificate-model-snapshots/`
+3. Review the generated JSON file to ensure it looks correct
+4. Run the test again - it should now pass
+
+**What happens if someone modifies a locked version:**
+The test will fail and show exactly what changed, preventing accidental modifications from being
+merged.
