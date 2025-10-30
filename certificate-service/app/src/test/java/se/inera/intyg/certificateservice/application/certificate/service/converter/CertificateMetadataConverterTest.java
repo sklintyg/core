@@ -113,7 +113,7 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 class CertificateMetadataConverterTest {
 
   private static final String TYPE = "type";
-  private static final String VERSION = "version";
+  private static final String VERSION = "2.0";
   private static final CertificateTypeName TYPE_NAME = new CertificateTypeName("typeName");
   private static final String MODEL_NAME = "modelName";
   private static final String MODEL_DESCRIPTION = "modelDescription";
@@ -190,6 +190,7 @@ class CertificateMetadataConverterTest {
                           .version(new CertificateVersion(VERSION))
                           .build()
                   )
+                  .certificateVersions(List.of(new CertificateVersion(VERSION)))
                   .typeName(TYPE_NAME)
                   .name(MODEL_NAME)
                   .detailedDescription(MODEL_DESCRIPTION)
@@ -442,6 +443,20 @@ class CertificateMetadataConverterTest {
     void shallIncludeTestCertificate() {
       assertEquals(ATHENA_REACT_ANDERSSON_TEST_INDICATED.value(),
           certificateMetadataConverter.convert(certificate, ACTION_EVALUATION).isTestCertificate()
+      );
+    }
+
+    @Test
+    void shallIncludeIsLatestMajorVersion() {
+      assertTrue(certificateMetadataConverter.convert(certificate, ACTION_EVALUATION)
+          .isLatestMajorVersion()
+      );
+    }
+
+    @Test
+    void shallIncludeIsInactiveCertificateType() {
+      assertFalse(certificateMetadataConverter.convert(certificate, ACTION_EVALUATION)
+          .isInactiveCertificateType()
       );
     }
 

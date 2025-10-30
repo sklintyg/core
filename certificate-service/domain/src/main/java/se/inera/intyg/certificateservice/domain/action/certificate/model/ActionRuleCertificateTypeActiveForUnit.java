@@ -9,8 +9,8 @@ import lombok.RequiredArgsConstructor;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
-import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessConfiguration;
-import se.inera.intyg.certificateservice.domain.unitaccess.dto.CertificateAccessUnitConfiguration;
+import se.inera.intyg.certificateservice.domain.configuration.unitaccess.dto.CertificateAccessConfiguration;
+import se.inera.intyg.certificateservice.domain.configuration.unitaccess.dto.CertificateAccessUnitConfiguration;
 
 @RequiredArgsConstructor
 public class ActionRuleCertificateTypeActiveForUnit implements ActionRule {
@@ -31,7 +31,7 @@ public class ActionRuleCertificateTypeActiveForUnit implements ActionRule {
   }
 
   public boolean evaluate(CertificateType certificateType, ActionEvaluation actionEvaluation) {
-    final var accessConfigurationForType = certificateActionConfigurationRepository.find(
+    final var accessConfigurationForType = certificateActionConfigurationRepository.findAccessConfiguration(
         certificateType
     );
 

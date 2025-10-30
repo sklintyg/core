@@ -9,10 +9,11 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7426_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7427_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7472_CERTIFICATE_MODEL;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7804_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7809_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7810_CERTIFICATE_MODEL;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.ag114certificateModelBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.ag7804certificateModelBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.fk7804certificateModelBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.SUBJECT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataStaff.AJLA_DOKTOR;
@@ -525,7 +526,7 @@ public class TestDataCertificate {
         )
         .certificateMetaData(CERTIFICATE_META_DATA);
   }
-  
+
   public static MedicalCertificate.MedicalCertificateBuilder fk7426CertificateBuilder() {
     return MedicalCertificate.builder()
         .id(CERTIFICATE_ID)
@@ -1008,7 +1009,7 @@ public class TestDataCertificate {
         .id(CERTIFICATE_ID)
         .revision(REVISION)
         .created(LocalDateTime.now(ZoneId.systemDefault()))
-        .certificateModel(FK7804_CERTIFICATE_MODEL)
+        .certificateModel(fk7804certificateModelBuilder().build())
         .xml(XML)
         .sent(SENT)
         .revoked(REVOKED)
@@ -1237,8 +1238,7 @@ public class TestDataCertificate {
         .revision(REVISION)
         .created(LocalDateTime.now(ZoneId.systemDefault()))
         .certificateModel(
-            ag7804certificateModelBuilder()
-                .build()
+            ag7804certificateModelBuilder().build()
         )
         .xml(XML)
         .externalReference(EXTERNAL_REFERENCE)
@@ -1464,7 +1464,7 @@ public class TestDataCertificate {
         .id(new CertificateId("AG114_CERTIFICATE_ID"))
         .revision(REVISION)
         .created(LocalDateTime.now(ZoneId.systemDefault()))
-        .certificateModel(TestDataCertificateModel.ag114certificateModelBuilder().build())
+        .certificateModel(ag114certificateModelBuilder().build())
         .xml(XML)
         .sent(SENT)
         .revoked(REVOKED)

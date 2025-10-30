@@ -3,10 +3,13 @@ package se.inera.intyg.certificateservice.domain.action.certificate.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.BETA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.BETA_VARDCENTRAL;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.ag7804CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.ag7804certificateModelBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ANONYMA_REACT_ATTILA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
@@ -29,13 +32,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
+import se.inera.intyg.certificateservice.domain.configuration.limitedcertificatefunctionality.dto.LimitedCertificateFunctionalityActionsConfiguration;
+import se.inera.intyg.certificateservice.domain.configuration.limitedcertificatefunctionality.dto.LimitedCertificateFunctionalityConfiguration;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateActionUpdateTest {
@@ -57,7 +62,8 @@ class CertificateActionUpdateTest {
   void setUp() {
     certificateActionUpdate = (CertificateActionUpdate) certificateActionFactory.create(
         CERTIFICATE_ACTION_SPECIFICATION);
-    certificateBuilder = MedicalCertificate.builder()
+
+    certificateBuilder = ag7804CertificateBuilder()
         .certificateMetaData(
             CertificateMetaData.builder()
                 .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
@@ -66,6 +72,7 @@ class CertificateActionUpdateTest {
                 .patient(ATHENA_REACT_ANDERSSON)
                 .build()
         );
+
     actionEvaluationBuilder = ActionEvaluation.builder()
         .user(AJLA_DOKTOR)
         .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
@@ -77,17 +84,6 @@ class CertificateActionUpdateTest {
   @Test
   void shallReturnTypeFromSpecification() {
     assertEquals(CertificateActionType.UPDATE, certificateActionUpdate.getType());
-  }
-
-  @Test
-  void shallReturnFalseIfCertificateIsEmpty() {
-    final Optional<Certificate> certificate = Optional.empty();
-    final var actionEvaluation = actionEvaluationBuilder.build();
-
-    assertFalse(
-        certificateActionUpdate.evaluate(certificate, Optional.of(actionEvaluation)),
-        () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
-    );
   }
 
   @Test
@@ -282,7 +278,7 @@ class CertificateActionUpdateTest {
     void setUp() {
       certificateActionUpdate = (CertificateActionUpdate) certificateActionFactory.create(
           CERTIFICATE_ACTION_SPECIFICATION);
-      certificateBuilder = MedicalCertificate.builder()
+      certificateBuilder = ag7804CertificateBuilder()
           .status(Status.DRAFT)
           .certificateMetaData(
               CertificateMetaData.builder()
@@ -481,5 +477,67 @@ class CertificateActionUpdateTest {
         certificateActionUpdate.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
+  }
+
+  @Nested
+  class EvaluateLimitedFunctionalityTests {
+
+    @Test
+    void shallReturnFalseIfCertificateIsNotMajorVersionWithLimitedFunctionalityConfiguration() {
+      final var inactiveConfigurations =
+          LimitedCertificateFunctionalityConfiguration.builder()
+              .certificateType("type")
+              .version(List.of("1.0"))
+              .configuration(
+                  LimitedCertificateFunctionalityActionsConfiguration.builder()
+                      .build()
+              )
+              .build();
+
+      final var actionEvaluation = actionEvaluationBuilder
+          .build();
+
+      final var certificate = certificateBuilder
+          .certificateModel(
+              ag7804certificateModelBuilder()
+                  .certificateVersions(List.of(new CertificateVersion("3.0")))
+                  .build()
+          )
+          .build();
+
+      when(
+          certificateActionConfigurationRepository.findLimitedCertificateFunctionalityConfiguration(
+              certificate.certificateModel().id()))
+          .thenReturn(inactiveConfigurations);
+
+      assertFalse(
+          certificateActionUpdate.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
+          () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+      );
+    }
+
+    @Test
+    void shallReturnTrueIfCertificateIsNotMajorVersionWithoutLimitedFunctionalityConfiguration() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .build();
+
+      final var certificate = certificateBuilder
+          .certificateModel(
+              ag7804certificateModelBuilder()
+                  .certificateVersions(List.of(new CertificateVersion("3.0")))
+                  .build()
+          )
+          .build();
+
+      when(
+          certificateActionConfigurationRepository.findLimitedCertificateFunctionalityConfiguration(
+              certificate.certificateModel().id()))
+          .thenReturn(null);
+
+      assertTrue(
+          certificateActionUpdate.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
+          () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+      );
+    }
   }
 }

@@ -834,4 +834,72 @@ class CertificateModelTest {
     assertInstanceOf(DefaultCitizenAvailableFunctionsProvider.class,
         certificateModel.citizenAvailableFunctionsProvider());
   }
+
+
+  @Nested
+  class IsLatestActiveVersionTests {
+
+    @Test
+    void shouldReturnTrueIfVersionMatches() {
+      final var certificateModel = CertificateModel.builder()
+          .id(
+              CertificateModelId.builder()
+                  .type(new CertificateType("type"))
+                  .version(new CertificateVersion("1.0"))
+                  .build()
+          )
+          .certificateVersions(List.of(new CertificateVersion("1.0")))
+          .build();
+
+      assertTrue(certificateModel.isLastestActiveVersion());
+    }
+
+    @Test
+    void shouldReturnTrueIfVersionMatchesWithMultipleMajorVersions() {
+      final var certificateModel = CertificateModel.builder()
+          .id(
+              CertificateModelId.builder()
+                  .type(new CertificateType("type"))
+                  .version(new CertificateVersion("2.0"))
+                  .build()
+          )
+          .certificateVersions(
+              List.of(new CertificateVersion("1.0"), new CertificateVersion("2.0")))
+          .build();
+
+      assertTrue(certificateModel.isLastestActiveVersion());
+    }
+
+    @Test
+    void shouldReturnTrueIfVersionMatchesWithMultipleMinorVersions() {
+      final var certificateModel = CertificateModel.builder()
+          .id(
+              CertificateModelId.builder()
+                  .type(new CertificateType("type"))
+                  .version(new CertificateVersion("1.8"))
+                  .build()
+          )
+          .certificateVersions(
+              List.of(new CertificateVersion("1.0"), new CertificateVersion("1.3"),
+                  new CertificateVersion("1.8")))
+          .build();
+
+      assertTrue(certificateModel.isLastestActiveVersion());
+    }
+
+    @Test
+    void shouldReturnFalseIfVersionDoesNotMatch() {
+      final var certificateModel = CertificateModel.builder()
+          .id(
+              CertificateModelId.builder()
+                  .type(new CertificateType("type"))
+                  .version(new CertificateVersion("1.0"))
+                  .build()
+          )
+          .certificateVersions(List.of(new CertificateVersion("2.0")))
+          .build();
+
+      assertFalse(certificateModel.isLastestActiveVersion());
+    }
+  }
 }
