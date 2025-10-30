@@ -153,7 +153,7 @@ class ListAvailableCertificateModelsDomainServiceTest {
         .allowTo(LIST_CERTIFICATE_TYPE, Optional.of(actionEvaluation));
 
     doReturn(Collections.emptyList()).when(certificateActionConfigurationRepository)
-        .find(CERTIFICATE_TYPE_1);
+        .findAccessConfiguration(CERTIFICATE_TYPE_1);
 
     final var actualCertificateModels = listAvailableCertificateModelsDomainService.getLatestVersions(
         actionEvaluation);
@@ -190,7 +190,7 @@ class ListAvailableCertificateModelsDomainServiceTest {
         .allowTo(LIST_CERTIFICATE_TYPE, Optional.of(actionEvaluation));
 
     doReturn(Collections.emptyList()).when(certificateActionConfigurationRepository)
-        .find(CERTIFICATE_TYPE_1);
+        .findAccessConfiguration(CERTIFICATE_TYPE_1);
 
     final var actualCertificateModels = listAvailableCertificateModelsDomainService.getLatestVersions(
         actionEvaluation);

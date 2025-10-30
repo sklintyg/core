@@ -1,8 +1,6 @@
 package se.inera.intyg.certificateservice.domain.action.certificate.model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.SEND;
@@ -41,14 +39,11 @@ class ActionRuleLimitedCertificateFunctionalityTest {
   }
 
   @Test
-  void shouldThrowIllegalStateExceptionWhenCertificateIsMissing() {
-    final var illegalStateException = assertThrows(IllegalStateException.class,
-        () -> actionRuleLimitedCertificateFunctionality.evaluate(Optional.empty(),
-            Optional.empty()));
+  void shouldReturnFalseIfCertificateIsMissing() {
+    final var result = actionRuleLimitedCertificateFunctionality.evaluate(Optional.empty(),
+        Optional.empty());
 
-    assertEquals(
-        "Certificate is required for evaluating LimitedCertificateFunctionality action rule",
-        illegalStateException.getMessage());
+    assertFalse(result);
   }
 
   @Test

@@ -15,9 +15,11 @@ public class ActionRuleLimitedCertificateFunctionality implements ActionRule {
   @Override
   public boolean evaluate(Optional<Certificate> certificate,
       Optional<ActionEvaluation> actionEvaluation) {
-    final var evaluatedCertificate = certificate.orElseThrow(() -> new IllegalStateException(
-        "Certificate is required for evaluating LimitedCertificateFunctionality action rule"));
-
+    if (certificate.isEmpty()) {
+      return false;
+    }
+    
+    final var evaluatedCertificate = certificate.get();
     if (evaluatedCertificate.certificateModel().isLastestActiveVersion()) {
       return true;
     }

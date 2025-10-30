@@ -2,7 +2,6 @@ package se.inera.intyg.certificateservice.domain.action.certificate.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
@@ -99,16 +98,13 @@ class CertificateActionSendTest {
   }
 
   @Test
-  void shallThrowIllegalStateExceptionIfCertificateIsEmpty() {
+  void shallReturnFalseIfCertificateIsEmpty() {
     final var actionEvaluation = actionEvaluationBuilder.build();
 
-    final var illegalStateException = assertThrows(IllegalStateException.class,
-        () -> certificateActionSend.evaluate(Optional.empty(),
-            Optional.of(actionEvaluation)));
+    final var result = certificateActionSend.evaluate(Optional.empty(),
+        Optional.of(actionEvaluation));
 
-    assertEquals(
-        "Certificate is required for evaluating LimitedCertificateFunctionality action rule",
-        illegalStateException.getMessage());
+    assertFalse(result);
   }
 
   @Test
