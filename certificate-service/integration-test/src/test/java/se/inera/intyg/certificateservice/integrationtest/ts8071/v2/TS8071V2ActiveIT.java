@@ -10,7 +10,6 @@ import static se.inera.intyg.certificateservice.integrationtest.ts8071.v2.TS8071
 import java.util.stream.Stream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.params.provider.Arguments;
@@ -75,7 +74,7 @@ public class TS8071V2ActiveIT extends ActiveCertificatesIT {
   }
 
   @Nested
-  @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION
+  @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION + " "
       + "Utökad behörighet vid djupintegration utan SVOD")
   class AccessLevelsDeepIntegration extends AccessLevelsDeepIntegrationIT {
 
@@ -326,7 +325,6 @@ public class TS8071V2ActiveIT extends ActiveCertificatesIT {
 
   @Nested
   @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION + " " + "Makulera")
-  @Disabled("Temporary disable this until we have a solution for resolving flakyness with MessageListener assertions")
   class RevokeCertificate extends RevokeCertificateIT {
 
     @Override
@@ -337,7 +335,6 @@ public class TS8071V2ActiveIT extends ActiveCertificatesIT {
 
   @Nested
   @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION + " " + "Skicka")
-  @Disabled("Temporary disable this until we have a solution for resolving flakyness with MessageListener assertions")
   class SendCertificate extends SendCertificateIT {
 
     @Override
@@ -358,7 +355,6 @@ public class TS8071V2ActiveIT extends ActiveCertificatesIT {
 
   @Nested
   @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION + " " + "Signera")
-  @Disabled("Temporary disable this until we have a solution for resolving flakyness with MessageListener assertions")
   class SignCertificate extends SignCertificateIT {
 
     @Override

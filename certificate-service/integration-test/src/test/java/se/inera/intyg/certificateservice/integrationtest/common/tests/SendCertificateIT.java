@@ -103,11 +103,16 @@ public abstract class SendCertificateIT extends BaseIntegrationIT {
         certificateId(testCertificates)
     );
 
-    final var message = MessageListenerUtil.awaitMessage(Duration.ofSeconds(5));
+    final var expectedCertificateId = certificateId(testCertificates);
+
+    final var message = MessageListenerUtil.awaitByCertificateId(Duration.ofSeconds(10),
+        expectedCertificateId);
 
     assertAll(
+        () -> assertNotNull(message,
+            "Expected to receive a message for certificateId: " + expectedCertificateId),
         () -> assertEquals(
-            certificateId(testCertificates), message.getStringProperty("certificateId")
+            expectedCertificateId, message.getStringProperty("certificateId")
         ),
         () -> assertEquals(
             "certificate-sent", message.getStringProperty("eventType")

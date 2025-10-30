@@ -25,7 +25,6 @@ import se.inera.intyg.certificateservice.integrationtest.common.util.MessageList
 
 public abstract class RevokeCertificateIT extends BaseIntegrationIT {
 
-
   @Test
   @DisplayName("Om intyget är utfärdat på samma mottagning skall det gå att makulera")
   void shallSuccessfullyRevokeIfUnitIsSubUnitAndIssuedOnSameSubUnit() {
@@ -91,16 +90,20 @@ public abstract class RevokeCertificateIT extends BaseIntegrationIT {
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
+    final var expectedCertificateId = certificateId(testCertificates);
+
     api().revokeCertificate(
         defaultRevokeCertificateRequest(),
-        certificateId(testCertificates)
+        expectedCertificateId
     );
 
-    final var message = MessageListenerUtil.awaitMessage(Duration.ofSeconds(5));
+    final var message = MessageListenerUtil.awaitByCertificateId(Duration.ofSeconds(10),
+        expectedCertificateId);
 
     assertAll(
         () -> assertEquals(
-            certificateId(testCertificates), message.getStringProperty("certificateId")
+            expectedCertificateId, message.getStringProperty("certificateId"),
+            "Expected to receive a message for certificateId: " + expectedCertificateId
         ),
         () -> assertEquals(
             "certificate-revoked", message.getStringProperty("eventType")
