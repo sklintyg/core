@@ -149,7 +149,7 @@ having common elements.
 
 1. In `VersionLockTest.java`, add a test for the previous version.
 2. Run the test - it will fail and generate a snapshot in
-   `src/test/resources/certificate-snapshots/`
+   `src/test/resources/certificate-model-snapshots/`
 3. Review the generated JSON file to ensure it looks correct
 4. Run the test again - it should now pass
 

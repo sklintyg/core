@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 
 public class SnapshotTestUtil {
 
-  private static final String SNAPSHOT_RESOURCE_DIR = "certificate-snapshots";
+  private static final String SNAPSHOT_RESOURCE_DIR = "certificate-model-snapshots";
 
   private SnapshotTestUtil() {
     throw new IllegalStateException("Utility class");

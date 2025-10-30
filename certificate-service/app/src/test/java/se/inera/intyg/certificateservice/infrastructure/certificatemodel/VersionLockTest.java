@@ -34,14 +34,14 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.
  *   <li>Each certificate version is serialized to JSON and compared against a stored snapshot</li>
  *   <li>If the snapshot doesn't exist, the test will fail and prompt you to create it</li>
  *   <li>If the model has changed, the test will show the differences and fail</li>
- *   <li>Snapshots are stored in src/test/resources/certificate-snapshots/</li>
+ *   <li>Snapshots are stored in src/test/resources/certificate-model-snapshots/</li>
  * </ul>
  * <p>
  * <b>Adding a new version lock:</b>
  * <ol>
  *   <li>Inject the CertificateModelFactory for the version you want to lock</li>
  *   <li>Add an entry to the {@code lockedVersions()} method with the factory and snapshot filename</li>
- *   <li>Run the test - it will generate a snapshot in src/test/resources/certificate-snapshots/</li>
+ *   <li>Run the test - it will generate a snapshot in src/test/resources/certificate-model-snapshots/</li>
  *   <li>Review the generated JSON file to ensure it looks correct</li>
  *   <li>Run the test again - it should now pass</li>
  * </ol>
@@ -74,7 +74,7 @@ class VersionLockTest {
    * <ol>
    *   <li>Serializes the certificate model to JSON</li>
    *   <li>Compares it with the stored snapshot file</li>
-   *   <li>If no snapshot exists, generates one in src/test/resources/certificate-snapshots/ and fails</li>
+   *   <li>If no snapshot exists, generates one in src/test/resources/certificate-model-snapshots/ and fails</li>
    *   <li>If snapshot exists but differs, shows the difference and fails</li>
    * </ol>
    *
