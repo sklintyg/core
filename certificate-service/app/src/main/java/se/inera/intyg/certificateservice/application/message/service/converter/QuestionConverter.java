@@ -35,7 +35,11 @@ public class QuestionConverter {
                 ? message.authoredStaff().name().fullName()
                 : message.author().name()
         )
-        .subject(message.subject().subject())
+        .subject(
+            message.authoredStaff() != null
+                ? message.subject().subject()
+                : message.type().displayName() + " - " + message.subject().subject()
+        )
         .sent(message.sent())
         .isHandled(message.status().equals(MessageStatus.HANDLED))
         .isForwarded(message.forwarded().value())
