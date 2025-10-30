@@ -20,7 +20,7 @@ public class TS8071CitizenAvailableFunctionsProvider implements CitizenAvailable
 
   public static final String OLD_VERSION_LIMITED_FUNCTIONALITY_INFO_TITLE = "Detta intyg är av en äldre version";
   private static final String OLD_VERSION_LIMITED_FUNCTIONALITY_INFO_NAME = "Presentera informationsruta";
-  public static final String OLD_VERSION_LIMITED_FUNCTIONALITY_INFO_BODY = "Intyget kan inte längre skickas digitalt till mottagaren";
+  public static final String OLD_VERSION_LIMITED_FUNCTIONALITY_INFO_BODY = "Intyget kan inte längre skickas digitalt till mottagaren.";
   public static final String AVAILABLE_FUNCTION_PRINT_NAME = "Intyget kan skrivas ut";
   private static final String SEND_CERTIFICATE_NAME = "Skicka intyg";
   private static final String SEND_CERTIFICATE_TITLE = "Skicka intyg";
