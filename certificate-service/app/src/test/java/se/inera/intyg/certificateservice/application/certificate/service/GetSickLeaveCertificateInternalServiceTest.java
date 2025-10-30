@@ -71,4 +71,22 @@ class GetSickLeaveCertificateInternalServiceTest {
 
     assertEquals(expectedSickLeaveDTO, response.getSickLeaveCertificate());
   }
+
+  @Test
+  void shallReturnGetSickLeaveCertificateInternalResponseWithSickLeaveAndIgnoreMddelRulesIsTrue() {
+    final var sickLeaveCertificate = SickLeaveCertificate.builder().build();
+    final var expectedSickLeaveDTO = SickLeaveCertificateDTO.builder().build();
+
+    when(getSickLeaveCertificateDomainService.get(new CertificateId(CERTIFICATE_ID), true))
+        .thenReturn(Optional.of(sickLeaveCertificate));
+    when(sickLeaveConverter.toSickLeaveCertificate(sickLeaveCertificate))
+        .thenReturn(expectedSickLeaveDTO);
+
+    final var response = getSickLeaveCertificateInternalService.get(
+        CERTIFICATE_ID,
+        true
+    );
+
+    assertEquals(expectedSickLeaveDTO, response.getSickLeaveCertificate());
+  }
 }

@@ -13,10 +13,10 @@ public class GetSickLeaveCertificateDomainService {
   private final CertificateRepository certificateRepository;
 
   public Optional<SickLeaveCertificate> get(CertificateId certificateId,
-      boolean ignoreModuleRules) {
+      boolean ignoreModelRules) {
     final Certificate certificate;
 
-    if (ignoreModuleRules) {
+    if (ignoreModelRules) {
       try {
         certificate = certificateRepository.getById(certificateId);
       } catch (Exception e) {
@@ -31,7 +31,7 @@ public class GetSickLeaveCertificateDomainService {
     }
 
     final var sickLeave = certificate.certificateModel().sickLeaveProvider()
-        .build(certificate, ignoreModuleRules);
+        .build(certificate, ignoreModelRules);
 
     if (sickLeave.isPresent() && !sickLeave.get().partOfSickLeaveChain()) {
       return Optional.empty();

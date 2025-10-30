@@ -160,4 +160,80 @@ class FK7804SickLeaveProviderTest {
     final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE, false);
     assertEquals(expectedEmployment, sickLeaveCertificate.orElseThrow().employment());
   }
+
+  @Test
+  void shallBuildSickLeaveCertificateWithoutIgnoredModelRules() {
+    final var result = provider.buildSickLeaveCertificate(FK7804_CERTIFICATE, false);
+
+    final var sickLeaveCertificate = result.orElseThrow();
+
+    assertTrue(result.isPresent());
+    assertEquals(FK7804_CERTIFICATE.id(), sickLeaveCertificate.id());
+    assertEquals(FK7804_CERTIFICATE.certificateModel().type(), sickLeaveCertificate.type());
+    assertEquals(FK7804_CERTIFICATE.certificateMetaData().issuer().hsaId(),
+        sickLeaveCertificate.signingDoctorId());
+    assertEquals(FK7804_CERTIFICATE.certificateMetaData().issuer().name(),
+        sickLeaveCertificate.signingDoctorName());
+    assertEquals(FK7804_CERTIFICATE.signed(), sickLeaveCertificate.signingDateTime());
+    assertEquals(FK7804_CERTIFICATE.certificateMetaData().careUnit().hsaId(),
+        sickLeaveCertificate.careUnitId());
+    assertEquals(FK7804_CERTIFICATE.certificateMetaData().careUnit().name(),
+        sickLeaveCertificate.careUnitName());
+    assertEquals(FK7804_CERTIFICATE.certificateMetaData().careProvider().hsaId(),
+        sickLeaveCertificate.careGiverId());
+    assertEquals(FK7804_CERTIFICATE.certificateMetaData().patient().id(),
+        sickLeaveCertificate.civicRegistrationNumber());
+    assertEquals(FK7804_CERTIFICATE.certificateMetaData().patient().name(),
+        sickLeaveCertificate.patientName());
+    assertEquals(FK7804_CERTIFICATE.revoked(), sickLeaveCertificate.deleted());
+    assertTrue(sickLeaveCertificate.partOfSickLeaveChain());
+
+    assertEquals("A013", sickLeaveCertificate.diagnoseCode().code());
+    assertNull(sickLeaveCertificate.biDiagnoseCode1());
+    assertNull(sickLeaveCertificate.biDiagnoseCode2());
+
+    assertEquals(1, sickLeaveCertificate.workCapacities().size());
+    final var workCapacity = sickLeaveCertificate.workCapacities().getFirst();
+    assertEquals("EN_FJARDEDEL", workCapacity.dateRangeId().value());
+    assertEquals(LocalDate.now(), workCapacity.from());
+    assertEquals(LocalDate.now().plusDays(30), workCapacity.to());
+
+    assertEquals(1, sickLeaveCertificate.employment().size());
+    assertEquals("NUVARANDE_ARBETE", sickLeaveCertificate.employment().getFirst().code());
+  }
+
+  @Test
+  void shallBuildSickLeaveCertificateWithIgnoredModelRules() {
+    final var result = provider.buildSickLeaveCertificate(FK7804_CERTIFICATE, true);
+
+    final var sickLeaveCertificate = result.orElseThrow();
+
+    assertTrue(result.isPresent());
+    assertEquals(FK7804_CERTIFICATE.id(), sickLeaveCertificate.id());
+    assertEquals(FK7804_CERTIFICATE.certificateModel().type(), sickLeaveCertificate.type());
+    assertEquals(FK7804_CERTIFICATE.certificateMetaData().issuer().hsaId(),
+        sickLeaveCertificate.signingDoctorId());
+    assertEquals(FK7804_CERTIFICATE.certificateMetaData().issuer().name(),
+        sickLeaveCertificate.signingDoctorName());
+    assertEquals(FK7804_CERTIFICATE.signed(), sickLeaveCertificate.signingDateTime());
+    assertEquals(FK7804_CERTIFICATE.certificateMetaData().careUnit().hsaId(),
+        sickLeaveCertificate.careUnitId());
+    assertEquals(FK7804_CERTIFICATE.certificateMetaData().careUnit().name(),
+        sickLeaveCertificate.careUnitName());
+    assertEquals(FK7804_CERTIFICATE.certificateMetaData().careProvider().hsaId(),
+        sickLeaveCertificate.careGiverId());
+    assertEquals(FK7804_CERTIFICATE.certificateMetaData().patient().id(),
+        sickLeaveCertificate.civicRegistrationNumber());
+    assertEquals(FK7804_CERTIFICATE.certificateMetaData().patient().name(),
+        sickLeaveCertificate.patientName());
+    assertEquals(FK7804_CERTIFICATE.revoked(), sickLeaveCertificate.deleted());
+    assertTrue(sickLeaveCertificate.partOfSickLeaveChain());
+
+    assertEquals("A013", sickLeaveCertificate.diagnoseCode().code());
+    assertNull(sickLeaveCertificate.biDiagnoseCode1());
+    assertNull(sickLeaveCertificate.biDiagnoseCode2());
+
+    assertNull(sickLeaveCertificate.workCapacities());
+    assertNull(sickLeaveCertificate.employment());
+  }
 }
