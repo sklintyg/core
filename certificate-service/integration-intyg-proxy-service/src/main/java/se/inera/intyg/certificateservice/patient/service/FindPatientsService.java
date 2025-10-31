@@ -8,6 +8,7 @@ import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 import se.inera.intyg.certificateservice.patient.converter.PatientConverter;
 import se.inera.intyg.certificateservice.patient.dto.PersonResponseDTO;
 import se.inera.intyg.certificateservice.patient.dto.PersonsRequestDTO;
+import se.inera.intyg.certificateservice.patient.dto.StatusDTOType;
 import se.inera.intyg.certificateservice.patient.integration.IPSIntegrationService;
 
 @Service
@@ -29,6 +30,7 @@ public class FindPatientsService {
     );
 
     return personResponse.getPersons().stream()
+        .filter(response -> response.getStatus().equals(StatusDTOType.FOUND))
         .map(PersonResponseDTO::getPerson)
         .map(patientConverter::convert)
         .toList();
