@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.domain.action.certificate.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7210_CERTIFICATE_MODEL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATLAS_REACT_ABRAHAMSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.AJLA_DOKTOR;
@@ -120,6 +121,24 @@ class ActionRulePatientAliveTest {
             + " Det krävs särskilda rättigheter eller en specifik befattning"
             + " för att hantera avlidna patienter.",
         actionRulePatientAlive.getReasonForPermissionDenied(Optional.empty())
+    );
+  }
+
+  @Test
+  void shallReturnErrorMessageWithCertificate() {
+
+    final var certificate = MedicalCertificate.builder()
+        .certificateMetaData(CertificateMetaData.builder()
+            .patient(ATLAS_REACT_ABRAHAMSSON)
+            .build())
+        .certificateModel(FK7210_CERTIFICATE_MODEL)
+        .build();
+
+    assertEquals(
+        String.format("Cannot issue intyg type %s for deceased patient %s",
+            certificate.certificateModel().type().displayName(),
+            certificate.certificateMetaData().patient().id().idWithDash()),
+        actionRulePatientAlive.getReasonForPermissionDenied(Optional.of(certificate))
     );
   }
 }
