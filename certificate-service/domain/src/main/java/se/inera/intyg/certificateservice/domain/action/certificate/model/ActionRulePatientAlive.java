@@ -27,8 +27,13 @@ public class ActionRulePatientAlive implements ActionRule {
   }
 
   @Override
-  public String getReasonForPermissionDenied() {
   public String getReasonForPermissionDenied(Optional<Certificate> certificate) {
+    if (certificateHasPatient(certificate) && certificate.isPresent()) {
+      return String.format("Cannot issue intyg type %s for deceased patient %s",
+          certificate.get().certificateModel().type().displayName(),
+          certificate.get().certificateMetaData().patient().id().idWithDash());
+    }
+
     return "Du saknar behörighet för den begärda åtgärden."
         + " Det krävs särskilda rättigheter eller en specifik befattning"
         + " för att hantera avlidna patienter.";
