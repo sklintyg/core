@@ -1,25 +1,40 @@
 package se.inera.intyg.certificateservice.patient.integration;
 
+import static se.inera.intyg.certificateservice.logging.MdcHelper.LOG_SESSION_ID_HEADER;
+import static se.inera.intyg.certificateservice.logging.MdcHelper.LOG_TRACE_ID_HEADER;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.SESSION_ID_KEY;
+import static se.inera.intyg.certificateservice.logging.MdcLogConstants.TRACE_ID_KEY;
+
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+import se.inera.intyg.certificateservice.patient.dto.PersonsRequestDTO;
+import se.inera.intyg.certificateservice.patient.dto.PersonsResponseDTO;
 
 @Service
 public class IPSIntegrationService {
 
   private final RestClient ipsRestClient;
 
-  @Value("${integration.intygproxyservice.base.url}")
-  private String ipsBaseUrl;
-
-  @Value("${integration.intygproxyservice.person}")
-  private String ipsPersonEndpoint;
-
   @Value("${integration.intygproxyservice.persons}")
   private String ipsPersonsEndpoint;
 
   public IPSIntegrationService(@Qualifier("ipsRestClient") RestClient ipsRestClient) {
     this.ipsRestClient = ipsRestClient;
+  }
+
+  public PersonsResponseDTO findPersons(PersonsRequestDTO request) {
+    return ipsRestClient
+        .post()
+        .uri(ipsPersonsEndpoint)
+        .body(request)
+        .header(LOG_TRACE_ID_HEADER, MDC.get(TRACE_ID_KEY))
+        .header(LOG_SESSION_ID_HEADER, MDC.get(SESSION_ID_KEY))
+        .contentType(MediaType.APPLICATION_JSON)
+        .retrieve()
+        .body(PersonsResponseDTO.class);
   }
 }

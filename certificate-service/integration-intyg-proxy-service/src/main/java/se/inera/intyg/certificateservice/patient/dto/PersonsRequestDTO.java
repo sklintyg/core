@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PersonsRequest {
+public class PersonsRequestDTO {
 
   private List<String> personIds;
 }

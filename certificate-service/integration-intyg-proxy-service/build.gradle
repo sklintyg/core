@@ -12,7 +12,7 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    implementation project(':app')
+    implementation project(':domain')
     implementation project(':logging')
 
     compileOnly 'org.projectlombok:lombok'
