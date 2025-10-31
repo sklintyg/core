@@ -108,7 +108,7 @@ class ActionRuleChildRelationMatchTest {
 
     assertEquals(
         "Du saknar behörighet för den begärda åtgärden eftersom intyget saknar utkast med relation med typ: [REPLACE]",
-        actionRuleChildRelation.getReasonForPermissionDenied()
+        actionRuleChildRelation.getReasonForPermissionDenied(Optional.empty())
     );
   }
 }

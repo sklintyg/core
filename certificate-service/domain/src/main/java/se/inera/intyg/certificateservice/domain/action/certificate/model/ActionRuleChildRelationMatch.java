@@ -29,7 +29,7 @@ public class ActionRuleChildRelationMatch implements ActionRule {
   }
 
   @Override
-  public String getReasonForPermissionDenied() {
+  public String getReasonForPermissionDenied(Optional<Certificate> certificate) {
     return "Du saknar behörighet för den begärda åtgärden eftersom intyget saknar utkast med relation med typ: %s"
         .formatted(relationTypes);
   }

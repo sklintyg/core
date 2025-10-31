@@ -28,7 +28,7 @@ public class ActionRuleBlockTestIndicatedPerson implements ActionRule {
   }
 
   @Override
-  public String getReasonForPermissionDenied() {
+  public String getReasonForPermissionDenied(Optional<Certificate> certificate) {
     return "Åtgärden kan inte utföras för testpersoner.";
   }
 

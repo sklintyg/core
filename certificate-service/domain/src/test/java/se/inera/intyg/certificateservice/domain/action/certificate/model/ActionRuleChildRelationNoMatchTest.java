@@ -98,7 +98,7 @@ class ActionRuleChildRelationNoMatchTest {
 
     assertEquals(
         "Du saknar behörighet för den begärda åtgärden eftersom intyget redan har relation med typ: [REPLACE]",
-        actionRuleChildRelation.getReasonForPermissionDenied()
+        actionRuleChildRelation.getReasonForPermissionDenied(Optional.empty())
     );
   }
 }

@@ -21,7 +21,7 @@ public class ActionRuleParentRelationMatch implements ActionRule {
   }
 
   @Override
-  public String getReasonForPermissionDenied() {
+  public String getReasonForPermissionDenied(Optional<Certificate> certificate) {
     return "Du saknar behörighet för den begärda åtgärden eftersom intyget inte har en förälder med typ: %s"
         .formatted(types);
   }

@@ -119,7 +119,7 @@ class ActionRulePatientAliveTest {
         "Du saknar behörighet för den begärda åtgärden."
             + " Det krävs särskilda rättigheter eller en specifik befattning"
             + " för att hantera avlidna patienter.",
-        actionRulePatientAlive.getReasonForPermissionDenied()
+        actionRulePatientAlive.getReasonForPermissionDenied(Optional.empty())
     );
   }
 }

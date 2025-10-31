@@ -123,7 +123,7 @@ class ActionRuleTestIndicatedPersonBlockTest {
   void shallReturnErrorMessage() {
     assertEquals(
         "Åtgärden kan inte utföras för testpersoner.",
-        actionRuleBlockTestIndicatedPerson.getReasonForPermissionDenied()
+        actionRuleBlockTestIndicatedPerson.getReasonForPermissionDenied(Optional.empty())
     );
   }
 

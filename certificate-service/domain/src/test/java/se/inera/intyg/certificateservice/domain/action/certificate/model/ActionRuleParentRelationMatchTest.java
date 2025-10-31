@@ -79,7 +79,7 @@ class ActionRuleParentRelationMatchTest {
 
     assertEquals(
         "Du saknar behörighet för den begärda åtgärden eftersom intyget inte har en förälder med typ: [REPLACE]",
-        actionRuleParentRelation.getReasonForPermissionDenied()
+        actionRuleParentRelation.getReasonForPermissionDenied(Optional.empty())
     );
   }
 }

@@ -22,7 +22,7 @@ public class CertificateActionReadyForSign implements CertificateAction {
       Optional<ActionEvaluation> actionEvaluation) {
     return actionRules.stream()
         .filter(value -> !value.evaluate(certificate, actionEvaluation))
-        .map(ActionRule::getReasonForPermissionDenied)
+        .map(actionRule -> actionRule.getReasonForPermissionDenied(certificate))
         .toList();
   }
 

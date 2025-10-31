@@ -7,7 +7,7 @@ public interface ActionRule {
 
   boolean evaluate(Optional<Certificate> certificate, Optional<ActionEvaluation> actionEvaluation);
 
-  default String getReasonForPermissionDenied() {
+  default String getReasonForPermissionDenied(Optional<Certificate> certificate) {
     return "Du saknar behörighet för den begärda åtgärden."
         + " För att utföra denna uppgift krävs särskilda rättigheter eller en specifik befattning.";
   }
