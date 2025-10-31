@@ -7,7 +7,6 @@ import static se.inera.intyg.certificateservice.logging.MdcLogConstants.TRACE_ID
 
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -19,9 +18,6 @@ public class IPSIntegrationService {
 
   private final RestClient ipsRestClient;
 
-  @Value("${integration.intygproxyservice.persons}")
-  private String ipsPersonsEndpoint;
-
   public IPSIntegrationService(@Qualifier("ipsRestClient") RestClient ipsRestClient) {
     this.ipsRestClient = ipsRestClient;
   }
@@ -29,7 +25,7 @@ public class IPSIntegrationService {
   public PersonsResponseDTO findPersons(PersonsRequestDTO request) {
     return ipsRestClient
         .post()
-        .uri(ipsPersonsEndpoint)
+        .uri("/api/v1/persons")
         .body(request)
         .header(LOG_TRACE_ID_HEADER, MDC.get(TRACE_ID_KEY))
         .header(LOG_SESSION_ID_HEADER, MDC.get(SESSION_ID_KEY))

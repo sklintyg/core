@@ -5,9 +5,9 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import java.util.List;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.certificateservice.patient.dto.PersonsResponseDTO.PersonsResponseBuilder;
+import se.inera.intyg.certificateservice.patient.dto.PersonsResponseDTO.PersonsResponseDTOBuilder;
 
-@JsonDeserialize(builder = PersonsResponseBuilder.class)
+@JsonDeserialize(builder = PersonsResponseDTOBuilder.class)
 @Value
 @Builder
 public class PersonsResponseDTO {
@@ -15,7 +15,7 @@ public class PersonsResponseDTO {
   List<PersonResponseDTO> persons;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class PersonsResponseBuilder {
+  public static class PersonsResponseDTOBuilder {
 
   }
 }

@@ -87,8 +87,8 @@ import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertifica
 @Configuration
 public class AppConfig {
 
-  @Value("${integration.intygproxyservice.baseurl}")
-  private String intygProxyServiceBaseUrl;
+  @Value("${integration.intygproxyservice.address}")
+  private String intygProxyServiceAddress;
 
   @Bean
   public CreateCertificateDomainService createCertificateDomainService(
@@ -478,7 +478,7 @@ public class AppConfig {
 
   @Bean
   public RestClient ipsRestClient() {
-    return RestClient.create(intygProxyServiceBaseUrl);
+    return RestClient.create(intygProxyServiceAddress);
   }
 
   @Bean

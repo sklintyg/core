@@ -18,7 +18,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.MDC;
 import org.springframework.http.MediaType;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.client.RestClient;
 import se.inera.intyg.certificateservice.patient.dto.PersonDTO;
 import se.inera.intyg.certificateservice.patient.dto.PersonResponseDTO;
@@ -29,7 +28,7 @@ import se.inera.intyg.certificateservice.patient.dto.StatusDTOType;
 @ExtendWith(MockitoExtension.class)
 class IPSIntegrationServiceTest {
 
-  private static final String ENDPOINT = "endpoint";
+  private static final String ENDPOINT = "/api/v1/persons";
   private static final String TRACE_ID = "traceId";
   private static final String SESSION_ID = "sessionId";
   private final RestClient.RequestBodyUriSpec requestBodyUriSpec = mock(
@@ -44,7 +43,6 @@ class IPSIntegrationServiceTest {
 
   @BeforeEach
   void setUp() {
-    ReflectionTestUtils.setField(ipsIntegrationService, "ipsPersonsEndpoint", ENDPOINT);
     MDC.put(TRACE_ID_KEY, TRACE_ID);
     MDC.put(SESSION_ID_KEY, SESSION_ID);
   }
