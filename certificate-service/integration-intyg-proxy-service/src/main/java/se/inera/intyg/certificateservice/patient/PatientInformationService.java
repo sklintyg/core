@@ -1,12 +1,12 @@
-package se.inera.intyg.certificateservice.certificate;
+package se.inera.intyg.certificateservice.patient;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.application.common.dto.PatientDTO;
 import se.inera.intyg.certificateservice.application.common.dto.PersonIdDTO;
-import se.inera.intyg.certificateservice.certificate.integration.IPSIntegrationService;
 import se.inera.intyg.certificateservice.infrastructure.patient.PatientInformationProvider;
+import se.inera.intyg.certificateservice.patient.integration.IPSIntegrationService;
 
 @Service
 @RequiredArgsConstructor

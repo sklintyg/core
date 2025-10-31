@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.certificate.dto;
+package se.inera.intyg.certificateservice.patient.dto;
 
 import java.util.List;
 import lombok.AllArgsConstructor;

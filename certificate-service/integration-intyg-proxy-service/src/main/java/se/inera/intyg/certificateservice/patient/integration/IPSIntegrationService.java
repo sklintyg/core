@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.certificate.integration;
+package se.inera.intyg.certificateservice.patient.integration;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +18,7 @@ public class IPSIntegrationService {
 
   @Value("${integration.intygproxyservice.persons}")
   private String ipsPersonsEndpoint;
-  
+
   public IPSIntegrationService(@Qualifier("ipsRestClient") RestClient ipsRestClient) {
     this.ipsRestClient = ipsRestClient;
   }

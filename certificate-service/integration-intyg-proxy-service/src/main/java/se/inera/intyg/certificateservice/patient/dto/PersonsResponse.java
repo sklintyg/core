@@ -1,11 +1,11 @@
-package se.inera.intyg.certificateservice.certificate.dto;
+package se.inera.intyg.certificateservice.patient.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import java.util.List;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.certificateservice.certificate.dto.PersonsResponse.PersonsResponseBuilder;
+import se.inera.intyg.certificateservice.patient.dto.PersonsResponse.PersonsResponseBuilder;
 
 @JsonDeserialize(builder = PersonsResponseBuilder.class)
 @Value
