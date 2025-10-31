@@ -37,7 +37,7 @@ public class FK7804SickLeaveProvider implements SickLeaveProvider {
     return buildSickLeaveCertificate(certificate, ignoreModuleRules);
   }
 
-  public Optional<SickLeaveCertificate> buildSickLeaveCertificate(Certificate certificate,
+  private Optional<SickLeaveCertificate> buildSickLeaveCertificate(Certificate certificate,
       boolean ignoreModelRules) {
 
     final var metadata = certificate.certificateMetaData();

@@ -165,7 +165,7 @@ class FK7804SickLeaveProviderTest {
 
   @Test
   void shallBuildSickLeaveCertificateWithoutIgnoredModelRules() {
-    final var result = provider.buildSickLeaveCertificate(FK7804_CERTIFICATE, false);
+    final var result = provider.build(FK7804_CERTIFICATE, false);
 
     final var sickLeaveCertificate = result.orElseThrow();
 
@@ -206,7 +206,7 @@ class FK7804SickLeaveProviderTest {
 
   @Test
   void shallBuildSickLeaveCertificateWithIgnoredModelRules() {
-    final var result = provider.buildSickLeaveCertificate(FK7804_CERTIFICATE, true);
+    final var result = provider.build(FK7804_CERTIFICATE, true);
 
     final var sickLeaveCertificate = result.orElseThrow();
 
