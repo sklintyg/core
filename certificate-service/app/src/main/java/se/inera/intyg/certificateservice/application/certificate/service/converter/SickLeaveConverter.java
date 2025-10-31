@@ -65,14 +65,17 @@ public class SickLeaveConverter {
       return null;
     }
 
-    final var workCapacities = sickLeaveCertificate.workCapacities().stream()
-        .map(this::mapDateRangeToWorkCapacity)
-        .collect(Collectors.toList());
+    final var workCapacities =
+        sickLeaveCertificate.workCapacities()
+            .stream()
+            .map(this::mapDateRangeToWorkCapacity)
+            .collect(Collectors.toList());
 
-    final var employments = sickLeaveCertificate.employment().stream()
-        .map(ElementValueCode::code)
-        .filter(code -> code != null && !code.isBlank())
-        .collect(Collectors.joining(","));
+    final var employments =
+        sickLeaveCertificate.employment().stream()
+            .map(ElementValueCode::code)
+            .filter(code -> code != null && !code.isBlank())
+            .collect(Collectors.joining(","));
 
     return SickLeaveCertificateDTO.builder()
         .id(sickLeaveCertificate.id().id())
@@ -100,6 +103,7 @@ public class SickLeaveConverter {
         .deleted(sickLeaveCertificate.deleted() != null)
         .sjukfallCertificateWorkCapacity(workCapacities)
         .testCertificate(false)
+        .extendsCertificateId(sickLeaveCertificate.extendsCertificateId())
         .build();
   }
 

@@ -21,6 +21,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.ExportInter
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetSickLeaveCertificateInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetSickLeaveCertificateInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.LockDraftsRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.LockDraftsResponse;
@@ -125,15 +126,37 @@ class CertificateInternalApiControllerTest {
   }
 
   @Test
-  void shallReturnGetSickLeaveCertificateResponse() {
+  void shallReturnGetSickLeaveCertificateResponseIgnoreModelRulesIsFalse() {
+    final var request = GetSickLeaveCertificateInternalRequest.builder()
+        .ignoreModelRules(false)
+        .build();
     final var expectedResult = GetSickLeaveCertificateInternalResponse.builder()
         .sickLeaveCertificate(SickLeaveCertificateDTO.builder().build())
         .build();
 
-    doReturn(expectedResult).when(getSickLeaveCertificateInternalService).get(CERTIFICATE_ID);
+    doReturn(expectedResult).when(getSickLeaveCertificateInternalService)
+        .get(CERTIFICATE_ID, false);
 
     final var actualResult = certificateInternalApiController.getSickLeaveCertificate(
-        CERTIFICATE_ID);
+        CERTIFICATE_ID, request);
+
+    assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  void shallReturnGetSickLeaveCertificateResponseIgnoreModelRulesIsTrue() {
+    final var request = GetSickLeaveCertificateInternalRequest.builder()
+        .ignoreModelRules(true)
+        .build();
+    final var expectedResult = GetSickLeaveCertificateInternalResponse.builder()
+        .sickLeaveCertificate(SickLeaveCertificateDTO.builder().build())
+        .build();
+
+    doReturn(expectedResult).when(getSickLeaveCertificateInternalService)
+        .get(CERTIFICATE_ID, true);
+
+    final var actualResult = certificateInternalApiController.getSickLeaveCertificate(
+        CERTIFICATE_ID, request);
 
     assertEquals(expectedResult, actualResult);
   }

@@ -30,6 +30,7 @@ public class SickLeaveCertificateDTO {
   Boolean deleted;
   List<SickLeaveCertificateWorkCapacityDTO> sjukfallCertificateWorkCapacity;
   boolean testCertificate;
+  String extendsCertificateId;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class SickLeaveCertificateDTOBuilder {

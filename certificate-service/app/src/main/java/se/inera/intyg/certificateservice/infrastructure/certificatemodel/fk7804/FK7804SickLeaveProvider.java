@@ -6,6 +6,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSysselsattning.QUESTION_SYSSELSATTNING_ID;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
@@ -14,13 +15,14 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCo
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
+import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.SickLeaveCertificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.SickLeaveProvider;
 
 public class FK7804SickLeaveProvider implements SickLeaveProvider {
 
   @Override
-  public Optional<SickLeaveCertificate> build(Certificate certificate) {
+  public Optional<SickLeaveCertificate> build(Certificate certificate, boolean ignoreModuleRules) {
     final var isNotSickLeaveCertificate = certificate.elementData().stream()
         .filter(elementData -> elementData.id().equals(QUESTION_SMITTBARARPENNING_ID))
         .findFirst()
@@ -29,9 +31,14 @@ public class FK7804SickLeaveProvider implements SickLeaveProvider {
         .map(ElementValueBoolean::value)
         .orElse(false);
 
-    if (isNotSickLeaveCertificate) {
+    if (isNotSickLeaveCertificate && !ignoreModuleRules) {
       return Optional.empty();
     }
+    return buildSickLeaveCertificate(certificate, ignoreModuleRules);
+  }
+
+  private Optional<SickLeaveCertificate> buildSickLeaveCertificate(Certificate certificate,
+      boolean ignoreModelRules) {
 
     final var metadata = certificate.certificateMetaData();
     return Optional.of(
@@ -45,7 +52,16 @@ public class FK7804SickLeaveProvider implements SickLeaveProvider {
             .civicRegistrationNumber(metadata.patient().id())
             .signingDoctorName(metadata.issuer().name())
             .patientName(metadata.patient().name())
-            .diagnoseCode(getElementValueDiagnoses(certificate).getFirst())
+            .diagnoseCode(
+                getElementValueDiagnoses(certificate).stream()
+                    .findFirst()
+                    .orElseGet(() -> {
+                      if (ignoreModelRules) {
+                        return null;
+                      }
+                      throw new NoSuchElementException();
+                    })
+            )
             .biDiagnoseCode1(
                 getElementValueDiagnoses(certificate).size() > 1
                     ? getElementValueDiagnoses(certificate).get(1)
@@ -68,7 +84,12 @@ public class FK7804SickLeaveProvider implements SickLeaveProvider {
                     .map(ElementData::value)
                     .map(ElementValueDateRangeList.class::cast)
                     .map(ElementValueDateRangeList::dateRangeList)
-                    .orElseThrow()
+                    .orElseGet(() -> {
+                      if (ignoreModelRules) {
+                        return List.of();
+                      }
+                      throw new NoSuchElementException();
+                    })
             )
             .employment(
                 certificate.elementData().stream()
@@ -78,10 +99,22 @@ public class FK7804SickLeaveProvider implements SickLeaveProvider {
                     .map(ElementData::value)
                     .map(ElementValueCodeList.class::cast)
                     .map(ElementValueCodeList::list)
-                    .orElseThrow()
+                    .orElseGet(() -> {
+                      if (ignoreModelRules) {
+                        return List.of();
+                      }
+                      throw new NoSuchElementException();
+                    })
             )
+            .extendsCertificateId(certificate.hasParent(RelationType.RENEW) ?
+                certificate.parent().certificate().id().id() : null)
             .build()
     );
+  }
+
+  @Override
+  public Optional<SickLeaveCertificate> build(Certificate certificate) {
+    return build(certificate, false);
   }
 
   private static List<ElementValueDiagnosis> getElementValueDiagnoses(Certificate certificate) {
@@ -91,6 +124,6 @@ public class FK7804SickLeaveProvider implements SickLeaveProvider {
         .map(ElementData::value)
         .map(ElementValueDiagnosisList.class::cast)
         .map(ElementValueDiagnosisList::diagnoses)
-        .orElseThrow();
+        .orElse(List.of());
   }
 }

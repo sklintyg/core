@@ -14,13 +14,15 @@ public class GetSickLeaveCertificateInternalService {
   private final GetSickLeaveCertificateDomainService getSickLeaveCertificateDomainService;
   private final SickLeaveConverter sickLeaveConverter;
 
-  public GetSickLeaveCertificateInternalResponse get(String certificateId) {
+  public GetSickLeaveCertificateInternalResponse get(String certificateId,
+      boolean ignoreModelRules) {
     if (certificateId == null || certificateId.isBlank()) {
       throw new IllegalArgumentException("Certificate id cannot be null or empty");
     }
 
     final var sickLeaveCertificate = getSickLeaveCertificateDomainService.get(
-        new CertificateId(certificateId)
+        new CertificateId(certificateId),
+        ignoreModelRules
     );
 
     return GetSickLeaveCertificateInternalResponse.builder()

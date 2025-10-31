@@ -38,7 +38,7 @@ class GetSickLeaveCertificateDomainServiceTest {
     when(certificateRepository.getById(CERTIFICATE_ID))
         .thenReturn(certificate);
 
-    final var result = getSickLeaveCertificateDomainService.get(CERTIFICATE_ID);
+    final var result = getSickLeaveCertificateDomainService.get(CERTIFICATE_ID, false);
     assertTrue(result.isEmpty());
   }
 
@@ -57,10 +57,10 @@ class GetSickLeaveCertificateDomainServiceTest {
 
     when(certificateRepository.getById(CERTIFICATE_ID))
         .thenReturn(certificate);
-    when(sickLeaveProvider.build(certificate))
+    when(sickLeaveProvider.build(certificate, false))
         .thenReturn(Optional.of(expectedSickLeaveCertificate));
 
-    final var result = getSickLeaveCertificateDomainService.get(CERTIFICATE_ID);
+    final var result = getSickLeaveCertificateDomainService.get(CERTIFICATE_ID, false);
     assertEquals(Optional.of(expectedSickLeaveCertificate), result);
   }
 
@@ -78,9 +78,9 @@ class GetSickLeaveCertificateDomainServiceTest {
 
     when(certificateRepository.getById(CERTIFICATE_ID))
         .thenReturn(certificate);
-    when(sickLeaveProvider.build(certificate))
+    when(sickLeaveProvider.build(certificate, false))
         .thenReturn(Optional.of(sickLeave));
-    final var result = getSickLeaveCertificateDomainService.get(CERTIFICATE_ID);
+    final var result = getSickLeaveCertificateDomainService.get(CERTIFICATE_ID, false);
     assertTrue(result.isEmpty());
   }
 }

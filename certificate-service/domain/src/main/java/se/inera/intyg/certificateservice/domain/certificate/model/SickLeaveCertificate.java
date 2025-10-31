@@ -32,4 +32,5 @@ public class SickLeaveCertificate {
   List<DateRange> workCapacities;
   boolean testCertificate;
   boolean partOfSickLeaveChain;
+  String extendsCertificateId;
 }
