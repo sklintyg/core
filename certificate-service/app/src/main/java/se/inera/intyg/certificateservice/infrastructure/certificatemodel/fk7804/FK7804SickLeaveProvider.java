@@ -6,6 +6,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7804.elements.QuestionSysselsattning.QUESTION_SYSSELSATTNING_ID;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
@@ -65,7 +66,7 @@ public class FK7804SickLeaveProvider implements SickLeaveProvider {
             .signingDoctorId(metadata.issuer().hsaId())
             .signingDateTime(certificate.signed())
             .deleted(certificate.revoked())
-            .workCapacities(ignoreModuleRules ? null :
+            .workCapacities(
                 certificate.elementData().stream()
                     .filter(
                         elementData -> elementData.id()
@@ -74,9 +75,14 @@ public class FK7804SickLeaveProvider implements SickLeaveProvider {
                     .map(ElementData::value)
                     .map(ElementValueDateRangeList.class::cast)
                     .map(ElementValueDateRangeList::dateRangeList)
-                    .orElseThrow()
+                    .orElseGet(() -> {
+                      if (ignoreModuleRules) {
+                        return List.of();
+                      }
+                      throw new NoSuchElementException();
+                    })
             )
-            .employment(ignoreModuleRules ? null :
+            .employment(
                 certificate.elementData().stream()
                     .filter(
                         elementData -> elementData.id().equals(QUESTION_SYSSELSATTNING_ID))
@@ -84,12 +90,22 @@ public class FK7804SickLeaveProvider implements SickLeaveProvider {
                     .map(ElementData::value)
                     .map(ElementValueCodeList.class::cast)
                     .map(ElementValueCodeList::list)
-                    .orElseThrow()
+                    .orElseGet(() -> {
+                      if (ignoreModuleRules) {
+                        return List.of();
+                      }
+                      throw new NoSuchElementException();
+                    })
             )
             .extendsCertificateId(certificate.hasParent(RelationType.RENEW) ?
                 certificate.parent().certificate().id().id() : null)
             .build()
     );
+  }
+
+  @Override
+  public Optional<SickLeaveCertificate> build(Certificate certificate) {
+    return build(certificate, false);
   }
 
   private static List<ElementValueDiagnosis> getElementValueDiagnoses(Certificate certificate) {

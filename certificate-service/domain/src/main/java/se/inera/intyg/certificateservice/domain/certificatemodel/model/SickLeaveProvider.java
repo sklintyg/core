@@ -6,5 +6,9 @@ import se.inera.intyg.certificateservice.domain.certificate.model.SickLeaveCerti
 
 public interface SickLeaveProvider {
 
-  Optional<SickLeaveCertificate> build(Certificate certificate, boolean ignoreModelRules);
+  default Optional<SickLeaveCertificate> build(Certificate certificate, boolean ignoreModelRules) {
+    return build(certificate);
+  }
+
+  Optional<SickLeaveCertificate> build(Certificate certificate);
 }

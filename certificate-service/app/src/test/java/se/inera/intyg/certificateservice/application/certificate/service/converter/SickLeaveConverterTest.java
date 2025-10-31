@@ -271,62 +271,6 @@ class SickLeaveConverterTest {
     }
 
     @Test
-    void shouldHandleNullWorkCapacities() {
-      sickLeaveCertificate = SickLeaveCertificate.builder()
-          .id(CERTIFICATE_ID)
-          .type(TYPE)
-          .signingDoctorId(SIGNING_DOCTOR_ID)
-          .signingDoctorName(SIGNING_DOCTOR_NAME)
-          .signingDateTime(SIGNING_DATE_TIME)
-          .careUnitId(CARE_UNIT_ID)
-          .careUnitName(CARE_UNIT_NAME)
-          .careGiverId(CARE_GIVER_ID)
-          .civicRegistrationNumber(CIVIC_REGISTRATION_NUMBER)
-          .patientName(PATIENT_NAME)
-          .diagnoseCode(DIAGNOSIS_CODE)
-          .biDiagnoseCode1(BI_DIAGNOSE_CODE1)
-          .biDiagnoseCode2(BI_DIAGNOSE_CODE2)
-          .employment(EMPLOYMENT)
-          .deleted(DELETED)
-          .workCapacities(null)
-          .testCertificate(TEST_CERTIFICATE)
-          .extendsCertificateId(CERTIFICATE_ID.id())
-          .build();
-
-      final var dto = converter.toSickLeaveCertificate(sickLeaveCertificate);
-
-      assertNull(dto.getSjukfallCertificateWorkCapacity());
-    }
-
-    @Test
-    void shouldHandleNullEmployment() {
-      sickLeaveCertificate = SickLeaveCertificate.builder()
-          .id(CERTIFICATE_ID)
-          .type(TYPE)
-          .signingDoctorId(SIGNING_DOCTOR_ID)
-          .signingDoctorName(SIGNING_DOCTOR_NAME)
-          .signingDateTime(SIGNING_DATE_TIME)
-          .careUnitId(CARE_UNIT_ID)
-          .careUnitName(CARE_UNIT_NAME)
-          .careGiverId(CARE_GIVER_ID)
-          .civicRegistrationNumber(CIVIC_REGISTRATION_NUMBER)
-          .patientName(PATIENT_NAME)
-          .diagnoseCode(DIAGNOSIS_CODE)
-          .biDiagnoseCode1(BI_DIAGNOSE_CODE1)
-          .biDiagnoseCode2(BI_DIAGNOSE_CODE2)
-          .employment(null)
-          .deleted(DELETED)
-          .workCapacities(WORK_CAPACITIES)
-          .testCertificate(TEST_CERTIFICATE)
-          .extendsCertificateId(CERTIFICATE_ID.id())
-          .build();
-
-      final var dto = converter.toSickLeaveCertificate(sickLeaveCertificate);
-
-      assertNull(dto.getEmployment());
-    }
-
-    @Test
     void shouldConvertExtendsCertificateId() {
       sickLeaveCertificate = SickLeaveCertificate.builder()
           .id(CERTIFICATE_ID)
@@ -526,5 +470,4 @@ class SickLeaveConverterTest {
       assertEquals(expected, dto.getWorkCapacityList());
     }
   }
-
 }

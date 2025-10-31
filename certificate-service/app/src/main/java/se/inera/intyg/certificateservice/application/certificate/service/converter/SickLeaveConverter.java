@@ -66,16 +66,16 @@ public class SickLeaveConverter {
     }
 
     final var workCapacities =
-        sickLeaveCertificate.workCapacities() != null ? sickLeaveCertificate.workCapacities()
+        sickLeaveCertificate.workCapacities()
             .stream()
             .map(this::mapDateRangeToWorkCapacity)
-            .collect(Collectors.toList()) : null;
+            .collect(Collectors.toList());
 
     final var employments =
-        sickLeaveCertificate.employment() != null ? sickLeaveCertificate.employment().stream()
+        sickLeaveCertificate.employment().stream()
             .map(ElementValueCode::code)
             .filter(code -> code != null && !code.isBlank())
-            .collect(Collectors.joining(",")) : null;
+            .collect(Collectors.joining(","));
 
     return SickLeaveCertificateDTO.builder()
         .id(sickLeaveCertificate.id().id())

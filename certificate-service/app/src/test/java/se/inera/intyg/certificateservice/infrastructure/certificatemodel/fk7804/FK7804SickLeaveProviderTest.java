@@ -233,7 +233,7 @@ class FK7804SickLeaveProviderTest {
     assertNull(sickLeaveCertificate.biDiagnoseCode1());
     assertNull(sickLeaveCertificate.biDiagnoseCode2());
 
-    assertNull(sickLeaveCertificate.workCapacities());
-    assertNull(sickLeaveCertificate.employment());
+    assertEquals(1, sickLeaveCertificate.workCapacities().size());
+    assertEquals(1, sickLeaveCertificate.employment().size());
   }
 }

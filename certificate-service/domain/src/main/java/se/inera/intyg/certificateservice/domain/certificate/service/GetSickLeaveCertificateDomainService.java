@@ -2,7 +2,6 @@ package se.inera.intyg.certificateservice.domain.certificate.service;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.SickLeaveCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
@@ -14,17 +13,7 @@ public class GetSickLeaveCertificateDomainService {
 
   public Optional<SickLeaveCertificate> get(CertificateId certificateId,
       boolean ignoreModelRules) {
-    final Certificate certificate;
-
-    if (ignoreModelRules) {
-      try {
-        certificate = certificateRepository.getById(certificateId);
-      } catch (Exception e) {
-        return Optional.empty();
-      }
-    } else {
-      certificate = certificateRepository.getById(certificateId);
-    }
+    final var certificate = certificateRepository.getById(certificateId);
 
     if (certificate.certificateModel().sickLeaveProvider() == null) {
       return Optional.empty();
