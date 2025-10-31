@@ -51,8 +51,9 @@ public class CertificateModel implements Comparator<ElementId> {
   SickLeaveProvider sickLeaveProvider;
   CitizenAvailableFunctionsProvider citizenAvailableFunctionsProvider;
   CertificateModelId ableToCreateDraftForModel;
+  @Builder.Default
   @With
-  List<CertificateVersion> certificateVersions;
+  List<CertificateVersion> certificateVersions = Collections.emptyList();
   CertificateGenerelPrintProvider generalPrintProvider;
 
   public List<CertificateAction> actions() {

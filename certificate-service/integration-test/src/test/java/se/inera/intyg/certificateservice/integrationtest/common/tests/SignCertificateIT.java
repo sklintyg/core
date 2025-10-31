@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.integrationtest.common.tests;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO.SIGNED;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ANONYMA_REACT_ATTILA_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_HUDMOTTAGNINGEN_DTO;
@@ -241,11 +242,16 @@ public abstract class SignCertificateIT extends BaseIntegrationIT {
         version(testCertificates)
     );
 
-    final var message = MessageListenerUtil.awaitMessage(Duration.ofSeconds(5));
+    final var expectedCertificateId = certificateId(testCertificates);
+
+    final var message = MessageListenerUtil.awaitByCertificateId(Duration.ofSeconds(10),
+        expectedCertificateId);
 
     assertAll(
+        () -> assertNotNull(message,
+            "Expected to receive a message for certificateId: " + expectedCertificateId),
         () -> assertEquals(
-            certificateId(testCertificates), message.getStringProperty("certificateId")
+            expectedCertificateId, message.getStringProperty("certificateId")
         ),
         () -> assertEquals(
             "certificate-signed", message.getStringProperty("eventType")

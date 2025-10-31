@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,7 +19,11 @@ public class SnapshotTestUtil {
         .getResource(SNAPSHOT_RESOURCE_DIR + "/" + snapshotFileName);
 
     if (resourceUrl != null) {
-      return Paths.get(resourceUrl.getPath().substring(1));
+      try {
+        return Paths.get(resourceUrl.toURI());
+      } catch (URISyntaxException e) {
+        throw new IllegalStateException("Failed to convert resource URL to path", e);
+      }
     }
 
     return Paths.get("src/test/resources", SNAPSHOT_RESOURCE_DIR, snapshotFileName);

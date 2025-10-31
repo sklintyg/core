@@ -10,6 +10,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.COMPLEMENT_MESSAGE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.CONTACT_MESSAGE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.complementMessageBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.contactMessageBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.AUTHOR_INCOMING_MESSAGE_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.CONTACT_INFO;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.CONTENT;
@@ -104,8 +105,24 @@ class QuestionConverterTest {
 
   @Test
   void shallIncludeSubject() {
+    final var expected = MessageType.COMPLEMENT.displayName() + " - " + SUBJECT;
+
     final var convert = questionConverter.convert(COMPLEMENT_MESSAGE, MESSAGE_ACTIONS);
-    assertEquals(SUBJECT, convert.getSubject());
+    assertEquals(expected, convert.getSubject());
+  }
+
+  @Test
+  void shallIncludeSubjectPrefixedWithTypeWhenQuestionToCare() {
+    final var expected = MessageType.OTHER.displayName() + " - " + SUBJECT;
+
+    final var otherMessage = contactMessageBuilder()
+        .type(MessageType.OTHER)
+        .authoredStaff(null)
+        .build();
+
+    final var convert = questionConverter.convert(otherMessage, MESSAGE_ACTIONS);
+
+    assertEquals(expected, convert.getSubject());
   }
 
   @Test
@@ -256,7 +273,7 @@ class QuestionConverterTest {
 
     @Test
     void shallExcludeContactInfoIfNull() {
-      final var MessageWithAnswerWithoutContactInfo = complementMessageBuilder()
+      final var messageWithAnswerWithoutContactInfo = complementMessageBuilder()
           .answer(
               Answer.builder()
                   .id(new MessageId("id"))
@@ -266,14 +283,14 @@ class QuestionConverterTest {
                   .build()
           )
           .build();
-      final var convert = questionConverter.convert(MessageWithAnswerWithoutContactInfo,
+      final var convert = questionConverter.convert(messageWithAnswerWithoutContactInfo,
           MESSAGE_ACTIONS);
       assertNull(convert.getAnswer().getContactInfo());
     }
 
     @Test
     void shallExcludeContactInfoIfEmpty() {
-      final var MessageWithAnswerWithoutContactInfo = complementMessageBuilder()
+      final var messageWithAnswerWithoutContactInfo = complementMessageBuilder()
           .answer(
               Answer.builder()
                   .id(new MessageId("id"))
@@ -284,7 +301,7 @@ class QuestionConverterTest {
                   .build()
           )
           .build();
-      final var convert = questionConverter.convert(MessageWithAnswerWithoutContactInfo,
+      final var convert = questionConverter.convert(messageWithAnswerWithoutContactInfo,
           MESSAGE_ACTIONS);
       assertNull(convert.getAnswer().getContactInfo());
     }

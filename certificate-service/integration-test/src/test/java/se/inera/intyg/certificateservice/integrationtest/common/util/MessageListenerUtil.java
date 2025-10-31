@@ -20,11 +20,7 @@ public final class MessageListenerUtil {
     return Objects.requireNonNull(messageListener, "MessageListener not initialized!");
   }
 
-  public static void clear() {
-    getMessageListener().clear();
-  }
-
-  public static Message awaitMessage(Duration timeout) {
-    return getMessageListener().awaitMessage(timeout);
+  public static Message awaitByCertificateId(Duration timeout, String certificateId) {
+    return getMessageListener().awaitByCertificateId(timeout, certificateId);
   }
 }

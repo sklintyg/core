@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.integrationtest.common.tests;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO.SIGNED;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ANONYMA_REACT_ATTILA_DTO;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonUnitDTO.ALFA_HUDMOTTAGNINGEN_DTO;
@@ -24,7 +25,6 @@ import se.inera.intyg.certificateservice.integrationtest.common.setup.BaseIntegr
 import se.inera.intyg.certificateservice.integrationtest.common.util.MessageListenerUtil;
 
 public abstract class RevokeCertificateIT extends BaseIntegrationIT {
-
 
   @Test
   @DisplayName("Om intyget är utfärdat på samma mottagning skall det gå att makulera")
@@ -91,16 +91,22 @@ public abstract class RevokeCertificateIT extends BaseIntegrationIT {
         defaultTestablilityCertificateRequest(type(), typeVersion(), SIGNED)
     );
 
+    final var expectedCertificateId = certificateId(testCertificates);
+
     api().revokeCertificate(
         defaultRevokeCertificateRequest(),
-        certificateId(testCertificates)
+        expectedCertificateId
     );
 
-    final var message = MessageListenerUtil.awaitMessage(Duration.ofSeconds(5));
+    final var message = MessageListenerUtil.awaitByCertificateId(Duration.ofSeconds(10),
+        expectedCertificateId);
 
     assertAll(
+        () -> assertNotNull(message,
+            "Expected to receive a message for certificateId: " + expectedCertificateId),
         () -> assertEquals(
-            certificateId(testCertificates), message.getStringProperty("certificateId")
+            expectedCertificateId, message.getStringProperty("certificateId"),
+            "Expected to receive a message for certificateId: " + expectedCertificateId
         ),
         () -> assertEquals(
             "certificate-revoked", message.getStringProperty("eventType")
