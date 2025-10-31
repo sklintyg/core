@@ -38,7 +38,7 @@ public class FK7804SickLeaveProvider implements SickLeaveProvider {
   }
 
   public Optional<SickLeaveCertificate> buildSickLeaveCertificate(Certificate certificate,
-      boolean ignoreModuleRules) {
+      boolean ignoreModelRules) {
 
     final var metadata = certificate.certificateMetaData();
     return Optional.of(
@@ -52,7 +52,16 @@ public class FK7804SickLeaveProvider implements SickLeaveProvider {
             .civicRegistrationNumber(metadata.patient().id())
             .signingDoctorName(metadata.issuer().name())
             .patientName(metadata.patient().name())
-            .diagnoseCode(getElementValueDiagnoses(certificate).getFirst())
+            .diagnoseCode(
+                getElementValueDiagnoses(certificate).stream()
+                    .findFirst()
+                    .orElseGet(() -> {
+                      if (ignoreModelRules) {
+                        return null;
+                      }
+                      throw new NoSuchElementException();
+                    })
+            )
             .biDiagnoseCode1(
                 getElementValueDiagnoses(certificate).size() > 1
                     ? getElementValueDiagnoses(certificate).get(1)
@@ -76,7 +85,7 @@ public class FK7804SickLeaveProvider implements SickLeaveProvider {
                     .map(ElementValueDateRangeList.class::cast)
                     .map(ElementValueDateRangeList::dateRangeList)
                     .orElseGet(() -> {
-                      if (ignoreModuleRules) {
+                      if (ignoreModelRules) {
                         return List.of();
                       }
                       throw new NoSuchElementException();
@@ -91,7 +100,7 @@ public class FK7804SickLeaveProvider implements SickLeaveProvider {
                     .map(ElementValueCodeList.class::cast)
                     .map(ElementValueCodeList::list)
                     .orElseGet(() -> {
-                      if (ignoreModuleRules) {
+                      if (ignoreModelRules) {
                         return List.of();
                       }
                       throw new NoSuchElementException();
@@ -115,6 +124,6 @@ public class FK7804SickLeaveProvider implements SickLeaveProvider {
         .map(ElementData::value)
         .map(ElementValueDiagnosisList.class::cast)
         .map(ElementValueDiagnosisList::diagnoses)
-        .orElseThrow();
+        .orElse(List.of());
   }
 }

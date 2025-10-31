@@ -27,7 +27,7 @@ public class AG114SickLeaveProvider implements SickLeaveProvider {
       .build();
 
   @Override
-  public Optional<SickLeaveCertificate> build(Certificate certificate, boolean ignoreModelRules) {
+  public Optional<SickLeaveCertificate> build(Certificate certificate) {
     final var metadata = certificate.certificateMetaData();
     final var diagnoses = getElementValueDiagnoses(certificate);
 
@@ -63,11 +63,6 @@ public class AG114SickLeaveProvider implements SickLeaveProvider {
             ))
             .build()
     );
-  }
-
-  @Override
-  public Optional<SickLeaveCertificate> build(Certificate certificate) {
-    return build(certificate, false);
   }
 
   private static List<ElementValueDiagnosis> getElementValueDiagnoses(Certificate certificate) {

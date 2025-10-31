@@ -91,7 +91,7 @@ public class CertificateInternalApiController {
       @PathVariable("certificateId") String certificateId,
       @RequestBody(required = false) GetSickLeaveCertificateInternalRequest request) {
     return getSickLeaveCertificateInternalService.get(certificateId,
-        request != null ? request.isIgnoreModelRules() : false);
+        request != null && request.isIgnoreModelRules());
   }
 
   @PostMapping("/lock")
