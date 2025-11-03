@@ -110,6 +110,7 @@ import se.inera.intyg.certificateservice.domain.message.model.Forwarded;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
+import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.domain.testdata.TestDataStaff;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitContactInfo;
@@ -3117,6 +3118,23 @@ class MedicalCertificateTest {
       assertEquals(expected, certificate.getMetadataForPrint());
       verify(certificateRepo).getMetadataFromSignInstance(certificate.certificateMetaData(),
           signed);
+    }
+  }
+
+  @Nested
+  class UpdateMetadataWithPatient {
+
+    @Test
+    void shouldUpdateMetadataWithPatient() {
+      certificate.updateMetadata(ALVE_REACT_ALFREDSSON);
+      assertEquals(ALVE_REACT_ALFREDSSON, certificate.certificateMetaData().patient());
+    }
+
+    @Test
+    void shouldNotUpdatePatientIfNull() {
+      final var patient = (Patient) null;
+      certificate.updateMetadata(patient);
+      assertEquals(ATHENA_REACT_ANDERSSON, certificate.certificateMetaData().patient());
     }
   }
 }

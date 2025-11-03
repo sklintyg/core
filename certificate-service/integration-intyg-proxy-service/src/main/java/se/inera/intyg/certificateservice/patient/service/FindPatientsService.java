@@ -24,6 +24,7 @@ public class FindPatientsService {
             .personIds(
                 personIds.stream()
                     .map(PersonId::id)
+                    .distinct()
                     .toList()
             )
             .build()

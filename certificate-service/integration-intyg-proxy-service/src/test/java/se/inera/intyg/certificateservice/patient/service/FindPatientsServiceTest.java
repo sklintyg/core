@@ -1,8 +1,10 @@
 package se.inera.intyg.certificateservice.patient.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -109,6 +111,33 @@ class FindPatientsServiceTest {
     final var result = findPatientsService.find(personIds);
     assertEquals(expectedResult, result);
   }
+
+  @Test
+  void shouldFilterOutDuplicatedPersonIdsInRequest() {
+    final var personIds = List.of(
+        PersonId.builder()
+            .id(ID_1)
+            .build(),
+        PersonId.builder()
+            .id(ID_1)
+            .build()
+    );
+
+    final var personsRequestDTO = PersonsRequestDTO.builder()
+        .personIds(List.of(ID_1))
+        .build();
+
+    when(ipsIntegrationService.findPersons(personsRequestDTO)).thenReturn(
+        PersonsResponseDTO.builder()
+            .persons(Collections.emptyList())
+            .build()
+    );
+
+    findPatientsService.find(personIds);
+
+    verify(ipsIntegrationService).findPersons(personsRequestDTO);
+  }
+
 
   private static Patient getPatient(String id2) {
     return Patient.builder()

@@ -41,6 +41,7 @@ import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
+import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.domain.unit.model.IssuingUnit;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationResult;
@@ -711,5 +712,11 @@ public class MedicalCertificate implements Certificate {
     return certificateModel.generalPrintProvider() != null ? Optional.of(
         certificateModel.generalPrintProvider()
             .generalPrintText()) : Optional.empty();
+  }
+
+  @Override
+  public void updateMetadata(Patient patient) {
+    Optional.ofNullable(patient)
+        .ifPresent(value -> certificateMetaData = certificateMetaData.withPatient(value));
   }
 }
