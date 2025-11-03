@@ -716,7 +716,10 @@ public class MedicalCertificate implements Certificate {
 
   @Override
   public void updateMetadata(Patient patient) {
-    Optional.ofNullable(patient)
-        .ifPresent(value -> certificateMetaData = certificateMetaData.withPatient(value));
+    if (patient == null) {
+      throw new IllegalArgumentException("Patient cannot be null");
+    }
+
+    certificateMetaData = certificateMetaData.withPatient(patient);
   }
 }

@@ -3131,10 +3131,12 @@ class MedicalCertificateTest {
     }
 
     @Test
-    void shouldNotUpdatePatientIfNull() {
+    void shouldThrowIfPatientIsNull() {
       final var patient = (Patient) null;
-      certificate.updateMetadata(patient);
-      assertEquals(ATHENA_REACT_ANDERSSON, certificate.certificateMetaData().patient());
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> certificate.updateMetadata(patient));
+
+      assertEquals("Patient cannot be null", illegalArgumentException.getMessage());
     }
   }
 }

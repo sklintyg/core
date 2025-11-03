@@ -2,7 +2,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -130,22 +130,27 @@ public class CertificateRepositoryImpl implements TestabilityCertificateReposito
         .stream()
         .collect(Collectors.toMap(
             Patient::id,
-            Optional::of
+            Function.identity()
         ));
 
-    certificates.forEach(certificate ->
-        certificate.updateMetadata(
-            patients.get(certificate.certificateMetaData().patient().id())
-                .orElse(null)
-        )
+    certificates.forEach(certificate -> {
+          if (patients.containsKey(certificate.certificateMetaData().patient().id())) {
+            final var patient = patients.get(certificate.certificateMetaData().patient().id());
+            certificate.updateMetadata(patient);
+          }
+        }
     );
   }
 
-  private void updatePatient(Certificate savedCertificate) {
+  private void updatePatient(Certificate certificate) {
     final var patient = patientInformationProvider.findPatient(
-        savedCertificate.certificateMetaData().patient().id()
+        certificate.certificateMetaData().patient().id()
     );
 
-    savedCertificate.updateMetadata(patient.orElse(null));
+    if (patient.isEmpty()) {
+      return;
+    }
+
+    certificate.updateMetadata(patient.get());
   }
 }
