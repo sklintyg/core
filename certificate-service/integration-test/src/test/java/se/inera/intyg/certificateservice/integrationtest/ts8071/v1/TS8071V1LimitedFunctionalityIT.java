@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.integrationtest.ts8071.v1;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.customUpdateCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.common.util.ApiRequestUtil.defaultTestablilityCertificateRequest;
 import static se.inera.intyg.certificateservice.integrationtest.common.util.CertificateUtil.certificate;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import se.inera.intyg.certificateservice.application.common.dto.ResourceLinkTypeDTO;
 import se.inera.intyg.certificateservice.integrationtest.common.setup.ActiveCertificatesIT;
 import se.inera.intyg.certificateservice.integrationtest.common.setup.BaseTestabilityUtilities;
 import se.inera.intyg.certificateservice.integrationtest.common.setup.TestabilityUtilities;
@@ -49,7 +51,7 @@ class TS8071V1LimitedFunctionalityIT extends ActiveCertificatesIT {
 
   @Test
   @DisplayName("Should be able to update the V1 certificate with limited functionality before expiration.")
-  void shallNotUpdateV1CertificateAfterLimitedFunctionalityExpired() {
+  void shallUpdateV1CertificateBeforeLimitedFunctionalityExpired() {
     final var testCertificates = v1Utilities.getTestabilityUtilities().getTestabilityApi()
         .addCertificates(
             defaultTestablilityCertificateRequest(
@@ -68,6 +70,26 @@ class TS8071V1LimitedFunctionalityIT extends ActiveCertificatesIT {
     );
 
     assertEquals(200, response.getStatusCode().value());
+  }
+
+  @Test
+  @DisplayName("shall have update action for V1 certificate when limited functionality before expiration")
+  void shallNotHaveUpdateActionForV1() {
+    final var testCertificates = v1Utilities.getTestabilityUtilities().getTestabilityApi()
+        .addCertificates(
+            defaultTestablilityCertificateRequest(
+                v1Utilities.getTestabilityCertificate().getType(),
+                v1Utilities.getTestabilityCertificate().getActiveVersion()
+            )
+        );
+
+    final var certificate = certificate(testCertificates);
+
+    final var hasUpdateAction = certificate.getLinks().stream()
+        .anyMatch(link -> ResourceLinkTypeDTO.EDIT_CERTIFICATE.equals(link.getType()));
+
+    assertTrue(hasUpdateAction,
+        "V1 certificate should have EDIT_CERTIFICATE action available when completely limited functionality before expiration date");
   }
 }
 
