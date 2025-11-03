@@ -5,8 +5,8 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
-import se.inera.intyg.certificateservice.domain.patient.PatientInformationProvider;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
+import se.inera.intyg.certificateservice.domain.patient.service.PatientInformationProvider;
 import se.inera.intyg.certificateservice.patient.service.FindPatientsService;
 
 @Service

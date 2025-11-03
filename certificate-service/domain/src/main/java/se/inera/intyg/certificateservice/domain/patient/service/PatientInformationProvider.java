@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.domain.patient;
+package se.inera.intyg.certificateservice.domain.patient.service;
 
 import java.util.List;
 import java.util.Optional;
