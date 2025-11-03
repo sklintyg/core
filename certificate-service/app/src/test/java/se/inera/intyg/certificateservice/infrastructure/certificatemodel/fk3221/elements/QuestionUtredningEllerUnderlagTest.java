@@ -70,7 +70,7 @@ class QuestionUtredningEllerUnderlagTest {
             "Ange utredning eller underlag")
         .id(new FieldId("4.1"))
         .informationSourceDescription(
-            "Skriv exempelvis Neuropsykiatriska kliniken på X-stads sjukhus eller om föräldern kommer att bifoga utredningen till sin ansökan.")
+            "Skriv exempelvis Neuropsykiatriska kliniken på X-stads sjukhus.")
         .informationSourceText("Från vilken vårdgivare")
         .dateText("Datum")
         .typeText("Utredning eller underlag")
