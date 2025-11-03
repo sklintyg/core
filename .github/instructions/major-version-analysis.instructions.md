@@ -39,8 +39,20 @@ following:
 - Differences in **file names or similar** that do not affect rules or content should **not** be
   treated as version differences.
 
+## 5. Model changes
+
+- Compare other model changes that are not specific to a question or category
+- This can be descriptions of the model, or other metadata that is not specific to a question or
+  category
+- Compare this to previous version CertificateModel and present the changes (only changes to model,
+  not to categories/questions in this section)
+- Detailed description is long so it needs to be compared in detail word by word.
+- Do not compare functions, this will be verified by developer manually
+
 ## 5. Output
 
 - Clearly list IDs that are **missing in either source**.
 - For matching IDs, report **any differences** in rules or text content.
+- List model changes that are not specific to a question or category.
 - Example formats can be found in examples folder in the github folder.
+- Do not include code examples. 

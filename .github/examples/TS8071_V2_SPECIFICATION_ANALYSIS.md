@@ -716,14 +716,222 @@ Do NOT include in V2:
 
 ---
 
+## Model-Level Changes (Non-Question/Category Specific)
+
+This section compares the **V1 CertificateModel CODE** against the **V2 SPECIFICATION** to identify
+changes in metadata, text descriptions, and functional configurations that are not specific to
+individual questions or categories.
+
+### Certificate Metadata Comparison
+
+| Property             | V1 Code                                                                                               | V2 Spec Requirement | Change Required     |
+|----------------------|-------------------------------------------------------------------------------------------------------|---------------------|---------------------|
+| **Certificate Code** | `ts8071`                                                                                              | TS8071              | ✅ MATCHES           |
+| **Certificate Name** | Läkarintyg för högre körkortsbehörigheter, taxiförarlegitimation och på begäran av Transportstyrelsen | Same                | ✅ MATCHES           |
+| **Version**          | `1.0`                                                                                                 | 2.0                 | ❌ **UPDATE TO 2.0** |
+
+**Decision**: Version must be changed from 1.0 to 2.0 in V2 implementation.
+
+---
+
+### Description and Instruction Text Comparison
+
+#### DESCRIPTION Field (Introductory Text)
+
+**V1 Code:**
+
+```
+Transportstyrelsens läkarintyg ska användas vid förlängd giltighet av högre behörighet från 45 år, 
+ansökan om körkortstillstånd för grupp II och III och vid ansökan om taxiförarlegitimation. 
+Transportstyrelsens läkarintyg kan även användas när Transportstyrelsen i annat fall begärt ett 
+allmänt läkarintyg avseende lämplighet att inneha körkort.
+
+Specialistintyg finns bl.a. för alkohol, läkemedel, synfunktion, Alkolås m.m. 
+Se <LINK:transportstyrelsenLink>.
+```
+
+**V2 Spec ("Text innan val av intyg"):**
+
+```
+Transportstyrelsens läkarintyg ska användas vid förlängd giltighet av högre behörighet från 45 år, 
+ansökan om körkortstillstånd för grupp II och III och vid ansökan om taxiförarlegitimation. 
+Transportstyrelsens läkarintyg kan även användas när Transportstyrelsen i annat fall begärt ett 
+allmänt läkarintyg avseende lämplighet att inneha körkort. Specialistintyg finns bl.a. för 
+alkohol, läkemedel, synfunktion, Alkolås m.m. Se Transportstyrelsens hemsida.
+```
+
+**Comparison**: ✅ **CONTENT IDENTICAL** (V1 uses link placeholder, V2 spec shows final text)
+
+---
+
+#### DETAILED_DESCRIPTION Field (Instruction Text)
+
+**V1 Code:**
+
+```
+Intyg för körkort och taxiförarlegitimation ska avges med beaktande av vad som anges i 
+Transportstyrelsens föreskrifter och allmänna råd (TSFS 2010:125) om medicinska krav för 
+innehav av körkort m.m. (medicinföreskrifterna). Föreskrifterna finns på 
+<LINK:transportstyrelsenLink> och där finns också kompletterande upplysningar till vissa av 
+kapitlen. För närvarande finns kompletterande upplysningar till kapitel 1 om bland annat 
+läkares anmälan, kapitel 2 om synfunktionerna, kapitel 6 om diabetes och kapitel 17 om 
+medicinska intyg.
+
+På <LINK:transportstyrelsenLink> finns också blanketter för olika specialistläkarintyg, 
+exempelvis för intyg om ADHD m.m., om hjärt- och kärlsjukdomar, om diabetes och om alkohol, 
+narkotika och läkemedel. Om en person ska lämna något specialistläkarintyg har denne fått 
+ett brev om saken från Transporstyrelsen. Det är därför ofta klokt att be att få se brevet, 
+så att intyget kommer att svara mot de frågeställningar som kan finnas hos myndigheten.
+
+<b className="iu-fw-heading">Har du frågor?</b>
+Kontakta avdelning Körkort på Transportstyrelsen, telefon 0771-81 81 81.
+```
+
+**V2 Spec ("Text efter val av intyg"):**
+
+```
+Läkarintyg avseende högre körkortsbehörigheter, taxiförarlegitimation och på begäran av 
+Transportstyrelsen TS8071 2.0
+
+Intyg för körkort och taxiförarlegitimation ska avges med beaktande av vad som anges i 
+Transportstyrelsens föreskrifter och allmänna råd (TSFS 2010:125) om medicinska krav för 
+innehav av körkort m.m. (medicinföreskrifterna). Föreskrifterna finns på Transportstyrelsens 
+hemsida och där finns också kompletterande upplysningar till vissa av kapitlen. För närvarande 
+finns kompletterande upplysningar till kapitel 1 om bland annat läkares anmälan, kapitel 2 om 
+synfunktionerna, kapitel 6 om diabetes och kapitel 17 om medicinska intyg. På Transportstyrelsens 
+hemsida finns också blanketter för olika specialistläkarintyg, exempelvis för intyg om hjärt- och 
+kärlsjukdomar, om diabetes och om alkohol, narkotika och läkemedel. Om en person ska lämna något 
+specialistläkarintyg har denne fått ett brev om saken från Transporstyrelsen. Det är därför ofta 
+klokt att be att få se brevet, så att intyget kommer att svara mot de frågeställningar som kan 
+finnas hos myndigheten. Har du frågor? Kontakta avdelning Körkort på Transportstyrelsen, 
+telefon 0771-81 81 81.
+```
+
+**Comparison**:
+
+- ⚠️ **V2 SPEC ADDS TITLE**: "Läkarintyg avseende högre körkortsbehörigheter, taxiförarlegitimation
+  och på begäran av Transportstyrelsen TS8071 2.0"
+- ❌ **V2 REMOVES "ADHD m.m." from text**:
+    - **V1 Code**: "exempelvis för intyg om **ADHD m.m.**, om hjärt- och kärlsjukdomar, om
+      diabetes..."
+    - **V2 Spec**: "exempelvis för intyg om hjärt- och kärlsjukdomar, om diabetes..."
+- ✅ **MAIN CONTENT OTHERWISE IDENTICAL** (formatting/line breaks differ but content same)
+
+**Decision**:
+
+1. V2 should prepend title with version "TS8071 2.0" to detailed description
+2. V2 must remove "ADHD m.m." from specialist certificate examples list (consistent with removing
+   ADHD category)
+
+---
+
+### Functional Requirements from V2 Spec
+
+**V2 Specification - "Funktioner" Section states:**
+
+| Function                  | V2 Spec Requirement                                                                                     | Where Implemented in V1                | Analysis                                        |
+|---------------------------|---------------------------------------------------------------------------------------------------------|----------------------------------------|-------------------------------------------------|
+| **Ärendekommunikation**   | "ska inte finnas tillgängligt"                                                                          | `TS8071CertificateActionSpecification` | ⚠️ **VERIFY** - Not in model, check action spec |
+| **Kompletteringsbegäran** | "ska inte finnas tillgängligt"                                                                          | `TS8071CertificateActionSpecification` | ⚠️ **VERIFY** - Not in model, check action spec |
+| **1177 intyg summary**    | "Intyget avser: `<behörighet>`" (Example: "Intyget avser: Körkortstillstånd grupp II (C1, C1E, C, CE)") | `TS8071CertificateSummaryProvider`     | ⚠️ **VERIFY** summary provider output           |
+| **Förnya intyg**          | "ska inte kunna förnyas"                                                                                | `TS8071CertificateActionSpecification` | ⚠️ **VERIFY** - Not in model, check action spec |
+
+**Note**: V2 spec functional restrictions are NOT directly visible in V1 CertificateModelFactory
+code.
+These are handled in:
+
+- `TS8071CertificateActionSpecification.create()` - for action availability
+- `TS8071CertificateSummaryProvider` - for 1177 summary format
+
+**Decision**: Must verify that action specification properly disables ärendekommunikation,
+kompletteringsbegäran, and förnya for V2.
+
+---
+
+### Summary of Model-Level Changes: V1 Code vs V2 Spec
+
+| Aspect                                    | V1 Code                                      | V2 Spec Requirement                                   | Change Required for V2        |
+|-------------------------------------------|----------------------------------------------|-------------------------------------------------------|-------------------------------|
+| **Version Number**                        | `1.0`                                        | 2.0                                                   | ❌ **MUST UPDATE**             |
+| **Certificate Name**                      | Läkarintyg för högre körkortsbehörigheter... | Same                                                  | ✅ NO CHANGE                   |
+| **Description Text**                      | Has all content                              | Same content                                          | ✅ NO CHANGE                   |
+| **Detailed Description Header**           | No title/version in text                     | Should start with "Läkarintyg avseende... TS8071 2.0" | ⚠️ **ADD TITLE/VERSION**      |
+| **Detailed Description - ADHD Reference** | Contains "intyg om ADHD m.m., om hjärt-..."  | "intyg om hjärt-..." (ADHD removed)                   | ❌ **REMOVE "ADHD m.m."**      |
+| **Ärendekommunikation**                   | Check in action spec                         | Should be disabled                                    | ⚠️ **VERIFY** action spec     |
+| **Kompletteringsbegäran**                 | Check in action spec                         | Should be disabled                                    | ⚠️ **VERIFY** action spec     |
+| **Förnya intyg**                          | Check in action spec                         | Should be disabled                                    | ⚠️ **VERIFY** action spec     |
+| **1177 Summary Format**                   | Uses `TS8071CertificateSummaryProvider`      | Should show "Intyget avser: `<behörighet>`"           | ⚠️ **VERIFY** provider output |
+
+---
+
+### Critical Changes Required for V2
+
+Based on **V1 CODE vs V2 SPEC** comparison:
+
+1. **Version**: ❌ Must update from `1.0` to `2.0`
+
+2. **Detailed Description**: ⚠️ Should add title header:
+    - "Läkarintyg avseende högre körkortsbehörigheter, taxiförarlegitimation och på begäran av
+      Transportstyrelsen TS8071 2.0"
+
+3. **Category Structure**: ❌ Must restructure:
+    - REMOVE: `categoryAdhdAutismPsykiskUtvecklingsstorningV1` (all 6 questions: 20.1-20.6)
+    - ADD: `categoryIntellektuellFunktionsnedsattningV2` (2 questions: 26.1-26.2)
+
+4. **Action Specifications**: ⚠️ Must verify/update `TS8071CertificateActionSpecification` to
+   disable:
+    - Ärendekommunikation
+    - Kompletteringsbegäran
+    - Förnya intyg
+
+5. **Summary Provider**: ⚠️ Must verify `TS8071CertificateSummaryProvider` produces format:
+    - "Intyget avser: Körkortstillstånd grupp II (C1, C1E, C, CE)" (example from spec)
+
+---
+
+### Model-Level Items NOT Specified in V2 Spec
+
+The V2 spec does NOT explicitly state requirements for:
+
+- `availableForCitizen` configuration
+- `citizenAvailableFunctionsProvider` usage
+- `recipient` configuration
+- Preamble text
+
+**Decision**: These are implementation details that may need architectural decisions beyond the
+spec requirements.
+to the action specification class).
+
+---
+
 ## Conclusion
 
-The V2 implementation requires:
+The V2 implementation requires changes at both question-level and model-level when compared to V1:
+
+### Question-Level Changes:
 
 - **~32 NEW V2-specific question/category files**
 - **~75 questions can REUSE V1 common implementation**
-- **6 V1-only questions to EXCLUDE**
+- **6 V1-only questions to EXCLUDE** (ADHD category: 20.1-20.5, moved 20.6→26.1)
 
-This analysis is based solely on comparing the V2 specification against existing V1 implementation
-files.
+### Model-Level Changes (V1 CODE vs V2 SPEC):
+
+1. **Version Number**: Must change from `1.0` to `2.0`
+
+2. **Detailed Description**: Should add title "Läkarintyg avseende högre körkortsbehörigheter,
+   taxiförarlegitimation och på begäran av Transportstyrelsen TS8071 2.0" AND remove "ADHD m.m."
+   from specialist certificate examples
+
+3. **Category Structure**: ❌ Must restructure:
+    - REMOVE: `categoryAdhdAutismPsykiskUtvecklingsstorningV1` (all 6 questions: 20.1-20.6)
+    - ADD: `categoryIntellektuellFunktionsnedsattningV2` (2 questions: 26.1-26.2)
+
+4. **Functional Requirements** (verify in action specification):
+    - Ärendekommunikation must be disabled
+    - Kompletteringsbegäran must be disabled
+    - Förnya intyg must be disabled
+    - 1177 summary must show format: "Intyget avser: `<behörighet>`"
+
+This analysis is based on comparing **V1 code implementation** against the **V2 specification**
+requirements.
 
