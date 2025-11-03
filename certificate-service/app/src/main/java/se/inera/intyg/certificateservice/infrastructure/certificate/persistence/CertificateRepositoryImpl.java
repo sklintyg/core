@@ -22,7 +22,7 @@ import se.inera.intyg.certificateservice.testability.certificate.service.reposit
 
 @Repository
 @RequiredArgsConstructor
-public class AggregatingCertificateRepository implements TestabilityCertificateRepository {
+public class CertificateRepositoryImpl implements TestabilityCertificateRepository {
 
   private final JpaCertificateRepository jpaCertificateRepository;
   private final PatientInformationProvider patientInformationProvider;
