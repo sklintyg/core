@@ -3,6 +3,7 @@ apply plugin: "java-test-fixtures"
 dependencies {
     implementation project(':domain')
     implementation project(':app')
+    implementation project(':integration-intyg-proxy-service')
 
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
