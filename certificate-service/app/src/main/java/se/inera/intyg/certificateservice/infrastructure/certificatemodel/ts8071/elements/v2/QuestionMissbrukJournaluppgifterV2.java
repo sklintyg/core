@@ -28,7 +28,7 @@ public class QuestionMissbrukJournaluppgifterV2 {
             ElementConfigurationRadioBoolean.builder()
                 .id(QUESTION_MISSBRUK_JOURNALUPPGIFTER_V2_FIELD_ID)
                 .name(
-                    "Finns journaluppgifter, anamnestiska uppgifter, resultat av laboratorieprover eller andra tecken på pågående skadligt bruk, missbruk eller beroende av alkohol, narkotika eller läkemedel?")
+                    "Finns journaluppgifter, anamnestiska uppgifter, resultat av laboratorieprover eller andra tecken på överkonsumtion av alkohol som inte är tillfällig eller tecken på pågående bruk av psykoaktiva substanser eller läkemedel?")
                 .description(
                     "Här avses uppgifter om eller tecken på beroende av psykoaktiv substans oavsett när i tid detta förekommit. Här avses också uppgifter om eller tecken på aktuellt skadligt mönster av bruk, skadligt bruk eller överkonsumtion av alkohol som inte är tillfälligt under de senaste tolv månaderna.")
                 .selectedText("Ja")

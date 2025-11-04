@@ -36,8 +36,7 @@ class QuestionPsykiskTidpunktV2Test {
   @Test
   void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationTextField.builder()
-        .name("När hade personen senast läkarkontakt med anledning av sin diagnos?")
-        .label("Ange tidpunkt")
+        .name("När hade personen senast läkarkontakt med anledning av sin diagnos? Ange tidpunkt")
         .id(new FieldId("19.3"))
         .build();
 
@@ -62,7 +61,7 @@ class QuestionPsykiskTidpunktV2Test {
         ElementRuleLimit.builder()
             .id(ELEMENT_ID)
             .type(ElementRuleType.TEXT_LIMIT)
-            .limit(new RuleLimit((short) 250))
+            .limit(new RuleLimit((short) 50))
             .build()
     );
 
@@ -76,7 +75,7 @@ class QuestionPsykiskTidpunktV2Test {
     final var expectedValidations = List.of(
         ElementValidationText.builder()
             .mandatory(true)
-            .limit(250)
+            .limit(50)
             .build()
     );
 

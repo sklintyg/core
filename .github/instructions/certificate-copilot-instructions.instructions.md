@@ -20,6 +20,7 @@ This document describes how a new certificate model is created.
   (e.g., `certificate.fk7804.activation-date=2024-06-01`)
 - "Text innan val av intyg" maps to "description" in model
 - "Text efter val av intyg" maps to "detailedDescription" in model
+- Texts from specification should be added word by word, no changes can be made in texts
 
 ### 2. ElementValue and ElementConfiguration
 
