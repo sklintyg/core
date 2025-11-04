@@ -9,6 +9,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7804CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATLAS_REACT_ABRAHAMSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataRelation.relationComplementBuilder;
@@ -63,7 +64,7 @@ class CertificateActionRenewTest {
     certificateActionRenew = (CertificateActionRenew) certificateActionFactory.create(
         CERTIFICATE_ACTION_SPECIFICATION);
 
-    certificateBuilder = MedicalCertificate.builder()
+    certificateBuilder = fk7804CertificateBuilder()
         .status(Status.SIGNED)
         .sent(null)
         .certificateMetaData(

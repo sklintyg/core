@@ -292,7 +292,8 @@ public class TestDataCertificateModel {
                     .build()
             )
         )
-        .certificateActionFactory(new CertificateActionFactory(null));
+        .certificateActionFactory(new CertificateActionFactory(null))
+        .activeFrom(LocalDateTime.now().minusDays(1));
   }
 
   public static CertificateModel.CertificateModelBuilder ag114certificateModelBuilder() {

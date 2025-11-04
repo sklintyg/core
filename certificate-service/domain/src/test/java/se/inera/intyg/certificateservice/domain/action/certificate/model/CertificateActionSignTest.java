@@ -62,6 +62,7 @@ class CertificateActionSignTest {
               .build()
       )
       .certificateVersions(List.of(VERSION))
+      .activeFrom(LocalDateTime.now().minusDays(1))
       .build();
   private CertificateActionSign certificateActionSign;
   private ActionEvaluation.ActionEvaluationBuilder actionEvaluationBuilder;
