@@ -482,17 +482,78 @@ Show when 1.1 = <gr_II_III, forlang_gr_II_III, tax_leg, utbyt_utl_kk, int_begar_
 
 ---
 
+## Model-Level Changes (Non-Question/Category Specific)
+
+This section compares **actual V1 and V2 code implementations** to identify changes in model
+metadata and properties that are not specific to individual questions or categories.
+
+### Certificate Metadata Comparison (From Code)
+
+| Aspect                    | V1 Implementation                              | V2 Implementation                              | Status      |
+|---------------------------|------------------------------------------------|------------------------------------------------|-------------|
+| **Certificate Code**      | `ts8071`                                       | `ts8071`                                       | ✅ IDENTICAL |
+| **Certificate Name**      | Läkarintyg för högre körkortsbehörigheter...   | Läkarintyg för högre körkortsbehörigheter...   | ✅ IDENTICAL |
+| **Version Number**        | `1.0`                                          | `2.0`                                          | ✅ CHANGED   |
+| **Type Name**             | `TS8071`                                       | `TS8071`                                       | ✅ IDENTICAL |
+| **Available for Citizen** | `true`                                         | `true`                                         | ✅ IDENTICAL |
+| **Active From Config**    | `${certificate.model.ts8071.v1_0.active.from}` | `${certificate.model.ts8071.v2_0.active.from}` | ✅ UPDATED   |
+
+---
+
+### Description Text Changes (From Code)
+
+#### DESCRIPTION Field
+
+**V1:**
+
+```
+...Specialistintyg finns bl.a. för alkohol, läkemedel, synfunktion, Alkolås m.m. 
+Se <LINK:transportstyrelsenLink>.
+```
+
+**V2:**
+
+```
+...Specialistintyg finns bl.a. för alkohol, läkemedel, synfunktion, Alkolås m.m. 
+Se <LINK:transportstyrelsenHemsidaLink>.
+```
+
+**Change**: ⚠️ Link name: `transportstyrelsenLink` → `transportstyrelsenHemsidaLink`
+
+#### DETAILED_DESCRIPTION Field
+
+**V1:** Uses `<LINK:transportstyrelsenLink>` (2 occurrences)  
+**V2:** Uses `<LINK:transportstyrelsenHemsidaLink>` (2 occurrences)
+
+**Change**: ⚠️ Same link name change as above (appears 2 more times) as well as text changes
+
+#### PREAMBLE_TEXT
+
+**V1 & V2:** ✅ **IDENTICAL** - No changes
+
+---
+
 ## Conclusion
 
-The V1 implementation is **mostly aligned** with the V2 specification, but there are:
+Comparing **V1 code** to **V2 specification**, the following changes are required:
 
-- **10 questions with text differences** that need updating
-- **1 new question (18.10)** that needs to be added
-- **5 questions (20.1-20.5)** that need to be removed
-- **1 question (20.6→24)** that needs to be moved and renamed
-- **Multiple help texts missing** as descriptions
+### Question-Level Changes:
+
+- **10 questions with text differences** - Need V2-specific implementations
+- **1 new question (18.10)** - Must be added
+- **5 questions (20.1-20.5)** - Must be removed (ADHD category)
+- **1 question (20.6→26.1)** - Must be moved and renamed
 - **1 character limit change** (18.2: 250→400)
-- **1 show rule** that needs adjustment
+- **1 show rule change** (Category Hörsel)
 
-Most differences are minor text variations, but they should be addressed for full V2 compliance.
+### Model-Level Changes:
+
+1. **Version**: Must update from `1.0` to `2.0`
+2. **Detailed Description Changes**:
+    - Add title "Läkarintyg avseende... TS8071 2.0"
+    - Remove "ADHD m.m." from specialist certificate examples text (V1 has "intyg om ADHD m.m., om
+      hjärt-...", V2 spec has "intyg om hjärt-...")
+
+This analysis compares **V1 implementation code** against **V2 specification requirements** to
+identify what needs to change for V2.
 

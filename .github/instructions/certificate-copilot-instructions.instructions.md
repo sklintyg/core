@@ -18,6 +18,8 @@ This document describes how a new certificate model is created.
     - An `ElementConfiguration` (defines the type, options, and validation for the field)
 - Add an activation date for the certificate in `application-dev.properties`
   (e.g., `certificate.fk7804.activation-date=2024-06-01`)
+- "Text innan val av intyg" maps to "description" in model
+- "Text efter val av intyg" maps to "detailedDescription" in model
 
 ### 2. ElementValue and ElementConfiguration
 
