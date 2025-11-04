@@ -47,6 +47,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpeci
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecification.FK7472_PDF_SPECIFICATION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecification.FK7809_PDF_SPECIFICATION;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
