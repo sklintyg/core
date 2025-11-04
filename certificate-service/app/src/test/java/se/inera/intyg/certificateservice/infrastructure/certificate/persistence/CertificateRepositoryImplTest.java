@@ -7,7 +7,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.FK7210_CERTIFICATE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7804_CERTIFICATE_MODEL;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ALVE_REACT_ALFREDSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 
 import java.time.LocalDateTime;
@@ -78,10 +77,10 @@ class CertificateRepositoryImplTest {
           .thenReturn(FK7210_CERTIFICATE);
       when(patientInformationProvider.findPatient(
           FK7210_CERTIFICATE.certificateMetaData().patient().id()))
-          .thenReturn(Optional.of(ALVE_REACT_ALFREDSSON));
+          .thenReturn(Optional.of(ATHENA_REACT_ANDERSSON));
 
       final var result = certificateRepository.save(FK7210_CERTIFICATE);
-      assertEquals(ALVE_REACT_ALFREDSSON, result.certificateMetaData().patient());
+      assertEquals(ATHENA_REACT_ANDERSSON, result.certificateMetaData().patient());
     }
   }
 
@@ -105,10 +104,10 @@ class CertificateRepositoryImplTest {
           .thenReturn(FK7210_CERTIFICATE);
       when(patientInformationProvider.findPatient(
           FK7210_CERTIFICATE.certificateMetaData().patient().id()))
-          .thenReturn(Optional.of(ALVE_REACT_ALFREDSSON));
+          .thenReturn(Optional.of(ATHENA_REACT_ANDERSSON));
 
       final var result = certificateRepository.getById(certificateId);
-      assertEquals(ALVE_REACT_ALFREDSSON, result.certificateMetaData().patient());
+      assertEquals(ATHENA_REACT_ANDERSSON, result.certificateMetaData().patient());
     }
   }
 
