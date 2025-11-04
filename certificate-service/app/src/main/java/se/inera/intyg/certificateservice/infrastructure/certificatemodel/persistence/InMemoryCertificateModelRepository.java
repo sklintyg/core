@@ -112,15 +112,6 @@ public class InMemoryCertificateModelRepository implements CertificateModelRepos
       );
     }
 
-    if (LocalDateTime.now(ZoneId.systemDefault()).isBefore(certificateModel.activeFrom())) {
-      throw new IllegalArgumentException(
-          "CertificateModel with id '%s' not active until '%s'".formatted(
-              certificateModel.id(),
-              certificateModel.activeFrom()
-          )
-      );
-    }
-
     return certificateModel;
   }
 

@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -187,5 +188,13 @@ public class CertificateModel implements Comparator<ElementId> {
         .max(Comparator.naturalOrder())
         .map(max -> max.compareTo(new BigDecimal(version)) == 0)
         .orElse(false);
+  }
+
+  public boolean isActive() {
+    return LocalDateTime.now(ZoneId.systemDefault()).isAfter(activeFrom);
+  }
+
+  public boolean isInactive() {
+    return !isActive();
   }
 }

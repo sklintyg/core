@@ -27,7 +27,7 @@
     "logo" : "ts/transportstyrelsen-logo.png",
     "generalName" : "Läkarintyg Transportstyrelsen"
   },
-  "activeFrom" : null,
+  "activeFrom" : [ 2024, 12, 1, 0, 0 ],
   "availableForCitizen" : true,
   "certificateActionSpecifications" : [ {
     "certificateActionType" : "CREATE",
@@ -5246,5 +5246,7 @@
   "ableToCreateDraftForModel" : null,
   "certificateVersions" : [ ],
   "generalPrintProvider" : null,
-  "lastestActiveVersion" : false
+  "lastestActiveVersion" : false,
+  "active" : true,
+  "inactive" : false
 }
