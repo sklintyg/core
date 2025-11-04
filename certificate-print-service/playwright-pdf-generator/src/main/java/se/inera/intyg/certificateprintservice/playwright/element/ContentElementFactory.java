@@ -31,7 +31,7 @@ public class ContentElementFactory {
                 .text("Person- /samordningsnr %s".formatted(personId)),
             element(Tag.H1)
                 .addClass(INVISIBLE_STYLE)
-                .text("%s (%s v%s)".formatted(name, type, version)),
+                .text("%s".formatted(type)),
             element(Tag.P)
                 .addClass(INVISIBLE_STYLE)
                 .text(HeaderElementFactory.alertMessage(recipientName, isDraft, isSent,
@@ -89,12 +89,35 @@ public class ContentElementFactory {
         .addClass("break-before-page")
         .appendChildren(List.of(
             element(Tag.STRONG).text(name),
-            element(Tag.P).addClass("whitespace-pre-line").append(description),
+            parseDescription(description),
             element(Tag.BR)))
         .appendChildren(citizenInfo(canSendElectronically));
 
     setLinkColor(certificateInfo);
     return certificateInfo;
+  }
+
+  private static Element parseDescription(String description) {
+    final var cleanedDescription = description.replaceAll("<LINK:[^>]+>", "");
+    final var container = element(Tag.DIV).addClass("whitespace-pre-line");
+    final var doc = org.jsoup.Jsoup.parseBodyFragment(cleanedDescription);
+
+    for (final var node : doc.body().childNodes()) {
+      if (node instanceof org.jsoup.nodes.TextNode textNode) {
+        container.append(textNode.getWholeText());
+      } else if (node instanceof Element elementNode) {
+        if (elementNode.tagName().equals("ul")) {
+          final var listElement = element(Tag.UL).addClass("list-disc pl-5");
+          for (final var listItem : elementNode.select("li")) {
+            listElement.appendChild(element(Tag.LI).html(listItem.html()));
+          }
+          container.appendChild(listElement);
+        } else {
+          container.append(elementNode.outerHtml());
+        }
+      }
+    }
+    return container;
   }
 
   private static List<Element> citizenInfo(boolean canSendElectronically) {
