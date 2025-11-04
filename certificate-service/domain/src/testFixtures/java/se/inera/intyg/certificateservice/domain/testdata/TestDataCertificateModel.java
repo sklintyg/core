@@ -47,7 +47,6 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpeci
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecification.FK7472_PDF_SPECIFICATION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPdfSpecification.FK7809_PDF_SPECIFICATION;
 
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
@@ -98,8 +97,7 @@ public class TestDataCertificateModel {
         .schematronPath(FK7210_SCHEMATRON_PATH)
         .recipient(FK_RECIPIENT)
         .pdfSpecification(FK7210_PDF_SPECIFICATION)
-        .certificateActionFactory(new CertificateActionFactory(null))
-        .activeFrom(LocalDateTime.now().minusDays(1));
+        .certificateActionFactory(new CertificateActionFactory(null));
   }
 
   public static CertificateModel.CertificateModelBuilder fk3226certificateModelBuilder() {
@@ -119,8 +117,7 @@ public class TestDataCertificateModel {
         .schematronPath(FK3226_SCHEMATRON_PATH)
         .recipient(FK_RECIPIENT)
         .pdfSpecification(FK3226_PDF_SPECIFICATION)
-        .certificateActionFactory(new CertificateActionFactory(null))
-        .activeFrom(LocalDateTime.now().minusDays(1));
+        .certificateActionFactory(new CertificateActionFactory(null));
   }
 
 
@@ -141,8 +138,7 @@ public class TestDataCertificateModel {
         .schematronPath(FK7472_SCHEMATRON_PATH)
         .recipient(FK_RECIPIENT)
         .pdfSpecification(FK7472_PDF_SPECIFICATION)
-        .certificateActionFactory(new CertificateActionFactory(null))
-        .activeFrom(LocalDateTime.now().minusDays(1));
+        .certificateActionFactory(new CertificateActionFactory(null));
   }
 
   public static CertificateModel.CertificateModelBuilder fk7809certificateModelBuilder() {
@@ -162,8 +158,7 @@ public class TestDataCertificateModel {
         .schematronPath(FK7809_SCHEMATRON_PATH)
         .pdfSpecification(FK7809_PDF_SPECIFICATION)
         .recipient(FK_RECIPIENT)
-        .certificateActionFactory(new CertificateActionFactory(null))
-        .activeFrom(LocalDateTime.now().minusDays(1));
+        .certificateActionFactory(new CertificateActionFactory(null));
   }
 
   public static CertificateModel.CertificateModelBuilder fk7427certificateModelBuilder() {
@@ -181,8 +176,7 @@ public class TestDataCertificateModel {
         .typeName(FK7427_TYPE_NAME)
         .availableForCitizen(false)
         .recipient(FK_RECIPIENT)
-        .certificateActionFactory(new CertificateActionFactory(null))
-        .activeFrom(LocalDateTime.now().minusDays(1));
+        .certificateActionFactory(new CertificateActionFactory(null));
   }
 
   public static CertificateModel.CertificateModelBuilder fk7426certificateModelBuilder() {
@@ -201,8 +195,7 @@ public class TestDataCertificateModel {
         .availableForCitizen(false)
         .schematronPath(TestDataCertificateModelConstants.FK7426_SCHEMATRON_PATH)
         .recipient(TestDataCertificateModelConstants.FK_RECIPIENT)
-        .certificateActionFactory(new CertificateActionFactory(null))
-        .activeFrom(LocalDateTime.now().minusDays(1));
+        .certificateActionFactory(new CertificateActionFactory(null));
   }
 
   public static CertificateModel.CertificateModelBuilder fk3221certificateModelBuilder() {
@@ -221,8 +214,7 @@ public class TestDataCertificateModel {
         .availableForCitizen(false)
         .schematronPath(TestDataCertificateModelConstants.FK3221_SCHEMATRON_PATH)
         .recipient(TestDataCertificateModelConstants.FK_RECIPIENT)
-        .certificateActionFactory(new CertificateActionFactory(null))
-        .activeFrom(LocalDateTime.now().minusDays(1));
+        .certificateActionFactory(new CertificateActionFactory(null));
   }
 
   public static CertificateModel.CertificateModelBuilder fk7810certificateModelBuilder() {
@@ -249,8 +241,7 @@ public class TestDataCertificateModel {
                     .subject(new Subject(MessageType.CONTACT.displayName()))
                     .build()
             )
-        )
-        .activeFrom(LocalDateTime.now().minusDays(1));
+        );
   }
 
   public static CertificateModel.CertificateModelBuilder fk7804certificateModelBuilder() {
@@ -264,8 +255,7 @@ public class TestDataCertificateModel {
         .schematronPath(TestDataCertificateModelConstants.FK7804_SCHEMATRON_PATH)
         .recipient(TestDataCertificateModelConstants.FK_RECIPIENT)
         .certificateActionFactory(new CertificateActionFactory(null))
-        .certificateVersions(List.of(FK7804_VERSION))
-        .activeFrom(LocalDateTime.now().minusDays(1));
+        .certificateVersions(List.of(FK7804_VERSION));
   }
 
   public static CertificateModel.CertificateModelBuilder ag7804certificateModelBuilder() {
@@ -320,7 +310,6 @@ public class TestDataCertificateModel {
         .typeName(AG114_TYPE_NAME)
         .availableForCitizen(true)
         .recipient(TestDataCertificateModelConstants.SKR_RECIPIENT)
-        .certificateActionFactory(new CertificateActionFactory(null))
-        .activeFrom(LocalDateTime.now().minusDays(1));
+        .certificateActionFactory(new CertificateActionFactory(null));
   }
 }

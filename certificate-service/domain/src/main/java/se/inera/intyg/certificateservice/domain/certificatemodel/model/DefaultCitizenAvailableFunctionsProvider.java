@@ -16,10 +16,6 @@ public class DefaultCitizenAvailableFunctionsProvider implements CitizenAvailabl
 
   @Override
   public List<CitizenAvailableFunction> of(Certificate certificate) {
-    if (certificate.certificateModel().isInactive()) {
-      return List.of(createPrintFunction(certificate));
-    }
-
     return List.of(
         createSendFunction(certificate),
         createPrintFunction(certificate)

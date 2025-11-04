@@ -3,7 +3,6 @@ package se.inera.intyg.certificateservice.application.citizen.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.fk7804certificateModelBuilder;
 
 import java.util.Collections;
 import java.util.List;
@@ -24,6 +23,7 @@ import se.inera.intyg.certificateservice.application.common.dto.PersonIdTypeDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.citizen.service.GetCitizenCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
@@ -38,12 +38,10 @@ class GetCitizenCertificateServiceTest {
   private static final CertificateTextDTO CONVERTED_TEXT =
       CertificateTextDTO.builder().build();
   private static final Certificate CERTIFICATE = MedicalCertificate.builder()
-      .certificateModel(
-          fk7804certificateModelBuilder()
-              .name("Test")
-              .texts(List.of(CERTIFICATE_TEXT))
-              .build()
-      )
+      .certificateModel(CertificateModel.builder()
+          .name("Test")
+          .texts(List.of(CERTIFICATE_TEXT))
+          .build())
       .build();
   private static final String PERSON_ID = "PERSON_ID";
   private static final PersonIdDTO PERSON_ID_DTO = PersonIdDTO.builder()
