@@ -47,6 +47,9 @@ public class Containers {
     System.setProperty("integration.certificateprintservice.address",
         String.format("http://%s:%s", mockServerContainerHost, mockServerContainerPort)
     );
+
+    System.setProperty("integration.intygproxyservice.address",
+        String.format("http://%s:%s", mockServerContainerHost, mockServerContainerPort)
+    );
   }
 }
-

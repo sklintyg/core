@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.infrastructure.configuration;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
@@ -85,6 +86,9 @@ import se.inera.intyg.certificateservice.infrastructure.clinicalprocesscertifica
 
 @Configuration
 public class AppConfig {
+
+  @Value("${integration.intygproxyservice.address}")
+  private String intygProxyServiceAddress;
 
   @Bean
   public CreateCertificateDomainService createCertificateDomainService(
@@ -468,8 +472,13 @@ public class AppConfig {
   }
 
   @Bean
-  public RestClient restClient() {
+  public RestClient cpsRestClient() {
     return RestClient.create();
+  }
+
+  @Bean
+  public RestClient ipsRestClient() {
+    return RestClient.create(intygProxyServiceAddress);
   }
 
   @Bean

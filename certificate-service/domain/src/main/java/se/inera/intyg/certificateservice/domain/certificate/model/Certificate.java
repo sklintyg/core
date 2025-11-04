@@ -17,6 +17,7 @@ import se.inera.intyg.certificateservice.domain.message.model.Content;
 import se.inera.intyg.certificateservice.domain.message.model.Forwarded;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
+import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationResult;
 
 public interface Certificate {
@@ -144,4 +145,5 @@ public interface Certificate {
 
   Optional<CertificateGeneralPrintText> getGeneralPrintText();
 
+  void updateMetadata(Patient patient);
 }

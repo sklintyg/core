@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.domain.certificate.model;
 
 import lombok.Builder;
 import lombok.Value;
+import lombok.With;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.ActionEvaluation;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
@@ -15,6 +16,7 @@ import se.inera.intyg.certificateservice.domain.user.model.ResponsibleIssuer;
 @Builder
 public class CertificateMetaData {
 
+  @With
   Patient patient;
   Staff issuer;
   IssuingUnit issuingUnit;
