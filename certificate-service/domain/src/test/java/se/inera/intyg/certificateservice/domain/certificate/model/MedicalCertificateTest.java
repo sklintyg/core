@@ -3126,8 +3126,12 @@ class MedicalCertificateTest {
 
     @Test
     void shouldUpdateMetadataWithPatient() {
-      certificate.updateMetadata(ATHENA_REACT_ANDERSSON);
-      assertEquals(ATHENA_REACT_ANDERSSON, certificate.certificateMetaData().patient());
+      final var patient = Patient.builder()
+          .id(ATHENA_REACT_ANDERSSON.id())
+          .build();
+
+      certificate.updateMetadata(patient);
+      assertEquals(patient, certificate.certificateMetaData().patient());
     }
 
     @Test
