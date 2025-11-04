@@ -22,6 +22,7 @@ import se.inera.intyg.certificateservice.domain.message.model.Content;
 import se.inera.intyg.certificateservice.domain.message.model.Forwarded;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
+import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 import se.inera.intyg.certificateservice.domain.validation.model.ValidationResult;
 
 @Getter
@@ -325,5 +326,10 @@ public class PlaceholderCertificate implements Certificate {
   @Override
   public Optional<CertificateGeneralPrintText> getGeneralPrintText() {
     throw new IllegalStateException("Cannot get general print text for a placeholder certificate");
+  }
+
+  @Override
+  public void updateMetadata(Patient patient) {
+    throw new IllegalStateException("Cannot update metadata for a placeholder certificate");
   }
 }

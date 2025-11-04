@@ -103,6 +103,8 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 class JpaCertificateRepositoryTest {
 
   @Mock
+  CertificateRepository certificateRepository;
+  @Mock
   CertificateRelationRepository certificateRelationRepository;
   @Mock
   CertificateEntityRepository certificateEntityRepository;
@@ -387,26 +389,26 @@ class JpaCertificateRepositoryTest {
     @Test
     void shouldThrowExceptionIfCertificateModelIsNull() {
       assertThrows(IllegalArgumentException.class,
-          () -> jpaCertificateRepository.create(null));
+          () -> jpaCertificateRepository.create(null, certificateRepository));
     }
 
     @Test
     void shouldCreateCertificateWithModel() {
-      final var response = jpaCertificateRepository.create(CONVERTED_MODEL);
+      final var response = jpaCertificateRepository.create(CONVERTED_MODEL, certificateRepository);
 
       assertEquals(CONVERTED_MODEL, response.certificateModel());
     }
 
     @Test
     void shouldCreateCertificateWithId() {
-      final var response = jpaCertificateRepository.create(CONVERTED_MODEL);
+      final var response = jpaCertificateRepository.create(CONVERTED_MODEL, certificateRepository);
 
       assertNotNull(response.id().id());
     }
 
     @Test
     void shouldCreateCertificateWithCreated() {
-      final var response = jpaCertificateRepository.create(CONVERTED_MODEL);
+      final var response = jpaCertificateRepository.create(CONVERTED_MODEL, certificateRepository);
 
       assertEquals(
           LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS),
@@ -416,7 +418,7 @@ class JpaCertificateRepositoryTest {
 
     @Test
     void shouldCreateCertificateWithRevision() {
-      final var response = jpaCertificateRepository.create(CONVERTED_MODEL);
+      final var response = jpaCertificateRepository.create(CONVERTED_MODEL, certificateRepository);
 
       assertEquals(0, response.revision().value());
     }
@@ -439,7 +441,8 @@ class JpaCertificateRepositoryTest {
       doReturn(SIGNED_CERTIFICATE_ENTITY).when(certificateEntityRepository)
           .save(SIGNED_CERTIFICATE_ENTITY);
 
-      final var response = jpaCertificateRepository.save(EXPECTED_CERTIFICATE);
+      final var response = jpaCertificateRepository.save(EXPECTED_CERTIFICATE,
+          certificateRepository);
 
       assertEquals(EXPECTED_CERTIFICATE, response);
     }
@@ -453,7 +456,7 @@ class JpaCertificateRepositoryTest {
 
       doReturn(Optional.of(CERTIFICATE_ENTITY)).when(certificateEntityRepository)
           .findByCertificateId(CERTIFICATE_ID.id());
-      final var actualResult = jpaCertificateRepository.save(expectedResult);
+      final var actualResult = jpaCertificateRepository.save(expectedResult, certificateRepository);
 
       verify(certificateEntityRepository).delete(CERTIFICATE_ENTITY);
       verify(certificateRelationRepository).deleteRelations(CERTIFICATE_ENTITY);
@@ -469,7 +472,7 @@ class JpaCertificateRepositoryTest {
 
       doReturn(Optional.of(CERTIFICATE_ENTITY)).when(certificateEntityRepository)
           .findByCertificateId(CERTIFICATE_ID.id());
-      jpaCertificateRepository.save(expectedResult);
+      jpaCertificateRepository.save(expectedResult, certificateRepository);
 
       verify(certificateRelationRepository).deleteRelations(CERTIFICATE_ENTITY);
     }
@@ -482,7 +485,7 @@ class JpaCertificateRepositoryTest {
       doReturn(SIGNED_CERTIFICATE_ENTITY).when(certificateEntityRepository)
           .save(SIGNED_CERTIFICATE_ENTITY);
 
-      jpaCertificateRepository.save(EXPECTED_CERTIFICATE);
+      jpaCertificateRepository.save(EXPECTED_CERTIFICATE, certificateRepository);
       verify(certificateRelationRepository).save(EXPECTED_CERTIFICATE, SIGNED_CERTIFICATE_ENTITY);
     }
   }
@@ -493,14 +496,14 @@ class JpaCertificateRepositoryTest {
     @Test
     void shouldThrowExceptionIfIdIsNull() {
       assertThrows(IllegalArgumentException.class,
-          () -> jpaCertificateRepository.getById(null));
+          () -> jpaCertificateRepository.getById(null, certificateRepository));
     }
 
     @Test
     void shouldThrowExceptionIfCertificateIsNull() {
       final var id = new CertificateId("ID");
       assertThrows(IllegalArgumentException.class,
-          () -> jpaCertificateRepository.getById(id)
+          () -> jpaCertificateRepository.getById(id, certificateRepository)
       );
     }
 
@@ -510,7 +513,8 @@ class JpaCertificateRepositoryTest {
       when(certificateEntityRepository.findByCertificateId("ID"))
           .thenReturn(Optional.of(SIGNED_CERTIFICATE_ENTITY));
 
-      final var response = jpaCertificateRepository.getById(new CertificateId("ID"));
+      final var response = jpaCertificateRepository.getById(new CertificateId("ID"),
+          certificateRepository);
 
       assertEquals(EXPECTED_CERTIFICATE, response);
     }
@@ -522,14 +526,14 @@ class JpaCertificateRepositoryTest {
     @Test
     void shouldThrowExceptionIfIdsIsNull() {
       assertThrows(IllegalArgumentException.class,
-          () -> jpaCertificateRepository.getByIds(null));
+          () -> jpaCertificateRepository.getByIds(null, certificateRepository));
     }
 
     @Test
     void shouldThrowExceptionIfIdsIsEmpty() {
       final List<CertificateId> certificateIds = Collections.emptyList();
       assertThrows(IllegalArgumentException.class,
-          () -> jpaCertificateRepository.getByIds(certificateIds)
+          () -> jpaCertificateRepository.getByIds(certificateIds, certificateRepository)
       );
     }
 
@@ -546,7 +550,7 @@ class JpaCertificateRepositoryTest {
           List.of("ID1", "ID2"))
       ).thenReturn(List.of(SIGNED_CERTIFICATE_ENTITY, SIGNED_CERTIFICATE_ENTITY));
 
-      final var response = jpaCertificateRepository.getByIds(certificateIds);
+      final var response = jpaCertificateRepository.getByIds(certificateIds, certificateRepository);
 
       assertEquals(expectedCertificates, response);
     }
@@ -563,7 +567,7 @@ class JpaCertificateRepositoryTest {
       ).thenReturn(List.of(CertificateEntity.builder().certificateId("ID").build()));
 
       assertThrows(IllegalStateException.class,
-          () -> jpaCertificateRepository.getByIds(certificateIds));
+          () -> jpaCertificateRepository.getByIds(certificateIds, certificateRepository));
     }
   }
 
@@ -604,7 +608,7 @@ class JpaCertificateRepositoryTest {
           .save(SIGNED_CERTIFICATE_ENTITY);
 
       final var actualCertificate = jpaCertificateRepository.insert(EXPECTED_CERTIFICATE,
-          new Revision(1));
+          new Revision(1), certificateRepository);
 
       assertEquals(EXPECTED_CERTIFICATE, actualCertificate);
     }
@@ -616,7 +620,7 @@ class JpaCertificateRepositoryTest {
       doReturn(SIGNED_CERTIFICATE_ENTITY).when(certificateEntityRepository)
           .save(SIGNED_CERTIFICATE_ENTITY);
 
-      jpaCertificateRepository.insert(EXPECTED_CERTIFICATE, new Revision(1));
+      jpaCertificateRepository.insert(EXPECTED_CERTIFICATE, new Revision(1), certificateRepository);
       verify(certificateRelationRepository).save(EXPECTED_CERTIFICATE, SIGNED_CERTIFICATE_ENTITY);
     }
 
@@ -660,7 +664,8 @@ class JpaCertificateRepositoryTest {
       doReturn(List.of(SIGNED_CERTIFICATE_ENTITY)).when(certificateEntityRepository)
           .findCertificateEntitiesByCertificateIdIn(certificateIds);
 
-      final var actualCertificates = jpaCertificateRepository.findByIds(request);
+      final var actualCertificates = jpaCertificateRepository.findByIds(request,
+          certificateRepository);
       assertEquals(expectedCertificates, actualCertificates);
     }
 
@@ -673,14 +678,15 @@ class JpaCertificateRepositoryTest {
       doReturn(Collections.emptyList()).when(certificateEntityRepository)
           .findCertificateEntitiesByCertificateIdIn(certificateIds);
 
-      final var actualCertificates = jpaCertificateRepository.findByIds(request);
+      final var actualCertificates = jpaCertificateRepository.findByIds(request,
+          certificateRepository);
       assertEquals(expectedCertificates, actualCertificates);
     }
 
     @Test
     void shallThrowIfCertificateIdsIsNull() {
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> jpaCertificateRepository.findByIds(null));
+          () -> jpaCertificateRepository.findByIds(null, certificateRepository));
 
       assertEquals("Cannot get certificate if certificateIds is null",
           illegalArgumentException.getMessage());
@@ -693,7 +699,8 @@ class JpaCertificateRepositoryTest {
     @Test
     void shallThrowIfCareProviderIdIsNull() {
       final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> jpaCertificateRepository.getExportByCareProviderId(null, 0, 0));
+          () -> jpaCertificateRepository.getExportByCareProviderId(null, 0, 0,
+              certificateRepository));
 
       assertEquals("Cannot get certificates if careProviderId is null",
           illegalArgumentException.getMessage());
@@ -724,7 +731,7 @@ class JpaCertificateRepositoryTest {
           any(CertificateRepository.class));
 
       final var actualResult = jpaCertificateRepository.getExportByCareProviderId(
-          new HsaId(CARE_PROVIDER_ENTITY.getHsaId()), 0, 10);
+          new HsaId(CARE_PROVIDER_ENTITY.getHsaId()), 0, 10, certificateRepository);
       assertEquals(expectedResult, actualResult);
     }
   }
@@ -779,7 +786,7 @@ class JpaCertificateRepositoryTest {
           .build();
 
       final var response = jpaCertificateRepository
-          .createFromPlaceholder(placeHolderRequest, CONVERTED_MODEL);
+          .createFromPlaceholder(placeHolderRequest, CONVERTED_MODEL, certificateRepository);
 
       assertAll(
           () -> assertEquals(RelationType.RENEW, response.parent().type()),
@@ -796,7 +803,7 @@ class JpaCertificateRepositoryTest {
           .build();
 
       final var response = jpaCertificateRepository
-          .createFromPlaceholder(placeHolderRequest, CONVERTED_MODEL);
+          .createFromPlaceholder(placeHolderRequest, CONVERTED_MODEL, certificateRepository);
 
       assertAll(
           () -> assertNotNull(response.id().id()),
@@ -830,7 +837,7 @@ class JpaCertificateRepositoryTest {
           .thenReturn(CERTIFICATE_ENTITY);
 
       jpaCertificateRepository
-          .createFromPlaceholder(placeHolderRequest, CONVERTED_MODEL);
+          .createFromPlaceholder(placeHolderRequest, CONVERTED_MODEL, certificateRepository);
 
       verify(certificateEntityRepository).save(CERTIFICATE_ENTITY);
     }
@@ -1010,7 +1017,8 @@ class JpaCertificateRepositoryTest {
 
       doReturn(List.of()).when(certificateEntityRepository).findAll(any());
 
-      final var actualCertificates = jpaCertificateRepository.findByCertificatesRequest(request);
+      final var actualCertificates = jpaCertificateRepository.findByCertificatesRequest(request,
+          certificateRepository);
 
       assertTrue(actualCertificates.isEmpty());
     }
@@ -1022,9 +1030,10 @@ class JpaCertificateRepositoryTest {
           .build();
       doReturn(List.of(CERTIFICATE_ENTITY)).when(certificateEntityRepository).findAll(any());
       doReturn(EXPECTED_CERTIFICATE).when(certificateEntityMapper)
-          .toDomain(CERTIFICATE_ENTITY, jpaCertificateRepository);
+          .toDomain(CERTIFICATE_ENTITY, certificateRepository);
 
-      final var actualCertificates = jpaCertificateRepository.findByCertificatesRequest(request);
+      final var actualCertificates = jpaCertificateRepository.findByCertificatesRequest(request,
+          certificateRepository);
 
       assertEquals(expectedCertificates, actualCertificates);
     }
@@ -1037,7 +1046,7 @@ class JpaCertificateRepositoryTest {
       doReturn(List.of()).when(certificateEntityRepository).findAll(any());
       when(certificateEntitySpecificationFactory.create(request)).thenReturn(specification);
 
-      jpaCertificateRepository.findByCertificatesRequest(request);
+      jpaCertificateRepository.findByCertificatesRequest(request, certificateRepository);
 
       verify(certificateEntityRepository).findAll(specification);
     }

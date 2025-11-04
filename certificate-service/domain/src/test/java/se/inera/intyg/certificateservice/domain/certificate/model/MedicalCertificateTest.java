@@ -110,6 +110,7 @@ import se.inera.intyg.certificateservice.domain.message.model.Forwarded;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
+import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.domain.testdata.TestDataStaff;
 import se.inera.intyg.certificateservice.domain.unit.model.UnitContactInfo;
@@ -3117,6 +3118,41 @@ class MedicalCertificateTest {
       assertEquals(expected, certificate.getMetadataForPrint());
       verify(certificateRepo).getMetadataFromSignInstance(certificate.certificateMetaData(),
           signed);
+    }
+  }
+
+  @Nested
+  class UpdateMetadataWithPatient {
+
+    @Test
+    void shouldUpdateMetadataWithPatient() {
+      certificate.updateMetadata(ATHENA_REACT_ANDERSSON);
+      assertEquals(ATHENA_REACT_ANDERSSON, certificate.certificateMetaData().patient());
+    }
+
+    @Test
+    void shouldThrowIfPatientIsNull() {
+      final var patient = (Patient) null;
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> certificate.updateMetadata(patient));
+
+      assertEquals("Patient cannot be null", illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shouldThrowIfPatientIdDoesNotMatchCurrentPatient() {
+      final var medicalCertificate = certificateBuilder.certificateMetaData(
+              CertificateMetaData.builder()
+                  .patient(ALVE_REACT_ALFREDSSON)
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> medicalCertificate.updateMetadata(ATHENA_REACT_ANDERSSON));
+
+      assertEquals("Cannot update metadata with patient having different PersonId",
+          illegalArgumentException.getMessage());
     }
   }
 }

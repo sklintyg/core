@@ -26,6 +26,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
 import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Revision;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
+import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PlaceholderCertificateRequest;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
@@ -50,11 +51,10 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.PatientVersionEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.StaffVersionEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.UnitVersionEntityRepository;
-import se.inera.intyg.certificateservice.testability.certificate.service.repository.TestabilityCertificateRepository;
 
 @Repository
 @RequiredArgsConstructor
-public class JpaCertificateRepository implements TestabilityCertificateRepository {
+public class JpaCertificateRepository {
 
   @Value("${erase.certificates.page.size:1000}")
   private int eraseCertificatesPageSize;
@@ -68,8 +68,8 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
   private final PatientVersionEntityRepository patientVersionEntityRepository;
   private final UnitVersionEntityRepository unitVersionEntityRepository;
 
-  @Override
-  public Certificate create(CertificateModel certificateModel) {
+  public Certificate create(CertificateModel certificateModel,
+      CertificateRepository certificateRepository) {
     if (certificateModel == null) {
       throw new IllegalArgumentException("Unable to create, certificateModel was null");
     }
@@ -79,13 +79,13 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
         .created(LocalDateTime.now(ZoneId.systemDefault()))
         .certificateModel(certificateModel)
         .revision(new Revision(0))
-        .certificateRepository(this)
+        .certificateRepository(certificateRepository)
         .build();
   }
 
-  @Override
+
   public Certificate createFromPlaceholder(PlaceholderCertificateRequest request,
-      CertificateModel model) {
+      CertificateModel model, CertificateRepository certificateRepository) {
     final var placeholderCertificate = PlaceholderCertificate.builder()
         .id(request.certificateId())
         .status(request.status())
@@ -112,12 +112,12 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
                 .created(LocalDateTime.now(ZoneId.systemDefault()))
                 .build()
         )
-        .certificateRepository(this)
+        .certificateRepository(certificateRepository)
         .build();
   }
 
-  @Override
-  public Certificate save(Certificate certificate) {
+
+  public Certificate save(Certificate certificate, CertificateRepository certificateRepository) {
     if (certificate == null) {
       throw new IllegalArgumentException(
           "Unable to save, certificate was null"
@@ -147,11 +147,12 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
         certificate, savedEntity
     );
 
-    return certificateEntityMapper.toDomain(savedEntity, this);
+    return certificateEntityMapper.toDomain(savedEntity, certificateRepository);
   }
 
-  @Override
-  public Certificate getById(CertificateId certificateId) {
+
+  public Certificate getById(CertificateId certificateId,
+      CertificateRepository certificateRepository) {
     if (certificateId == null) {
       throw new IllegalArgumentException("Cannot get certificate if certificateId is null");
     }
@@ -164,11 +165,12 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
             )
         );
 
-    return certificateEntityMapper.toDomain(certificateEntity, this);
+    return certificateEntityMapper.toDomain(certificateEntity, certificateRepository);
   }
 
-  @Override
-  public List<Certificate> getByIds(List<CertificateId> certificateIds) {
+
+  public List<Certificate> getByIds(List<CertificateId> certificateIds,
+      CertificateRepository certificateRepository) {
     if (certificateIds == null || certificateIds.isEmpty()) {
       throw new IllegalArgumentException(
           "Cannot get certificate if certificateIds is null or empty '%s'".formatted(
@@ -197,12 +199,14 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
     }
 
     return certificateEntities.stream()
-        .map(certificateEntity -> certificateEntityMapper.toDomain(certificateEntity, this))
+        .map(certificateEntity -> certificateEntityMapper.toDomain(certificateEntity,
+            certificateRepository))
         .toList();
   }
 
-  @Override
-  public List<Certificate> findByIds(List<CertificateId> certificateIds) {
+
+  public List<Certificate> findByIds(List<CertificateId> certificateIds,
+      CertificateRepository certificateRepository) {
     if (certificateIds == null) {
       throw new IllegalArgumentException(
           "Cannot get certificate if certificateIds is null"
@@ -220,11 +224,12 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
     );
 
     return certificateEntities.stream()
-        .map(certificateEntity -> certificateEntityMapper.toDomain(certificateEntity, this))
+        .map(certificateEntity -> certificateEntityMapper.toDomain(certificateEntity,
+            certificateRepository))
         .toList();
   }
 
-  @Override
+
   public boolean exists(CertificateId certificateId) {
     if (certificateId == null) {
       throw new IllegalArgumentException(
@@ -234,17 +239,20 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
     return certificateEntityRepository.findByCertificateId(certificateId.id()).isPresent();
   }
 
-  @Override
-  public List<Certificate> findByCertificatesRequest(CertificatesRequest request) {
+
+  public List<Certificate> findByCertificatesRequest(CertificatesRequest request,
+      CertificateRepository certificateRepository) {
     final var specification = certificateEntitySpecificationFactory.create(request);
 
     return certificateEntityRepository.findAll(specification).stream()
-        .map(certificateEntity -> certificateEntityMapper.toDomain(certificateEntity, this))
+        .map(certificateEntity -> certificateEntityMapper.toDomain(certificateEntity,
+            certificateRepository))
         .toList();
   }
 
-  @Override
-  public CertificateExportPage getExportByCareProviderId(HsaId careProviderId, int page, int size) {
+
+  public CertificateExportPage getExportByCareProviderId(HsaId careProviderId, int page, int size,
+      CertificateRepository certificateRepository) {
     if (careProviderId == null) {
       throw new IllegalArgumentException("Cannot get certificates if careProviderId is null");
     }
@@ -265,13 +273,14 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
         .totalRevoked(revokedCertificatesOnCareProvider)
         .certificates(
             certificateEntitiesPage.getContent().stream()
-                .map(certificateEntity -> certificateEntityMapper.toDomain(certificateEntity, this))
+                .map(certificateEntity -> certificateEntityMapper.toDomain(certificateEntity,
+                    certificateRepository))
                 .toList()
         )
         .build();
   }
 
-  @Override
+
   public long deleteByCareProviderId(HsaId careProviderId) {
     if (careProviderId == null) {
       throw new IllegalArgumentException("Cannot delete certificates if careProviderId is null");
@@ -301,7 +310,7 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
     return certificateEntitiesPage.getTotalElements();
   }
 
-  @Override
+
   public boolean placeholderExists(CertificateId certificateId) {
     if (certificateId == null) {
       throw new IllegalArgumentException(
@@ -312,7 +321,6 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
         .isPresent();
   }
 
-  @Override
   public PlaceholderCertificate getPlaceholderById(CertificateId certificateId) {
     if (certificateId == null) {
       throw new IllegalArgumentException(
@@ -330,7 +338,6 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
     return placeholderCertificateEntityMapper.toDomain(certificateEntity);
   }
 
-  @Override
   public PlaceholderCertificate save(PlaceholderCertificate placeholderCertificate) {
     if (placeholderCertificate == null) {
       throw new IllegalArgumentException(
@@ -345,8 +352,8 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
     return placeholderCertificateEntityMapper.toDomain(certificateEntity);
   }
 
-  @Override
-  public Certificate insert(Certificate certificate, Revision revision) {
+  public Certificate insert(Certificate certificate, Revision revision,
+      CertificateRepository certificateRepository) {
     final var entity = certificateEntityMapper.toEntity(certificate);
     entity.setRevision(revision.value());
 
@@ -356,10 +363,9 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
         certificate, savedEntity
     );
 
-    return certificateEntityMapper.toDomain(savedEntity, this);
+    return certificateEntityMapper.toDomain(savedEntity, certificateRepository);
   }
 
-  @Override
   public void remove(List<CertificateId> certificateIds) {
     certificateIds.stream()
         .map(certificateId -> certificateEntityRepository.findByCertificateId(certificateId.id()))
@@ -375,7 +381,6 @@ public class JpaCertificateRepository implements TestabilityCertificateRepositor
 
   }
 
-  @Override
   public CertificateMetaData getMetadataFromSignInstance(CertificateMetaData metadata,
       LocalDateTime signedAt) {
 

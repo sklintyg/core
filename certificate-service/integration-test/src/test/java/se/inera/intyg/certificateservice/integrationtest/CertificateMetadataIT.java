@@ -17,11 +17,17 @@ import static se.inera.intyg.certificateservice.integrationtest.fk7804.FK7804Tes
 import static se.inera.intyg.certificateservice.integrationtest.fk7804.FK7804TestSetup.CERTIFICATE_TYPE;
 import static se.inera.intyg.certificateservice.testability.common.TestabilityConstants.TESTABILITY_PROFILE;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Collections;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockserver.client.MockServerClient;
+import org.mockserver.model.HttpRequest;
+import org.mockserver.model.HttpResponse;
+import org.mockserver.model.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -31,6 +37,7 @@ import org.springframework.test.context.ActiveProfiles;
 import se.inera.intyg.certificateservice.integrationtest.common.util.ApiUtil;
 import se.inera.intyg.certificateservice.integrationtest.common.util.Containers;
 import se.inera.intyg.certificateservice.integrationtest.common.util.TestabilityApiUtil;
+import se.inera.intyg.certificateservice.patient.dto.PersonsResponseDTO;
 
 @ActiveProfiles({"integration-test", TESTABILITY_PROFILE})
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -57,6 +64,11 @@ class CertificateMetadataIT {
   void setUp() {
     this.api = new ApiUtil(restTemplate, port);
     this.testabilityApi = new TestabilityApiUtil(restTemplate, port);
+    final var mockServerClient = new MockServerClient(
+        Containers.MOCK_SERVER_CONTAINER.getHost(),
+        Containers.MOCK_SERVER_CONTAINER.getServerPort()
+    );
+    mockIntygProxyService(mockServerClient);
   }
 
   @AfterEach
@@ -162,5 +174,23 @@ class CertificateMetadataIT {
     );
   }
 
-
+  private void mockIntygProxyService(MockServerClient mockServerClient) {
+    try {
+      mockServerClient.when(HttpRequest.request("/api/v1/persons"))
+          .respond(
+              HttpResponse
+                  .response(
+                      new ObjectMapper().writeValueAsString(
+                          PersonsResponseDTO.builder()
+                              .persons(Collections.emptyList())
+                              .build()
+                      )
+                  )
+                  .withStatusCode(200)
+                  .withContentType(MediaType.APPLICATION_JSON)
+          );
+    } catch (Exception ex) {
+      throw new IllegalStateException(ex);
+    }
+  }
 }

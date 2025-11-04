@@ -6,8 +6,8 @@ import static se.inera.intyg.certificateservice.logging.MdcLogConstants.EVENT_TY
 import static se.inera.intyg.certificateservice.logging.MdcLogConstants.SESSION_ID_KEY;
 import static se.inera.intyg.certificateservice.logging.MdcLogConstants.TRACE_ID_KEY;
 
-import lombok.RequiredArgsConstructor;
 import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -16,18 +16,21 @@ import se.inera.intyg.certificateservice.certificate.dto.PrintCertificateRespons
 import se.inera.intyg.certificateservice.logging.PerformanceLogging;
 
 @Service
-@RequiredArgsConstructor
 public class PrintCertificateFromCertificatePrintService {
 
-  private final RestClient restClient;
+  private final RestClient cpsRestClient;
 
   @Value("${integration.certificateprintservice.address}")
   private String printCertificateServiceUrl;
 
-
+  public PrintCertificateFromCertificatePrintService(
+      @Qualifier("cpsRestClient") RestClient cpsRestClient) {
+    this.cpsRestClient = cpsRestClient;
+  }
+  
   @PerformanceLogging(eventAction = "print-certificate-from-certificate-print-service", eventType = EVENT_TYPE_ACCESSED)
   public PrintCertificateResponseDTO print(PrintCertificateRequestDTO request) {
-    return restClient
+    return cpsRestClient
         .post()
         .uri(printCertificateServiceUrl + "/api/print")
         .header(LOG_TRACE_ID_HEADER, MDC.get(TRACE_ID_KEY))
