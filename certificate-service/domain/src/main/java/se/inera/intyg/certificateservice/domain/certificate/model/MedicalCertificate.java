@@ -720,6 +720,11 @@ public class MedicalCertificate implements Certificate {
       throw new IllegalArgumentException("Patient cannot be null");
     }
 
+    if (this.certificateMetaData.patient().id() != patient.id()) {
+      throw new IllegalArgumentException(
+          "Cannot update metadata with patient having different PersonId");
+    }
+
     certificateMetaData = certificateMetaData.withPatient(patient);
   }
 }

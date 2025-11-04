@@ -3126,8 +3126,8 @@ class MedicalCertificateTest {
 
     @Test
     void shouldUpdateMetadataWithPatient() {
-      certificate.updateMetadata(ALVE_REACT_ALFREDSSON);
-      assertEquals(ALVE_REACT_ALFREDSSON, certificate.certificateMetaData().patient());
+      certificate.updateMetadata(ATHENA_REACT_ANDERSSON);
+      assertEquals(ATHENA_REACT_ANDERSSON, certificate.certificateMetaData().patient());
     }
 
     @Test
@@ -3137,6 +3137,22 @@ class MedicalCertificateTest {
           () -> certificate.updateMetadata(patient));
 
       assertEquals("Patient cannot be null", illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shouldThrowIfPatientIdDoesNotMatchCurrentPatient() {
+      final var medicalCertificate = certificateBuilder.certificateMetaData(
+              CertificateMetaData.builder()
+                  .patient(ALVE_REACT_ALFREDSSON)
+                  .build()
+          )
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> medicalCertificate.updateMetadata(ATHENA_REACT_ANDERSSON));
+
+      assertEquals("Cannot update metadata with patient having different PersonId",
+          illegalArgumentException.getMessage());
     }
   }
 }
