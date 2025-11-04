@@ -353,40 +353,6 @@ class InMemoryCertificateModelRepositoryTest {
     }
 
     @Test
-    void shallThrowExceptionIfCertificateModelNotActive() {
-      inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
-          List.of(certificateModelFactoryOne)
-      );
-
-      final var expectedModel = CertificateModel.builder()
-          .id(
-              CertificateModelId.builder()
-                  .type(new CertificateType(TYPE_ONE))
-                  .version(new CertificateVersion(VERSION_ONE))
-                  .build()
-          )
-          .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).plusMinutes(1))
-          .build();
-
-      final var certificateModelId = expectedModel.id();
-
-      doReturn(expectedModel).when(certificateModelFactoryOne).create();
-      initCertificateModelMap(inMemoryCertificateModelRepository);
-
-      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
-          () -> inMemoryCertificateModelRepository.getById(certificateModelId)
-      );
-
-      assertEquals(
-          "CertificateModel with id '%s' not active until '%s'".formatted(
-              expectedModel.id(),
-              expectedModel.activeFrom()
-          ),
-          illegalArgumentException.getMessage()
-      );
-    }
-
-    @Test
     void shallThrowExceptionIfCertificateModelIdIsNull() {
       inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
           List.of(certificateModelFactoryOne)

@@ -9,10 +9,12 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.FK7210_CERTIFICATE_MODEL;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.fk7804certificateModelBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementDataConstants.DATE_ELEMENT_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementSpecification.DATE_ELEMENT_SPECIFICATION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataElementSpecification.dateElementSpecificationBuilder;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -900,6 +902,54 @@ class CertificateModelTest {
           .build();
 
       assertFalse(certificateModel.isLastestActiveVersion());
+    }
+  }
+
+  @Nested
+  class IsActiveTests {
+
+    @Test
+    void shouldReturnTrueIfActiveFromIsInThePast() {
+      final var pastDate = LocalDateTime.now().minusDays(1);
+      final var certificateModel = fk7804certificateModelBuilder()
+          .activeFrom(pastDate)
+          .build();
+
+      assertTrue(certificateModel.isActive());
+    }
+
+    @Test
+    void shouldReturnFalseIfActiveFromIsInTheFuture() {
+      final var futureDate = LocalDateTime.now().plusDays(1);
+      final var certificateModel = fk7804certificateModelBuilder()
+          .activeFrom(futureDate)
+          .build();
+
+      assertFalse(certificateModel.isActive());
+    }
+  }
+
+  @Nested
+  class IsInactiveTests {
+
+    @Test
+    void shouldReturnFalseIfActiveFromIsInThePast() {
+      final var pastDate = LocalDateTime.now().minusDays(1);
+      final var certificateModel = fk7804certificateModelBuilder()
+          .activeFrom(pastDate)
+          .build();
+
+      assertFalse(certificateModel.isInactive());
+    }
+
+    @Test
+    void shouldReturnTrueIfActiveFromIsInTheFuture() {
+      final var futureDate = LocalDateTime.now().plusDays(1);
+      final var certificateModel = fk7804certificateModelBuilder()
+          .activeFrom(futureDate)
+          .build();
+
+      assertTrue(certificateModel.isInactive());
     }
   }
 }
