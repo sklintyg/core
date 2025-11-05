@@ -110,7 +110,7 @@ public class PrintCertificateMetadataConverter {
       case "transportstyrelsenLink", "transportstyrelsensHemsidaLink" ->
           "Transportstyrelsens hemsida";
       case "forsakringskassanLink" -> "Försäkringskassans hemsida";
-      default -> "";
+      default -> throw new IllegalStateException("No replacement found for link id: " + linkId);
     };
   }
 }
