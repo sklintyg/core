@@ -201,6 +201,35 @@ class PrintCertificateMetadataConverterTest {
   }
 
   @Test
+  void shouldReplaceDescriptionLink() {
+    final var certificateWithLinkInDescription = fk7210CertificateBuilder()
+        .certificateModel(fk7210certificateModelBuilder()
+            .description(
+                "Besök <LINK:transportstyrelsenLink> för mer information.")
+            .recipient(new Recipient(new RecipientId("ts"), "ts", "ts",
+                "transportstyrelsen-logo.png",
+                "Läkarintyg Transportstyrelsen")
+            ).build()
+        )
+        .status(Status.SIGNED)
+        .sent(
+            Sent.builder()
+                .sentAt(LocalDateTime.now())
+                .build()
+        )
+        .signed(LocalDateTime.now())
+        .metaDataFromSignInstance(CERTIFICATE_META_DATA)
+        .certificateMetaData(null)
+        .build();
+
+    final var result = printCertificateMetadataConverter.convert(certificateWithLinkInDescription,
+        false, FILE_NAME);
+    assertEquals(
+        "Besök Transportstyrelsens hemsida för mer information.",
+        result.getDescription());
+  }
+
+  @Test
   void shouldSetFileName() {
     final var result = printCertificateMetadataConverter.convert(CERTIFICATE, false, FILE_NAME);
     assertEquals(FILE_NAME, result.getFileName());

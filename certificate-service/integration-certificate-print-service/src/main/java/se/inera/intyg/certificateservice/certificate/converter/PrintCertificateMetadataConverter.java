@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -42,7 +43,7 @@ public class PrintCertificateMetadataConverter {
             ? APPLICATION_ORIGIN_1177_INTYG
             : APPLICATION_ORIGIN_WEBCERT)
         .personId(metadata.patient().id().idWithDash())
-        .description(certificate.certificateModel().description())
+        .description(convertDescription(certificate.certificateModel().description()))
         .issuerName(metadata.issuer().name().fullName())
         .issuingUnit(metadata.issuingUnit().name().name())
         .sentDate(
@@ -85,5 +86,31 @@ public class PrintCertificateMetadataConverter {
     } catch (IOException e) {
       throw new IllegalStateException("Could not convert logo:", e);
     }
+  }
+
+  private String convertDescription(String description) {
+    if (description == null || description.isEmpty()) {
+      return description;
+    }
+
+    if (!description.contains("<LINK:")) {
+      return description;
+    }
+
+    final var pattern = Pattern.compile("<LINK:(.*?)>");
+    final var matcher = pattern.matcher(description);
+
+    return matcher.replaceAll(link ->
+        getLinkReplacement(link.group(1))
+    );
+  }
+
+  private static String getLinkReplacement(String linkId) {
+    return switch (linkId) {
+      case "transportstyrelsenLink", "transportstyrelsensHemsidaLink" ->
+          "Transportstyrelsens hemsida";
+      case "forsakringskassanLink" -> "Försäkringskassans hemsida";
+      default -> throw new IllegalStateException("No replacement found for link id: " + linkId);
+    };
   }
 }
