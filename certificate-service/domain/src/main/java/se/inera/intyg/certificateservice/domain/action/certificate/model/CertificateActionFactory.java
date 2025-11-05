@@ -420,7 +420,8 @@ public class CertificateActionFactory {
                   new ActionRuleUserHasAccessScope(
                       List.of(AccessScope.WITHIN_CARE_UNIT)
                   ),
-                  new ActionRuleUserAgreement()
+                  new ActionRuleUserAgreement(),
+                  new ActionRuleActiveCertificateModel()
               )
           )
           .build();
