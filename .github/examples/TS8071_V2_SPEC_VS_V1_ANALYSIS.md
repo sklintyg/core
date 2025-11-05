@@ -1,4 +1,5 @@
 # Generated using AI support with model: Claude Sonnet 4.5
+# These files should be seen as an example of a file that can be generated to support developers. It has changed during development process and should not be seen as a 1-to-1 mapping of implementation or requirements. 
 
 # TS8071 V2.0 Specification vs V1 Implementation Analysis
 
@@ -23,8 +24,8 @@ October 23, 2025
 ## Summary
 
 - **Total Questions in V2 Spec**: ~95 questions (including sub-questions)
-- **Questions Using Common Implementation (Identical V1/V2)**: ~75 questions
-- **Questions with V2-Specific Implementation**: ~14 questions (correctly implemented to match V2
+- **Questions Using Common Implementation (Identical V1/V2)**: ~53 questions
+- **Questions with V2-Specific Implementation**: ~42 questions (correctly implemented to match V2
   spec)
 - **New Question in V2**: 1 question (18.10 - remission status) ✅ Implemented
 - **Removed from V2**: ADHD/Neuropsykiatrisk category (6 questions)
@@ -33,6 +34,11 @@ October 23, 2025
 implementation. However, **V2 has been correctly implemented** with separate V2-specific files that
 match the V2 specification. The differences noted below are between V1 and V2, but V2
 implementations are correct.
+
+**NOTE**: The V2-specific questions include not only questions with text/config differences, but also
+questions that need V2 versions for proper parent mapping and category structure (e.g., Hörsel, 
+Psykisk, Lakemedel, etc.), as well as questions where V1 files don't exist in the common folder 
+(e.g., Diabetes, Demens, Stroke, StrokePaverkan, SjukdomEllerSynnedsattningBeskrivning).
 
 ---
 
