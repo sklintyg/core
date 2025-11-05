@@ -44,13 +44,11 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSynfunktioner.QUESTION_SYNFUNKTIONER_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSynkopeBeskrivning.QUESTION_SYNKOPE_BESKRIVNING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSynskarpa.QUESTION_SYNSKARPA_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionDiabetesV1.QUESTION_DIABETES_V1_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionSjukdomEllerSynnedsattningBeskrivningV1.QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_BESKRIVNING_V1_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionStrokeV1.QUESTION_STROKE_V1_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionBalanssinneBeskrivningV2.QUESTION_BALANSSINNE_BESKRIVNING_V2_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionBedomningRiskV2.QUESTION_BEDOMNING_RISK_V2_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionDemensBeskrivningV2.QUESTION_DEMENS_BESKRIVNING_V2_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionDemensV2.QUESTION_DEMENS_V2_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionDiabetesV2.QUESTION_DIABETES_V2_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionEpilepsiMedicinTidpunktV2.QUESTION_EPILEPSI_MEDICIN_TIDPUNKT_V2_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionGlasogonStyrkaV2.QUESTION_GLASOGON_STYRKA_V2_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionHjartsjukdomBehandladBeskrivningV2.QUESTION_HJARTSJUKDOM_BEHANDLAD_BESKRIVNING_V2_ID;
@@ -75,9 +73,11 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionNeurologiskSjukdomV2.QUESTION_NEUROLOGISK_SJUKDOM_V2_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionPsykiskTidpunktV2.QUESTION_PSYKISK_TIDPUNKT_V2_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionPsykiskV2.QUESTION_PSYKISK_V2_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionSjukdomEllerSynnedsattningBeskrivningV2.QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_BESKRIVNING_V2_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionSjukdomshistorikBeskrivningV2.QUESTION_SJUKDOMSHISTORIK_BESKRIVNING_V2_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionSomnV2.QUESTION_SOMN_V2_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionStrokePaverkanV2.QUESTION_STROKE_PAVARKAN_V2_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionStrokeV2.QUESTION_STROKE_V2_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionSynkopeV2.QUESTION_SYNKOPE_V2_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionToleransKorrektionV2.QUESTION_TOLERANS_KORREKTION_V2_ID;
 import static se.inera.intyg.certificateservice.testability.certificate.dto.TestabilityFillTypeDTO.EMPTY;
@@ -119,7 +119,7 @@ public class TestabilityCertificateFillServiceTS8071V2 implements
       QUESTION_SYNSKARPA_ID, QUESTION_IDENTITET_ID, QUESTION_SYNFUNKTIONER_ID,
       QUESTION_TOLERANS_KORREKTION_V2_ID, QUESTION_GLASOGON_STYRKA_V2_ID,
       QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_ID,
-      QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_BESKRIVNING_V1_ID, QUESTION_SJUKDOMSHISTORIK_ID,
+      QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_BESKRIVNING_V2_ID, QUESTION_SJUKDOMSHISTORIK_ID,
       QUESTION_SJUKDOMSHISTORIK_BESKRIVNING_V2_ID, QUESTION_BALANSSINNE_ID,
       QUESTION_BALANSSINNE_BESKRIVNING_V2_ID, QUESTION_HORSEL_V2_ID,
       QUESTION_HORSELHJALPMEDEL_V2_ID,
@@ -129,8 +129,8 @@ public class TestabilityCertificateFillServiceTS8071V2 implements
       QUESTION_HJARTSJUKDOM_BESKRIVNING_V2_ID,
       QUESTION_HJARTSJUKDOM_BEHANDLAD_ID, QUESTION_HJARTSJUKDOM_BEHANDLAD_BESKRIVNING_V2_ID,
       QUESTION_ARYTMI_ID, QUESTION_ARYTMI_BESKRIVNING_ID, QUESTION_SYNKOPE_V2_ID,
-      QUESTION_SYNKOPE_BESKRIVNING_ID, QUESTION_STROKE_V1_ID, QUESTION_STROKE_PAVARKAN_V2_ID,
-      QUESTION_DIABETES_V1_ID, QUESTION_NEUROLOGISK_SJUKDOM_V2_ID,
+      QUESTION_SYNKOPE_BESKRIVNING_ID, QUESTION_STROKE_V2_ID, QUESTION_STROKE_PAVARKAN_V2_ID,
+      QUESTION_DIABETES_V2_ID, QUESTION_NEUROLOGISK_SJUKDOM_V2_ID,
       QUESTION_NEUROLOGISK_SJUKDOM_BESKRIVNING_V2_ID, QUESTION_EPILEPSI_ID,
       QUESTION_EPILEPSI_BESKRIVNING_ID, QUESTION_EPILEPSI_ANFALL_ID,
       QUESTION_EPILEPSI_ANFALL_BESKRIVNING_ID, QUESTION_EPILEPSI_MEDICIN_ID,
@@ -159,7 +159,7 @@ public class TestabilityCertificateFillServiceTS8071V2 implements
       QUESTION_HORSEL_V2_ID,
       QUESTION_HORSELHJALPMEDEL_V2_ID, QUESTION_HORSELHJALPMEDEL_POSITION_V2_ID,
       QUESTION_RORLIGHET_ID,
-      QUESTION_RORLIGHET_HJALPA_PASSAGERARE_ID, QUESTION_HJARTSJUKDOM_ID, QUESTION_DIABETES_V1_ID,
+      QUESTION_RORLIGHET_HJALPA_PASSAGERARE_ID, QUESTION_HJARTSJUKDOM_ID, QUESTION_DIABETES_V2_ID,
       QUESTION_NEUROLOGISK_SJUKDOM_V2_ID,
       QUESTION_EPILEPSI_ID, QUESTION_EPILEPSI_ANFALL_ID,
       QUESTION_MEDVETANDESTORNING_ID,
