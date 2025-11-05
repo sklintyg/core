@@ -553,7 +553,8 @@ public class CertificateActionFactory {
                   new ActionRuleLimitedCertificateFunctionality(
                       certificateActionConfigurationRepository,
                       actionSpecification.certificateActionType()
-                  )
+                  ),
+                  new ActionRuleActiveCertificateModel()
               )
           )
           .build();
@@ -665,7 +666,8 @@ public class CertificateActionFactory {
                   new ActionRuleUserAgreement(),
                   new ActionRuleUserHasAccessScope(
                       List.of(AccessScope.WITHIN_CARE_PROVIDER, AccessScope.ALL_CARE_PROVIDERS)
-                  )
+                  ),
+                  new ActionRuleActiveCertificateModel()
               )
           )
           .build();

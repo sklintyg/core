@@ -23,6 +23,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ann
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.bertilBarnmorskaBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AGREEMENT_FALSE;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -383,6 +384,60 @@ class CertificateActionReadyForSignTest {
           certificateActionConfigurationRepository.findLimitedCertificateFunctionalityConfiguration(
               certificate.certificateModel().id()))
           .thenReturn(null);
+
+      assertTrue(
+          certificateActionReadyForSign.evaluate(Optional.of(certificate),
+              Optional.of(actionEvaluation)),
+          () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+      );
+    }
+  }
+
+  @Nested
+  class ActiveCertificateTests {
+
+    @Test
+    void shouldReturnFalseIfCertificateIsInactive() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .user(
+              annaSjukskoterskaBuilder()
+                  .accessScope(AccessScope.ALL_CARE_PROVIDERS)
+                  .build()
+          )
+          .build();
+
+      final var certificate = certificateBuilder
+          .certificateModel(
+              fk7804certificateModelBuilder()
+                  .activeFrom(LocalDateTime.now().plusDays(1))
+                  .build()
+          )
+          .build();
+
+      assertFalse(
+          certificateActionReadyForSign.evaluate(Optional.of(certificate),
+              Optional.of(actionEvaluation)),
+          () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+      );
+    }
+
+    @Test
+    void shouldReturnTrueIfCertificateIsActive() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .user(
+              annaSjukskoterskaBuilder()
+                  .accessScope(AccessScope.ALL_CARE_PROVIDERS)
+                  .build()
+          )
+          .build();
+
+      final var certificate = certificateBuilder
+          .certificateModel(
+              fk7804certificateModelBuilder()
+                  .activeFrom(LocalDateTime.now().minusDays(1))
+                  .build()
+          )
+          .build();
 
       assertTrue(
           certificateActionReadyForSign.evaluate(Optional.of(certificate),
