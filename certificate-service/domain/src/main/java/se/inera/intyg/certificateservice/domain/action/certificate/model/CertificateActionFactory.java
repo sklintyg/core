@@ -308,7 +308,8 @@ public class CertificateActionFactory {
                       List.of(RelationType.COMPLEMENT),
                       List.of(Status.REVOKED)
                   ),
-                  new ActionRuleUserAgreement()
+                  new ActionRuleUserAgreement(),
+                  new ActionRuleActiveCertificateModel()
               )
           )
           .build();
@@ -336,8 +337,7 @@ public class CertificateActionFactory {
           .actionRules(
               List.of(
                   new ActionRuleSent(true),
-                  new ActionRuleStatus(List.of(Status.SIGNED, Status.REVOKED)),
-                  new ActionRuleActiveCertificateModel()
+                  new ActionRuleStatus(List.of(Status.SIGNED, Status.REVOKED))
               )
           )
           .build();
