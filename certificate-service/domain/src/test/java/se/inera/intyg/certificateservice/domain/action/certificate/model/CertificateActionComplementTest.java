@@ -9,6 +9,8 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProv
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.BETA_VARDCENTRAL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7804CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.fk7804certificateModelBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ANONYMA_REACT_ATTILA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATLAS_REACT_ABRAHAMSSON;
@@ -70,7 +72,7 @@ class CertificateActionComplementTest {
         CERTIFICATE_ACTION_SPECIFICATION
     );
 
-    certificateBuilder = MedicalCertificate.builder()
+    certificateBuilder = fk7804CertificateBuilder()
         .status(Status.SIGNED)
         .sent(Sent.builder()
             .sentAt(LocalDateTime.now())
@@ -383,7 +385,7 @@ class CertificateActionComplementTest {
     void setUp() {
       certificateActionComplement = (CertificateActionComplement) certificateActionFactory.create(
           CERTIFICATE_ACTION_SPECIFICATION);
-      certificateBuilder = MedicalCertificate.builder()
+      certificateBuilder = fk7804CertificateBuilder()
           .status(Status.SIGNED)
           .sent(Sent.builder().sentAt(LocalDateTime.now()).build())
           .messages(
@@ -644,5 +646,49 @@ class CertificateActionComplementTest {
             Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
+  }
+
+  @Nested
+  class ActiveCertificateTests {
+
+    @Test
+    void shouldReturnFalseIfCertificateIsInactive() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .build();
+
+      final var certificate = certificateBuilder
+          .certificateModel(
+              fk7804certificateModelBuilder()
+                  .activeFrom(LocalDateTime.now().plusDays(1))
+                  .build()
+          )
+          .build();
+
+      assertFalse(
+          certificateActionComplement.evaluate(Optional.of(certificate),
+              Optional.of(actionEvaluation)),
+          () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+      );
+    }
+
+    @Test
+    void shouldReturnTrueIfCertificateIsActive() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .build();
+
+      final var certificate = certificateBuilder
+          .certificateModel(
+              fk7804certificateModelBuilder()
+                  .activeFrom(LocalDateTime.now().minusDays(1))
+                  .build()
+          )
+          .build();
+
+      assertTrue(
+          certificateActionComplement.evaluate(Optional.of(certificate),
+              Optional.of(actionEvaluation)),
+          () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+      );
+    }
   }
 }

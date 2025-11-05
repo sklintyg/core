@@ -25,7 +25,7 @@ public class RenewExternalCertificateDomainService {
       ExternalReference externalReference, PlaceholderCertificateRequest request) {
     final var start = LocalDateTime.now(ZoneId.systemDefault());
 
-    final var certificateModel = certificateModelRepository.getById(
+    final var certificateModel = certificateModelRepository.getActiveById(
         request.certificateModelId()
     );
     final var certificate = certificateRepository.createFromPlaceholder(request, certificateModel);

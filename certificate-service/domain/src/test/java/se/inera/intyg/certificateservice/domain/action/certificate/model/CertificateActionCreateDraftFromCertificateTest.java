@@ -9,6 +9,8 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7804CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.fk7804certificateModelBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATLAS_REACT_ABRAHAMSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataRelation.relationComplementBuilder;
@@ -23,9 +25,11 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALLOW_COPY_FALSE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BLOCKED_TRUE;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -79,7 +83,7 @@ class CertificateActionCreateDraftFromCertificateTest {
     certificateActionCreateDraftFromCertificate = (CertificateActionCreateDraftFromCertificate) certificateActionFactory.create(
         certificateActionSpecification);
 
-    certificateBuilder = MedicalCertificate.builder()
+    certificateBuilder = fk7804CertificateBuilder()
         .status(Status.SIGNED)
         .sent(null)
         .certificateMetaData(
@@ -596,5 +600,49 @@ class CertificateActionCreateDraftFromCertificateTest {
             Optional.of(actionEvaluation)),
         () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
     );
+  }
+
+  @Nested
+  class ActiveCertificateTests {
+
+    @Test
+    void shouldReturnFalseIfCertificateIsInactive() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .build();
+
+      final var certificate = certificateBuilder
+          .certificateModel(
+              fk7804certificateModelBuilder()
+                  .activeFrom(LocalDateTime.now().plusDays(1))
+                  .build()
+          )
+          .build();
+
+      assertFalse(
+          certificateActionCreateDraftFromCertificate.evaluate(Optional.of(certificate),
+              Optional.of(actionEvaluation)),
+          () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+      );
+    }
+
+    @Test
+    void shouldReturnTrueIfCertificateIsActive() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .build();
+
+      final var certificate = certificateBuilder
+          .certificateModel(
+              fk7804certificateModelBuilder()
+                  .activeFrom(LocalDateTime.now().minusDays(1))
+                  .build()
+          )
+          .build();
+
+      assertTrue(
+          certificateActionCreateDraftFromCertificate.evaluate(Optional.of(certificate),
+              Optional.of(actionEvaluation)),
+          () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+      );
+    }
   }
 }

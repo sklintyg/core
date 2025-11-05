@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.time.LocalDateTime;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +18,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionFactory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
@@ -58,9 +60,15 @@ class VersionLockTest {
   private static CertificateActionConfigurationRepository certificateActionConfigurationRepository;
 
   private ObjectMapper objectMapper;
-  private static final CertificateModelFactory ts8071FactoryV1 = new CertificateModelFactoryTS8071(
-      certificateActionFactory, certificateActionConfigurationRepository
-  );
+  private static final CertificateModelFactoryTS8071 ts8071FactoryV1;
+
+  static {
+    ts8071FactoryV1 = new CertificateModelFactoryTS8071(
+        certificateActionFactory, certificateActionConfigurationRepository
+    );
+    ReflectionTestUtils.setField(ts8071FactoryV1, "activeFrom",
+        LocalDateTime.of(2024, 12, 1, 0, 0, 0));
+  }
 
   @BeforeEach
   void setUp() {
@@ -117,11 +125,9 @@ class VersionLockTest {
       }
 
       final var expectedJson = Files.readString(snapshotPath);
-      final var normalizedExpected = normalizeJson(expectedJson);
-      final var normalizedActual = normalizeJson(actualJson);
       final var differences = findDifferences(expectedJson, actualJson);
 
-      assertEquals(normalizedExpected, normalizedActual,
+      assertEquals(objectMapper.readTree(expectedJson), objectMapper.readTree(actualJson),
           String.format(
               "Certificate model %s has changed. This version should be locked.%n"
                   + "%n"
@@ -141,11 +147,6 @@ class VersionLockTest {
     }
   }
 
-  private String normalizeJson(String json) throws IOException {
-    final var tree = objectMapper.readTree(json);
-    return objectMapper.writeValueAsString(tree);
-  }
-
   private String findDifferences(String expectedJson, String actualJson) throws IOException {
     final var expectedTree = objectMapper.readTree(expectedJson);
     final var actualTree = objectMapper.readTree(actualJson);
@@ -155,4 +156,3 @@ class VersionLockTest {
     return !differences.isEmpty() ? differences.toString() : "No specific differences found";
   }
 }
-

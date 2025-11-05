@@ -62,7 +62,8 @@ public class CertificateActionFactory {
                   new ActionRuleLimitedCertificateFunctionality(
                       certificateActionConfigurationRepository,
                       actionSpecification.certificateActionType()
-                  )
+                  ),
+                  new ActionRuleActiveCertificateModel()
               )
           )
           .build();
@@ -98,7 +99,8 @@ public class CertificateActionFactory {
                   new ActionRuleLimitedCertificateFunctionality(
                       certificateActionConfigurationRepository,
                       actionSpecification.certificateActionType()
-                  )
+                  ),
+                  new ActionRuleActiveCertificateModel()
               )
           )
           .build();
@@ -120,7 +122,8 @@ public class CertificateActionFactory {
                   new ActionRuleLimitedCertificateFunctionality(
                       certificateActionConfigurationRepository,
                       actionSpecification.certificateActionType()
-                  )
+                  ),
+                  new ActionRuleActiveCertificateModel()
               )
           )
           .build();
@@ -175,7 +178,8 @@ public class CertificateActionFactory {
                   new ActionRuleLimitedCertificateFunctionality(
                       certificateActionConfigurationRepository,
                       actionSpecification.certificateActionType()
-                  )
+                  ),
+                  new ActionRuleActiveCertificateModel()
               )
           )
           .build();
@@ -193,7 +197,8 @@ public class CertificateActionFactory {
                   new ActionRuleProtectedPerson(
                       actionSpecification.allowedRolesForProtectedPersons()
                   ),
-                  new ActionRuleUserAgreement()
+                  new ActionRuleUserAgreement(),
+                  new ActionRuleActiveCertificateModel()
               )
           )
           .build();
@@ -216,7 +221,8 @@ public class CertificateActionFactory {
                       List.of(RelationType.REPLACE, RelationType.COMPLEMENT),
                       List.of(Status.DRAFT, Status.REVOKED)
                   ),
-                  new ActionRuleUserAgreement()
+                  new ActionRuleUserAgreement(),
+                  new ActionRuleActiveCertificateModel()
               )
           )
           .build();
@@ -302,7 +308,8 @@ public class CertificateActionFactory {
                       List.of(RelationType.COMPLEMENT),
                       List.of(Status.REVOKED)
                   ),
-                  new ActionRuleUserAgreement()
+                  new ActionRuleUserAgreement(),
+                  new ActionRuleActiveCertificateModel()
               )
           )
           .build();
@@ -393,7 +400,8 @@ public class CertificateActionFactory {
                   new ActionRuleLimitedCertificateFunctionality(
                       certificateActionConfigurationRepository,
                       actionSpecification.certificateActionType()
-                  )
+                  ),
+                  new ActionRuleActiveCertificateModel()
               )
           )
           .build();
@@ -412,7 +420,8 @@ public class CertificateActionFactory {
                   new ActionRuleUserHasAccessScope(
                       List.of(AccessScope.WITHIN_CARE_UNIT)
                   ),
-                  new ActionRuleUserAgreement()
+                  new ActionRuleUserAgreement(),
+                  new ActionRuleActiveCertificateModel()
               )
           )
           .build();
@@ -544,7 +553,8 @@ public class CertificateActionFactory {
                   new ActionRuleLimitedCertificateFunctionality(
                       certificateActionConfigurationRepository,
                       actionSpecification.certificateActionType()
-                  )
+                  ),
+                  new ActionRuleActiveCertificateModel()
               )
           )
           .build();
@@ -583,7 +593,8 @@ public class CertificateActionFactory {
                   new ActionRuleLimitedCertificateFunctionality(
                       certificateActionConfigurationRepository,
                       actionSpecification.certificateActionType()
-                  )
+                  ),
+                  new ActionRuleActiveCertificateModel()
               )
           )
           .build();
@@ -635,7 +646,8 @@ public class CertificateActionFactory {
                   new ActionRuleUserAgreement(),
                   new ActionRuleUserHasAccessScope(
                       List.of(AccessScope.WITHIN_CARE_UNIT)
-                  )
+                  ),
+                  new ActionRuleActiveCertificateModel()
               )
           )
           .build();
@@ -654,7 +666,8 @@ public class CertificateActionFactory {
                   new ActionRuleUserAgreement(),
                   new ActionRuleUserHasAccessScope(
                       List.of(AccessScope.WITHIN_CARE_PROVIDER, AccessScope.ALL_CARE_PROVIDERS)
-                  )
+                  ),
+                  new ActionRuleActiveCertificateModel()
               )
           )
           .build();

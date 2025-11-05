@@ -36,7 +36,7 @@ public class CreateCertificateDomainService {
 
     final var start = LocalDateTime.now(ZoneId.systemDefault());
 
-    final var certificateModel = certificateModelRepository.getById(certificateModelId);
+    final var certificateModel = certificateModelRepository.getActiveById(certificateModelId);
     if (!certificateModel.allowTo(CertificateActionType.CREATE, Optional.of(actionEvaluation))) {
       throw new CertificateActionForbidden(
           "Not allowed to create certificate for %s".formatted(certificateModelId),
