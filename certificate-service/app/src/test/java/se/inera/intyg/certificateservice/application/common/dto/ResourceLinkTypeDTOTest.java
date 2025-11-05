@@ -222,5 +222,12 @@ class ResourceLinkTypeDTOTest {
           ResourceLinkTypeDTO.toResourceLinkType(
               CertificateActionType.CREATE_DRAFT_FROM_CERTIFICATE));
     }
+
+    @Test
+    void shallReturnResourceLinkTypeDTOInactiveCertificateFromCertificate() {
+      assertEquals(ResourceLinkTypeDTO.INACTIVE_CERTIFICATE,
+          ResourceLinkTypeDTO.toResourceLinkType(
+              CertificateActionType.INACTIVE_CERTIFICATE_MODEL));
+    }
   }
 }

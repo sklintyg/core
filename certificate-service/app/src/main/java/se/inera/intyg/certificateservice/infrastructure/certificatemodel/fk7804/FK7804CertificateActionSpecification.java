@@ -157,6 +157,9 @@ public class FK7804CertificateActionSpecification {
             .certificateActionType(CertificateActionType.CREATE_DRAFT_FROM_CERTIFICATE)
             .allowedRoles(allowedRoles)
             .contentProvider(new FK7804CertificateCreateDraftFromCertificateContentProvider())
+            .build(),
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.INACTIVE_CERTIFICATE_MODEL)
             .build()
     );
   }
