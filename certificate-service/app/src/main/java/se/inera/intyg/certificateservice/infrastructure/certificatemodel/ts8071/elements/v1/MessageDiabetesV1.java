@@ -1,7 +1,7 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionDiabetes.QUESTION_DIABETES_FIELD_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionDiabetes.QUESTION_DIABETES_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionDiabetesV1.QUESTION_DIABETES_FIELD_V1_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionDiabetesV1.QUESTION_DIABETES_V1_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationMessage;
@@ -11,13 +11,13 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.MessageLevel;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
-public class MessageDiabetes {
+public class MessageDiabetesV1 {
 
-  private MessageDiabetes() {
+  private MessageDiabetesV1() {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification messageDiabetes() {
+  public static ElementSpecification messageDiabetesV1() {
     return ElementSpecification.builder()
         .id(new ElementId("diabetes"))
         .configuration(
@@ -33,7 +33,8 @@ public class MessageDiabetes {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.show(QUESTION_DIABETES_ID, QUESTION_DIABETES_FIELD_ID)
+                CertificateElementRuleFactory.show(QUESTION_DIABETES_V1_ID,
+                    QUESTION_DIABETES_FIELD_V1_ID)
             )
         )
         .build();

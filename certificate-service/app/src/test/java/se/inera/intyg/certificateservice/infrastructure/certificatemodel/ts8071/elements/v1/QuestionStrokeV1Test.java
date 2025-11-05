@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -18,13 +18,13 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 
-class QuestionStrokeTest {
+class QuestionStrokeV1Test {
 
   private static final ElementId ELEMENT_ID = new ElementId("11.9");
 
   @Test
   void shallIncludeId() {
-    final var element = QuestionStroke.questionStroke();
+    final var element = QuestionStrokeV1.questionStrokeV1();
 
     assertEquals(ELEMENT_ID, element.id());
   }
@@ -39,7 +39,7 @@ class QuestionStrokeTest {
         .unselectedText("Nej")
         .build();
 
-    final var element = QuestionStroke.questionStroke();
+    final var element = QuestionStrokeV1.questionStrokeV1();
 
     assertEquals(expectedConfiguration, element.configuration());
   }
@@ -67,7 +67,7 @@ class QuestionStrokeTest {
             .build()
     );
 
-    final var element = QuestionStroke.questionStroke();
+    final var element = QuestionStrokeV1.questionStrokeV1();
 
     assertEquals(expectedRule, element.rules());
   }
@@ -80,14 +80,14 @@ class QuestionStrokeTest {
             .build()
     );
 
-    final var element = QuestionStroke.questionStroke();
+    final var element = QuestionStrokeV1.questionStrokeV1();
 
     assertEquals(expectedValidations, element.validations());
   }
 
   @Test
   void shallIncludeMapping() {
-    final var element = QuestionStroke.questionStroke();
+    final var element = QuestionStrokeV1.questionStrokeV1();
 
     assertEquals(new ElementMapping(new ElementId("11"), null), element.mapping());
   }
@@ -108,7 +108,7 @@ class QuestionStrokeTest {
               .build()
       );
 
-      final var element = QuestionStroke.questionStroke();
+      final var element = QuestionStrokeV1.questionStrokeV1();
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -128,7 +128,7 @@ class QuestionStrokeTest {
               .build()
       );
 
-      final var element = QuestionStroke.questionStroke();
+      final var element = QuestionStrokeV1.questionStrokeV1();
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -148,7 +148,7 @@ class QuestionStrokeTest {
               .build()
       );
 
-      final var element = QuestionStroke.questionStroke();
+      final var element = QuestionStrokeV1.questionStrokeV1();
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 

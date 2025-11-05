@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1;
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionHjartsjukdom.QUESTION_HJARTSJUKDOM_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionHjartsjukdom.QUESTION_HJARTSJUKDOM_ID;
@@ -13,22 +13,22 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
 
-public class QuestionStroke {
+public class QuestionStrokeV1 {
 
-  public static final ElementId QUESTION_STROKE_ID = new ElementId("11.9");
-  public static final FieldId QUESTION_STROKE_FIELD_ID = new FieldId("11.9");
+  public static final ElementId QUESTION_STROKE_V1_ID = new ElementId("11.9");
+  public static final FieldId QUESTION_STROKE_V1_FIELD_ID = new FieldId("11.9");
 
-  private QuestionStroke() {
+  private QuestionStrokeV1() {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionStroke(
+  public static ElementSpecification questionStrokeV1(
       ElementSpecification... children) {
     return ElementSpecification.builder()
-        .id(QUESTION_STROKE_ID)
+        .id(QUESTION_STROKE_V1_ID)
         .configuration(
             ElementConfigurationRadioBoolean.builder()
-                .id(QUESTION_STROKE_FIELD_ID)
+                .id(QUESTION_STROKE_V1_FIELD_ID)
                 .selectedText("Ja")
                 .unselectedText("Nej")
                 .name(
@@ -46,8 +46,8 @@ public class QuestionStroke {
         .rules(
             List.of(
                 CertificateElementRuleFactory.mandatoryExist(
-                    QUESTION_STROKE_ID,
-                    QUESTION_STROKE_FIELD_ID
+                    QUESTION_STROKE_V1_ID,
+                    QUESTION_STROKE_V1_FIELD_ID
                 ),
                 CertificateElementRuleFactory.show(
                     QUESTION_HJARTSJUKDOM_ID,

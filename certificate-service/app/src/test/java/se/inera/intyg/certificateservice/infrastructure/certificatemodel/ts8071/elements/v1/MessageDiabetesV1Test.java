@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -12,20 +12,20 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRu
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.MessageLevel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 
-class MessageDiabetesTest {
+class MessageDiabetesV1Test {
 
   private static final ElementId ELEMENT_ID = new ElementId("diabetes");
 
   @Test
   void shallIncludeId() {
-    final var element = MessageDiabetes.messageDiabetes();
+    final var element = MessageDiabetesV1.messageDiabetesV1();
 
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
   void shallIncludeRules() {
-    final var element = MessageDiabetes.messageDiabetes();
+    final var element = MessageDiabetesV1.messageDiabetesV1();
 
     assertEquals(
         List.of(
@@ -49,7 +49,7 @@ class MessageDiabetesTest {
         )
         .build();
 
-    final var element = MessageDiabetes.messageDiabetes();
+    final var element = MessageDiabetesV1.messageDiabetesV1();
 
     assertEquals(expectedConfiguration, element.configuration());
   }
