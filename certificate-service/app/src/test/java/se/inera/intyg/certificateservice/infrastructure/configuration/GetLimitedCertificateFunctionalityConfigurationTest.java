@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.certificateservice.domain.configuration.limitedcertificatefunctionality.dto.LimitedActionConfiguration;
 import se.inera.intyg.certificateservice.domain.configuration.limitedcertificatefunctionality.dto.LimitedCertificateFunctionalityActionsConfiguration;
@@ -18,13 +19,11 @@ import se.inera.intyg.certificateservice.domain.configuration.limitedcertificate
 @ExtendWith(MockitoExtension.class)
 class GetLimitedCertificateFunctionalityConfigurationTest {
 
-  private static final String LIMITED_FUNCTIONALITY_WITH_SEND_CONFIG = Paths.get("src", "test",
-      "resources",
+  private static final String LIMITED_FUNCTIONALITY_WITH_SEND_CONFIG = Paths.get(
       "limitedfunctionality",
       "limited-functionality-with-send-config.json").toString();
 
-  private static final String LIMITED_FUNCTIONALITY_WITHOUT_ACTIONS = Paths.get("src", "test",
-      "resources",
+  private static final String LIMITED_FUNCTIONALITY_WITHOUT_ACTIONS = Paths.get(
       "limitedfunctionality",
       "limited-functionality-without-actions.json").toString();
 
@@ -39,7 +38,7 @@ class GetLimitedCertificateFunctionalityConfigurationTest {
   void shallParseFileWithActionSend() {
     ReflectionTestUtils.setField(getLimitedCertificateFunctionalityConfiguration,
         "limitedCertificateFunctionalityConfigurationPath",
-        LIMITED_FUNCTIONALITY_WITH_SEND_CONFIG);
+        new ClassPathResource(LIMITED_FUNCTIONALITY_WITH_SEND_CONFIG));
 
     final var expectedInactiveCertificateConfiguration = List.of(
         LimitedCertificateFunctionalityConfiguration.builder()
@@ -68,7 +67,7 @@ class GetLimitedCertificateFunctionalityConfigurationTest {
   void shallParseFileWithoutActions() {
     ReflectionTestUtils.setField(getLimitedCertificateFunctionalityConfiguration,
         "limitedCertificateFunctionalityConfigurationPath",
-        LIMITED_FUNCTIONALITY_WITHOUT_ACTIONS);
+        new ClassPathResource(LIMITED_FUNCTIONALITY_WITHOUT_ACTIONS));
 
     final var expectedInactiveCertificateConfiguration = List.of(
         LimitedCertificateFunctionalityConfiguration.builder()

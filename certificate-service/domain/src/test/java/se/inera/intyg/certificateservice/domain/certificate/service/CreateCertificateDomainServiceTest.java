@@ -80,7 +80,8 @@ class CreateCertificateDomainServiceTest {
       doReturn(CERTIFICATE_MODEL_ID).when(certificateModel).id();
       doReturn(Collections.emptyList()).when(certificateActionConfigurationRepository)
           .findAccessConfiguration(CERTIFICATE_MODEL_ID.type());
-      doReturn(certificateModel).when(certificateModelRepository).getById(CERTIFICATE_MODEL_ID);
+      doReturn(certificateModel).when(certificateModelRepository)
+          .getActiveById(CERTIFICATE_MODEL_ID);
       doReturn(certificate).when(certificateRepository).create(certificateModel);
       doReturn(true).when(certificateModel)
           .allowTo(CertificateActionType.CREATE, Optional.of(ACTION_EVALUATION));
@@ -153,7 +154,8 @@ class CreateCertificateDomainServiceTest {
 
       @BeforeEach
       void setUp() {
-        doReturn(certificateModel).when(certificateModelRepository).getById(CERTIFICATE_MODEL_ID);
+        doReturn(certificateModel).when(certificateModelRepository)
+            .getActiveById(CERTIFICATE_MODEL_ID);
         doReturn(false).when(certificateModel)
             .allowTo(CertificateActionType.CREATE, Optional.of(ACTION_EVALUATION));
       }
@@ -201,7 +203,8 @@ class CreateCertificateDomainServiceTest {
         doReturn(CERTIFICATE_MODEL_ID).when(certificateModel).id();
         doReturn(certificateAccessConfigurations).when(certificateActionConfigurationRepository)
             .findAccessConfiguration(CERTIFICATE_MODEL_ID.type());
-        doReturn(certificateModel).when(certificateModelRepository).getById(CERTIFICATE_MODEL_ID);
+        doReturn(certificateModel).when(certificateModelRepository)
+            .getActiveById(CERTIFICATE_MODEL_ID);
         doReturn(true).when(certificateModel)
             .allowTo(CertificateActionType.CREATE, Optional.of(ACTION_EVALUATION));
       }

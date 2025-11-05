@@ -33,6 +33,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUser.ajl
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AGREEMENT_FALSE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.BLOCKED_TRUE;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -880,6 +881,50 @@ class CertificateActionReplaceTest {
           certificateActionConfigurationRepository.findLimitedCertificateFunctionalityConfiguration(
               certificate.certificateModel().id()))
           .thenReturn(null);
+
+      assertTrue(
+          certificateActionReplace.evaluate(Optional.of(certificate),
+              Optional.of(actionEvaluation)),
+          () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
+      );
+    }
+  }
+
+  @Nested
+  class ActiveCertificateTests {
+
+    @Test
+    void shouldReturnFalseIfCertificateIsInactive() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .build();
+
+      final var certificate = certificateBuilder
+          .certificateModel(
+              fk7804certificateModelBuilder()
+                  .activeFrom(LocalDateTime.now().plusDays(1))
+                  .build()
+          )
+          .build();
+
+      assertFalse(
+          certificateActionReplace.evaluate(Optional.of(certificate),
+              Optional.of(actionEvaluation)),
+          () -> "Expected false when passing %s and %s".formatted(actionEvaluation, certificate)
+      );
+    }
+
+    @Test
+    void shouldReturnTrueIfCertificateIsActive() {
+      final var actionEvaluation = actionEvaluationBuilder
+          .build();
+
+      final var certificate = certificateBuilder
+          .certificateModel(
+              fk7804certificateModelBuilder()
+                  .activeFrom(LocalDateTime.now().minusDays(1))
+                  .build()
+          )
+          .build();
 
       assertTrue(
           certificateActionReplace.evaluate(Optional.of(certificate),

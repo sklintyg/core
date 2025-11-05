@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7804CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataRelation.RELATION_COMPLEMENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnit.ALFA_ALLERGIMOTTAGNINGEN;
@@ -47,7 +48,7 @@ class CertificateActionMessagesTest {
         CERTIFICATE_ACTION_SPECIFICATION
     );
 
-    certificateBuilder = MedicalCertificate.builder()
+    certificateBuilder = fk7804CertificateBuilder()
         .status(Status.SIGNED)
         .sent(TestDataCertificate.SENT)
         .certificateMetaData(

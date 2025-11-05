@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -23,7 +24,6 @@ class DefaultCitizenAvailableFunctionsProviderTest {
   void setUp() {
     when(certificate.certificateModel()).thenReturn(certificateModel);
     when(certificateModel.fileName()).thenReturn("fileName.pdf");
-    when(certificate.isSendActiveForCitizen()).thenReturn(true);
   }
 
   @Test
@@ -38,10 +38,26 @@ class DefaultCitizenAvailableFunctionsProviderTest {
         .enabled(true)
         .build();
 
+    when(certificate.isSendActiveForCitizen()).thenReturn(true);
+
     final var actual = new DefaultCitizenAvailableFunctionsProvider()
         .of(certificate).getFirst();
 
     assertEquals(expected, actual);
+  }
+
+  @Test
+  void shouldNotReturnSendFunctionIfCertificateModelIsInactive() {
+    when(certificateModel.isInactive()).thenReturn(true);
+
+    final var actual = new DefaultCitizenAvailableFunctionsProvider()
+        .of(certificate);
+
+    assertTrue(
+        actual.stream().noneMatch(
+            function -> function.type() == CitizenAvailableFunctionType.SEND_CERTIFICATE
+        )
+    );
   }
 
   @Test
