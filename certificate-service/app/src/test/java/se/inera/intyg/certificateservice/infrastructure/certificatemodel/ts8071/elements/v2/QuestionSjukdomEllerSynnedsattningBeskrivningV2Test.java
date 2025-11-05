@@ -26,7 +26,7 @@ class QuestionSjukdomEllerSynnedsattningBeskrivningV2Test {
 
   @Test
   void shouldIncludeId() {
-    final var element = QuestionSjukdomEllerSynnedsattningBeskrivningV2.questionSjukdomEllerSynnedsattningBeskrivning();
+    final var element = QuestionSjukdomEllerSynnedsattningBeskrivningV2.questionSjukdomEllerSynnedsattningBeskrivningV2();
 
     assertEquals(ELEMENT_ID, element.id());
   }
@@ -38,7 +38,7 @@ class QuestionSjukdomEllerSynnedsattningBeskrivningV2Test {
         .id(new FieldId("7.2"))
         .build();
 
-    final var element = QuestionSjukdomEllerSynnedsattningBeskrivningV2.questionSjukdomEllerSynnedsattningBeskrivning();
+    final var element = QuestionSjukdomEllerSynnedsattningBeskrivningV2.questionSjukdomEllerSynnedsattningBeskrivningV2();
 
     assertEquals(expectedConfiguration, element.configuration());
   }
@@ -63,7 +63,7 @@ class QuestionSjukdomEllerSynnedsattningBeskrivningV2Test {
             .build()
     );
 
-    final var element = QuestionSjukdomEllerSynnedsattningBeskrivningV2.questionSjukdomEllerSynnedsattningBeskrivning();
+    final var element = QuestionSjukdomEllerSynnedsattningBeskrivningV2.questionSjukdomEllerSynnedsattningBeskrivningV2();
 
     assertEquals(expectedRules, element.rules());
   }
@@ -77,7 +77,7 @@ class QuestionSjukdomEllerSynnedsattningBeskrivningV2Test {
             .build()
     );
 
-    final var element = QuestionSjukdomEllerSynnedsattningBeskrivningV2.questionSjukdomEllerSynnedsattningBeskrivning();
+    final var element = QuestionSjukdomEllerSynnedsattningBeskrivningV2.questionSjukdomEllerSynnedsattningBeskrivningV2();
 
     assertEquals(expectedValidations, element.validations());
   }
@@ -98,7 +98,7 @@ class QuestionSjukdomEllerSynnedsattningBeskrivningV2Test {
               .build()
       );
 
-      final var element = QuestionSjukdomEllerSynnedsattningBeskrivningV2.questionSjukdomEllerSynnedsattningBeskrivning();
+      final var element = QuestionSjukdomEllerSynnedsattningBeskrivningV2.questionSjukdomEllerSynnedsattningBeskrivningV2();
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -118,7 +118,7 @@ class QuestionSjukdomEllerSynnedsattningBeskrivningV2Test {
               .build()
       );
 
-      final var element = QuestionSjukdomEllerSynnedsattningBeskrivningV2.questionSjukdomEllerSynnedsattningBeskrivning();
+      final var element = QuestionSjukdomEllerSynnedsattningBeskrivningV2.questionSjukdomEllerSynnedsattningBeskrivningV2();
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -138,7 +138,7 @@ class QuestionSjukdomEllerSynnedsattningBeskrivningV2Test {
               .build()
       );
 
-      final var element = QuestionSjukdomEllerSynnedsattningBeskrivningV2.questionSjukdomEllerSynnedsattningBeskrivning();
+      final var element = QuestionSjukdomEllerSynnedsattningBeskrivningV2.questionSjukdomEllerSynnedsattningBeskrivningV2();
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -148,7 +148,7 @@ class QuestionSjukdomEllerSynnedsattningBeskrivningV2Test {
 
   @Test
   void shouldIncludeMapping() {
-    final var element = QuestionSjukdomEllerSynnedsattningBeskrivningV2.questionSjukdomEllerSynnedsattningBeskrivning();
+    final var element = QuestionSjukdomEllerSynnedsattningBeskrivningV2.questionSjukdomEllerSynnedsattningBeskrivningV2();
 
     assertEquals(new ElementMapping(new ElementId("7"), null), element.mapping());
   }

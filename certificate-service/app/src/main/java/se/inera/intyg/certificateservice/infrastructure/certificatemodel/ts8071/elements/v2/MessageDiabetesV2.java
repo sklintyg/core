@@ -1,7 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionDiabetesV1.QUESTION_DIABETES_FIELD_V1_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionDiabetesV1.QUESTION_DIABETES_V1_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionDiabetesV2.QUESTION_DIABETES_FIELD_V2_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionDiabetesV2.QUESTION_DIABETES_V2_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationMessage;
@@ -33,8 +33,8 @@ public class MessageDiabetesV2 {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.show(QUESTION_DIABETES_V1_ID,
-                    QUESTION_DIABETES_FIELD_V1_ID)
+                CertificateElementRuleFactory.show(QUESTION_DIABETES_V2_ID,
+                    QUESTION_DIABETES_FIELD_V2_ID)
             )
         )
         .build();

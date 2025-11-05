@@ -24,7 +24,7 @@ public class QuestionSjukdomEllerSynnedsattningBeskrivningV2 {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionSjukdomEllerSynnedsattningBeskrivning() {
+  public static ElementSpecification questionSjukdomEllerSynnedsattningBeskrivningV2() {
     return ElementSpecification.builder()
         .id(QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_BESKRIVNING_V2_ID)
         .configuration(
