@@ -116,6 +116,31 @@ public class InMemoryCertificateModelRepository implements CertificateModelRepos
   }
 
   @Override
+  public CertificateModel getActiveById(CertificateModelId certificateModelId) {
+    if (certificateModelId == null) {
+      throw new IllegalArgumentException("CertificateModelId is null!");
+    }
+
+    final var certificateModel = getCertificateModelMap().get(certificateModelId);
+    if (certificateModel == null) {
+      throw new IllegalArgumentException(
+          "CertificateModel missing: %s".formatted(certificateModelId)
+      );
+    }
+
+    if (LocalDateTime.now(ZoneId.systemDefault()).isBefore(certificateModel.activeFrom())) {
+      throw new IllegalArgumentException(
+          "CertificateModel with id '%s' not active until '%s'".formatted(
+              certificateModel.id(),
+              certificateModel.activeFrom()
+          )
+      );
+    }
+
+    return certificateModel;
+  }
+
+  @Override
   public List<CertificateModel> all() {
     return getCertificateModelMap().values().stream().toList();
   }

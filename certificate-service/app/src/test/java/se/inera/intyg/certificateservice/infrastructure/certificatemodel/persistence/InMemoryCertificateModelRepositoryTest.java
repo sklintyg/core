@@ -367,6 +367,116 @@ class InMemoryCertificateModelRepositoryTest {
   }
 
   @Nested
+  class GetActiveByIdTests {
+
+    @Test
+    void shallReturnCertificateModelIfIdExistsAndIsActive() {
+      inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
+          List.of(certificateModelFactoryOne)
+      );
+
+      final var expectedModel = CertificateModel.builder()
+          .id(
+              CertificateModelId.builder()
+                  .type(new CertificateType(TYPE_ONE))
+                  .version(new CertificateVersion(VERSION_ONE))
+                  .build()
+          )
+          .certificateVersions(List.of(new CertificateVersion(VERSION_ONE)))
+          .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
+          .build();
+
+      doReturn(expectedModel).when(certificateModelFactoryOne).create();
+      initCertificateModelMap(inMemoryCertificateModelRepository);
+
+      final var actualModel = inMemoryCertificateModelRepository.getActiveById(expectedModel.id());
+
+      assertEquals(expectedModel, actualModel);
+    }
+
+    @Test
+    void shallThrowExceptionIfIdIsMissing() {
+      inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
+          List.of(certificateModelFactoryOne)
+      );
+
+      final var expectedModel = CertificateModel.builder()
+          .id(
+              CertificateModelId.builder()
+                  .type(new CertificateType(TYPE_ONE))
+                  .version(new CertificateVersion(VERSION_ONE))
+                  .build()
+          )
+          .certificateVersions(List.of(new CertificateVersion(VERSION_ONE)))
+          .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(1))
+          .build();
+
+      doReturn(expectedModel).when(certificateModelFactoryOne).create();
+      initCertificateModelMap(inMemoryCertificateModelRepository);
+
+      final var certificateModelId = CertificateModelId.builder()
+          .type(new CertificateType(TYPE_TWO))
+          .version(new CertificateVersion(VERSION_ONE))
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> inMemoryCertificateModelRepository.getActiveById(certificateModelId)
+      );
+
+      assertEquals("CertificateModel missing: %s".formatted(certificateModelId),
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowExceptionIfCertificateModelIdIsNull() {
+      inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
+          List.of(certificateModelFactoryOne)
+      );
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> inMemoryCertificateModelRepository.getActiveById(null)
+      );
+
+      assertEquals("CertificateModelId is null!", illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowExceptionIfCertificateModelNotActive() {
+      inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
+          List.of(certificateModelFactoryOne)
+      );
+
+      final var expectedModel = CertificateModel.builder()
+          .id(
+              CertificateModelId.builder()
+                  .type(new CertificateType(TYPE_ONE))
+                  .version(new CertificateVersion(VERSION_ONE))
+                  .build()
+          )
+          .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).plusMinutes(1))
+          .build();
+
+      final var certificateModelId = expectedModel.id();
+
+      doReturn(expectedModel).when(certificateModelFactoryOne).create();
+      initCertificateModelMap(inMemoryCertificateModelRepository);
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> inMemoryCertificateModelRepository.getActiveById(certificateModelId)
+      );
+
+      assertEquals(
+          "CertificateModel with id '%s' not active until '%s'".formatted(
+              expectedModel.id(),
+              expectedModel.activeFrom()
+          ),
+          illegalArgumentException.getMessage()
+      );
+    }
+
+  }
+
+  @Nested
   class TestTestabilityCertificateModelRepository {
 
 

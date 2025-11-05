@@ -16,4 +16,6 @@ public interface CertificateModelRepository {
   Optional<CertificateModel> findLatestActiveByExternalType(Code code);
 
   CertificateModel getById(CertificateModelId certificateModelId);
+
+  CertificateModel getActiveById(CertificateModelId certificateModelId);
 }

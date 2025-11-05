@@ -48,7 +48,7 @@ class RenewExternalCertificateDomainServiceTest {
     final var certificateModel = mock(CertificateModel.class);
 
     doReturn(certificateModel).when(certificateModelRepository)
-        .getById(FK7804_CERTIFICATE_MODEL_ID);
+        .getActiveById(FK7804_CERTIFICATE_MODEL_ID);
     doReturn(certificate).when(certificateRepository)
         .createFromPlaceholder(placeholderRequest, certificateModel);
 
@@ -67,7 +67,7 @@ class RenewExternalCertificateDomainServiceTest {
     final var certificateModel = mock(CertificateModel.class);
 
     doReturn(certificateModel).when(certificateModelRepository)
-        .getById(FK7804_CERTIFICATE_MODEL_ID);
+        .getActiveById(FK7804_CERTIFICATE_MODEL_ID);
     doReturn(certificate).when(certificateRepository)
         .createFromPlaceholder(placeholderRequest, certificateModel);
 
@@ -86,7 +86,7 @@ class RenewExternalCertificateDomainServiceTest {
     final var certificateModel = mock(CertificateModel.class);
 
     doReturn(certificateModel).when(certificateModelRepository)
-        .getById(FK7804_CERTIFICATE_MODEL_ID);
+        .getActiveById(FK7804_CERTIFICATE_MODEL_ID);
     doReturn(certificate).when(certificateRepository)
         .createFromPlaceholder(placeholderRequest, certificateModel);
     doReturn(certificate).when(certificateRepository).save(certificate);
@@ -107,7 +107,7 @@ class RenewExternalCertificateDomainServiceTest {
     final var certificateModel = mock(CertificateModel.class);
 
     doReturn(certificateModel).when(certificateModelRepository)
-        .getById(FK7804_CERTIFICATE_MODEL_ID);
+        .getActiveById(FK7804_CERTIFICATE_MODEL_ID);
     doReturn(certificate).when(certificateRepository)
         .createFromPlaceholder(placeholderRequest, certificateModel);
 
@@ -134,7 +134,7 @@ class RenewExternalCertificateDomainServiceTest {
     final var certificateModel = mock(CertificateModel.class);
 
     doReturn(certificateModel).when(certificateModelRepository)
-        .getById(FK7804_CERTIFICATE_MODEL_ID);
+        .getActiveById(FK7804_CERTIFICATE_MODEL_ID);
     doReturn(certificate).when(certificateRepository)
         .createFromPlaceholder(placeholderRequest, certificateModel);
 
