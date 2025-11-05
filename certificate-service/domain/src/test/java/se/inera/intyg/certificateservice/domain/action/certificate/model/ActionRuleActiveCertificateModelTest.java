@@ -9,14 +9,14 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
-class ActionRuleActiveCertificateTest {
+class ActionRuleActiveCertificateModelTest {
 
   @Test
   void shouldReturnTrueIfCertificateIsActive() {
     final var activeCertificate = fk7804CertificateBuilder()
         .build();
 
-    final var result = new ActionRuleActiveCertificate()
+    final var result = new ActionRuleActiveCertificateModel()
         .evaluate(
             Optional.of(activeCertificate),
             Optional.empty()
@@ -36,7 +36,7 @@ class ActionRuleActiveCertificateTest {
         )
         .build();
 
-    final var result = new ActionRuleActiveCertificate()
+    final var result = new ActionRuleActiveCertificateModel()
         .evaluate(
             Optional.of(inactiveCertificate),
             Optional.empty()
@@ -47,7 +47,7 @@ class ActionRuleActiveCertificateTest {
 
   @Test
   void shouldReturnFalseIfCertificateIsMissing() {
-    final var result = new ActionRuleActiveCertificate()
+    final var result = new ActionRuleActiveCertificateModel()
         .evaluate(
             Optional.empty(),
             Optional.empty()
