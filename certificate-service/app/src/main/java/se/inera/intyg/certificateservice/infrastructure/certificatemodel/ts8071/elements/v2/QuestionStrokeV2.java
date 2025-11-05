@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionMissbrukV2.QUESTION_MISSBRUK_V2_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionHjartsjukdom.QUESTION_HJARTSJUKDOM_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionHjartsjukdom.QUESTION_HJARTSJUKDOM_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
@@ -10,29 +11,28 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
 
-public class QuestionMissbrukJournaluppgifterV2 {
+public class QuestionStrokeV2 {
 
-  public static final ElementId QUESTION_MISSBRUK_JOURNALUPPGIFTER_V2_ID = new ElementId("18.3");
-  public static final FieldId QUESTION_MISSBRUK_JOURNALUPPGIFTER_V2_FIELD_ID = new FieldId("18.3");
+  public static final ElementId QUESTION_STROKE_V2_ID = new ElementId("11.9");
+  public static final FieldId QUESTION_STROKE_V2_FIELD_ID = new FieldId("11.9");
 
-  private QuestionMissbrukJournaluppgifterV2() {
+  private QuestionStrokeV2() {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionMissbrukJournaluppgifterV2(
+  public static ElementSpecification questionStrokeV2(
       ElementSpecification... children) {
     return ElementSpecification.builder()
-        .id(QUESTION_MISSBRUK_JOURNALUPPGIFTER_V2_ID)
+        .id(QUESTION_STROKE_V2_ID)
         .configuration(
             ElementConfigurationRadioBoolean.builder()
-                .id(QUESTION_MISSBRUK_JOURNALUPPGIFTER_V2_FIELD_ID)
-                .name(
-                    "Finns journaluppgifter, anamnestiska uppgifter, resultat av laboratorieprover eller andra tecken på överkonsumtion av alkohol som inte är tillfällig eller tecken på pågående bruk av psykoaktiva substanser eller läkemedel?")
-                .description(
-                    "Här avses uppgifter om eller tecken på beroende av psykoaktiv substans oavsett när i tid detta förekommit. Här avses också uppgifter om eller tecken på aktuellt skadligt mönster av bruk, skadligt bruk eller överkonsumtion av alkohol som inte är tillfälligt under de senaste tolv månaderna.")
+                .id(QUESTION_STROKE_V2_FIELD_ID)
                 .selectedText("Ja")
                 .unselectedText("Nej")
+                .name(
+                    "Har personen haft en stroke eller finns tecken på hjärnskada efter trauma, stroke eller annan sjukdom i centrala nervsystemet?")
                 .build()
         )
         .validations(
@@ -45,14 +45,18 @@ public class QuestionMissbrukJournaluppgifterV2 {
         .rules(
             List.of(
                 CertificateElementRuleFactory.mandatoryExist(
-                    QUESTION_MISSBRUK_JOURNALUPPGIFTER_V2_ID,
-                    QUESTION_MISSBRUK_JOURNALUPPGIFTER_V2_FIELD_ID
+                    QUESTION_STROKE_V2_ID,
+                    QUESTION_STROKE_V2_FIELD_ID
+                ),
+                CertificateElementRuleFactory.show(
+                    QUESTION_HJARTSJUKDOM_ID,
+                    QUESTION_HJARTSJUKDOM_FIELD_ID
                 )
             )
         )
-        .mapping(new ElementMapping(QUESTION_MISSBRUK_V2_ID, null))
+        .mapping(new ElementMapping(QUESTION_HJARTSJUKDOM_ID, null))
+        .shouldValidate(ElementDataPredicateFactory.valueBoolean(QUESTION_HJARTSJUKDOM_ID))
         .children(List.of(children))
         .build();
   }
 }
-

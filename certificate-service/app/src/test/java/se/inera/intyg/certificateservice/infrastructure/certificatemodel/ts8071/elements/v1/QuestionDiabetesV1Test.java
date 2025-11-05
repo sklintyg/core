@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -12,13 +12,13 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 
-class QuestionDiabetesTest {
+class QuestionDiabetesV1Test {
 
   private static final ElementId ELEMENT_ID = new ElementId("12");
 
   @Test
   void shallIncludeId() {
-    final var element = QuestionDiabetes.questionDiabetes();
+    final var element = QuestionDiabetesV1.questionDiabetesV1();
 
     assertEquals(ELEMENT_ID, element.id());
   }
@@ -34,7 +34,7 @@ class QuestionDiabetesTest {
         .unselectedText("Nej")
         .build();
 
-    final var element = QuestionDiabetes.questionDiabetes();
+    final var element = QuestionDiabetesV1.questionDiabetesV1();
 
     assertEquals(expectedConfiguration, element.configuration());
   }
@@ -53,7 +53,7 @@ class QuestionDiabetesTest {
             .build()
     );
 
-    final var element = QuestionDiabetes.questionDiabetes();
+    final var element = QuestionDiabetesV1.questionDiabetesV1();
 
     assertEquals(expectedRule, element.rules());
   }
@@ -66,7 +66,7 @@ class QuestionDiabetesTest {
             .build()
     );
 
-    final var element = QuestionDiabetes.questionDiabetes();
+    final var element = QuestionDiabetesV1.questionDiabetesV1();
 
     assertEquals(expectedValidations, element.validations());
   }

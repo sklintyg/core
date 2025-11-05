@@ -1,7 +1,7 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2;
 
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionDiabetes.QUESTION_DIABETES_FIELD_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionDiabetes.QUESTION_DIABETES_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionDiabetesV2.QUESTION_DIABETES_FIELD_V2_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionDiabetesV2.QUESTION_DIABETES_V2_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationMessage;
@@ -11,13 +11,13 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.MessageLevel;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
-public class MessageDiabetes {
+public class MessageDiabetesV2 {
 
-  private MessageDiabetes() {
+  private MessageDiabetesV2() {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification messageDiabetes() {
+  public static ElementSpecification messageDiabetesV2() {
     return ElementSpecification.builder()
         .id(new ElementId("diabetes"))
         .configuration(
@@ -25,7 +25,7 @@ public class MessageDiabetes {
                 .message(
                     ElementMessage.builder()
                         .content(
-                            "Har personen läkemedelsbehandlad diabetes krävs normalt ett särskilt läkarintyg om detta. Om personen redan har ett villkor om att skicka in ett nytt diabetesintyg till Transportstyrelsen i framtiden är det dock inte alltid som ett sådant intyg krävs vid prövningen av ansökan. Diabetesintyg går att skicka in digitalt via Webcert. Intygsblanketten finns också på <LINK:transportstyrelsenLink>.")
+                            "Har personen läkemedelsbehandlad diabetes krävs normalt ett särskilt läkarintyg om detta. Om personen redan har ett villkor om att skicka in ett nytt diabetesintyg till Transportstyrelsen i framtiden är det dock inte alltid som ett sådant intyg krävs vid prövningen av ansökan. Diabetesintyg går att skicka in digitalt via Webcert. Intygsblanketten finns också på <LINK:transportstyrelsenHemsidaLink>.")
                         .level(MessageLevel.OBSERVE)
                         .build()
                 )
@@ -33,9 +33,11 @@ public class MessageDiabetes {
         )
         .rules(
             List.of(
-                CertificateElementRuleFactory.show(QUESTION_DIABETES_ID, QUESTION_DIABETES_FIELD_ID)
+                CertificateElementRuleFactory.show(QUESTION_DIABETES_V2_ID,
+                    QUESTION_DIABETES_FIELD_V2_ID)
             )
         )
         .build();
   }
 }
+

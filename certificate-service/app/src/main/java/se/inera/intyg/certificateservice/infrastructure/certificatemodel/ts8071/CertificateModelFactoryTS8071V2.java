@@ -13,14 +13,12 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.CategoryIntygetBaseratPa.categoryIntygetBaseratPa;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.CategoryNeurologiskaSjukdomar.categoryNeurologiskaSjukdomar;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.CategoryNjursjukdomar.categoryNjursjukdomar;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.CategoryOvrigKommentar.categoryOvrigKommentar;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.CategoryOvrigMedicinering.categoryOvrigMedicinering;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.CategoryPsykiskaSjukdomarOchStorningar.categoryPsykiskaSjukdomarOchStorningar;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.CategoryRorelseorganensFunktioner.categoryRorelseorganensFunktioner;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.CategorySomnOchVakenhetsstorningar.categorySomnOchVakenhetsstorningar;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.CategorySynfunktion.categorySynfunktion;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.CategorySynskarpa.categorySynskarpa;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.MessageDiabetes.messageDiabetes;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionArytmi.questionArytmi;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionArytmiBeskrivning.questionArytmiBeskrivning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionBalanssinne.questionBalanssinne;
@@ -28,7 +26,6 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionBaseratPaDatum.questionBaseratPaDatum;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionBedomning.questionBedomning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionBedomningOkand.questionBedomningOkand;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionDiabetes.questionDiabetes;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionEpilepsi.questionEpilepsi;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionEpilepsiAnfall.questionEpilepsiAnfall;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionEpilepsiAnfallBeskrivning.questionEpilepsiAnfallBeskrivning;
@@ -52,21 +49,22 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionRorlighetBeskrivning.questionRorlighetBeskrivning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionRorlighetHjalpaPassagerare.questionRorlighetHjalpaPassagerare;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSjukdomEllerSynnedsattning.questionSjukdomEllerSynnedsattning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSjukdomEllerSynnedsattningBeskrivning.questionSjukdomEllerSynnedsattningBeskrivning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSjukdomshistorik.questionSjukdomshistorik;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSomnBehandling.questionSomnBehandling;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSomnBeskrivning.questionSomnBeskrivning;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionStroke.questionStroke;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSynfunktioner.questionSynfunktioner;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSynkopeBeskrivning.questionSynkopeBeskrivning;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSynskarpa.questionSynskarpa;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.CategoryAlkoholOchLakemedelV2.categoryAlkoholOchLakemedelV2;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.CategoryHorselV2.categoryHorselV2;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.CategoryIntellektuellFunktionsnedsattningV2.categoryIntellektuellFunktionsnedsattningV2;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.CategoryOvrigKommentarV2.categoryOvrigKommentarV2;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.MessageDiabetesV2.messageDiabetesV2;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionBalanssinneBeskrivningV2.questionBalanssinneBeskrivningV2;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionBedomningRiskV2.questionBedomningRiskV2;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionDemensBeskrivningV2.questionDemensBeskrivningV2;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionDemensV2.questionDemensV2;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionDiabetesV2.questionDiabetesV2;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionEpilepsiMedicinTidpunktV2.questionEpilepsiMedicinTidpunktV2;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionGlasogonStyrkaV2.questionGlasogonStyrkaV2;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionHjartsjukdomBehandladBeskrivningV2.questionHjartsjukdomBehandladBeskrivningV2;
@@ -96,11 +94,13 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionPsykiskV2.QUESTION_PSYKISK_V2_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionPsykiskV2.QUESTION_PSYKISK_V2_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionPsykiskV2.questionPsykiskV2;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionSjukdomEllerSynnedsattningBeskrivningV2.questionSjukdomEllerSynnedsattningBeskrivningV2;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionSjukdomshistorikBeskrivningV2.questionSjukdomshistorikBeskrivningV2;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionSomnV2.QUESTION_SOMN_V2_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionSomnV2.QUESTION_SOMN_V2_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionSomnV2.questionSomnV2;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionStrokePaverkanV2.questionStrokePaverkanV2;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionStrokeV2.questionStrokeV2;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionSynkopeV2.QUESTION_SYNKOPE_V2_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionSynkopeV2.QUESTION_SYNKOPE_V2_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionSynkopeV2.questionSynkopeV2;
@@ -207,7 +207,7 @@ public class CertificateModelFactoryTS8071V2 implements CertificateModelFactory 
                 ),
                 categoryAnamnes(
                     questionSjukdomEllerSynnedsattning(
-                        questionSjukdomEllerSynnedsattningBeskrivning()
+                        questionSjukdomEllerSynnedsattningBeskrivningV2()
                     ),
                     questionSjukdomshistorik(
                         questionSjukdomshistorikBeskrivningV2()
@@ -244,13 +244,13 @@ public class CertificateModelFactoryTS8071V2 implements CertificateModelFactory 
                         questionSynkopeBeskrivning(QUESTION_SYNKOPE_V2_ID,
                             QUESTION_SYNKOPE_V2_FIELD_ID)
                     ),
-                    questionStroke(
+                    questionStrokeV2(
                         questionStrokePaverkanV2()
                     )
                 ),
                 categoryDiabetes(
-                    questionDiabetes(),
-                    messageDiabetes()
+                    questionDiabetesV2(),
+                    messageDiabetesV2()
                 ),
                 categoryNeurologiskaSjukdomar(
                     questionNeurologiskSjukdomV2(
@@ -327,7 +327,7 @@ public class CertificateModelFactoryTS8071V2 implements CertificateModelFactory 
                         questionMedicineringBeskrivningV2()
                     )
                 ),
-                categoryOvrigKommentar(
+                categoryOvrigKommentarV2(
                     questionOvrigBeskrivning()
                 ),
                 categoryBedomning(

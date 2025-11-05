@@ -1,23 +1,23 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 
-public class CategoryOvrigKommentar {
+public class CategoryOvrigKommentarV1 {
 
-  private static final ElementId INTYGET_OVRIG_KOMMENTAR_CATEGORY_ID = new ElementId(
+  private static final ElementId INTYGET_OVRIG_KOMMENTAR_CATEGORY_V1_ID = new ElementId(
       "KAT_16");
 
-  private CategoryOvrigKommentar() {
+  private CategoryOvrigKommentarV1() {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification categoryOvrigKommentar(
+  public static ElementSpecification categoryOvrigKommentarV1(
       ElementSpecification... children) {
     return ElementSpecification.builder()
-        .id(INTYGET_OVRIG_KOMMENTAR_CATEGORY_ID)
+        .id(INTYGET_OVRIG_KOMMENTAR_CATEGORY_V1_ID)
         .configuration(
             ElementConfigurationCategory.builder()
                 .name("Övrig kommentar")

@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationRadioBoolean;
@@ -8,21 +8,21 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 
-public class QuestionDiabetes {
+public class QuestionDiabetesV1 {
 
-  public static final ElementId QUESTION_DIABETES_ID = new ElementId("12");
-  public static final FieldId QUESTION_DIABETES_FIELD_ID = new FieldId("12.1");
+  public static final ElementId QUESTION_DIABETES_V1_ID = new ElementId("12");
+  public static final FieldId QUESTION_DIABETES_FIELD_V1_ID = new FieldId("12.1");
 
-  private QuestionDiabetes() {
+  private QuestionDiabetesV1() {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionDiabetes() {
+  public static ElementSpecification questionDiabetesV1() {
     return ElementSpecification.builder()
-        .id(QUESTION_DIABETES_ID)
+        .id(QUESTION_DIABETES_V1_ID)
         .configuration(
             ElementConfigurationRadioBoolean.builder()
-                .id(QUESTION_DIABETES_FIELD_ID)
+                .id(QUESTION_DIABETES_FIELD_V1_ID)
                 .selectedText("Ja")
                 .unselectedText("Nej")
                 .name("Har personen läkemedelsbehandlad diabetes?")
@@ -40,8 +40,8 @@ public class QuestionDiabetes {
         .rules(
             List.of(
                 CertificateElementRuleFactory.mandatoryExist(
-                    QUESTION_DIABETES_ID,
-                    QUESTION_DIABETES_FIELD_ID
+                    QUESTION_DIABETES_V1_ID,
+                    QUESTION_DIABETES_FIELD_V1_ID
                 )
             )
         )

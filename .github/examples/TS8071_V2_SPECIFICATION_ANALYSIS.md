@@ -1,4 +1,5 @@
 # Generated using AI support with model: Claude Sonnet 4.5
+# These files should be seen as an example of a file that can be generated to support developers. It has changed during development process and should not be seen as a 1-to-1 mapping of implementation or requirements.
 
 # TS8071 V2.0 Specification Analysis
 
@@ -11,8 +12,8 @@ spec requires.
 ## Summary
 
 - **Total Questions in V2 Spec**: ~95 questions/elements
-- **Questions that can use V1 implementation (COMMON)**: ~75 questions
-- **Questions that need NEW V2 implementation**: ~20 questions
+- **Questions that can use V1 implementation (COMMON)**: ~53 questions
+- **Questions that need NEW V2 implementation**: ~42 questions (including categories and messages)
 - **Questions REMOVED from V2 (V1 only)**: 6 questions (ADHD category)
 
 ---
@@ -138,15 +139,20 @@ spec requires.
 
 - **Files**:
     - `QuestionSjukdomEllerSynnedsattning.java` (common) - ✅ 7.1 Identical
-    - `QuestionSjukdomEllerSynnedsattningBeskrivning.java` (common) - ✅ 7.2 Identical
+    - `QuestionSjukdomEllerSynnedsattningBeskrivningV1.java` - NOT IN COMMON
     - `QuestionSjukdomshistorik.java` (common) - ✅ 7.3 Identical
-    - `QuestionSjukdomshistorikBeskrivningV1.java` - Text: "Ange vilken eller vilka sjukdomar"
+    - `QuestionSjukdomshistorikBeskrivningV1.java` - NOT IN COMMON
 
 **Decision**:
 
-- ✅ **USE V1 (COMMON)** for 7.1, 7.2, 7.3
-- ❌ **NEED NEW V2 QUESTION** for 7.4 - Text is different ("Ange vad" vs "Ange vilken eller vilka
-  sjukdomar")
+- ✅ **USE V1 (COMMON)** for 7.1, 7.3
+- ❌ **NEED NEW V2 QUESTION** for 7.2
+- ❌ **NEED NEW V2 QUESTION** for 7.4 - Text is different
+
+**V2 Implementation Created:**
+
+- ✅ `QuestionSjukdomEllerSynnedsattningBeskrivningV2.java` - V2-specific implementation
+- ✅ `QuestionSjukdomshistorikBeskrivningV2.java` - Text changed
 
 ---
 
@@ -251,17 +257,19 @@ spec requires.
     - `QuestionSynkopeV1.java` - Text: "Har personen eller har personen haft någon synkope?" (
       different)
     - `QuestionSynkopeBeskrivning.java` (common) - ✅ 11.8 Identical
-    - `QuestionStroke.java` (common) - ✅ 11.9 Identical
-    - `QuestionStrokePavarkan.java` (common) - ✅ 11.10 Identical
+    - `QuestionStroke.java` - NOT IN COMMON
+    - `QuestionStrokePavarkan.java` - NOT IN COMMON
 
 **Decision**:
 
-- ✅ **USE V1 (COMMON)** for 11.1, 11.3, 11.5, 11.6, 11.8, 11.9, 11.10
+- ✅ **USE V1 (COMMON)** for 11.1, 11.3, 11.5, 11.6, 11.8
 - ❌ **NEED NEW V2 QUESTION** for 11.2 - Text adds "och tidpunkt för diagnos"
 - ❌ **NEED NEW V2 QUESTION** for 11.4 - Config changed from SK-006 (TextField, 50) to SK-007 (
   TextArea, 250), Text changed
 - ❌ **NEED NEW V2 QUESTION** for 11.7 - Text changed from "Har personen eller har personen haft
   någon synkope?" to "Har personen haft en synkope?"
+- ❌ **NEED NEW V2 QUESTION** for 11.9
+- ❌ **NEED NEW V2 QUESTION** for 11.1
 
 ---
 
@@ -276,8 +284,10 @@ spec requires.
 **V1 Implementation:**
 
 - **Files**:
-    - `QuestionDiabetes.java` (common) - ✅ 12 Identical
-    - `MessageDiabetes.java` (common) - ✅ 12.2 Identical
+    - `QuestionDiabetes.java` - NOT IN COMMON
+    - `MessageDiabetes.java` - NOT IN COMMON
+    
+**Decision**: ❌ **NEED NEW V2 QUESTION** for 12 and 12.2
 
 **Decision**: ✅ **USE V1 (COMMON)** - All identical
 
@@ -383,14 +393,13 @@ spec requires.
 - **Files**:
     - `QuestionKognitivStorningV1.java` - Text: "Har personen **diagnos** allvarlig kognitiv
       störning?" (extra word "diagnos")
-    - `QuestionDemens.java` (common) - ✅ 16.2 Identical
-    - `QuestionDemensBeskrivningV1.java` (common) - Text includes extra parenthetical: "(Med grader
-      avses lindrig, måttlig/medelsvår eller grav/allvarlig.)"
+    - `QuestionDemens.java` - NOT IN COMMON
+    - `QuestionDemensBeskrivning.java` - NOT IN COMMON
 
 **Decision**:
 
 - ❌ **NEED NEW V2 QUESTION** for 16.1 - Text removes word "diagnos"
-- ✅ **USE V1 (COMMON)** for 16.2
+- ❌ **NEED NEW V2 QUESTION** for 16.2
 - ❌ **NEED NEW V2 QUESTION** for 16.3 - Text is shorter (removes parenthetical explanation)
 
 ---
@@ -623,41 +632,47 @@ utvecklingsstörning (KAT_14)
 | 3.0                                | Identitet                   | Common          | ✅ USE COMMON                                 |
 | 4                                  | Synfunktioner               | Common          | ✅ USE COMMON                                 |
 | 5.0-5.6                            | Synskarpa                   | Common          | ✅ USE COMMON                                 |
-| 24                                 | ToleransKorrektion          | V1 different    | ❌ NEW V2                                     |
-| 25                                 | GlasogonStyrka              | V1 different    | ❌ NEW V2                                     |
-| 7.1-7.3                            | Anamnes (7.1-7.3)           | Common          | ✅ USE COMMON                                 |
+| 24                                 | ToleransKorrektion          | V1 different    | ❌ NEW V2 - New structure                     |
+| 25                                 | GlasogonStyrka              | V1 different    | ❌ NEW V2 - New structure                     |
+| 7.1, 7.3                           | Anamnes (7.1, 7.3)          | Common          | ✅ USE COMMON                                 |
+| 7.2                                | SjukdomBeskrivning          | NOT IN V1       | ❌ NEW V2             |
 | 7.4                                | SjukdomshistorikBeskrivning | V1 exists       | ❌ NEW V2 - Text different                    |
 | 8.0                                | Balanssinne                 | Common          | ✅ USE COMMON                                 |
 | 8.2                                | BalanssinneBeskrivning      | V1 exists       | ❌ NEW V2 - Config changed TextField→TextArea |
 | 9 (cat)                            | Hörsel Category             | V1 exists       | ❌ NEW V2 - Show rule different               |
-| 9.0, 9.2                           | Hörsel questions            | Common          | ✅ USE COMMON                                 |
+| 9.0, 9.2                           | Hörsel questions            | V1 exists       | ❌ NEW V2 - For proper category mapping       |
 | 9.3                                | HorselhjalpmedelPosition    | V1 exists       | ❌ NEW V2 - Under new category                |
 | 10                                 | Rorlighet                   | Common          | ✅ USE COMMON                                 |
-| 11.1, 11.3, 11.5, 11.6, 11.8-11.10 | Hjart (most)                | Common          | ✅ USE COMMON                                 |
+| 11.1, 11.3, 11.5, 11.6, 11.8       | Hjart (some)                | Common          | ✅ USE COMMON                                 |
 | 11.2                               | HjartsjukdomBeskrivning     | V1 exists       | ❌ NEW V2 - Text adds "och tidpunkt"          |
 | 11.4                               | HjartBehandladBeskrivning   | V1 exists       | ❌ NEW V2 - Config/text changed               |
 | 11.7                               | Synkope                     | V1 exists       | ❌ NEW V2 - Text simplified                   |
-| 12                                 | Diabetes                    | Common          | ✅ USE COMMON                                 |
-| 13                                 | Neurologisk                 | Common          | ✅ USE COMMON                                 |
-| 13.2                               | NeurologiskBeskrivning      | Need check      | ❌ NEW V2                                     |
+| 11.9                               | Stroke                      | NOT IN V1       | ❌ NEW V2                                     |
+| 11.10                              | StrokePaverkan              | NOT IN V1       | ❌ NEW V2                                     |
+| 12                                 | Diabetes                    | NOT IN V1       | ❌ NEW V2                                     |
+| 12.2                               | MessageDiabetes             | NOT IN V1       | ❌ NEW V2                                     |
+| 13                                 | Neurologisk                 | V1 exists       | ❌ NEW V2 - Description incomplete            |
+| 13.2                               | NeurologiskBeskrivning      | V1 exists       | ❌ NEW V2 - Config changed                    |
 | 14.1-14.6, 14.8-14.9               | Epilepsi (most)             | Common          | ✅ USE COMMON                                 |
 | 14.7                               | EpilepsiMedicinTidpunkt     | V1 exists       | ❌ NEW V2 - Text adds "har"                   |
 | 15                                 | Njur                        | Common          | ✅ USE COMMON                                 |
-| 16.2                               | Demens                      | Common          | ✅ USE COMMON                                 |
 | 16.1                               | KognitivStorning            | V1 exists       | ❌ NEW V2 - Text removes "diagnos"            |
+| 16.2                               | Demens                      | NOT IN V1       | ❌ NEW V2 - V1 file doesn't exist             |
 | 16.3                               | DemensBeskrivning           | V1 exists       | ❌ NEW V2 - Text shortened                    |
-| 17                                 | Somn                        | Common          | ✅ USE COMMON                                 |
-| 18.3, 18.5, 18.6                   | Missbruk (some)             | Common          | ✅ USE COMMON                                 |
+| 17.1                               | Somn                        | V1 exists       | ❌ NEW V2 - Description text differs          |
+| 17.2, 17.3                         | Somn (beskrivning/beh)      | Common          | ✅ USE COMMON                                 |
+| 18.5, 18.6                         | Missbruk (provtagning/vard) | Common          | ✅ USE COMMON                                 |
 | 18.1                               | Missbruk                    | V1 exists       | ❌ NEW V2 - Text completely different         |
 | 18.2                               | MissbrukBeskrivning         | V1 exists       | ❌ NEW V2 - Text/limit different              |
 | 18.10                              | MissbrukRemission           | NOT IN V1       | ❌ NEW V2 - **NEW QUESTION**                  |
+| 18.3                               | MissbrukJournaluppgifter    | V1 exists       | ❌ NEW V2 - Description incomplete            |
 | 18.4                               | MissbrukJournalBeskrivning  | V1 exists       | ❌ NEW V2 - Config/text changed               |
 | 18.7                               | MissbrukVardBeskrivning     | V1 exists       | ❌ NEW V2 - Text shortened                    |
-| 18.8, 18.9                         | Lakemedel                   | Common          | ✅ USE COMMON (or V2 for mapping)             |
-| 19                                 | Psykisk                     | Common          | ✅ USE COMMON (or V2 for mapping)             |
+| 18.8, 18.9                         | Lakemedel                   | V1 exists       | ❌ NEW V2 - For proper parent reference       |
+| 19                                 | Psykisk                     | V1 exists       | ❌ NEW V2 - For proper parent reference       |
 | 24                                 | IntellektuellFunktion       | V1 different ID | ❌ NEW V2 - New category, different structure |
-| 21                                 | OvrigMedicinering           | Need check      | ❌ NEW V2                                     |
-| 22                                 | OvrigKommentar              | Common          | ✅ USE COMMON                                 |
+| 21                                 | OvrigMedicinering           | V1 exists       | ❌ NEW V2 - For proper parent reference       |
+| 22                                 | OvrigKommentar              | V1 exists       | ❌ NEW V2 - V2 category needed                |
 | 23.1, 23.2                         | Bedomning (most)            | Common          | ✅ USE COMMON                                 |
 | 23.3                               | BedomningRisk               | V1 exists       | ❌ NEW V2 - Text different                    |
 
@@ -670,36 +685,47 @@ utvecklingsstörning (KAT_14)
 These questions need to be created as V2-specific because they differ from V1:
 
 1. ✅ `QuestionToleransKorrektionV2` - New structure
-2. ✅ `QuestionSjukdomshistorikBeskrivningV2` - Different text
+2. ✅ `QuestionGlasogonStyrkaV2` - New structure  
+3. ✅ `QuestionSjukdomEllerSynnedsattningBeskrivningV2` - V1 file doesn't exist
 4. ✅ `QuestionSjukdomshistorikBeskrivningV2` - Different text
 5. ✅ `QuestionBalanssinneBeskrivningV2` - TextField→TextArea, 50→250 chars
 6. ✅ `CategoryHorselV2` - Different show rule
-7. ✅ `QuestionHorselhjalpmedelPositionV2` - Under new category
-8. ✅ `QuestionHjartsjukdomBeskrivningV2` - Text adds "och tidpunkt för diagnos"
-9. ✅ `QuestionHjartsjukdomBehandladBeskrivningV2` - Config/text changed
-10. ✅ `QuestionSynkopeV2` - Text simplified
-11. ✅ `QuestionNeurologiskSjukdomBeskrivningV2` - Config check needed
-12. ✅ `QuestionEpilepsiMedicinTidpunktV2` - Text adds "har"
-13. ✅ `QuestionKognitivStorningV2` - Text removes "diagnos"
-14. ✅ `QuestionDemensBeskrivningV2` - Text shortened
-15. ✅ `QuestionMissbrukV2` - Text completely different
-16. ✅ `QuestionMissbrukBeskrivningV2` - Text/limit different (400 chars)
-17. ✅ `QuestionMissbrukRemissionV2` - **NEW QUESTION** (Radio: ja/nej/vetinte)
-18. ✅ `QuestionMissbrukJournaluppgifterBeskrivningV2` - Config/text changed
-19. ✅ `QuestionMissbrukVardV2` - For proper parent reference
-20. ✅ `QuestionMissbrukVardBeskrivningV2` - Text shortened
-21. ✅ `QuestionLakemedelV2` - For proper parent reference
-22. ✅ `QuestionLakemedelBeskrivningV2` - For proper parent reference
-23. ✅ `QuestionPsykiskV2` - For proper parent reference
-24. ✅ `QuestionPsykiskBeskrivningV2` - For proper parent reference
-25. ✅ `QuestionPsykiskTidpunktV2` - For proper parent reference
-26. ✅ `CategoryIntellektuellFunktionsnedsattningV2` - New category
-27. ✅ `QuestionIntellektuellFunktionsnedsattningV2` - New ID/structure
-28. ✅ `QuestionIntellektuellFunktionsnedsattningBeskrivningV2` - New ID/structure
-29. ✅ `QuestionMedicineringV2` - Need to verify
-30. ✅ `QuestionMedicineringBeskrivningV2` - Need to verify
-31. ✅ `QuestionBedomningRiskV2` - Text different
-32. ✅ `CategoryAlkoholOchLakemedelV2` - New structure with 18.10
+7. ✅ `QuestionHorselV2` - For proper category mapping
+8. ✅ `QuestionHorselhjalpmedelV2` - For proper category mapping
+9. ✅ `QuestionHorselhjalpmedelPositionV2` - Under new category
+10. ✅ `QuestionHjartsjukdomBeskrivningV2` - Text adds "och tidpunkt för diagnos"
+11. ✅ `QuestionHjartsjukdomBehandladBeskrivningV2` - Config/text changed
+12. ✅ `QuestionSynkopeV2` - Text simplified
+13. ✅ `QuestionStrokeV2` - V1 file doesn't exist
+14. ✅ `QuestionStrokePaverkanV2` - V1 file doesn't exist (note: filename has "Paverkan" not "Pavarkan")
+15. ✅ `QuestionDiabetesV2` - V1 file doesn't exist
+16. ✅ `MessageDiabetesV2` - V1 file doesn't exist
+17. ✅ `QuestionNeurologiskSjukdomV2` - Description incomplete in V1
+18. ✅ `QuestionNeurologiskSjukdomBeskrivningV2` - Config changed
+19. ✅ `QuestionEpilepsiMedicinTidpunktV2` - Text adds "har"
+20. ✅ `QuestionKognitivStorningV2` - Text removes "diagnos"
+21. ✅ `QuestionDemensV2` - V1 file doesn't exist
+22. ✅ `QuestionDemensBeskrivningV2` - Text shortened
+23. ✅ `QuestionSomnV2` - Description text differs
+24. ✅ `QuestionMissbrukV2` - Text completely different
+25. ✅ `QuestionMissbrukBeskrivningV2` - Text/limit different (400 chars)
+26. ✅ `QuestionMissbrukRemissionV2` - **NEW QUESTION** (Radio: ja/nej/vetinte)
+27. ✅ `QuestionMissbrukJournaluppgifterV2` - Description incomplete in V1
+28. ✅ `QuestionMissbrukJournaluppgifterBeskrivningV2` - Config/text changed
+29. ✅ `QuestionMissbrukVardV2` - For proper parent reference
+30. ✅ `QuestionMissbrukVardBeskrivningV2` - Text shortened
+31. ✅ `QuestionLakemedelV2` - For proper parent reference
+32. ✅ `QuestionLakemedelBeskrivningV2` - For proper parent reference
+33. ✅ `QuestionPsykiskV2` - For proper parent reference
+34. ✅ `QuestionPsykiskBeskrivningV2` - Reuses common but needs V2 for parent mapping
+35. ✅ `QuestionPsykiskTidpunktV2` - For proper parent reference
+36. ✅ `CategoryIntellektuellFunktionsnedsattningV2` - New category
+37. ✅ `QuestionIntellektuellFunktionsnedsattningV2` - New ID/structure
+38. ✅ `QuestionIntellektuellFunktionsnedsattningBeskrivningV2` - New ID/structure
+39. ✅ `QuestionMedicineringBeskrivningV2` - For proper parent reference
+40. ✅ `CategoryOvrigKommentarV2` - V2 category needed for proper structure
+41. ✅ `QuestionBedomningRiskV2` - Text different
+42. ✅ `CategoryAlkoholOchLakemedelV2` - New structure with 18.10
 
 ### 2. Reuse Common Questions (USE V1)
 

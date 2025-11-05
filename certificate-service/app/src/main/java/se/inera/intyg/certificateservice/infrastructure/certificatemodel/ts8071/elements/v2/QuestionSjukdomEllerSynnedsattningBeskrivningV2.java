@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2;
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSjukdomEllerSynnedsattning.QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_FIELD_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSjukdomEllerSynnedsattning.QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_ID;
@@ -13,24 +13,24 @@ import se.inera.intyg.certificateservice.domain.validation.model.ElementValidati
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.CertificateElementRuleFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.ElementDataPredicateFactory;
 
-public class QuestionSjukdomEllerSynnedsattningBeskrivning {
+public class QuestionSjukdomEllerSynnedsattningBeskrivningV2 {
 
-  public static final ElementId QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_BESKRIVNING_ID = new ElementId(
+  public static final ElementId QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_BESKRIVNING_V2_ID = new ElementId(
       "7.2");
-  public static final FieldId QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_BESKRIVNING_FIELD_ID = new FieldId(
+  public static final FieldId QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_BESKRIVNING_V2_FIELD_ID = new FieldId(
       "7.2");
 
-  private QuestionSjukdomEllerSynnedsattningBeskrivning() {
+  private QuestionSjukdomEllerSynnedsattningBeskrivningV2() {
     throw new IllegalStateException("Utility class");
   }
 
-  public static ElementSpecification questionSjukdomEllerSynnedsattningBeskrivning() {
+  public static ElementSpecification questionSjukdomEllerSynnedsattningBeskrivningV2() {
     return ElementSpecification.builder()
-        .id(QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_BESKRIVNING_ID)
+        .id(QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_BESKRIVNING_V2_ID)
         .configuration(
             ElementConfigurationTextArea.builder()
-                .id(QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_BESKRIVNING_FIELD_ID)
-                .name("Ange sjukdom/synnedsättning")
+                .id(QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_BESKRIVNING_V2_FIELD_ID)
+                .name("Ange vilken sjukdom/synnedsättning")
                 .build()
         )
         .rules(
@@ -40,11 +40,11 @@ public class QuestionSjukdomEllerSynnedsattningBeskrivning {
                     QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_FIELD_ID
                 ),
                 CertificateElementRuleFactory.mandatory(
-                    QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_BESKRIVNING_ID,
-                    QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_BESKRIVNING_FIELD_ID
+                    QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_BESKRIVNING_V2_ID,
+                    QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_BESKRIVNING_V2_FIELD_ID
                 ),
                 CertificateElementRuleFactory.limit(
-                    QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_BESKRIVNING_ID,
+                    QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_BESKRIVNING_V2_ID,
                     (short) 250)
             )
         )

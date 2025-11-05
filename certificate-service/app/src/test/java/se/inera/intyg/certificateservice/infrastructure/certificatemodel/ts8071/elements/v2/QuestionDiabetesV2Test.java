@@ -12,13 +12,13 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationBoolean;
 
-class QuestionMissbrukVardV2Test {
+class QuestionDiabetesV2Test {
 
-  private static final ElementId ELEMENT_ID = new ElementId("18.6");
+  private static final ElementId ELEMENT_ID = new ElementId("12");
 
   @Test
   void shouldIncludeId() {
-    final var element = QuestionMissbrukVardV2.questionMissbrukVardV2();
+    final var element = QuestionDiabetesV2.questionDiabetesV2();
 
     assertEquals(ELEMENT_ID, element.id());
   }
@@ -26,16 +26,13 @@ class QuestionMissbrukVardV2Test {
   @Test
   void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationRadioBoolean.builder()
-        .id(new FieldId("18.6"))
-        .name(
-            "Har personen vid något tillfälle vårdats eller sökt hjälp för substansrelaterad diagnos, överkonsumtion av alkohol eller regelbundet bruk av psykoaktiva substanser eller läkemedel?")
-        .description(
-            "Här avses uppgifter om eller tecken på beroende av psykoaktiv substans oavsett när i tid detta förekommit. Här avses också uppgifter om eller tecken på aktuellt skadligt mönster av bruk, skadligt bruk eller överkonsumtion av alkohol som inte är tillfälligt under de senaste tolv månaderna.")
+        .id(new FieldId("12.1"))
         .selectedText("Ja")
         .unselectedText("Nej")
+        .name("Har personen läkemedelsbehandlad diabetes?")
         .build();
 
-    final var element = QuestionMissbrukVardV2.questionMissbrukVardV2();
+    final var element = QuestionDiabetesV2.questionDiabetesV2();
 
     assertEquals(expectedConfiguration, element.configuration());
   }
@@ -46,15 +43,11 @@ class QuestionMissbrukVardV2Test {
         ElementRuleExpression.builder()
             .id(ELEMENT_ID)
             .type(ElementRuleType.MANDATORY)
-            .expression(
-                new RuleExpression(
-                    "exists($18.6)"
-                )
-            )
+            .expression(new RuleExpression("exists($12.1)"))
             .build()
     );
 
-    final var element = QuestionMissbrukVardV2.questionMissbrukVardV2();
+    final var element = QuestionDiabetesV2.questionDiabetesV2();
 
     assertEquals(expectedRules, element.rules());
   }
@@ -67,7 +60,7 @@ class QuestionMissbrukVardV2Test {
             .build()
     );
 
-    final var element = QuestionMissbrukVardV2.questionMissbrukVardV2();
+    final var element = QuestionDiabetesV2.questionDiabetesV2();
 
     assertEquals(expectedValidations, element.validations());
   }

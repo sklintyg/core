@@ -37,7 +37,7 @@ class QuestionHjartsjukdomBehandladBeskrivningV2Test {
   @Test
   void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationTextArea.builder()
-        .name("Ange när och hur tillståndet behandlats")
+        .name("Ange när och hur")
         .id(new FieldId("11.4"))
         .build();
 

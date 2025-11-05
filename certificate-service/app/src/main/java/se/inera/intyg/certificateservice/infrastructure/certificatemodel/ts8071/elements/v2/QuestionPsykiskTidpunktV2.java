@@ -28,8 +28,8 @@ public class QuestionPsykiskTidpunktV2 {
         .configuration(
             ElementConfigurationTextField.builder()
                 .id(QUESTION_PSYKISK_TIDPUNKT_V2_FIELD_ID)
-                .name("När hade personen senast läkarkontakt med anledning av sin diagnos?")
-                .label("Ange tidpunkt")
+                .name(
+                    "När hade personen senast läkarkontakt med anledning av sin diagnos? Ange tidpunkt")
                 .build()
         )
         .rules(
@@ -44,7 +44,7 @@ public class QuestionPsykiskTidpunktV2 {
                 ),
                 CertificateElementRuleFactory.limit(
                     QUESTION_PSYKISK_TIDPUNKT_V2_ID,
-                    (short) 250)
+                    (short) 50)
             )
         )
         .shouldValidate(
@@ -57,7 +57,7 @@ public class QuestionPsykiskTidpunktV2 {
             List.of(
                 ElementValidationText.builder()
                     .mandatory(true)
-                    .limit(250)
+                    .limit(50)
                     .build()
             )
         )

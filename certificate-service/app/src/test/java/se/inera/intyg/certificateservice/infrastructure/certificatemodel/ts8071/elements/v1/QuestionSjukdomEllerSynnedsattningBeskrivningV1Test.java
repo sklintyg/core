@@ -1,17 +1,15 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionPsykiskV2.QUESTION_PSYKISK_V2_FIELD_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2.QuestionPsykiskV2.QUESTION_PSYKISK_V2_ID;
 
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextField;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementMapping;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
@@ -21,84 +19,78 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.FieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpression;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
+import se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSjukdomshistorik;
 
-class QuestionPsykiskTidpunktV2Test {
+class QuestionSjukdomEllerSynnedsattningBeskrivningV1Test {
 
-  private static final ElementId ELEMENT_ID = new ElementId("19.3");
+  private static final ElementId ELEMENT_ID = new ElementId("7.2");
 
   @Test
-  void shouldIncludeId() {
-    final var element = QuestionPsykiskTidpunktV2.questionPsykiskTidpunktV2();
+  void shallIncludeId() {
+    final var element = QuestionSjukdomEllerSynnedsattningBeskrivningV1.questionSjukdomEllerSynnedsattningBeskrivningV1();
 
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
-  void shouldIncludeConfiguration() {
-    final var expectedConfiguration = ElementConfigurationTextField.builder()
-        .name("När hade personen senast läkarkontakt med anledning av sin diagnos? Ange tidpunkt")
-        .id(new FieldId("19.3"))
+  void shallIncludeConfiguration() {
+    final var expectedConfiguration = ElementConfigurationTextArea.builder()
+        .name("Ange sjukdom/synnedsättning")
+        .id(new FieldId("7.2"))
         .build();
 
-    final var element = QuestionPsykiskTidpunktV2.questionPsykiskTidpunktV2();
+    final var element = QuestionSjukdomEllerSynnedsattningBeskrivningV1.questionSjukdomEllerSynnedsattningBeskrivningV1();
 
     assertEquals(expectedConfiguration, element.configuration());
   }
 
   @Test
-  void shouldIncludeRules() {
+  void shallIncludeRules() {
     final var expectedRules = List.of(
         ElementRuleExpression.builder()
-            .id(QUESTION_PSYKISK_V2_ID)
+            .id(new ElementId("7"))
             .type(ElementRuleType.SHOW)
-            .expression(new RuleExpression("$" + QUESTION_PSYKISK_V2_FIELD_ID.value()))
+            .expression(new RuleExpression("$7.1"))
             .build(),
         ElementRuleExpression.builder()
             .id(ELEMENT_ID)
             .type(ElementRuleType.MANDATORY)
-            .expression(new RuleExpression("$19.3"))
+            .expression(new RuleExpression("$7.2"))
             .build(),
         ElementRuleLimit.builder()
             .id(ELEMENT_ID)
             .type(ElementRuleType.TEXT_LIMIT)
-            .limit(new RuleLimit((short) 50))
+            .limit(new RuleLimit((short) 250))
             .build()
     );
 
-    final var element = QuestionPsykiskTidpunktV2.questionPsykiskTidpunktV2();
+    final var element = QuestionSjukdomEllerSynnedsattningBeskrivningV1.questionSjukdomEllerSynnedsattningBeskrivningV1();
 
     assertEquals(expectedRules, element.rules());
   }
 
   @Test
-  void shouldIncludeValidations() {
+  void shallIncludeValidations() {
     final var expectedValidations = List.of(
         ElementValidationText.builder()
             .mandatory(true)
-            .limit(50)
+            .limit(250)
             .build()
     );
 
-    final var element = QuestionPsykiskTidpunktV2.questionPsykiskTidpunktV2();
+    final var element = QuestionSjukdomEllerSynnedsattningBeskrivningV1.questionSjukdomEllerSynnedsattningBeskrivningV1();
 
     assertEquals(expectedValidations, element.validations());
-  }
-
-  @Test
-  void shouldIncludeMapping() {
-    final var element = QuestionPsykiskTidpunktV2.questionPsykiskTidpunktV2();
-
-    assertEquals(new ElementMapping(QUESTION_PSYKISK_V2_ID, null), element.mapping());
   }
 
   @Nested
   class ShouldValidate {
 
     @Test
-    void shouldReturnTrueIfBooleanIsTrue() {
+    void shallReturnTrueIfBooleanIsTrue() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(QUESTION_PSYKISK_V2_ID)
+              .id(new ElementId("7"))
               .value(
                   ElementValueBoolean.builder()
                       .value(true)
@@ -107,18 +99,18 @@ class QuestionPsykiskTidpunktV2Test {
               .build()
       );
 
-      final var element = QuestionPsykiskTidpunktV2.questionPsykiskTidpunktV2();
+      final var element = QuestionSjukdomEllerSynnedsattningBeskrivningV1.questionSjukdomEllerSynnedsattningBeskrivningV1();
 
-      final var shouldValidate = element.shouldValidate();
+      final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
       assertTrue(shouldValidate.test(elementData));
     }
 
     @Test
-    void shouldReturnFalseIfElementMissing() {
+    void shallReturnFalseIfElementMissing() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(new ElementId("other"))
+              .id(new ElementId("8.1"))
               .value(
                   ElementValueBoolean.builder()
                       .value(true)
@@ -127,18 +119,18 @@ class QuestionPsykiskTidpunktV2Test {
               .build()
       );
 
-      final var element = QuestionPsykiskTidpunktV2.questionPsykiskTidpunktV2();
+      final var element = QuestionSjukdomEllerSynnedsattningBeskrivningV1.questionSjukdomEllerSynnedsattningBeskrivningV1();
 
-      final var shouldValidate = element.shouldValidate();
+      final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
       assertFalse(shouldValidate.test(elementData));
     }
 
     @Test
-    void shouldReturnFalseIfBooleanIsFalse() {
+    void shallReturnFalseIfElementFalse() {
       final var elementData = List.of(
           ElementData.builder()
-              .id(QUESTION_PSYKISK_V2_ID)
+              .id(new ElementId("7"))
               .value(
                   ElementValueBoolean.builder()
                       .value(false)
@@ -147,12 +139,18 @@ class QuestionPsykiskTidpunktV2Test {
               .build()
       );
 
-      final var element = QuestionPsykiskTidpunktV2.questionPsykiskTidpunktV2();
+      final var element = QuestionSjukdomEllerSynnedsattningBeskrivningV1.questionSjukdomEllerSynnedsattningBeskrivningV1();
 
-      final var shouldValidate = element.shouldValidate();
+      final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
       assertFalse(shouldValidate.test(elementData));
     }
   }
-}
 
+  @Test
+  void shallIncludeMapping() {
+    final var element = QuestionSjukdomshistorik.questionSjukdomshistorik();
+
+    assertEquals(new ElementMapping(new ElementId("7"), null), element.mapping());
+  }
+}

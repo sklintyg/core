@@ -1,8 +1,8 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1;
 
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionHjartsjukdom.QUESTION_HJARTSJUKDOM_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionStroke.QUESTION_STROKE_FIELD_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionStroke.QUESTION_STROKE_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionStrokeV1.QUESTION_STROKE_V1_FIELD_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionStrokeV1.QUESTION_STROKE_V1_ID;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
@@ -55,12 +55,12 @@ public class QuestionStrokePaverkanV1 {
                     radioMultipleCodes.stream().map(ElementConfigurationCode::id).toList()
                 ),
                 CertificateElementRuleFactory.show(
-                    QUESTION_STROKE_ID,
-                    QUESTION_STROKE_FIELD_ID
+                    QUESTION_STROKE_V1_ID,
+                    QUESTION_STROKE_V1_FIELD_ID
                 )
             )
         )
-        .shouldValidate(ElementDataPredicateFactory.valueBoolean(QUESTION_STROKE_ID))
+        .shouldValidate(ElementDataPredicateFactory.valueBoolean(QUESTION_STROKE_V1_ID))
         .mapping(new ElementMapping(QUESTION_HJARTSJUKDOM_ID, null))
         .validations(
             List.of(
