@@ -25,7 +25,7 @@ public class QuestionMissbrukVardV2 {
             ElementConfigurationRadioBoolean.builder()
                 .id(QUESTION_MISSBRUK_VARD_V2_FIELD_ID)
                 .name(
-                    "Har personen vid något tillfälle vårdats eller sökt hjälp för missbruk eller beroende av alkohol, narkotika eller läkemedel?")
+                    "Har personen vid något tillfälle vårdats eller sökt hjälp för substansrelaterad diagnos, överkonsumtion av alkohol eller regelbundet bruk av psykoaktiva substanser eller läkemedel?")
                 .description(
                     "Här avses uppgifter om eller tecken på beroende av psykoaktiv substans oavsett när i tid detta förekommit. Här avses också uppgifter om eller tecken på aktuellt skadligt mönster av bruk, skadligt bruk eller överkonsumtion av alkohol som inte är tillfälligt under de senaste tolv månaderna.")
                 .selectedText("Ja")

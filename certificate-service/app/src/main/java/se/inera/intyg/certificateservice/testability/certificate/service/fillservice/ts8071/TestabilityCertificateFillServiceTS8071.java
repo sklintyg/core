@@ -40,7 +40,6 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionRorlighetBeskrivning.QUESTION_RORLIGHET_BESKRIVNING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionRorlighetHjalpaPassagerare.QUESTION_RORLIGHET_HJALPA_PASSAGERARE_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSjukdomEllerSynnedsattning.QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_ID;
-import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSjukdomEllerSynnedsattningBeskrivning.QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_BESKRIVNING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSjukdomshistorik.QUESTION_SJUKDOMSHISTORIK_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSomnBehandling.QUESTION_SOMN_BEHANDLING_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common.QuestionSomnBeskrivning.QUESTION_SOMN_BESKRIVNING_ID;
@@ -81,6 +80,7 @@ import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionPsykiskUtvecklingsstorningAllvarligV1.QUESTION_PSYKISK_UTVECKLINGSSTORNING_ALLVARLIG_V1_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionPsykiskUtvecklingsstorningV1.QUESTION_PSYKISK_UTVECKLINGSSTORNING_V1_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionPsykiskV1.QUESTION_PSYKISK_V1_ID;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionSjukdomEllerSynnedsattningBeskrivningV1.QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_BESKRIVNING_V1_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionSjukdomshistorikBeskrivningV1.QUESTION_SJUKDOMSHISTORIK_BESKRIVNING_V1_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionSomnV1.QUESTION_SOMN_V1_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v1.QuestionStrokePaverkanV1.QUESTION_STROKE_PAVERKAN_V1_ID;
@@ -127,7 +127,7 @@ public class TestabilityCertificateFillServiceTS8071 implements
       QUESTION_KORRIGERING_AV_SYNSKARPA_V1_ID, QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_OVER_V1_ID,
       QUESTION_KONTAKTLINSER_V1_ID, QUESTION_KORRIGERING_AV_SYNSKARPA_STRYKA_UNDER_V1_ID,
       QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_ID,
-      QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_BESKRIVNING_ID, QUESTION_SJUKDOMSHISTORIK_ID,
+      QUESTION_SJUKDOM_ELLER_SYNNEDSATTNING_BESKRIVNING_V1_ID, QUESTION_SJUKDOMSHISTORIK_ID,
       QUESTION_SJUKDOMSHISTORIK_BESKRIVNING_V1_ID, QUESTION_BALANSSINNE_ID,
       QUESTION_BALANSSINNE_BESKRIVNING_V1_ID, QUESTION_HORSEL_V1_ID,
       QUESTION_HORSELHJALPMEDEL_V1_ID,

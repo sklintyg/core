@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.common;
+package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.elements.v2;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -20,31 +20,31 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleExpre
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.RuleLimit;
 import se.inera.intyg.certificateservice.domain.validation.model.ElementValidationText;
 
-class QuestionSjukdomEllerSynnedsattningBeskrivningTest {
+class QuestionSjukdomEllerSynnedsattningBeskrivningV2Test {
 
   private static final ElementId ELEMENT_ID = new ElementId("7.2");
 
   @Test
-  void shallIncludeId() {
-    final var element = QuestionSjukdomEllerSynnedsattningBeskrivning.questionSjukdomEllerSynnedsattningBeskrivning();
+  void shouldIncludeId() {
+    final var element = QuestionSjukdomEllerSynnedsattningBeskrivningV2.questionSjukdomEllerSynnedsattningBeskrivning();
 
     assertEquals(ELEMENT_ID, element.id());
   }
 
   @Test
-  void shallIncludeConfiguration() {
+  void shouldIncludeConfiguration() {
     final var expectedConfiguration = ElementConfigurationTextArea.builder()
-        .name("Ange sjukdom/synnedsättning")
+        .name("Ange vilken sjukdom/synnedsättning")
         .id(new FieldId("7.2"))
         .build();
 
-    final var element = QuestionSjukdomEllerSynnedsattningBeskrivning.questionSjukdomEllerSynnedsattningBeskrivning();
+    final var element = QuestionSjukdomEllerSynnedsattningBeskrivningV2.questionSjukdomEllerSynnedsattningBeskrivning();
 
     assertEquals(expectedConfiguration, element.configuration());
   }
 
   @Test
-  void shallIncludeRules() {
+  void shouldIncludeRules() {
     final var expectedRules = List.of(
         ElementRuleExpression.builder()
             .id(new ElementId("7"))
@@ -63,13 +63,13 @@ class QuestionSjukdomEllerSynnedsattningBeskrivningTest {
             .build()
     );
 
-    final var element = QuestionSjukdomEllerSynnedsattningBeskrivning.questionSjukdomEllerSynnedsattningBeskrivning();
+    final var element = QuestionSjukdomEllerSynnedsattningBeskrivningV2.questionSjukdomEllerSynnedsattningBeskrivning();
 
     assertEquals(expectedRules, element.rules());
   }
 
   @Test
-  void shallIncludeValidations() {
+  void shouldIncludeValidations() {
     final var expectedValidations = List.of(
         ElementValidationText.builder()
             .mandatory(true)
@@ -77,7 +77,7 @@ class QuestionSjukdomEllerSynnedsattningBeskrivningTest {
             .build()
     );
 
-    final var element = QuestionSjukdomEllerSynnedsattningBeskrivning.questionSjukdomEllerSynnedsattningBeskrivning();
+    final var element = QuestionSjukdomEllerSynnedsattningBeskrivningV2.questionSjukdomEllerSynnedsattningBeskrivning();
 
     assertEquals(expectedValidations, element.validations());
   }
@@ -86,7 +86,7 @@ class QuestionSjukdomEllerSynnedsattningBeskrivningTest {
   class ShouldValidate {
 
     @Test
-    void shallReturnTrueIfBooleanIsTrue() {
+    void shouldReturnTrueIfBooleanIsTrue() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("7"))
@@ -98,7 +98,7 @@ class QuestionSjukdomEllerSynnedsattningBeskrivningTest {
               .build()
       );
 
-      final var element = QuestionSjukdomEllerSynnedsattningBeskrivning.questionSjukdomEllerSynnedsattningBeskrivning();
+      final var element = QuestionSjukdomEllerSynnedsattningBeskrivningV2.questionSjukdomEllerSynnedsattningBeskrivning();
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -106,7 +106,7 @@ class QuestionSjukdomEllerSynnedsattningBeskrivningTest {
     }
 
     @Test
-    void shallReturnFalseIfElementMissing() {
+    void shouldReturnFalseIfElementMissing() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("8.1"))
@@ -118,7 +118,7 @@ class QuestionSjukdomEllerSynnedsattningBeskrivningTest {
               .build()
       );
 
-      final var element = QuestionSjukdomEllerSynnedsattningBeskrivning.questionSjukdomEllerSynnedsattningBeskrivning();
+      final var element = QuestionSjukdomEllerSynnedsattningBeskrivningV2.questionSjukdomEllerSynnedsattningBeskrivning();
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -126,7 +126,7 @@ class QuestionSjukdomEllerSynnedsattningBeskrivningTest {
     }
 
     @Test
-    void shallReturnFalseIfElementFalse() {
+    void shouldReturnFalseIfElementFalse() {
       final var elementData = List.of(
           ElementData.builder()
               .id(new ElementId("7"))
@@ -138,7 +138,7 @@ class QuestionSjukdomEllerSynnedsattningBeskrivningTest {
               .build()
       );
 
-      final var element = QuestionSjukdomEllerSynnedsattningBeskrivning.questionSjukdomEllerSynnedsattningBeskrivning();
+      final var element = QuestionSjukdomEllerSynnedsattningBeskrivningV2.questionSjukdomEllerSynnedsattningBeskrivning();
 
       final var shouldValidate = element.elementSpecification(ELEMENT_ID).shouldValidate();
 
@@ -147,9 +147,10 @@ class QuestionSjukdomEllerSynnedsattningBeskrivningTest {
   }
 
   @Test
-  void shallIncludeMapping() {
-    final var element = QuestionSjukdomshistorik.questionSjukdomshistorik();
+  void shouldIncludeMapping() {
+    final var element = QuestionSjukdomEllerSynnedsattningBeskrivningV2.questionSjukdomEllerSynnedsattningBeskrivning();
 
     assertEquals(new ElementMapping(new ElementId("7"), null), element.mapping());
   }
 }
+
