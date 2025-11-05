@@ -107,7 +107,7 @@ public class PrintCertificateMetadataConverter {
 
   private static String getLinkReplacement(String linkId) {
     return switch (linkId) {
-      case "transportstyrelsenLink", "transportstyrelsensHemsidaLink" ->
+      case "transportstyrelsenLink", "transportstyrelsenHemsidaLink" ->
           "Transportstyrelsens hemsida";
       case "forsakringskassanLink" -> "Försäkringskassans hemsida";
       default -> throw new IllegalStateException("No replacement found for link id: " + linkId);
