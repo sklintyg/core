@@ -102,22 +102,30 @@ public class ContentElementFactory {
     final var container = element(Tag.DIV).addClass("whitespace-pre-line");
     final var doc = org.jsoup.Jsoup.parseBodyFragment(cleanedDescription);
 
-    for (final var node : doc.body().childNodes()) {
+    doc.body().childNodes().forEach(node -> {
       if (node instanceof org.jsoup.nodes.TextNode textNode) {
         container.append(textNode.getWholeText());
       } else if (node instanceof Element elementNode) {
-        if (elementNode.tagName().equals("ul")) {
-          final var listElement = element(Tag.UL).addClass("list-disc pl-5");
-          for (final var listItem : elementNode.select("li")) {
-            listElement.appendChild(element(Tag.LI).html(listItem.html()));
-          }
-          container.appendChild(listElement);
-        } else {
-          container.append(elementNode.outerHtml());
-        }
+        appendElementNode(container, elementNode);
       }
-    }
+    });
     return container;
+  }
+
+  private static void appendElementNode(Element container, Element elementNode) {
+    if (elementNode.tagName().equals("ul")) {
+      container.appendChild(createUnorderedList(elementNode));
+    } else {
+      container.append(elementNode.outerHtml());
+    }
+  }
+
+  private static Element createUnorderedList(Element ulElement) {
+    final var listElement = element(Tag.UL).addClass("list-disc pl-5");
+    ulElement.select("li").forEach(listItem ->
+        listElement.appendChild(element(Tag.LI).html(listItem.html()))
+    );
+    return listElement;
   }
 
   private static List<Element> citizenInfo(boolean canSendElectronically) {
