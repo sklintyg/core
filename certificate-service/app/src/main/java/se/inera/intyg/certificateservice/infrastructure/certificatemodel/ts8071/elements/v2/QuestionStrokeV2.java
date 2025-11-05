@@ -32,8 +32,7 @@ public class QuestionStrokeV2 {
                 .selectedText("Ja")
                 .unselectedText("Nej")
                 .name(
-                    "Har personen haft en stroke eller finns tecken på hjärnskada efter trauma, stroke "
-                        + "eller annan sjukdom i centrala nervsystemet?")
+                    "Har personen haft en stroke eller finns tecken på hjärnskada efter trauma, stroke eller annan sjukdom i centrala nervsystemet?")
                 .build()
         )
         .validations(
