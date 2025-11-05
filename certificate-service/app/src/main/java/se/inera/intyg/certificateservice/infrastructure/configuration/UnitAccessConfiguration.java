@@ -3,13 +3,13 @@ package se.inera.intyg.certificateservice.infrastructure.configuration;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.configuration.unitaccess.dto.CertificateAccessConfiguration;
 
@@ -19,7 +19,8 @@ import se.inera.intyg.certificateservice.domain.configuration.unitaccess.dto.Cer
 public class UnitAccessConfiguration {
 
   @Value("${unit.access.configuration.path:}")
-  private String unitAccessConfigurationPath;
+  private Resource unitAccessConfigurationPath;
+
   private List<CertificateAccessConfiguration> certificateAccessConfigurations;
 
   public List<CertificateAccessConfiguration> get() {
@@ -27,7 +28,7 @@ public class UnitAccessConfiguration {
       final var objectMapper = new ObjectMapper();
       objectMapper.registerModule(new JavaTimeModule());
       certificateAccessConfigurations = new ArrayList<>();
-      try (final var resourceAsStream = new FileInputStream(unitAccessConfigurationPath)) {
+      try (final var resourceAsStream = unitAccessConfigurationPath.getInputStream()) {
         certificateAccessConfigurations = objectMapper.readValue(
             resourceAsStream,
             new TypeReference<>() {
@@ -35,7 +36,8 @@ public class UnitAccessConfiguration {
         log.info("Certificate Unit Access was loaded with configuration: {}",
             certificateAccessConfigurations);
       } catch (FileNotFoundException e) {
-        log.warn("File not found: {}. Returning empty configuration.", unitAccessConfigurationPath);
+        log.warn("File not found: {}. Returning empty configuration.",
+            unitAccessConfigurationPath);
       } catch (Exception e) {
         log.error(
             String.format("Failed to load Certificate Unit Access configuration. Reason: %s",
