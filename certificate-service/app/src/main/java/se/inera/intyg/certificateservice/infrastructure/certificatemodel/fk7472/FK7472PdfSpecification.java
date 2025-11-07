@@ -4,8 +4,8 @@ import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfMcid;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagIndex;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.TemplatePdfSpecification;
 
 public class FK7472PdfSpecification {
 
@@ -36,8 +36,8 @@ public class FK7472PdfSpecification {
     throw new IllegalStateException("Utility class");
   }
 
-  public static PdfSpecification create() {
-    return PdfSpecification.builder()
+  public static TemplatePdfSpecification create() {
+    return TemplatePdfSpecification.builder()
         .pdfTemplatePath(PDF_FK_7472_PDF)
         .pdfNoAddressTemplatePath(PDF_NO_ADDRESS_FK_7472_PDF)
         .patientIdFieldIds(List.of(PDF_PATIENT_ID_FIELD_ID))

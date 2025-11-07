@@ -4,7 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
-import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -12,6 +11,7 @@ import se.inera.intyg.certificateservice.certificate.dto.GeneralPrintTextDTO;
 import se.inera.intyg.certificateservice.certificate.dto.PrintCertificateMetadataDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateGeneralPrintText;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.GeneralPdfSpecification;
 
 @Component
 @RequiredArgsConstructor
@@ -43,7 +43,9 @@ public class PrintCertificateMetadataConverter {
             ? APPLICATION_ORIGIN_1177_INTYG
             : APPLICATION_ORIGIN_WEBCERT)
         .personId(metadata.patient().id().idWithDash())
-        .description(convertDescription(certificate.certificateModel().description()))
+        .description(
+            getDescription(certificate)
+        )
         .issuerName(metadata.issuer().name().fullName())
         .issuingUnit(metadata.issuingUnit().name().name())
         .sentDate(
@@ -55,6 +57,21 @@ public class PrintCertificateMetadataConverter {
         .canSendElectronically(certificate.certificateModel().recipient().canSendElectronically())
         .generalPrintText(convertGeneralPrintText(certificate.getGeneralPrintText()))
         .build();
+  }
+
+  private static String getDescription(Certificate certificate) {
+    if (certificate.certificateModel().pdfSpecification() == null) {
+      return certificate.certificateModel().description();
+    }
+
+    if (certificate.certificateModel()
+        .pdfSpecification() instanceof GeneralPdfSpecification generalPdfSpecification) {
+      return generalPdfSpecification.description();
+    }
+
+    throw new IllegalStateException(
+        String.format("Unknown PDF specification type: %s cannot convert metadata",
+            certificate.certificateModel().pdfSpecification().getClass()));
   }
 
   private static GeneralPrintTextDTO convertGeneralPrintText(
@@ -86,31 +103,5 @@ public class PrintCertificateMetadataConverter {
     } catch (IOException e) {
       throw new IllegalStateException("Could not convert logo:", e);
     }
-  }
-
-  private String convertDescription(String description) {
-    if (description == null || description.isEmpty()) {
-      return description;
-    }
-
-    if (!description.contains("<LINK:")) {
-      return description;
-    }
-
-    final var pattern = Pattern.compile("<LINK:(.*?)>");
-    final var matcher = pattern.matcher(description);
-
-    return matcher.replaceAll(link ->
-        getLinkReplacement(link.group(1))
-    );
-  }
-
-  private static String getLinkReplacement(String linkId) {
-    return switch (linkId) {
-      case "transportstyrelsenLink", "transportstyrelsenHemsidaLink" ->
-          "Transportstyrelsens hemsida";
-      case "forsakringskassanLink" -> "Försäkringskassans hemsida";
-      default -> throw new IllegalStateException("No replacement found for link id: " + linkId);
-    };
   }
 }
