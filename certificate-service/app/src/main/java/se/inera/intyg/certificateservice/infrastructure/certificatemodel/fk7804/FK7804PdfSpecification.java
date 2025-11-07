@@ -5,8 +5,8 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.OverflowP
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfMcid;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagIndex;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.TemplatePdfSpecification;
 
 public class FK7804PdfSpecification {
 
@@ -50,8 +50,8 @@ public class FK7804PdfSpecification {
     throw new IllegalStateException("Utility class");
   }
 
-  public static PdfSpecification create() {
-    return PdfSpecification.builder()
+  public static TemplatePdfSpecification create() {
+    return TemplatePdfSpecification.builder()
         .pdfTemplatePath(PDF_FK_7804_PDF)
         .pdfNoAddressTemplatePath(PDF_NO_ADDRESS_FK_7804_PDF)
         .hasPageNbr(false)

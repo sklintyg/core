@@ -23,6 +23,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.GeneralPdfSpecification;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateText;
 import se.inera.intyg.certificateservice.domain.common.model.CertificateTextType;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
@@ -75,6 +76,22 @@ class CertificateModelFactoryTS8071V2Test {
     final var certificateModel = certificateModelFactoryTS8071V2.create();
 
     assertFalse(certificateModel.description().isBlank());
+  }
+
+  @Test
+  void shallIncludePdfSpecificationWithDescription() {
+    final var expected = """
+        Transportstyrelsens läkarintyg ska användas vid förlängd giltighet av högre behörighet från 45 år, ansökan om körkortstillstånd för grupp II och III och vid ansökan om taxiförarlegitimation. Transportstyrelsens läkarintyg kan även användas när Transportstyrelsen i annat fall begärt ett allmänt läkarintyg avseende lämplighet att inneha körkort.
+        
+        Specialistintyg finns bl.a. för alkohol, läkemedel, synfunktion, Alkolås m.m. Se Transportstyrelsens hemsida.""";
+    final var certificateModel = certificateModelFactoryTS8071V2.create();
+
+    final var pdfSpecification = (GeneralPdfSpecification) certificateModel.pdfSpecification();
+
+    assertEquals(
+        expected,
+        pdfSpecification.description()
+    );
   }
 
   @Test

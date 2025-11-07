@@ -15,7 +15,7 @@ import org.apache.pdfbox.pdmodel.documentinterchange.logicalstructure.PDStructur
 import org.apache.pdfbox.pdmodel.documentinterchange.markedcontent.PDMarkedContent;
 import org.apache.pdfbox.pdmodel.documentinterchange.markedcontent.PDPropertyList;
 import org.apache.pdfbox.pdmodel.documentinterchange.taggedpdf.StandardStructureTypes;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.TemplatePdfSpecification;
 
 public class PdfAccessibilityUtil {
 
@@ -24,7 +24,7 @@ public class PdfAccessibilityUtil {
   }
 
   public static PDStructureElement createNewOverflowPageTag(PDDocument pdf, PDPage page,
-      PdfSpecification pdfSpecification) {
+      TemplatePdfSpecification templatePdfSpecification) {
     final var structuredTree = pdf.getDocumentCatalog().getStructureTreeRoot();
     final var documentTag = getFirstChildFromStructuredElement(
         structuredTree.getKids(),
@@ -34,7 +34,7 @@ public class PdfAccessibilityUtil {
     final var pageContainer = createNewContainer(documentTag, "Page", null);
 
     final var watermarkContainer = createNewContainer(pageContainer, StandardStructureTypes.DIV, 0);
-    pdfSpecification.untaggedWatermarks()
+    templatePdfSpecification.untaggedWatermarks()
         .forEach(watermark -> addContentToSection(page, watermarkContainer, watermark, COSName.P));
 
     final var section = createNewContainer(pageContainer, StandardStructureTypes.SECT, 0);

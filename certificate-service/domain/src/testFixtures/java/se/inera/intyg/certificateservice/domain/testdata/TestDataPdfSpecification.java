@@ -61,6 +61,7 @@ import java.util.List;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.OverflowPageIndex;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSpecification;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.TemplatePdfSpecification;
 
 public class TestDataPdfSpecification {
 
@@ -70,7 +71,7 @@ public class TestDataPdfSpecification {
   public static final PdfSpecification FK7809_PDF_SPECIFICATION = fk7809PdfSpecification();
 
   public static PdfSpecification fk7210PdfSpecification() {
-    return PdfSpecification.builder()
+    return TemplatePdfSpecification.builder()
         .signature(PdfSignature.builder()
             .signaturePageIndex(FK7210_PDF_SIGNATURE_PAGE_INDEX)
             .signatureWithAddressTagIndex(FK7210_PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX)
@@ -91,7 +92,7 @@ public class TestDataPdfSpecification {
   }
 
   public static PdfSpecification fk3226PdfSpecification() {
-    return PdfSpecification.builder()
+    return TemplatePdfSpecification.builder()
         .signature(PdfSignature.builder()
             .signaturePageIndex(FK3226_PDF_SIGNATURE_PAGE_INDEX)
             .signatureWithAddressTagIndex(FK3226_PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX)
@@ -112,7 +113,7 @@ public class TestDataPdfSpecification {
   }
 
   public static PdfSpecification fk7472PdfSpecification() {
-    return PdfSpecification.builder()
+    return TemplatePdfSpecification.builder()
         .signature(PdfSignature.builder()
             .signaturePageIndex(FK7472_PDF_SIGNATURE_PAGE_INDEX)
             .signatureWithAddressTagIndex(FK7472_PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX)
@@ -133,7 +134,7 @@ public class TestDataPdfSpecification {
   }
 
   public static PdfSpecification fk7809PdfSpecification() {
-    return PdfSpecification.builder()
+    return TemplatePdfSpecification.builder()
         .signature(PdfSignature.builder()
             .signaturePageIndex(FK7809_PDF_SIGNATURE_PAGE_INDEX)
             .signatureWithAddressTagIndex(FK7809_PDF_SIGNATURE_WITH_ADDRESS_TAG_INDEX)

@@ -24,6 +24,7 @@ import se.inera.intyg.certificateservice.certificate.dto.GeneralPrintTextDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.GeneralPdfSpecification;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.AG7804CertificateGeneralPrintProvider;
@@ -201,11 +202,13 @@ class PrintCertificateMetadataConverterTest {
   }
 
   @Test
-  void shouldReplaceDescriptionLink() {
+  void shouldUseGeneralPrintDescription() {
     final var certificateWithLinkInDescription = fk7210CertificateBuilder()
         .certificateModel(fk7210certificateModelBuilder()
-            .description(
-                "Besök <LINK:transportstyrelsenLink> för mer information.")
+            .description("Not general print description.")
+            .pdfSpecification(GeneralPdfSpecification.builder()
+                .description("General print description.")
+                .build())
             .recipient(new Recipient(new RecipientId("ts"), "ts", "ts",
                 "transportstyrelsen-logo.png",
                 "Läkarintyg Transportstyrelsen")
@@ -225,7 +228,7 @@ class PrintCertificateMetadataConverterTest {
     final var result = printCertificateMetadataConverter.convert(certificateWithLinkInDescription,
         false, FILE_NAME);
     assertEquals(
-        "Besök Transportstyrelsens hemsida för mer information.",
+        "General print description.",
         result.getDescription());
   }
 

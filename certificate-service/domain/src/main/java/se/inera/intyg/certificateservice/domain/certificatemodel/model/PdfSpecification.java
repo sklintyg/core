@@ -1,24 +1,9 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
-import java.util.List;
-import lombok.Builder;
-import lombok.Builder.Default;
-import lombok.Value;
+/**
+ * Specification for PDF generation. Implementations determine the PDF generation strategy for a
+ * certificate model.
+ */
+public interface PdfSpecification {
 
-@Value
-@Builder
-public class PdfSpecification {
-
-  String pdfTemplatePath;
-  String pdfNoAddressTemplatePath;
-  String certificateName;
-  PdfMcid pdfMcid;
-  PdfTagIndex signatureWithAddressTagIndex;
-  PdfTagIndex signatureWithoutAddressTagIndex;
-  List<PdfFieldId> patientIdFieldIds;
-  PdfSignature signature;
-  OverflowPageIndex overFlowPageIndex;
-  List<String> untaggedWatermarks;
-  @Default
-  boolean hasPageNbr = true;
 }

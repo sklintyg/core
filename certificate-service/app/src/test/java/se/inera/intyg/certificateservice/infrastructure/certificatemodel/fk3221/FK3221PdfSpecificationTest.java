@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSignature;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagIndex;
-import se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7809.FK7809PdfSpecification;
 
 class FK3221PdfSpecificationTest {
 
@@ -37,7 +36,7 @@ class FK3221PdfSpecificationTest {
         new PdfFieldId("form1[0].#subform[4].flt_txtPersonNr[4]")
     );
 
-    final var pdfSpecification = FK7809PdfSpecification.create();
+    final var pdfSpecification = FK3221PdfSpecification.create();
 
     assertEquals(expected, pdfSpecification.patientIdFieldIds());
   }
@@ -59,7 +58,7 @@ class FK3221PdfSpecificationTest {
             new PdfFieldId("form1[0].#subform[3].flt_txtVardgivarensNamnAdressTelefon[0]"))
         .build();
 
-    final var pdfSpecification = FK7809PdfSpecification.create();
+    final var pdfSpecification = FK3221PdfSpecification.create();
 
     assertEquals(expected, pdfSpecification.signature());
   }
@@ -67,14 +66,14 @@ class FK3221PdfSpecificationTest {
   @Test
   void shallIncludeOverflowPageIndex() {
     final var expected = 4;
-    final var pdfSpecification = FK7809PdfSpecification.create();
+    final var pdfSpecification = FK3221PdfSpecification.create();
 
     assertEquals(expected, pdfSpecification.overFlowPageIndex().value());
   }
 
   @Test
   void shallIncludeHasPageNumberFalse() {
-    final var pdfSpecification = FK7809PdfSpecification.create();
+    final var pdfSpecification = FK3221PdfSpecification.create();
 
     assertFalse(pdfSpecification.hasPageNbr());
   }
@@ -82,7 +81,7 @@ class FK3221PdfSpecificationTest {
   @Test
   void shallIncludeMcid() {
     final var expected = 200;
-    final var pdfSpecification = FK7809PdfSpecification.create();
+    final var pdfSpecification = FK3221PdfSpecification.create();
 
     assertEquals(expected, pdfSpecification.pdfMcid().value());
   }
