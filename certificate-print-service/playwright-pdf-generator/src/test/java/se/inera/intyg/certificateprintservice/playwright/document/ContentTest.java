@@ -155,7 +155,7 @@ class ContentTest {
               () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
               () -> assertEquals(1, attributesSize(element), NUM_ATTRIBUTES),
               () -> assertEquals(
-                  "%s (%s v%s)".formatted(CERTIFICATE_NAME, CERTIFICATE_TYPE, CERTIFICATE_VERSION),
+                  "%s".formatted(CERTIFICATE_TYPE),
                   element.text(), TEXT),
               () -> assertEquals("absolute h-px w-[17cm] text-[1px] -z-50 text-white",
                   attributes(element, CLASS), ATTRIBUTES)
@@ -555,11 +555,45 @@ class ContentTest {
           final var content = contentBuilder.isDraft(true).signDate(null).build();
           final var element = content.create().child(3).child(1);
           assertAll(
-              () -> assertEquals(P, element.tag(), TAG_TYPE),
+              () -> assertEquals(DIV, element.tag(), TAG_TYPE),
               () -> assertEquals(0, element.children().size(), NUM_CHILDREN),
               () -> assertEquals(1, attributesSize(element), ATTRIBUTES),
               () -> assertEquals(DESCRIPTION, element.text(), TEXT),
               () -> assertEquals("whitespace-pre-line", attributes(element, CLASS), ATTRIBUTES)
+          );
+        }
+
+        @Test
+        void shouldParseDescriptionWithLinksLineBreaksAndLists() {
+          final var description =
+              "This is a description with a <A href=\"http://www.test.test\">link</A>."
+                  + "<BR>And a new line."
+                  + "<LINK:some-link-id>" + "<ul><li>List item 1</li><li>List item 2</li></ul>";
+          final var content = contentBuilder.description(description).isDraft(false)
+              .signDate(SIGN_DATE).build();
+          final var element = content.create().child(3).child(1);
+
+          assertAll(
+              () -> assertEquals(DIV, element.tag(), TAG_TYPE),
+              () -> assertEquals(1, attributesSize(element), ATTRIBUTES),
+              () -> assertEquals("whitespace-pre-line", attributes(element, CLASS), ATTRIBUTES),
+              () -> assertEquals(
+                  "This is a description with a link. And a new line. List item 1 List item 2",
+                  element.text(),
+                  "Text content should have LINK tag removed and include list items"),
+              () -> assertEquals(1, element.select("a").size(), "Should have one anchor tag"),
+              () -> assertEquals("link", element.select("a").first().text(), "Anchor text"),
+              () -> assertEquals("http://www.test.test", element.select("a").first().attr("href"),
+                  "Anchor href"),
+              () -> assertEquals(1, element.select("br").size(), "Should have one br tag"),
+              () -> assertEquals(1, element.select("ul").size(), "Should have one ul tag"),
+              () -> assertEquals("list-disc pl-5", element.select("ul").first().attr("class"),
+                  "UL should have list-disc pl-5 classes"),
+              () -> assertEquals(2, element.select("li").size(), "Should have two li tags"),
+              () -> assertEquals("List item 1", element.select("li").get(0).text(),
+                  "First li text"),
+              () -> assertEquals("List item 2", element.select("li").get(1).text(),
+                  "Second li text")
           );
         }
 

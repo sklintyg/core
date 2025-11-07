@@ -31,7 +31,7 @@ public class ContentElementFactory {
                 .text("Person- /samordningsnr %s".formatted(personId)),
             element(Tag.H1)
                 .addClass(INVISIBLE_STYLE)
-                .text("%s (%s v%s)".formatted(name, type, version)),
+                .text("%s".formatted(type)),
             element(Tag.P)
                 .addClass(INVISIBLE_STYLE)
                 .text(HeaderElementFactory.alertMessage(recipientName, isDraft, isSent,
@@ -89,12 +89,43 @@ public class ContentElementFactory {
         .addClass("break-before-page")
         .appendChildren(List.of(
             element(Tag.STRONG).text(name),
-            element(Tag.P).addClass("whitespace-pre-line").append(description),
+            parseDescription(description),
             element(Tag.BR)))
         .appendChildren(citizenInfo(canSendElectronically));
 
     setLinkColor(certificateInfo);
     return certificateInfo;
+  }
+
+  private static Element parseDescription(String description) {
+    final var cleanedDescription = description.replaceAll("<LINK:[^>]+>", "");
+    final var container = element(Tag.DIV).addClass("whitespace-pre-line");
+    final var doc = org.jsoup.Jsoup.parseBodyFragment(cleanedDescription);
+
+    doc.body().childNodes().forEach(node -> {
+      if (node instanceof org.jsoup.nodes.TextNode textNode) {
+        container.append(textNode.getWholeText());
+      } else if (node instanceof Element elementNode) {
+        appendElementNode(container, elementNode);
+      }
+    });
+    return container;
+  }
+
+  private static void appendElementNode(Element container, Element elementNode) {
+    if (elementNode.tagName().equals("ul")) {
+      container.appendChild(createUnorderedList(elementNode));
+    } else {
+      container.append(elementNode.outerHtml());
+    }
+  }
+
+  private static Element createUnorderedList(Element ulElement) {
+    final var listElement = element(Tag.UL).addClass("list-disc pl-5");
+    ulElement.select("li").forEach(listItem ->
+        listElement.appendChild(element(Tag.LI).html(listItem.html()))
+    );
+    return listElement;
   }
 
   private static List<Element> citizenInfo(boolean canSendElectronically) {
