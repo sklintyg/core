@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -21,4 +22,6 @@ public interface PatientVersionEntityRepository extends
       "ORDER BY CASE WHEN p.validFrom IS NULL THEN 1 ELSE 0 END, p.validFrom DESC")
   Optional<PatientVersionEntity> findFirstCoveringTimestampOrderByMostRecent(@Param("id") String id,
       @Param("ts") LocalDateTime ts);
+
+  List<PatientVersionEntity> findAllByPatientIdOrderByValidFromDesc(String patientId);
 }
