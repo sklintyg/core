@@ -727,4 +727,30 @@ public class MedicalCertificate implements Certificate {
 
     certificateMetaData = certificateMetaData.withPatient(patient);
   }
+
+  @Override
+  public void updateMetadata(CertificateMetaData metaData) {
+    if (metaData == null) {
+      throw new IllegalArgumentException("CertificateMetaData cannot be null");
+    }
+
+    if (!this.certificateMetaData.issuer().hsaId().equals(metaData.issuer().hsaId())) {
+      throw new IllegalArgumentException(
+          "Cannot update metadata with CertificateMetaData having different issuer HSA-ID");
+    } else if (!this.certificateMetaData.careProvider().hsaId()
+        .equals(metaData.careProvider().hsaId())) {
+      throw new IllegalArgumentException(
+          "Cannot update metadata with CertificateMetaData having different careProvider HSA-ID");
+    } else if (!this.certificateMetaData.careUnit().hsaId().equals(metaData.careUnit().hsaId())) {
+      throw new IllegalArgumentException(
+          "Cannot update metadata with CertificateMetaData having different careUnit HSA-ID");
+    } else if (!this.certificateMetaData.issuingUnit().hsaId()
+        .equals(metaData.issuingUnit().hsaId())) {
+      throw new IllegalArgumentException(
+          "Cannot update metadata with CertificateMetaData having different issuingUnit HSA-ID");
+    }
+
+    certificateMetaData = metaData;
+  }
+
 }
