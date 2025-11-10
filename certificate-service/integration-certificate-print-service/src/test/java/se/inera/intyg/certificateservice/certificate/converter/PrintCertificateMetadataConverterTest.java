@@ -45,7 +45,8 @@ class PrintCertificateMetadataConverterTest {
               .recipient(
                   new Recipient(new RecipientId("SKR"), "SKR", "SKR", "transportstyrelsen-logo.png",
                       "SKR")
-              ).build()
+              )
+              .build()
       )
       .status(Status.SIGNED)
       .sent(
@@ -65,7 +66,8 @@ class PrintCertificateMetadataConverterTest {
               .recipient(
                   new Recipient(new RecipientId("SKR"), "SKR", "SKR", "transportstyrelsen-logo.png",
                       "SKR")
-              ).build()
+              )
+              .build()
       )
       .status(Status.SIGNED)
       .sent(
