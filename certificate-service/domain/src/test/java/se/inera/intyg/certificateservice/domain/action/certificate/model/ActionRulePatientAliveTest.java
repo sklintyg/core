@@ -115,10 +115,7 @@ class ActionRulePatientAliveTest {
 
   @Test
   void shallReturnErrorMessage() {
-    assertEquals(
-        "Du saknar behörighet för den begärda åtgärden."
-            + " Det krävs särskilda rättigheter eller en specifik befattning"
-            + " för att hantera avlidna patienter.",
+    assertEquals("Du kan ej utföra den begärda åtgärden eftersom patienten är avliden.",
         actionRulePatientAlive.getReasonForPermissionDenied()
     );
   }
