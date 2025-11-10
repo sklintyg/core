@@ -46,7 +46,7 @@ class MessageArbetsformagaAlertTest {
         ElementRuleExpression.builder()
             .type(ElementRuleType.SHOW)
             .id(QUESTION_PERIOD_BEDOMNING_ID)
-            .expression(new RuleExpression("($7.2.to - $7.2.from) > 14"))
+            .expression(new RuleExpression("($7.2.to - $7.2.from) >= 14"))
             .build()
     );
     assertEquals(expectedRules, element.rules());
