@@ -40,7 +40,7 @@ public class MessageArbetsformagaAlert {
                 CertificateElementRuleFactory.show(
                     QUESTION_PERIOD_BEDOMNING_ID,
                     new RuleExpression(
-                        String.format("($%s.to - $%s.from) > 14",
+                        String.format("($%s.to - $%s.from) >= 14",
                             QUESTION_PERIOD_BEDOMNING_FIELD_ID.value(),
                             QUESTION_PERIOD_BEDOMNING_FIELD_ID.value()))
                 )
