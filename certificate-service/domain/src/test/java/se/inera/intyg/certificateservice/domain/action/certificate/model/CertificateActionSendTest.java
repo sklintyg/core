@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.BETA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_VARDCENTRAL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.BETA_VARDCENTRAL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.ag7804CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.ag7804certificateModelBuilder;
@@ -366,6 +367,7 @@ class CertificateActionSendTest {
       @Test
       void shallReturnFalseIfNotWithinCareUnit() {
         final var actionEvaluation = actionEvaluationBuilder
+            .careUnit(ALFA_VARDCENTRAL)
             .subUnit(ALFA_HUDMOTTAGNINGEN)
             .user(ajlaDoctorBuilder()
                 .accessScope(userAccessScope)
@@ -408,6 +410,7 @@ class CertificateActionSendTest {
       @Test
       void shallReturnFalseIfNotWithinCareUnit() {
         final var actionEvaluation = actionEvaluationBuilder
+            .careUnit(ALFA_VARDCENTRAL)
             .subUnit(ALFA_HUDMOTTAGNINGEN)
             .user(ajlaDoctorBuilder()
                 .accessScope(userAccessScope)
