@@ -43,6 +43,7 @@ class PrintCertificateMetadataConverterTest {
 
   private static final Certificate CERTIFICATE = fk7210CertificateBuilder()
       .certificateModel(fk7210certificateModelBuilder()
+          .pdfSpecification(null)
           .recipient(new Recipient(new RecipientId("ts"), "ts", "ts", "transportstyrelsen-logo.png",
               "Läkarintyg Transportstyrelsen")
           ).build()
@@ -78,6 +79,7 @@ class PrintCertificateMetadataConverterTest {
 
   public static final Certificate DRAFT = fk7210CertificateBuilder()
       .certificateModel(fk7210certificateModelBuilder()
+          .pdfSpecification(null)
           .recipient(new Recipient(new RecipientId("ts"), "ts", "ts", "transportstyrelsen-logo.png",
               "Läkarintyg Transportstyrelsen")
           ).build()
