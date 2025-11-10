@@ -374,6 +374,7 @@ class FK7809CertificateConfirmationModalProviderTest {
                             .build()
                     )
                     .issuingUnit(ALFA_MEDICINCENTRUM)
+                    .careUnit(ALFA_MEDICINCENTRUM)
                     .build()
             )
             .build();

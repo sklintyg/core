@@ -15,6 +15,7 @@ import static se.inera.intyg.certificateservice.domain.common.model.Role.PRIVATE
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.ALFA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareProvider.BETA_REGIONEN;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_MEDICINCENTRUM;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_VARDCENTRAL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.BETA_VARDCENTRAL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_MEDICINCENTRUM_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnitConstants.ALFA_VARDCENTRAL_ID;
@@ -246,6 +247,7 @@ class CertificateActionUpdateDraftFromCertificateTest {
   @Test
   void shallReturnFalseIfIssuedUnitDontMatchSubUnit() {
     final var actionEvaluation = actionEvaluationBuilder
+        .careUnit(ALFA_VARDCENTRAL)
         .subUnit(
             SubUnit.builder()
                 .hsaId(new HsaId(ALFA_HUDMOTTAGNINGEN_ID))
@@ -265,6 +267,7 @@ class CertificateActionUpdateDraftFromCertificateTest {
   @Test
   void shallReturnFalseIfCareUnitDontMatchSubUnitAndSubUnitDontMatchIssuingUnit() {
     final var actionEvaluation = actionEvaluationBuilder
+        .careUnit(ALFA_VARDCENTRAL)
         .subUnit(
             SubUnit.builder()
                 .hsaId(new HsaId(ALFA_VARDCENTRAL_ID))
@@ -542,6 +545,7 @@ class CertificateActionUpdateDraftFromCertificateTest {
     @Test
     void shallReturnFalseIfNotWithinCareUnit() {
       final var actionEvaluation = actionEvaluationBuilder
+          .careUnit(ALFA_VARDCENTRAL)
           .subUnit(ALFA_HUDMOTTAGNINGEN)
           .user(ajlaDoctorBuilder()
               .accessScope(userAccessScope)
@@ -588,6 +592,7 @@ class CertificateActionUpdateDraftFromCertificateTest {
     @Test
     void shallReturnFalseIfNotWithinCareUnit() {
       final var actionEvaluation = actionEvaluationBuilder
+          .careUnit(ALFA_VARDCENTRAL)
           .subUnit(ALFA_HUDMOTTAGNINGEN)
           .user(ajlaDoctorBuilder()
               .accessScope(userAccessScope)

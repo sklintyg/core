@@ -29,6 +29,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModificationException;
+import se.inera.intyg.certificateservice.domain.common.model.AccessScope;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
 import se.inera.intyg.certificateservice.domain.common.model.ExternalReference;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
@@ -579,8 +580,13 @@ public class MedicalCertificate implements Certificate {
 
   @Override
   public boolean isWithinCareUnit(ActionEvaluation actionEvaluation) {
-    return isIssuingUnitMatchingSubUnit(actionEvaluation)
-        || isCareUnitMatchingSubUnit(actionEvaluation);
+    if (AccessScope.WITHIN_CARE_UNIT.equals(actionEvaluation.user().accessScope())) {
+      return isIssuingUnitMatchingSubUnit(actionEvaluation)
+          || isCareUnitMatchingSubUnit(actionEvaluation);
+    }
+    return certificateMetaData.careUnit().hsaId().equals(
+        actionEvaluation.careUnit().hsaId()
+    );
   }
 
   @Override

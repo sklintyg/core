@@ -101,6 +101,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementCo
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.common.exception.ConcurrentModificationException;
+import se.inera.intyg.certificateservice.domain.common.model.AccessScope;
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
 import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
@@ -3157,6 +3158,250 @@ class MedicalCertificateTest {
 
       assertEquals("Cannot update metadata with patient having different PersonId",
           illegalArgumentException.getMessage());
+    }
+  }
+
+  @Nested
+  class TestWithinCareUnit {
+
+    @Nested
+    class UserAccessScopeWithinCareUnit {
+
+      @Test
+      void shallReturnTrueIfLoggedInOnCareUnitWhenCertificateIssuedOnCareUnit() {
+        final var actionEvaluation = actionEvaluationBuilder
+            .user(
+                ajlaDoctorBuilder()
+                    .accessScope(AccessScope.WITHIN_CARE_UNIT)
+                    .build()
+            )
+            .subUnit(
+                alfaAllergimottagningenBuilder()
+                    .hsaId(ALFA_MEDICINCENTRUM.hsaId())
+                    .build()
+            )
+            .build();
+
+        final var signedCertificate = certificateBuilder
+            .status(Status.SIGNED)
+            .certificateMetaData(
+                CertificateMetaData.builder()
+                    .patient(ATHENA_REACT_ANDERSSON)
+                    .issuer(TestDataStaff.AJLA_DOKTOR)
+                    .issuingUnit(ALFA_MEDICINCENTRUM)
+                    .careUnit(ALFA_MEDICINCENTRUM)
+                    .careProvider(ALFA_REGIONEN)
+                    .build()
+            )
+            .build();
+
+        assertTrue(signedCertificate.isWithinCareUnit(actionEvaluation));
+      }
+
+      @Test
+      void shallReturnTrueIfLoggedInOnCareUnitWhenCertificateIssuedOnSubUnit() {
+        final var actionEvaluation = actionEvaluationBuilder
+            .user(
+                ajlaDoctorBuilder()
+                    .accessScope(AccessScope.WITHIN_CARE_UNIT)
+                    .build()
+            )
+            .subUnit(
+                alfaAllergimottagningenBuilder()
+                    .hsaId(ALFA_MEDICINCENTRUM.hsaId())
+                    .build()
+            )
+            .build();
+
+        final var signedCertificate = certificateBuilder
+            .status(Status.SIGNED)
+            .certificateMetaData(
+                CertificateMetaData.builder()
+                    .patient(ATHENA_REACT_ANDERSSON)
+                    .issuer(TestDataStaff.AJLA_DOKTOR)
+                    .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
+                    .careUnit(ALFA_MEDICINCENTRUM)
+                    .careProvider(ALFA_REGIONEN)
+                    .build()
+            )
+            .build();
+
+        assertTrue(signedCertificate.isWithinCareUnit(actionEvaluation));
+      }
+
+      @Test
+      void shallReturnTrueIfLoggedInOnSubUnitWhenCertificateIssuedOnSubUnit() {
+        final var actionEvaluation = actionEvaluationBuilder
+            .user(
+                ajlaDoctorBuilder()
+                    .accessScope(AccessScope.WITHIN_CARE_UNIT)
+                    .build()
+            )
+            .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
+            .build();
+
+        final var signedCertificate = certificateBuilder
+            .status(Status.SIGNED)
+            .certificateMetaData(
+                CertificateMetaData.builder()
+                    .patient(ATHENA_REACT_ANDERSSON)
+                    .issuer(TestDataStaff.AJLA_DOKTOR)
+                    .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
+                    .careUnit(ALFA_MEDICINCENTRUM)
+                    .careProvider(ALFA_REGIONEN)
+                    .build()
+            )
+            .build();
+
+        assertTrue(signedCertificate.isWithinCareUnit(actionEvaluation));
+      }
+
+      @Test
+      void shallReturnFalseIfLoggedInOnSubUnitWhenCertificateIssuedOnCareUnit() {
+        final var actionEvaluation = actionEvaluationBuilder
+            .user(
+                ajlaDoctorBuilder()
+                    .accessScope(AccessScope.WITHIN_CARE_UNIT)
+                    .build()
+            )
+            .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
+            .build();
+
+        final var signedCertificate = certificateBuilder
+            .status(Status.SIGNED)
+            .certificateMetaData(
+                CertificateMetaData.builder()
+                    .patient(ATHENA_REACT_ANDERSSON)
+                    .issuer(TestDataStaff.AJLA_DOKTOR)
+                    .issuingUnit(ALFA_MEDICINCENTRUM)
+                    .careUnit(ALFA_MEDICINCENTRUM)
+                    .careProvider(ALFA_REGIONEN)
+                    .build()
+            )
+            .build();
+
+        assertFalse(signedCertificate.isWithinCareUnit(actionEvaluation));
+      }
+    }
+
+    @Nested
+    class UserAccessScopeWithinCareProvider {
+
+      @Test
+      void shallReturnTrueIfLoggedInOnCareUnitWhenCertificateIssuedOnCareUnit() {
+        final var actionEvaluation = actionEvaluationBuilder
+            .user(
+                ajlaDoctorBuilder()
+                    .accessScope(AccessScope.WITHIN_CARE_PROVIDER)
+                    .build()
+            )
+            .subUnit(
+                alfaAllergimottagningenBuilder()
+                    .hsaId(ALFA_MEDICINCENTRUM.hsaId())
+                    .build()
+            )
+            .build();
+
+        final var signedCertificate = certificateBuilder
+            .status(Status.SIGNED)
+            .certificateMetaData(
+                CertificateMetaData.builder()
+                    .patient(ATHENA_REACT_ANDERSSON)
+                    .issuer(TestDataStaff.AJLA_DOKTOR)
+                    .issuingUnit(ALFA_MEDICINCENTRUM)
+                    .careUnit(ALFA_MEDICINCENTRUM)
+                    .careProvider(ALFA_REGIONEN)
+                    .build()
+            )
+            .build();
+
+        assertTrue(signedCertificate.isWithinCareUnit(actionEvaluation));
+      }
+
+      @Test
+      void shallReturnTrueIfLoggedInOnCareUnitWhenCertificateIssuedOnSubUnit() {
+        final var actionEvaluation = actionEvaluationBuilder
+            .user(
+                ajlaDoctorBuilder()
+                    .accessScope(AccessScope.WITHIN_CARE_PROVIDER)
+                    .build()
+            )
+            .subUnit(
+                alfaAllergimottagningenBuilder()
+                    .hsaId(ALFA_MEDICINCENTRUM.hsaId())
+                    .build()
+            )
+            .build();
+
+        final var signedCertificate = certificateBuilder
+            .status(Status.SIGNED)
+            .certificateMetaData(
+                CertificateMetaData.builder()
+                    .patient(ATHENA_REACT_ANDERSSON)
+                    .issuer(TestDataStaff.AJLA_DOKTOR)
+                    .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
+                    .careUnit(ALFA_MEDICINCENTRUM)
+                    .careProvider(ALFA_REGIONEN)
+                    .build()
+            )
+            .build();
+
+        assertTrue(signedCertificate.isWithinCareUnit(actionEvaluation));
+      }
+
+      @Test
+      void shallReturnTrueIfLoggedInOnSubUnitWhenCertificateIssuedOnSubUnit() {
+        final var actionEvaluation = actionEvaluationBuilder
+            .user(
+                ajlaDoctorBuilder()
+                    .accessScope(AccessScope.WITHIN_CARE_PROVIDER)
+                    .build()
+            )
+            .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
+            .build();
+
+        final var signedCertificate = certificateBuilder
+            .status(Status.SIGNED)
+            .certificateMetaData(
+                CertificateMetaData.builder()
+                    .patient(ATHENA_REACT_ANDERSSON)
+                    .issuer(TestDataStaff.AJLA_DOKTOR)
+                    .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
+                    .careUnit(ALFA_MEDICINCENTRUM)
+                    .careProvider(ALFA_REGIONEN)
+                    .build()
+            )
+            .build();
+
+        assertTrue(signedCertificate.isWithinCareUnit(actionEvaluation));
+      }
+
+      @Test
+      void shallReturnTrueIfLoggedInOnSubUnitWhenCertificateIssuedOnCareUnit() {
+        final var actionEvaluation = actionEvaluationBuilder
+            .user(
+                ajlaDoctorBuilder()
+                    .accessScope(AccessScope.WITHIN_CARE_PROVIDER)
+                    .build()
+            )
+            .subUnit(ALFA_ALLERGIMOTTAGNINGEN)
+            .build();
+
+        final var signedCertificate = certificateBuilder
+            .status(Status.SIGNED)
+            .certificateMetaData(
+                CertificateMetaData.builder()
+                    .patient(ATHENA_REACT_ANDERSSON)
+                    .issuer(TestDataStaff.AJLA_DOKTOR)
+                    .issuingUnit(ALFA_MEDICINCENTRUM)
+                    .careUnit(ALFA_MEDICINCENTRUM)
+                    .careProvider(ALFA_REGIONEN)
+                    .build()
+            )
+            .build();
+
+        assertTrue(signedCertificate.isWithinCareUnit(actionEvaluation));
+      }
     }
   }
 }
