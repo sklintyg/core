@@ -132,6 +132,9 @@ public class FK7472CertificateActionSpecification {
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.FORWARD_CERTIFICATE_FROM_LIST)
             .allowedRolesForProtectedPersons(signingRoles)
+            .build(),
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.INACTIVE_CERTIFICATE_MODEL)
             .build()
     );
   }

@@ -494,4 +494,16 @@ class CertificateActionFactoryTest {
     assert certificateAction != null;
     assertEquals(CertificateActionUpdateDraftFromCertificate.class, certificateAction.getClass());
   }
+
+  @Test
+  void shallReturnCertificateActionInactiveCertificateModelIfExistInSpecification() {
+    final var certificateActionSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.INACTIVE_CERTIFICATE_MODEL)
+        .build();
+
+    final var certificateAction = certificateActionFactory.create(certificateActionSpecification);
+
+    assert certificateAction != null;
+    assertEquals(CertificateActionInactiveCertificateModel.class, certificateAction.getClass());
+  }
 }

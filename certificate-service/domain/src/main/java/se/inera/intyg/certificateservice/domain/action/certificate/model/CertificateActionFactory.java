@@ -671,6 +671,14 @@ public class CertificateActionFactory {
               )
           )
           .build();
+      case INACTIVE_CERTIFICATE_MODEL -> CertificateActionInactiveCertificateModel.builder()
+          .certificateActionSpecification(actionSpecification)
+          .actionRules(
+              List.of(
+                  new ActionRuleInactiveCertificateModel()
+              )
+          )
+          .build();
     };
   }
 }

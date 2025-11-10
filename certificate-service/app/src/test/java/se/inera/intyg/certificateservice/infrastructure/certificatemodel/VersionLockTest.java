@@ -52,7 +52,7 @@ import se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071.
  */
 @ExtendWith(MockitoExtension.class)
 class VersionLockTest {
-
+  
   @Mock
   private static CertificateActionFactory certificateActionFactory;
 

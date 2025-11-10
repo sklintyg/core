@@ -119,6 +119,12 @@
     "allowedRoles" : [ ],
     "allowedRolesForProtectedPersons" : [ "DOCTOR", "PRIVATE_DOCTOR", "DENTIST" ],
     "contentProvider" : null
+  }, {
+    "certificateActionType" : "INACTIVE_CERTIFICATE_MODEL",
+    "enabled" : null,
+    "allowedRoles" : [ ],
+    "allowedRolesForProtectedPersons" : [ "DOCTOR", "PRIVATE_DOCTOR", "DENTIST" ],
+    "contentProvider" : null
   } ],
   "messageActionSpecifications" : [ ],
   "elementSpecifications" : [ {

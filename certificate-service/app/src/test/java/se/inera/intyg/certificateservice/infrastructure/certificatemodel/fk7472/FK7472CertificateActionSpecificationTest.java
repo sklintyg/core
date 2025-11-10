@@ -396,6 +396,19 @@ class FK7472CertificateActionSpecificationTest {
     );
   }
 
+  @Test
+  void shallIncludeCertificateActionInactiveCertificateModel() {
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.INACTIVE_CERTIFICATE_MODEL)
+        .build();
+
+    final var actionSpecifications = FK7472CertificateActionSpecification.create();
+
+    assertTrue(actionSpecifications.stream().anyMatch(
+            expectedSpecification::equals),
+        "Expected type: %s".formatted(expectedSpecification));
+  }
+
   private static CertificateActionSpecification actualSpecification(
       List<CertificateActionSpecification> actionSpecifications,
       CertificateActionType certificateActionType) {
