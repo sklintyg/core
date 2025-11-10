@@ -110,6 +110,7 @@ import se.inera.intyg.certificateservice.domain.message.model.Forwarded;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
+import se.inera.intyg.certificateservice.domain.patient.model.Name;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.domain.testdata.TestDataStaff;
@@ -3156,6 +3157,110 @@ class MedicalCertificateTest {
           () -> medicalCertificate.updateMetadata(ATHENA_REACT_ANDERSSON));
 
       assertEquals("Cannot update metadata with patient having different PersonId",
+          illegalArgumentException.getMessage());
+    }
+  }
+
+  @Nested
+  class UpdateMetadataWithMetadata {
+
+    @Test
+    void shouldUpdateMetadataWithMetadata() {
+
+      final var metadata = CertificateMetaData.builder()
+          .patient(ATHENA_REACT_ANDERSSON)
+          .issuer(TestDataStaff.ajlaDoctorBuilder().name(Name.builder()
+              .firstName("test")
+              .middleName("test")
+              .lastName("test")
+              .build()).build())
+          .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
+          .careUnit(ALFA_MEDICINCENTRUM)
+          .careProvider(ALFA_REGIONEN)
+          .build();
+
+      certificate.updateMetadata(metadata);
+      assertEquals("test", certificate.certificateMetaData().issuer().name().firstName());
+    }
+
+    @Test
+    void shouldThrowIfMetadataIsNull() {
+      final var metadata = (CertificateMetaData) null;
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> certificate.updateMetadata(metadata));
+
+      assertEquals("CertificateMetaData cannot be null", illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shouldThrowIfMetadataIdDoesNotMatchCurrentIssuer() {
+      final var metadata = CertificateMetaData.builder()
+          .issuer(TestDataStaff.ALF_DOKTOR)
+          .patient(ATHENA_REACT_ANDERSSON)
+          .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
+          .careUnit(ALFA_MEDICINCENTRUM)
+          .careProvider(ALFA_REGIONEN)
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> certificate.updateMetadata(metadata));
+
+      assertEquals("Cannot update metadata with CertificateMetaData "
+              + "having different issuer HSA-ID",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shouldThrowIfMetadataIdDoesNotMatchCurrentCareProvider() {
+      final var metadata = CertificateMetaData.builder()
+          .patient(ATHENA_REACT_ANDERSSON)
+          .issuer(TestDataStaff.AJLA_DOKTOR)
+          .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
+          .careUnit(ALFA_MEDICINCENTRUM)
+          .careProvider(BETA_REGIONEN)
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> certificate.updateMetadata(metadata));
+
+      assertEquals("Cannot update metadata with CertificateMetaData"
+              + " having different careProvider HSA-ID",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shouldThrowIfMetadataIdDoesNotMatchCurrentIssuingUnit() {
+      final var metadata = CertificateMetaData.builder()
+          .issuingUnit(ALFA_HUDMOTTAGNINGEN)
+          .patient(ATHENA_REACT_ANDERSSON)
+          .issuer(TestDataStaff.AJLA_DOKTOR)
+          .careUnit(ALFA_MEDICINCENTRUM)
+          .careProvider(ALFA_REGIONEN)
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> certificate.updateMetadata(metadata));
+
+      assertEquals("Cannot update metadata with CertificateMetaData "
+              + "having different issuingUnit HSA-ID",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shouldThrowIfMetadataIdDoesNotMatchCurrentCareUnit() {
+      final var metadata = CertificateMetaData.builder()
+          .careUnit(ALFA_VARDCENTRAL)
+          .patient(ATHENA_REACT_ANDERSSON)
+          .issuer(TestDataStaff.AJLA_DOKTOR)
+          .issuingUnit(ALFA_ALLERGIMOTTAGNINGEN)
+          .careProvider(ALFA_REGIONEN)
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> certificate.updateMetadata(metadata));
+
+      assertEquals(
+          "Cannot update metadata with CertificateMetaData having different careUnit HSA-ID",
           illegalArgumentException.getMessage());
     }
   }
