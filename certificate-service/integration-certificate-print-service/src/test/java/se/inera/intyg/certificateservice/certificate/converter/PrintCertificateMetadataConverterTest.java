@@ -40,12 +40,12 @@ class PrintCertificateMetadataConverterTest {
   private PrintCertificateMetadataConverter printCertificateMetadataConverter;
 
   private static final Certificate CERTIFICATE = ag7804CertificateBuilder()
-      .certificateModel(ag7804certificateModelBuilder()
-          .pdfSpecification(null)
-          .recipient(
-              new Recipient(new RecipientId("SKR"), "SKR", "SKR", "transportstyrelsen-logo.png",
-                  "SKR")
-          ).build()
+      .certificateModel(
+          ag7804certificateModelBuilder()
+              .recipient(
+                  new Recipient(new RecipientId("SKR"), "SKR", "SKR", "transportstyrelsen-logo.png",
+                      "SKR")
+              ).build()
       )
       .status(Status.SIGNED)
       .sent(
@@ -59,12 +59,13 @@ class PrintCertificateMetadataConverterTest {
       .build();
 
   private static final Certificate CERTIFICATE_SKR = ag7804CertificateBuilder()
-      .certificateModel(ag7804certificateModelBuilder()
-          .generalPrintProvider(new AG7804CertificateGeneralPrintProvider())
-          .recipient(
-              new Recipient(new RecipientId("SKR"), "SKR", "SKR", "transportstyrelsen-logo.png",
-                  "SKR")
-          ).build()
+      .certificateModel(
+          ag7804certificateModelBuilder()
+              .generalPrintProvider(new AG7804CertificateGeneralPrintProvider())
+              .recipient(
+                  new Recipient(new RecipientId("SKR"), "SKR", "SKR", "transportstyrelsen-logo.png",
+                      "SKR")
+              ).build()
       )
       .status(Status.SIGNED)
       .sent(
@@ -78,12 +79,13 @@ class PrintCertificateMetadataConverterTest {
       .build();
 
   public static final Certificate DRAFT = ag7804CertificateBuilder()
-      .certificateModel(ag7804certificateModelBuilder()
-          .pdfSpecification(null)
-          .recipient(
-              new Recipient(new RecipientId("SKR"), "SKR", "SKR", "transportstyrelsen-logo.png",
-                  "SKR")
-          ).build()
+      .certificateModel(
+          ag7804certificateModelBuilder()
+              .recipient(
+                  new Recipient(new RecipientId("SKR"), "SKR", "SKR", "transportstyrelsen-logo.png",
+                      "SKR")
+              )
+              .build()
       )
       .signed(null)
       .status(Status.DRAFT)
