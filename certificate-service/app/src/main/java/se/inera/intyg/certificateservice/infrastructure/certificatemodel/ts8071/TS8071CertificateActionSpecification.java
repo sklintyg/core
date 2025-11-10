@@ -76,6 +76,9 @@ public class TS8071CertificateActionSpecification {
             .build(),
         CertificateActionSpecification.builder()
             .certificateActionType(CertificateActionType.PRINT)
+            .build(),
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.INACTIVE_CERTIFICATE_MODEL)
             .build()
     );
   }

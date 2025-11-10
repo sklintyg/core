@@ -292,4 +292,17 @@ class FK7427CertificateActionSpecificationTest {
         ),
         "Expected type: %s".formatted(expectedType));
   }
+
+  @Test
+  void shallIncludeCertificateActionInactiveCertificateModel() {
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.INACTIVE_CERTIFICATE_MODEL)
+        .build();
+
+    final var actionSpecifications = FK7427CertificateActionSpecification.create();
+
+    assertTrue(actionSpecifications.stream().anyMatch(
+            expectedSpecification::equals),
+        "Expected type: %s".formatted(expectedSpecification));
+  }
 }

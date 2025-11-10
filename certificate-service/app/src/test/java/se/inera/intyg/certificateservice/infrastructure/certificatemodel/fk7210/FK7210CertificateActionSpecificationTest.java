@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.fk7210;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -248,6 +249,19 @@ class FK7210CertificateActionSpecificationTest {
     assertEquals(expectedSpecification,
         actualSpecification(actionSpecifications, expectedSpecification.certificateActionType())
     );
+  }
+
+  @Test
+  void shallIncludeCertificateActionInactiveCertificateModel() {
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.INACTIVE_CERTIFICATE_MODEL)
+        .build();
+
+    final var actionSpecifications = FK7210CertificateActionSpecification.create();
+
+    assertTrue(actionSpecifications.stream().anyMatch(
+            expectedSpecification::equals),
+        "Expected type: %s".formatted(expectedSpecification));
   }
 
   private static CertificateActionSpecification actualSpecification(
