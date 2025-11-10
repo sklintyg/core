@@ -7,9 +7,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_META_DATA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.ag7804CertificateBuilder;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.ag7804certificateModelBuilder;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.fk7210certificateModelBuilder;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -41,10 +39,12 @@ class PrintCertificateMetadataConverterTest {
   @InjectMocks
   private PrintCertificateMetadataConverter printCertificateMetadataConverter;
 
-  private static final Certificate CERTIFICATE = fk7210CertificateBuilder()
-      .certificateModel(fk7210certificateModelBuilder()
-          .recipient(new Recipient(new RecipientId("ts"), "ts", "ts", "transportstyrelsen-logo.png",
-              "Läkarintyg Transportstyrelsen")
+  private static final Certificate CERTIFICATE = ag7804CertificateBuilder()
+      .certificateModel(ag7804certificateModelBuilder()
+          .pdfSpecification(null)
+          .recipient(
+              new Recipient(new RecipientId("SKR"), "SKR", "SKR", "transportstyrelsen-logo.png",
+                  "SKR")
           ).build()
       )
       .status(Status.SIGNED)
@@ -61,8 +61,9 @@ class PrintCertificateMetadataConverterTest {
   private static final Certificate CERTIFICATE_SKR = ag7804CertificateBuilder()
       .certificateModel(ag7804certificateModelBuilder()
           .generalPrintProvider(new AG7804CertificateGeneralPrintProvider())
-          .recipient(new Recipient(new RecipientId("ts"), "ts", "ts", "transportstyrelsen-logo.png",
-              "Läkarintyg Transportstyrelsen")
+          .recipient(
+              new Recipient(new RecipientId("SKR"), "SKR", "SKR", "transportstyrelsen-logo.png",
+                  "SKR")
           ).build()
       )
       .status(Status.SIGNED)
@@ -76,10 +77,12 @@ class PrintCertificateMetadataConverterTest {
       .certificateMetaData(null)
       .build();
 
-  public static final Certificate DRAFT = fk7210CertificateBuilder()
-      .certificateModel(fk7210certificateModelBuilder()
-          .recipient(new Recipient(new RecipientId("ts"), "ts", "ts", "transportstyrelsen-logo.png",
-              "Läkarintyg Transportstyrelsen")
+  public static final Certificate DRAFT = ag7804CertificateBuilder()
+      .certificateModel(ag7804certificateModelBuilder()
+          .pdfSpecification(null)
+          .recipient(
+              new Recipient(new RecipientId("SKR"), "SKR", "SKR", "transportstyrelsen-logo.png",
+                  "SKR")
           ).build()
       )
       .signed(null)
@@ -203,15 +206,15 @@ class PrintCertificateMetadataConverterTest {
 
   @Test
   void shouldUseGeneralPrintDescription() {
-    final var certificateWithLinkInDescription = fk7210CertificateBuilder()
-        .certificateModel(fk7210certificateModelBuilder()
+    final var certificateWithLinkInDescription = ag7804CertificateBuilder()
+        .certificateModel(ag7804certificateModelBuilder()
             .description("Not general print description.")
             .pdfSpecification(GeneralPdfSpecification.builder()
                 .description("General print description.")
                 .build())
-            .recipient(new Recipient(new RecipientId("ts"), "ts", "ts",
-                "transportstyrelsen-logo.png",
-                "Läkarintyg Transportstyrelsen")
+            .recipient(
+                new Recipient(new RecipientId("SKR"), "SKR", "SKR", "transportstyrelsen-logo.png",
+                    "SKR")
             ).build()
         )
         .status(Status.SIGNED)
