@@ -6,15 +6,16 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 
 @Builder
 @Getter(AccessLevel.NONE)
 public class CertificateActionSign implements CertificateAction {
 
-  private static final String SIGN = "Signera intyget";
-  private static final String SIGN_AND_SEND = "Signera och skicka";
-  private static final String SIGN_AND_SEND_DESCRIPTION = "Intyget skickas direkt till %s.";
+  private static final String SIGN_NAME = "Signera intyget";
+  private static final String SEND_AFTER_SIGN_NAME = "Signera och skicka";
+  private static final String SEND_AFTER_SIGN_DESCRIPTION = "Intyget skickas direkt till %s.";
   private static final String SIGN_DESCRIPTION = "Intyget signeras.";
   private final CertificateActionSpecification certificateActionSpecification;
   private final List<ActionRule> actionRules;
@@ -44,27 +45,32 @@ public class CertificateActionSign implements CertificateAction {
   @Override
   public String getName(Optional<Certificate> optionalCertificate) {
     return optionalCertificate.map(
-            certificate -> {
-              final var hasSignAfterSendAction = certificate.certificateModel()
-                  .certificateActionExists(CertificateActionType.SEND_AFTER_SIGN);
-              return hasSignAfterSendAction ? SIGN_AND_SEND : SIGN;
-            }
+            certificate -> displaySendAfterSignAction(certificate) ? SEND_AFTER_SIGN_NAME : SIGN_NAME
         )
-        .orElse(SIGN);
+        .orElse(SIGN_NAME);
   }
 
   @Override
   public String getDescription(Optional<Certificate> optionalCertificate) {
-    return optionalCertificate.map(
-            certificate -> {
-              final var hasSignAfterSendAction = certificate.certificateModel()
-                  .certificateActionExists(CertificateActionType.SEND_AFTER_SIGN);
-              return hasSignAfterSendAction
-                  ? SIGN_AND_SEND_DESCRIPTION.formatted(
-                  certificate.certificateModel().recipient().name())
-                  : SIGN_DESCRIPTION;
-            }
+    return optionalCertificate.filter(CertificateActionSign::displaySendAfterSignAction)
+        .map(
+            certificate -> SEND_AFTER_SIGN_DESCRIPTION.formatted(
+                certificate.certificateModel().recipient().name())
         )
         .orElse(SIGN_DESCRIPTION);
+  }
+
+  private static boolean displaySendAfterSignAction(Certificate certificate) {
+    return certificate.certificateModel()
+        .certificateActionExists(CertificateActionType.SEND_AFTER_SIGN)
+        || hasComplementRelationAndSendAfterComplementActionAction(certificate);
+  }
+
+  private static boolean hasComplementRelationAndSendAfterComplementActionAction(
+      Certificate certificate) {
+    return certificate.parent() != null
+        && RelationType.COMPLEMENT.equals(certificate.parent().type())
+        && certificate.certificateModel()
+        .certificateActionExists(CertificateActionType.SEND_AFTER_COMPLEMENT);
   }
 }
