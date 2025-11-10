@@ -36,6 +36,14 @@ public class GetCitizenCertificateListService {
             .build()
     );
 
+    certificates.forEach(certificate -> {
+      if (certificate.signed() != null) {
+        final var updatedMetadata = certificateRepository
+            .getMetadataFromSignInstance(certificate.certificateMetaData(), certificate.signed());
+        certificate.updateMetadata(updatedMetadata);
+      }
+    });
+
     return GetCitizenCertificateListResponse.builder()
         .citizenCertificates(certificates.stream()
             .filter(certificate -> certificate.certificateModel().availableForCitizen())
