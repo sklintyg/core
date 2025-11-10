@@ -28,9 +28,7 @@ public class ActionRulePatientAlive implements ActionRule {
 
   @Override
   public String getReasonForPermissionDenied() {
-    return "Du saknar behörighet för den begärda åtgärden."
-        + " Det krävs särskilda rättigheter eller en specifik befattning"
-        + " för att hantera avlidna patienter.";
+    return "Du kan ej utföra den begärda åtgärden eftersom patienten är avliden.";
   }
 
   private static boolean certificateHasPatient(Optional<Certificate> certificate) {
