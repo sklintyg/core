@@ -35,6 +35,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMetaData;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
+import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
@@ -132,7 +134,7 @@ class CertificateActionSignTest {
 
   @Test
   void shallReturnTrueIfAllowedToSign() {
-    final var certificateActionSign = (CertificateActionSign) certificateActionFactory.create(
+    final var certificateActionSignAction = (CertificateActionSign) certificateActionFactory.create(
         CERTIFICATE_ACTION_SPECIFICATION
     );
 
@@ -142,7 +144,8 @@ class CertificateActionSignTest {
     final var certificate = certificateBuilder.build();
 
     assertTrue(
-        certificateActionSign.evaluate(Optional.of(certificate), Optional.of(actionEvaluation)),
+        certificateActionSignAction.evaluate(Optional.of(certificate),
+            Optional.of(actionEvaluation)),
         () -> "Expected true when passing %s and %s".formatted(actionEvaluation, certificate)
     );
   }
@@ -225,6 +228,32 @@ class CertificateActionSignTest {
           .build();
       assertEquals("Signera och skicka", certificateActionSign.getName(Optional.of(certificate)));
     }
+
+    @Test
+    void shallReturnSendAfterSignNameIfCertificateHasComplementRelationWithSendAfterComplementAction() {
+      final var certificate = certificateBuilder.parent(
+              Relation.builder()
+                  .type(RelationType.COMPLEMENT)
+                  .build()
+          )
+          .certificateModel(
+              CertificateModel.builder()
+                  .certificateActionSpecifications(
+                      List.of(
+                          CertificateActionSpecification.builder()
+                              .certificateActionType(CertificateActionType.SIGN)
+                              .build(),
+                          CertificateActionSpecification.builder()
+                              .certificateActionType(CertificateActionType.SEND_AFTER_COMPLEMENT)
+                              .build()
+                      )
+                  )
+                  .build()
+          )
+          .build();
+
+      assertEquals("Signera och skicka", certificateActionSign.getName(Optional.of(certificate)));
+    }
   }
 
   @Nested
@@ -266,6 +295,39 @@ class CertificateActionSignTest {
                           "LOGICAL_ADDRESS"
                       )
                   )
+                  .build()
+          )
+          .build();
+      assertEquals("Intyget skickas direkt till Försäkringskassan.",
+          certificateActionSign.getDescription(Optional.of(certificate)));
+    }
+
+    @Test
+    void shallReturnSendAfterSignDescriptionIfCertificateHasComplementRelationWithSendAfterComplementAction() {
+      final var certificate = certificateBuilder.certificateModel(
+              CertificateModel.builder()
+                  .certificateActionSpecifications(
+                      List.of(
+                          CertificateActionSpecification.builder()
+                              .certificateActionType(CertificateActionType.SIGN)
+                              .build(),
+                          CertificateActionSpecification.builder()
+                              .certificateActionType(CertificateActionType.SEND_AFTER_COMPLEMENT)
+                              .build()
+                      )
+                  )
+                  .recipient(
+                      new Recipient(
+                          new RecipientId("id"),
+                          "Försäkringskassan",
+                          "LOGICAL_ADDRESS"
+                      )
+                  )
+                  .build()
+          )
+          .parent(
+              Relation.builder()
+                  .type(RelationType.COMPLEMENT)
                   .build()
           )
           .build();
