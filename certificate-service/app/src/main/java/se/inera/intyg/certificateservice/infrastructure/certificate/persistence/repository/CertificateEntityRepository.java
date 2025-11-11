@@ -38,4 +38,20 @@ public interface CertificateEntityRepository extends CrudRepository<CertificateE
 
   @Query("SELECT c FROM CertificateEntity c WHERE c.certificateId = :certificateId AND c.placeholder = true")
   Optional<CertificateEntity> findPlaceholderByCertificateId(String certificateId);
+
+  @Query("""
+        SELECT c
+        FROM CertificateEntity c
+        WHERE c.certificateId IN :certificateIds
+          AND c.revoked IS NULL
+          AND NOT EXISTS (
+            SELECT rel
+            FROM CertificateRelationEntity rel
+            WHERE rel.parentCertificate = c
+              AND rel.childCertificate.revoked IS NULL
+              AND rel.childCertificate.signed IS NOT NULL
+              AND rel.certificateRelationType.type IN ('COMPLEMENT', 'REPLACE')
+          )
+      """)
+  List<CertificateEntity> findValidSickLeaveCertificatesByIds(List<String> certificateIds);
 }

@@ -1051,4 +1051,25 @@ class JpaCertificateRepositoryTest {
       verify(certificateEntityRepository).findAll(specification);
     }
   }
+
+  @Nested
+  class FindValidSickLeavesByIdsTests {
+
+    private static final String ID1 = "CERTIFICATE_ID";
+    private static final List<CertificateId> CERTIFICATE_IDS = List.of(
+        new CertificateId(ID1));
+
+    @Test
+    void shouldReturnListOfCertificates() {
+      when(
+          certificateEntityRepository.findValidSickLeaveCertificatesByIds(List.of(ID1))).thenReturn(
+          List.of(CERTIFICATE_ENTITY));
+      when(certificateEntityMapper.toDomain(CERTIFICATE_ENTITY, certificateRepository))
+          .thenReturn(EXPECTED_CERTIFICATE);
+
+      final var result = jpaCertificateRepository.findValidSickLeavesByIds(
+          CERTIFICATE_IDS, certificateRepository);
+      assertEquals(List.of(EXPECTED_CERTIFICATE), result);
+    }
+  }
 }
