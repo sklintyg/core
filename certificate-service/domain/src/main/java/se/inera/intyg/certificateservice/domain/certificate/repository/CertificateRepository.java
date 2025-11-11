@@ -43,7 +43,7 @@ public interface CertificateRepository {
   CertificateMetaData getMetadataFromSignInstance(CertificateMetaData certificateMetaData,
       LocalDateTime signed);
 
-  List<CertificateId> findValidSickLeavesByIds(List<CertificateId> certificateId);
+  List<CertificateId> findValidSickLeavesCertificateIdsByIds(List<CertificateId> certificateId);
 
   void updateCertificateMetadataFromSignInstances(List<Certificate> certificates);
 }

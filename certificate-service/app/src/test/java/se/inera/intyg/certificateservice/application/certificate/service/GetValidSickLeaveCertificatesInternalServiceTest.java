@@ -61,7 +61,8 @@ class GetValidSickLeaveCertificatesInternalServiceTest {
         .certificateIds(List.of(CERTIFICATE_ID))
         .build();
 
-    when(certificateRepository.findValidSickLeavesByIds(List.of(new CertificateId(CERTIFICATE_ID))))
+    when(certificateRepository.findValidSickLeavesCertificateIdsByIds(
+        List.of(new CertificateId(CERTIFICATE_ID))))
         .thenReturn(List.of(FK7804_CERTIFICATE.id()));
 
     final var actualResult = getValidSickLeaveCertificatesInternalService.get(

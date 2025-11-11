@@ -21,7 +21,7 @@ public class GetValidSickLeaveCertificatesInternalService {
       );
     }
 
-    final var validSickLeavesByIds = certificateRepository.findValidSickLeavesByIds(
+    final var sickLeavesCertificateIdsByIds = certificateRepository.findValidSickLeavesCertificateIdsByIds(
         request.getCertificateIds().stream()
             .map(CertificateId::new)
             .toList()
@@ -29,7 +29,7 @@ public class GetValidSickLeaveCertificatesInternalService {
 
     return GetValidSickLeaveCertificateIdsInternalResponse.builder()
         .certificateIds(
-            validSickLeavesByIds.stream()
+            sickLeavesCertificateIdsByIds.stream()
                 .map(CertificateId::id)
                 .toList()
         )
