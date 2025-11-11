@@ -13,6 +13,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataPatientVersionEntity.ATHENA_REACT_ANDERSSON_VERSION_ENTITY;
+import static se.inera.intyg.certificateservice.application.testdata.TestDataPatientVersionEntity.athenaReactAnderssonVersionEntityBuilder;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffVersionEntity.AJLA_DOKTOR_VERSION_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffVersionEntity.ALF_DOKTOR_VERSION_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataUnitVersionEntity.ALFA_ALLERGIMOTTAGNINGEN_VERSION_ENTITY;
@@ -1084,8 +1085,7 @@ class JpaCertificateRepositoryTest {
 
       doReturn(List.of(ATHENA_REACT_ANDERSSON_VERSION_ENTITY))
           .when(patientVersionEntityRepository)
-          .findAllByPatientIdOrderByValidFromDesc(
-              CERTIFICATE_META_DATA.patient().id().idWithoutDash());
+          .findAllByIdIn(List.of(CERTIFICATE_META_DATA.patient().id().idWithoutDash()));
       doReturn(List.of()).when(staffVersionEntityRepository).findAllByHsaIdIn(any());
       doReturn(List.of()).when(unitVersionEntityRepository).findAllByHsaIdIn(any());
 
@@ -1103,7 +1103,7 @@ class JpaCertificateRepositoryTest {
           .build();
 
       doReturn(List.of()).when(patientVersionEntityRepository)
-          .findAllByPatientIdOrderByValidFromDesc(any());
+          .findAllByIdIn(any());
       doReturn(List.of(AJLA_DOKTOR_VERSION_ENTITY, ALF_DOKTOR_VERSION_ENTITY))
           .when(staffVersionEntityRepository)
           .findAllByHsaIdIn(List.of(AJLA_DOCTOR_HSA_ID, ALF_DOKTOR_HSA_ID));
@@ -1126,7 +1126,7 @@ class JpaCertificateRepositoryTest {
           .build();
 
       doReturn(List.of()).when(patientVersionEntityRepository)
-          .findAllByPatientIdOrderByValidFromDesc(any());
+          .findAllByIdIn(any());
       doReturn(List.of()).when(staffVersionEntityRepository).findAllByHsaIdIn(any());
       doReturn(List.of(
           ALFA_REGIONEN_VERSION_ENTITY,
@@ -1155,7 +1155,7 @@ class JpaCertificateRepositoryTest {
           .build();
 
       doReturn(List.of()).when(patientVersionEntityRepository)
-          .findAllByPatientIdOrderByValidFromDesc(any());
+          .findAllByIdIn(any());
       doReturn(List.of()).when(staffVersionEntityRepository).findAllByHsaIdIn(any());
       doReturn(List.of()).when(unitVersionEntityRepository).findAllByHsaIdIn(any());
 
@@ -1194,7 +1194,7 @@ class JpaCertificateRepositoryTest {
 
       doReturn(List.of(ATHENA_REACT_ANDERSSON_VERSION_ENTITY))
           .when(patientVersionEntityRepository)
-          .findAllByPatientIdOrderByValidFromDesc(any());
+          .findAllByIdIn(any());
       doReturn(List.of(AJLA_DOKTOR_VERSION_ENTITY, ALF_DOKTOR_VERSION_ENTITY))
           .when(staffVersionEntityRepository).findAllByHsaIdIn(any());
       doReturn(List.of(
@@ -1220,13 +1220,14 @@ class JpaCertificateRepositoryTest {
           .certificateMetaData(CERTIFICATE_META_DATA)
           .build();
 
-      final var versionEntity = ATHENA_REACT_ANDERSSON_VERSION_ENTITY;
-      versionEntity.setValidFrom(TIMESTAMP.minusDays(1));
-      versionEntity.setValidTo(TIMESTAMP.plusDays(1));
+      final var versionEntity =
+          athenaReactAnderssonVersionEntityBuilder()
+              .validFrom(TIMESTAMP.minusDays(1))
+              .validTo(TIMESTAMP.plusDays(1)).build();
 
       doReturn(List.of(versionEntity))
           .when(patientVersionEntityRepository)
-          .findAllByPatientIdOrderByValidFromDesc(any());
+          .findAllByIdIn(any());
       doReturn(List.of()).when(staffVersionEntityRepository).findAllByHsaIdIn(any());
       doReturn(List.of()).when(unitVersionEntityRepository).findAllByHsaIdIn(any());
 

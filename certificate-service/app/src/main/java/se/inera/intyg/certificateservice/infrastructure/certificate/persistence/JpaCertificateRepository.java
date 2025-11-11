@@ -481,9 +481,11 @@ public class JpaCertificateRepository {
 
     final var staffHsaIds = new HashSet<String>();
     final var unitHsaIds = new HashSet<String>();
+    final var patientIds = new HashSet<String>();
 
     certificates.forEach(certificate -> {
       final var metadata = certificate.certificateMetaData();
+      patientIds.add(metadata.patient().id().idWithoutDash());
       staffHsaIds.add(metadata.creator().hsaId().id());
       staffHsaIds.add(metadata.issuer().hsaId().id());
       unitHsaIds.add(metadata.careProvider().hsaId().id());
@@ -492,8 +494,7 @@ public class JpaCertificateRepository {
     });
 
     final var patientVersions = patientVersionEntityRepository
-        .findAllByPatientIdOrderByValidFromDesc(certificates.
-            getFirst().certificateMetaData().patient().id().idWithoutDash());
+        .findAllByIdIn(patientIds.stream().toList());
 
     final var staffVersions = staffVersionEntityRepository
         .findAllByHsaIdIn(staffHsaIds.stream().toList());
