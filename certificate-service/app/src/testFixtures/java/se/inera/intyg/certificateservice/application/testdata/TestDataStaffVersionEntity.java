@@ -17,6 +17,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserCons
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALF_DOKTOR_PA_TITLES;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALF_DOKTOR_SPECIALITIES;
 
+import java.time.LocalDateTime;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.HealthcareProfessionalLicenceVersionEmbeddable;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.PaTitleVersionEmbeddable;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.SpecialityVersionEmbeddable;
@@ -30,9 +31,11 @@ public class TestDataStaffVersionEntity {
     throw new IllegalStateException("Utility class");
   }
 
+  public static final LocalDateTime VALID_TO = LocalDateTime.now().plusYears(1);
   public static final StaffVersionEntity AJLA_DOKTOR_VERSION_ENTITY = ajlaDoctorVersionEntityBuilder().build();
 
   public static final StaffVersionEntity ALF_DOKTOR_VERSION_ENTITY = alfDoktorVersionEntityBuilder().build();
+
 
   public static StaffVersionEntity.StaffVersionEntityBuilder ajlaDoctorVersionEntityBuilder() {
     return StaffVersionEntity.builder()
@@ -40,6 +43,7 @@ public class TestDataStaffVersionEntity {
         .firstName(AJLA_DOCTOR_FIRST_NAME)
         .middleName(AJLA_DOCTOR_MIDDLE_NAME)
         .lastName(AJLA_DOCTOR_LAST_NAME)
+        .validTo(VALID_TO)
         .role(
             StaffRoleEntity.builder()
                 .role(StaffRole.DOCTOR.name())
@@ -82,6 +86,7 @@ public class TestDataStaffVersionEntity {
         .firstName(ALF_DOKTOR_FIRST_NAME)
         .middleName(ALF_DOKTOR_MIDDLE_NAME)
         .lastName(ALF_DOKTOR_LAST_NAME)
+        .validTo(VALID_TO)
         .role(
             StaffRoleEntity.builder()
                 .role(StaffRole.DOCTOR.name())

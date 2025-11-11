@@ -22,4 +22,6 @@ public interface StaffVersionEntityRepository extends JpaRepository<StaffVersion
   List<StaffVersionEntity> findAllCoveringTimestampByHsaIdIn(@Param("ids") List<String> hsaIds,
       @Param("ts") LocalDateTime ts);
 
+  List<StaffVersionEntity> findAllByHsaIdIn(List<String> hsaIds);
+
 }

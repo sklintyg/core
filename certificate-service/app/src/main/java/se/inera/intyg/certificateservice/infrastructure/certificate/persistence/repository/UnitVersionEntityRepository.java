@@ -24,4 +24,6 @@ public interface UnitVersionEntityRepository extends CrudRepository<UnitVersionE
   List<UnitVersionEntity> findAllCoveringTimestampByHsaIdIn(@Param("ids") List<String> hsaIds,
       @Param("ts") LocalDateTime ts);
 
+  List<UnitVersionEntity> findAllByHsaIdIn(List<String> hsaIds);
+
 }

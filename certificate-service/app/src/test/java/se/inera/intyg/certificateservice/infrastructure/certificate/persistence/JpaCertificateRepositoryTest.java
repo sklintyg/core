@@ -945,9 +945,8 @@ class JpaCertificateRepositoryTest {
 
     @Test
     void shouldThrowIllegalStateExceptionWhenNotSigned() {
-      assertThrows(IllegalStateException.class, () -> {
-        jpaCertificateRepository.getMetadataFromSignInstance(CERTIFICATE_META_DATA, null);
-      });
+      assertThrows(IllegalStateException.class,
+          () -> jpaCertificateRepository.getMetadataFromSignInstance(CERTIFICATE_META_DATA, null));
     }
 
     @Test
@@ -1070,6 +1069,172 @@ class JpaCertificateRepositoryTest {
       final var result = jpaCertificateRepository.findValidSickLeavesByIds(
           CERTIFICATE_IDS, certificateRepository);
       assertEquals(List.of(EXPECTED_CERTIFICATE), result);
+    }
+  }
+
+  @Nested
+  class UpdateCertificateMetadataFromSignInstancesTest {
+
+    @Test
+    void shouldUpdatePatientMetadataFromVersionEntity() {
+      final var athenaWithoutAddress = athenaReactAnderssonBuilder().address(null).build();
+      final var certificate = MedicalCertificate.builder()
+          .id(CERTIFICATE_ID)
+          .signed(TIMESTAMP)
+          .certificateMetaData(CERTIFICATE_META_DATA)
+          .build();
+
+      doReturn(List.of(ATHENA_REACT_ANDERSSON_VERSION_ENTITY))
+          .when(patientVersionEntityRepository)
+          .findAllByPatientIdOrderByValidFromDesc(
+              CERTIFICATE_META_DATA.patient().id().idWithoutDash());
+      doReturn(List.of()).when(staffVersionEntityRepository).findAllByHsaIdIn(any());
+      doReturn(List.of()).when(unitVersionEntityRepository).findAllByHsaIdIn(any());
+
+      jpaCertificateRepository.updateCertificateMetadataFromSignInstances(List.of(certificate));
+
+      assertEquals(athenaWithoutAddress, certificate.certificateMetaData().patient());
+    }
+
+    @Test
+    void shouldUpdateStaffMetadataFromVersionEntities() {
+      final var certificate = MedicalCertificate.builder()
+          .id(CERTIFICATE_ID)
+          .signed(TIMESTAMP)
+          .certificateMetaData(CERTIFICATE_META_DATA)
+          .build();
+
+      doReturn(List.of()).when(patientVersionEntityRepository)
+          .findAllByPatientIdOrderByValidFromDesc(any());
+      doReturn(List.of(AJLA_DOKTOR_VERSION_ENTITY, ALF_DOKTOR_VERSION_ENTITY))
+          .when(staffVersionEntityRepository)
+          .findAllByHsaIdIn(List.of(AJLA_DOCTOR_HSA_ID, ALF_DOKTOR_HSA_ID));
+      doReturn(List.of()).when(unitVersionEntityRepository).findAllByHsaIdIn(any());
+
+      jpaCertificateRepository.updateCertificateMetadataFromSignInstances(List.of(certificate));
+
+      assertAll(
+          () -> assertEquals(AJLA_DOKTOR, certificate.certificateMetaData().issuer()),
+          () -> assertEquals(ALF_DOKTOR, certificate.certificateMetaData().creator())
+      );
+    }
+
+    @Test
+    void shouldUpdateUnitMetadataFromVersionEntities() {
+      final var certificate = MedicalCertificate.builder()
+          .id(CERTIFICATE_ID)
+          .signed(TIMESTAMP)
+          .certificateMetaData(CERTIFICATE_META_DATA)
+          .build();
+
+      doReturn(List.of()).when(patientVersionEntityRepository)
+          .findAllByPatientIdOrderByValidFromDesc(any());
+      doReturn(List.of()).when(staffVersionEntityRepository).findAllByHsaIdIn(any());
+      doReturn(List.of(
+          ALFA_REGIONEN_VERSION_ENTITY,
+          ALFA_MEDICINCENTRUM_VERSION_ENTITY,
+          ALFA_ALLERGIMOTTAGNINGEN_VERSION_ENTITY))
+          .when(unitVersionEntityRepository)
+          .findAllByHsaIdIn(List.of(
+              ALFA_MEDICINCENTRUM_ID, ALFA_REGIONEN_ID, ALFA_ALLERGIMOTTAGNINGEN_ID));
+
+      jpaCertificateRepository.updateCertificateMetadataFromSignInstances(List.of(certificate));
+
+      assertAll(
+          () -> assertEquals(ALFA_REGIONEN, certificate.certificateMetaData().careProvider()),
+          () -> assertEquals(ALFA_MEDICINCENTRUM, certificate.certificateMetaData().careUnit()),
+          () -> assertEquals(ALFA_ALLERGIMOTTAGNINGEN,
+              certificate.certificateMetaData().issuingUnit())
+      );
+    }
+
+    @Test
+    void shouldDefaultToOriginalMetadataWhenNoVersionFound() {
+      final var certificate = MedicalCertificate.builder()
+          .id(CERTIFICATE_ID)
+          .signed(TIMESTAMP)
+          .certificateMetaData(CERTIFICATE_META_DATA)
+          .build();
+
+      doReturn(List.of()).when(patientVersionEntityRepository)
+          .findAllByPatientIdOrderByValidFromDesc(any());
+      doReturn(List.of()).when(staffVersionEntityRepository).findAllByHsaIdIn(any());
+      doReturn(List.of()).when(unitVersionEntityRepository).findAllByHsaIdIn(any());
+
+      jpaCertificateRepository.updateCertificateMetadataFromSignInstances(List.of(certificate));
+
+      assertEquals(CERTIFICATE_META_DATA, certificate.certificateMetaData());
+    }
+
+    @Test
+    void shouldNotUpdateMetadataForUnsignedCertificate() {
+      final var unsignedCertificate = MedicalCertificate.builder()
+          .id(CERTIFICATE_ID)
+          .signed(null)
+          .certificateMetaData(CERTIFICATE_META_DATA)
+          .build();
+
+      jpaCertificateRepository.updateCertificateMetadataFromSignInstances(
+          List.of(unsignedCertificate));
+
+      assertEquals(CERTIFICATE_META_DATA, unsignedCertificate.certificateMetaData());
+    }
+
+    @Test
+    void shouldHandleMultipleCertificates() {
+      final var certificate1 = MedicalCertificate.builder()
+          .id(CERTIFICATE_ID)
+          .signed(TIMESTAMP)
+          .certificateMetaData(CERTIFICATE_META_DATA)
+          .build();
+
+      final var certificate2 = MedicalCertificate.builder()
+          .id(new CertificateId("ID2"))
+          .signed(TIMESTAMP)
+          .certificateMetaData(CERTIFICATE_META_DATA)
+          .build();
+
+      doReturn(List.of(ATHENA_REACT_ANDERSSON_VERSION_ENTITY))
+          .when(patientVersionEntityRepository)
+          .findAllByPatientIdOrderByValidFromDesc(any());
+      doReturn(List.of(AJLA_DOKTOR_VERSION_ENTITY, ALF_DOKTOR_VERSION_ENTITY))
+          .when(staffVersionEntityRepository).findAllByHsaIdIn(any());
+      doReturn(List.of(
+          ALFA_REGIONEN_VERSION_ENTITY,
+          ALFA_MEDICINCENTRUM_VERSION_ENTITY,
+          ALFA_ALLERGIMOTTAGNINGEN_VERSION_ENTITY))
+          .when(unitVersionEntityRepository).findAllByHsaIdIn(any());
+
+      jpaCertificateRepository.updateCertificateMetadataFromSignInstances(
+          List.of(certificate1, certificate2));
+
+      assertAll(
+          () -> assertNotNull(certificate1.certificateMetaData()),
+          () -> assertNotNull(certificate2.certificateMetaData())
+      );
+    }
+
+    @Test
+    void shouldFilterVersionsBySignedTimestamp() {
+      final var certificate = MedicalCertificate.builder()
+          .id(CERTIFICATE_ID)
+          .signed(TIMESTAMP)
+          .certificateMetaData(CERTIFICATE_META_DATA)
+          .build();
+
+      final var versionEntity = ATHENA_REACT_ANDERSSON_VERSION_ENTITY;
+      versionEntity.setValidFrom(TIMESTAMP.minusDays(1));
+      versionEntity.setValidTo(TIMESTAMP.plusDays(1));
+
+      doReturn(List.of(versionEntity))
+          .when(patientVersionEntityRepository)
+          .findAllByPatientIdOrderByValidFromDesc(any());
+      doReturn(List.of()).when(staffVersionEntityRepository).findAllByHsaIdIn(any());
+      doReturn(List.of()).when(unitVersionEntityRepository).findAllByHsaIdIn(any());
+
+      jpaCertificateRepository.updateCertificateMetadataFromSignInstances(List.of(certificate));
+
+      assertNotNull(certificate.certificateMetaData().patient());
     }
   }
 }

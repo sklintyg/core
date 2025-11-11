@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificate.persistence
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -473,5 +474,92 @@ public class JpaCertificateRepository {
         .map(certificateEntity -> certificateEntityMapper.toDomain(certificateEntity,
             certificateRepository))
         .toList();
+  }
+
+  public void updateCertificateMetadataFromSignInstances(List<Certificate> certificates) {
+    final var staffHsaIds = new HashSet<String>();
+    final var unitHsaIds = new HashSet<String>();
+
+    certificates.forEach(certificate -> {
+      final var metadata = certificate.certificateMetaData();
+      staffHsaIds.add(metadata.creator().hsaId().id());
+      staffHsaIds.add(metadata.issuer().hsaId().id());
+      unitHsaIds.add(metadata.careProvider().hsaId().id());
+      unitHsaIds.add(metadata.careUnit().hsaId().id());
+      unitHsaIds.add(metadata.issuingUnit().hsaId().id());
+    });
+
+    final var patientVersions = patientVersionEntityRepository
+        .findAllByPatientIdOrderByValidFromDesc(certificates.
+            getFirst().certificateMetaData().patient().id().idWithoutDash());
+
+    final var staffVersions = staffVersionEntityRepository
+        .findAllByHsaIdIn(staffHsaIds.stream().toList());
+
+    final var unitVersions = unitVersionEntityRepository
+        .findAllByHsaIdIn(unitHsaIds.stream().toList());
+
+    certificates.forEach(certificate -> {
+      final var signedAt = certificate.signed();
+
+      if (signedAt != null) {
+        final var metadata = certificate.certificateMetaData();
+
+        final var patientWhenSigned = patientVersions.stream()
+            .filter(pv -> pv.getId().equals(
+                metadata.patient().id().idWithoutDash()))
+            .filter(pv -> (pv.getValidFrom() == null || !pv.getValidFrom().isAfter(signedAt))
+                && pv.getValidTo().isAfter(signedAt))
+            .findFirst()
+            .map(PatientVersionEntityMapper::toPatient)
+            .map(PatientEntityMapper::toDomain)
+            .orElse(metadata.patient());
+
+        final var staffMap = staffVersions.stream()
+            .filter(sv -> sv.getHsaId().equals(metadata.issuer().hsaId().id())
+                || sv.getHsaId().equals(metadata.creator().hsaId().id()))
+            .filter(sv -> (sv.getValidFrom() == null || !sv.getValidFrom().isAfter(signedAt))
+                && sv.getValidTo().isAfter(signedAt))
+            .map(StaffVersionEntityMapper::toStaff)
+            .map(StaffEntityMapper::toDomain)
+            .collect(Collectors.toMap(s -> s.hsaId().id(), Function.identity(), (a, b) -> a));
+
+        final var unitMap = unitVersions.stream()
+            .filter(uv -> uv.getHsaId().equals(metadata.careProvider().hsaId().id())
+                || uv.getHsaId().equals(metadata.careUnit().hsaId().id())
+                || uv.getHsaId().equals(metadata.issuingUnit().hsaId().id()))
+            .filter(uv -> (uv.getValidFrom() == null || !uv.getValidFrom().isAfter(signedAt))
+                && uv.getValidTo().isAfter(signedAt))
+            .map(UnitVersionEntityMapper::toUnit)
+            .collect(Collectors.toMap(UnitEntity::getHsaId, Function.identity(), (a, b) -> a));
+
+        certificate.updateMetadata(
+            CertificateMetaData.builder()
+                .issuer(staffMap.getOrDefault(metadata.issuer().hsaId().id(), metadata.issuer()))
+                .creator(staffMap.getOrDefault(metadata.creator().hsaId().id(), metadata.creator()))
+                .careProvider(
+                    unitMap.containsKey(metadata.careProvider().hsaId().id())
+                        ? UnitEntityMapper.toCareProviderDomain(
+                        unitMap.get(metadata.careProvider().hsaId().id()))
+                        : metadata.careProvider()
+                )
+                .careUnit(
+                    unitMap.containsKey(metadata.careUnit().hsaId().id())
+                        ? UnitEntityMapper.toCareUnitDomain(
+                        unitMap.get(metadata.careUnit().hsaId().id()))
+                        : metadata.careUnit()
+                )
+                .issuingUnit(
+                    unitMap.containsKey(metadata.issuingUnit().hsaId().id())
+                        ? UnitEntityMapper.toIssuingUnitDomain(
+                        unitMap.get(metadata.issuingUnit().hsaId().id()))
+                        : metadata.issuingUnit()
+                )
+                .patient(patientWhenSigned)
+                .build()
+        );
+
+      }
+    });
   }
 }
