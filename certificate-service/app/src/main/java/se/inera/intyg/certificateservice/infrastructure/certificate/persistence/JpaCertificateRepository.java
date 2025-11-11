@@ -464,6 +464,10 @@ public class JpaCertificateRepository {
   }
 
   public void updateCertificateMetadataFromSignInstances(List<Certificate> certificates) {
+    if (certificates == null || certificates.isEmpty()) {
+      return;
+    }
+
     final var staffHsaIds = new HashSet<String>();
     final var unitHsaIds = new HashSet<String>();
 
