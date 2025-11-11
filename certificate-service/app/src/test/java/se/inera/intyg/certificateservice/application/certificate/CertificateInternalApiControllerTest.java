@@ -23,6 +23,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetCertific
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetSickLeaveCertificateInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetSickLeaveCertificateInternalResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetValidSickLeaveCertificateIdsInternalRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetValidSickLeaveCertificateIdsInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.LockDraftsRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.LockDraftsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.SickLeaveCertificateDTO;
@@ -35,6 +37,7 @@ import se.inera.intyg.certificateservice.application.certificate.service.GetCert
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalXmlService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetSickLeaveCertificateInternalService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetTotalExportsInternalForCareProviderService;
+import se.inera.intyg.certificateservice.application.certificate.service.GetValidSickLeaveCertificatesInternalService;
 import se.inera.intyg.certificateservice.application.certificate.service.LockDraftsInternalService;
 import se.inera.intyg.certificateservice.application.certificate.service.PlaceholderCertificateExistsService;
 import se.inera.intyg.certificateservice.application.certificate.service.RevokePlaceholderCertificateInternalService;
@@ -43,6 +46,8 @@ import se.inera.intyg.certificateservice.application.patient.service.GetCertific
 @ExtendWith(MockitoExtension.class)
 class CertificateInternalApiControllerTest {
 
+  @Mock
+  private GetValidSickLeaveCertificatesInternalService getValidSickLeaveCertificatesInternalService;
   @Mock
   PlaceholderCertificateExistsService placeholderCertificateExistsService;
   @Mock
@@ -229,5 +234,18 @@ class CertificateInternalApiControllerTest {
   void shouldRevokePlaceHolderCertificate() {
     certificateInternalApiController.revokePlaceholderCertificate(CERTIFICATE_ID);
     verify(revokePlaceholderCertificateInternalService).revoke(CERTIFICATE_ID);
+  }
+
+  @Test
+  void shouldReturnGetValidSickLeaveCertificateIdsInternalResponse() {
+    final var request = GetValidSickLeaveCertificateIdsInternalRequest.builder().build();
+    final var expectedResult = GetValidSickLeaveCertificateIdsInternalResponse.builder().build();
+
+    when(getValidSickLeaveCertificatesInternalService.get(request)).thenReturn(expectedResult);
+
+    final var actualResult = certificateInternalApiController.getValidSickLeaveCertificateIds(
+        request
+    );
+    assertEquals(expectedResult, actualResult);
   }
 }
