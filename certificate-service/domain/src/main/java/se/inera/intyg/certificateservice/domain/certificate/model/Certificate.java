@@ -146,4 +146,6 @@ public interface Certificate {
   Optional<CertificateGeneralPrintText> getGeneralPrintText();
 
   void updateMetadata(Patient patient);
+
+  void updateMetadata(CertificateMetaData updatedMetadata);
 }
