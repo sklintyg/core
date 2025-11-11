@@ -124,6 +124,12 @@ public class CertificateRepositoryImpl implements TestabilityCertificateReposito
     jpaCertificateRepository.remove(certificateIds);
   }
 
+  @Override
+  public List<CertificateId> findValidSickLeavesCertificateIdsByIds(
+      List<CertificateId> certificateId) {
+    return jpaCertificateRepository.findValidSickLeavesByIds(certificateId);
+  }
+
   private void updatePatient(List<Certificate> certificates) {
     final var patients = patientInformationProvider.findPatients(
             certificates.stream()

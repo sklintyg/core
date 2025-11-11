@@ -463,6 +463,17 @@ public class JpaCertificateRepository {
         .collect(Collectors.toMap(UnitEntity::getHsaId, Function.identity(), (a, b) -> a));
   }
 
+  public List<CertificateId> findValidSickLeavesByIds(List<CertificateId> certificateId) {
+    return certificateEntityRepository.findValidSickLeaveCertificatesByIds(
+            certificateId.stream()
+                .map(CertificateId::id)
+                .toList()
+        )
+        .stream()
+        .map(CertificateId::new)
+        .toList();
+  }
+
   public void updateCertificateMetadataFromSignInstances(List<Certificate> certificates) {
     if (certificates == null || certificates.isEmpty()) {
       return;
