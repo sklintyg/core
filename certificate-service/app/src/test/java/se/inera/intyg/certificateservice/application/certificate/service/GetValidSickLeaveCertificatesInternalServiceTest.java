@@ -15,14 +15,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetValidSickLeaveCertificateIdsInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetValidSickLeaveCertificateIdsInternalResponse;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
-import se.inera.intyg.certificateservice.domain.certificate.service.GetValidSickLeaveCertificatesDomainService;
+import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 
 @ExtendWith(MockitoExtension.class)
 class GetValidSickLeaveCertificatesInternalServiceTest {
 
   private static final String CERTIFICATE_ID = "CERTIFICATE_ID";
+
   @Mock
-  GetValidSickLeaveCertificatesDomainService getValidSickLeaveCertificatesDomainService;
+  CertificateRepository certificateRepository;
   @InjectMocks
   GetValidSickLeaveCertificatesInternalService getValidSickLeaveCertificatesInternalService;
 
@@ -60,8 +61,8 @@ class GetValidSickLeaveCertificatesInternalServiceTest {
         .certificateIds(List.of(CERTIFICATE_ID))
         .build();
 
-    when(getValidSickLeaveCertificatesDomainService.get(List.of(new CertificateId(CERTIFICATE_ID))))
-        .thenReturn(List.of(FK7804_CERTIFICATE));
+    when(certificateRepository.findValidSickLeavesByIds(List.of(new CertificateId(CERTIFICATE_ID))))
+        .thenReturn(List.of(FK7804_CERTIFICATE.id()));
 
     final var actualResult = getValidSickLeaveCertificatesInternalService.get(
         request);

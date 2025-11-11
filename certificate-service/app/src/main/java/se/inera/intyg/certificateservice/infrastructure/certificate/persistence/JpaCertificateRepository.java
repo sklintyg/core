@@ -463,16 +463,14 @@ public class JpaCertificateRepository {
         .collect(Collectors.toMap(UnitEntity::getHsaId, Function.identity(), (a, b) -> a));
   }
 
-  public List<Certificate> findValidSickLeavesByIds(List<CertificateId> certificateId,
-      CertificateRepository certificateRepository) {
+  public List<CertificateId> findValidSickLeavesByIds(List<CertificateId> certificateId) {
     return certificateEntityRepository.findValidSickLeaveCertificatesByIds(
             certificateId.stream()
                 .map(CertificateId::id)
                 .toList()
         )
         .stream()
-        .map(certificateEntity -> certificateEntityMapper.toDomain(certificateEntity,
-            certificateRepository))
+        .map(CertificateId::new)
         .toList();
   }
 

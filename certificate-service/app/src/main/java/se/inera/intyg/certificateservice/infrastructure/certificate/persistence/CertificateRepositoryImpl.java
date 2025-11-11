@@ -125,8 +125,8 @@ public class CertificateRepositoryImpl implements TestabilityCertificateReposito
   }
 
   @Override
-  public List<Certificate> findValidSickLeavesByIds(List<CertificateId> certificateId) {
-    return jpaCertificateRepository.findValidSickLeavesByIds(certificateId, this);
+  public List<CertificateId> findValidSickLeavesByIds(List<CertificateId> certificateId) {
+    return jpaCertificateRepository.findValidSickLeavesByIds(certificateId);
   }
 
   private void updatePatient(List<Certificate> certificates) {

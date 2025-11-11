@@ -40,7 +40,7 @@ public interface CertificateEntityRepository extends CrudRepository<CertificateE
   Optional<CertificateEntity> findPlaceholderByCertificateId(String certificateId);
 
   @Query("""
-        SELECT c
+        SELECT c.certificateId
         FROM CertificateEntity c
         WHERE c.certificateId IN :certificateIds
           AND c.revoked IS NULL
@@ -53,5 +53,5 @@ public interface CertificateEntityRepository extends CrudRepository<CertificateE
               AND rel.certificateRelationType.type IN ('COMPLEMENT', 'REPLACE')
           )
       """)
-  List<CertificateEntity> findValidSickLeaveCertificatesByIds(List<String> certificateIds);
+  List<String> findValidSickLeaveCertificatesByIds(List<String> certificateIds);
 }

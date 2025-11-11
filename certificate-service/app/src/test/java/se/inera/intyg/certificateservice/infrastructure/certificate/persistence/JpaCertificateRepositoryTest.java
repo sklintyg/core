@@ -1059,16 +1059,14 @@ class JpaCertificateRepositoryTest {
         new CertificateId(ID1));
 
     @Test
-    void shouldReturnListOfCertificates() {
+    void shouldReturnListOfCertificateIds() {
       when(
           certificateEntityRepository.findValidSickLeaveCertificatesByIds(List.of(ID1))).thenReturn(
-          List.of(CERTIFICATE_ENTITY));
-      when(certificateEntityMapper.toDomain(CERTIFICATE_ENTITY, certificateRepository))
-          .thenReturn(EXPECTED_CERTIFICATE);
+          List.of(CERTIFICATE_ENTITY.getCertificateId()));
 
       final var result = jpaCertificateRepository.findValidSickLeavesByIds(
-          CERTIFICATE_IDS, certificateRepository);
-      assertEquals(List.of(EXPECTED_CERTIFICATE), result);
+          CERTIFICATE_IDS);
+      assertEquals(List.of(EXPECTED_CERTIFICATE.id()), result);
     }
   }
 

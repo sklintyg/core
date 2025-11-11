@@ -344,8 +344,7 @@ class CertificateRepositoryImplTest {
       final var certificateIds = List.of(FK7210_CERTIFICATE.id());
 
       certificateRepository.findValidSickLeavesByIds(certificateIds);
-      verify(jpaCertificateRepository).findValidSickLeavesByIds(certificateIds,
-          certificateRepository);
+      verify(jpaCertificateRepository).findValidSickLeavesByIds(certificateIds);
     }
   }
 }

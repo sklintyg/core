@@ -4,15 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetValidSickLeaveCertificateIdsInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetValidSickLeaveCertificateIdsInternalResponse;
-import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
-import se.inera.intyg.certificateservice.domain.certificate.service.GetValidSickLeaveCertificatesDomainService;
+import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 
 @Service
 @RequiredArgsConstructor
 public class GetValidSickLeaveCertificatesInternalService {
 
-  private final GetValidSickLeaveCertificatesDomainService getValidSickLeaveCertificatesDomainService;
+  private final CertificateRepository certificateRepository;
 
   public GetValidSickLeaveCertificateIdsInternalResponse get(
       GetValidSickLeaveCertificateIdsInternalRequest request) {
@@ -22,7 +21,7 @@ public class GetValidSickLeaveCertificatesInternalService {
       );
     }
 
-    final var sickLeaveCertificates = getValidSickLeaveCertificatesDomainService.get(
+    final var validSickLeavesByIds = certificateRepository.findValidSickLeavesByIds(
         request.getCertificateIds().stream()
             .map(CertificateId::new)
             .toList()
@@ -30,8 +29,7 @@ public class GetValidSickLeaveCertificatesInternalService {
 
     return GetValidSickLeaveCertificateIdsInternalResponse.builder()
         .certificateIds(
-            sickLeaveCertificates.stream()
-                .map(Certificate::id)
+            validSickLeavesByIds.stream()
                 .map(CertificateId::id)
                 .toList()
         )
