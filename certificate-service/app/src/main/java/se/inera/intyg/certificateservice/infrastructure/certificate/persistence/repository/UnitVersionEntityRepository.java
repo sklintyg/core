@@ -14,16 +14,25 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 public interface UnitVersionEntityRepository extends CrudRepository<UnitVersionEntity, Long>,
     JpaSpecificationExecutor<UnitVersionEntity> {
 
-  Optional<UnitVersionEntity> findFirstByHsaIdOrderByValidFromDesc(String hsaId);
+  @Query("SELECT uv FROM UnitVersionEntity uv " +
+      "JOIN uv.unit u " +
+      "WHERE u.hsaId = :hsaId " +
+      "ORDER BY uv.validFrom DESC " +
+      "LIMIT 1")
+  Optional<UnitVersionEntity> findFirstByHsaIdOrderByValidFromDesc(@Param("hsaId") String hsaId);
 
-  @Query("SELECT p FROM UnitVersionEntity p " +
-      "WHERE p.hsaId IN :ids " +
-      "AND (p.validFrom IS NULL OR p.validFrom <= :ts) " +
-      "AND p.validTo >= :ts " +
-      "ORDER BY CASE WHEN p.validFrom IS NULL THEN 1 ELSE 0 END, p.validFrom DESC")
+  @Query("SELECT uv FROM UnitVersionEntity uv " +
+      "JOIN uv.unit u " +
+      "WHERE u.hsaId IN :ids " +
+      "AND (uv.validFrom IS NULL OR uv.validFrom <= :ts) " +
+      "AND uv.validTo >= :ts " +
+      "ORDER BY CASE WHEN uv.validFrom IS NULL THEN 1 ELSE 0 END, uv.validFrom DESC")
   List<UnitVersionEntity> findAllCoveringTimestampByHsaIdIn(@Param("ids") List<String> hsaIds,
       @Param("ts") LocalDateTime ts);
 
-  List<UnitVersionEntity> findAllByHsaIdIn(List<String> hsaIds);
+  @Query("SELECT uv FROM UnitVersionEntity uv " +
+      "JOIN uv.unit u " +
+      "WHERE u.hsaId IN :ids")
+  List<UnitVersionEntity> findAllByHsaIdIn(@Param("ids") List<String> hsaIds);
 
 }
