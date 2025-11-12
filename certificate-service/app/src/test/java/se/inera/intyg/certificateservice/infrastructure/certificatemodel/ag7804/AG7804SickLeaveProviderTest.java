@@ -34,15 +34,15 @@ class AG7804SickLeaveProviderTest {
   @Test
   void shouldMapCareUnitId() {
     final var sickLeaveCertificate = provider.build(ag7804CertificateBuilder().build(), false);
-    assertEquals(ag7804CertificateBuilder().build().certificateMetaData().careUnit().hsaId(),
-        sickLeaveCertificate.orElseThrow().careUnitId());
+    assertEquals(ag7804CertificateBuilder().build().certificateMetaData().issuingUnit().hsaId(),
+        sickLeaveCertificate.orElseThrow().issuingUnitId());
   }
 
   @Test
   void shouldMapCareUnitName() {
     final var sickLeaveCertificate = provider.build(ag7804CertificateBuilder().build(), false);
-    assertEquals(ag7804CertificateBuilder().build().certificateMetaData().careUnit().name(),
-        sickLeaveCertificate.orElseThrow().careUnitName());
+    assertEquals(ag7804CertificateBuilder().build().certificateMetaData().issuingUnit().name(),
+        sickLeaveCertificate.orElseThrow().issuingUnitName());
   }
 
   @Test

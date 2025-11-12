@@ -61,15 +61,15 @@ class FK7804SickLeaveProviderTest {
   @Test
   void shallMapCareUnitId() {
     final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE, false);
-    assertEquals(FK7804_CERTIFICATE.certificateMetaData().careUnit().hsaId(),
-        sickLeaveCertificate.orElseThrow().careUnitId());
+    assertEquals(FK7804_CERTIFICATE.certificateMetaData().issuingUnit().hsaId(),
+        sickLeaveCertificate.orElseThrow().issuingUnitId());
   }
 
   @Test
   void shallMapCareUnitName() {
     final var sickLeaveCertificate = provider.build(FK7804_CERTIFICATE, false);
-    assertEquals(FK7804_CERTIFICATE.certificateMetaData().careUnit().name(),
-        sickLeaveCertificate.orElseThrow().careUnitName());
+    assertEquals(FK7804_CERTIFICATE.certificateMetaData().issuingUnit().name(),
+        sickLeaveCertificate.orElseThrow().issuingUnitName());
   }
 
   @Test
@@ -177,10 +177,10 @@ class FK7804SickLeaveProviderTest {
     assertEquals(FK7804_CERTIFICATE.certificateMetaData().issuer().name(),
         sickLeaveCertificate.signingDoctorName());
     assertEquals(FK7804_CERTIFICATE.signed(), sickLeaveCertificate.signingDateTime());
-    assertEquals(FK7804_CERTIFICATE.certificateMetaData().careUnit().hsaId(),
-        sickLeaveCertificate.careUnitId());
-    assertEquals(FK7804_CERTIFICATE.certificateMetaData().careUnit().name(),
-        sickLeaveCertificate.careUnitName());
+    assertEquals(FK7804_CERTIFICATE.certificateMetaData().issuingUnit().hsaId(),
+        sickLeaveCertificate.issuingUnitId());
+    assertEquals(FK7804_CERTIFICATE.certificateMetaData().issuingUnit().name(),
+        sickLeaveCertificate.issuingUnitName());
     assertEquals(FK7804_CERTIFICATE.certificateMetaData().careProvider().hsaId(),
         sickLeaveCertificate.careGiverId());
     assertEquals(FK7804_CERTIFICATE.certificateMetaData().patient().id(),
@@ -218,10 +218,10 @@ class FK7804SickLeaveProviderTest {
     assertEquals(FK7804_CERTIFICATE.certificateMetaData().issuer().name(),
         sickLeaveCertificate.signingDoctorName());
     assertEquals(FK7804_CERTIFICATE.signed(), sickLeaveCertificate.signingDateTime());
-    assertEquals(FK7804_CERTIFICATE.certificateMetaData().careUnit().hsaId(),
-        sickLeaveCertificate.careUnitId());
-    assertEquals(FK7804_CERTIFICATE.certificateMetaData().careUnit().name(),
-        sickLeaveCertificate.careUnitName());
+    assertEquals(FK7804_CERTIFICATE.certificateMetaData().issuingUnit().hsaId(),
+        sickLeaveCertificate.issuingUnitId());
+    assertEquals(FK7804_CERTIFICATE.certificateMetaData().issuingUnit().name(),
+        sickLeaveCertificate.issuingUnitName());
     assertEquals(FK7804_CERTIFICATE.certificateMetaData().careProvider().hsaId(),
         sickLeaveCertificate.careGiverId());
     assertEquals(FK7804_CERTIFICATE.certificateMetaData().patient().id(),

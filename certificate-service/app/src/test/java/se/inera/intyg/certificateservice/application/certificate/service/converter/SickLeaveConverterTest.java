@@ -37,8 +37,8 @@ class SickLeaveConverterTest {
   private static final Name SIGNING_DOCTOR_NAME = Name.builder().firstName("FIRST_NAME")
       .middleName("MIDDLE_NAME").lastName("LAST_NAME").build();
   private static final LocalDateTime SIGNING_DATE_TIME = LocalDateTime.of(2023, 1, 1, 10, 0);
-  private static final HsaId CARE_UNIT_ID = new HsaId("CU_ID");
-  private static final UnitName CARE_UNIT_NAME = new UnitName("CARE_UNIT_NAME");
+  private static final HsaId ISSUING_UNIT_ID = new HsaId("ISSUING_UNIT_ID");
+  private static final UnitName ISSUING_UNIT_NAME = new UnitName("ISSUING_UNIT_NAME");
   private static final HsaId CARE_GIVER_ID = new HsaId("CG_ID");
   private static final PersonId CIVIC_REGISTRATION_NUMBER = PersonId.builder().id("191212121212")
       .build();
@@ -54,7 +54,7 @@ class SickLeaveConverterTest {
       ElementValueCode.builder().code("EMP1").build(),
       ElementValueCode.builder().code("EMP2").build());
   private static final Revoked DELETED = Revoked.builder()
-      .revokedBy(Staff.builder().name(SIGNING_DOCTOR_NAME).hsaId(CARE_UNIT_ID).build())
+      .revokedBy(Staff.builder().name(SIGNING_DOCTOR_NAME).hsaId(ISSUING_UNIT_ID).build())
       .revokedAt(LocalDateTime.of(2050, 1, 1, 1, 1, 0)).build();
   private static final List<DateRange> WORK_CAPACITIES = List.of(
       DateRange.builder().dateRangeId(new FieldId("10")).from(LocalDate.of(2023, 1, 1))
@@ -78,8 +78,8 @@ class SickLeaveConverterTest {
         .signingDoctorId(SIGNING_DOCTOR_ID)
         .signingDoctorName(SIGNING_DOCTOR_NAME)
         .signingDateTime(SIGNING_DATE_TIME)
-        .careUnitId(CARE_UNIT_ID)
-        .careUnitName(CARE_UNIT_NAME)
+        .issuingUnitId(ISSUING_UNIT_ID)
+        .issuingUnitName(ISSUING_UNIT_NAME)
         .careGiverId(CARE_GIVER_ID)
         .civicRegistrationNumber(CIVIC_REGISTRATION_NUMBER)
         .patientName(PATIENT_NAME)
@@ -137,8 +137,8 @@ class SickLeaveConverterTest {
 
       final var dto = converter.toSickLeaveCertificate(sickLeaveCertificate);
 
-      assertEquals("CU_ID", dto.getCareUnitId());
-      assertEquals("CARE_UNIT_NAME", dto.getCareUnitName());
+      assertEquals("ISSUING_UNIT_ID", dto.getCareUnitId());
+      assertEquals("ISSUING_UNIT_NAME", dto.getCareUnitName());
       assertEquals("CG_ID", dto.getCareGiverId());
     }
 
@@ -221,8 +221,8 @@ class SickLeaveConverterTest {
           .signingDoctorId(SIGNING_DOCTOR_ID)
           .signingDoctorName(SIGNING_DOCTOR_NAME)
           .signingDateTime(SIGNING_DATE_TIME)
-          .careUnitId(CARE_UNIT_ID)
-          .careUnitName(CARE_UNIT_NAME)
+          .issuingUnitId(ISSUING_UNIT_ID)
+          .issuingUnitName(ISSUING_UNIT_NAME)
           .careGiverId(CARE_GIVER_ID)
           .civicRegistrationNumber(CIVIC_REGISTRATION_NUMBER)
           .patientName(PATIENT_NAME)
@@ -278,8 +278,8 @@ class SickLeaveConverterTest {
           .signingDoctorId(SIGNING_DOCTOR_ID)
           .signingDoctorName(SIGNING_DOCTOR_NAME)
           .signingDateTime(SIGNING_DATE_TIME)
-          .careUnitId(CARE_UNIT_ID)
-          .careUnitName(CARE_UNIT_NAME)
+          .issuingUnitId(ISSUING_UNIT_ID)
+          .issuingUnitName(ISSUING_UNIT_NAME)
           .careGiverId(CARE_GIVER_ID)
           .civicRegistrationNumber(CIVIC_REGISTRATION_NUMBER)
           .patientName(PATIENT_NAME)
@@ -306,8 +306,8 @@ class SickLeaveConverterTest {
           .signingDoctorId(SIGNING_DOCTOR_ID)
           .signingDoctorName(SIGNING_DOCTOR_NAME)
           .signingDateTime(SIGNING_DATE_TIME)
-          .careUnitId(CARE_UNIT_ID)
-          .careUnitName(CARE_UNIT_NAME)
+          .issuingUnitId(ISSUING_UNIT_ID)
+          .issuingUnitName(ISSUING_UNIT_NAME)
           .careGiverId(CARE_GIVER_ID)
           .civicRegistrationNumber(CIVIC_REGISTRATION_NUMBER)
           .patientName(PATIENT_NAME)
@@ -371,8 +371,8 @@ class SickLeaveConverterTest {
 
       final var dto = converter.toSickLeaveCertificateItem(sickLeaveCertificate);
 
-      assertEquals("CU_ID", dto.getCareUnitId());
-      assertEquals("CARE_UNIT_NAME", dto.getCareUnitName());
+      assertEquals("ISSUING_UNIT_ID", dto.getCareUnitId());
+      assertEquals("ISSUING_UNIT_NAME", dto.getCareUnitName());
       assertEquals("CG_ID", dto.getCareProviderId());
     }
 
@@ -422,8 +422,8 @@ class SickLeaveConverterTest {
           .signingDoctorId(SIGNING_DOCTOR_ID)
           .signingDoctorName(SIGNING_DOCTOR_NAME)
           .signingDateTime(SIGNING_DATE_TIME)
-          .careUnitId(CARE_UNIT_ID)
-          .careUnitName(CARE_UNIT_NAME)
+          .issuingUnitId(ISSUING_UNIT_ID)
+          .issuingUnitName(ISSUING_UNIT_NAME)
           .careGiverId(CARE_GIVER_ID)
           .civicRegistrationNumber(CIVIC_REGISTRATION_NUMBER)
           .patientName(PATIENT_NAME)
