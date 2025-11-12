@@ -65,6 +65,7 @@ import se.inera.intyg.certificateservice.domain.message.service.SaveMessageDomai
 import se.inera.intyg.certificateservice.domain.message.service.SendAnswerDomainService;
 import se.inera.intyg.certificateservice.domain.message.service.SendMessageDomainService;
 import se.inera.intyg.certificateservice.domain.message.service.SetMessagesToHandleDomainService;
+import se.inera.intyg.certificateservice.domain.message.service.SetMessagesToUnhandledDomainService;
 import se.inera.intyg.certificateservice.domain.message.service.XmlGeneratorMessage;
 import se.inera.intyg.certificateservice.domain.patient.service.GetCertificatesWithQAInternalDomainService;
 import se.inera.intyg.certificateservice.domain.patient.service.GetPatientCertificatesDomainService;
@@ -212,9 +213,11 @@ public class AppConfig {
   public RevokeCertificateDomainService revokeCertificateDomainService(
       CertificateRepository certificateRepository,
       CertificateEventDomainService certificateEventDomainService,
-      SetMessagesToHandleDomainService setMessagesToHandleDomainService) {
+      SetMessagesToHandleDomainService setMessagesToHandleDomainService,
+      SetMessagesToUnhandledDomainService setMessagesToUnhandledDomainService) {
     return new RevokeCertificateDomainService(certificateRepository,
-        certificateEventDomainService, setMessagesToHandleDomainService);
+        certificateEventDomainService, setMessagesToHandleDomainService,
+        setMessagesToUnhandledDomainService);
   }
 
   @Bean
@@ -312,6 +315,12 @@ public class AppConfig {
   public SetMessagesToHandleDomainService setMessagesToHandleDomainService(
       MessageRepository messageRepository) {
     return new SetMessagesToHandleDomainService(messageRepository);
+  }
+
+  @Bean
+  public SetMessagesToUnhandledDomainService setMessagesToUnhandledDomainService(
+      MessageRepository messageRepository) {
+    return new SetMessagesToUnhandledDomainService(messageRepository);
   }
 
   @Bean

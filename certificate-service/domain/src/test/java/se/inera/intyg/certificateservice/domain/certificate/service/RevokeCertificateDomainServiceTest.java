@@ -8,6 +8,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType.REVOKE;
+import static se.inera.intyg.certificateservice.domain.certificate.model.RelationType.COMPLEMENT;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataAction.ACTION_EVALUATION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.CERTIFICATE_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.COMPLEMENT_MESSAGE;
@@ -22,6 +23,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.action.certificate.model.CertificateActionType;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
 import se.inera.intyg.certificateservice.domain.certificate.repository.CertificateRepository;
 import se.inera.intyg.certificateservice.domain.common.exception.CertificateActionForbidden;
 import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
@@ -29,7 +31,10 @@ import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
+import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
+import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.service.SetMessagesToHandleDomainService;
+import se.inera.intyg.certificateservice.domain.message.service.SetMessagesToUnhandledDomainService;
 
 @ExtendWith(MockitoExtension.class)
 class RevokeCertificateDomainServiceTest {
@@ -39,6 +44,8 @@ class RevokeCertificateDomainServiceTest {
   private static final RevokedInformation REVOKED_INFORMATION = new RevokedInformation(REASON,
       MESSAGE);
 
+  @Mock
+  private SetMessagesToUnhandledDomainService setMessagesToUnhandledDomainService;
   @Mock
   private CertificateRepository certificateRepository;
   @Mock
@@ -145,5 +152,42 @@ class RevokeCertificateDomainServiceTest {
     verify(setMessagesToHandleDomainService).handle(messagesCaptor.capture());
 
     assertEquals(expectedMessages, messagesCaptor.getValue());
+  }
+
+  @Test
+  void shallUnhandleMessagesOnParentIfRevokedCertificateHasParentWithComplementRelation() {
+    final var complementMessage = Message.builder()
+        .type(MessageType.COMPLEMENT)
+        .status(MessageStatus.HANDLED)
+        .build();
+
+    final var parentCertificate = Relation.builder()
+        .certificate(
+            MedicalCertificate.builder()
+                .messages(
+                    List.of(
+                        complementMessage,
+                        Message.builder()
+                            .type(MessageType.ANSWER)
+                            .status(MessageStatus.HANDLED)
+                            .build()
+                    )
+                )
+                .build()
+        )
+        .build();
+
+    final var revokedCertificate = mock(MedicalCertificate.class);
+
+    final var certificate = mock(MedicalCertificate.class);
+    doReturn(certificate).when(certificateRepository).getById(CERTIFICATE_ID);
+    doReturn(true).when(certificate).allowTo(REVOKE, Optional.of(ACTION_EVALUATION));
+    doReturn(revokedCertificate).when(certificateRepository).save(certificate);
+    doReturn(true).when(revokedCertificate).hasParent(COMPLEMENT);
+    doReturn(parentCertificate).when(revokedCertificate).parent();
+
+    revokeCertificateDomainService.revoke(CERTIFICATE_ID, ACTION_EVALUATION, REVOKED_INFORMATION);
+
+    verify(setMessagesToUnhandledDomainService).unhandled(List.of(complementMessage));
   }
 }
