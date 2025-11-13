@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag114;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -219,5 +220,17 @@ class AG114CertificateActionSpecificationTest {
     return actionSpecifications.stream()
         .filter(spec -> spec.certificateActionType() == certificateActionType)
         .findAny().orElseThrow();
+  }
+
+  @Test
+  void shallIncludeCertificateActionInactiveCertificateModel() {
+    final var expectedSpecification = CertificateActionSpecification.builder()
+        .certificateActionType(CertificateActionType.INACTIVE_CERTIFICATE_MODEL)
+        .build();
+
+    final var actionSpecifications = AG114CertificateActionSpecification.create();
+
+    assertTrue(actionSpecifications.stream().anyMatch(expectedSpecification::equals),
+        "Expected type: %s".formatted(expectedSpecification));
   }
 }
