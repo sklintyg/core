@@ -44,7 +44,9 @@ public class SickLeaveConverter {
         .careProviderId(sickLeaveCertificate.careGiverId().id())
         .personId(sickLeaveCertificate.civicRegistrationNumber().idWithDash())
         .patientFullName(sickLeaveCertificate.patientName().fullName())
-        .diagnoseCode(sickLeaveCertificate.diagnoseCode().code())
+        .diagnoseCode(
+            sickLeaveCertificate.diagnoseCode() != null ? sickLeaveCertificate.diagnoseCode().code()
+                : null)
         .secondaryDiagnoseCodes(
             Stream.of(
                     sickLeaveCertificate.biDiagnoseCode1(),
