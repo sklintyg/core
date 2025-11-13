@@ -199,6 +199,79 @@ class SickLeaveConverterTest {
       assertEquals("2023-01-10", wc1.getToDate());
     }
 
+
+    @Test
+    void shallConvertPartialWorkCapacityWithoutFrom() {
+      sickLeaveCertificate = SickLeaveCertificate.builder()
+          .id(CERTIFICATE_ID)
+          .type(TYPE)
+          .signingDoctorId(SIGNING_DOCTOR_ID)
+          .signingDoctorName(SIGNING_DOCTOR_NAME)
+          .signingDateTime(SIGNING_DATE_TIME)
+          .issuingUnitId(ISSUING_UNIT_ID)
+          .issuingUnitName(ISSUING_UNIT_NAME)
+          .careGiverId(CARE_GIVER_ID)
+          .civicRegistrationNumber(CIVIC_REGISTRATION_NUMBER)
+          .patientName(PATIENT_NAME)
+          .diagnoseCode(DIAGNOSIS_CODE)
+          .biDiagnoseCode1(BI_DIAGNOSE_CODE1)
+          .biDiagnoseCode2(BI_DIAGNOSE_CODE2)
+          .employment(EMPLOYMENT)
+          .deleted(DELETED)
+          .workCapacities(
+              List.of(
+                  DateRange.builder().dateRangeId(new FieldId("10"))
+                      .to(LocalDate.of(2023, 1, 10)).build()
+              )
+          )
+          .testCertificate(TEST_CERTIFICATE)
+          .extendsCertificateId(CERTIFICATE_ID.id())
+          .build();
+
+      final var dto = converter.toSickLeaveCertificate(sickLeaveCertificate);
+
+      final var wc1 = dto.getSjukfallCertificateWorkCapacity().getFirst();
+      assertEquals(10, wc1.getCapacityPercentage());
+      assertNull(wc1.getFromDate());
+      assertEquals("2023-01-10", wc1.getToDate());
+    }
+
+    @Test
+    void shallConvertPartialWorkCapacityWithoutTo() {
+      sickLeaveCertificate = SickLeaveCertificate.builder()
+          .id(CERTIFICATE_ID)
+          .type(TYPE)
+          .signingDoctorId(SIGNING_DOCTOR_ID)
+          .signingDoctorName(SIGNING_DOCTOR_NAME)
+          .signingDateTime(SIGNING_DATE_TIME)
+          .issuingUnitId(ISSUING_UNIT_ID)
+          .issuingUnitName(ISSUING_UNIT_NAME)
+          .careGiverId(CARE_GIVER_ID)
+          .civicRegistrationNumber(CIVIC_REGISTRATION_NUMBER)
+          .patientName(PATIENT_NAME)
+          .diagnoseCode(DIAGNOSIS_CODE)
+          .biDiagnoseCode1(BI_DIAGNOSE_CODE1)
+          .biDiagnoseCode2(BI_DIAGNOSE_CODE2)
+          .employment(EMPLOYMENT)
+          .deleted(DELETED)
+          .workCapacities(
+              List.of(
+                  DateRange.builder().dateRangeId(new FieldId("10"))
+                      .from(LocalDate.of(2023, 1, 10)).build()
+              )
+          )
+          .testCertificate(TEST_CERTIFICATE)
+          .extendsCertificateId(CERTIFICATE_ID.id())
+          .build();
+
+      final var dto = converter.toSickLeaveCertificate(sickLeaveCertificate);
+
+      final var wc1 = dto.getSjukfallCertificateWorkCapacity().getFirst();
+      assertEquals(10, wc1.getCapacityPercentage());
+      assertNull(wc1.getToDate());
+      assertEquals("2023-01-10", wc1.getFromDate());
+    }
+
     @Test
     void shallConvertSecondWorkCapacity() {
 
@@ -240,6 +313,35 @@ class SickLeaveConverterTest {
 
       assertNull(dto.getBiDiagnoseCode1());
       assertNull(dto.getBiDiagnoseCode2());
+    }
+
+    @Test
+    void shouldHandleNullMainDiagnoseCodes() {
+
+      sickLeaveCertificate = SickLeaveCertificate.builder()
+          .id(CERTIFICATE_ID)
+          .type(TYPE)
+          .signingDoctorId(SIGNING_DOCTOR_ID)
+          .signingDoctorName(SIGNING_DOCTOR_NAME)
+          .signingDateTime(SIGNING_DATE_TIME)
+          .issuingUnitId(ISSUING_UNIT_ID)
+          .issuingUnitName(ISSUING_UNIT_NAME)
+          .careGiverId(CARE_GIVER_ID)
+          .civicRegistrationNumber(CIVIC_REGISTRATION_NUMBER)
+          .patientName(PATIENT_NAME)
+          .diagnoseCode(null)
+          .biDiagnoseCode1(BI_DIAGNOSE_CODE1)
+          .biDiagnoseCode2(BI_DIAGNOSE_CODE2)
+          .employment(EMPLOYMENT)
+          .deleted(DELETED)
+          .workCapacities(WORK_CAPACITIES)
+          .testCertificate(TEST_CERTIFICATE)
+          .extendsCertificateId(CERTIFICATE_ID.id())
+          .build();
+
+      final var dto = converter.toSickLeaveCertificate(sickLeaveCertificate);
+
+      assertNull(dto.getDiagnoseCode());
     }
 
     @Test

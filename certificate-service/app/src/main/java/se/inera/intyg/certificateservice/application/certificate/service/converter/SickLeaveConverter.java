@@ -26,7 +26,7 @@ public class SickLeaveConverter {
 
     final var workCapacities = sickLeaveCertificate.workCapacities().stream()
         .map(this::mapDateRangeToItemWorkCapacity)
-        .collect(Collectors.toList());
+        .toList();
 
     final var employments = sickLeaveCertificate.employment().stream()
         .map(ElementValueCode::code)
@@ -69,7 +69,7 @@ public class SickLeaveConverter {
         sickLeaveCertificate.workCapacities()
             .stream()
             .map(this::mapDateRangeToWorkCapacity)
-            .collect(Collectors.toList());
+            .toList();
 
     final var employments =
         sickLeaveCertificate.employment().stream()
@@ -88,7 +88,9 @@ public class SickLeaveConverter {
         .careGiverId(sickLeaveCertificate.careGiverId().id())
         .civicRegistrationNumber(sickLeaveCertificate.civicRegistrationNumber().idWithDash())
         .patientName(sickLeaveCertificate.patientName().fullName())
-        .diagnoseCode(sickLeaveCertificate.diagnoseCode().code())
+        .diagnoseCode(
+            sickLeaveCertificate.diagnoseCode() != null ? sickLeaveCertificate.diagnoseCode().code()
+                : null)
         .biDiagnoseCode1(
             sickLeaveCertificate.biDiagnoseCode1() != null
                 ? sickLeaveCertificate.biDiagnoseCode1().code()
@@ -119,8 +121,10 @@ public class SickLeaveConverter {
   }
 
   private SickLeaveCertificateWorkCapacityDTO mapDateRangeToWorkCapacity(DateRange dateRange) {
-    final var from = dateRange.from().format(DateTimeFormatter.ISO_LOCAL_DATE);
-    final var to = dateRange.to().format(DateTimeFormatter.ISO_LOCAL_DATE);
+    final var from =
+        dateRange.from() != null ? dateRange.from().format(DateTimeFormatter.ISO_LOCAL_DATE) : null;
+    final var to =
+        dateRange.to() != null ? dateRange.to().format(DateTimeFormatter.ISO_LOCAL_DATE) : null;
     return SickLeaveCertificateWorkCapacityDTO.builder()
         .capacityPercentage(toCapacityPercentage(dateRange.dateRangeId()))
         .fromDate(from)
