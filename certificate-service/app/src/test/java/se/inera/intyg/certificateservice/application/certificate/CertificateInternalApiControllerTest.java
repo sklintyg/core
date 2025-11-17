@@ -16,6 +16,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateMetadataDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.DeleteDraftsRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.DeleteDraftsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ExportCertificateInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ExportInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse;
@@ -28,6 +30,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.LockDraftsR
 import se.inera.intyg.certificateservice.application.certificate.dto.SickLeaveCertificateDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.TotalExportsInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.service.CertificateExistsService;
+import se.inera.intyg.certificateservice.application.certificate.service.DeleteDraftsInternalService;
 import se.inera.intyg.certificateservice.application.certificate.service.EraseCertificateInternalForCareProviderService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateExportsInternalForCareProviderService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalMetadataService;
@@ -57,6 +60,8 @@ class CertificateInternalApiControllerTest {
   private GetCertificatesWithQAInternalService getCertificatesWithQAInternalService;
   @Mock
   private LockDraftsInternalService lockDraftsInternalService;
+  @Mock
+  private DeleteDraftsInternalService deleteDraftsInternalService;
   @Mock
   private CertificateExistsService certificateExistsService;
   @Mock
@@ -168,6 +173,16 @@ class CertificateInternalApiControllerTest {
     doReturn(expectedResult).when(lockDraftsInternalService).lock(request);
 
     final var actualResult = certificateInternalApiController.lockDrafts(request);
+    assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
+  void shallReturnDeleteDraftsResponse() {
+    final var expectedResult = DeleteDraftsResponse.builder().build();
+    final var request = DeleteDraftsRequest.builder().build();
+    doReturn(expectedResult).when(deleteDraftsInternalService).delete(request);
+
+    final var actualResult = certificateInternalApiController.deleteDrafts(request);
     assertEquals(expectedResult, actualResult);
   }
 

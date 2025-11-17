@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.DeleteDraftsRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.DeleteDraftsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ExportCertificateInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ExportInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse;
@@ -26,6 +28,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.LockDraftsR
 import se.inera.intyg.certificateservice.application.certificate.dto.LockDraftsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.TotalExportsInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.service.CertificateExistsService;
+import se.inera.intyg.certificateservice.application.certificate.service.DeleteDraftsInternalService;
 import se.inera.intyg.certificateservice.application.certificate.service.EraseCertificateInternalForCareProviderService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateExportsInternalForCareProviderService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalMetadataService;
@@ -49,6 +52,7 @@ public class CertificateInternalApiController {
   private final GetCertificateExportsInternalForCareProviderService getCertificateExportsInternalForCareProviderService;
   private final GetCertificateInternalXmlService getCertificateInternalXmlService;
   private final GetCertificateInternalMetadataService getCertificateInternalMetadataService;
+  private final DeleteDraftsInternalService deleteDraftsInternalService;
   private final GetCertificateInternalService getCertificateInternalService;
   private final CertificateExistsService certificateExistsService;
   private final LockDraftsInternalService lockDraftsInternalService;
@@ -98,6 +102,12 @@ public class CertificateInternalApiController {
   @PerformanceLogging(eventAction = "internal-lock-certificate", eventType = EVENT_TYPE_CHANGE)
   LockDraftsResponse lockDrafts(@RequestBody LockDraftsRequest request) {
     return lockDraftsInternalService.lock(request);
+  }
+
+  @DeleteMapping("/delete")
+  @PerformanceLogging(eventAction = "internal-delete-certificate", eventType = EVENT_TYPE_DELETION)
+  DeleteDraftsResponse deleteDrafts(@RequestBody DeleteDraftsRequest request) {
+    return deleteDraftsInternalService.delete(request);
   }
 
   @PostMapping("/qa")

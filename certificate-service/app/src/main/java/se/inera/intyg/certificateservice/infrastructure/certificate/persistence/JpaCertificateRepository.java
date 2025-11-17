@@ -378,7 +378,6 @@ public class JpaCertificateRepository {
             .map(CertificateId::id)
             .toList()
     );
-
   }
 
   public CertificateMetaData getMetadataFromSignInstance(CertificateMetaData metadata,

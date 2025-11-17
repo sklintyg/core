@@ -42,4 +42,6 @@ public interface CertificateRepository {
 
   CertificateMetaData getMetadataFromSignInstance(CertificateMetaData certificateMetaData,
       LocalDateTime signed);
+
+  void remove(List<CertificateId> certificateIds);
 }
