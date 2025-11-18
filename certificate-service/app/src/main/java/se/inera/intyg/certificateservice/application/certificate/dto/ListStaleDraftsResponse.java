@@ -5,17 +5,17 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import java.util.List;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.certificateservice.application.certificate.dto.DeleteDraftsResponse.DeleteDraftsResponseBuilder;
+import se.inera.intyg.certificateservice.application.certificate.dto.ListStaleDraftsResponse.ListStaleDraftsResponseBuilder;
 
-@JsonDeserialize(builder = DeleteDraftsResponseBuilder.class)
+@JsonDeserialize(builder = ListStaleDraftsResponseBuilder.class)
 @Value
 @Builder
-public class DeleteDraftsResponse {
+public class ListStaleDraftsResponse {
 
   List<CertificateDTO> certificates;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class DeleteDraftsResponseBuilder {
+  public static class ListStaleDraftsResponseBuilder {
 
   }
 }

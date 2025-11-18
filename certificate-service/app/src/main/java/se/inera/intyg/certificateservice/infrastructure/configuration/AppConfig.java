@@ -14,7 +14,7 @@ import se.inera.intyg.certificateservice.domain.certificate.service.ComplementCe
 import se.inera.intyg.certificateservice.domain.certificate.service.CreateCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.CreateDraftFromCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.DeleteCertificateDomainService;
-import se.inera.intyg.certificateservice.domain.certificate.service.DeleteDraftsDomainService;
+import se.inera.intyg.certificateservice.domain.certificate.service.DeleteStaleDraftsDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.ForwardCertificateDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.ForwardCertificateMessagesDomainService;
 import se.inera.intyg.certificateservice.domain.certificate.service.GetCertificateCandidateDomainService;
@@ -527,8 +527,8 @@ public class AppConfig {
   }
 
   @Bean
-  public DeleteDraftsDomainService deleteDraftsDomainService(
+  public DeleteStaleDraftsDomainService deleteDraftsDomainService(
       CertificateRepository certificateRepository) {
-    return new DeleteDraftsDomainService(certificateRepository);
+    return new DeleteStaleDraftsDomainService(certificateRepository);
   }
 }

@@ -16,8 +16,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.Certificate
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateMetadataDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalResponse;
-import se.inera.intyg.certificateservice.application.certificate.dto.DeleteDraftsRequest;
-import se.inera.intyg.certificateservice.application.certificate.dto.DeleteDraftsResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.DeleteStaleDraftsRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.DeleteStaleDraftsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ExportCertificateInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ExportInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse;
@@ -27,12 +27,14 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetSickLeav
 import se.inera.intyg.certificateservice.application.certificate.dto.GetSickLeaveCertificateInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetValidSickLeaveCertificateIdsInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetValidSickLeaveCertificateIdsInternalResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.ListStaleDraftsRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.ListStaleDraftsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.LockDraftsRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.LockDraftsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.SickLeaveCertificateDTO;
 import se.inera.intyg.certificateservice.application.certificate.dto.TotalExportsInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.service.CertificateExistsService;
-import se.inera.intyg.certificateservice.application.certificate.service.DeleteDraftsInternalService;
+import se.inera.intyg.certificateservice.application.certificate.service.DeleteStaleDraftsInternalService;
 import se.inera.intyg.certificateservice.application.certificate.service.EraseCertificateInternalForCareProviderService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateExportsInternalForCareProviderService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalMetadataService;
@@ -66,7 +68,7 @@ class CertificateInternalApiControllerTest {
   @Mock
   private LockDraftsInternalService lockDraftsInternalService;
   @Mock
-  private DeleteDraftsInternalService deleteDraftsInternalService;
+  private DeleteStaleDraftsInternalService deleteStaleDraftsInternalService;
   @Mock
   private CertificateExistsService certificateExistsService;
   @Mock
@@ -182,10 +184,20 @@ class CertificateInternalApiControllerTest {
   }
 
   @Test
+  void shallReturnListDraftsResponse() {
+    final var expectedResult = ListStaleDraftsResponse.builder().build();
+    final var request = ListStaleDraftsRequest.builder().build();
+    doReturn(expectedResult).when(deleteStaleDraftsInternalService).list(request);
+
+    final var actualResult = certificateInternalApiController.listStaleDrafts(request);
+    assertEquals(expectedResult, actualResult);
+  }
+
+  @Test
   void shallReturnDeleteDraftsResponse() {
-    final var expectedResult = DeleteDraftsResponse.builder().build();
-    final var request = DeleteDraftsRequest.builder().build();
-    doReturn(expectedResult).when(deleteDraftsInternalService).delete(request);
+    final var expectedResult = DeleteStaleDraftsResponse.builder().build();
+    final var request = DeleteStaleDraftsRequest.builder().build();
+    doReturn(expectedResult).when(deleteStaleDraftsInternalService).delete(request);
 
     final var actualResult = certificateInternalApiController.deleteDrafts(request);
     assertEquals(expectedResult, actualResult);
