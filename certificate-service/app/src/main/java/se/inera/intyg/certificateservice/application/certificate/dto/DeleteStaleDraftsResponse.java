@@ -5,9 +5,9 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import java.util.List;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.certificateservice.application.certificate.dto.DeleteStaleDraftsResponse.DeleteDraftsResponseBuilder;
+import se.inera.intyg.certificateservice.application.certificate.dto.DeleteStaleDraftsResponse.DeleteStaleDraftsResponseBuilder;
 
-@JsonDeserialize(builder = DeleteDraftsResponseBuilder.class)
+@JsonDeserialize(builder = DeleteStaleDraftsResponseBuilder.class)
 @Value
 @Builder
 public class DeleteStaleDraftsResponse {
@@ -15,7 +15,7 @@ public class DeleteStaleDraftsResponse {
   List<CertificateDTO> certificates;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class DeleteDraftsResponseBuilder {
+  public static class DeleteStaleDraftsResponseBuilder {
 
   }
 }
