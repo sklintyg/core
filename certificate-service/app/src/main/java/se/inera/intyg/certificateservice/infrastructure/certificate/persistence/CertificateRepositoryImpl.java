@@ -110,6 +110,11 @@ public class CertificateRepositoryImpl implements TestabilityCertificateReposito
   }
 
   @Override
+  public void updateCertificateMetadataFromSignInstances(List<Certificate> certificates) {
+    jpaCertificateRepository.updateCertificateMetadataFromSignInstances(certificates);
+  }
+
+  @Override
   public Certificate insert(Certificate certificate, Revision revision) {
     return jpaCertificateRepository.insert(certificate, revision, this);
   }
@@ -117,6 +122,12 @@ public class CertificateRepositoryImpl implements TestabilityCertificateReposito
   @Override
   public void remove(List<CertificateId> certificateIds) {
     jpaCertificateRepository.remove(certificateIds);
+  }
+
+  @Override
+  public List<CertificateId> findValidSickLeavesCertificateIdsByIds(
+      List<CertificateId> certificateId) {
+    return jpaCertificateRepository.findValidSickLeavesByIds(certificateId);
   }
 
   private void updatePatient(List<Certificate> certificates) {

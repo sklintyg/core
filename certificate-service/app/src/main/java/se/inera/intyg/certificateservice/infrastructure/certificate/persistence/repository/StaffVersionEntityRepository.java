@@ -12,14 +12,24 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 @Repository
 public interface StaffVersionEntityRepository extends JpaRepository<StaffVersionEntity, Integer> {
 
-  Optional<StaffVersionEntity> findFirstByHsaIdOrderByValidFromDesc(String hsaId);
+  @Query("SELECT sv FROM StaffVersionEntity sv " +
+      "JOIN sv.staff s " +
+      "WHERE s.hsaId = :hsaId " +
+      "ORDER BY sv.validFrom DESC " +
+      "LIMIT 1")
+  Optional<StaffVersionEntity> findFirstByHsaIdOrderByValidFromDesc(@Param("hsaId") String hsaId);
 
-  @Query("SELECT p FROM StaffVersionEntity p " +
-      "WHERE p.hsaId IN :ids " +
-      "AND (p.validFrom IS NULL OR p.validFrom <= :ts) " +
-      "AND p.validTo >= :ts " +
-      "ORDER BY CASE WHEN p.validFrom IS NULL THEN 1 ELSE 0 END, p.validFrom DESC")
+  @Query("SELECT sv FROM StaffVersionEntity sv " +
+      "JOIN sv.staff s " +
+      "WHERE s.hsaId IN :ids " +
+      "AND (sv.validFrom IS NULL OR sv.validFrom <= :ts) " +
+      "AND sv.validTo >= :ts " +
+      "ORDER BY CASE WHEN sv.validFrom IS NULL THEN 1 ELSE 0 END, sv.validFrom DESC")
   List<StaffVersionEntity> findAllCoveringTimestampByHsaIdIn(@Param("ids") List<String> hsaIds,
       @Param("ts") LocalDateTime ts);
 
+  @Query("SELECT sv FROM StaffVersionEntity sv " +
+      "JOIN sv.staff s " +
+      "WHERE s.hsaId IN :ids")
+  List<StaffVersionEntity> findAllByHsaIdIn(@Param("ids") List<String> hsaIds);
 }

@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.domain.certificate.service;
 
+import static se.inera.intyg.certificateservice.domain.certificate.model.RelationType.COMPLEMENT;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Optional;
@@ -14,7 +16,10 @@ import se.inera.intyg.certificateservice.domain.common.model.RevokedInformation;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEvent;
 import se.inera.intyg.certificateservice.domain.event.model.CertificateEventType;
 import se.inera.intyg.certificateservice.domain.event.service.CertificateEventDomainService;
+import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
+import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.domain.message.service.SetMessagesToHandleDomainService;
+import se.inera.intyg.certificateservice.domain.message.service.SetMessagesToUnhandledDomainService;
 
 @RequiredArgsConstructor
 public class RevokeCertificateDomainService {
@@ -22,6 +27,7 @@ public class RevokeCertificateDomainService {
   private final CertificateRepository certificateRepository;
   private final CertificateEventDomainService certificateEventDomainService;
   private final SetMessagesToHandleDomainService setMessagesToHandleDomainService;
+  private final SetMessagesToUnhandledDomainService setMessagesToUnhandledDomainService;
 
   public Certificate revoke(CertificateId certificateId, ActionEvaluation actionEvaluation,
       RevokedInformation revokedInformation) {
@@ -40,6 +46,15 @@ public class RevokeCertificateDomainService {
     final var revokedCertificate = certificateRepository.save(certificate);
 
     setMessagesToHandleDomainService.handle(revokedCertificate.messages());
+
+    if (revokedCertificate.hasParent(COMPLEMENT)) {
+      setMessagesToUnhandledDomainService.unhandled(
+          revokedCertificate.parent().certificate().messages().stream()
+              .filter(message -> message.type() == MessageType.COMPLEMENT)
+              .filter(message -> MessageStatus.HANDLED.equals(message.status()))
+              .toList()
+      );
+    }
 
     certificateEventDomainService.publish(
         CertificateEvent.builder()

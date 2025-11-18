@@ -43,5 +43,9 @@ public interface CertificateRepository {
   CertificateMetaData getMetadataFromSignInstance(CertificateMetaData certificateMetaData,
       LocalDateTime signed);
 
+  List<CertificateId> findValidSickLeavesCertificateIdsByIds(List<CertificateId> certificateId);
+
+  void updateCertificateMetadataFromSignInstances(List<Certificate> certificates);
+
   void remove(List<CertificateId> certificateIds);
 }

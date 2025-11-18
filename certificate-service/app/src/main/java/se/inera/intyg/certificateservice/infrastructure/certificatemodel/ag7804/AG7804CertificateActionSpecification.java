@@ -78,6 +78,9 @@ public class AG7804CertificateActionSpecification {
             .certificateActionType(CertificateActionType.UPDATE_DRAFT_FROM_CERTIFICATE)
             .allowedRoles(allowedRoles)
             .contentProvider(new AG7804UpdateDraftFromCertificateContentProvider())
+            .build(),
+        CertificateActionSpecification.builder()
+            .certificateActionType(CertificateActionType.INACTIVE_CERTIFICATE_MODEL)
             .build()
     );
   }

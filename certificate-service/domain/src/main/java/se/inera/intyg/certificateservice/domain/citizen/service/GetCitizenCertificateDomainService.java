@@ -15,6 +15,12 @@ public class GetCitizenCertificateDomainService {
   public Certificate get(CertificateId certificateId, PersonId citizen) {
     final var certificate = certificateRepository.getById(certificateId);
 
+    if (certificate.signed() != null) {
+      final var updatedMetadata = certificateRepository
+          .getMetadataFromSignInstance(certificate.certificateMetaData(), certificate.signed());
+      certificate.updateMetadata(updatedMetadata);
+    }
+
     if (!certificate.isCertificateIssuedOnPatient(citizen)) {
       throw new CitizenCertificateForbidden(
           "Citizen is trying to access certificate with id '%s', but it is not issued on citizen"

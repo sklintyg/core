@@ -335,4 +335,16 @@ class CertificateRepositoryImplTest {
       verify(jpaCertificateRepository).remove(certificateIds);
     }
   }
+
+  @Nested
+  class FindValidSickLeavesByIdsTests {
+
+    @Test
+    void shouldCallJpaCertificateRepositoryFindValidSickLeavesByIds() {
+      final var certificateIds = List.of(FK7210_CERTIFICATE.id());
+
+      certificateRepository.findValidSickLeavesCertificateIdsByIds(certificateIds);
+      verify(jpaCertificateRepository).findValidSickLeavesByIds(certificateIds);
+    }
+  }
 }

@@ -19,8 +19,8 @@ public class SickLeaveCertificate {
   HsaId signingDoctorId;
   Name signingDoctorName;
   LocalDateTime signingDateTime;
-  HsaId careUnitId;
-  UnitName careUnitName;
+  HsaId issuingUnitId;
+  UnitName issuingUnitName;
   HsaId careGiverId;
   PersonId civicRegistrationNumber;
   Name patientName;

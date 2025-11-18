@@ -22,6 +22,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitC
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_WORKPLACE_CODE;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataSubUnitConstants.ALFA_ALLERGIMOTTAGNINGEN_ZIP_CODE;
 
+import java.time.LocalDateTime;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitType;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitTypeEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitVersionEntity;
@@ -32,6 +33,7 @@ public class TestDataUnitVersionEntity {
     throw new IllegalStateException("Utility class");
   }
 
+  public static final LocalDateTime VALID_TO = LocalDateTime.now().plusYears(1);
   public static final UnitVersionEntity ALFA_REGIONEN_VERSION_ENTITY =
       alfaRegionenVersionEntityBuilder().build();
   public static final UnitVersionEntity ALFA_MEDICINCENTRUM_VERSION_ENTITY =
@@ -48,6 +50,7 @@ public class TestDataUnitVersionEntity {
                 .key(UnitType.CARE_PROVIDER.getKey())
                 .build()
         )
+        .validTo(VALID_TO)
         .hsaId(ALFA_REGIONEN_ID)
         .name(ALFA_REGIONEN_NAME)
         .unit(ALFA_REGIONEN_ENTITY);
@@ -62,6 +65,7 @@ public class TestDataUnitVersionEntity {
                 .key(UnitType.CARE_UNIT.getKey())
                 .build()
         )
+        .validTo(VALID_TO)
         .hsaId(ALFA_MEDICINCENTRUM_ID)
         .name(ALFA_MEDICINCENTRUM_NAME)
         .address(ALFA_MEDICINCENTRUM_ADDRESS)
@@ -81,6 +85,7 @@ public class TestDataUnitVersionEntity {
                 .key(UnitType.SUB_UNIT.getKey())
                 .build()
         )
+        .validTo(VALID_TO)
         .hsaId(ALFA_ALLERGIMOTTAGNINGEN_ID)
         .name(ALFA_ALLERGIMOTTAGNINGEN_NAME)
         .address(ALFA_ALLERGIMOTTAGNINGEN_ADDRESS)

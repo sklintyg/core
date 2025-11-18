@@ -1,12 +1,13 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataPatientEntity.ATHENA_REACT_ANDERSSON_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataPatientVersionEntity.ATHENA_REACT_ANDERSSON_VERSION_ENTITY;
-import static se.inera.intyg.certificateservice.application.testdata.TestDataPatientVersionEntity.VALID_TO;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_FIRST_NAME;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_LAST_NAME;
@@ -46,8 +47,19 @@ class PatientVersionEntityMapperTest {
   void shouldReturnPatientVersionEntity() {
     final var response =
         PatientVersionEntityMapper.toPatientVersion(ATHENA_REACT_ANDERSSON_ENTITY);
-    response.setValidTo(VALID_TO);
-    assertEquals(ATHENA_REACT_ANDERSSON_VERSION_ENTITY, response);
+
+    assertAll(
+        () -> assertEquals(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH, response.getId()),
+        () -> assertEquals(ATHENA_REACT_ANDERSSON_FIRST_NAME, response.getFirstName()),
+        () -> assertEquals(ATHENA_REACT_ANDERSSON_MIDDLE_NAME, response.getMiddleName()),
+        () -> assertEquals(ATHENA_REACT_ANDERSSON_LAST_NAME, response.getLastName()),
+        () -> assertFalse(response.isProtectedPerson()),
+        () -> assertFalse(response.isDeceased()),
+        () -> assertFalse(response.isTestIndicated()),
+        () -> assertEquals(PersonEntityIdType.PERSONAL_IDENTITY_NUMBER.name(),
+            response.getType().getType()),
+        () -> assertNotNull(response.getPatient())
+    );
   }
 
 

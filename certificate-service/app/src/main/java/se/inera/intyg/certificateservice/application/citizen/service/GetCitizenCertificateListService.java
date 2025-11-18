@@ -36,6 +36,8 @@ public class GetCitizenCertificateListService {
             .build()
     );
 
+    certificateRepository.updateCertificateMetadataFromSignInstances(certificates);
+
     return GetCitizenCertificateListResponse.builder()
         .citizenCertificates(certificates.stream()
             .filter(certificate -> certificate.certificateModel().availableForCitizen())
