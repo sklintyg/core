@@ -104,7 +104,6 @@ public class CertificateInternalApiController {
     return lockDraftsInternalService.lock(request);
   }
 
-
   @PostMapping("/qa")
   @PerformanceLogging(eventAction = "internal-retrieve-certificate-with-qa", eventType = EVENT_TYPE_ACCESSED)
   CertificatesWithQAInternalResponse getCertificatesWithQA(
