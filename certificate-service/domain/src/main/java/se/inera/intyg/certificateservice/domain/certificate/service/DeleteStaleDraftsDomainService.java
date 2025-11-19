@@ -18,7 +18,7 @@ public class DeleteStaleDraftsDomainService {
   private final CertificateRepository certificateRepository;
 
   public List<CertificateId> list(LocalDateTime cutoffDate) {
-    return certificateRepository.findIdsByCertificatesRequest(
+    return certificateRepository.findIdsByCreateBeforeAndStatusIn(
         CertificatesRequest.builder()
             .createdTo(cutoffDate)
             .statuses(ALLOWED_STATUSES)

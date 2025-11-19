@@ -45,12 +45,12 @@ class DeleteStaleDraftsDomainServiceTest {
           .build();
 
       doReturn(List.of(certificateId)).when(certificateRepository)
-          .findIdsByCertificatesRequest(expectedRequest);
+          .findIdsByCreateBeforeAndStatusIn(expectedRequest);
 
       final var result = service.list(cutoffDate);
 
       assertEquals(List.of(certificateId), result);
-      verify(certificateRepository).findIdsByCertificatesRequest(expectedRequest);
+      verify(certificateRepository).findIdsByCreateBeforeAndStatusIn(expectedRequest);
     }
 
     @Test
@@ -61,7 +61,7 @@ class DeleteStaleDraftsDomainServiceTest {
           .build();
 
       doReturn(Collections.emptyList()).when(certificateRepository)
-          .findIdsByCertificatesRequest(expectedRequest);
+          .findIdsByCreateBeforeAndStatusIn(expectedRequest);
 
       final var result = service.list(cutoffDate);
 

@@ -30,7 +30,7 @@ public interface CertificateRepository {
 
   List<Certificate> findByCertificatesRequest(CertificatesRequest request);
 
-  List<CertificateId> findIdsByCertificatesRequest(CertificatesRequest request);
+  List<CertificateId> findIdsByCreateBeforeAndStatusIn(CertificatesRequest request);
 
   CertificateExportPage getExportByCareProviderId(HsaId careProviderId, int page, int size);
 
