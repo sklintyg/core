@@ -29,8 +29,8 @@ public class DraftInternalApiController {
     return deleteStaleDraftsInternalService.list(request);
   }
 
-  @DeleteMapping("/delete")
-  @PerformanceLogging(eventAction = "internal-delete-certificate", eventType = EVENT_TYPE_DELETION)
+  @DeleteMapping
+  @PerformanceLogging(eventAction = "internal-delete-stale-drafts", eventType = EVENT_TYPE_DELETION)
   DeleteStaleDraftsResponse deleteDrafts(@RequestBody DeleteStaleDraftsRequest request) {
     return deleteStaleDraftsInternalService.delete(request);
   }
