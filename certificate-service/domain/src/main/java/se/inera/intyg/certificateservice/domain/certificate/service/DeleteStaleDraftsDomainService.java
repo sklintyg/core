@@ -26,25 +26,24 @@ public class DeleteStaleDraftsDomainService {
     );
   }
 
-  public List<Certificate> delete(List<CertificateId> certificateIds) {
-    final var certificates = certificateRepository.findByIds(certificateIds);
+  public List<Certificate> delete(CertificateId certificateId) {
+    final var certificates = certificateRepository.findByIds(List.of(certificateId));
 
-    final var invalidCertificate = certificates.stream()
-        .filter(certificate -> !ALLOWED_STATUSES.contains(certificate.status()))
-        .findFirst();
+    if (certificates.isEmpty()) {
+      return List.of();
+    }
 
-    if (invalidCertificate.isPresent()) {
+    final var certificate = certificates.getFirst();
+
+    if (!ALLOWED_STATUSES.contains(certificate.status())) {
       throw new IllegalStateException(
-          "Cannot delete certificate with id: " + invalidCertificate.get().id().id()
-              + " and status: " + invalidCertificate.get().status()
-      );
+          String.format("Cannot delete certificate with id %s wrong status %s",
+              certificate.id().id(), certificate.status()));
     }
 
-    if (!certificates.isEmpty()) {
-      certificateRepository.remove(certificateIds);
-    }
+    certificateRepository.remove(List.of(certificateId));
 
-    return certificates;
+    return List.of(certificate);
   }
 }
 

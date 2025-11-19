@@ -28,11 +28,9 @@ public class DeleteStaleDraftsInternalService {
     final var staleDrafts = deleteStaleDraftsDomainService.list(request.getCutoffDate());
 
     return ListStaleDraftsResponse.builder()
-        .certificates(
+        .certificateIds(
             staleDrafts.stream()
-                .map(draft ->
-                    converter.convert(draft, Collections.emptyList(), null)
-                )
+                .map(draft -> draft.id().id())
                 .toList()
         )
         .build();
@@ -40,20 +38,17 @@ public class DeleteStaleDraftsInternalService {
 
   @Transactional
   public DeleteStaleDraftsResponse delete(DeleteStaleDraftsRequest request) {
-    if (request.getCertificateIds() == null || request.getCertificateIds().isEmpty()) {
-      throw new IllegalArgumentException("Certificate IDs cannot be null or empty");
+    if (request.getCertificateId() == null) {
+      throw new IllegalArgumentException("Certificate ID cannot be null");
     }
 
-    final var deletedCertificates = deleteStaleDraftsDomainService.delete(
-        request.getCertificateIds()
-            .stream()
-            .map(CertificateId::new)
-            .toList()
+    final var deletedCertificate = deleteStaleDraftsDomainService.delete(
+        new CertificateId(request.getCertificateId())
     );
 
     return DeleteStaleDraftsResponse.builder()
         .certificates(
-            deletedCertificates.stream()
+            deletedCertificate.stream()
                 .map(draft ->
                     converter.convert(draft, Collections.emptyList(), null)
                 )

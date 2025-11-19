@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -43,9 +44,9 @@ class DeleteStaleDraftsInternalServiceTest {
 
   @Test
   void shouldReturnListStaleDraftsResponse() {
-    final var expectedCertificate = CertificateDTO.builder().build();
+    final var certificateId = "cert-123";
     final var expectedResponse = ListStaleDraftsResponse.builder()
-        .certificates(List.of(expectedCertificate))
+        .certificateIds(List.of(certificateId))
         .build();
     final var cutoffDate = LocalDateTime.now();
     final var request = ListStaleDraftsRequest.builder()
@@ -53,10 +54,9 @@ class DeleteStaleDraftsInternalServiceTest {
         .build();
 
     final var certificate = mock(MedicalCertificate.class);
+    when(certificate.id()).thenReturn(new CertificateId(certificateId));
     final var certificates = List.of(certificate);
     doReturn(certificates).when(deleteStaleDraftsDomainService).list(cutoffDate);
-    doReturn(expectedCertificate).when(converter)
-        .convert(certificate, Collections.emptyList(), null);
 
     final var actualResponse = deleteStaleDraftsInternalService.list(request);
     assertEquals(expectedResponse, actualResponse);
@@ -65,7 +65,7 @@ class DeleteStaleDraftsInternalServiceTest {
   @Test
   void shouldReturnEmptyListWhenNoStaleDrafts() {
     final var expectedResponse = ListStaleDraftsResponse.builder()
-        .certificates(Collections.emptyList())
+        .certificateIds(Collections.emptyList())
         .build();
     final var cutoffDate = LocalDateTime.now();
     final var request = ListStaleDraftsRequest.builder()
@@ -79,17 +79,8 @@ class DeleteStaleDraftsInternalServiceTest {
   }
 
   @Test
-  void shouldThrowIfCertificateIdsIsNullForDelete() {
+  void shouldThrowIfCertificateIdIsNullForDelete() {
     final var request = DeleteStaleDraftsRequest.builder()
-        .build();
-    assertThrows(IllegalArgumentException.class,
-        () -> deleteStaleDraftsInternalService.delete(request));
-  }
-
-  @Test
-  void shouldThrowIfCertificateIdsIsEmptyForDelete() {
-    final var request = DeleteStaleDraftsRequest.builder()
-        .certificateIds(Collections.emptyList())
         .build();
     assertThrows(IllegalArgumentException.class,
         () -> deleteStaleDraftsInternalService.delete(request));
@@ -101,41 +92,16 @@ class DeleteStaleDraftsInternalServiceTest {
     final var expectedResponse = DeleteStaleDraftsResponse.builder()
         .certificates(List.of(expectedCertificate))
         .build();
-    final var certificateIds = List.of(new CertificateId("cert-123"),
-        new CertificateId("cert-456"));
+    final var certificateId = new CertificateId("cert-123");
     final var request = DeleteStaleDraftsRequest.builder()
-        .certificateIds(List.of("cert-123", "cert-456"))
+        .certificateId("cert-123")
         .build();
 
     final var certificate = mock(MedicalCertificate.class);
     final var certificates = List.of(certificate);
-    doReturn(certificates).when(deleteStaleDraftsDomainService).delete(certificateIds);
+    doReturn(certificates).when(deleteStaleDraftsDomainService).delete(certificateId);
     doReturn(expectedCertificate).when(converter)
         .convert(certificate, Collections.emptyList(), null);
-
-    final var actualResponse = deleteStaleDraftsInternalService.delete(request);
-    assertEquals(expectedResponse, actualResponse);
-  }
-
-  @Test
-  void shouldReturnMultipleDeletedCertificates() {
-    final var certificate1 = mock(MedicalCertificate.class);
-    final var certificate2 = mock(MedicalCertificate.class);
-    final var certificates = List.of(certificate1, certificate2);
-    final var certificateDTO1 = CertificateDTO.builder().build();
-    final var certificateDTO2 = CertificateDTO.builder().build();
-    final var expectedResponse = DeleteStaleDraftsResponse.builder()
-        .certificates(List.of(certificateDTO1, certificateDTO2))
-        .build();
-    final var certificateIds = List.of(new CertificateId("cert-123"),
-        new CertificateId("cert-456"));
-    final var request = DeleteStaleDraftsRequest.builder()
-        .certificateIds(List.of("cert-123", "cert-456"))
-        .build();
-
-    doReturn(certificates).when(deleteStaleDraftsDomainService).delete(certificateIds);
-    doReturn(certificateDTO1).when(converter).convert(certificate1, Collections.emptyList(), null);
-    doReturn(certificateDTO2).when(converter).convert(certificate2, Collections.emptyList(), null);
 
     final var actualResponse = deleteStaleDraftsInternalService.delete(request);
     assertEquals(expectedResponse, actualResponse);

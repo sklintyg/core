@@ -12,7 +12,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.ListStaleDr
 @Builder
 public class ListStaleDraftsResponse {
 
-  List<CertificateDTO> certificates;
+  List<String> certificateIds;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class ListStaleDraftsResponseBuilder {
