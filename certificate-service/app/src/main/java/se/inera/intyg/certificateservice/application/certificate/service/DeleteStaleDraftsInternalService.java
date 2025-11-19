@@ -30,7 +30,7 @@ public class DeleteStaleDraftsInternalService {
     return ListStaleDraftsResponse.builder()
         .certificateIds(
             staleDrafts.stream()
-                .map(draft -> draft.id().id())
+                .map(CertificateId::id)
                 .toList()
         )
         .build();

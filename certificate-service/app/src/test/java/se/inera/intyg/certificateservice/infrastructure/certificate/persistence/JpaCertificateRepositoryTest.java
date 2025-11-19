@@ -1053,6 +1053,42 @@ class JpaCertificateRepositoryTest {
   }
 
   @Nested
+  class FindIdsByCertificatesRequestTest {
+
+    @Test
+    void shouldReturnEmptyListIfNoCertificatesAreFound() {
+      final var request = CertificatesRequest.builder()
+          .createdTo(LocalDateTime.now())
+          .statuses(List.of(Status.SIGNED, Status.REVOKED))
+          .build();
+
+      doReturn(List.of()).when(certificateEntityRepository)
+          .findCertificateIdsByCreatedBeforeAndStatusIn(request.createdTo(),
+              List.of("SIGNED", "REVOKED"));
+      final var actualCertificateIds = jpaCertificateRepository.findIdsByCreatedBeforeAndStatusIn(
+          request);
+
+      assertTrue(actualCertificateIds.isEmpty());
+    }
+
+    @Test
+    void shouldReturnListOfCertificateIds() {
+      final var request = CertificatesRequest.builder()
+          .createdTo(LocalDateTime.now())
+          .statuses(List.of(Status.SIGNED, Status.REVOKED))
+          .build();
+      doReturn(List.of(CERTIFICATE_ID.id())).when(certificateEntityRepository)
+          .findCertificateIdsByCreatedBeforeAndStatusIn(request.createdTo(),
+              List.of("SIGNED", "REVOKED"));
+
+      final var actualCertificateIds = jpaCertificateRepository.findIdsByCreatedBeforeAndStatusIn(
+          request);
+
+      assertEquals(List.of(CERTIFICATE_ID), actualCertificateIds);
+    }
+  }
+
+  @Nested
   class FindValidSickLeavesByIdsTests {
 
     private static final String ID1 = "CERTIFICATE_ID";

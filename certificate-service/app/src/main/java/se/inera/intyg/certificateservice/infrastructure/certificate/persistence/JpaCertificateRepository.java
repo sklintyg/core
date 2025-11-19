@@ -251,6 +251,12 @@ public class JpaCertificateRepository {
         .toList();
   }
 
+  public List<CertificateId> findIdsByCreatedBeforeAndStatusIn(CertificatesRequest request) {
+    return certificateEntityRepository.findCertificateIdsByCreatedBeforeAndStatusIn(
+        request.createdTo(),
+        request.statuses().stream().map(Enum::name).toList()
+    ).stream().map(CertificateId::new).toList();
+  }
 
   public CertificateExportPage getExportByCareProviderId(HsaId careProviderId, int page, int size,
       CertificateRepository certificateRepository) {

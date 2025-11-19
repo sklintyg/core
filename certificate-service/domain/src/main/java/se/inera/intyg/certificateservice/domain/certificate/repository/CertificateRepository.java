@@ -30,6 +30,8 @@ public interface CertificateRepository {
 
   List<Certificate> findByCertificatesRequest(CertificatesRequest request);
 
+  List<CertificateId> findIdsByCertificatesRequest(CertificatesRequest request);
+
   CertificateExportPage getExportByCareProviderId(HsaId careProviderId, int page, int size);
 
   long deleteByCareProviderId(HsaId careProviderId);

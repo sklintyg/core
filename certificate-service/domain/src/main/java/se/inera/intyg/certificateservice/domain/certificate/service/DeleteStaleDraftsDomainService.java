@@ -17,8 +17,8 @@ public class DeleteStaleDraftsDomainService {
 
   private final CertificateRepository certificateRepository;
 
-  public List<Certificate> list(LocalDateTime cutoffDate) {
-    return certificateRepository.findByCertificatesRequest(
+  public List<CertificateId> list(LocalDateTime cutoffDate) {
+    return certificateRepository.findIdsByCertificatesRequest(
         CertificatesRequest.builder()
             .createdTo(cutoffDate)
             .statuses(ALLOWED_STATUSES)
@@ -32,6 +32,7 @@ public class DeleteStaleDraftsDomainService {
     if (certificate == null) {
       throw new IllegalStateException(
           String.format("Certificate with id %s doesnt exist and cannot be deleted",
+
               certificateId));
     }
 

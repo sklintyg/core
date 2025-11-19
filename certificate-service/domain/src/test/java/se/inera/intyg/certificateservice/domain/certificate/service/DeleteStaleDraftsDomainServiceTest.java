@@ -38,19 +38,19 @@ class DeleteStaleDraftsDomainServiceTest {
 
     @Test
     void shouldFindUnsignedDraftsBeforeCutoffDate() {
-      final var certificate = mock(MedicalCertificate.class);
+      final var certificateId = new CertificateId("cert-123");
       final var expectedRequest = CertificatesRequest.builder()
           .createdTo(cutoffDate)
           .statuses(List.of(Status.DRAFT, Status.DELETED_DRAFT, Status.LOCKED_DRAFT))
           .build();
 
-      doReturn(List.of(certificate)).when(certificateRepository)
-          .findByCertificatesRequest(expectedRequest);
+      doReturn(List.of(certificateId)).when(certificateRepository)
+          .findIdsByCertificatesRequest(expectedRequest);
 
       final var result = service.list(cutoffDate);
 
-      assertEquals(List.of(certificate), result);
-      verify(certificateRepository).findByCertificatesRequest(expectedRequest);
+      assertEquals(List.of(certificateId), result);
+      verify(certificateRepository).findIdsByCertificatesRequest(expectedRequest);
     }
 
     @Test
@@ -61,7 +61,7 @@ class DeleteStaleDraftsDomainServiceTest {
           .build();
 
       doReturn(Collections.emptyList()).when(certificateRepository)
-          .findByCertificatesRequest(expectedRequest);
+          .findIdsByCertificatesRequest(expectedRequest);
 
       final var result = service.list(cutoffDate);
 
