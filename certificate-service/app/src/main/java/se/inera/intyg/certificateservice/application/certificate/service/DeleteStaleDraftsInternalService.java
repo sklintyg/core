@@ -47,13 +47,8 @@ public class DeleteStaleDraftsInternalService {
     );
 
     return DeleteStaleDraftsResponse.builder()
-        .certificate(
-            deletedCertificate.stream()
-                .map(draft ->
-                    converter.convert(draft, Collections.emptyList(), null)
-                )
-                .toList()
-        )
+        .certificate(converter.convert(deletedCertificate, Collections.emptyList(), null))
         .build();
   }
 }
+

@@ -79,11 +79,11 @@ class DeleteStaleDraftsDomainServiceTest {
       final var certificate = mock(MedicalCertificate.class);
       when(certificate.status()).thenReturn(Status.DRAFT);
 
-      doReturn(List.of(certificate)).when(certificateRepository).findByIds(List.of(CERT_ID_1));
+      doReturn(certificate).when(certificateRepository).getById(CERT_ID_1);
 
       service.delete(CERT_ID_1);
 
-      verify(certificateRepository).findByIds(List.of(CERT_ID_1));
+      verify(certificateRepository).getById(CERT_ID_1);
     }
 
     @Test
@@ -91,7 +91,7 @@ class DeleteStaleDraftsDomainServiceTest {
       final var certificate = mock(MedicalCertificate.class);
       when(certificate.status()).thenReturn(Status.DRAFT);
 
-      doReturn(List.of(certificate)).when(certificateRepository).findByIds(List.of(CERT_ID_1));
+      doReturn(certificate).when(certificateRepository).getById(CERT_ID_1);
 
       service.delete(CERT_ID_1);
 
@@ -104,12 +104,12 @@ class DeleteStaleDraftsDomainServiceTest {
       when(certificate.status()).thenReturn(Status.SIGNED);
       when(certificate.id()).thenReturn(CERT_ID_1);
 
-      doReturn(List.of(certificate)).when(certificateRepository).findByIds(List.of(CERT_ID_1));
+      doReturn(certificate).when(certificateRepository).getById(CERT_ID_1);
 
       final var exception = assertThrows(IllegalStateException.class,
           () -> service.delete(CERT_ID_1));
 
-      assertEquals("Cannot delete certificate with id: " + CERT_ID_1.id() + " and status: SIGNED",
+      assertEquals("Cannot delete certificate with id " + CERT_ID_1.id() + " wrong status SIGNED",
           exception.getMessage());
     }
 
@@ -119,7 +119,7 @@ class DeleteStaleDraftsDomainServiceTest {
       when(certificate.status()).thenReturn(Status.REVOKED);
       when(certificate.id()).thenReturn(CERT_ID_1);
 
-      doReturn(List.of(certificate)).when(certificateRepository).findByIds(List.of(CERT_ID_1));
+      doReturn(certificate).when(certificateRepository).getById(CERT_ID_1);
 
       assertThrows(IllegalStateException.class, () -> service.delete(CERT_ID_1));
     }
@@ -130,11 +130,11 @@ class DeleteStaleDraftsDomainServiceTest {
       when(certificate.status()).thenReturn(Status.SIGNED);
       when(certificate.id()).thenReturn(CERT_ID_1);
 
-      doReturn(List.of(certificate)).when(certificateRepository).findByIds(List.of(CERT_ID_1));
+      doReturn(certificate).when(certificateRepository).getById(CERT_ID_1);
 
       assertThrows(IllegalStateException.class, () -> service.delete(CERT_ID_1));
 
-      verify(certificateRepository).findByIds(List.of(CERT_ID_1));
+      verify(certificateRepository).getById(CERT_ID_1);
       verifyNoMoreInteractions(certificateRepository);
     }
 
@@ -143,7 +143,7 @@ class DeleteStaleDraftsDomainServiceTest {
       final var certificate = mock(MedicalCertificate.class);
       when(certificate.status()).thenReturn(Status.DRAFT);
 
-      doReturn(List.of(certificate)).when(certificateRepository).findByIds(List.of(CERT_ID_1));
+      doReturn(certificate).when(certificateRepository).getById(CERT_ID_1);
 
       service.delete(CERT_ID_1);
 
@@ -154,24 +154,19 @@ class DeleteStaleDraftsDomainServiceTest {
     void shouldReturnDeletedCertificate() {
       final var certificate = mock(MedicalCertificate.class);
       when(certificate.status()).thenReturn(Status.DRAFT);
-      final var certificates = List.of(certificate);
 
-      doReturn(List.of(certificate)).when(certificateRepository).findByIds(List.of(CERT_ID_1));
+      doReturn(certificate).when(certificateRepository).getById(CERT_ID_1);
 
-      final var deletedCertificates = service.delete(CERT_ID_1);
+      final var deletedCertificate = service.delete(CERT_ID_1);
 
-      assertEquals(certificates, deletedCertificates);
+      assertEquals(certificate, deletedCertificate);
     }
 
     @Test
-    void shouldReturnEmptyListIfNoCertificateFound() {
-      doReturn(Collections.emptyList()).when(certificateRepository).findByIds(List.of(CERT_ID_1));
+    void shouldThrowIfNoCertificateFound() {
+      doReturn(null).when(certificateRepository).getById(CERT_ID_1);
 
-      final var deletedCertificates = service.delete(CERT_ID_1);
-
-      assertEquals(Collections.emptyList(), deletedCertificates);
-      verify(certificateRepository).findByIds(List.of(CERT_ID_1));
-      verifyNoMoreInteractions(certificateRepository);
+      assertThrows(IllegalStateException.class, () -> service.delete(CERT_ID_1));
     }
   }
 }

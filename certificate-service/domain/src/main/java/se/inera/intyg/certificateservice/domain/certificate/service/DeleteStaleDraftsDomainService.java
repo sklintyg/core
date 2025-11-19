@@ -26,14 +26,14 @@ public class DeleteStaleDraftsDomainService {
     );
   }
 
-  public List<Certificate> delete(CertificateId certificateId) {
-    final var certificates = certificateRepository.findByIds(List.of(certificateId));
+  public Certificate delete(CertificateId certificateId) {
+    final var certificate = certificateRepository.getById(certificateId);
 
-    if (certificates.isEmpty()) {
-      return List.of();
+    if (certificate == null) {
+      throw new IllegalStateException(
+          String.format("Certificate with id %s doesnt exist and cannot be deleted",
+              certificateId));
     }
-
-    final var certificate = certificates.getFirst();
 
     if (!ALLOWED_STATUSES.contains(certificate.status())) {
       throw new IllegalStateException(
@@ -43,7 +43,7 @@ public class DeleteStaleDraftsDomainService {
 
     certificateRepository.remove(List.of(certificateId));
 
-    return List.of(certificate);
+    return certificate;
   }
 }
 

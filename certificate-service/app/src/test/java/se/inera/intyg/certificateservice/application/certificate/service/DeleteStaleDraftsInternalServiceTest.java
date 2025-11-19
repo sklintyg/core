@@ -90,7 +90,7 @@ class DeleteStaleDraftsInternalServiceTest {
   void shouldReturnDeleteStaleDraftsResponse() {
     final var expectedCertificate = CertificateDTO.builder().build();
     final var expectedResponse = DeleteStaleDraftsResponse.builder()
-        .certificate(List.of(expectedCertificate))
+        .certificate(expectedCertificate)
         .build();
     final var certificateId = new CertificateId("cert-123");
     final var request = DeleteStaleDraftsRequest.builder()
@@ -98,8 +98,7 @@ class DeleteStaleDraftsInternalServiceTest {
         .build();
 
     final var certificate = mock(MedicalCertificate.class);
-    final var certificates = List.of(certificate);
-    doReturn(certificates).when(deleteStaleDraftsDomainService).delete(certificateId);
+    doReturn(certificate).when(deleteStaleDraftsDomainService).delete(certificateId);
     doReturn(expectedCertificate).when(converter)
         .convert(certificate, Collections.emptyList(), null);
 
@@ -107,3 +106,4 @@ class DeleteStaleDraftsInternalServiceTest {
     assertEquals(expectedResponse, actualResponse);
   }
 }
+
