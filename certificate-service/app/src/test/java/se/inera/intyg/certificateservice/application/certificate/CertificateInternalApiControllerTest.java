@@ -176,7 +176,6 @@ class CertificateInternalApiControllerTest {
     assertEquals(expectedResult, actualResult);
   }
 
-
   @Test
   void shallReturnGetCertificateInternalResponse() {
     final var expectedResult = CertificatesWithQAInternalResponse.builder().build();
