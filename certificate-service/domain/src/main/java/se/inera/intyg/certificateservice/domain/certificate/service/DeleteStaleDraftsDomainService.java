@@ -32,7 +32,6 @@ public class DeleteStaleDraftsDomainService {
     if (certificate == null) {
       throw new IllegalStateException(
           String.format("Certificate with id %s doesnt exist and cannot be deleted",
-
               certificateId));
     }
 
