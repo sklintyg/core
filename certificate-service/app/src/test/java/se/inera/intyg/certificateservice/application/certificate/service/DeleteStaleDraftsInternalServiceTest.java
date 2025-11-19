@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -53,10 +52,8 @@ class DeleteStaleDraftsInternalServiceTest {
         .cutoffDate(cutoffDate)
         .build();
 
-    final var certificate = mock(MedicalCertificate.class);
-    when(certificate.id()).thenReturn(new CertificateId(certificateId));
-    final var certificates = List.of(certificate);
-    doReturn(certificates).when(deleteStaleDraftsDomainService).list(cutoffDate);
+    doReturn(List.of(new CertificateId(certificateId))).when(deleteStaleDraftsDomainService)
+        .list(cutoffDate);
 
     final var actualResponse = deleteStaleDraftsInternalService.list(request);
     assertEquals(expectedResponse, actualResponse);
