@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalResponse;
-import se.inera.intyg.certificateservice.application.certificate.dto.DeleteStaleDraftsRequest;
-import se.inera.intyg.certificateservice.application.certificate.dto.DeleteStaleDraftsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ExportCertificateInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ExportInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse;
@@ -26,13 +24,10 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetSickLeav
 import se.inera.intyg.certificateservice.application.certificate.dto.GetSickLeaveCertificateInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetValidSickLeaveCertificateIdsInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetValidSickLeaveCertificateIdsInternalResponse;
-import se.inera.intyg.certificateservice.application.certificate.dto.ListStaleDraftsRequest;
-import se.inera.intyg.certificateservice.application.certificate.dto.ListStaleDraftsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.LockDraftsRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.LockDraftsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.TotalExportsInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.service.CertificateExistsService;
-import se.inera.intyg.certificateservice.application.certificate.service.DeleteStaleDraftsInternalService;
 import se.inera.intyg.certificateservice.application.certificate.service.EraseCertificateInternalForCareProviderService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateExportsInternalForCareProviderService;
 import se.inera.intyg.certificateservice.application.certificate.service.GetCertificateInternalMetadataService;
@@ -57,7 +52,6 @@ public class CertificateInternalApiController {
   private final GetCertificateExportsInternalForCareProviderService getCertificateExportsInternalForCareProviderService;
   private final GetCertificateInternalXmlService getCertificateInternalXmlService;
   private final GetCertificateInternalMetadataService getCertificateInternalMetadataService;
-  private final DeleteStaleDraftsInternalService deleteStaleDraftsInternalService;
   private final GetCertificateInternalService getCertificateInternalService;
   private final CertificateExistsService certificateExistsService;
   private final LockDraftsInternalService lockDraftsInternalService;
@@ -110,17 +104,6 @@ public class CertificateInternalApiController {
     return lockDraftsInternalService.lock(request);
   }
 
-  @PostMapping("draft/list")
-  @PerformanceLogging(eventAction = "internal-list-stale-drafts", eventType = EVENT_TYPE_ACCESSED)
-  ListStaleDraftsResponse listStaleDrafts(@RequestBody ListStaleDraftsRequest request) {
-    return deleteStaleDraftsInternalService.list(request);
-  }
-
-  @DeleteMapping("draft/delete")
-  @PerformanceLogging(eventAction = "internal-delete-certificate", eventType = EVENT_TYPE_DELETION)
-  DeleteStaleDraftsResponse deleteDrafts(@RequestBody DeleteStaleDraftsRequest request) {
-    return deleteStaleDraftsInternalService.delete(request);
-  }
 
   @PostMapping("/qa")
   @PerformanceLogging(eventAction = "internal-retrieve-certificate-with-qa", eventType = EVENT_TYPE_ACCESSED)
