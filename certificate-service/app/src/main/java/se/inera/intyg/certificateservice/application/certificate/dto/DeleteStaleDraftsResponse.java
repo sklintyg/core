@@ -12,7 +12,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.DeleteStale
 @Builder
 public class DeleteStaleDraftsResponse {
 
-  List<CertificateDTO> certificates;
+  List<CertificateDTO> certificate;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class DeleteStaleDraftsResponseBuilder {

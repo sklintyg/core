@@ -90,7 +90,7 @@ class DeleteStaleDraftsInternalServiceTest {
   void shouldReturnDeleteStaleDraftsResponse() {
     final var expectedCertificate = CertificateDTO.builder().build();
     final var expectedResponse = DeleteStaleDraftsResponse.builder()
-        .certificates(List.of(expectedCertificate))
+        .certificate(List.of(expectedCertificate))
         .build();
     final var certificateId = new CertificateId("cert-123");
     final var request = DeleteStaleDraftsRequest.builder()
@@ -107,4 +107,3 @@ class DeleteStaleDraftsInternalServiceTest {
     assertEquals(expectedResponse, actualResponse);
   }
 }
-
