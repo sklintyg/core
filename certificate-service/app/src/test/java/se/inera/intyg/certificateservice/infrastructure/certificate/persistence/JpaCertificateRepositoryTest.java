@@ -1059,12 +1059,12 @@ class JpaCertificateRepositoryTest {
     void shouldReturnEmptyListIfNoCertificatesAreFound() {
       final var request = CertificatesRequest.builder()
           .createdTo(LocalDateTime.now())
-          .statuses(List.of(Status.SIGNED, Status.REVOKED))
+          .statuses(List.of(Status.DRAFT, Status.LOCKED_DRAFT))
           .build();
 
       doReturn(List.of()).when(certificateEntityRepository)
           .findCertificateIdsByCreatedBeforeAndStatusIn(request.createdTo(),
-              List.of("SIGNED", "REVOKED"));
+              List.of(1, 4));
       final var actualCertificateIds = jpaCertificateRepository.findIdsByCreatedBeforeAndStatusIn(
           request);
 
@@ -1075,11 +1075,11 @@ class JpaCertificateRepositoryTest {
     void shouldReturnListOfCertificateIds() {
       final var request = CertificatesRequest.builder()
           .createdTo(LocalDateTime.now())
-          .statuses(List.of(Status.SIGNED, Status.REVOKED))
+          .statuses(List.of(Status.DRAFT, Status.LOCKED_DRAFT))
           .build();
       doReturn(List.of(CERTIFICATE_ID.id())).when(certificateEntityRepository)
           .findCertificateIdsByCreatedBeforeAndStatusIn(request.createdTo(),
-              List.of("SIGNED", "REVOKED"));
+              List.of(1, 4));
 
       final var actualCertificateIds = jpaCertificateRepository.findIdsByCreatedBeforeAndStatusIn(
           request);
