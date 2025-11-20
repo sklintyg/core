@@ -41,27 +41,27 @@ class DeleteStaleDraftsDomainServiceTest {
       final var certificateId = new CertificateId("cert-123");
       final var expectedRequest = CertificatesRequest.builder()
           .createdTo(cutoffDate)
-          .statuses(List.of(Status.DRAFT, Status.DELETED_DRAFT, Status.LOCKED_DRAFT))
+          .statuses(List.of(Status.DRAFT, Status.LOCKED_DRAFT))
           .build();
 
       doReturn(List.of(certificateId)).when(certificateRepository)
-          .findIdsByCreateBeforeAndStatusIn(expectedRequest);
+          .findIdsByCreatedBeforeAndStatusIn(expectedRequest);
 
       final var result = service.list(cutoffDate);
 
       assertEquals(List.of(certificateId), result);
-      verify(certificateRepository).findIdsByCreateBeforeAndStatusIn(expectedRequest);
+      verify(certificateRepository).findIdsByCreatedBeforeAndStatusIn(expectedRequest);
     }
 
     @Test
     void shouldReturnEmptyListWhenNoDraftsFound() {
       final var expectedRequest = CertificatesRequest.builder()
           .createdTo(cutoffDate)
-          .statuses(List.of(Status.DRAFT, Status.DELETED_DRAFT, Status.LOCKED_DRAFT))
+          .statuses(List.of(Status.DRAFT, Status.LOCKED_DRAFT))
           .build();
 
       doReturn(Collections.emptyList()).when(certificateRepository)
-          .findIdsByCreateBeforeAndStatusIn(expectedRequest);
+          .findIdsByCreatedBeforeAndStatusIn(expectedRequest);
 
       final var result = service.list(cutoffDate);
 

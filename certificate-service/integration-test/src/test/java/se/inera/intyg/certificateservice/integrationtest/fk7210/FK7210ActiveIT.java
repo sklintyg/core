@@ -43,6 +43,7 @@ import se.inera.intyg.certificateservice.integrationtest.common.tests.SendCitize
 import se.inera.intyg.certificateservice.integrationtest.common.tests.SignCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.SignCertificateMidwifeIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.SignCertificateNurseIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.StaleDraftsIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.UnitStatisticsIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.UpdateCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.ValidateCertificateIT;
@@ -284,6 +285,17 @@ public class FK7210ActiveIT extends ActiveCertificatesIT {
       return baseTestabilityUtilities;
     }
   }
+
+  @Nested
+  @DisplayName(TYPE + "Rensning av utkast")
+  class StaleDrafts extends StaleDraftsIT {
+
+    @Override
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
+    }
+  }
+
 
   @Nested
   @DisplayName(TYPE + "Ärendekommunikation skall ej vara tillgänglig!")

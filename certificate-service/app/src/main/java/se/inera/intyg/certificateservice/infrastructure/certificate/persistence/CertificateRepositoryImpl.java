@@ -79,7 +79,7 @@ public class CertificateRepositoryImpl implements TestabilityCertificateReposito
   }
 
   @Override
-  public List<CertificateId> findIdsByCreateBeforeAndStatusIn(CertificatesRequest request) {
+  public List<CertificateId> findIdsByCreatedBeforeAndStatusIn(CertificatesRequest request) {
     return jpaCertificateRepository.findIdsByCreatedBeforeAndStatusIn(request);
   }
 

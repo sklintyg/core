@@ -35,6 +35,7 @@ import se.inera.intyg.certificateservice.domain.common.model.HsaId;
 import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 import se.inera.intyg.certificateservice.domain.staff.model.Staff;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.CertificateStatus;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.StaffVersionEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.UnitVersionEntity;
@@ -254,7 +255,9 @@ public class JpaCertificateRepository {
   public List<CertificateId> findIdsByCreatedBeforeAndStatusIn(CertificatesRequest request) {
     return certificateEntityRepository.findCertificateIdsByCreatedBeforeAndStatusIn(
         request.createdTo(),
-        request.statuses().stream().map(Enum::name).toList()
+        request.statuses().stream()
+            .map(status -> CertificateStatus.valueOf(status.name()).getKey())
+            .toList()
     ).stream().map(CertificateId::new).toList();
   }
 

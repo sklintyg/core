@@ -56,8 +56,8 @@ public interface CertificateEntityRepository extends CrudRepository<CertificateE
       """)
   List<String> findValidSickLeaveCertificatesByIds(List<String> certificateIds);
 
-  @Query("SELECT c.certificateId FROM CertificateEntity c WHERE c.created <= :createdTo AND c.status IN :statuses")
+  @Query("SELECT c.certificateId FROM CertificateEntity c WHERE c.created <= :createdTo AND c.status.key IN :statuses")
   List<String> findCertificateIdsByCreatedBeforeAndStatusIn(
       @Param("createdTo") LocalDateTime createdTo,
-      @Param("statuses") List<String> statuses);
+      @Param("statuses") List<Integer> statuses);
 }

@@ -12,13 +12,12 @@ import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest
 @RequiredArgsConstructor
 public class DeleteStaleDraftsDomainService {
 
-  private static final List<Status> ALLOWED_STATUSES = List.of(Status.DRAFT, Status.DELETED_DRAFT,
-      Status.LOCKED_DRAFT);
+  private static final List<Status> ALLOWED_STATUSES = List.of(Status.DRAFT, Status.LOCKED_DRAFT);
 
   private final CertificateRepository certificateRepository;
 
   public List<CertificateId> list(LocalDateTime cutoffDate) {
-    return certificateRepository.findIdsByCreateBeforeAndStatusIn(
+    return certificateRepository.findIdsByCreatedBeforeAndStatusIn(
         CertificatesRequest.builder()
             .createdTo(cutoffDate)
             .statuses(ALLOWED_STATUSES)
