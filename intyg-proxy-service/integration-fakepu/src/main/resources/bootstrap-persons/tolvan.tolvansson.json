@@ -4,23 +4,23 @@
   },
   "protectedPersonIndicator": false,
   "testIndicator": false,
-  "primaryIdentity": false,
+  "primaryIdentity": true,
   "name": {
     "givenName": {
       "name": "Tolvan"
     },
-    "middleName": {},
+    "middleName": {
+      "name":"TPU"
+    },
     "surname": {
       "name": "Tolvansson"
     }
   },
   "addressInformation": {
     "residentialAddress": {
-      "careOf": "Svensson",
-      "postalAddress1": "Storgatan 1",
-      "postalAddress2": "PL 1234",
-      "postalCode": 12345,
-      "city": "Småmåla"
+      "postalAddress1": "LÖWENHJELM, Testvägen 2",
+      "postalCode": 11111,
+      "city": "Testborg"
     }
   },
   "isActive": false

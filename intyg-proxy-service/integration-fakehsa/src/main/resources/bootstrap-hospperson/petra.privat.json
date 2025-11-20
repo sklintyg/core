@@ -1,0 +1,16 @@
+{
+    "personalIdentityNumber": "199608112380",
+    "personalPrescriptionCode": "3570355",
+    "specialities":[
+        {
+            "specialityName":"Internmedicin",
+            "specialityCode":"1099"
+        }
+    ],
+    "healthCareProfessionalLicenceType": [
+        {
+            "healthCareProfessionalLicenceCode": "LK",
+            "healthCareProfessionalLicenceName": "Läkare"
+        }
+    ]
+}

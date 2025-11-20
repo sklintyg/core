@@ -7,17 +7,13 @@
   "primaryIdentity": true,
   "name": {
     "givenName": {
-      "name": "Frida"
+      "name": "Foris"
+    },
+    "middleName": {
+      "name": "DoBo1"
     },
     "surname": {
-      "name": "Kranstege"
-    }
-  },
-  "addressInformation": {
-    "residentialAddress": {
-      "postalAddress1": "RIDDARGATAN 3",
-      "postalCode": 11435,
-      "city": "STOCKHOLM"
+      "name": "Dorisson1"
     }
   }
 }

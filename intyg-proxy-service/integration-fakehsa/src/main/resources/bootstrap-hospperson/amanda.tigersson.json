@@ -1,0 +1,16 @@
+{
+  "personalIdentityNumber": "195711092642",
+  "personalPrescriptionCode": "2570342",
+  "restrictions":[
+    {
+      "restrictionName":"Återkallad legitimation",
+      "restrictionCode":"LK;001"
+    }
+  ],
+    "healthCareProfessionalLicenceType": [
+        {
+            "healthCareProfessionalLicenceCode": "LK",
+            "healthCareProfessionalLicenceName": "Läkare"
+        }
+    ]
+}

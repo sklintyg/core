@@ -1,0 +1,10 @@
+{
+    "personalIdentityNumber": "200007312382",
+    "personalPrescriptionCode": "9570342",
+    "healthCareProfessionalLicenceType": [
+        {
+            "healthCareProfessionalLicenceCode": "LK",
+            "healthCareProfessionalLicenceName": "Läkare"
+        }
+    ]
+}

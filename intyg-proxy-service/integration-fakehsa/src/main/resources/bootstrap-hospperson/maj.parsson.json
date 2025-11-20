@@ -1,0 +1,20 @@
+{
+    "personalIdentityNumber": "199001092387",
+    "personalPrescriptionCode": "2570342",
+    "restrictions":[
+        {
+        "restrictionName":"Treårig prövotid",
+        "restrictionCode":"LK;002"
+        },
+      {
+        "restrictionName":"Begränsad förskrivningsrätt",
+        "restrictionCode":"LK;003"
+      }
+    ],
+    "healthCareProfessionalLicenceType": [
+        {
+            "healthCareProfessionalLicenceCode": "LK",
+            "healthCareProfessionalLicenceName": "Läkare"
+        }
+    ]
+}
