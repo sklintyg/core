@@ -68,6 +68,7 @@ import se.inera.intyg.certificateservice.integrationtest.common.tests.GetUnitCer
 import se.inera.intyg.certificateservice.integrationtest.common.tests.InternalApiIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.InternalApiMessagesIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.MessageExistsIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.ObsoleteDraftsIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.RenewCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.RenewExternalCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.ReplaceCertificateIT;
@@ -75,7 +76,6 @@ import se.inera.intyg.certificateservice.integrationtest.common.tests.RevokeCert
 import se.inera.intyg.certificateservice.integrationtest.common.tests.SendCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.SendCitizenCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.SignCertificateIT;
-import se.inera.intyg.certificateservice.integrationtest.common.tests.StaleDraftsIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.UnitStatisticsIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.UpdateCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.ValidateCertificateIT;
@@ -438,7 +438,7 @@ public class FK7427ActiveIT extends ActiveCertificatesIT {
 
   @Nested
   @DisplayName(TYPE + "Rensning av utkast")
-  class StaleDrafts extends StaleDraftsIT {
+  class ObsoleteDrafts extends ObsoleteDraftsIT {
 
     @Override
     protected BaseTestabilityUtilities testabilityUtilities() {

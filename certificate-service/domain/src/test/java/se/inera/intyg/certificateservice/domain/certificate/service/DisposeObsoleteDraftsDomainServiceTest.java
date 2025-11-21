@@ -24,12 +24,12 @@ import se.inera.intyg.certificateservice.domain.certificate.repository.Certifica
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
 
 @ExtendWith(MockitoExtension.class)
-class DeleteStaleDraftsDomainServiceTest {
+class DisposeObsoleteDraftsDomainServiceTest {
 
   @Mock
   private CertificateRepository certificateRepository;
   @InjectMocks
-  private DeleteStaleDraftsDomainService service;
+  private DisposeObsoleteDraftsDomainService service;
 
   @Nested
   class ListTests {

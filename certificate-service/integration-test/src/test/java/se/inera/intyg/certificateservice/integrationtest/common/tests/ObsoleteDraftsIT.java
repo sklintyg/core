@@ -15,15 +15,15 @@ import java.time.ZoneId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateStatusTypeDTO;
-import se.inera.intyg.certificateservice.application.certificate.dto.DeleteStaleDraftsRequest;
-import se.inera.intyg.certificateservice.application.certificate.dto.ListStaleDraftsRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.DisposeObsoleteDraftsRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.ListObsoleteDraftsRequest;
 import se.inera.intyg.certificateservice.integrationtest.common.setup.BaseIntegrationIT;
 
-public abstract class StaleDraftsIT extends BaseIntegrationIT {
+public abstract class ObsoleteDraftsIT extends BaseIntegrationIT {
 
   @Test
   @DisplayName("Om utkast är äldre än cutoff datum ska de listas")
-  void shouldListStaleDrafts() {
+  void shouldListObsoleteDrafts() {
     final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
@@ -31,11 +31,11 @@ public abstract class StaleDraftsIT extends BaseIntegrationIT {
     final var certificateId = certificateId(testCertificates);
     final var cutoffDate = LocalDateTime.now(ZoneId.systemDefault()).plusDays(1);
 
-    final var request = ListStaleDraftsRequest.builder()
+    final var request = ListObsoleteDraftsRequest.builder()
         .cutoffDate(cutoffDate)
         .build();
 
-    final var response = internalApi().listStaleDrafts(request);
+    final var response = internalApi().listObsoleteDrafts(request);
 
     assertAll(
         () -> assertEquals(200, response.getStatusCode().value()),
@@ -53,11 +53,11 @@ public abstract class StaleDraftsIT extends BaseIntegrationIT {
 
     final var cutoffDate = LocalDateTime.now(ZoneId.systemDefault()).minusDays(1);
 
-    final var request = ListStaleDraftsRequest.builder()
+    final var request = ListObsoleteDraftsRequest.builder()
         .cutoffDate(cutoffDate)
         .build();
 
-    final var response = internalApi().listStaleDrafts(request);
+    final var response = internalApi().listObsoleteDrafts(request);
 
     assertAll(
         () -> assertEquals(200, response.getStatusCode().value()),
@@ -68,18 +68,18 @@ public abstract class StaleDraftsIT extends BaseIntegrationIT {
 
   @Test
   @DisplayName("Om gammalt utkast raderas via internt API ska det tas bort")
-  void shouldDeleteStaleDraft() {
+  void shouldDisposeObsoleteDraft() {
     final var testCertificates = testabilityApi().addCertificates(
         defaultTestablilityCertificateRequest(type(), typeVersion())
     );
 
     final var certificateId = certificateId(testCertificates);
 
-    final var request = DeleteStaleDraftsRequest.builder()
+    final var request = DisposeObsoleteDraftsRequest.builder()
         .certificateId(certificateId)
         .build();
 
-    final var response = internalApi().deleteStaleDrafts(request);
+    final var response = internalApi().disposeObsoleteDrafts(request);
 
     assertAll(
         () -> assertEquals(200, response.getStatusCode().value()),
@@ -95,14 +95,14 @@ public abstract class StaleDraftsIT extends BaseIntegrationIT {
 
   @Test
   @DisplayName("Om inga gamla utkast finns ska tom lista returneras")
-  void shouldReturnEmptyListWhenNoStaleDrafts() {
+  void shouldReturnEmptyListWhenNoObsoleteDrafts() {
     final var cutoffDate = LocalDateTime.now(ZoneId.systemDefault()).minusYears(10);
 
-    final var request = ListStaleDraftsRequest.builder()
+    final var request = ListObsoleteDraftsRequest.builder()
         .cutoffDate(cutoffDate)
         .build();
 
-    final var response = internalApi().listStaleDrafts(request);
+    final var response = internalApi().listObsoleteDrafts(request);
 
     assertAll(
         () -> assertEquals(200, response.getStatusCode().value()),
@@ -122,11 +122,11 @@ public abstract class StaleDraftsIT extends BaseIntegrationIT {
     final var certificateId = certificateId(testCertificates);
     final var cutoffDate = LocalDateTime.now(ZoneId.systemDefault()).plusDays(1);
 
-    final var request = ListStaleDraftsRequest.builder()
+    final var request = ListObsoleteDraftsRequest.builder()
         .cutoffDate(cutoffDate)
         .build();
 
-    final var response = internalApi().listStaleDrafts(request);
+    final var response = internalApi().listObsoleteDrafts(request);
 
     assertAll(
         () -> assertEquals(200, response.getStatusCode().value()),
@@ -145,11 +145,11 @@ public abstract class StaleDraftsIT extends BaseIntegrationIT {
 
     final var cutoffDate = LocalDateTime.now(ZoneId.systemDefault()).plusDays(1);
 
-    final var request = ListStaleDraftsRequest.builder()
+    final var request = ListObsoleteDraftsRequest.builder()
         .cutoffDate(cutoffDate)
         .build();
 
-    final var response = internalApi().listStaleDrafts(request);
+    final var response = internalApi().listObsoleteDrafts(request);
 
     assertAll(
         () -> assertEquals(200, response.getStatusCode().value()),
@@ -173,11 +173,11 @@ public abstract class StaleDraftsIT extends BaseIntegrationIT {
 
     final var cutoffDate = LocalDateTime.now(ZoneId.systemDefault()).plusDays(1);
 
-    final var request = ListStaleDraftsRequest.builder()
+    final var request = ListObsoleteDraftsRequest.builder()
         .cutoffDate(cutoffDate)
         .build();
 
-    final var response = internalApi().listStaleDrafts(request);
+    final var response = internalApi().listObsoleteDrafts(request);
 
     assertAll(
         () -> assertEquals(200, response.getStatusCode().value()),
@@ -196,11 +196,11 @@ public abstract class StaleDraftsIT extends BaseIntegrationIT {
 
     final var certificateId = certificateId(testCertificates);
 
-    final var request = DeleteStaleDraftsRequest.builder()
+    final var request = DisposeObsoleteDraftsRequest.builder()
         .certificateId(certificateId)
         .build();
 
-    final var response = internalApi().deleteStaleDrafts(request);
+    final var response = internalApi().disposeObsoleteDrafts(request);
 
     assertAll(
         () -> assertEquals(200, response.getStatusCode().value()),
@@ -224,11 +224,11 @@ public abstract class StaleDraftsIT extends BaseIntegrationIT {
 
     final var certificateId = certificateId(testCertificates);
 
-    final var request = DeleteStaleDraftsRequest.builder()
+    final var request = DisposeObsoleteDraftsRequest.builder()
         .certificateId(certificateId)
         .build();
 
-    final var response = internalApi().deleteStaleDrafts(request);
+    final var response = internalApi().disposeObsoleteDrafts(request);
 
     assertAll(
         () -> assertEquals(500, response.getStatusCode().value()),
@@ -254,11 +254,11 @@ public abstract class StaleDraftsIT extends BaseIntegrationIT {
 
     final var certificateId = certificateId(testCertificates);
 
-    final var request = DeleteStaleDraftsRequest.builder()
+    final var request = DisposeObsoleteDraftsRequest.builder()
         .certificateId(certificateId)
         .build();
 
-    final var response = internalApi().deleteStaleDrafts(request);
+    final var response = internalApi().disposeObsoleteDrafts(request);
 
     assertAll(
         () -> assertEquals(500, response.getStatusCode().value()),

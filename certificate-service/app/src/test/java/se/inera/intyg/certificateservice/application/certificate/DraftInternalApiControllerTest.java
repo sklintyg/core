@@ -8,36 +8,36 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.application.certificate.dto.DeleteStaleDraftsRequest;
-import se.inera.intyg.certificateservice.application.certificate.dto.DeleteStaleDraftsResponse;
-import se.inera.intyg.certificateservice.application.certificate.dto.ListStaleDraftsRequest;
-import se.inera.intyg.certificateservice.application.certificate.dto.ListStaleDraftsResponse;
-import se.inera.intyg.certificateservice.application.certificate.service.DeleteStaleDraftsInternalService;
+import se.inera.intyg.certificateservice.application.certificate.dto.DisposeObsoleteDraftsRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.DisposeObsoleteDraftsResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.ListObsoleteDraftsRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.ListObsoleteDraftsResponse;
+import se.inera.intyg.certificateservice.application.certificate.service.DisposeObsoleteDraftsInternalService;
 
 @ExtendWith(MockitoExtension.class)
 class DraftInternalApiControllerTest {
 
   @Mock
-  private DeleteStaleDraftsInternalService deleteStaleDraftsInternalService;
+  private DisposeObsoleteDraftsInternalService disposeObsoleteDraftsInternalService;
 
   @InjectMocks
   private DraftInternalApiController draftInternalApiController;
 
   @Test
   void shouldReturnListDraftsResponse() {
-    final var expectedResult = ListStaleDraftsResponse.builder().build();
-    final var request = ListStaleDraftsRequest.builder().build();
-    doReturn(expectedResult).when(deleteStaleDraftsInternalService).list(request);
+    final var expectedResult = ListObsoleteDraftsResponse.builder().build();
+    final var request = ListObsoleteDraftsRequest.builder().build();
+    doReturn(expectedResult).when(disposeObsoleteDraftsInternalService).list(request);
 
-    final var actualResult = draftInternalApiController.listStaleDrafts(request);
+    final var actualResult = draftInternalApiController.listObsoleteDrafts(request);
     assertEquals(expectedResult, actualResult);
   }
 
   @Test
   void shouldReturnDeleteDraftsResponse() {
-    final var expectedResult = DeleteStaleDraftsResponse.builder().build();
-    final var request = DeleteStaleDraftsRequest.builder().build();
-    doReturn(expectedResult).when(deleteStaleDraftsInternalService).delete(request);
+    final var expectedResult = DisposeObsoleteDraftsResponse.builder().build();
+    final var request = DisposeObsoleteDraftsRequest.builder().build();
+    doReturn(expectedResult).when(disposeObsoleteDraftsInternalService).delete(request);
 
     final var actualResult = draftInternalApiController.deleteDrafts(request);
     assertEquals(expectedResult, actualResult);

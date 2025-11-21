@@ -10,7 +10,7 @@ import se.inera.intyg.certificateservice.domain.certificate.repository.Certifica
 import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest;
 
 @RequiredArgsConstructor
-public class DeleteStaleDraftsDomainService {
+public class DisposeObsoleteDraftsDomainService {
 
 
   private final CertificateRepository certificateRepository;

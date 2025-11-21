@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import se.inera.intyg.certificateservice.application.certificate.dto.DeleteStaleDraftsRequest;
-import se.inera.intyg.certificateservice.application.certificate.dto.DeleteStaleDraftsResponse;
-import se.inera.intyg.certificateservice.application.certificate.dto.ListStaleDraftsRequest;
-import se.inera.intyg.certificateservice.application.certificate.dto.ListStaleDraftsResponse;
-import se.inera.intyg.certificateservice.application.certificate.service.DeleteStaleDraftsInternalService;
+import se.inera.intyg.certificateservice.application.certificate.dto.DisposeObsoleteDraftsRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.DisposeObsoleteDraftsResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.ListObsoleteDraftsRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.ListObsoleteDraftsResponse;
+import se.inera.intyg.certificateservice.application.certificate.service.DisposeObsoleteDraftsInternalService;
 import se.inera.intyg.certificateservice.logging.PerformanceLogging;
 
 @RequiredArgsConstructor
@@ -21,18 +21,18 @@ import se.inera.intyg.certificateservice.logging.PerformanceLogging;
 @RequestMapping("/internalapi/draft")
 public class DraftInternalApiController {
 
-  private final DeleteStaleDraftsInternalService deleteStaleDraftsInternalService;
+  private final DisposeObsoleteDraftsInternalService disposeObsoleteDraftsInternalService;
 
   @PostMapping("/list")
-  @PerformanceLogging(eventAction = "internal-list-stale-drafts", eventType = EVENT_TYPE_ACCESSED)
-  ListStaleDraftsResponse listStaleDrafts(@RequestBody ListStaleDraftsRequest request) {
-    return deleteStaleDraftsInternalService.list(request);
+  @PerformanceLogging(eventAction = "internal-list-obsolete-drafts", eventType = EVENT_TYPE_ACCESSED)
+  ListObsoleteDraftsResponse listObsoleteDrafts(@RequestBody ListObsoleteDraftsRequest request) {
+    return disposeObsoleteDraftsInternalService.list(request);
   }
 
   @DeleteMapping
-  @PerformanceLogging(eventAction = "internal-delete-stale-drafts", eventType = EVENT_TYPE_DELETION)
-  DeleteStaleDraftsResponse deleteDrafts(@RequestBody DeleteStaleDraftsRequest request) {
-    return deleteStaleDraftsInternalService.delete(request);
+  @PerformanceLogging(eventAction = "internal-dispose-obsolete-drafts", eventType = EVENT_TYPE_DELETION)
+  DisposeObsoleteDraftsResponse deleteDrafts(@RequestBody DisposeObsoleteDraftsRequest request) {
+    return disposeObsoleteDraftsInternalService.delete(request);
   }
 }
 

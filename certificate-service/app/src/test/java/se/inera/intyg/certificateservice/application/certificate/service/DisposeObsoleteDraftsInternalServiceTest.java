@@ -14,92 +14,92 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateDTO;
-import se.inera.intyg.certificateservice.application.certificate.dto.DeleteStaleDraftsRequest;
-import se.inera.intyg.certificateservice.application.certificate.dto.DeleteStaleDraftsResponse;
-import se.inera.intyg.certificateservice.application.certificate.dto.ListStaleDraftsRequest;
-import se.inera.intyg.certificateservice.application.certificate.dto.ListStaleDraftsResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.DisposeObsoleteDraftsRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.DisposeObsoleteDraftsResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.ListObsoleteDraftsRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.ListObsoleteDraftsResponse;
 import se.inera.intyg.certificateservice.application.certificate.service.converter.CertificateConverter;
 import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
-import se.inera.intyg.certificateservice.domain.certificate.service.DeleteStaleDraftsDomainService;
+import se.inera.intyg.certificateservice.domain.certificate.service.DisposeObsoleteDraftsDomainService;
 
 @ExtendWith(MockitoExtension.class)
-class DeleteStaleDraftsInternalServiceTest {
+class DisposeObsoleteDraftsInternalServiceTest {
 
   @Mock
-  DeleteStaleDraftsDomainService deleteStaleDraftsDomainService;
+  DisposeObsoleteDraftsDomainService disposeObsoleteDraftsDomainService;
   @Mock
   CertificateConverter converter;
   @InjectMocks
-  DeleteStaleDraftsInternalService deleteStaleDraftsInternalService;
+  DisposeObsoleteDraftsInternalService disposeObsoleteDraftsInternalService;
 
   @Test
   void shouldThrowIfCutoffDateIsNullForList() {
-    final var request = ListStaleDraftsRequest.builder()
+    final var request = ListObsoleteDraftsRequest.builder()
         .build();
     assertThrows(IllegalArgumentException.class,
-        () -> deleteStaleDraftsInternalService.list(request));
+        () -> disposeObsoleteDraftsInternalService.list(request));
   }
 
   @Test
-  void shouldReturnListStaleDraftsResponse() {
+  void shouldReturnListObsoleteDraftsResponse() {
     final var certificateId = "cert-123";
-    final var expectedResponse = ListStaleDraftsResponse.builder()
+    final var expectedResponse = ListObsoleteDraftsResponse.builder()
         .certificateIds(List.of(certificateId))
         .build();
     final var cutoffDate = LocalDateTime.now();
-    final var request = ListStaleDraftsRequest.builder()
+    final var request = ListObsoleteDraftsRequest.builder()
         .cutoffDate(cutoffDate)
         .build();
 
-    doReturn(List.of(new CertificateId(certificateId))).when(deleteStaleDraftsDomainService)
+    doReturn(List.of(new CertificateId(certificateId))).when(disposeObsoleteDraftsDomainService)
         .list(cutoffDate);
 
-    final var actualResponse = deleteStaleDraftsInternalService.list(request);
+    final var actualResponse = disposeObsoleteDraftsInternalService.list(request);
     assertEquals(expectedResponse, actualResponse);
   }
 
   @Test
-  void shouldReturnEmptyListWhenNoStaleDrafts() {
-    final var expectedResponse = ListStaleDraftsResponse.builder()
+  void shouldReturnEmptyListWhenNoObsoleterafts() {
+    final var expectedResponse = ListObsoleteDraftsResponse.builder()
         .certificateIds(Collections.emptyList())
         .build();
     final var cutoffDate = LocalDateTime.now();
-    final var request = ListStaleDraftsRequest.builder()
+    final var request = ListObsoleteDraftsRequest.builder()
         .cutoffDate(cutoffDate)
         .build();
 
-    doReturn(Collections.emptyList()).when(deleteStaleDraftsDomainService).list(cutoffDate);
+    doReturn(Collections.emptyList()).when(disposeObsoleteDraftsDomainService).list(cutoffDate);
 
-    final var actualResponse = deleteStaleDraftsInternalService.list(request);
+    final var actualResponse = disposeObsoleteDraftsInternalService.list(request);
     assertEquals(expectedResponse, actualResponse);
   }
 
   @Test
   void shouldThrowIfCertificateIdIsNullForDelete() {
-    final var request = DeleteStaleDraftsRequest.builder()
+    final var request = DisposeObsoleteDraftsRequest.builder()
         .build();
     assertThrows(IllegalArgumentException.class,
-        () -> deleteStaleDraftsInternalService.delete(request));
+        () -> disposeObsoleteDraftsInternalService.delete(request));
   }
 
   @Test
-  void shouldReturnDeleteStaleDraftsResponse() {
+  void shouldReturnDisposeObsoleteDraftsResponse() {
     final var expectedCertificate = CertificateDTO.builder().build();
-    final var expectedResponse = DeleteStaleDraftsResponse.builder()
+    final var expectedResponse = DisposeObsoleteDraftsResponse.builder()
         .certificate(expectedCertificate)
         .build();
     final var certificateId = new CertificateId("cert-123");
-    final var request = DeleteStaleDraftsRequest.builder()
+    final var request = DisposeObsoleteDraftsRequest.builder()
         .certificateId("cert-123")
         .build();
 
     final var certificate = mock(MedicalCertificate.class);
-    doReturn(certificate).when(deleteStaleDraftsDomainService).delete(certificateId);
+    doReturn(certificate).when(disposeObsoleteDraftsDomainService).delete(certificateId);
     doReturn(expectedCertificate).when(converter)
         .convert(certificate, Collections.emptyList(), null);
 
-    final var actualResponse = deleteStaleDraftsInternalService.delete(request);
+    final var actualResponse = disposeObsoleteDraftsInternalService.delete(request);
     assertEquals(expectedResponse, actualResponse);
   }
 }
