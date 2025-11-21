@@ -13,11 +13,15 @@ import org.springframework.http.ResponseEntity;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.DisposeObsoleteDraftsRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.DisposeObsoleteDraftsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetSickLeaveCertificatesInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetSickLeaveCertificatesInternalResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.ListObsoleteDraftsRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.ListObsoleteDraftsResponse;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageInternalResponse;
 import se.inera.intyg.certificateservice.application.message.dto.GetMessageInternalXmlResponse;
 
@@ -174,6 +178,40 @@ public class InternalApiUtil {
         new ParameterizedTypeReference<>() {
         },
         Collections.emptyList()
+    );
+  }
+
+  public ResponseEntity<ListObsoleteDraftsResponse> listObsoleteDrafts(
+      ListObsoleteDraftsRequest request) {
+    final var requestUrl = "http://localhost:%s/internalapi/draft/list".formatted(port);
+
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    return this.restTemplate.exchange(
+        requestUrl,
+        HttpMethod.POST,
+        new HttpEntity<>(request, headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyMap()
+    );
+  }
+
+  public ResponseEntity<DisposeObsoleteDraftsResponse> disposeObsoleteDrafts(
+      DisposeObsoleteDraftsRequest request) {
+    final var requestUrl = "http://localhost:%s/internalapi/draft".formatted(port);
+
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    return this.restTemplate.exchange(
+        requestUrl,
+        HttpMethod.DELETE,
+        new HttpEntity<>(request, headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyMap()
     );
   }
 

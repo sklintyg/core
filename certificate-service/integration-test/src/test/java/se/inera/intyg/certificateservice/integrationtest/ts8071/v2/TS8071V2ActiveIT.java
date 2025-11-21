@@ -37,6 +37,7 @@ import se.inera.intyg.certificateservice.integrationtest.common.tests.GetUnitCer
 import se.inera.intyg.certificateservice.integrationtest.common.tests.GetUnitCertificatesWhenSignedIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.InternalApiIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.MessagingNotAvailableIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.ObsoleteDraftsIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.RenewExternalCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.RenewNotAvailableIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.ReplaceCertificateIT;
@@ -291,6 +292,17 @@ public class TS8071V2ActiveIT extends ActiveCertificatesIT {
       return baseTestabilityUtilities;
     }
   }
+
+  @Nested
+  @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION + " " + "Rensning av utkast")
+  class ObsoleteDrafts extends ObsoleteDraftsIT {
+
+    @Override
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
+    }
+  }
+
 
   @Nested
   @DisplayName(TYPE + ACTIVE_CERTIFICATE_TYPE_VERSION

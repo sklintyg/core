@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -54,4 +55,9 @@ public interface CertificateEntityRepository extends CrudRepository<CertificateE
           )
       """)
   List<String> findValidSickLeaveCertificatesByIds(List<String> certificateIds);
+
+  @Query("SELECT c.certificateId FROM CertificateEntity c WHERE c.created <= :createdTo AND c.status.key IN :statuses")
+  List<String> findCertificateIdsByCreatedBeforeAndStatusIn(
+      @Param("createdTo") LocalDateTime createdTo,
+      @Param("statuses") List<Integer> statuses);
 }

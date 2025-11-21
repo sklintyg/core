@@ -30,6 +30,8 @@ public interface CertificateRepository {
 
   List<Certificate> findByCertificatesRequest(CertificatesRequest request);
 
+  List<CertificateId> findIdsByCreatedBeforeAndStatusIn(CertificatesRequest request);
+
   CertificateExportPage getExportByCareProviderId(HsaId careProviderId, int page, int size);
 
   long deleteByCareProviderId(HsaId careProviderId);
@@ -46,4 +48,6 @@ public interface CertificateRepository {
   List<CertificateId> findValidSickLeavesCertificateIdsByIds(List<CertificateId> certificateId);
 
   void updateCertificateMetadataFromSignInstances(List<Certificate> certificates);
+
+  void remove(List<CertificateId> certificateIds);
 }

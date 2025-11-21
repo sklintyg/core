@@ -41,6 +41,7 @@ import se.inera.intyg.certificateservice.integrationtest.common.tests.GetUnitCer
 import se.inera.intyg.certificateservice.integrationtest.common.tests.InternalApiIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.InternalApiMessagesIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.MessageExistsIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.ObsoleteDraftsIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.RenewCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.RenewExternalCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.ReplaceCertificateIT;
@@ -297,6 +298,16 @@ public class FK7804ActiveIT extends ActiveCertificatesIT {
   @Nested
   @DisplayName(TYPE + "Intern api ärendekommunikation")
   class InternalApiMessages extends InternalApiMessagesIT {
+
+    @Override
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
+    }
+  }
+
+  @Nested
+  @DisplayName(TYPE + "Rensning av utkast")
+  class ObsoleteDrafts extends ObsoleteDraftsIT {
 
     @Override
     protected BaseTestabilityUtilities testabilityUtilities() {

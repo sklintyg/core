@@ -44,6 +44,7 @@ import se.inera.intyg.certificateservice.integrationtest.common.tests.GetUnitCer
 import se.inera.intyg.certificateservice.integrationtest.common.tests.InternalApiIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.InternalApiMessagesIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.MessageExistsIT;
+import se.inera.intyg.certificateservice.integrationtest.common.tests.ObsoleteDraftsIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.RenewCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.RenewExternalCertificateIT;
 import se.inera.intyg.certificateservice.integrationtest.common.tests.ReplaceCertificateIT;
@@ -348,6 +349,17 @@ public class FK3226ActiveIT extends ActiveCertificatesIT {
       return baseTestabilityUtilities;
     }
   }
+
+  @Nested
+  @DisplayName(TYPE + "Rensning av utkast")
+  class ObsoleteDrafts extends ObsoleteDraftsIT {
+
+    @Override
+    protected BaseTestabilityUtilities testabilityUtilities() {
+      return baseTestabilityUtilities;
+    }
+  }
+
 
   @Nested
   @DisplayName(TYPE + "Finns meddelandet i tjänsten")

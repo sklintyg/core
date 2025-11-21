@@ -79,6 +79,11 @@ public class CertificateRepositoryImpl implements TestabilityCertificateReposito
   }
 
   @Override
+  public List<CertificateId> findIdsByCreatedBeforeAndStatusIn(CertificatesRequest request) {
+    return jpaCertificateRepository.findIdsByCreatedBeforeAndStatusIn(request);
+  }
+
+  @Override
   public CertificateExportPage getExportByCareProviderId(HsaId careProviderId, int page, int size) {
     return jpaCertificateRepository.getExportByCareProviderId(careProviderId, page, size, this);
   }
