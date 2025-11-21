@@ -12,7 +12,6 @@ import se.inera.intyg.certificateservice.domain.common.model.CertificatesRequest
 @RequiredArgsConstructor
 public class DeleteStaleDraftsDomainService {
 
-  private static final List<Status> ALLOWED_STATUSES = List.of(Status.DRAFT, Status.LOCKED_DRAFT);
 
   private final CertificateRepository certificateRepository;
 
@@ -20,7 +19,7 @@ public class DeleteStaleDraftsDomainService {
     return certificateRepository.findIdsByCreatedBeforeAndStatusIn(
         CertificatesRequest.builder()
             .createdTo(cutoffDate)
-            .statuses(ALLOWED_STATUSES)
+            .statuses(Status.unsigned())
             .build()
     );
   }
@@ -34,7 +33,7 @@ public class DeleteStaleDraftsDomainService {
               certificateId));
     }
 
-    if (!ALLOWED_STATUSES.contains(certificate.status())) {
+    if (!Status.unsigned().contains(certificate.status())) {
       throw new IllegalStateException(
           String.format("Cannot delete certificate with id %s wrong status %s",
               certificate.id().id(), certificate.status()));

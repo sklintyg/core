@@ -19,7 +19,6 @@ public class DeleteStaleDraftsInternalService {
   private final DeleteStaleDraftsDomainService deleteStaleDraftsDomainService;
   private final CertificateConverter converter;
 
-  @Transactional
   public ListStaleDraftsResponse list(ListStaleDraftsRequest request) {
     if (request.getCutoffDate() == null) {
       throw new IllegalArgumentException("Cutoff date cannot be null");
