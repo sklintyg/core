@@ -40,7 +40,7 @@ public class TS8071CitizenAvailableFunctionsProvider implements CitizenAvailable
       citizenAvailableFunctions.add(
           CitizenAvailableFunction.builder()
               .type(CitizenAvailableFunctionType.SEND_CERTIFICATE)
-              .enabled(true)
+              .enabled(certificate.sent() == null)
               .title(SEND_CERTIFICATE_TITLE)
               .name(SEND_CERTIFICATE_NAME)
               .body(SEND_CERTIFICATE_BODY)
