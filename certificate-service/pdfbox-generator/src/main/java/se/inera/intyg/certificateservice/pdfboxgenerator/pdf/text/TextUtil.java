@@ -34,7 +34,7 @@ public class TextUtil {
   public List<String> wrapLine(String line, float width, float fontSize, PDFont font) {
     List<String> wrappedLines = new ArrayList<>();
 
-    final var sanitizedLine = sanitizeText(line);
+    var sanitizedLine = sanitizeText(line);
     final float lineWidth = fontSize * getWidthOfString(sanitizedLine, font) / 1000;
 
     // If the line fits, no need to wrap it
@@ -43,33 +43,32 @@ public class TextUtil {
       return wrappedLines;
     }
 
-    var processedLine = sanitizedLine;
     int lastSpaceIndex = -1;
-    while (!processedLine.isEmpty()) {
-      int spaceIndex = processedLine.indexOf(' ', lastSpaceIndex + 1);
+    while (!sanitizedLine.isEmpty()) {
+      int spaceIndex = sanitizedLine.indexOf(' ', lastSpaceIndex + 1);
 
       if (spaceIndex == -1) {
         // If no space found, take the entire remaining text
-        spaceIndex = processedLine.length();
+        spaceIndex = sanitizedLine.length();
       }
 
-      String substring = processedLine.substring(0, spaceIndex);
+      String substring = sanitizedLine.substring(0, spaceIndex);
       float substringWidth = fontSize * getWidthOfString(substring, font) / 1000;
 
       // If the substring is too long, add the previous part to the line
       if (substringWidth > width) {
         // If the substring is one long word without spaces it will not wrap correctly
         if (lastSpaceIndex != -1) {
-          substring = processedLine.substring(0, lastSpaceIndex);
+          substring = sanitizedLine.substring(0, lastSpaceIndex);
         }
 
         wrappedLines.add(substring);
-        processedLine = processedLine.substring(lastSpaceIndex == -1 ? spaceIndex : lastSpaceIndex)
+        sanitizedLine = sanitizedLine.substring(lastSpaceIndex == -1 ? spaceIndex : lastSpaceIndex)
             .trim();
         lastSpaceIndex = -1; // Reset to process the next part
-      } else if (spaceIndex == processedLine.length()) {
+      } else if (spaceIndex == sanitizedLine.length()) {
         // If we've reached the end of the line, add the last portion and break
-        wrappedLines.add(processedLine);
+        wrappedLines.add(sanitizedLine);
         break;
       } else {
         // Update lastSpaceIndex to continue wrapping
