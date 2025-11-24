@@ -34,39 +34,42 @@ public class TextUtil {
   public List<String> wrapLine(String line, float width, float fontSize, PDFont font) {
     List<String> wrappedLines = new ArrayList<>();
 
-    final float lineWidth = fontSize * getWidthOfString(line, font) / 1000;
+    final var sanitizedLine = sanitizeText(line);
+    final float lineWidth = fontSize * getWidthOfString(sanitizedLine, font) / 1000;
 
     // If the line fits, no need to wrap it
     if (lineWidth <= width) {
-      wrappedLines.add(line);
+      wrappedLines.add(sanitizedLine);
       return wrappedLines;
     }
 
+    var processedLine = sanitizedLine;
     int lastSpaceIndex = -1;
-    while (!line.isEmpty()) {
-      int spaceIndex = line.indexOf(' ', lastSpaceIndex + 1);
+    while (!processedLine.isEmpty()) {
+      int spaceIndex = processedLine.indexOf(' ', lastSpaceIndex + 1);
 
       if (spaceIndex == -1) {
         // If no space found, take the entire remaining text
-        spaceIndex = line.length();
+        spaceIndex = processedLine.length();
       }
 
-      String substring = line.substring(0, spaceIndex);
+      String substring = processedLine.substring(0, spaceIndex);
       float substringWidth = fontSize * getWidthOfString(substring, font) / 1000;
 
       // If the substring is too long, add the previous part to the line
       if (substringWidth > width) {
         // If the substring is one long word without spaces it will not wrap correctly
         if (lastSpaceIndex != -1) {
-          substring = line.substring(0, lastSpaceIndex);
+          substring = processedLine.substring(0, lastSpaceIndex);
         }
 
         wrappedLines.add(substring);
-        line = line.substring(lastSpaceIndex == -1 ? spaceIndex : lastSpaceIndex).trim();
+        processedLine = processedLine.substring(lastSpaceIndex == -1 ? spaceIndex : lastSpaceIndex)
+            .trim();
         lastSpaceIndex = -1; // Reset to process the next part
-      } else if (spaceIndex == line.length()) {
+      } else if (spaceIndex == processedLine.length()) {
         // If we've reached the end of the line, add the last portion and break
-        wrappedLines.add(line);
+        wrappedLines.add(processedLine);
         break;
       } else {
         // Update lastSpaceIndex to continue wrapping
@@ -83,6 +86,13 @@ public class TextUtil {
     } catch (IOException exception) {
       throw new IllegalStateException("Could not process text", exception);
     }
+  }
+
+  private String sanitizeText(String text) {
+    if (text == null) {
+      return "";
+    }
+    return text.replaceAll("[\\t\\r\\f\\v\\x00-\\x08\\x0B-\\x0C\\x0E-\\x1F\\x7F]", " ");
   }
 
   public Optional<OverFlowLineSplit> getOverflowingLines(List<PdfField> currentFields,

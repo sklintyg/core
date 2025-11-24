@@ -144,4 +144,281 @@ class TextUtilTest {
       assertTrue(response.isPresent());
     }
   }
+
+  @Nested
+  class HandleSpecialCharacters {
+
+    @Test
+    void shouldHandleTabCharactersInText() {
+      final var textWithTab = "A\tB\tC";
+      final var field = PdfField.builder()
+          .value(textWithTab)
+          .id("ID_TAB")
+          .build();
+
+      final var response = textUtil.getOverflowingLines(
+          List.of(),
+          field,
+          new PDRectangle(200, 56),
+          12,
+          new PDType1Font(FontName.HELVETICA)
+      );
+
+      assertFalse(response.isPresent());
+    }
+
+    @Test
+    void shouldCalculateHeightForTextWithTabs() {
+      final var textWithTab = "Text with\ttab character";
+
+      final var actualHeight = textUtil.calculateTextHeight(
+          textWithTab,
+          FONT_SIZE,
+          new PDType1Font(FontName.HELVETICA),
+          450
+      );
+
+      assertEquals(FONT_SIZE * LINE_HEIGHT, actualHeight);
+    }
+
+    @Test
+    void shouldWrapLinesWithTabCharacters() {
+      final var textWithTab = "Text with\ttab character";
+
+      final var wrappedLines = textUtil.wrapLine(
+          textWithTab,
+          450,
+          FONT_SIZE,
+          new PDType1Font(FontName.HELVETICA)
+      );
+
+      assertEquals(1, wrappedLines.size());
+      assertEquals("Text with tab character", wrappedLines.getFirst());
+    }
+
+    @Test
+    void shouldHandleMultipleTabsInText() {
+      final var textWithMultipleTabs = "A\tB\tC";
+      final var field = PdfField.builder()
+          .value(textWithMultipleTabs)
+          .id("ID_MULTI_TAB")
+          .build();
+
+      final var response = textUtil.getOverflowingLines(
+          List.of(),
+          field,
+          new PDRectangle(200, 56),
+          12,
+          new PDType1Font(FontName.HELVETICA)
+      );
+
+      assertFalse(response.isPresent());
+    }
+
+    @Test
+    void shouldHandleTabsInLongText() {
+      final var longTextWithTabs = "AAAAAAAAAAA\tBBBBBBBBBBB\tCCCCCCCCCCC\tDDDDDDDDDDD";
+      final var field = PdfField.builder()
+          .value(longTextWithTabs)
+          .id("ID_LONG_TAB")
+          .build();
+
+      final var response = textUtil.getOverflowingLines(
+          List.of(),
+          field,
+          RECTANGLE_100_40,
+          12,
+          new PDType1Font(FontName.HELVETICA)
+      );
+
+      assertTrue(response.isPresent());
+    }
+
+    @Test
+    void shouldSanitizeTabsButPreserveNewlines() {
+      final var textWithTabsAndNewlines = "Line 1\twith tab\nLine 2\twith tab";
+
+      final var actualHeight = textUtil.calculateTextHeight(
+          textWithTabsAndNewlines,
+          FONT_SIZE,
+          new PDType1Font(FontName.HELVETICA),
+          450
+      );
+
+      assertEquals(2 * FONT_SIZE * LINE_HEIGHT, actualHeight);
+    }
+
+    @Test
+    void shouldReplaceCarriageReturnWithSpace() {
+      final var textWithCarriageReturn = "Text with\rcarriage return";
+
+      final var wrappedLines = textUtil.wrapLine(
+          textWithCarriageReturn,
+          450,
+          FONT_SIZE,
+          new PDType1Font(FontName.HELVETICA)
+      );
+
+      assertEquals(1, wrappedLines.size());
+      assertEquals("Text with carriage return", wrappedLines.getFirst());
+    }
+
+    @Test
+    void shouldReplaceFormFeedWithSpace() {
+      final var textWithFormFeed = "Text with\fform feed";
+
+      final var wrappedLines = textUtil.wrapLine(
+          textWithFormFeed,
+          450,
+          FONT_SIZE,
+          new PDType1Font(FontName.HELVETICA)
+      );
+
+      assertEquals(1, wrappedLines.size());
+      assertEquals("Text with form feed", wrappedLines.getFirst());
+    }
+
+    @Test
+    void shouldHandleMultipleControlCharacters() {
+      final var textWithControlChars = "Text\twith\rmultiple\fcontrol\u0000characters";
+
+      final var wrappedLines = textUtil.wrapLine(
+          textWithControlChars,
+          450,
+          FONT_SIZE,
+          new PDType1Font(FontName.HELVETICA)
+      );
+
+      assertEquals(1, wrappedLines.size());
+      assertEquals("Text with multiple control characters", wrappedLines.getFirst());
+    }
+
+    @Test
+    void shouldCalculateCorrectHeightWithControlCharacters() {
+      final var textWithControlChars = "Line 1\twith\ttabs\nLine 2\rwith\rcarriage\nLine 3\fwith\fform feeds";
+
+      final var actualHeight = textUtil.calculateTextHeight(
+          textWithControlChars,
+          FONT_SIZE,
+          new PDType1Font(FontName.HELVETICA),
+          450
+      );
+
+      assertEquals(3 * FONT_SIZE * LINE_HEIGHT, actualHeight);
+    }
+
+    @Test
+    void shouldHandleNullText() {
+      final var wrappedLines = textUtil.wrapLine(
+          null,
+          450,
+          FONT_SIZE,
+          new PDType1Font(FontName.HELVETICA)
+      );
+
+      assertEquals(1, wrappedLines.size());
+      assertEquals("", wrappedLines.getFirst());
+    }
+
+    @Test
+    void shouldPreserveSpacesBetweenWords() {
+      final var textWithTabsAndSpaces = "Word1\t  \tWord2";
+
+      final var wrappedLines = textUtil.wrapLine(
+          textWithTabsAndSpaces,
+          450,
+          FONT_SIZE,
+          new PDType1Font(FontName.HELVETICA)
+      );
+
+      assertEquals(1, wrappedLines.size());
+      assertEquals("Word1    Word2", wrappedLines.getFirst());
+    }
+
+    @Test
+    void shouldSanitizeNullCharacter() {
+      final var textWithNull = "Text\u0000with\u0000null";
+
+      final var wrappedLines = textUtil.wrapLine(
+          textWithNull,
+          450,
+          FONT_SIZE,
+          new PDType1Font(FontName.HELVETICA)
+      );
+
+      assertEquals(1, wrappedLines.size());
+      assertEquals("Text with null", wrappedLines.getFirst());
+    }
+
+    @Test
+    void shouldSanitizeMultipleTypesOfControlCharacters() {
+      final var textWithMultiple = "A\tB\rC\fD\u0007E";
+
+      final var wrappedLines = textUtil.wrapLine(
+          textWithMultiple,
+          450,
+          FONT_SIZE,
+          new PDType1Font(FontName.HELVETICA)
+      );
+
+      assertEquals(1, wrappedLines.size());
+      assertEquals("A B C D E", wrappedLines.getFirst());
+    }
+
+    @Test
+    void shouldHandleEmptyString() {
+      final var wrappedLines = textUtil.wrapLine(
+          "",
+          450,
+          FONT_SIZE,
+          new PDType1Font(FontName.HELVETICA)
+      );
+
+      assertEquals(1, wrappedLines.size());
+      assertEquals("", wrappedLines.getFirst());
+    }
+
+    @Test
+    void shouldHandleOnlyControlCharacters() {
+      final var onlyControlChars = "\t\r\f\u0000\u0007";
+
+      final var wrappedLines = textUtil.wrapLine(
+          onlyControlChars,
+          450,
+          FONT_SIZE,
+          new PDType1Font(FontName.HELVETICA)
+      );
+
+      assertEquals(1, wrappedLines.size());
+      assertTrue(wrappedLines.getFirst().trim().isEmpty());
+    }
+
+    @Test
+    void shouldHandleTabsInLongTextThatNeedsWrapping() {
+      final var longTextWithTabs = "This is a long text\twith tabs\tthat should wrap\tto multiple lines when the width is limited";
+
+      final var wrappedLines = textUtil.wrapLine(
+          longTextWithTabs,
+          200,
+          FONT_SIZE,
+          new PDType1Font(FontName.HELVETICA)
+      );
+
+      assertTrue(wrappedLines.size() > 1);
+    }
+
+    @Test
+    void shouldPreserveNewlinesInCalculateTextHeight() {
+      final var textWithNewline = "Line 1\nLine 2";
+
+      final var actualHeight = textUtil.calculateTextHeight(
+          textWithNewline,
+          FONT_SIZE,
+          new PDType1Font(FontName.HELVETICA),
+          450
+      );
+
+      assertEquals(2 * FONT_SIZE * LINE_HEIGHT, actualHeight);
+    }
+  }
 }
