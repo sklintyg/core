@@ -86,6 +86,7 @@ public class ParsedHsaPerson {
   @NoArgsConstructor
   public static class Restrictions {
 
+    private String healthCareProfessionalLicenceCode;
     private String restrictionCode;
     private String restrictionName;
   }
@@ -96,6 +97,7 @@ public class ParsedHsaPerson {
   @NoArgsConstructor
   public static class Speciality {
 
+    private String healthCareProfessionalLicenceCode;
     private String specialityName;
     private String specialityCode;
   }

@@ -18,9 +18,11 @@
   },
   "addressInformation": {
     "residentialAddress": {
-      "postalAddress1": "LÖWENHJELM, Testvägen 2",
-      "postalCode": 11111,
-      "city": "Testborg"
+      "careOf": "Svensson",
+      "postalAddress1": "Storgatan 1",
+      "postalAddress2": "PL 1234",
+      "postalCode": 12345,
+      "city": "Småmåla"
     }
   },
   "isActive": false

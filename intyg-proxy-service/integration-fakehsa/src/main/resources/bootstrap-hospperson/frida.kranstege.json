@@ -1,13 +1,15 @@
 {
     "personalIdentityNumber": "197705232382",
-    "personalPrescriptionCode": "1234568",
+    "personalPrescriptionCode": "3570342",
     "specialities":[
         {
-            "specialityName":"Nukleärmedicin",
+          "healthCareProfessionalLicenceCode": "LK",
+          "specialityName":"Nukleärmedicin",
             "specialityCode":"74"
         },
         {
-            "specialityName":"Klinisk fysiologi",
+          "healthCareProfessionalLicenceCode": "LK",
+          "specialityName":"Klinisk fysiologi",
             "specialityCode":"3299"
         }
     ],
