@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
@@ -62,12 +63,33 @@ class TS8071CitizenAvailableFunctionsProviderTest {
   }
 
   @Test
-  void shouldShowSendFunctionWhenCertificateHasFullFunctionality() {
-    certificate = getLatestMajorVersionCertificate();
+  void shouldShowSendFunctionEnabledWhenCertificateHasFullFunctionality() {
+    certificate = getLatestMajorVersionCertificate(false);
 
     final var expectedSendFunction = CitizenAvailableFunction.builder()
         .type(CitizenAvailableFunctionType.SEND_CERTIFICATE)
         .enabled(true)
+        .title("Skicka intyg")
+        .name("Skicka intyg")
+        .body("Från den här sidan kan du välja att skicka ditt intyg digitalt till mottagaren. "
+            + "Endast mottagare som kan ta emot digitala intyg visas nedan.")
+        .build();
+
+    final var result = provider.of(certificate);
+
+    assertAll(
+        () -> assertEquals(expectedSendFunction, result.getFirst()),
+        () -> assertEquals(2, result.size())
+    );
+  }
+
+  @Test
+  void shouldShowSendFunctionDisabledWhenCertificateHasFullFunctionalityAndIsAlreadySent() {
+    certificate = getLatestMajorVersionCertificate(true);
+
+    final var expectedSendFunction = CitizenAvailableFunction.builder()
+        .type(CitizenAvailableFunctionType.SEND_CERTIFICATE)
+        .enabled(false)
         .title("Skicka intyg")
         .name("Skicka intyg")
         .body("Från den här sidan kan du välja att skicka ditt intyg digitalt till mottagaren. "
@@ -105,7 +127,7 @@ class TS8071CitizenAvailableFunctionsProviderTest {
 
   @Test
   void shouldShowPrintFunctionWhenCertificateHasFullFunctionality() {
-    certificate = getLatestMajorVersionCertificate();
+    certificate = getLatestMajorVersionCertificate(true);
 
     final var expectedPrintFunction = CitizenAvailableFunction.builder()
         .type(CitizenAvailableFunctionType.PRINT_CERTIFICATE)
@@ -147,7 +169,7 @@ class TS8071CitizenAvailableFunctionsProviderTest {
         ).build();
   }
 
-  private static MedicalCertificate getLatestMajorVersionCertificate() {
+  private static MedicalCertificate getLatestMajorVersionCertificate(boolean sent) {
     return ag7804CertificateBuilder()
         .certificateModel(
             CertificateModel.builder()
@@ -158,6 +180,10 @@ class TS8071CitizenAvailableFunctionsProviderTest {
                         .build()
                 )
                 .build()
-        ).build();
+        )
+        .sent(
+            sent ? Sent.builder().build() : null
+        )
+        .build();
   }
 }
