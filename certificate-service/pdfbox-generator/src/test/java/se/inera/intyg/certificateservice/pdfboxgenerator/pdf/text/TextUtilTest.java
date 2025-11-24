@@ -17,14 +17,24 @@ class TextUtilTest {
 
   public static final PDRectangle RECTANGLE_100_40 = new PDRectangle(100, 56);
   private static final String TEXT_LONGER_THAN_100_40 = "AAAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAA BBBBBBBBBBBBBB BBBBBBBBBBB CCCCCCCCCCCC CCCCCCCCCCCCCCC";
+  private static final String TEXT_LONGER_THAN_100_40W_WITH_TAB = "AAAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAA \tBBBBBBBBBBBBBB BBBBBBBBBBB CCCCCCCCCCCC \tCCCCCCCCCCCCC";
   private static final PdfField LONG_FIELD = PdfField.builder()
       .value(TEXT_LONGER_THAN_100_40)
       .id("ID1")
       .build();
+  private static final PdfField LONG_FIELD_WITH_TAB = PdfField.builder()
+      .value(TEXT_LONGER_THAN_100_40W_WITH_TAB)
+      .id("ID4")
+      .build();
   private static final String TEXT_SHORTER_THAN_100_40 = "A B C";
+  private static final String TEXT_SHORTER_THAN_100_40_WITH_TAB = "A\tB\tC";
   private static final PdfField SHORT_FIELD = PdfField.builder()
       .value(TEXT_SHORTER_THAN_100_40)
       .id("ID2")
+      .build();
+  private static final PdfField SHORT_FIELD_WITH_TAB = PdfField.builder()
+      .value(TEXT_SHORTER_THAN_100_40_WITH_TAB)
+      .id("ID3")
       .build();
   private static final int FONT_SIZE = 10;
   private static final float LINE_HEIGHT = 1.4F;
@@ -32,7 +42,7 @@ class TextUtilTest {
   TextUtil textUtil = new TextUtil();
 
   @Test
-  void shallCalculateTextHeightWithNewLines() {
+  void shouldCalculateTextHeightWithNewLines() {
     var actualHeight = textUtil.calculateTextHeight(
         "A short text that contains a new line \n with more text", FONT_SIZE,
         new PDType1Font(
@@ -41,7 +51,7 @@ class TextUtilTest {
   }
 
   @Test
-  void shallCalculateTextHeightWithoutNewLines() {
+  void shouldCalculateTextHeightWithoutNewLines() {
     var actualHeight = textUtil.calculateTextHeight(
         "A tiny bit longer text that does not contain a new line with more text", FONT_SIZE,
         new PDType1Font(
@@ -50,7 +60,7 @@ class TextUtilTest {
   }
 
   @Test
-  void shallCountLongLineAsMultipleLines() {
+  void shouldCountLongLineAsMultipleLines() {
     var actualHeight = textUtil.calculateTextHeight(
         "A very long text that fore sure needs to be split into multiple lines A very long text that fore sure needs to be split into multiple linesA very long text that fore sure needs to be split into multiple linesA very long text that fore sure needs to be split into multiple linesA very long text that fore sure needs to be split into multiple linesA very long text that fore sure needs to be split into multiple lines",
         FONT_SIZE,
@@ -60,7 +70,7 @@ class TextUtilTest {
   }
 
   @Test
-  void shallTakeFontSizeIntoConsideration() {
+  void shouldTakeFontSizeIntoConsideration() {
     var actualHeight = textUtil.calculateTextHeight(
         "A very long text that fore sure needs to be split into multiple lines A very long text that fore sure needs to be split into multiple linesA very long text that fore sure needs to be split into multiple linesA very long text that fore sure needs to be split into multiple linesA very long text that fore sure needs to be split into multiple linesA very long text that fore sure needs to be split into multiple lines",
         20,
@@ -70,7 +80,7 @@ class TextUtilTest {
   }
 
   @Test
-  void shallTakeFontTypeIntoConsideration() {
+  void shouldTakeFontTypeIntoConsideration() {
     final var text = "A long text that needs multiple lines for certain fonts fore sure needs to be split into multiple lines and that is gw";
     var timesFont = textUtil.calculateTextHeight(
         text,
@@ -149,22 +159,58 @@ class TextUtilTest {
   class HandleSpecialCharacters {
 
     @Test
-    void shouldHandleTabCharactersInText() {
-      final var textWithTab = "A\tB\tC";
-      final var field = PdfField.builder()
-          .value(textWithTab)
-          .id("ID_TAB")
-          .build();
+    void shouldReturnTrueIfOverflowingTextAndTryingToAddMore() {
+      final var rectangle = new PDRectangle(FONT_SIZE, FONT_SIZE);
 
       final var response = textUtil.getOverflowingLines(
-          List.of(),
-          field,
-          new PDRectangle(200, 56),
+          List.of(LONG_FIELD_WITH_TAB),
+          SHORT_FIELD,
+          rectangle,
+          12,
+          new PDType1Font(FontName.HELVETICA)
+      );
+
+      assertTrue(response.isPresent());
+    }
+
+    @Test
+    void shouldReturnTrueIfOverflowingTextInSeveralPartsAndTryingToAddMore() {
+
+      final var response = textUtil.getOverflowingLines(
+          List.of(SHORT_FIELD, LONG_FIELD_WITH_TAB),
+          LONG_FIELD,
+          RECTANGLE_100_40,
+          12,
+          new PDType1Font(FontName.HELVETICA)
+      );
+
+      assertTrue(response.isPresent());
+    }
+
+    @Test
+    void shouldReturnFalseIfNotOverflowingText() {
+      final var response = textUtil.getOverflowingLines(
+          List.of(SHORT_FIELD),
+          SHORT_FIELD,
+          RECTANGLE_100_40,
           12,
           new PDType1Font(FontName.HELVETICA)
       );
 
       assertFalse(response.isPresent());
+    }
+
+    @Test
+    void shouldReturnTrueIfNotOverflowingTextButAddingOverflow() {
+      final var response = textUtil.getOverflowingLines(
+          List.of(SHORT_FIELD_WITH_TAB),
+          LONG_FIELD,
+          RECTANGLE_100_40,
+          12,
+          new PDType1Font(FontName.HELVETICA)
+      );
+
+      assertTrue(response.isPresent());
     }
 
     @Test
@@ -194,44 +240,6 @@ class TextUtilTest {
 
       assertEquals(1, wrappedLines.size());
       assertEquals("Text with tab character", wrappedLines.getFirst());
-    }
-
-    @Test
-    void shouldHandleMultipleTabsInText() {
-      final var textWithMultipleTabs = "A\tB\tC";
-      final var field = PdfField.builder()
-          .value(textWithMultipleTabs)
-          .id("ID_MULTI_TAB")
-          .build();
-
-      final var response = textUtil.getOverflowingLines(
-          List.of(),
-          field,
-          new PDRectangle(200, 56),
-          12,
-          new PDType1Font(FontName.HELVETICA)
-      );
-
-      assertFalse(response.isPresent());
-    }
-
-    @Test
-    void shouldHandleTabsInLongText() {
-      final var longTextWithTabs = "AAAAAAAAAAA\tBBBBBBBBBBB\tCCCCCCCCCCC\tDDDDDDDDDDD";
-      final var field = PdfField.builder()
-          .value(longTextWithTabs)
-          .id("ID_LONG_TAB")
-          .build();
-
-      final var response = textUtil.getOverflowingLines(
-          List.of(),
-          field,
-          RECTANGLE_100_40,
-          12,
-          new PDType1Font(FontName.HELVETICA)
-      );
-
-      assertTrue(response.isPresent());
     }
 
     @Test
@@ -404,7 +412,7 @@ class TextUtilTest {
           new PDType1Font(FontName.HELVETICA)
       );
 
-      assertTrue(wrappedLines.size() > 1);
+      assertEquals(2, wrappedLines.size());
     }
 
     @Test
