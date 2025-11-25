@@ -229,4 +229,10 @@
       referencedTableName="dim_patient" referencedColumnNames="patient_key"
       constraintName="fk_event_patient"/>
   </changeSet>
+
+  <changeSet id="remove-unique-message-reminder-id" author="cs">
+    <dropUniqueConstraint
+      tableName="dim_message"
+      constraintName="message_reminder_id"/>
+  </changeSet>
 </databaseChangeLog>
