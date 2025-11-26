@@ -38,7 +38,9 @@ public class ElementConfigurationDateRange implements ElementConfiguration {
       throw new IllegalStateException("Wrong value type");
     }
     if (elementValue.isEmpty()) {
-      return Optional.of(ElementSimplifiedValueText.builder().text("Ej angivet").build());
+      return Optional.of(ElementSimplifiedValueText.builder()
+          .text("Ej angivet")
+          .build());
     }
 
     return Optional.of(

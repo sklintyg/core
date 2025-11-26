@@ -44,7 +44,9 @@ public class ElementConfigurationInteger implements ElementConfiguration {
     }
 
     if (elementValue.isEmpty()) {
-      return Optional.of(ElementSimplifiedValueText.builder().text("Ej angivet").build());
+      return Optional.of(ElementSimplifiedValueText.builder()
+          .text("Ej angivet")
+          .build());
     }
 
     return Optional.of(ElementSimplifiedValueText.builder()

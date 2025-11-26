@@ -54,7 +54,9 @@ public class ElementConfigurationCheckboxMultipleDate implements ElementConfigur
       throw new IllegalStateException("Wrong value type");
     }
     if (elementValue.isEmpty()) {
-      return Optional.of(ElementSimplifiedValueText.builder().text("Ej angivet").build());
+      return Optional.of(ElementSimplifiedValueText.builder()
+          .text("Ej angivet")
+          .build());
     }
 
     final var matchedDates = elementValue.dateList().stream()
