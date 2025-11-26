@@ -1,13 +1,13 @@
 package se.inera.intyg.intygproxyservice.integration.fakehsa.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -102,12 +102,14 @@ class FakeHsaRepositoryTest {
     }
 
     @Test
-    void shouldThrowIllegalArgumentExceptionIfEmployeeNotFound() {
+    void shouldReturnEmptyIfEmployeeNotFound() {
       final var parsedHsaPerson = ParsedHsaPerson.builder().personalIdentityNumber(PERSON_ID)
           .build();
 
       fakeHsaRepository.addParsedHsaPerson(parsedHsaPerson);
-      assertThrows(IllegalArgumentException.class, () -> fakeHsaRepository.getEmployee(HSA_ID));
+      assertEquals(Employee.builder()
+          .personInformation(Collections.emptyList())
+          .build(), fakeHsaRepository.getEmployee(HSA_ID));
     }
   }
 
@@ -186,11 +188,10 @@ class FakeHsaRepositoryTest {
 
 
     @Test
-    void shouldThrowIllegalArgumentExceptionIfUnitNotFound() {
+    void shouldReturnEmptyIfUnitNotFound() {
       final var parsedCareProvider = ParsedCareProvider.builder().id(HSA_ID).build();
       fakeHsaRepository.addParsedCareProvider(parsedCareProvider);
-      assertThrows(IllegalArgumentException.class,
-          () -> fakeHsaRepository.getHealthCareUnit(HSA_ID));
+      assertEquals(HealthCareUnit.builder().build(), fakeHsaRepository.getHealthCareUnit(HSA_ID));
     }
   }
 
