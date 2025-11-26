@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Value;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueTable;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
 
@@ -51,7 +52,7 @@ public class ElementConfigurationDiagnosis implements ElementConfiguration {
     }
 
     if (elementValue.isEmpty()) {
-      return Optional.empty();
+      return Optional.of(ElementSimplifiedValueText.builder().text("Ej angivet").build());
     }
 
     return Optional.of(

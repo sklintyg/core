@@ -10,6 +10,7 @@ import lombok.Value;
 import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueTable;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
@@ -70,7 +71,7 @@ public class ElementConfigurationCheckboxDateRangeList implements ElementConfigu
       throw new IllegalStateException("Wrong value type");
     }
     if (elementValue.isEmpty()) {
-      return Optional.empty();
+      return Optional.of(ElementSimplifiedValueText.builder().text("Ej angivet").build());
     }
     return Optional.of(
         ElementSimplifiedValueTable.builder()
