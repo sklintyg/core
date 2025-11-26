@@ -9,6 +9,7 @@ public class SpecialitiesConverter {
 
   public HCPSpecialityCodes convert(Speciality speciality) {
     return HCPSpecialityCodes.builder()
+        .healthCareProfessionalLicenceCode(speciality.getHealthCareProfessionalLicenceCode())
         .specialityName(speciality.getSpecialityName())
         .specialityCode(speciality.getSpecialityCode())
         .build();

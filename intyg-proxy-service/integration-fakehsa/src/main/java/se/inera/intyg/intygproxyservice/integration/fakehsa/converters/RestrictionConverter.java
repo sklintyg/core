@@ -9,6 +9,7 @@ public class RestrictionConverter {
 
   public Restriction convert(Restrictions restriction) {
     return Restriction.builder()
+        .healthCareProfessionalLicenceCode(restriction.getHealthCareProfessionalLicenceCode())
         .restrictionName(restriction.getRestrictionName())
         .restrictionCode(restriction.getRestrictionCode())
         .build();

@@ -1,0 +1,17 @@
+{
+  "personalIdentity": {
+    "extension": "200007312382"
+  },
+  "protectedPersonIndicator": false,
+  "testIndicator": false,
+  "primaryIdentity": true,
+  "name": {
+    "givenName": {
+      "name": "Görel"
+    },
+    "surname": {
+      "name": "Gärelsson"
+    }
+  },
+  "isActive": true
+}

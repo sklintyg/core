@@ -1,25 +1,24 @@
 {
   "personalIdentity": {
-    "extension": "199001092387"
+    "extension": "199608112380"
   },
   "protectedPersonIndicator": false,
   "testIndicator": false,
   "primaryIdentity": true,
   "name": {
     "givenName": {
-      "name": "Maj"
+      "name": "Petra"
     },
     "middleName": {},
     "surname": {
-      "name": "Pärsson"
+      "name": "Privat"
     }
   },
   "addressInformation": {
     "residentialAddress": {
-      "postalAddress1": "Utdelningsadress1, SIARGATAN 2",
-      "postalCode": 11827,
-      "city": "STOCKHOLM"
+      "postalAddress1": "Storgatan 14",
+      "postalCode": 83130,
+      "city": "Östersund"
     }
-  },
-  "isActive": true
+  }
 }

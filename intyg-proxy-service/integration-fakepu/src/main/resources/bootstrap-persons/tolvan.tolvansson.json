@@ -4,12 +4,14 @@
   },
   "protectedPersonIndicator": false,
   "testIndicator": false,
-  "primaryIdentity": false,
+  "primaryIdentity": true,
   "name": {
     "givenName": {
       "name": "Tolvan"
     },
-    "middleName": {},
+    "middleName": {
+      "name":"TPU"
+    },
     "surname": {
       "name": "Tolvansson"
     }

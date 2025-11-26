@@ -1,26 +1,24 @@
 {
   "personalIdentity": {
-    "extension": "199001092387"
+    "extension": "197309069289"
   },
   "protectedPersonIndicator": false,
   "testIndicator": false,
-  "primaryIdentity": false,
+  "primaryIdentity": true,
   "name": {
     "givenName": {
-      "name": "Nisse"
+      "name": "Nina Maria"
     },
     "middleName": {},
     "surname": {
-      "name": "Nilsson"
+      "name": "Greger"
     }
   },
   "addressInformation": {
     "residentialAddress": {
-      "careOf": "",
-      "postalAddress1": "Nisse Nilsson 1",
-      "postalAddress2": "",
-      "postalCode": 54321,
-      "city": "Nilscity"
+      "postalAddress1": "MENHAMMAR 2",
+      "postalCode": 17890,
+      "city": "EKERÖ"
     }
   },
   "isActive": true
