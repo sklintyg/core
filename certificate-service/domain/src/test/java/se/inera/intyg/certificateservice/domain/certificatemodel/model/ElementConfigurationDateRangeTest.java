@@ -1,12 +1,13 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueTable;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRange;
 
 class ElementConfigurationDateRangeTest {
@@ -34,11 +35,17 @@ class ElementConfigurationDateRangeTest {
   }
 
   @Test
-  void shouldReturnSimplifiedValueAsEmptyOptionalIfValueIsEmpty() {
+  void shouldReturnSimplifiedValueIfValueIsEmpty() {
+    final var expected = Optional.of(
+        ElementSimplifiedValueText.builder()
+            .text("Ej angivet")
+            .build()
+    );
+
     final var config = ElementConfigurationDateRange.builder().build();
     final var value = ElementValueDateRange.builder().build();
     final var simplified = config.simplified(value);
-    assertTrue(simplified.isEmpty());
+    assertEquals(expected, simplified);
   }
 
   @Test
