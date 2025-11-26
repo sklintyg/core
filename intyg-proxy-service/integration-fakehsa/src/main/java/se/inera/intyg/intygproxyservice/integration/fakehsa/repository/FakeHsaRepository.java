@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 import se.inera.intyg.intygproxyservice.integration.api.authorization.model.CredentialInformation;
@@ -31,6 +32,7 @@ import se.inera.intyg.intygproxyservice.integration.fakehsa.repository.model.Par
 
 @Repository
 @RequiredArgsConstructor
+@Slf4j
 public class FakeHsaRepository {
 
   private final EmployeeConverter employeeConverter;
@@ -47,10 +49,14 @@ public class FakeHsaRepository {
   private final Map<String, ParsedCareUnit> careUnitMap = new HashMap<>();
   private final Map<String, ParsedSubUnit> subUnitMap = new HashMap<>();
 
+
   public Employee getEmployee(String id) {
     final var employee = hsaPersonMap.get(id);
     if (employee == null) {
-      throw new IllegalArgumentException(String.format("Employee was not found, id: '%s'", id));
+      log.info("Employee was not found, id: '{}'", id);
+      return Employee.builder()
+          .personInformation(Collections.emptyList())
+          .build();
     }
     return employeeConverter.convert(employee);
   }
@@ -70,7 +76,8 @@ public class FakeHsaRepository {
     }
     final var parsedCareUnit = careUnitMap.get(id);
     if (parsedCareUnit == null) {
-      throw new IllegalArgumentException(String.format("Unit was not found, id: '%s'", id));
+      log.info("Unit was not found, id: '{}'", id);
+      return HealthCareUnit.builder().build();
     }
     return healthCareUnitConverter.convert(parsedCareUnit);
   }
