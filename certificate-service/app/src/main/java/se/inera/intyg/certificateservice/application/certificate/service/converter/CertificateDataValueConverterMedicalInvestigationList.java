@@ -20,6 +20,9 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.MedicalIn
 public class CertificateDataValueConverterMedicalInvestigationList implements
     CertificateDataValueConverter {
 
+  private static final String LEGACY_CODE = "SYNHABILITERING";
+  private static final String CURRENT_CODE = "SYNHABILITERINGEN";
+
   @Override
   public ElementType getType() {
     return ElementType.MEDICAL_INVESTIGATION_LIST;
@@ -80,7 +83,7 @@ public class CertificateDataValueConverterMedicalInvestigationList implements
                                 elementConfiguration,
                                 medicalInvestigation
                             ).investigationTypeId().value())
-                            .code(medicalInvestigation.investigationType().code())
+                            .code(mapLegacyCode(medicalInvestigation.investigationType().code()))
                             .build())
                         .build()
                 ).toList()
@@ -111,5 +114,12 @@ public class CertificateDataValueConverterMedicalInvestigationList implements
     final var value = (ElementValueMedicalInvestigationList) elementValue;
 
     return value.list() != null && !value.list().isEmpty();
+  }
+
+  private static String mapLegacyCode(String code) {
+    if (LEGACY_CODE.equals(code)) {
+      return CURRENT_CODE;
+    }
+    return code;
   }
 }
