@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
@@ -114,12 +115,13 @@ class ElementConfigurationMedicalInvestigationListTest {
                     .investigationTypeId(new FieldId(CODE_FIELD_ID))
                     .typeOptions(
                         List.of(
-                            // Only the current code is in typeOptions
                             new Code(currentCode, CODE_SYSTEM, displayName)
                         )
                     )
                     .dateId(new FieldId(DATE_ID))
                     .informationSourceId(new FieldId(INFORMATION_SOURCE_ID))
+                    .legacyMapping(
+                        Map.of("SYNHABILITERING", new Code(currentCode, CODE_SYSTEM, displayName)))
                     .build()
             )
         )
@@ -130,14 +132,12 @@ class ElementConfigurationMedicalInvestigationListTest {
         .code(legacyCode)
         .build();
 
-    // Should return the current code object when given legacy code
     final var result = configWithLegacySupport.code(valueWithLegacyCode);
 
     assertEquals(currentCode, result.code());
     assertEquals(displayName, result.displayName());
   }
-
-
+  
   @Nested
   class EmptyValue {
 

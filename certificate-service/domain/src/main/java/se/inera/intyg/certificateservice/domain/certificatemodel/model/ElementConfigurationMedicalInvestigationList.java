@@ -80,12 +80,6 @@ public class ElementConfigurationMedicalInvestigationList implements ElementConf
 
   private Optional<Code> findLegacyCodeMapping(MedicalInvestigationConfig config,
       String codeValue) {
-    if ("SYNHABILITERING".equals(codeValue)) {
-      return config.typeOptions().stream()
-          .filter(typeOption -> "SYNHABILITERINGEN".equals(typeOption.code()))
-          .findFirst();
-    }
-    
-    return Optional.empty();
+    return Optional.ofNullable(config.legacyMapping().get(codeValue));
   }
 }

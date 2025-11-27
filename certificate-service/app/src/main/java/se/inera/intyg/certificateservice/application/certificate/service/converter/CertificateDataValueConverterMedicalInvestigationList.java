@@ -55,37 +55,34 @@ public class CertificateDataValueConverterMedicalInvestigationList implements
             isValueDefined(valueForConversion)
                 ? ((ElementValueMedicalInvestigationList) valueForConversion).list()
                 .stream()
-                .map(medicalInvestigation ->
-                    CertificateDataValueMedicalInvestigation.builder()
-                        .id(getMedicalInvestigationConfig(
-                            valueForConversion,
-                            elementConfiguration,
-                            medicalInvestigation).id().value())
-                        .date(CertificateDataValueDate.builder()
-                            .id(getMedicalInvestigationConfig(
-                                valueForConversion,
-                                elementConfiguration,
-                                medicalInvestigation).dateId().value()
-                            )
-                            .date(medicalInvestigation.date().date())
-                            .build())
-                        .informationSource(CertificateDataValueText.builder()
-                            .id(getMedicalInvestigationConfig(
-                                valueForConversion,
-                                elementConfiguration,
-                                medicalInvestigation
-                            ).informationSourceId().value())
-                            .text(medicalInvestigation.informationSource().text())
-                            .build())
-                        .investigationType(CertificateDataValueCode.builder()
-                            .id(getMedicalInvestigationConfig(
-                                valueForConversion,
-                                elementConfiguration,
-                                medicalInvestigation
-                            ).investigationTypeId().value())
-                            .code(mapLegacyCode(medicalInvestigation.investigationType().code()))
-                            .build())
-                        .build()
+                .map(medicalInvestigation -> {
+                      final var medicalInvestigationConfig = getMedicalInvestigationConfig(
+                          valueForConversion,
+                          elementConfiguration,
+                          medicalInvestigation
+                      );
+
+                      return CertificateDataValueMedicalInvestigation.builder()
+                          .id(medicalInvestigationConfig.id().value())
+                          .date(CertificateDataValueDate.builder()
+                              .id(medicalInvestigationConfig.dateId().value())
+                              .date(medicalInvestigation.date().date())
+                              .build())
+                          .informationSource(CertificateDataValueText.builder()
+                              .id(medicalInvestigationConfig.informationSourceId().value())
+                              .text(medicalInvestigation.informationSource().text())
+                              .build())
+                          .investigationType(CertificateDataValueCode.builder()
+                              .id(medicalInvestigationConfig.investigationTypeId().value())
+                              .code(
+                                  mapLegacyCode(
+                                      medicalInvestigationConfig,
+                                      medicalInvestigation.investigationType().code()
+                                  )
+                              )
+                              .build())
+                          .build();
+                    }
                 ).toList()
                 : Collections.emptyList())
         .build();
@@ -116,10 +113,12 @@ public class CertificateDataValueConverterMedicalInvestigationList implements
     return value.list() != null && !value.list().isEmpty();
   }
 
-  private static String mapLegacyCode(String code) {
-    if (LEGACY_CODE.equals(code)) {
-      return CURRENT_CODE;
+  private static String mapLegacyCode(MedicalInvestigationConfig medicalInvestigationConfig,
+      String code) {
+    if (code != null && medicalInvestigationConfig.legacyMapping().containsKey(code)) {
+      return medicalInvestigationConfig.legacyMapping().get(code).code();
     }
+    
     return code;
   }
 }

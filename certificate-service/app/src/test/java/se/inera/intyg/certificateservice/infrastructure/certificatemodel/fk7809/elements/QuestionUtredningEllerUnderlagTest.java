@@ -85,6 +85,7 @@ class QuestionUtredningEllerUnderlagTest {
                 .typeOptions(codes)
                 .min(null)
                 .max(Period.ofDays(0))
+                .legacyMapping(Map.of("SYNHABILITERING", SYNHABILITERINGEN))
                 .build(),
             MedicalInvestigationConfig.builder()
                 .id(new FieldId("medicalInvestigation2"))
@@ -94,6 +95,7 @@ class QuestionUtredningEllerUnderlagTest {
                 .typeOptions(codes)
                 .min(null)
                 .max(Period.ofDays(0))
+                .legacyMapping(Map.of("SYNHABILITERING", SYNHABILITERINGEN))
                 .build(),
             MedicalInvestigationConfig.builder()
                 .id(new FieldId("medicalInvestigation3"))
@@ -103,6 +105,7 @@ class QuestionUtredningEllerUnderlagTest {
                 .typeOptions(codes)
                 .min(null)
                 .max(Period.ofDays(0))
+                .legacyMapping(Map.of("SYNHABILITERING", SYNHABILITERINGEN))
                 .build()
         ))
         .build();
@@ -254,5 +257,4 @@ class QuestionUtredningEllerUnderlagTest {
         )
     );
   }
-
 }

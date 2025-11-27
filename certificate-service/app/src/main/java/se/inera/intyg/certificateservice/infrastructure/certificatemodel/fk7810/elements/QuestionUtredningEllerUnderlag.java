@@ -61,6 +61,7 @@ public class QuestionUtredningEllerUnderlag {
   public static final PdfFieldId INVESTIGATION_PDF_FIELD_ID_3 = new PdfFieldId(
       "form1[0].#subform[0].lbx_listVardeUtredningUnderlag_3[0]");
   public static final int LIMIT = 53;
+  private static final String SYNHABILITERING = "SYNHABILITERING";
 
   private QuestionUtredningEllerUnderlag() {
     throw new IllegalStateException("Utility class");
@@ -198,6 +199,7 @@ public class QuestionUtredningEllerUnderlag {
                 OVRIGT
             )
         )
+        .legacyMapping(Map.of(SYNHABILITERING, SYNHABILITERINGEN))
         .min(null)
         .max(Period.ofDays(0))
         .build();

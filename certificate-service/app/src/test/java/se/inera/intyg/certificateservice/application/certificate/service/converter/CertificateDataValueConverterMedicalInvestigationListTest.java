@@ -2,11 +2,13 @@ package se.inera.intyg.certificateservice.application.certificate.service.conver
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.SYNHABILITERINGEN;
 
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueCode;
@@ -281,6 +283,7 @@ class CertificateDataValueConverterMedicalInvestigationListTest {
                     .typeOptions(List.of(
                         new Code(currentCode, "CODE_SYSTEM", "Display Name")
                     ))
+                    .legacyMapping(Map.of(legacyCode, SYNHABILITERINGEN))
                     .build()
             ))
             .build())
