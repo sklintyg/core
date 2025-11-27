@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.Correction;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueTable;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueVisualAcuities;
 import se.inera.intyg.certificateservice.domain.certificate.model.VisualAcuity;
 
@@ -79,5 +80,31 @@ class ElementConfigurationVisualAcuitiesTest {
     );
 
     assertEquals(expected, CONFIG.simplified(VALUE));
+  }
+
+  @Test
+  void shouldReturnSimplifiedValueIfEmpty() {
+    final var expected = Optional.of(
+        ElementSimplifiedValueText.builder()
+            .text("Ej angivet")
+            .build()
+    );
+
+    final var emptyValue = ElementValueVisualAcuities.builder()
+        .rightEye(VisualAcuity.builder()
+            .withoutCorrection(null)
+            .withCorrection(null)
+            .build())
+        .leftEye(VisualAcuity.builder()
+            .withoutCorrection(null)
+            .withCorrection(null)
+            .build())
+        .binocular(VisualAcuity.builder()
+            .withoutCorrection(null)
+            .withCorrection(null)
+            .build())
+        .build();
+
+    assertEquals(expected, CONFIG.simplified(emptyValue));
   }
 }

@@ -1,12 +1,13 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueList;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCodeList;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
@@ -68,19 +69,29 @@ class ElementConfigurationCheckboxMultipleCodeTest {
   }
 
   @Test
-  void shouldReturnEmptyOptionalForNull() {
-    final var config = ElementConfigurationCheckboxMultipleCode.builder()
-        .build();
-
-    assertTrue(config.simplified(config.emptyValue()).isEmpty());
-  }
-
-  @Test
-  void shouldReturnEmptyOptionalForEmptyList() {
+  void shouldReturnSimplifiedValueIfEmptyList() {
+    final var expected = Optional.of(
+        ElementSimplifiedValueText.builder()
+            .text("Ej angivet")
+            .build()
+    );
     final var config = ElementConfigurationCheckboxMultipleCode.builder()
         .list(Collections.emptyList())
         .build();
 
-    assertTrue(config.simplified(config.emptyValue()).isEmpty());
+    assertEquals(expected, config.simplified(config.emptyValue()));
+  }
+
+  @Test
+  void shouldReturnSimplifiedValueIfEmpty() {
+    final var expected = Optional.of(
+        ElementSimplifiedValueText.builder()
+            .text("Ej angivet")
+            .build()
+    );
+    final var config = ElementConfigurationCheckboxMultipleCode.builder()
+        .build();
+
+    assertEquals(expected, config.simplified(config.emptyValue()));
   }
 }

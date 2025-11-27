@@ -5,9 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.DateRange;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueTable;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateRangeList;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 
@@ -67,11 +69,17 @@ class ElementConfigurationCheckboxDateRangeListTest {
   }
 
   @Test
-  void shouldReturnSimplifiedValueAsEmptyOptionalIfValueIsEmpty() {
+  void shouldReturnSimplifiedValueIfEmpty() {
+    final var expected = Optional.of(
+        ElementSimplifiedValueText.builder()
+            .text("Ej angivet")
+            .build()
+    );
     final var config = ElementConfigurationCheckboxDateRangeList.builder().build();
     final var value = ElementValueDateRangeList.builder().dateRangeList(List.of()).build();
     final var simplified = config.simplified(value);
-    assertTrue(simplified.isEmpty());
+
+    assertEquals(expected, simplified);
   }
 
   @Test

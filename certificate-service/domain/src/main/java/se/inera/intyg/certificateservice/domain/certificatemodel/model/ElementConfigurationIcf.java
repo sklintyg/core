@@ -41,7 +41,9 @@ public class ElementConfigurationIcf implements ElementConfiguration {
     }
 
     if (elementValue.isEmpty()) {
-      return Optional.empty();
+      return Optional.of(ElementSimplifiedValueText.builder()
+          .text("Ej angivet")
+          .build());
     }
 
     if (elementValue.icfCodes().isEmpty()) {

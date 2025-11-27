@@ -199,8 +199,17 @@ class PrintCertificateQuestionConverterTest {
   }
 
   @Test
-  void shouldReturnOptionalEmptyIfValueIsEmpty() {
-    final var expected = Optional.empty();
+  void shouldReturnSimplifiedValueIfEmpty() {
+    final var expected = Optional.of(
+        PrintCertificateQuestionDTO.builder()
+            .id("1")
+            .name("Beräknat födelsedatum")
+            .value(ElementSimplifiedValueTextDTO.builder()
+                .text("Ej angivet")
+                .build())
+            .subquestions(Collections.emptyList())
+            .build()
+    );
 
     final var response = printCertificateQuestionConverter.convert(
         ELEMENT_SPECIFICATION, CERTIFICATE_EMPTY, OPTIONS

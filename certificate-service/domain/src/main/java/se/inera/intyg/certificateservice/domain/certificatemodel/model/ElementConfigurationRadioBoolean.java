@@ -39,7 +39,9 @@ public class ElementConfigurationRadioBoolean implements ElementConfiguration {
     }
 
     if (elementValue.isEmpty()) {
-      return Optional.empty();
+      return Optional.of(ElementSimplifiedValueText.builder()
+          .text("Ej angivet")
+          .build());
     }
 
     return Optional.of(
