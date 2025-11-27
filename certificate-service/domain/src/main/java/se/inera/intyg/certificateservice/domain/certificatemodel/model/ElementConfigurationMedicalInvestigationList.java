@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.domain.certificatemodel.model;
 
 import java.util.List;
+import java.util.Optional;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
@@ -60,17 +61,25 @@ public class ElementConfigurationMedicalInvestigationList implements ElementConf
   }
 
   public Code code(ElementValueCode code) {
-    return list.stream()
+    final var config = list.stream()
         .filter(row -> row.investigationTypeId().equals(code.codeId()))
         .findFirst()
         .orElseThrow(() -> new IllegalArgumentException(
                 "Cannot find matching medical investigation with codeId '%s'".formatted(code.codeId())
             )
-        ).typeOptions().stream()
+        );
+
+    return config.typeOptions().stream()
         .filter(typeOption -> typeOption.code().equals(code.code()))
         .findFirst()
+        .or(() -> findLegacyCodeMapping(config, code.code()))
         .orElseThrow(() -> new IllegalArgumentException(
             "Cannot find matching type option for code '%s'".formatted(code.code()))
         );
+  }
+
+  private Optional<Code> findLegacyCodeMapping(MedicalInvestigationConfig config,
+      String codeValue) {
+    return Optional.ofNullable(config.legacyMapping().get(codeValue));
   }
 }

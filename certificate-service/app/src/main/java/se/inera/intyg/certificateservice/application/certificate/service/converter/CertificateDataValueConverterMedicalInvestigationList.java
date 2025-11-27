@@ -20,6 +20,9 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.MedicalIn
 public class CertificateDataValueConverterMedicalInvestigationList implements
     CertificateDataValueConverter {
 
+  private static final String LEGACY_CODE = "SYNHABILITERING";
+  private static final String CURRENT_CODE = "SYNHABILITERINGEN";
+
   @Override
   public ElementType getType() {
     return ElementType.MEDICAL_INVESTIGATION_LIST;
@@ -52,37 +55,34 @@ public class CertificateDataValueConverterMedicalInvestigationList implements
             isValueDefined(valueForConversion)
                 ? ((ElementValueMedicalInvestigationList) valueForConversion).list()
                 .stream()
-                .map(medicalInvestigation ->
-                    CertificateDataValueMedicalInvestigation.builder()
-                        .id(getMedicalInvestigationConfig(
-                            valueForConversion,
-                            elementConfiguration,
-                            medicalInvestigation).id().value())
-                        .date(CertificateDataValueDate.builder()
-                            .id(getMedicalInvestigationConfig(
-                                valueForConversion,
-                                elementConfiguration,
-                                medicalInvestigation).dateId().value()
-                            )
-                            .date(medicalInvestigation.date().date())
-                            .build())
-                        .informationSource(CertificateDataValueText.builder()
-                            .id(getMedicalInvestigationConfig(
-                                valueForConversion,
-                                elementConfiguration,
-                                medicalInvestigation
-                            ).informationSourceId().value())
-                            .text(medicalInvestigation.informationSource().text())
-                            .build())
-                        .investigationType(CertificateDataValueCode.builder()
-                            .id(getMedicalInvestigationConfig(
-                                valueForConversion,
-                                elementConfiguration,
-                                medicalInvestigation
-                            ).investigationTypeId().value())
-                            .code(medicalInvestigation.investigationType().code())
-                            .build())
-                        .build()
+                .map(medicalInvestigation -> {
+                      final var medicalInvestigationConfig = getMedicalInvestigationConfig(
+                          valueForConversion,
+                          elementConfiguration,
+                          medicalInvestigation
+                      );
+
+                      return CertificateDataValueMedicalInvestigation.builder()
+                          .id(medicalInvestigationConfig.id().value())
+                          .date(CertificateDataValueDate.builder()
+                              .id(medicalInvestigationConfig.dateId().value())
+                              .date(medicalInvestigation.date().date())
+                              .build())
+                          .informationSource(CertificateDataValueText.builder()
+                              .id(medicalInvestigationConfig.informationSourceId().value())
+                              .text(medicalInvestigation.informationSource().text())
+                              .build())
+                          .investigationType(CertificateDataValueCode.builder()
+                              .id(medicalInvestigationConfig.investigationTypeId().value())
+                              .code(
+                                  mapLegacyCode(
+                                      medicalInvestigationConfig,
+                                      medicalInvestigation.investigationType().code()
+                                  )
+                              )
+                              .build())
+                          .build();
+                    }
                 ).toList()
                 : Collections.emptyList())
         .build();
@@ -111,5 +111,14 @@ public class CertificateDataValueConverterMedicalInvestigationList implements
     final var value = (ElementValueMedicalInvestigationList) elementValue;
 
     return value.list() != null && !value.list().isEmpty();
+  }
+
+  private static String mapLegacyCode(MedicalInvestigationConfig medicalInvestigationConfig,
+      String code) {
+    if (code != null && medicalInvestigationConfig.legacyMapping().containsKey(code)) {
+      return medicalInvestigationConfig.legacyMapping().get(code).code();
+    }
+    
+    return code;
   }
 }

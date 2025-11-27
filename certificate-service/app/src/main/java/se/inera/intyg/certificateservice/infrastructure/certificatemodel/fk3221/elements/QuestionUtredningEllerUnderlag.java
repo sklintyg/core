@@ -63,6 +63,7 @@ public class QuestionUtredningEllerUnderlag {
       "form1[0].#subform[0].lbx_listVardeUnderlagUtredning3[0]");
 
   public static final int LIMIT = 53;
+  private static final String SYNHABILITERING = "SYNHABILITERING";
 
   private QuestionUtredningEllerUnderlag() {
     throw new IllegalStateException("Utility class");
@@ -202,6 +203,7 @@ public class QuestionUtredningEllerUnderlag {
                 OVRIGT
             )
         )
+        .legacyMapping(Map.of(SYNHABILITERING, SYNHABILITERINGEN))
         .min(null)
         .max(Period.ofDays(0))
         .build();

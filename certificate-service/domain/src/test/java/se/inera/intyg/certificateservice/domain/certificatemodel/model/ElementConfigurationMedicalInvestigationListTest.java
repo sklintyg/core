@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
@@ -99,6 +100,44 @@ class ElementConfigurationMedicalInvestigationListTest {
     );
   }
 
+  @Test
+  void shallMapLegacyCodeSynhabiliteringToCurrentCode() {
+    final var legacyCode = "SYNHABILITERING";
+    final var currentCode = "SYNHABILITERINGEN";
+    final var displayName = "Underlag från synhabiliteringen";
+
+    final var configWithLegacySupport = ElementConfigurationMedicalInvestigationList.builder()
+        .id(new FieldId(FIELD_ID))
+        .list(
+            List.of(
+                MedicalInvestigationConfig.builder()
+                    .id(new FieldId(ROW_FIELD_ID))
+                    .investigationTypeId(new FieldId(CODE_FIELD_ID))
+                    .typeOptions(
+                        List.of(
+                            new Code(currentCode, CODE_SYSTEM, displayName)
+                        )
+                    )
+                    .dateId(new FieldId(DATE_ID))
+                    .informationSourceId(new FieldId(INFORMATION_SOURCE_ID))
+                    .legacyMapping(
+                        Map.of("SYNHABILITERING", new Code(currentCode, CODE_SYSTEM, displayName)))
+                    .build()
+            )
+        )
+        .build();
+
+    final var valueWithLegacyCode = ElementValueCode.builder()
+        .codeId(new FieldId(CODE_FIELD_ID))
+        .code(legacyCode)
+        .build();
+
+    final var result = configWithLegacySupport.code(valueWithLegacyCode);
+
+    assertEquals(currentCode, result.code());
+    assertEquals(displayName, result.displayName());
+  }
+  
   @Nested
   class EmptyValue {
 
@@ -137,5 +176,32 @@ class ElementConfigurationMedicalInvestigationListTest {
 
       assertEquals(emptyValue, CONFIG.emptyValue());
     }
+  }
+
+  @Test
+  void shallThrowIfLegacyMappingReturnsEmpty() {
+    final var configWithNoMatchingCodes = ElementConfigurationMedicalInvestigationList.builder()
+        .id(new FieldId(FIELD_ID))
+        .list(
+            List.of(
+                MedicalInvestigationConfig.builder()
+                    .id(new FieldId(ROW_FIELD_ID))
+                    .investigationTypeId(new FieldId(CODE_FIELD_ID))
+                    .typeOptions(List.of())
+                    .dateId(new FieldId(DATE_ID))
+                    .informationSourceId(new FieldId(INFORMATION_SOURCE_ID))
+                    .build()
+            )
+        )
+        .build();
+
+    final var valueWithUnknownCode = ElementValueCode.builder()
+        .codeId(new FieldId(CODE_FIELD_ID))
+        .code("UNKNOWN_CODE")
+        .build();
+
+    assertThrows(IllegalArgumentException.class,
+        () -> configWithNoMatchingCodes.code(valueWithUnknownCode)
+    );
   }
 }

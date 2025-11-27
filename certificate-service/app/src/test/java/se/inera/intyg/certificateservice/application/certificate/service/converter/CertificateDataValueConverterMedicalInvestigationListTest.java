@@ -2,11 +2,13 @@ package se.inera.intyg.certificateservice.application.certificate.service.conver
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.common.codesystems.CodeSystemKvFkmu0005.SYNHABILITERINGEN;
 
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.application.certificate.dto.value.CertificateDataValueCode;
@@ -74,20 +76,20 @@ class CertificateDataValueConverterMedicalInvestigationListTest {
       .list(
           List.of(
               CertificateDataValueMedicalInvestigation.builder()
-                  .id(CONFIGURATION.list().get(0).id().value())
+                  .id(CONFIGURATION.list().getFirst().id().value())
                   .date(
                       CertificateDataValueDate.builder()
-                          .id(CONFIGURATION.list().get(0).dateId().value())
+                          .id(CONFIGURATION.list().getFirst().dateId().value())
                           .build()
                   )
                   .investigationType(
                       CertificateDataValueCode.builder()
-                          .id(CONFIGURATION.list().get(0).investigationTypeId().value())
+                          .id(CONFIGURATION.list().getFirst().investigationTypeId().value())
                           .build()
                   )
                   .informationSource(
                       CertificateDataValueText.builder()
-                          .id(CONFIGURATION.list().get(0).informationSourceId().value())
+                          .id(CONFIGURATION.list().getFirst().informationSourceId().value())
                           .build()
                   )
                   .build(),
@@ -208,7 +210,7 @@ class CertificateDataValueConverterMedicalInvestigationListTest {
     final var result = converter.convert(ELEMENT_SPECIFICATION, ELEMENT_VALUE);
     final var medicalInvestigationResult = (CertificateDataValueMedicalInvestigationList) result;
 
-    assertEquals("ID_1", medicalInvestigationResult.getList().get(0).getId());
+    assertEquals("ID_1", medicalInvestigationResult.getList().getFirst().getId());
   }
 
   @Test
@@ -216,7 +218,7 @@ class CertificateDataValueConverterMedicalInvestigationListTest {
     final var result = converter.convert(ELEMENT_SPECIFICATION, ELEMENT_VALUE);
     final var medicalInvestigationResult = (CertificateDataValueMedicalInvestigationList) result;
 
-    assertEquals("DATE_ID_1", medicalInvestigationResult.getList().get(0).getDate().getId());
+    assertEquals("DATE_ID_1", medicalInvestigationResult.getList().getFirst().getDate().getId());
   }
 
   @Test
@@ -224,7 +226,8 @@ class CertificateDataValueConverterMedicalInvestigationListTest {
     final var result = converter.convert(ELEMENT_SPECIFICATION, ELEMENT_VALUE);
     final var medicalInvestigationResult = (CertificateDataValueMedicalInvestigationList) result;
 
-    assertEquals(LocalDate.now(), medicalInvestigationResult.getList().get(0).getDate().getDate());
+    assertEquals(LocalDate.now(),
+        medicalInvestigationResult.getList().getFirst().getDate().getDate());
   }
 
   @Test
@@ -233,7 +236,7 @@ class CertificateDataValueConverterMedicalInvestigationListTest {
     final var medicalInvestigationResult = (CertificateDataValueMedicalInvestigationList) result;
 
     assertEquals("SOURCE_ID_1",
-        medicalInvestigationResult.getList().get(0).getInformationSource().getId());
+        medicalInvestigationResult.getList().getFirst().getInformationSource().getId());
   }
 
   @Test
@@ -242,7 +245,7 @@ class CertificateDataValueConverterMedicalInvestigationListTest {
     final var medicalInvestigationResult = (CertificateDataValueMedicalInvestigationList) result;
 
     assertEquals("TEXT",
-        medicalInvestigationResult.getList().get(0).getInformationSource().getText());
+        medicalInvestigationResult.getList().getFirst().getInformationSource().getText());
   }
 
   @Test
@@ -251,7 +254,7 @@ class CertificateDataValueConverterMedicalInvestigationListTest {
     final var medicalInvestigationResult = (CertificateDataValueMedicalInvestigationList) result;
 
     assertEquals("TYPE_ID_1",
-        medicalInvestigationResult.getList().get(0).getInvestigationType().getId());
+        medicalInvestigationResult.getList().getFirst().getInvestigationType().getId());
   }
 
   @Test
@@ -260,6 +263,57 @@ class CertificateDataValueConverterMedicalInvestigationListTest {
     final var medicalInvestigationResult = (CertificateDataValueMedicalInvestigationList) result;
 
     assertEquals("CODE",
-        medicalInvestigationResult.getList().get(0).getInvestigationType().getCode());
+        medicalInvestigationResult.getList().getFirst().getInvestigationType().getCode());
+  }
+
+  @Test
+  void shouldMapLegacyCodeToCurrentCode() {
+    final var legacyCode = "SYNHABILITERING";
+    final var currentCode = "SYNHABILITERINGEN";
+
+    final var elementSpecification = ElementSpecification.builder()
+        .configuration(ElementConfigurationMedicalInvestigationList.builder()
+            .id(new FieldId("ID"))
+            .list(List.of(
+                MedicalInvestigationConfig.builder()
+                    .id(new FieldId("ID_1"))
+                    .investigationTypeId(new FieldId("TYPE_ID_1"))
+                    .informationSourceId(new FieldId("SOURCE_ID_1"))
+                    .dateId(new FieldId("DATE_ID_1"))
+                    .typeOptions(List.of(
+                        new Code(currentCode, "CODE_SYSTEM", "Display Name")
+                    ))
+                    .legacyMapping(Map.of(legacyCode, SYNHABILITERINGEN))
+                    .build()
+            ))
+            .build())
+        .build();
+
+    final var elementValue = ElementValueMedicalInvestigationList.builder()
+        .id(new FieldId("ID"))
+        .list(List.of(
+            MedicalInvestigation.builder()
+                .id(new FieldId("ID_1"))
+                .investigationType(ElementValueCode.builder()
+                    .codeId(new FieldId("TYPE_ID_1"))
+                    .code(legacyCode)
+                    .build())
+                .date(ElementValueDate.builder()
+                    .dateId(new FieldId("DATE_ID_1"))
+                    .date(LocalDate.now())
+                    .build())
+                .informationSource(ElementValueText.builder()
+                    .textId(new FieldId("SOURCE_ID_1"))
+                    .text("Source")
+                    .build())
+                .build()
+        ))
+        .build();
+
+    final var result = converter.convert(elementSpecification, elementValue);
+    final var medicalInvestigationResult = (CertificateDataValueMedicalInvestigationList) result;
+
+    assertEquals(currentCode,
+        medicalInvestigationResult.getList().getFirst().getInvestigationType().getCode());
   }
 }
