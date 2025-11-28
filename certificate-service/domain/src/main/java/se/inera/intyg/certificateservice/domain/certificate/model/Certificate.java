@@ -129,6 +129,14 @@ public interface Certificate {
 
   List<Relation> children();
 
+  default boolean isReplaced() {
+    return false;
+  }
+
+  default boolean isComplemented() {
+    return false;
+  }
+
   List<Message> messages();
 
   Forwarded forwarded();

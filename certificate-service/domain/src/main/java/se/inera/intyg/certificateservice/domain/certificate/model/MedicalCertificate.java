@@ -515,6 +515,22 @@ public class MedicalCertificate implements Certificate {
   }
 
   @Override
+  public boolean isReplaced() {
+    return this.children().stream()
+        .anyMatch(relation -> relation.type() == RelationType.REPLACE
+            && relation.certificate().status() == Status.SIGNED
+        );
+  }
+
+  @Override
+  public boolean isComplemented() {
+    return this.children().stream()
+        .anyMatch(relation -> relation.type() == RelationType.COMPLEMENT
+            && relation.certificate().status() == Status.SIGNED
+        );
+  }
+
+  @Override
   public void answerComplement(ActionEvaluation actionEvaluation, Content content) {
     this.messages = this.messages.stream()
         .peek(message -> {

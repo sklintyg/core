@@ -20,6 +20,10 @@ public class DefaultCitizenAvailableFunctionsProvider implements CitizenAvailabl
       return List.of(createPrintFunction(certificate));
     }
 
+    if (certificate.isReplaced() || certificate.isComplemented()) {
+      return List.of();
+    }
+
     return List.of(
         createSendFunction(certificate),
         createPrintFunction(certificate)
