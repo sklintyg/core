@@ -41,7 +41,6 @@ public class InMemoryCertificateModelRepository implements CertificateModelRepos
     });
 
     final var certificateTypeToVersionReference = certificateModelMap.values().stream()
-        .filter(filterActiveCertificateModels())
         .collect(
             Collectors.groupingBy(
                 model -> model.id().type(),
@@ -50,18 +49,14 @@ public class InMemoryCertificateModelRepository implements CertificateModelRepos
             )
         );
 
-    certificateModelMap.forEach((key, certificateModel) -> {
-      if (!certificateTypeToVersionReference.containsKey(certificateModel.id().type())) {
-        return;
-      }
-
-      certificateModelMap.put(
-          key,
-          certificateModel.withCertificateVersions(
-              certificateTypeToVersionReference.get(certificateModel.id().type())
-          )
-      );
-    });
+    certificateModelMap.forEach((key, certificateModel) ->
+        certificateModelMap.put(
+            key,
+            certificateModel.withCertificateVersions(
+                certificateTypeToVersionReference.get(certificateModel.id().type())
+            )
+        )
+    );
   }
 
   private Map<CertificateModelId, CertificateModel> getCertificateModelMap() {
