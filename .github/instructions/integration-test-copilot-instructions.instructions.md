@@ -2,6 +2,8 @@
 
 This document describes how integration tests are created and structured in the project.
 
+**Important**: Before proceeding with any workflow, ensure the integration test specification file exists and is complete. Use the `specifications/integration-test-specification-template.spec.md` as the format. If a specific spec file is provided, use that; otherwise, use the template. The specification must include all required details (certificate type, versions, test scenarios, test data, access settings) to avoid missing information. Do not proceed without a complete spec.
+
 Use the `specifications/integration-test-specification-template.spec.md` to structure your input for creating new integration tests or updating existing ones.
 
 ## Generating the Specification
@@ -33,47 +35,45 @@ Default test scenarios to include (check as appropriate):
 
 ## Integration Test Workflows
 
-This section outlines the workflows for different integration test-related tasks. Each workflow specifies what input the developer provides, what the agent does, and how iteration works. Refer to the numbered sections below for detailed instructions.
-
-**Important**: For each workflow, if the agent is missing necessary information (e.g., certificate type, versions, specific test data), it must ask the developer before proceeding or generating code.
+This section outlines the workflows for different integration test-related tasks. Each workflow specifies what input the agent uses from the specification, what the agent does, and how iteration works. Refer to the numbered sections below for detailed instructions.
 
 - **Workflow Creating Integration Tests for a New Certificate Type**:
-  - **Developer Input**: Certificate type (e.g., FK7804), active version, recipient, code, test data (e.g., sample ElementData for filling), and access settings.
+  - **Input**: Certificate type, active version, recipient, code, test data, and access settings from specification file.
   - **Agent Actions**: 
     - Create the test folder structure under `integrationtest/{type}/`.
     - Generate `{TYPE}TestSetup.java` with constants and builder method.
     - Create `{TYPE}ActiveIT.java` extending ActiveCertificatesIT with nested test classes.
     - Create `{TYPE}CitizenIT.java` and `{TYPE}InactiveIT.java` similarly.
     - Ensure proper imports and setup/teardown methods.
-  - **Iteration**: Agent asks for missing test data or access settings; developer reviews generated code.
+  - **Iteration**: If missing test data or access settings, add TODO comments; developer reviews generated code.
 
 - **Adding Tests to an Existing Certificate Type**:
-  - **Developer Input**: Certificate type and specific test scenarios to add (e.g., new question validation).
+  - **Input**: Certificate type and specific test scenarios from specification file.
   - **Agent Actions**: 
     - Identify the existing test folder and classes.
     - Add new nested test classes in the IT files based on common/tests templates.
     - Update TestSetup if new test data is needed.
     - Ensure consistency with existing tests.
-  - **Iteration**: If new test types are needed, agent suggests and asks for approval; developer reviews additions.
+  - **Iteration**: If new test types are needed, add TODO comments; developer reviews additions.
 
 - **Updating Integration Tests for Certificate Changes**:
-  - **Developer Input**: Details of certificate model changes (e.g., new questions, rules, version updates).
+  - **Input**: Details of certificate model changes from specification file.
   - **Agent Actions**: 
     - Update TestSetup with new test data or version.
     - Modify IT classes to include new nested tests if applicable.
     - Run tests to verify they still pass.
     - Add or update prefill XML resources if needed.
-  - **Iteration**: Agent runs tests and reports failures, asking for fixes; developer provides additional test data.
+  - **Iteration**: Run tests and add TODO for failures; developer reviews and provides fixes.
 
 - **Creating Testability Fill Services**:
-  - **Developer Input**: Certificate type and fill data requirements.
+  - **Input**: Certificate type and fill data requirements from specification file.
   - **Agent Actions**: Generate `TestabilityCertificateFillService{TYPE}.java` for populating test certificates.
-  - **Iteration**: Agent asks for specific fill logic; developer reviews the service.
+  - **Iteration**: Add TODO for specific fill logic; developer reviews the service.
 
 - **Setting Up Test Resources**:
-  - **Developer Input**: Certificate type and prefill XML data.
+  - **Input**: Certificate type and prefill XML data from specification file.
   - **Agent Actions**: Create or update `src/test/resources/prefill/{TYPE}.xml` for create tests.
-  - **Iteration**: Agent asks for XML content; developer provides or reviews.
+  - **Iteration**: Add TODO for XML content; developer reviews.
 
 ## Important points to always follow
 

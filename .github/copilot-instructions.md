@@ -166,3 +166,5 @@ Available tools:
 - `/integration-test`: Regulated by `.github/instructions/integration-test-copilot-instructions.instructions.md`. Applies guidelines for creating and maintaining integration tests, including test structure, setup, and best practices.
 
 To list all available tools, use the command `/tools`.
+
+If the user does not invoke any specific tool, but the task relates to one of the above areas, the agent should suggest using the relevant tool to ensure the appropriate instructions are applied.

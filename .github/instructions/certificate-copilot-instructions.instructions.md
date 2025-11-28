@@ -2,51 +2,51 @@
 
 This document describes how a new certificate model is created.
 
+**Important**: Before proceeding with any workflow, ensure the certificate specification file exists and is complete. Use the `certificate-specification-template.spec.md` as the format. If a specific spec file is provided, use that; otherwise, use the template. The specification must include all required details (type, questions, IDs, texts, types, rules, validations, activation date) to avoid missing information. Do not proceed without a complete spec.
+
 ### Certificate Creation Workflows
 
-This section outlines the workflows for different certificate-related tasks. Each workflow specifies what input the developer provides, what the agent does, and how iteration works. Refer to the numbered sections below for detailed instructions.
-
-**Important**: For each workflow, if the agent is missing necessary information (e.g., IDs, codes, specifications, or clarifications), it must ask the developer before proceeding or generating code. Use the `certificate-specification-template.md` to structure your input for creating new certificates or versions.
+This section outlines the workflows for different certificate-related tasks. Each workflow specifies what input the agent uses from the specification, what the agent does, and how iteration works. Refer to the numbered sections below for detailed instructions.
 
 - **Creating a New Certificate Model**:
-  - **Developer Input**: Certificate specification document with type, questions, IDs, texts, types, rules, validations, and activation date.
+  - **Input**: Certificate specification file with type, questions, IDs, texts, types, rules, validations, and activation date.
   - **Agent Actions**: Generate `CertificateModelFactoryTYPE`, create `ElementSpecifications`, map configurations and values, add rules and validations, generate tests, ensure texts are word-for-word.
-  - **Iteration**: Agent asks for missing IDs/codes; developer reviews and refines code.
+  - **Iteration**: If missing IDs/codes, add TODO comments; developer reviews and refines code.
 
 - **Mapping ElementConfigurations and ElementValues**:
-  - **Developer Input**: Question types and SK codes from specification.
+  - **Input**: Question types and SK codes from specification file.
   - **Agent Actions**: Use Value Generator Mapping Table to assign `ElementConfiguration` and `ElementValue`, add validations, reference examples for uniformity.
-  - **Iteration**: If unclear, agent references table and asks for clarification.
+  - **Iteration**: If unclear, add TODO comments and reference table; developer reviews.
 
 - **Applying Rules to Questions**:
-  - **Developer Input**: Rule descriptions from specification (e.g., mandatory, show/hide conditions).
+  - **Input**: Rule descriptions from specification file (e.g., mandatory, show/hide conditions).
   - **Agent Actions**: Map to Rule Code and ElementRuleType, use `ElementRuleFactory`, add validations like mandatoryExists.
-  - **Iteration**: For complex rules, agent breaks them down and asks for confirmation.
+  - **Iteration**: For complex rules, add TODO comments; developer reviews.
 
 - **Generating Categories and Questions**:
-  - **Developer Input**: Swedish requirements with IDs, texts, rules.
+  - **Input**: Swedish requirements with IDs, texts, rules from specification file.
   - **Agent Actions**: Create class names in PascalCase, assign IDs (KAT_x for categories), generate configurations, rules, tests; handle sub-questions and mappings.
-  - **Iteration**: If names ambiguous, agent suggests options and asks for approval.
+  - **Iteration**: If names ambiguous, add TODO comments; developer reviews.
 
 - **Handling ElementRules and Conditional Logic**:
-  - **Developer Input**: Conditional logic (e.g., "show if true").
+  - **Input**: Conditional logic from specification file (e.g., "show if true").
   - **Agent Actions**: Parse logic, map to ElementRuleType, use `ElementRuleFactory`, add shouldValidate.
-  - **Iteration**: For multi-conditions, agent outlines and asks for verification.
+  - **Iteration**: For multi-conditions, add TODO comments; developer reviews.
 
 - **Creating Tests**:
-  - **Developer Input**: Certificate type.
+  - **Input**: Certificate type from specification file.
   - **Agent Actions**: Generate unit tests (e.g., QuestionClassTest), integration tests (e.g., FK7804ActiveIT), TestabilityCertificateFillService.
-  - **Iteration**: Agent generates and asks for review of edge cases.
+  - **Iteration**: Generate and add TODO for edge cases; developer reviews.
 
 - **Adding a Major Version (only if new major version)**:
-  - **Developer Input**: New version number and updated specification.
+  - **Input**: New version number and updated specification file.
   - **Agent Actions**: Generate analysis with `major-version-analysis.md`, create version lock test, build CertificateModelFactoryVX, move common elements, add unique elements with VX suffix, generate tests.
-  - **Iteration**: Review analysis for common/unique; ensure no V1 imports in V2.
+  - **Iteration**: Review analysis; if issues, add TODOs; developer reviews.
 
 - **Version Lock Testing**:
-  - **Developer Input**: Previous version to lock.
+  - **Input**: Previous version from specification file.
   - **Agent Actions**: Add test in `VersionLockTest.java`, run to generate snapshot, verify and re-run.
-  - **Iteration**: If snapshot incorrect, agent highlights differences and asks for corrections.
+  - **Iteration**: If snapshot incorrect, add TODO comments; developer reviews.
 
 ### Important points to always follow
 
