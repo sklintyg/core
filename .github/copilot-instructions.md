@@ -149,3 +149,20 @@ the developer has not missed some of these rules.
 - **Configuration Management**: Store configuration securely avoid hardcoding sensitive
   configurations.
 - **Scalability**: Design services to scale horizontally to handle increased load efficiently.
+
+## Available Copilot Tools
+
+When working on specific tasks, you can invoke the following tools to apply specialized instructions. When a user invokes a tool (e.g., by typing "/certificate"), the agent should:
+
+1. Mention which file regulates the tool.
+2. Ask if the user wants to proceed with applying those instructions.
+3. If the user wants to proceed then the agent should go in the instruction and apply the relevant guidelines to the task at hand.
+
+Available tools:
+
+- `/certificate`: Regulated by `.github/instructions/certificate-copilot-instructions.instructions.md`. Applies certificate-specific instructions for creating, modifying, and versioning certificate models, elements, configurations, rules, and testing.
+- `/certificateVersionAnalysis`: Regulated by `.github/instructions/major-version-analysis.instructions.md`. Applies instructions for analyzing differences between certificate versions to identify common and unique elements.
+- `/certificatePDF`: Regulated by `.github/instructions/pdf-copilot-instructions.instructions.md`. Applies guidelines for mapping certificate data to PDF configurations and ensuring proper PDF generation.
+- `/integration-test`: Regulated by `.github/instructions/integration-test-copilot-instructions.instructions.md`. Applies guidelines for creating and maintaining integration tests, including test structure, setup, and best practices.
+
+To list all available tools, use the command `/tools`.
