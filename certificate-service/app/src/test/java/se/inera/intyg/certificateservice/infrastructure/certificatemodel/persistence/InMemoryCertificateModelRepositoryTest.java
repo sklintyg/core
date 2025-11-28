@@ -654,4 +654,85 @@ class InMemoryCertificateModelRepositoryTest {
       );
     }
   }
+
+  @Nested
+  class CertificateVersionsTests {
+
+    @Test
+    void shouldAddCertificateVersionsForAllCertificateModels() {
+      inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
+          List.of(certificateModelFactoryOne)
+      );
+
+      final var inactiveCertificateModel = CertificateModel.builder()
+          .id(
+              CertificateModelId.builder()
+                  .type(new CertificateType(TYPE_ONE))
+                  .version(new CertificateVersion(VERSION_ONE))
+                  .build()
+          )
+          .type(new Code(CODE_1, CODE_SYSTEM_1, DISPLAY_NAME))
+          .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).plusDays(10))
+          .build();
+
+      doReturn(inactiveCertificateModel).when(certificateModelFactoryOne).create();
+      initCertificateModelMap(inMemoryCertificateModelRepository);
+
+      final var certificateModel = inMemoryCertificateModelRepository.getById(
+          inactiveCertificateModel.id()
+      );
+
+      assertEquals(List.of(new CertificateVersion(VERSION_ONE)),
+          certificateModel.certificateVersions());
+    }
+
+
+    @Test
+    void shouldAddMultipleCertificateVersionsForAllCertificateModels() {
+      inMemoryCertificateModelRepository = new InMemoryCertificateModelRepository(
+          List.of(certificateModelFactoryOne, certificateModelFactoryTwo)
+      );
+
+      final var certificateModel1 = CertificateModel.builder()
+          .id(
+              CertificateModelId.builder()
+                  .type(new CertificateType(TYPE_ONE))
+                  .version(new CertificateVersion(VERSION_ONE))
+                  .build()
+          )
+          .type(new Code(CODE_1, CODE_SYSTEM_1, DISPLAY_NAME))
+          .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).plusDays(10))
+          .build();
+
+      final var certificateModel2 = CertificateModel.builder()
+          .id(
+              CertificateModelId.builder()
+                  .type(new CertificateType(TYPE_ONE))
+                  .version(new CertificateVersion(VERSION_TWO))
+                  .build()
+          )
+          .type(new Code(CODE_1, CODE_SYSTEM_1, DISPLAY_NAME))
+          .activeFrom(LocalDateTime.now(ZoneId.systemDefault()).plusDays(10))
+          .build();
+
+      doReturn(certificateModel1).when(certificateModelFactoryOne).create();
+      doReturn(certificateModel2).when(certificateModelFactoryTwo).create();
+      initCertificateModelMap(inMemoryCertificateModelRepository);
+
+      final var actualCertificateModel1 = inMemoryCertificateModelRepository.getById(
+          certificateModel1.id()
+      );
+
+      final var actualCertificateModel2 = inMemoryCertificateModelRepository.getById(
+          certificateModel1.id()
+      );
+
+      assertEquals(
+          List.of(new CertificateVersion(VERSION_ONE), new CertificateVersion(VERSION_TWO)),
+          actualCertificateModel1.certificateVersions());
+      assertEquals(
+          List.of(new CertificateVersion(VERSION_ONE), new CertificateVersion(VERSION_TWO)),
+          actualCertificateModel2.certificateVersions());
+    }
+  }
 }
