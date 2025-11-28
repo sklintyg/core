@@ -35,6 +35,10 @@ public class AG114CitizenAvailableFunctionsProvider implements
   public List<CitizenAvailableFunction> of(Certificate certificate) {
     final var functions = new ArrayList<CitizenAvailableFunction>();
 
+    if (certificate.isReplaced() || certificate.isComplemented()) {
+      return List.of();
+    }
+
     if (isDiagnosisIncluded(certificate)) {
       functions.add(
           CitizenAvailableFunction.builder()

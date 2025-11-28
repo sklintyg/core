@@ -2,24 +2,30 @@ package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ts8071
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenAvailableFunctionType.ATTENTION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.ag7804CertificateBuilder;
 
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.Relation;
+import se.inera.intyg.certificateservice.domain.certificate.model.RelationType;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
+import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenAvailableFunction;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenAvailableFunctionType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.DefaultCitizenAvailableFunctionsProvider;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.configuration.limitedcertificatefunctionality.dto.LimitedCertificateFunctionalityActionsConfiguration;
 import se.inera.intyg.certificateservice.domain.configuration.limitedcertificatefunctionality.dto.LimitedCertificateFunctionalityConfiguration;
@@ -185,5 +191,127 @@ class TS8071CitizenAvailableFunctionsProviderTest {
             sent ? Sent.builder().build() : null
         )
         .build();
+  }
+
+  @Nested
+  class ReplacedCerificateFunction {
+
+    @Test
+    void shouldNotReturnSendAndPrintFunctionIfCertificateIsReplaced() {
+
+      final var replacedCertificate = (Certificate) ag7804CertificateBuilder()
+          .children(
+              List.of(
+                  Relation.builder()
+                      .type(RelationType.REPLACE)
+                      .certificate(
+                          ag7804CertificateBuilder()
+                              .status(Status.SIGNED)
+                              .build()
+                      )
+                      .build()
+              )
+          )
+          .build();
+
+      final var actual = new DefaultCitizenAvailableFunctionsProvider()
+          .of(replacedCertificate);
+
+      assertAll(
+          () -> assertTrue(
+              actual.stream().noneMatch(
+                  function -> function.type() == CitizenAvailableFunctionType.SEND_CERTIFICATE
+              )
+          ),
+          () -> assertTrue(
+              actual.stream().noneMatch(
+                  function -> function.type() == CitizenAvailableFunctionType.PRINT_CERTIFICATE
+              )
+          )
+      );
+    }
+
+    @Test
+    void shouldReturnSendAndPrintFunctionIfCertificateIsNotReplaced() {
+
+      final var notReplacedCertificate = (Certificate) ag7804CertificateBuilder().build();
+
+      final var actual = new DefaultCitizenAvailableFunctionsProvider()
+          .of(notReplacedCertificate);
+
+      assertAll(
+          () -> assertTrue(
+              actual.stream().anyMatch(
+                  function -> function.type() == CitizenAvailableFunctionType.SEND_CERTIFICATE
+              )
+          ),
+          () -> assertTrue(
+              actual.stream().anyMatch(
+                  function -> function.type() == CitizenAvailableFunctionType.PRINT_CERTIFICATE
+              )
+          )
+      );
+    }
+  }
+
+  @Nested
+  class ComplementedFunction {
+
+    @Test
+    void shouldNotReturnSendAndPrintFunctionIfCertificateIsComplemented() {
+
+      final var complementedCertificate = (Certificate) ag7804CertificateBuilder()
+          .children(
+              List.of(
+                  Relation.builder()
+                      .type(RelationType.COMPLEMENT)
+                      .certificate(
+                          ag7804CertificateBuilder()
+                              .status(Status.SIGNED)
+                              .build()
+                      )
+                      .build()
+              )
+          )
+          .build();
+
+      final var actual = new DefaultCitizenAvailableFunctionsProvider()
+          .of(complementedCertificate);
+
+      assertAll(
+          () -> assertTrue(
+              actual.stream().noneMatch(
+                  function -> function.type() == CitizenAvailableFunctionType.SEND_CERTIFICATE
+              )
+          ),
+          () -> assertTrue(
+              actual.stream().noneMatch(
+                  function -> function.type() == CitizenAvailableFunctionType.PRINT_CERTIFICATE
+              )
+          )
+      );
+    }
+
+    @Test
+    void shouldReturnSendAndPrintFunctionIfCertificateIsNotComplemented() {
+
+      final var notComplementedCertificate = (Certificate) ag7804CertificateBuilder().build();
+
+      final var actual = new DefaultCitizenAvailableFunctionsProvider()
+          .of(notComplementedCertificate);
+
+      assertAll(
+          () -> assertTrue(
+              actual.stream().anyMatch(
+                  function -> function.type() == CitizenAvailableFunctionType.SEND_CERTIFICATE
+              )
+          ),
+          () -> assertTrue(
+              actual.stream().anyMatch(
+                  function -> function.type() == CitizenAvailableFunctionType.PRINT_CERTIFICATE
+              )
+          )
+      );
+    }
   }
 }

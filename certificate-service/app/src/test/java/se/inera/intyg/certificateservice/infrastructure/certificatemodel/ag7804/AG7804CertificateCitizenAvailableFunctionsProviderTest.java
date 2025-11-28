@@ -1,6 +1,8 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionDiagnos.QUESTION_DIAGNOS_ID;
 import static se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements.QuestionFormedlaInfoOmDiagnosTillAG.QUESTION_FORMEDLA_DIAGNOS_ID;
@@ -22,6 +24,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenAv
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenAvailableFunctionInformation;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenAvailableFunctionInformationType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenAvailableFunctionType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.DefaultCitizenAvailableFunctionsProvider;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,7 +40,6 @@ class AG7804CertificateCitizenAvailableFunctionsProviderTest {
   @BeforeEach
   void setUp() {
     provider = new AG7804CitizenAvailableFunctionsProvider();
-    when(certificateModel.fileName()).thenReturn("ag7804-certificate.pdf");
     when(certificate.certificateModel()).thenReturn(certificateModel);
   }
 
@@ -56,6 +58,7 @@ class AG7804CertificateCitizenAvailableFunctionsProviderTest {
               .id(new ElementId(QUESTION_FORMEDLA_DIAGNOS_ID.id()))
               .value(ElementValueBoolean.builder().value(false).build())
               .build()));
+      when(certificateModel.fileName()).thenReturn("ag7804-certificate.pdf");
 
       final var expectedAttentionFunction = CitizenAvailableFunction.builder()
           .type(CitizenAvailableFunctionType.ATTENTION)
@@ -87,6 +90,7 @@ class AG7804CertificateCitizenAvailableFunctionsProviderTest {
               .id(new ElementId(QUESTION_FORMEDLA_DIAGNOS_ID.id()))
               .value(ElementValueBoolean.builder().value(false).build())
               .build()));
+      when(certificateModel.fileName()).thenReturn("ag7804-certificate.pdf");
 
       final var result = provider.of(certificate);
 
@@ -103,6 +107,7 @@ class AG7804CertificateCitizenAvailableFunctionsProviderTest {
               .id(new ElementId(QUESTION_FORMEDLA_DIAGNOS_ID.id()))
               .value(ElementValueBoolean.builder().value(false).build())
               .build()));
+      when(certificateModel.fileName()).thenReturn("ag7804-certificate.pdf");
 
       final var result = provider.of(certificate);
 
@@ -126,6 +131,7 @@ class AG7804CertificateCitizenAvailableFunctionsProviderTest {
               .id(new ElementId(QUESTION_FORMEDLA_DIAGNOS_ID.id()))
               .value(ElementValueBoolean.builder().value(true).build())
               .build()));
+      when(certificateModel.fileName()).thenReturn("ag7804-certificate.pdf");
 
       final var expectedCustomizeFunction = CitizenAvailableFunction.builder()
           .type(CitizenAvailableFunctionType.CUSTOMIZE_PRINT_CERTIFICATE)
@@ -172,6 +178,7 @@ class AG7804CertificateCitizenAvailableFunctionsProviderTest {
               .id(new ElementId(QUESTION_FORMEDLA_DIAGNOS_ID.id()))
               .value(ElementValueBoolean.builder().value(false).build())
               .build()));
+      when(certificateModel.fileName()).thenReturn("ag7804-certificate.pdf");
 
       final var result = provider.of(certificate);
 
@@ -188,11 +195,108 @@ class AG7804CertificateCitizenAvailableFunctionsProviderTest {
               .build()));
       when(certificate.getElementDataById(QUESTION_FORMEDLA_DIAGNOS_ID)).thenReturn(
           Optional.empty());
+      when(certificateModel.fileName()).thenReturn("ag7804-certificate.pdf");
 
       final var result = provider.of(certificate);
 
       assertEquals(1, result.size());
       assertEquals(CitizenAvailableFunctionType.PRINT_CERTIFICATE, result.getFirst().type());
+    }
+  }
+
+  @Nested
+  class ReplacedCerificateFunction {
+
+    @Test
+    void shouldNotReturnSendAndPrintFunctionIfCertificateIsReplaced() {
+      when(certificate.isReplaced()).thenReturn(true);
+
+      final var actual = new DefaultCitizenAvailableFunctionsProvider()
+          .of(certificate);
+
+      assertAll(
+          () -> assertTrue(
+              actual.stream().noneMatch(
+                  function -> function.type() == CitizenAvailableFunctionType.SEND_CERTIFICATE
+              )
+          ),
+          () -> assertTrue(
+              actual.stream().noneMatch(
+                  function -> function.type() == CitizenAvailableFunctionType.PRINT_CERTIFICATE
+              )
+          )
+      );
+    }
+
+    @Test
+    void shouldReturnSendAndPrintFunctionIfCertificateIsNotReplaced() {
+      when(certificate.isReplaced()).thenReturn(false);
+      when(certificateModel.fileName()).thenReturn("fileName.pdf");
+      when(certificate.isSendActiveForCitizen()).thenReturn(true);
+
+      final var actual = new DefaultCitizenAvailableFunctionsProvider()
+          .of(certificate);
+
+      assertAll(
+          () -> assertTrue(
+              actual.stream().anyMatch(
+                  function -> function.type() == CitizenAvailableFunctionType.SEND_CERTIFICATE
+              )
+          ),
+          () -> assertTrue(
+              actual.stream().anyMatch(
+                  function -> function.type() == CitizenAvailableFunctionType.PRINT_CERTIFICATE
+              )
+          )
+      );
+    }
+  }
+
+  @Nested
+  class ComplementedFunction {
+
+    @Test
+    void shouldNotReturnSendAndPrintFunctionIfCertificateIsComplemented() {
+      when(certificate.isComplemented()).thenReturn(true);
+
+      final var actual = new DefaultCitizenAvailableFunctionsProvider()
+          .of(certificate);
+
+      assertAll(
+          () -> assertTrue(
+              actual.stream().noneMatch(
+                  function -> function.type() == CitizenAvailableFunctionType.SEND_CERTIFICATE
+              )
+          ),
+          () -> assertTrue(
+              actual.stream().noneMatch(
+                  function -> function.type() == CitizenAvailableFunctionType.PRINT_CERTIFICATE
+              )
+          )
+      );
+    }
+
+    @Test
+    void shouldReturnSendAndPrintFunctionIfCertificateIsNotComplemented() {
+      when(certificate.isComplemented()).thenReturn(false);
+      when(certificateModel.fileName()).thenReturn("fileName.pdf");
+      when(certificate.isSendActiveForCitizen()).thenReturn(true);
+
+      final var actual = new DefaultCitizenAvailableFunctionsProvider()
+          .of(certificate);
+
+      assertAll(
+          () -> assertTrue(
+              actual.stream().anyMatch(
+                  function -> function.type() == CitizenAvailableFunctionType.SEND_CERTIFICATE
+              )
+          ),
+          () -> assertTrue(
+              actual.stream().anyMatch(
+                  function -> function.type() == CitizenAvailableFunctionType.PRINT_CERTIFICATE
+              )
+          )
+      );
     }
   }
 }

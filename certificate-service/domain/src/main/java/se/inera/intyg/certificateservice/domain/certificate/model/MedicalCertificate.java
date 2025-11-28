@@ -518,6 +518,7 @@ public class MedicalCertificate implements Certificate {
   public boolean isReplaced() {
     return this.children().stream()
         .anyMatch(relation -> relation.type() == RelationType.REPLACE
+            && relation.certificate().status() == Status.SIGNED
         );
   }
 
@@ -525,6 +526,7 @@ public class MedicalCertificate implements Certificate {
   public boolean isComplemented() {
     return this.children().stream()
         .anyMatch(relation -> relation.type() == RelationType.COMPLEMENT
+            && relation.certificate().status() == Status.SIGNED
         );
   }
 

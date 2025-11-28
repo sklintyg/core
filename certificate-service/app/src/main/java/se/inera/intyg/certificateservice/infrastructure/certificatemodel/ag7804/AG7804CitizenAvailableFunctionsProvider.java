@@ -42,6 +42,10 @@ public class AG7804CitizenAvailableFunctionsProvider implements
   public List<CitizenAvailableFunction> of(Certificate certificate) {
     final var functions = new ArrayList<CitizenAvailableFunction>();
 
+    if (certificate.isReplaced() || certificate.isComplemented()) {
+      return List.of();
+    }
+
     if (isSmittbararpenning(certificate)) {
       functions.add(
           CitizenAvailableFunction.builder()

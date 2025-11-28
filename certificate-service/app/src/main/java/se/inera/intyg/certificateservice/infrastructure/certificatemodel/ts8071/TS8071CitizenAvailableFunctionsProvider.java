@@ -36,6 +36,10 @@ public class TS8071CitizenAvailableFunctionsProvider implements CitizenAvailable
         certificateActionConfigurationRepository,
         SEND);
 
+    if (certificate.isReplaced() || certificate.isComplemented()) {
+      return List.of();
+    }
+
     if (certificateHasFullFunctionality(certificate, actionRuleLimitedCertificateFunctionality)) {
       citizenAvailableFunctions.add(
           CitizenAvailableFunction.builder()
