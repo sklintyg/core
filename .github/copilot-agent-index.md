@@ -15,6 +15,13 @@ This document defines the roles, responsibilities, and prompt templates for spec
 | RequirementsGatherer | Gathers and structures requirements            | Prompts user for detailed requirements and organizes them clearly     |
 | FeatureGuideCreator | Creates feature implementation guides          | Generates README guides outlining development plans and iterations     |
 
+## Multi Agent Workflow
+- When using multiple agents in a workflow, ensure clear handoffs between agents.
+- Each agent should produce output that serves as input for the next agent.
+- Maintain context by summarizing previous outputs when passing to the next agent.
+- Confirm with the user at key points to ensure alignment before proceeding to the next agent.
+- If user wants to skip to the next agent, confirm there is enough information to proceed.
+
 ---
 
 ## Agent: CodeArchitect
