@@ -1,6 +1,33 @@
 # GitHub Copilot Instructions Index
 
+IMPORTANT: All tools are listed in `.github/copilot-instructions.md`
+
 This document serves as an index for the various GitHub Copilot instruction files in the project. It describes the purpose of each instruction set and when to apply them, helping the Copilot agent mode select the appropriate guidelines based on the context of the work.
+
+### Working with Tools and Specifications
+
+Before starting any certificate-related task, a complete certificate specification file must be created or provided. The specification serves as the blueprint for all subsequent actions and ensures consistency and completeness.
+
+#### Specification Creation Process
+1. **Create the Spec**: The specification can be created by the agent (using templates like `certificate-specification-template.spec.md`) or provided by the developer. It must include all required details.
+2. **Review the Spec**: The developer and agent should review the specification for accuracy, completeness, and adherence to requirements. Any missing or unclear information should be clarified before proceeding. If the agent fins the spec is incomplete it should be notified to the developer.
+3. **Follow Instructions**: Once the spec is reviewed and approved, proceed with the relevant workflows outlined in this document. If any information is missing during implementation, add TODO comments for the developer to resolve.
+
+#### Using Copilot Tools
+This document includes specialized tools to assist with specific tasks. When a task relates to one of the available tools, the agent should suggest or invoke the appropriate tool.
+
+- **Invoking a Tool**: Tools are invoked by typing commands like `/certificate` or `/certificateVersionAnalysis`. Upon invocation:
+    1. The agent mentions the regulating file for the tool.
+    2. Asks the user if they want to proceed with applying the instructions.
+    3. If confirmed, applies the relevant guidelines from the tool's instructions to the task at hand.
+- **Available Tools**:
+    - `/certificate`: For creating, modifying, and versioning certificate models.
+    - `/certificateVersionAnalysis`: For analyzing differences between certificate versions.
+    - `/certificatePDF`: For mapping certificate data to PDF configurations.
+    - `/integration-test`: For creating and maintaining integration tests.
+    - `/feature`: Orchestrates the creation of a complete feature including spec, implementation, and tests using SpecCreator, FeatureImplementer, and TestCreator agents.
+- **Listing Tools**: Use `/tools` to list all available tools.
+- **Suggestion**: If no tool is invoked but the task relates to a tool's area, the agent should suggest using the relevant tool to ensure proper guidelines are applied.
 
 ## General Instructions
 
@@ -18,6 +45,24 @@ This document serves as an index for the various GitHub Copilot instruction file
 - Controller, service, and DTO design principles.
 - Logging, observability, and performance monitoring.
 - Error handling, security principles, and testing conventions.
+
+## Feature Development Instructions
+
+### `.github/instructions/feature-copilot-instructions.instructions.md`
+**Tool Name**: `/feature`  
+**Purpose**: Orchestrates the creation of a complete feature including spec, implementation, and tests using SpecCreator, FeatureImplementer, and TestCreator agents.  
+**When to Use**:
+- When developing a new feature from scratch, requiring specification, code implementation, and testing.
+- For end-to-end feature development workflows that need coordination between spec creation, coding, and testing phases.
+- When the user provides high-level requirements and wants a fully realized feature.
+
+**Key Topics Covered**:
+- Gathering user requirements for feature development.
+- Generating feature implementation guides and READMEs.
+- Generating feature specifications using templates.
+- Implementing features based on specs, following coding standards.
+- Creating comprehensive tests for the implemented features.
+- Validation and final review of the complete feature package.
 
 ## Certificate-Specific Instructions
 

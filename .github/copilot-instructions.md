@@ -157,14 +157,56 @@ When working on specific tasks, you can invoke the following tools to apply spec
 1. Mention which file regulates the tool.
 2. Ask if the user wants to proceed with applying those instructions.
 3. If the user wants to proceed then the agent should go in the instruction and apply the relevant guidelines to the task at hand.
+4. If it is a listing tool like /tools and /agents you should just list the available tools or agents instead.
 
 Available tools:
 
 - `/certificate`: Regulated by `.github/instructions/certificate-copilot-instructions.instructions.md`. Applies certificate-specific instructions for creating, modifying, and versioning certificate models, elements, configurations, rules, and testing.
+
+## How the Tool Works
+
+When the `/certificate` tool is invoked, start with a general message to the user like: "Hi! I'll assist with certificate-specific instructions for creating, modifying, and versioning certificate models, elements, configurations, rules, and testing. Should we proceed?"
+
 - `/certificateVersionAnalysis`: Regulated by `.github/instructions/major-version-analysis.instructions.md`. Applies instructions for analyzing differences between certificate versions to identify common and unique elements.
+
+## How the Tool Works
+
+When the `/certificateVersionAnalysis` tool is invoked, start with a general message to the user like: "Hi! I'll help analyze differences between certificate versions to identify common and unique elements. Should we proceed?"
+
 - `/certificatePDF`: Regulated by `.github/instructions/pdf-copilot-instructions.instructions.md`. Applies guidelines for mapping certificate data to PDF configurations and ensuring proper PDF generation.
+
+## How the Tool Works
+
+When the `/certificatePDF` tool is invoked, start with a general message to the user like: "Hi! I'll guide you on mapping certificate data to PDF configurations and ensuring proper PDF generation. Should we proceed?"
+
 - `/integration-test`: Regulated by `.github/instructions/integration-test-copilot-instructions.instructions.md`. Applies guidelines for creating and maintaining integration tests, including test structure, setup, and best practices.
 
+## How the Tool Works
+
+When the `/integration-test` tool is invoked, start with a general message to the user like: "Hi! I'll assist with creating and maintaining integration tests, including test structure, setup, and best practices. Should we proceed?"
+
+- `/feature`: Regulated by `.github/instructions/feature-copilot-instructions.instructions.md`. Orchestrates the creation of a complete feature using multiple agents.
+
+## How the Tool Works
+
+When the `/feature` tool is invoked, start with a general message to the user like: "Hi! I'll help you implement a new feature. The process will go: [Gather requirements] -> [Create specification] -> [Create implementation guide]  -> [Implement feature] -> [Create tests] -> [Final validation]. Should we start with step 1?"
+
 To list all available tools, use the command `/tools`.
+
+To list all available agents, use the command `/agents`.
+
+Do not read any context if you receive a /xxx command where xxx is a word. You need to go fast so only look in this file if you find the tool. Otherwise, ask user, are you looking for a tool? Here are the tools available: list tools. 
+When receiving a tool command, always start with the welcome message. After user has confirmed it wants to invoke tool then you go on to reading the instructions file. 
+
+Available agents:
+- `CodeArchitect`: Designs high-level structure and architecture.
+- `FeatureImplementer`: Writes functional code based on requirements.
+- `DocWriter`: Creates documentation and code comments.
+- `TestCreator`: Generates unit and integration tests.
+- `RefactorBot`: Improves code quality and maintainability.
+- `SpecCreator`: Creates specifications using templates and requirements.
+- `RequirementsGatherer`: Gathers and structures requirements.
+- `FeatureGuideCreator`: Creates feature implementation guides.
+- Roles are defined in `.github/copilot-agent-index.md`.
 
 If the user does not invoke any specific tool, but the task relates to one of the above areas, the agent should suggest using the relevant tool to ensure the appropriate instructions are applied.
