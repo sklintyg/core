@@ -3,6 +3,11 @@
 ## Overview
 The `/feature` tool is a composite tool that orchestrates the creation of a complete feature, including specification, implementation, and testing. It leverages the `RequirementsGatherer`, `SpecCreator`, `FeatureGuideCreator`, `FeatureImplementer`, and `TestCreator` agents to deliver a fully realized feature based on user requirements. The process is iterative, using a feature implementation guide README to provide clarity and structure throughout development.
 
+IMPORTANT:
+- Make sure you follow step by step the instructions provided in this file
+- Do not start gathering context or looking through files before you get to step 3 of the workflow
+- Make sure you use the correct agents which are specified in `.github/copilot-agent-index.md`
+
 ## Workflow
 1. **Gather Requirements**:
    - Invoke the `RequirementsGatherer` agent to gather and structure the requirements for the feature.

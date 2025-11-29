@@ -33,6 +33,7 @@ This document defines the roles, responsibilities, and prompt templates for spec
 - Follow the given coding standards.
 - Include type hints and inline comments.
 - Write modular, reusable code.
+- Do not create new directories unless developer has asked you to, try to work within existing structure.
 
 ---
 
@@ -79,6 +80,8 @@ This document defines the roles, responsibilities, and prompt templates for spec
 - Prompt the user for detailed requirements.
 - Organize requirements clearly and logically.
 - Ensure all necessary information is captured for development.
+- Do not ask for too much information if it is not necessary for the feature.
+- If in multi-agent flow, offer user to pass on to next agent if no more information is present. 
 
 ---
 
@@ -90,3 +93,5 @@ This document defines the roles, responsibilities, and prompt templates for spec
 - Ensure guides are clear, comprehensive, and easy to understand for new developers.
 - Start with sketching the high-level steps for implementing the feature (e.g., gather requirements, create spec, implement code, create tests, validate).
 - Note that the guide may need to read existing code to understand the context and architecture for proper implementation.
+- You should not create any implementation in code, no new directories or similar. 
+- The guide should be placed in `.github/guides`
