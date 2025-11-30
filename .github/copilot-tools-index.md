@@ -26,6 +26,7 @@ This document includes specialized tools to assist with specific tasks. When a t
     - `/certificatePDF`: For mapping certificate data to PDF configurations.
     - `/integration-test`: For creating and maintaining integration tests.
     - `/feature`: Orchestrates the creation of a complete feature including spec, implementation, and tests using SpecCreator, FeatureImplementer, and TestCreator agents.
+    - `/template`: Creates a spec or guide from a template.
 - **Listing Tools**: Use `/tools` to list all available tools.
 - **Suggestion**: If no tool is invoked but the task relates to a tool's area, the agent should suggest using the relevant tool to ensure proper guidelines are applied.
 
@@ -83,7 +84,7 @@ This document includes specialized tools to assist with specific tasks. When a t
 - Major version upgrades and common element extraction.
 
 ### `.github/instructions/major-version-analysis.instructions.md`
-**Tool Name**: `/certificateVersionAnalysis`  
+**Tool Name**: `/certificate-version-analysis`  
 **Purpose**: Instructions for analyzing differences between certificate versions to identify common and unique elements.  
 **When to Use**:
 - Before creating a new major version of a certificate (e.g., V2).
@@ -99,7 +100,7 @@ This document includes specialized tools to assist with specific tasks. When a t
 ## PDF Generation Instructions
 
 ### `.github/instructions/pdf-copilot-instructions.instructions.md`
-**Tool Name**: `/certificatePDF`  
+**Tool Name**: `/certificate-pdf`  
 **Purpose**: Guidelines for mapping certificate data to PDF configurations and ensuring proper PDF generation.  
 **When to Use**:
 - When implementing or updating PDF generation for certificates.
@@ -129,6 +130,22 @@ This document includes specialized tools to assist with specific tasks. When a t
 - Common test utilities and data.
 - Running and maintaining integration tests.
 - Best practices for test coverage and reliability.
+
+## Template Instructions
+
+### `.github/instructions/template-copilot-instructions.instructions.md`
+**Tool Name**: `/template`  
+**Purpose**: Creates a spec or guide from a template. It asks the user for the kind of document (spec or guide), and the task it should be created for, and looks for an appropriate template to use. If no template exists it first creates the template for the task, and then the specific document from that template. Depending on the kind of document, either requirements (for spec) or a spec file (for guide).  
+**When to Use**:
+- When creating a new specification document from user requirements.
+- When generating an implementation guide based on an existing specification.
+
+**Key Topics Covered**:
+- Interactively gathering template type (spec or guide).
+- Collecting task description and relevant details.
+- For specs: eliciting and structuring requirements into a specification template.
+- For guides: using a provided spec file to create a step-by-step implementation guide.
+- Ensuring output follows project templates and conventions.
 
 ## Usage Guidelines for Copilot Agent Mode
 

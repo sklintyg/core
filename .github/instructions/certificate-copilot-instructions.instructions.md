@@ -1,6 +1,9 @@
 # Certificate Creation Documentation
 
-This document describes how a new certificate model is created.
+🔧 **Tool name:** `/certificate`  
+📄 **Spec template:** `certificate-specification-template.spec.md`  
+📋 **Guide template:** `certificate-implementation-guide-template.guide.md`  
+📝 **Description:** This document describes how a new certificate model is created.
 
 **Important**: Before proceeding with any workflow, ensure the certificate specification file exists and is complete. Use the `certificate-specification-template.spec.md` as the format. If a specific spec file is provided, use that; otherwise, use the template. The specification must include all required details (type, questions, IDs, texts, types, rules, validations, activation date) to avoid missing information. Do not proceed without a complete spec.
 
