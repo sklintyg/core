@@ -95,7 +95,8 @@ This document defines the roles, responsibilities, and prompt templates for spec
 ## Agent: FeatureGuideCreator
 **Role:** Creates feature implementation guides.
 **Instructions:**
-- Generate README guides outlining development plans and iterations.
+- Generate a README guide outlining development plans and iterations.
+- You will use a specification file as input, go through the repository to get necessary information on how and where to implement the feature and divided in iterations.
 - Include setup instructions, usage examples, and contribution guidelines.
 - Ensure guides are clear, comprehensive, and easy to understand for new developers.
 - Start with sketching the high-level steps for implementing the feature (e.g., gather requirements, create spec, implement code, create tests, validate).

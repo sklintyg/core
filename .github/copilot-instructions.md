@@ -150,6 +150,27 @@ the developer has not missed some of these rules.
   configurations.
 - **Scalability**: Design services to scale horizontally to handle increased load efficiently.
 
+## Copilot Concepts
+If user writes /concepts list the concepts in an easy-to-read format. 
+
+*** SPEC ***
+A specification is a summary of requirements for a feature or a task.
+
+*** GUIDE ***
+A guide is a detailed step-by-step instruction set that Copilot can follow to implement a feature or task. It combines the information from a specification with additional context from the codebase to create a clear implementation plan.
+
+*** ANALYSIS ***
+An analysis is a detailed examination of a specific aspect of the codebase or requirements to inform decision-making during implementation. It helps identify patterns, differences, or areas for improvement.
+
+*** INSTRUCTION ***
+An instruction is a set of guidelines or rules that Copilot should follow when generating code. Instructions are written for reoccurring tasks to ensure consistency and adherence to best practices. Each instruction is linked to a tool. When the tool is called the instruction is invoked. Each instruction needs a specification with requirements.
+
+*** AGENT ***
+An agent is a specialized role that focuses on a specific aspect of the development process. Each agent has a defined responsibility and set of skills to contribute to the overall implementation of features or tasks. Agents work together to complete complex tasks by leveraging their unique expertise. Agents can be called using @name.
+
+*** TOOL ***
+A tool is a command that a user can invoke to apply specialized instructions for specific tasks. Each tool is linked to an instruction file that contains guidelines for Copilot to follow when generating code related to that task. Tools help ensure that Copilot adheres to best practices and coding standards for particular areas of development. A tool can be called using /name.
+
 ## Available Copilot Tools
 
 When working on specific tasks, you can invoke the following tools to apply specialized instructions. When a user invokes a tool (e.g., by typing "/certificate"), the agent should:
@@ -196,9 +217,13 @@ To list all available tools, use the command `/tools`.
 To list all available agents, use the command `/agents`.
 
 Do not read any context if you receive a /xxx command where xxx is a word. You need to go fast so only look in this file if you find the tool. Otherwise, ask user, are you looking for a tool? Here are the tools available: list tools. 
-When receiving a tool command, always start with the welcome message. After user has confirmed it wants to invoke tool then you go on to reading the instructions file. 
+When receiving a tool command, always start with the welcome message. After user has confirmed it wants to invoke tool then you go on to reading the instructions file. If the user does not invoke any specific tool, but the task relates to one of the above areas, the agent should suggest using the relevant tool to ensure the appropriate instructions are applied.
 
-Available agents:
+# Copilot agents
+
+Agents are specialized roles that focus on specific aspects of the development process. Each agent has a defined responsibility and set of skills to contribute to the overall implementation of features or tasks. Agents work together to complete complex tasks by leveraging their unique expertise. Agents can be called using @name.
+
+Available agents
 - `CodeArchitect`: Designs high-level structure and architecture.
 - `FeatureImplementer`: Writes functional code based on requirements.
 - `DocWriter`: Creates documentation and code comments.
@@ -208,5 +233,3 @@ Available agents:
 - `RequirementsGatherer`: Gathers and structures requirements.
 - `FeatureGuideCreator`: Creates feature implementation guides.
 - Roles are defined in `.github/copilot-agent-index.md`.
-
-If the user does not invoke any specific tool, but the task relates to one of the above areas, the agent should suggest using the relevant tool to ensure the appropriate instructions are applied.

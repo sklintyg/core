@@ -21,6 +21,7 @@ IMPORTANT:
    - Confirm with the user that the spec is acceptable before proceeding.
 
 3. **Create Feature Implementation Guide**:
+   - A guide combines the specification and the codebase context to create a step-by-step plan for implementing the feature divided in iterations.
    - Invoke the `FeatureGuideCreator` agent to generate a README document outlining the development plan, iterations, milestones, and setup instructions for the feature.
    - The guide should start with sketching the high-level steps for implementing the feature (e.g., gather requirements, create spec, implement code, create tests, validate).
    - Include sections for overview, setup, development phases, testing, and contribution guidelines.
