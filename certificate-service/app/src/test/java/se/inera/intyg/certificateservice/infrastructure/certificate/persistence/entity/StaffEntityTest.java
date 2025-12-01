@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffEntity.AJLA_DOKTOR_ENTITY;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataStaffEntity.ajlaDoctorEntityBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.AJLA_DOCTOR_HSA_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataUserConstants.ALF_DOKTOR_HSA_ID;
 
 import java.util.List;
@@ -126,6 +127,15 @@ class StaffEntityTest {
                     List.of(new HealthcareProfessionalLicenceEmbeddable()))
                 .build()),
         "all fields changed");
+  }
+
+  @Test
+  void shallNotThrowExceptionWhenComparingStaffWithCaseDifferentHsaId() {
+    assertFalse(AJLA_DOKTOR_ENTITY.hasDiff(
+            ajlaDoctorEntityBuilder()
+                .hsaId(AJLA_DOCTOR_HSA_ID.toLowerCase())
+                .build()),
+        "no fields changed");
   }
 
 
