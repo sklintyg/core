@@ -92,16 +92,16 @@ class ElementConfigurationVisualAcuitiesTest {
 
     final var emptyValue = ElementValueVisualAcuities.builder()
         .rightEye(VisualAcuity.builder()
-            .withoutCorrection(null)
-            .withCorrection(null)
+            .withoutCorrection(Correction.builder().build())
+            .withCorrection(Correction.builder().build())
             .build())
         .leftEye(VisualAcuity.builder()
-            .withoutCorrection(null)
-            .withCorrection(null)
+            .withoutCorrection(Correction.builder().build())
+            .withCorrection(Correction.builder().build())
             .build())
         .binocular(VisualAcuity.builder()
-            .withoutCorrection(null)
-            .withCorrection(null)
+            .withoutCorrection(Correction.builder().build())
+            .withCorrection(Correction.builder().build())
             .build())
         .build();
 
