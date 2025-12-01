@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Value;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueList;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCode;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueCodeList;
@@ -45,7 +46,9 @@ public class ElementConfigurationCheckboxMultipleCode implements ElementConfigur
     }
 
     if (elementValue.isEmpty()) {
-      return Optional.empty();
+      return Optional.of(ElementSimplifiedValueText.builder()
+          .text("Ej angivet")
+          .build());
     }
 
     return Optional.of(ElementSimplifiedValueList.builder()

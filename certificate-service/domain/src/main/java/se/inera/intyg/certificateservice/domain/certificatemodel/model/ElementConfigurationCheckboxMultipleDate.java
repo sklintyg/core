@@ -10,6 +10,7 @@ import lombok.Value;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueLabeledList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueLabeledText;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
@@ -53,7 +54,9 @@ public class ElementConfigurationCheckboxMultipleDate implements ElementConfigur
       throw new IllegalStateException("Wrong value type");
     }
     if (elementValue.isEmpty()) {
-      return Optional.empty();
+      return Optional.of(ElementSimplifiedValueText.builder()
+          .text("Ej angivet")
+          .build());
     }
 
     final var matchedDates = elementValue.dateList().stream()

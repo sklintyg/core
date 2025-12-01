@@ -10,6 +10,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueLabeledList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueLabeledText;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDateList;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
@@ -91,13 +92,18 @@ class ElementConfigurationCheckboxMultipleDateTest {
   }
 
   @Test
-  void shouldReturnSimplifiedValueAsEmptyOptionalIfValueIsEmpty() {
+  void shouldReturnSimplifiedValueIfEmpty() {
+    final var expected = Optional.of(
+        ElementSimplifiedValueText.builder()
+            .text("Ej angivet")
+            .build()
+    );
     final var config = ElementConfigurationCheckboxMultipleDate.builder().build();
     final var value = ElementValueDateList.builder().dateList(List.of()).build();
 
     final var result = config.simplified(value);
 
-    assertEquals(Optional.empty(), result);
+    assertEquals(expected, result);
   }
 
   @Test

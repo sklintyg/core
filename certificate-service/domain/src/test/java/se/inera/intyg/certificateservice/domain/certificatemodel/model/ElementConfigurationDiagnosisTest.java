@@ -6,8 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueTable;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosis;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDiagnosisList;
 
@@ -70,12 +72,16 @@ class ElementConfigurationDiagnosisTest {
   }
 
   @Test
-  void simplifiedShouldReturnEmptyOptionalIfEmpty() {
+  void shouldReturnSimplifiedValueIfEmpty() {
+    final var expected = Optional.of(
+        ElementSimplifiedValueText.builder()
+            .text("Ej angivet")
+            .build()
+    );
     final var config = ElementConfigurationDiagnosis.builder().build();
     final var value = ElementValueDiagnosisList.builder().diagnoses(List.of()).build();
     final var simplified = config.simplified(value);
-    assertAll(
-        () -> assertTrue(simplified.isEmpty())
-    );
+
+    assertEquals(expected, simplified);
   }
 }
