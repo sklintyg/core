@@ -74,7 +74,7 @@ public class StaffEntity {
       throw new IllegalArgumentException("Cannot compare StaffEntity with null");
     }
 
-    if (!Objects.equals(this.hsaId, other.getHsaId())) {
+    if (!Objects.equals(this.hsaId.toUpperCase(), other.getHsaId().toUpperCase())) {
       throw new IllegalArgumentException("Cannot compare StaffEntity with different hsaId");
     }
 

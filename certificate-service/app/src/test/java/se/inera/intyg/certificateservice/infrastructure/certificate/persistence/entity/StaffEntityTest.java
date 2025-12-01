@@ -128,6 +128,15 @@ class StaffEntityTest {
         "all fields changed");
   }
 
+  @Test
+  void shallNotThrowExceptionWhenComparingStaffWithCaseDifferentHsaId() {
+    assertFalse(AJLA_DOKTOR_ENTITY.hasDiff(
+            ajlaDoctorEntityBuilder()
+                .hsaId(ALF_DOKTOR_HSA_ID.toLowerCase())
+                .build()),
+        "no fields changed");
+  }
+
 
   @Test
   void shallThrowExceptionWhenOtherIsNull() {
