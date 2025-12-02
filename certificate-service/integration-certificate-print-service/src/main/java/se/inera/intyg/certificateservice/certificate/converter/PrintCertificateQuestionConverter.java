@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.certificate.converter;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.certificate.dto.ElementSimplifiedValueDTO;
@@ -10,6 +11,7 @@ import se.inera.intyg.certificateservice.certificate.dto.ElementSimplifiedValueT
 import se.inera.intyg.certificateservice.certificate.dto.ElementSimplifiedValueTextDTO;
 import se.inera.intyg.certificateservice.certificate.dto.PrintCertificateQuestionDTO;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueLabeledList;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueLabeledText;
@@ -28,6 +30,10 @@ public class PrintCertificateQuestionConverter {
     final var elementData = certificate.getElementDataById(elementSpecification.id());
     final var allElementData = certificate.elementData();
 
+    if (elementShouldNotBeDisplayed(elementSpecification, allElementData)) {
+      return Optional.empty();
+    }
+
     return elementSpecification.simplifiedValue(elementData, allElementData, pdfGeneratorOptions)
         .map(elementSimplifiedValue -> PrintCertificateQuestionDTO.builder()
             .id(elementSpecification.id().id())
@@ -42,6 +48,13 @@ public class PrintCertificateQuestionConverter {
             )
             .build()
         );
+  }
+
+  private static boolean elementShouldNotBeDisplayed(ElementSpecification elementSpecification,
+      List<ElementData> allElementData) {
+    return elementSpecification.shouldValidate() != null && elementSpecification.shouldValidate()
+        .negate()
+        .test(allElementData);
   }
 
   private ElementSimplifiedValueDTO convertValue(ElementSimplifiedValue elementSimplifiedValue) {
