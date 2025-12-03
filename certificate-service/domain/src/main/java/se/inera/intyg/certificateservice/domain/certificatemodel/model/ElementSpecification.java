@@ -145,7 +145,7 @@ public class ElementSpecification {
     }
 
     if (elementData.isEmpty()) {
-      return Optional.empty();
+      return configuration.simplified(configuration.emptyValue());
     }
 
     return configuration.simplified(elementData.get().value());

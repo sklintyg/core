@@ -266,4 +266,16 @@ class PrintCertificateQuestionConverterTest {
 
     assertEquals(expected, response.get().getValue());
   }
+
+  @Test
+  void shouldReturnEmptyWhenElementIsHidden() {
+    final var response = printCertificateQuestionConverter.convert(
+        ElementSpecification.builder()
+            .id(new ElementId("1"))
+            .shouldValidate(List::isEmpty)
+            .build(), CERTIFICATE, OPTIONS
+    );
+
+    assertTrue(response.isEmpty());
+  }
 }

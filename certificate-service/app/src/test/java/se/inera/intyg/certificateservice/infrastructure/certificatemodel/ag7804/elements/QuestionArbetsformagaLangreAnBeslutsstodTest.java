@@ -1,9 +1,14 @@
 package se.inera.intyg.certificateservice.infrastructure.certificatemodel.ag7804.elements;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueBoolean;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationTextArea;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementRuleExpression;
@@ -72,6 +77,52 @@ class QuestionArbetsformagaLangreAnBeslutsstodTest {
     final var element = QuestionArbetsformagaLangreAnBeslutsstod.questionArbetsformagaLangreAnBeslutsstod();
 
     assertEquals(expectedValidations, element.validations());
+  }
+
+  @Nested
+  class ShouldValidate {
+
+    @Test
+    void shouldReturnFalseIfBooleanIsTrue() {
+      final var element = QuestionArbetsformagaLangreAnBeslutsstod.questionArbetsformagaLangreAnBeslutsstod();
+      final var shouldValidate = element.elementSpecification(new ElementId("37"))
+          .shouldValidate();
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId("27"))
+              .value(ElementValueBoolean.builder().value(true).build())
+              .build()
+      );
+      assertFalse(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shouldReturnTrueIfBooleanIsFalse() {
+      final var element = QuestionArbetsformagaLangreAnBeslutsstod.questionArbetsformagaLangreAnBeslutsstod();
+      final var shouldValidate = element.elementSpecification(new ElementId("37"))
+          .shouldValidate();
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId("27"))
+              .value(ElementValueBoolean.builder().value(false).build())
+              .build()
+      );
+      assertTrue(shouldValidate.test(elementData));
+    }
+
+    @Test
+    void shouldReturnTrueIfElementMissing() {
+      final var element = QuestionArbetsformagaLangreAnBeslutsstod.questionArbetsformagaLangreAnBeslutsstod();
+      final var shouldValidate = element.elementSpecification(new ElementId("37"))
+          .shouldValidate();
+      final var elementData = List.of(
+          ElementData.builder()
+              .id(new ElementId("not27"))
+              .value(ElementValueBoolean.builder().value(true).build())
+              .build()
+      );
+      assertTrue(shouldValidate.test(elementData));
+    }
   }
 
 }

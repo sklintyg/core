@@ -26,6 +26,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementData;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValue;
+import se.inera.intyg.certificateservice.domain.certificate.model.ElementSimplifiedValueText;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValue;
 import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueDate;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGeneratorOptions;
@@ -414,7 +415,11 @@ class ElementSpecificationTest {
     }
 
     @Test
-    void shouldReturnEmptyWhenElementDataIsEmpty() {
+    void shouldReturnEmptyValueWhenElementDataIsEmpty() {
+      final var expected = Optional.of(ElementSimplifiedValueText.builder()
+          .text("Ej angivet")
+          .build());
+
       final var elementSpecification = dateElementSpecificationBuilder()
           .id(ELEMENT_ID)
           .build();
@@ -429,8 +434,7 @@ class ElementSpecificationTest {
           ALL_ELEMENT_DATA,
           options
       );
-
-      assertTrue(result.isEmpty());
+      assertEquals(expected, result);
     }
 
     @Test
