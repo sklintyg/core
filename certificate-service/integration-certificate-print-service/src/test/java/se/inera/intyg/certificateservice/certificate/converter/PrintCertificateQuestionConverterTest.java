@@ -63,9 +63,10 @@ class PrintCertificateQuestionConverterTest {
       .children(List.of(
           ElementSpecification.builder()
               .id(new ElementId("2"))
-              .configuration(ElementConfigurationTextArea.builder()
-                  .name(DESCRIPTION)
-                  .build())
+              .configuration(
+                  ElementConfigurationTextArea.builder()
+                      .name(DESCRIPTION)
+                      .build())
               .build()
       ))
       .build();
@@ -174,17 +175,6 @@ class PrintCertificateQuestionConverterTest {
     assertEquals("1", response.get().getId());
   }
 
-
-  @Test
-  void shouldReturnNullIfNoElementDate() {
-    final var response = printCertificateQuestionConverter.convert(
-        ElementSpecification.builder().id(new ElementId("2")).build(), CERTIFICATE_EMPTY,
-        OPTIONS
-    );
-
-    assertTrue(response.isEmpty());
-  }
-
   @Test
   void shouldSetValue() {
     final var expected = ElementSimplifiedValueTextDTO.builder()
@@ -207,7 +197,20 @@ class PrintCertificateQuestionConverterTest {
             .value(ElementSimplifiedValueTextDTO.builder()
                 .text("Ej angivet")
                 .build())
-            .subquestions(Collections.emptyList())
+            .subquestions(
+                List.of(
+                    PrintCertificateQuestionDTO.builder()
+                        .id("2")
+                        .name("Beskrivning")
+                        .value(
+                            ElementSimplifiedValueTextDTO.builder()
+                                .text("Ej angivet")
+                                .build()
+                        )
+                        .subquestions(Collections.emptyList())
+                        .build()
+                )
+            )
             .build()
     );
 
