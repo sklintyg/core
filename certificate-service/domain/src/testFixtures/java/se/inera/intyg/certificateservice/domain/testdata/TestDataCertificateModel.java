@@ -54,6 +54,7 @@ import se.inera.intyg.certificateservice.domain.action.certificate.model.Certifi
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateMessageType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersionAndModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCheckboxMultipleCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCode;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -94,7 +95,8 @@ public class TestDataCertificateModel {
         .typeName(FK7210_TYPE_NAME)
         .availableForCitizen(true)
         .certificateActionSpecifications(Collections.emptyList())
-        .certificateVersions(List.of(FK7210_VERSION))
+        .certificateVersions(
+            List.of(new CertificateVersionAndModel(FK7210_VERSION.version(), null)))
         .schematronPath(FK7210_SCHEMATRON_PATH)
         .recipient(FK_RECIPIENT)
         .pdfSpecification(FK7210_PDF_SPECIFICATION)
@@ -111,7 +113,8 @@ public class TestDataCertificateModel {
                 .build()
         )
         .certificateActionSpecifications(Collections.emptyList())
-        .certificateVersions(List.of(FK3226_VERSION))
+        .certificateVersions(
+            List.of(new CertificateVersionAndModel(FK3226_VERSION.version(), null)))
         .name(FK3226_NAME)
         .type(FK3226_CODE_TYPE)
         .typeName(FK3226_TYPE_NAME)
@@ -134,7 +137,8 @@ public class TestDataCertificateModel {
         )
         .name(FK7472_NAME)
         .certificateActionSpecifications(Collections.emptyList())
-        .certificateVersions(List.of(FK7472_VERSION))
+        .certificateVersions(
+            List.of(new CertificateVersionAndModel(FK7472_VERSION.version(), null)))
         .type(FK7472_CODE_TYPE)
         .typeName(FK7472_TYPE_NAME)
         .availableForCitizen(false)
@@ -154,7 +158,8 @@ public class TestDataCertificateModel {
                 .build()
         )
         .certificateActionSpecifications(Collections.emptyList())
-        .certificateVersions(List.of(FK7809_VERSION))
+        .certificateVersions(
+            List.of(new CertificateVersionAndModel(FK7809_VERSION.version(), null)))
         .name(FK7809_NAME)
         .type(FK7809_CODE_TYPE)
         .typeName(FK7809_TYPE_NAME)
@@ -175,7 +180,8 @@ public class TestDataCertificateModel {
                 .build()
         )
         .certificateActionSpecifications(Collections.emptyList())
-        .certificateVersions(List.of(FK7427_VERSION))
+        .certificateVersions(
+            List.of(new CertificateVersionAndModel(FK7427_VERSION.version(), null)))
         .name(FK7427_NAME)
         .type(FK7427_CODE_TYPE)
         .typeName(FK7427_TYPE_NAME)
@@ -194,7 +200,8 @@ public class TestDataCertificateModel {
                 .build()
         )
         .certificateActionSpecifications(Collections.emptyList())
-        .certificateVersions(List.of(FK7426_VERSION))
+        .certificateVersions(
+            List.of(new CertificateVersionAndModel(FK7426_VERSION.version(), null)))
         .name(TestDataCertificateModelConstants.FK7426_NAME)
         .type(TestDataCertificateModelConstants.FK7426_CODE_TYPE)
         .typeName(FK7426_TYPE_NAME)
@@ -214,7 +221,8 @@ public class TestDataCertificateModel {
                 .build()
         )
         .certificateActionSpecifications(Collections.emptyList())
-        .certificateVersions(List.of(FK3221_VERSION))
+        .certificateVersions(
+            List.of(new CertificateVersionAndModel(FK3221_VERSION.version(), null)))
         .name(TestDataCertificateModelConstants.FK3221_NAME)
         .type(TestDataCertificateModelConstants.FK3221_CODE_TYPE)
         .typeName(FK3221_TYPE_NAME)
@@ -234,7 +242,8 @@ public class TestDataCertificateModel {
                 .build()
         )
         .certificateActionSpecifications(Collections.emptyList())
-        .certificateVersions(List.of(FK7810_VERSION))
+        .certificateVersions(
+            List.of(new CertificateVersionAndModel(FK7810_VERSION.version(), null)))
         .name(TestDataCertificateModelConstants.FK7810_NAME)
         .type(TestDataCertificateModelConstants.FK7810_CODE_TYPE)
         .typeName(FK7810_TYPE_NAME)
@@ -264,7 +273,8 @@ public class TestDataCertificateModel {
         .schematronPath(TestDataCertificateModelConstants.FK7804_SCHEMATRON_PATH)
         .recipient(TestDataCertificateModelConstants.FK_RECIPIENT)
         .certificateActionFactory(new CertificateActionFactory(null))
-        .certificateVersions(List.of(FK7804_VERSION))
+        .certificateVersions(
+            List.of(new CertificateVersionAndModel(FK7804_VERSION.version(), null)))
         .activeFrom(LocalDateTime.now().minusDays(1));
   }
 
@@ -277,7 +287,8 @@ public class TestDataCertificateModel {
                 .build()
         )
         .certificateActionSpecifications(Collections.emptyList())
-        .certificateVersions(List.of(AG7804_VERSION))
+        .certificateVersions(
+            List.of(new CertificateVersionAndModel(AG7804_VERSION.version(), null)))
         .name(TestDataCertificateModelConstants.AG7804_NAME)
         .type(TestDataCertificateModelConstants.AG7804_CODE_TYPE)
         .typeName(AG7804_TYPE_NAME)
@@ -315,7 +326,7 @@ public class TestDataCertificateModel {
                 .build()
         )
         .certificateActionSpecifications(Collections.emptyList())
-        .certificateVersions(List.of(AG114_VERSION))
+        .certificateVersions(List.of(new CertificateVersionAndModel(AG114_VERSION.version(), null)))
         .name(TestDataCertificateModelConstants.AG114_NAME)
         .type(TestDataCertificateModelConstants.AG114_CODE_TYPE)
         .typeName(AG114_TYPE_NAME)

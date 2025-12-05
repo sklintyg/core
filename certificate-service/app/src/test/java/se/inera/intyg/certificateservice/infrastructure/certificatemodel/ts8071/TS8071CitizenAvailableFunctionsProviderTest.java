@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenAvailableFunctionType.ATTENTION;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.ag7804CertificateBuilder;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -23,6 +24,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersionAndModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenAvailableFunction;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenAvailableFunctionType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.DefaultCitizenAvailableFunctionsProvider;
@@ -162,31 +164,40 @@ class TS8071CitizenAvailableFunctionsProviderTest {
 
 
   private static MedicalCertificate getNotLatestMajorVersionCertificate() {
-    return ag7804CertificateBuilder()
-        .certificateModel(
-            CertificateModel.builder()
-                .certificateVersions(List.of(new CertificateVersion("3.0")))
-                .id(
-                    CertificateModelId.builder()
-                        .version(new CertificateVersion("2.0"))
-                        .build()
-                )
+    final var model = CertificateModel.builder()
+        .id(
+            CertificateModelId.builder()
+                .version(new CertificateVersion("2.0"))
                 .build()
-        ).build();
+        )
+        .activeFrom(LocalDateTime.now().plusDays(1))
+        .build();
+
+    final var certificateModel = model.withCertificateVersions(
+        List.of(new CertificateVersionAndModel("3.0", model))
+    );
+
+    return ag7804CertificateBuilder()
+        .certificateModel(certificateModel)
+        .build();
   }
 
   private static MedicalCertificate getLatestMajorVersionCertificate(boolean sent) {
-    return ag7804CertificateBuilder()
-        .certificateModel(
-            CertificateModel.builder()
-                .certificateVersions(List.of(new CertificateVersion("2.0")))
-                .id(
-                    CertificateModelId.builder()
-                        .version(new CertificateVersion("2.0"))
-                        .build()
-                )
+    final var model = CertificateModel.builder()
+        .id(
+            CertificateModelId.builder()
+                .version(new CertificateVersion("2.0"))
                 .build()
         )
+        .activeFrom(LocalDateTime.now().plusDays(1))
+        .build();
+
+    final var certificateModel = model.withCertificateVersions(
+        List.of(new CertificateVersionAndModel("2.0", model))
+    );
+
+    return ag7804CertificateBuilder()
+        .certificateModel(certificateModel)
         .sent(
             sent ? Sent.builder().build() : null
         )
