@@ -10,6 +10,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_VARDCENTRAL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.BETA_VARDCENTRAL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.ag7804CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.ag7804certificateModelBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.fk7804certificateModelBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ANONYMA_REACT_ATTILA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
@@ -37,7 +38,8 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionContentProvider;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersionAndModel;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
@@ -48,6 +50,7 @@ import se.inera.intyg.certificateservice.domain.patient.model.Patient;
 import se.inera.intyg.certificateservice.domain.patient.model.ProtectedPerson;
 import se.inera.intyg.certificateservice.domain.patient.model.TestIndicated;
 import se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate;
+import se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModelConstants;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateActionSendTest {
@@ -717,12 +720,25 @@ class CertificateActionSendTest {
       final var actionEvaluation = actionEvaluationBuilder
           .build();
 
-      final var model = fk7804certificateModelBuilder().build();
-      final var certificateModel = model.withCertificateVersions(
-          List.of(new CertificateVersionAndModel("3.0", model)
+      final var inactiveModel = ag7804certificateModelBuilder()
+          .id(
+              CertificateModelId.builder()
+                  .type(TestDataCertificateModelConstants.AG7804_TYPE)
+                  .version(new CertificateVersion("2"))
+                  .build()
           )
-      );
+          .build();
 
+      final var activeModel = ag7804certificateModelBuilder()
+          .id(
+              CertificateModelId.builder()
+                  .type(TestDataCertificateModelConstants.AG7804_TYPE)
+                  .version(new CertificateVersion("3"))
+                  .build()
+          )
+          .build();
+
+      final var certificateModel = inactiveModel.withVersions(List.of(inactiveModel, activeModel));
       final var certificate = certificateBuilder
           .certificateModel(certificateModel)
           .build();
@@ -743,12 +759,25 @@ class CertificateActionSendTest {
       final var actionEvaluation = actionEvaluationBuilder
           .build();
 
-      final var model = fk7804certificateModelBuilder().build();
-      final var certificateModel = model.withCertificateVersions(
-          List.of(new CertificateVersionAndModel("3.0", model)
+      final var inactiveModel = ag7804certificateModelBuilder()
+          .id(
+              CertificateModelId.builder()
+                  .type(TestDataCertificateModelConstants.AG7804_TYPE)
+                  .version(new CertificateVersion("2"))
+                  .build()
           )
-      );
+          .build();
 
+      final var activeModel = ag7804certificateModelBuilder()
+          .id(
+              CertificateModelId.builder()
+                  .type(TestDataCertificateModelConstants.AG7804_TYPE)
+                  .version(new CertificateVersion("3"))
+                  .build()
+          )
+          .build();
+
+      final var certificateModel = inactiveModel.withVersions(List.of(inactiveModel, activeModel));
       final var certificate = certificateBuilder
           .certificateModel(certificateModel)
           .build();
