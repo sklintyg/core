@@ -842,49 +842,98 @@ class CertificateModelTest {
   class IsLatestActiveVersionTests {
 
     @Test
-    void shouldReturnTrueIfVersionMatches() {
-      final var certificateModel = CertificateModel.builder()
+    void shouldReturnTrueIfVersionIsLatestActiveVersion() {
+      final var model = CertificateModel.builder()
           .id(
               CertificateModelId.builder()
                   .type(new CertificateType("type"))
                   .version(new CertificateVersion("1.0"))
                   .build()
           )
-          .certificateVersions(List.of(new CertificateVersion("1.0")))
+          .activeFrom(LocalDateTime.now().minusDays(1))
           .build();
+
+      final var certificateModel = model.withCertificateVersions(
+          List.of(new CertificateVersionAndModel("1.0", model)));
 
       assertTrue(certificateModel.isLastestActiveVersion());
     }
 
     @Test
-    void shouldReturnTrueIfVersionMatchesWithMultipleMajorVersions() {
-      final var certificateModel = CertificateModel.builder()
+    void shouldReturnTrueIfVersionMatchesWithMultipleMajorVersionsAndIsLatestActiveVersion() {
+      final var modelOne = CertificateModel.builder()
+          .id(
+              CertificateModelId.builder()
+                  .type(new CertificateType("type"))
+                  .version(new CertificateVersion("1.0"))
+                  .build()
+          )
+          .activeFrom(LocalDateTime.now().minusDays(1))
+          .build();
+
+      final var modelTwo = CertificateModel.builder()
           .id(
               CertificateModelId.builder()
                   .type(new CertificateType("type"))
                   .version(new CertificateVersion("2.0"))
                   .build()
           )
-          .certificateVersions(
-              List.of(new CertificateVersion("1.0"), new CertificateVersion("2.0")))
+          .activeFrom(LocalDateTime.now().minusDays(1))
           .build();
+
+      final var certificateModel = modelTwo.withCertificateVersions(
+          List.of(new CertificateVersionAndModel("1.0", modelOne),
+              new CertificateVersionAndModel("2.0", modelTwo)));
 
       assertTrue(certificateModel.isLastestActiveVersion());
     }
 
     @Test
     void shouldReturnTrueIfVersionMatchesWithMultipleMinorVersions() {
-      final var certificateModel = CertificateModel.builder()
+      final var modelOne = CertificateModel.builder()
+          .id(
+              CertificateModelId.builder()
+                  .type(new CertificateType("type"))
+                  .version(new CertificateVersion("1.0"))
+                  .build()
+          )
+          .activeFrom(LocalDateTime.now().minusDays(1))
+          .build();
+
+      final var modelTwo = CertificateModel.builder()
+          .id(
+              CertificateModelId.builder()
+                  .type(new CertificateType("type"))
+                  .version(new CertificateVersion("1.3"))
+                  .build()
+          )
+          .activeFrom(LocalDateTime.now().minusDays(1))
+          .build();
+
+      final var modelThree = CertificateModel.builder()
           .id(
               CertificateModelId.builder()
                   .type(new CertificateType("type"))
                   .version(new CertificateVersion("1.8"))
                   .build()
           )
-          .certificateVersions(
-              List.of(new CertificateVersion("1.0"), new CertificateVersion("1.3"),
-                  new CertificateVersion("1.8")))
+          .activeFrom(LocalDateTime.now().minusDays(1))
           .build();
+
+      final var model = CertificateModel.builder()
+          .id(
+              CertificateModelId.builder()
+                  .type(new CertificateType("type"))
+                  .version(new CertificateVersion("1.8"))
+                  .build()
+          )
+          .build();
+
+      final var certificateModel = model.withCertificateVersions(
+          List.of(new CertificateVersionAndModel("1.0", modelOne),
+              new CertificateVersionAndModel("1.3", modelTwo),
+              new CertificateVersionAndModel("1.8", modelThree))
+      );
 
       assertTrue(certificateModel.isLastestActiveVersion());
     }
@@ -898,10 +947,51 @@ class CertificateModelTest {
                   .version(new CertificateVersion("1.0"))
                   .build()
           )
-          .certificateVersions(List.of(new CertificateVersion("2.0")))
+          .certificateVersions(List.of(new CertificateVersionAndModel("2.0", null)))
           .build();
 
       assertFalse(certificateModel.isLastestActiveVersion());
+    }
+
+    @Test
+    void shallReturnTrueIfLastActiveVersionIfNextVersionIsInactive() {
+      final var modelOne = CertificateModel.builder()
+          .id(
+              CertificateModelId.builder()
+                  .type(new CertificateType("type"))
+                  .version(new CertificateVersion("1.0"))
+                  .build()
+          )
+          .activeFrom(LocalDateTime.now().minusDays(1))
+          .build();
+
+      final var modelTwo = CertificateModel.builder()
+          .id(
+              CertificateModelId.builder()
+                  .type(new CertificateType("type"))
+                  .version(new CertificateVersion("2.0"))
+                  .build()
+          )
+          .activeFrom(LocalDateTime.now().plusDays(1))
+          .build();
+
+      final var model = CertificateModel.builder()
+          .id(
+              CertificateModelId.builder()
+                  .type(new CertificateType("type"))
+                  .version(new CertificateVersion("1.0"))
+                  .build()
+          )
+          .build();
+
+      final var certificateModel = model.withCertificateVersions(
+          List.of(
+              new CertificateVersionAndModel("1.0", modelOne),
+              new CertificateVersionAndModel("2.0", modelTwo)
+          )
+      );
+
+      assertTrue(certificateModel.isLastestActiveVersion());
     }
   }
 

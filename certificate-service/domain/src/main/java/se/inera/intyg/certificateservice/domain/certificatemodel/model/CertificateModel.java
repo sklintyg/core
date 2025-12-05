@@ -54,7 +54,7 @@ public class CertificateModel implements Comparator<ElementId> {
   CertificateModelId ableToCreateDraftForModel;
   @Builder.Default
   @With
-  List<CertificateVersion> certificateVersions = Collections.emptyList();
+  List<CertificateVersionAndModel> certificateVersions = Collections.emptyList();
   CertificateGenerelPrintProvider generalPrintProvider;
 
   public List<CertificateAction> actions() {
@@ -182,7 +182,8 @@ public class CertificateModel implements Comparator<ElementId> {
   public boolean isLastestActiveVersion() {
     final var version = id.version().version();
     return certificateVersions.stream()
-        .map(CertificateVersion::version)
+        .filter(CertificateVersionAndModel::isActive)
+        .map(CertificateVersionAndModel::version)
         .filter(Objects::nonNull)
         .map(BigDecimal::new)
         .max(Comparator.naturalOrder())

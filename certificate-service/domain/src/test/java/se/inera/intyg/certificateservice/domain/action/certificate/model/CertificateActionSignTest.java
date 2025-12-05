@@ -11,7 +11,6 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.ALFA_VARDCENTRAL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCareUnit.BETA_VARDCENTRAL;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.ag7804CertificateBuilder;
-import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.ag7804certificateModelBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.fk7804certificateModelBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ANONYMA_REACT_ATTILA;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatient.ATHENA_REACT_ANDERSSON;
@@ -44,6 +43,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersionAndModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.common.model.Recipient;
 import se.inera.intyg.certificateservice.domain.common.model.RecipientId;
@@ -65,7 +65,6 @@ class CertificateActionSignTest {
               .version(VERSION)
               .build()
       )
-      .certificateVersions(List.of(VERSION))
       .activeFrom(LocalDateTime.now().minusDays(1))
       .build();
   private CertificateActionSign certificateActionSign;
@@ -723,12 +722,14 @@ class CertificateActionSignTest {
       final var actionEvaluation = actionEvaluationBuilder
           .build();
 
-      final var certificate = certificateBuilder
-          .certificateModel(
-              ag7804certificateModelBuilder()
-                  .certificateVersions(List.of(new CertificateVersion("3.0")))
-                  .build()
+      final var model = fk7804certificateModelBuilder().build();
+      final var certificateModel = model.withCertificateVersions(
+          List.of(new CertificateVersionAndModel("3.0", model)
           )
+      );
+
+      final var certificate = certificateBuilder
+          .certificateModel(certificateModel)
           .build();
 
       when(
@@ -747,12 +748,14 @@ class CertificateActionSignTest {
       final var actionEvaluation = actionEvaluationBuilder
           .build();
 
-      final var certificate = certificateBuilder
-          .certificateModel(
-              ag7804certificateModelBuilder()
-                  .certificateVersions(List.of(new CertificateVersion("3.0")))
-                  .build()
+      final var model = fk7804certificateModelBuilder().build();
+      final var certificateModel = model.withCertificateVersions(
+          List.of(new CertificateVersionAndModel("3.0", model)
           )
+      );
+
+      final var certificate = certificateBuilder
+          .certificateModel(certificateModel)
           .build();
 
       when(

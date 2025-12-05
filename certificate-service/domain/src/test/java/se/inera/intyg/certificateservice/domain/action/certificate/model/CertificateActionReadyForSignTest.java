@@ -37,7 +37,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.CertificateMet
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateActionSpecification;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersionAndModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.common.model.AccessScope;
 import se.inera.intyg.certificateservice.domain.common.model.Role;
@@ -342,12 +342,14 @@ class CertificateActionReadyForSignTest {
           )
           .build();
 
-      final var certificate = certificateBuilder
-          .certificateModel(
-              fk7804certificateModelBuilder()
-                  .certificateVersions(List.of(new CertificateVersion("3.0")))
-                  .build()
+      final var model = fk7804certificateModelBuilder().build();
+      final var certificateModel = model.withCertificateVersions(
+          List.of(new CertificateVersionAndModel("3.0", model)
           )
+      );
+
+      final var certificate = certificateBuilder
+          .certificateModel(certificateModel)
           .build();
 
       when(
@@ -372,12 +374,14 @@ class CertificateActionReadyForSignTest {
           )
           .build();
 
-      final var certificate = certificateBuilder
-          .certificateModel(
-              fk7804certificateModelBuilder()
-                  .certificateVersions(List.of(new CertificateVersion("3.0")))
-                  .build()
+      final var model = fk7804certificateModelBuilder().build();
+      final var certificateModel = model.withCertificateVersions(
+          List.of(new CertificateVersionAndModel("3.0", model)
           )
+      );
+
+      final var certificate = certificateBuilder
+          .certificateModel(certificateModel)
           .build();
 
       when(

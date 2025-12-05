@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersionAndModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
@@ -41,10 +42,12 @@ public class InMemoryCertificateModelRepository implements CertificateModelRepos
     });
 
     final var certificateTypeToVersionReference = certificateModelMap.values().stream()
+        .sorted(Comparator.comparing(model -> model.id().version().version()))
         .collect(
             Collectors.groupingBy(
                 model -> model.id().type(),
-                Collectors.mapping(model -> model.id().version(),
+                Collectors.mapping(
+                    model -> new CertificateVersionAndModel(model.id().version().version(), model),
                     Collectors.toList())
             )
         );

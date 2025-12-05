@@ -92,6 +92,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateTypeName;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersionAndModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -138,6 +139,7 @@ class CertificateMetadataConverterTest {
   private static final ActionEvaluation ACTION_EVALUATION = ActionEvaluation.builder().build();
   private static final CertificateConfirmationModalDTO CONVERTED_MODAL = CertificateConfirmationModalDTO.builder()
       .build();
+  private static final LocalDateTime ACTIVE_FROM = LocalDateTime.now().minusDays(1);
 
   @Mock
   private CertificateMessageTypeConverter certificateMessageTypeConverter;
@@ -161,6 +163,75 @@ class CertificateMetadataConverterTest {
 
     @BeforeEach
     void setUp() {
+      final var model = CertificateModel.builder()
+          .id(
+              CertificateModelId.builder()
+                  .type(new CertificateType(TYPE))
+                  .version(new CertificateVersion(VERSION))
+                  .build()
+          )
+          .activeFrom(ACTIVE_FROM)
+          .typeName(TYPE_NAME)
+          .name(MODEL_NAME)
+          .detailedDescription(MODEL_DESCRIPTION)
+          .recipient(RECIPIENT)
+          .messageTypes(CERTIFICATE_MESSAGE_TYPES)
+          .elementSpecifications(
+              List.of(
+                  ElementSpecification.builder()
+                      .id(new ElementId(Q_1))
+                      .configuration(
+                          ElementConfigurationCategory.builder()
+                              .name(NAME)
+                              .build()
+                      )
+                      .children(
+                          List.of(
+                              ElementSpecification.builder()
+                                  .id(new ElementId(ID))
+                                  .configuration(
+                                      ElementConfigurationDate.builder()
+                                          .id(new FieldId(ID))
+                                          .name(NAME)
+                                          .min(Period.ofDays(0))
+                                          .max(Period.ofYears(1))
+                                          .build()
+                                  )
+                                  .rules(
+                                      List.of(
+                                          ElementRuleExpression.builder()
+                                              .id(new ElementId(ID))
+                                              .type(ElementRuleType.MANDATORY)
+                                              .expression(
+                                                  new RuleExpression(EXPRESSION))
+                                              .build()
+                                      )
+                                  )
+                                  .validations(
+                                      List.of(
+                                          ElementValidationDate.builder()
+                                              .mandatory(true)
+                                              .min(Period.ofDays(0))
+                                              .max(Period.ofYears(1))
+                                              .build()
+                                      )
+                                  )
+                                  .build()
+                          )
+                      )
+                      .build()
+              )
+          )
+          .summaryProvider(certificateSummaryProvider)
+          .confirmationModalProvider(certificateConfirmationModalProvider)
+          .availableForCitizen(true)
+          .build();
+
+      final var certificateModel = model.withCertificateVersions(
+          List.of(new CertificateVersionAndModel(VERSION, model)
+          )
+      );
+
       certificateBuilder = MedicalCertificate.builder()
           .id(new CertificateId(CERTIFICATE_ID))
           .created(CREATED)
@@ -182,71 +253,7 @@ class CertificateMetadataConverterTest {
                   .readyForSignBy(Staff.builder().build())
                   .build()
           )
-          .certificateModel(
-              CertificateModel.builder()
-                  .id(
-                      CertificateModelId.builder()
-                          .type(new CertificateType(TYPE))
-                          .version(new CertificateVersion(VERSION))
-                          .build()
-                  )
-                  .certificateVersions(List.of(new CertificateVersion(VERSION)))
-                  .typeName(TYPE_NAME)
-                  .name(MODEL_NAME)
-                  .detailedDescription(MODEL_DESCRIPTION)
-                  .recipient(RECIPIENT)
-                  .messageTypes(CERTIFICATE_MESSAGE_TYPES)
-                  .elementSpecifications(
-                      List.of(
-                          ElementSpecification.builder()
-                              .id(new ElementId(Q_1))
-                              .configuration(
-                                  ElementConfigurationCategory.builder()
-                                      .name(NAME)
-                                      .build()
-                              )
-                              .children(
-                                  List.of(
-                                      ElementSpecification.builder()
-                                          .id(new ElementId(ID))
-                                          .configuration(
-                                              ElementConfigurationDate.builder()
-                                                  .id(new FieldId(ID))
-                                                  .name(NAME)
-                                                  .min(Period.ofDays(0))
-                                                  .max(Period.ofYears(1))
-                                                  .build()
-                                          )
-                                          .rules(
-                                              List.of(
-                                                  ElementRuleExpression.builder()
-                                                      .id(new ElementId(ID))
-                                                      .type(ElementRuleType.MANDATORY)
-                                                      .expression(
-                                                          new RuleExpression(EXPRESSION))
-                                                      .build()
-                                              )
-                                          )
-                                          .validations(
-                                              List.of(
-                                                  ElementValidationDate.builder()
-                                                      .mandatory(true)
-                                                      .min(Period.ofDays(0))
-                                                      .max(Period.ofYears(1))
-                                                      .build()
-                                              )
-                                          )
-                                          .build()
-                                  )
-                              )
-                              .build()
-                      )
-                  )
-                  .summaryProvider(certificateSummaryProvider)
-                  .confirmationModalProvider(certificateConfirmationModalProvider)
-                  .availableForCitizen(true)
-                  .build()
-          )
+          .certificateModel(certificateModel)
           .certificateMetaData(
               CertificateMetaData.builder()
                   .patient(
