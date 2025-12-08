@@ -189,7 +189,7 @@ When the `/feature` tool is invoked, start with a general message to the user li
 - `/template`: Creates a spec or guide from a template. It asks the user for the kind of template (spec or guide), the task it should be created for, and then depending on the kind, either requirements (for spec) or a spec file (for guide).
 When the `/template` tool is invoked, start with a general message to the user like: "Hi! I'll help you create a spec or guide from a template. Should we proceed?"
 
-To list all available tools, use the command `/tools`.
+To list all available tools, use the command `/tools`, mention name of tool and short summary but not instruction file.
 
 To list all available agents, use the command `/agents`.
 
