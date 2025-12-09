@@ -16,6 +16,15 @@ import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 @Component
 public class TextUtil {
 
+  private static final String[] PROBLEM_HYPHENS = {
+      "\u2010", // hyphen
+      "\u2011", // non-breaking hyphen
+      "\u2012", // figure dash
+      "\u2013", // en dash
+      "\u2014", // em dash
+      "\u2015"  // horizontal bar
+  };
+
   public float calculateTextHeight(String text, float fontSize, PDFont font,
       float width) {
 
@@ -91,7 +100,14 @@ public class TextUtil {
     if (text == null) {
       return "";
     }
-    return text.replaceAll("[\\t\\r\\f\\v\\x00-\\x08\\x0B-\\x0C\\x0E-\\x1F\\x7F]", " ");
+
+    var santizedText = text.replaceAll("[\\t\\r\\f\\v\\x00-\\x08\\x0B-\\x0C\\x0E-\\x1F\\x7F]", " ");
+
+    for (String h : PROBLEM_HYPHENS) {
+      santizedText = santizedText.replace(h, "-");
+    }
+
+    return santizedText;
   }
 
   public Optional<OverFlowLineSplit> getOverflowingLines(List<PdfField> currentFields,
