@@ -219,7 +219,7 @@ public class CertificatePdfFillService {
     try {
       field.setValue(
           fields.stream()
-              .map(PdfField::getValue)
+              .map(PdfField::sanitizedValue)
               .collect(Collectors.joining("\n"))
       );
     } catch (IOException e) {
