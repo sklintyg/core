@@ -105,6 +105,10 @@ public class TextUtil {
     final var sanitizedText = text.replaceAll(
         "[\\t\\r\\f\\v\\x00-\\x08\\x0B-\\x0C\\x0E-\\x1F\\x7F]", " ");
 
+    return normalizePrintableCharacters(sanitizedText);
+  }
+
+  public static String normalizePrintableCharacters(String sanitizedText) {
     return Arrays.stream(PROBLEM_HYPHENS)
         .reduce(sanitizedText, (result, hyphen) -> result.replace(hyphen, "-"));
   }
