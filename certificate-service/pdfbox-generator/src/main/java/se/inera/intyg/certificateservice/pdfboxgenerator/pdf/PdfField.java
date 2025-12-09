@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.TextUtil;
 
 @Getter
 @Builder
@@ -17,4 +18,12 @@ public class PdfField {
   Boolean append = false;
   String appearance;
   Integer offset;
+
+  public String sanitizedValue() {
+    if (this.value == null || this.value.isEmpty()) {
+      return "";
+    }
+    
+    return TextUtil.normalizePrintableCharacters(value);
+  }
 }

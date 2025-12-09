@@ -411,7 +411,7 @@ public class CertificatePdfFillService {
         textAppearance.adjustFieldHeight(field.getOffset());
       }
 
-      extractedField.setValue(field.getValue());
+      extractedField.setValue(field.sanitizedValue());
     }
   }
 
