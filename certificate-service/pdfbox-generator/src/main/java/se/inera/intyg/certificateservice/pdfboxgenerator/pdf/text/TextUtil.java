@@ -5,6 +5,7 @@ import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -101,13 +102,11 @@ public class TextUtil {
       return "";
     }
 
-    var santizedText = text.replaceAll("[\\t\\r\\f\\v\\x00-\\x08\\x0B-\\x0C\\x0E-\\x1F\\x7F]", " ");
+    final var sanitizedText = text.replaceAll(
+        "[\\t\\r\\f\\v\\x00-\\x08\\x0B-\\x0C\\x0E-\\x1F\\x7F]", " ");
 
-    for (String h : PROBLEM_HYPHENS) {
-      santizedText = santizedText.replace(h, "-");
-    }
-
-    return santizedText;
+    return Arrays.stream(PROBLEM_HYPHENS)
+        .reduce(sanitizedText, (result, hyphen) -> result.replace(hyphen, "-"));
   }
 
   public Optional<OverFlowLineSplit> getOverflowingLines(List<PdfField> currentFields,
