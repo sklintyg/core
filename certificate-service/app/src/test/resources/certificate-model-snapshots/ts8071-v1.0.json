@@ -5252,7 +5252,7 @@
     "certificateActionConfigurationRepository" : null
   },
   "ableToCreateDraftForModel" : null,
-  "certificateVersions" : [ ],
+  "versions" : [ ],
   "generalPrintProvider" : null,
   "active" : true,
   "lastestActiveVersion" : false,

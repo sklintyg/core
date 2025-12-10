@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersionAndModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateModelRepository;
 import se.inera.intyg.certificateservice.domain.common.model.Code;
 import se.inera.intyg.certificateservice.infrastructure.certificatemodel.CertificateModelFactory;
@@ -47,7 +47,7 @@ public class InMemoryCertificateModelRepository implements CertificateModelRepos
             Collectors.groupingBy(
                 model -> model.id().type(),
                 Collectors.mapping(
-                    model -> new CertificateVersionAndModel(model.id().version().version(), model),
+                    Function.identity(),
                     Collectors.toList())
             )
         );
@@ -55,7 +55,7 @@ public class InMemoryCertificateModelRepository implements CertificateModelRepos
     certificateModelMap.forEach((key, certificateModel) ->
         certificateModelMap.put(
             key,
-            certificateModel.withCertificateVersions(
+            certificateModel.withVersions(
                 certificateTypeToVersionReference.get(certificateModel.id().type())
             )
         )

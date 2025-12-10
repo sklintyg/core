@@ -92,7 +92,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateTypeName;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersionAndModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationCategory;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementConfigurationDate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
@@ -227,10 +226,7 @@ class CertificateMetadataConverterTest {
           .availableForCitizen(true)
           .build();
 
-      final var certificateModel = model.withCertificateVersions(
-          List.of(new CertificateVersionAndModel(VERSION, model)
-          )
-      );
+      final var certificateModel = model.withVersions(List.of(model));
 
       certificateBuilder = MedicalCertificate.builder()
           .id(new CertificateId(CERTIFICATE_ID))

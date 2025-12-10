@@ -18,8 +18,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersionAndModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.repository.CertificateActionConfigurationRepository;
 import se.inera.intyg.certificateservice.domain.configuration.limitedcertificatefunctionality.dto.LimitedActionConfiguration;
 import se.inera.intyg.certificateservice.domain.configuration.limitedcertificatefunctionality.dto.LimitedCertificateFunctionalityActionsConfiguration;
@@ -178,17 +178,27 @@ class ActionRuleLimitedCertificateFunctionalityTest {
   }
 
   private static MedicalCertificate buildNotLatestMajorVersionCertificate() {
-    final var model = CertificateModel.builder()
+    final var inactiveModel = CertificateModel.builder()
         .id(
             CertificateModelId.builder()
+                .type(new CertificateType("type"))
                 .version(new CertificateVersion("2.0"))
                 .build()
         )
         .activeFrom(LocalDateTime.now().minusDays(5))
         .build();
 
-    final var certificateModel = model.withCertificateVersions(
-        List.of(new CertificateVersionAndModel("3.0", model)));
+    final var activeModel = CertificateModel.builder()
+        .id(
+            CertificateModelId.builder()
+                .type(new CertificateType("type"))
+                .version(new CertificateVersion("3.0"))
+                .build()
+        )
+        .activeFrom(LocalDateTime.now().minusDays(5))
+        .build();
+
+    final var certificateModel = inactiveModel.withVersions(List.of(inactiveModel, activeModel));
 
     return ag7804CertificateBuilder()
         .certificateModel(certificateModel)
