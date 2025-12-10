@@ -34,7 +34,8 @@ class PdfFieldTest {
           Arguments.of("\u2012", "figure dash"),
           Arguments.of("\u2013", "en dash"),
           Arguments.of("\u2014", "em dash"),
-          Arguments.of("\u2015", "horizontal bar")
+          Arguments.of("\u2015", "horizontal bar"),
+          Arguments.of("\u2212", "minus")
       );
     }
 
