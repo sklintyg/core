@@ -23,7 +23,8 @@ public class TextUtil {
       "\u2012", // figure dash
       "\u2013", // en dash
       "\u2014", // em dash
-      "\u2015"  // horizontal bar
+      "\u2015", // horizontal bar
+      "\u2212"  // minus
   };
 
   public float calculateTextHeight(String text, float fontSize, PDFont font,
