@@ -5,8 +5,8 @@ import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
@@ -17,15 +17,17 @@ import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 @Component
 public class TextUtil {
 
-  private static final String[] PROBLEM_HYPHENS = {
-      "\u2010", // hyphen
-      "\u2011", // non-breaking hyphen
-      "\u2012", // figure dash
-      "\u2013", // en dash
-      "\u2014", // em dash
-      "\u2015", // horizontal bar
-      "\u2212"  // minus
-  };
+  private static final Map<String, String> PROBLEM_CHARACTERS_MAPPING = Map.of(
+      "\u2010", "-", // hyphen
+      "\u2011", "-", // non-breaking hyphen
+      "\u2012", "-", // figure dash
+      "\u2013", "-", // en dash
+      "\u2014", "-", // em dash
+      "\u2015", "-",  // horizontal bar
+      "\u2192", "->",  // right arrow
+      "\u2190", "<-",   // left arrow
+      "\u2194", "<->"   // left right arrow
+  );
 
   public float calculateTextHeight(String text, float fontSize, PDFont font,
       float width) {
@@ -110,8 +112,10 @@ public class TextUtil {
   }
 
   public static String normalizePrintableCharacters(String sanitizedText) {
-    return Arrays.stream(PROBLEM_HYPHENS)
-        .reduce(sanitizedText, (result, hyphen) -> result.replace(hyphen, "-"));
+    return PROBLEM_CHARACTERS_MAPPING.entrySet().stream()
+        .reduce(sanitizedText,
+            (result, entry) -> result.replace(entry.getKey(), entry.getValue()),
+            (s1, s2) -> s2);
   }
 
   public Optional<OverFlowLineSplit> getOverflowingLines(List<PdfField> currentFields,
