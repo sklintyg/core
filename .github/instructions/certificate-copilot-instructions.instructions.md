@@ -1,6 +1,55 @@
 # Certificate Creation Documentation
 
-This document describes how a new certificate model is created.
+🔧 **Tool name:** `/certificate`  
+📄 **Spec template:** `certificate-specification-template.spec.md`  
+📋 **Guide template:** `certificate-implementation-guide-template.guide.md`  
+📝 **Description:** This document describes how a new certificate model is created.
+
+**Important**: Before proceeding with any workflow, ensure the certificate specification file exists and is complete. Use the `certificate-specification-template.spec.md` as the format. If a specific spec file is provided, use that; otherwise, use the template. The specification must include all required details (type, questions, IDs, texts, types, rules, validations, activation date) to avoid missing information. Do not proceed without a complete spec.
+
+### Certificate Creation Workflows
+
+This section outlines the workflows for different certificate-related tasks. Each workflow specifies what input the agent uses from the specification, what the agent does, and how iteration works. Refer to the numbered sections below for detailed instructions.
+
+- **Creating a New Certificate Model**:
+  - **Input**: Certificate specification file with type, questions, IDs, texts, types, rules, validations, and activation date.
+  - **Agent Actions**: Generate `CertificateModelFactoryTYPE`, create `ElementSpecifications`, map configurations and values, add rules and validations, generate tests, ensure texts are word-for-word.
+  - **Iteration**: If missing IDs/codes, add TODO comments; developer reviews and refines code.
+
+- **Mapping ElementConfigurations and ElementValues**:
+  - **Input**: Question types and SK codes from specification file.
+  - **Agent Actions**: Use Value Generator Mapping Table to assign `ElementConfiguration` and `ElementValue`, add validations, reference examples for uniformity.
+  - **Iteration**: If unclear, add TODO comments and reference table; developer reviews.
+
+- **Applying Rules to Questions**:
+  - **Input**: Rule descriptions from specification file (e.g., mandatory, show/hide conditions).
+  - **Agent Actions**: Map to Rule Code and ElementRuleType, use `ElementRuleFactory`, add validations like mandatoryExists.
+  - **Iteration**: For complex rules, add TODO comments; developer reviews.
+
+- **Generating Categories and Questions**:
+  - **Input**: Swedish requirements with IDs, texts, rules from specification file.
+  - **Agent Actions**: Create class names in PascalCase, assign IDs (KAT_x for categories), generate configurations, rules, tests; handle sub-questions and mappings.
+  - **Iteration**: If names ambiguous, add TODO comments; developer reviews.
+
+- **Handling ElementRules and Conditional Logic**:
+  - **Input**: Conditional logic from specification file (e.g., "show if true").
+  - **Agent Actions**: Parse logic, map to ElementRuleType, use `ElementRuleFactory`, add shouldValidate.
+  - **Iteration**: For multi-conditions, add TODO comments; developer reviews.
+
+- **Creating Tests**:
+  - **Input**: Certificate type from specification file.
+  - **Agent Actions**: Generate unit tests (e.g., QuestionClassTest), integration tests (e.g., FK7804ActiveIT), TestabilityCertificateFillService.
+  - **Iteration**: Generate and add TODO for edge cases; developer reviews.
+
+- **Adding a Major Version (only if new major version)**:
+  - **Input**: New version number and updated specification file.
+  - **Agent Actions**: Generate analysis with `major-version-analysis.md`, create version lock test, build CertificateModelFactoryVX, move common elements, add unique elements with VX suffix, generate tests.
+  - **Iteration**: Review analysis; if issues, add TODOs; developer reviews.
+
+- **Version Lock Testing**:
+  - **Input**: Previous version from specification file.
+  - **Agent Actions**: Add test in `VersionLockTest.java`, run to generate snapshot, verify and re-run.
+  - **Iteration**: If snapshot incorrect, add TODO comments; developer reviews.
 
 ### Important points to always follow
 
@@ -54,7 +103,7 @@ This document describes how a new certificate model is created.
 | ElementConfigurationIcf                      | SK-007     | ElementValueIcf                      | QuestionAktivitetsbegransningar              | QuestionAktivitetsbegransningarTest              |
 | ElementConfigurationMessage                  | SK-A01->04 | N/A                                  | MessageNedsattningArbetsformagaStartDateInfo | MessageNedsattningArbetsformagaStartDateInfoTest |
 | ElementConfigurationCategory                 | SK-000     | N/A                                  | CategoryPrognos                              | CategoryPrognosTest                              |
-| ElementConfigurationVisualAcuities           |            | ElementValueVisualAcuities           | QuestionSynkarpa                             | QuestionSynskarpaTest                            |
+| ElementConfigurationVisualAcuities           |            | ElementValueVisualAcuities           | QuestionSynkarpa                             | QuestionSynkarpaTest                            |
 
 ### 4. Rule Mapping Table
 
