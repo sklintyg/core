@@ -3,12 +3,16 @@ package se.inera.intyg.certificateservice.pdfboxgenerator.pdf;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.X_MARGIN_APPENDIX_PAGE;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.Y_MARGIN_APPENDIX_PAGE;
 
+import jakarta.annotation.PostConstruct;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.Loader;
@@ -16,6 +20,7 @@ import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDResources;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
@@ -53,8 +58,20 @@ public class CertificatePdfFillService {
   private final PdfAdditionalInformationTextGenerator pdfAdditionalInformationTextGenerator;
   private final PdfElementValueGenerator pdfElementValueGenerator;
   private final TextUtil textUtil;
-  @Value("classpath:fonts/verdana.ttf")
+  @Value("classpath:fonts/arial-unicode.ttf")
   Resource fontResource;
+
+  private byte[] cachedFontBytes;
+
+  @PostConstruct
+  void init() {
+    try {
+      log.info("Loading unicode font from resource: {}", fontResource.getFilename());
+      this.cachedFontBytes = fontResource.getInputStream().readAllBytes();
+    } catch (IOException e) {
+      throw new IllegalStateException("Failed to load unicode font", e);
+    }
+  }
 
 
   public PDDocument fillDocument(Certificate certificate, String additionalInfoText,
@@ -77,7 +94,29 @@ public class CertificatePdfFillService {
       }
 
       final var document = Loader.loadPDF(inputStream.readAllBytes());
-      setFields(certificate, document, mcid, templatePdfSpecification);
+      PDAcroForm acroForm = document.getDocumentCatalog().getAcroForm();
+
+      if (acroForm == null) {
+        acroForm = new PDAcroForm(document);
+        document.getDocumentCatalog().setAcroForm(acroForm);
+      }
+
+      PDType0Font unicodeFont = PDType0Font.load(document,
+          new ByteArrayInputStream(cachedFontBytes), false);
+
+      PDResources resources = acroForm.getDefaultResources();
+      if (resources == null) {
+        resources = new PDResources();
+        acroForm.setDefaultResources(resources);
+      }
+
+      COSName fontResName = resources.add(unicodeFont);
+
+      String da = "/" + fontResName.getName() + " 10.00 Tf 0 g";
+      acroForm.setDefaultAppearance(da);
+      acroForm.setNeedAppearances(false);
+
+      setFields(certificate, document, mcid, templatePdfSpecification, da);
       addTexts(certificate, additionalInfoText, document, isCitizenFormat, mcid,
           templatePdfSpecification);
       return document;
@@ -111,12 +150,15 @@ public class CertificatePdfFillService {
   }
 
   private void setFields(Certificate certificate, PDDocument document, AtomicInteger mcid,
-      TemplatePdfSpecification templatePdfSpecification) {
+      TemplatePdfSpecification templatePdfSpecification, String defaultAppearance) {
     if (certificate.status() == Status.SIGNED) {
-      setFieldValues(document, pdfSignatureValueGenerator.generate(certificate));
+      setFieldValues(document,
+          getPdfFields(pdfSignatureValueGenerator.generate(certificate), defaultAppearance));
     }
 
-    final var pdfFields = pdfElementValueGenerator.generate(certificate);
+    final var pdfFields = getPdfFields(pdfElementValueGenerator.generate(certificate),
+        defaultAppearance);
+
     final var appendedFields = pdfFields.stream()
         .filter(PdfField::getAppend)
         .toList();
@@ -130,9 +172,16 @@ public class CertificatePdfFillService {
 
     setFieldValuesAppendix(document, certificate, templatePdfSpecification, appendedFields, mcid);
     setFieldValues(document, fieldsWithoutAppend);
-    setFieldValues(document, pdfUnitValueGenerator.generate(certificate));
-    setFieldValues(document, pdfPatientValueGenerator.generate(certificate,
-        templatePdfSpecification.patientIdFieldIds()));
+    setFieldValues(document,
+        getPdfFields(pdfUnitValueGenerator.generate(certificate), defaultAppearance));
+    setFieldValues(document, getPdfFields(pdfPatientValueGenerator.generate(certificate,
+        templatePdfSpecification.patientIdFieldIds()), defaultAppearance));
+  }
+
+  private @NonNull List<PdfField> getPdfFields(List<PdfField> pdfFields,
+      String defaultAppearance) {
+    return pdfFields.stream().map(field -> field.withAppearance(defaultAppearance))
+        .toList();
   }
 
   private void setFieldValuesAppendix(PDDocument document, Certificate certificate,
@@ -165,7 +214,7 @@ public class CertificatePdfFillService {
     final var fontSize = new TextFieldAppearance((PDVariableText) overflowField).getFontSize();
     int start = 0;
     int count = 0;
-    final var font = PDType0Font.load(document, fontResource.getInputStream());
+    final var font = PDType0Font.load(document, new ByteArrayInputStream(cachedFontBytes));
     var appendedFieldsMutable = new ArrayList<>(appendedFields);
 
     while (count < appendedFieldsMutable.size()) {
@@ -175,15 +224,16 @@ public class CertificatePdfFillService {
           rectangle, fontSize, font);
 
       if (overFlowLines.isPresent()) {
-        var parts = overFlowLines.get();
+        final var parts = overFlowLines.get();
 
         if (parts.partOne() != null) {
           appendedFieldsMutable.get(count).setValue(parts.partOne());
         }
 
         if (parts.partTwo() != null) {
-          var part2 = new PdfField(appendedFieldsMutable.get(count).getId(),
-              parts.partTwo(), true, null, 0);
+          final var part2 = new PdfField(appendedFieldsMutable.get(count).getId(),
+              parts.partTwo(), true, null, 0)
+              .withAppearance(appendedFieldsMutable.get(count).getAppearance());
           appendedFieldsMutable.add(count + 1, part2);
           count++;
         }
@@ -240,14 +290,11 @@ public class CertificatePdfFillService {
 
     PDPage clonedPage = new PDPage(newPageDict);
 
-    String allText = fields.stream()
+    final var lines = fields.stream()
         .map(PdfField::getValue)
-        .collect(Collectors.joining("\n"));
-
-    List<String> lines = new ArrayList<>();
-    for (String line : allText.split("\n")) {
-      lines.addAll(textUtil.wrapLine(line, rectangle.getWidth(), fontSize, font));
-    }
+        .flatMap(s -> Arrays.stream(s.split("\n")))
+        .flatMap(line -> textUtil.wrapLine(line, rectangle.getWidth(), fontSize, font).stream())
+        .toList();
 
     document.addPage(clonedPage);
     PdfAccessibilityUtil.createNewOverflowPageTag(document, clonedPage, templatePdfSpecification);
