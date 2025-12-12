@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.pdfboxgenerator.pdf;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Map;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -16,7 +17,10 @@ class PdfFieldTest {
 
     @ParameterizedTest()
     @MethodSource("provideProblemHyphens")
-    void shallReplaceProblemHyphensWithRegularHyphen(String problemHyphen, String description) {
+    void shallReplaceProblemHyphensWithRegularHyphen(Map<String, String> problemHyphenMap,
+        String description) {
+      String problemHyphen = problemHyphenMap.keySet().iterator().next();
+      String replacement = problemHyphenMap.get(problemHyphen);
       final var pdfField = PdfField.builder()
           .id("testId")
           .value("text" + problemHyphen + "text")
@@ -24,18 +28,21 @@ class PdfFieldTest {
 
       final var result = pdfField.sanitizedValue();
 
-      assertEquals("text-text", result);
+      assertEquals("text" + replacement + "text", result);
     }
 
     private static Stream<Arguments> provideProblemHyphens() {
       return Stream.of(
-          Arguments.of("\u2010", "hyphen"),
-          Arguments.of("\u2011", "non-breaking hyphen"),
-          Arguments.of("\u2012", "figure dash"),
-          Arguments.of("\u2013", "en dash"),
-          Arguments.of("\u2014", "em dash"),
-          Arguments.of("\u2015", "horizontal bar"),
-          Arguments.of("\u2212", "minus")
+          Arguments.of(Map.of("\u2010", "-"), "hyphen"),
+          Arguments.of(Map.of("\u2011", "-"), "non-breaking hyphen"),
+          Arguments.of(Map.of("\u2012", "-"), "figure dash"),
+          Arguments.of(Map.of("\u2013", "-"), "en dash"),
+          Arguments.of(Map.of("\u2014", "-"), "em dash"),
+          Arguments.of(Map.of("\u2015", "-"), "horizontal bar"),
+          Arguments.of(Map.of("\u2212", "-"), "minus"),
+          Arguments.of(Map.of("\u2192", "->"), "rightwards arrow"),
+          Arguments.of(Map.of("\u2190", "<-"), "leftwards arrow"),
+          Arguments.of(Map.of("\u2194", "<->"), "left right arrow")
       );
     }
 
