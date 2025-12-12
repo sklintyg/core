@@ -3,8 +3,6 @@ package se.inera.intyg.certificateservice.pdfboxgenerator.pdf;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.X_MARGIN_APPENDIX_PAGE;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.Y_MARGIN_APPENDIX_PAGE;
 
-import jakarta.annotation.PostConstruct;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,21 +56,8 @@ public class CertificatePdfFillService {
   private final PdfAdditionalInformationTextGenerator pdfAdditionalInformationTextGenerator;
   private final PdfElementValueGenerator pdfElementValueGenerator;
   private final TextUtil textUtil;
-  @Value("classpath:fonts/arial-unicode.ttf")
+  @Value("classpath:fonts/arial-unicode-nordic-max.ttf")
   Resource fontResource;
-
-  private byte[] cachedFontBytes;
-
-  @PostConstruct
-  void init() {
-    try {
-      log.info("Loading unicode font from resource: {}", fontResource.getFilename());
-      this.cachedFontBytes = fontResource.getInputStream().readAllBytes();
-    } catch (IOException e) {
-      throw new IllegalStateException("Failed to load unicode font", e);
-    }
-  }
-
 
   public PDDocument fillDocument(Certificate certificate, String additionalInfoText,
       boolean isCitizenFormat) {
@@ -102,7 +87,7 @@ public class CertificatePdfFillService {
       }
 
       PDType0Font unicodeFont = PDType0Font.load(document,
-          new ByteArrayInputStream(cachedFontBytes), false);
+          fontResource.getInputStream(), false);
 
       PDResources resources = acroForm.getDefaultResources();
       if (resources == null) {
@@ -116,7 +101,7 @@ public class CertificatePdfFillService {
       acroForm.setDefaultAppearance(da);
       acroForm.setNeedAppearances(false);
 
-      setFields(certificate, document, mcid, templatePdfSpecification, da);
+      setFields(certificate, document, mcid, templatePdfSpecification, da, unicodeFont);
       addTexts(certificate, additionalInfoText, document, isCitizenFormat, mcid,
           templatePdfSpecification);
       return document;
@@ -150,7 +135,8 @@ public class CertificatePdfFillService {
   }
 
   private void setFields(Certificate certificate, PDDocument document, AtomicInteger mcid,
-      TemplatePdfSpecification templatePdfSpecification, String defaultAppearance) {
+      TemplatePdfSpecification templatePdfSpecification, String defaultAppearance,
+      PDType0Font font) {
     if (certificate.status() == Status.SIGNED) {
       setFieldValues(document,
           getPdfFields(pdfSignatureValueGenerator.generate(certificate), defaultAppearance));
@@ -170,7 +156,8 @@ public class CertificatePdfFillService {
       document.removePage(document.getPage(templatePdfSpecification.overFlowPageIndex().value()));
     }
 
-    setFieldValuesAppendix(document, certificate, templatePdfSpecification, appendedFields, mcid);
+    setFieldValuesAppendix(document, certificate, templatePdfSpecification, appendedFields, mcid,
+        font);
     setFieldValues(document, fieldsWithoutAppend);
     setFieldValues(document,
         getPdfFields(pdfUnitValueGenerator.generate(certificate), defaultAppearance));
@@ -186,7 +173,7 @@ public class CertificatePdfFillService {
 
   private void setFieldValuesAppendix(PDDocument document, Certificate certificate,
       TemplatePdfSpecification templatePdfSpecification, List<PdfField> appendedFields,
-      AtomicInteger mcid) {
+      AtomicInteger mcid, PDType0Font font) {
     if (templatePdfSpecification.overFlowPageIndex() == null || appendedFields.isEmpty()) {
       return;
     }
@@ -198,7 +185,7 @@ public class CertificatePdfFillService {
           .build();
       setFieldValuesAppendix(document, templatePdfSpecification.overFlowPageIndex().value(),
           appendedFields,
-          patientField, mcid, templatePdfSpecification);
+          patientField, mcid, templatePdfSpecification, font);
     } catch (IOException e) {
       throw new IllegalStateException(e);
     }
@@ -206,7 +193,7 @@ public class CertificatePdfFillService {
 
   private void setFieldValuesAppendix(PDDocument document,
       int overFlowPageIndex, List<PdfField> appendedFields, PdfField patientIdField,
-      AtomicInteger mcid, TemplatePdfSpecification templatePdfSpecification)
+      AtomicInteger mcid, TemplatePdfSpecification templatePdfSpecification, PDType0Font font)
       throws IOException {
     final var acroForm = document.getDocumentCatalog().getAcroForm();
     final var overflowField = acroForm.getField(appendedFields.getFirst().getId());
@@ -214,7 +201,6 @@ public class CertificatePdfFillService {
     final var fontSize = new TextFieldAppearance((PDVariableText) overflowField).getFontSize();
     int start = 0;
     int count = 0;
-    final var font = PDType0Font.load(document, new ByteArrayInputStream(cachedFontBytes));
     var appendedFieldsMutable = new ArrayList<>(appendedFields);
 
     while (count < appendedFieldsMutable.size()) {
@@ -265,9 +251,13 @@ public class CertificatePdfFillService {
   }
 
   private static void fillOverflowPage(List<PdfField> fields, PDAcroForm acroForm) {
-    final var field = acroForm.getField(fields.getFirst().getId());
+    final var field = fields.getFirst();
+    final var extractedField = acroForm.getField(field.getId());
+    if (extractedField instanceof PDTextField textField && field.getAppearance() != null) {
+      textField.setDefaultAppearance(field.getAppearance());
+    }
     try {
-      field.setValue(
+      extractedField.setValue(
           fields.stream()
               .map(PdfField::sanitizedValue)
               .collect(Collectors.joining("\n"))
