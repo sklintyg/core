@@ -24,6 +24,7 @@ public class TextUtil {
       "\u2013", "-", // en dash
       "\u2014", "-", // em dash
       "\u2015", "-",  // horizontal bar
+      "\u2212", "-",  // minus
       "\u2192", "->",  // right arrow
       "\u2190", "<-",   // left arrow
       "\u2194", "<->"   // left right arrow
