@@ -139,11 +139,11 @@ public class CertificatePdfFillService {
       PDType0Font font) {
     if (certificate.status() == Status.SIGNED) {
       setFieldValues(document,
-          getPdfFields(pdfSignatureValueGenerator.generate(certificate), defaultAppearance));
+          getPdfFields(pdfSignatureValueGenerator.generate(certificate), defaultAppearance, font));
     }
 
     final var pdfFields = getPdfFields(pdfElementValueGenerator.generate(certificate),
-        defaultAppearance);
+        defaultAppearance, font);
 
     final var appendedFields = pdfFields.stream()
         .filter(PdfField::getAppend)
@@ -160,14 +160,19 @@ public class CertificatePdfFillService {
         font);
     setFieldValues(document, fieldsWithoutAppend);
     setFieldValues(document,
-        getPdfFields(pdfUnitValueGenerator.generate(certificate), defaultAppearance));
+        getPdfFields(pdfUnitValueGenerator.generate(certificate), defaultAppearance, font));
     setFieldValues(document, getPdfFields(pdfPatientValueGenerator.generate(certificate,
-        templatePdfSpecification.patientIdFieldIds()), defaultAppearance));
+        templatePdfSpecification.patientIdFieldIds()), defaultAppearance, font));
   }
 
   private @NonNull List<PdfField> getPdfFields(List<PdfField> pdfFields,
-      String defaultAppearance) {
-    return pdfFields.stream().map(field -> field.withAppearance(defaultAppearance))
+      String defaultAppearance, PDType0Font font) {
+    return pdfFields.stream()
+        .map(field ->
+            field
+                .withAppearance(defaultAppearance)
+                .withFont(font)
+        )
         .toList();
   }
 
@@ -218,7 +223,7 @@ public class CertificatePdfFillService {
 
         if (parts.partTwo() != null) {
           final var part2 = new PdfField(appendedFieldsMutable.get(count).getId(),
-              parts.partTwo(), true, null, 0)
+              parts.partTwo(), true, font, null, 0)
               .withAppearance(appendedFieldsMutable.get(count).getAppearance());
           appendedFieldsMutable.add(count + 1, part2);
           count++;

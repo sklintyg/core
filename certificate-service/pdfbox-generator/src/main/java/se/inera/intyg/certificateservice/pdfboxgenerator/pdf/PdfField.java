@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.With;
+import org.apache.pdfbox.pdmodel.font.PDFont;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.TextUtil;
 
 @Getter
@@ -18,6 +19,8 @@ public class PdfField {
   @Builder.Default
   Boolean append = false;
   @With
+  PDFont font;
+  @With
   String appearance;
   Integer offset;
 
@@ -26,6 +29,6 @@ public class PdfField {
       return "";
     }
 
-    return TextUtil.normalizePrintableCharacters(value);
+    return TextUtil.normalizePrintableCharacters(value, font);
   }
 }

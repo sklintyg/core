@@ -9,11 +9,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 
+@Slf4j
 @Component
 public class TextUtil {
 
@@ -48,7 +50,7 @@ public class TextUtil {
   public List<String> wrapLine(String line, float width, float fontSize, PDFont font) {
     List<String> wrappedLines = new ArrayList<>();
 
-    var sanitizedLine = sanitizeText(line);
+    var sanitizedLine = sanitizeText(line, font);
     final float lineWidth = fontSize * getWidthOfString(sanitizedLine, font) / 1000;
 
     // If the line fits, no need to wrap it
@@ -101,7 +103,7 @@ public class TextUtil {
     }
   }
 
-  private String sanitizeText(String text) {
+  private String sanitizeText(String text, PDFont font) {
     if (text == null) {
       return "";
     }
@@ -109,14 +111,36 @@ public class TextUtil {
     final var sanitizedText = text.replaceAll(
         "[\\t\\r\\f\\v\\x00-\\x08\\x0B-\\x0C\\x0E-\\x1F\\x7F]", " ");
 
-    return normalizePrintableCharacters(sanitizedText);
+    return normalizePrintableCharacters(sanitizedText, font);
   }
 
-  public static String normalizePrintableCharacters(String sanitizedText) {
-    return PROBLEM_CHARACTERS_MAPPING.entrySet().stream()
+  private static boolean isAllowedCharacter(int charValue, PDFont font) {
+    if (charValue == '\n' || charValue == '\r' || charValue == '\t' || charValue == ' ') {
+      return true;
+    }
+
+    try {
+      font.encode(String.valueOf((char) charValue));
+      return true;
+    } catch (IOException | IllegalArgumentException e) {
+      log.info("Character '{}' (code {}) is not supported by font {}, ignoring it",
+          (char) charValue,
+          charValue, font.getName());
+
+      return false;
+    }
+  }
+
+  public static String normalizePrintableCharacters(String sanitizedText, PDFont font) {
+    final var normalizedText = PROBLEM_CHARACTERS_MAPPING.entrySet().stream()
         .reduce(sanitizedText,
             (result, entry) -> result.replace(entry.getKey(), entry.getValue()),
             (s1, s2) -> s2);
+
+    return normalizedText.chars()
+        .filter(charValue -> isAllowedCharacter(charValue, font))
+        .mapToObj(c -> String.valueOf((char) c))
+        .collect(Collectors.joining());
   }
 
   public Optional<OverFlowLineSplit> getOverflowingLines(List<PdfField> currentFields,
