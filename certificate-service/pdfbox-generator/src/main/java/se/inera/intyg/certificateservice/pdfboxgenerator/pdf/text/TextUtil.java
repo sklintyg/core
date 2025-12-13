@@ -19,18 +19,7 @@ import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 @Component
 public class TextUtil {
 
-  private static final Map<String, String> PROBLEM_CHARACTERS_MAPPING = Map.of(
-      "\u2010", "-", // hyphen
-      "\u2011", "-", // non-breaking hyphen
-      "\u2012", "-", // figure dash
-      "\u2013", "-", // en dash
-      "\u2014", "-", // em dash
-      "\u2015", "-",  // horizontal bar
-      "\u2212", "-",  // minus
-      "\u2192", "->",  // right arrow
-      "\u2190", "<-",   // left arrow
-      "\u2194", "<->"   // left right arrow
-  );
+  private static final Map<String, String> PROBLEM_CHARACTERS_MAPPING = Map.of();
 
   public float calculateTextHeight(String text, float fontSize, PDFont font,
       float width) {
