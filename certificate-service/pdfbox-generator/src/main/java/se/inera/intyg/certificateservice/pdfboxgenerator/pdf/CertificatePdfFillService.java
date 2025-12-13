@@ -56,7 +56,7 @@ public class CertificatePdfFillService {
   private final PdfAdditionalInformationTextGenerator pdfAdditionalInformationTextGenerator;
   private final PdfElementValueGenerator pdfElementValueGenerator;
   private final TextUtil textUtil;
-  @Value("classpath:fonts/arial-unicode-nordic-max.ttf")
+  @Value("classpath:fonts/arial-unicode.ttf")
   Resource fontResource;
 
   public PDDocument fillDocument(Certificate certificate, String additionalInfoText,
