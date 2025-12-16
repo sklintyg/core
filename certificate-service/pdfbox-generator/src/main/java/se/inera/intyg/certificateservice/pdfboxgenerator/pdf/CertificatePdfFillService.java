@@ -23,8 +23,6 @@ import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDTextField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDVariableText;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
@@ -53,8 +51,6 @@ public class CertificatePdfFillService {
   private final PdfAdditionalInformationTextGenerator pdfAdditionalInformationTextGenerator;
   private final PdfElementValueGenerator pdfElementValueGenerator;
   private final TextUtil textUtil;
-  @Value("classpath:fonts/verdana.ttf")
-  Resource fontResource;
 
 
   public PDDocument fillDocument(Certificate certificate, String additionalInfoText,
@@ -162,10 +158,11 @@ public class CertificatePdfFillService {
     final var acroForm = document.getDocumentCatalog().getAcroForm();
     final var overflowField = acroForm.getField(appendedFields.getFirst().getId());
     final var rectangle = overflowField.getWidgets().getFirst().getRectangle();
-    final var fontSize = new TextFieldAppearance((PDVariableText) overflowField).getFontSize();
+    final var textFieldAppearance = new TextFieldAppearance((PDVariableText) overflowField);
+    final var fontSize = textFieldAppearance.getFontSize();
+    final var font = textFieldAppearance.getFont(acroForm.getDefaultResources());
     int start = 0;
     int count = 0;
-    final var font = extractFontFromAcroForm(document);
     var appendedFieldsMutable = new ArrayList<>(appendedFields);
 
     while (count < appendedFieldsMutable.size()) {
@@ -206,7 +203,7 @@ public class CertificatePdfFillService {
       TemplatePdfSpecification templatePdfSpecification)
       throws IOException {
     if (start == 0) {
-      fillOverflowPage(appendedFields.subList(start, count), acroForm, document);
+      fillOverflowPage(appendedFields.subList(start, count), acroForm, font);
     } else {
       addAndFillOverflowPage(document, overFlowPageIndex, appendedFields.subList(start, count),
           acroForm,
@@ -214,10 +211,8 @@ public class CertificatePdfFillService {
     }
   }
 
-  private void fillOverflowPage(List<PdfField> fields, PDAcroForm acroForm, PDDocument document) {
+  private void fillOverflowPage(List<PdfField> fields, PDAcroForm acroForm, PDFont font) {
     final var field = acroForm.getField(fields.getFirst().getId());
-    PDFont font;
-    font = extractFontFromAcroForm(document);
     try {
       field.setValue(
           fields.stream()
@@ -229,8 +224,7 @@ public class CertificatePdfFillService {
     }
   }
 
-  private PDFont extractFontFromAcroForm(PDDocument document) {
-    PDAcroForm acroForm = document.getDocumentCatalog().getAcroForm();
+  private PDFont extractFontFromAcroForm(PDAcroForm acroForm) {
     if (acroForm == null) {
       return null;
     }
@@ -265,15 +259,13 @@ public class CertificatePdfFillService {
 
     PDPage clonedPage = new PDPage(newPageDict);
 
-    final var newFont = extractFontFromAcroForm(document);
-
     String allText = fields.stream()
         .map(PdfField::getValue)
         .collect(Collectors.joining("\n"));
 
     List<String> lines = new ArrayList<>();
     for (String line : allText.split("\n")) {
-      lines.addAll(textUtil.wrapLine(line, rectangle.getWidth(), fontSize, newFont));
+      lines.addAll(textUtil.wrapLine(line, rectangle.getWidth(), fontSize, font));
     }
 
     document.addPage(clonedPage);
@@ -282,7 +274,7 @@ public class CertificatePdfFillService {
     float startX = rectangle.getLowerLeftX() + X_MARGIN_APPENDIX_PAGE;
     float startY = rectangle.getUpperRightY() - Y_MARGIN_APPENDIX_PAGE;
     pdfAdditionalInformationTextGenerator.addOverFlowPageText(document,
-        document.getNumberOfPages() - 1, lines, startX, startY, fontSize, newFont,
+        document.getNumberOfPages() - 1, lines, startX, startY, fontSize, font,
         mcid.getAndIncrement());
 
     addPatientId(document, document.getNumberOfPages() - 1, patientIdField, acroForm, fontSize,
@@ -337,14 +329,12 @@ public class CertificatePdfFillService {
 
   private void setFieldValues(PDDocument document, List<PdfField> fields) {
     final var acroForm = document.getDocumentCatalog().getAcroForm();
-    PDFont font;
-    font = extractFontFromAcroForm(document);
     fields
         .stream()
         .filter(Objects::nonNull)
         .forEach(field -> {
           try {
-            setFieldValue(acroForm, field, font);
+            setFieldValue(acroForm, field);
           } catch (IOException e) {
             throw new IllegalStateException(e);
           }
@@ -423,8 +413,8 @@ public class CertificatePdfFillService {
     return signedDate.getWidgets().getFirst().getRectangle();
   }
 
-  private void setFieldValue(PDAcroForm acroForm, PdfField field, PDFont font)
-      throws IOException {
+  private void setFieldValue(PDAcroForm acroForm, PdfField field) throws IOException {
+
     if (field.getValue() != null) {
       final var extractedField = acroForm.getField(field.getId());
       validateField(field.getId(), extractedField);
@@ -440,8 +430,22 @@ public class CertificatePdfFillService {
         textAppearance.adjustFieldHeight(field.getOffset());
       }
 
-      extractedField.setValue(textUtil.normalizePrintableCharacters(field.getValue(), font));
+      extractedField.setValue(textUtil.normalizePrintableCharacters(field.getValue(),
+          extractFont(extractedField, acroForm)));
     }
+  }
+
+  private PDFont extractFont(PDField extractedField, PDAcroForm acroForm) {
+
+    if (extractedField instanceof PDTextField textField) {
+      final var textFieldAppearance = new TextFieldAppearance(textField);
+      return textFieldAppearance.getFont(acroForm.getDefaultResources());
+    } else if (extractedField instanceof PDVariableText textField) {
+      final var textAppearance = new TextFieldAppearance(textField);
+      return textAppearance.getFont(acroForm.getDefaultResources());
+    }
+
+    return extractFontFromAcroForm(acroForm);
   }
 
 
