@@ -134,14 +134,14 @@ public class TextUtil {
       return new String(Character.toChars(cp));
     }
 
-    String s = new String(Character.toChars(cp));
+    final var s = new String(Character.toChars(cp));
     try {
       font.encode(s);
       return s;
     } catch (IOException | IllegalArgumentException e) {
-      log.info(
-          "Character '{}' cannot be encoded in font '{}', replacing with space.",
-          s, font.getName()
+      log.warn(
+          "Character '%s' cannot be encoded in font '%s', replacing with space.".formatted(s,
+              font.getName()), e
       );
       return " ";
     }

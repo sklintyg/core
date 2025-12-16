@@ -16,7 +16,6 @@ import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDResources;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
@@ -225,21 +224,12 @@ public class CertificatePdfFillService {
   }
 
   private PDFont extractFontFromAcroForm(PDAcroForm acroForm) {
-    if (acroForm == null) {
-      return null;
-    }
-
-    PDResources resources = acroForm.getDefaultResources();
-    if (resources == null) {
-      return null;
-    }
-
-    COSName fontNames = resources.getFontNames().iterator().next();
-
+    final var defaultResources = acroForm.getDefaultResources();
+    final var fontNames = defaultResources.getFontNames().iterator().next();
     try {
-      return resources.getFont(fontNames);
+      return defaultResources.getFont(fontNames);
     } catch (IOException e) {
-      log.info("Could not extract font from acroform resources", e);
+      log.warn("Could not extract font from acroform resources", e);
     }
 
     return null;
@@ -436,7 +426,6 @@ public class CertificatePdfFillService {
   }
 
   private PDFont extractFont(PDField extractedField, PDAcroForm acroForm) {
-
     if (extractedField instanceof PDTextField textField) {
       final var textFieldAppearance = new TextFieldAppearance(textField);
       return textFieldAppearance.getFont(acroForm.getDefaultResources());
@@ -444,7 +433,7 @@ public class CertificatePdfFillService {
       final var textAppearance = new TextFieldAppearance(textField);
       return textAppearance.getFont(acroForm.getDefaultResources());
     }
-
+    
     return extractFontFromAcroForm(acroForm);
   }
 
