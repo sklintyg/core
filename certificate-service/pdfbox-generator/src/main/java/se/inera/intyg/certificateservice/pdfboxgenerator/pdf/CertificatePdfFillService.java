@@ -16,9 +16,9 @@ import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDResources;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDTextField;
@@ -165,7 +165,7 @@ public class CertificatePdfFillService {
     final var fontSize = new TextFieldAppearance((PDVariableText) overflowField).getFontSize();
     int start = 0;
     int count = 0;
-    final var font = PDType0Font.load(document, fontResource.getInputStream());
+    final var font = extractFontFromAcroForm(document);
     var appendedFieldsMutable = new ArrayList<>(appendedFields);
 
     while (count < appendedFieldsMutable.size()) {
@@ -202,11 +202,11 @@ public class CertificatePdfFillService {
   private void fillFieldsOnPage(PDDocument document, int overFlowPageIndex,
       List<PdfField> appendedFields,
       PdfField patientIdField, int start, int count, PDAcroForm acroForm, float fontSize,
-      PDType0Font font, PDRectangle rectangle, AtomicInteger mcid,
+      PDFont font, PDRectangle rectangle, AtomicInteger mcid,
       TemplatePdfSpecification templatePdfSpecification)
       throws IOException {
     if (start == 0) {
-      fillOverflowPage(appendedFields.subList(start, count), acroForm);
+      fillOverflowPage(appendedFields.subList(start, count), acroForm, document);
     } else {
       addAndFillOverflowPage(document, overFlowPageIndex, appendedFields.subList(start, count),
           acroForm,
@@ -214,18 +214,43 @@ public class CertificatePdfFillService {
     }
   }
 
-  private static void fillOverflowPage(List<PdfField> fields, PDAcroForm acroForm) {
+  private void fillOverflowPage(List<PdfField> fields, PDAcroForm acroForm, PDDocument document) {
     final var field = acroForm.getField(fields.getFirst().getId());
+    PDFont font;
+    font = extractFontFromAcroForm(document);
     try {
       field.setValue(
           fields.stream()
-              .map(PdfField::sanitizedValue)
+              .map(pdfField -> textUtil.normalizePrintableCharacters(pdfField.getValue(), font))
               .collect(Collectors.joining("\n"))
       );
     } catch (IOException e) {
       throw new IllegalStateException(e);
     }
   }
+
+  private PDFont extractFontFromAcroForm(PDDocument document) {
+    PDAcroForm acroForm = document.getDocumentCatalog().getAcroForm();
+    if (acroForm == null) {
+      return null;
+    }
+
+    PDResources resources = acroForm.getDefaultResources();
+    if (resources == null) {
+      return null;
+    }
+
+    COSName fontNames = resources.getFontNames().iterator().next();
+
+    try {
+      return resources.getFont(fontNames);
+    } catch (IOException e) {
+      log.info("Could not extract font from acroform resources", e);
+    }
+
+    return null;
+  }
+
 
   private void addAndFillOverflowPage(PDDocument document,
       int overFlowPageIndex, List<PdfField> fields,
@@ -240,13 +265,15 @@ public class CertificatePdfFillService {
 
     PDPage clonedPage = new PDPage(newPageDict);
 
+    final var newFont = extractFontFromAcroForm(document);
+
     String allText = fields.stream()
         .map(PdfField::getValue)
         .collect(Collectors.joining("\n"));
 
     List<String> lines = new ArrayList<>();
     for (String line : allText.split("\n")) {
-      lines.addAll(textUtil.wrapLine(line, rectangle.getWidth(), fontSize, font));
+      lines.addAll(textUtil.wrapLine(line, rectangle.getWidth(), fontSize, newFont));
     }
 
     document.addPage(clonedPage);
@@ -255,7 +282,7 @@ public class CertificatePdfFillService {
     float startX = rectangle.getLowerLeftX() + X_MARGIN_APPENDIX_PAGE;
     float startY = rectangle.getUpperRightY() - Y_MARGIN_APPENDIX_PAGE;
     pdfAdditionalInformationTextGenerator.addOverFlowPageText(document,
-        document.getNumberOfPages() - 1, lines, startX, startY, fontSize, font,
+        document.getNumberOfPages() - 1, lines, startX, startY, fontSize, newFont,
         mcid.getAndIncrement());
 
     addPatientId(document, document.getNumberOfPages() - 1, patientIdField, acroForm, fontSize,
@@ -310,12 +337,14 @@ public class CertificatePdfFillService {
 
   private void setFieldValues(PDDocument document, List<PdfField> fields) {
     final var acroForm = document.getDocumentCatalog().getAcroForm();
+    PDFont font;
+    font = extractFontFromAcroForm(document);
     fields
         .stream()
         .filter(Objects::nonNull)
         .forEach(field -> {
           try {
-            setFieldValue(acroForm, field);
+            setFieldValue(acroForm, field, font);
           } catch (IOException e) {
             throw new IllegalStateException(e);
           }
@@ -394,7 +423,7 @@ public class CertificatePdfFillService {
     return signedDate.getWidgets().getFirst().getRectangle();
   }
 
-  private void setFieldValue(PDAcroForm acroForm, PdfField field)
+  private void setFieldValue(PDAcroForm acroForm, PdfField field, PDFont font)
       throws IOException {
     if (field.getValue() != null) {
       final var extractedField = acroForm.getField(field.getId());
@@ -411,7 +440,7 @@ public class CertificatePdfFillService {
         textAppearance.adjustFieldHeight(field.getOffset());
       }
 
-      extractedField.setValue(field.sanitizedValue());
+      extractedField.setValue(textUtil.normalizePrintableCharacters(field.getValue(), font));
     }
   }
 
