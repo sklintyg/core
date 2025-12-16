@@ -429,4 +429,208 @@ class TextUtilTest {
       assertEquals(2 * FONT_SIZE * LINE_HEIGHT, actualHeight);
     }
   }
+
+  @Nested
+  class NormalizePrintableCharacters {
+
+    @Test
+    void shouldReturnSameTextWhenAllCharactersAreSupported() {
+      final var font = new PDType1Font(FontName.HELVETICA);
+      final var text = "Hello World 123";
+
+      final var result = TextUtil.normalizePrintableCharacters(text, font);
+
+      assertEquals("Hello World 123", result);
+    }
+
+    @Test
+    void shouldReplaceUnsupportedCharacterWithSpace() {
+      final var font = new PDType1Font(FontName.HELVETICA);
+      final var textWithUnsupported = "Hello\u2665World"; // Heart symbol
+
+      final var result = TextUtil.normalizePrintableCharacters(textWithUnsupported, font);
+
+      assertEquals("Hello World", result);
+    }
+
+    @Test
+    void shouldReplaceHyphenVariantsWithRegularHyphen() {
+      final var font = new PDType1Font(FontName.HELVETICA);
+      final var textWithHyphens = "Hello\u2010\u2011\u2012\u2013\u2014\u2015World";
+
+      final var result = TextUtil.normalizePrintableCharacters(textWithHyphens, font);
+
+      assertEquals("Hello------World", result);
+    }
+
+    @Test
+    void shouldReplaceMinusSignWithHyphen() {
+      final var font = new PDType1Font(FontName.HELVETICA);
+      final var textWithMinus = "Value\u22125";
+
+      final var result = TextUtil.normalizePrintableCharacters(textWithMinus, font);
+
+      assertEquals("Value-5", result);
+    }
+
+    @Test
+    void shouldReplaceArrowsWithTextRepresentation() {
+      final var font = new PDType1Font(FontName.HELVETICA);
+      final var textWithArrows = "A\u2192B\u2190C\u2194D";
+
+      final var result = TextUtil.normalizePrintableCharacters(textWithArrows, font);
+
+      assertEquals("A->B<-C<->D", result);
+    }
+
+    @Test
+    void shouldHandleEmptyString() {
+      final var font = new PDType1Font(FontName.HELVETICA);
+      final var emptyText = "";
+
+      final var result = TextUtil.normalizePrintableCharacters(emptyText, font);
+
+      assertEquals("", result);
+    }
+
+    @Test
+    void shouldHandleStringWithOnlyUnsupportedCharacters() {
+      final var font = new PDType1Font(FontName.HELVETICA);
+      final var textWithUnsupported = "\u2665\u2666\u2663\u2660";
+
+      final var result = TextUtil.normalizePrintableCharacters(textWithUnsupported, font);
+
+      assertEquals("    ", result);
+    }
+
+    @Test
+    void shouldHandleMixedSupportedAndUnsupportedCharacters() {
+      final var font = new PDType1Font(FontName.HELVETICA);
+      final var mixedText = "Hello\u2665World\u2192Test";
+
+      final var result = TextUtil.normalizePrintableCharacters(mixedText, font);
+
+      assertEquals("Hello World->Test", result);
+    }
+
+    @Test
+    void shouldReplaceAllHyphenVariants() {
+      final var font = new PDType1Font(FontName.HELVETICA);
+      final var allHyphens = "\u2010\u2011\u2012\u2013\u2014\u2015\u2212";
+
+      final var result = TextUtil.normalizePrintableCharacters(allHyphens, font);
+
+      assertEquals("-------", result);
+    }
+
+    @Test
+    void shouldHandleUnicodeCharactersCorrectly() {
+      final var font = new PDType1Font(FontName.HELVETICA);
+      final var textWithUnicode = "Price: 100\u2192200";
+
+      final var result = TextUtil.normalizePrintableCharacters(textWithUnicode, font);
+
+      assertEquals("Price: 100->200", result);
+    }
+
+    @Test
+    void shouldPreserveSpacesAndNewlines() {
+      final var font = new PDType1Font(FontName.HELVETICA);
+      final var textWithWhitespace = "Line 1\nLine 2   with spaces";
+
+      final var result = TextUtil.normalizePrintableCharacters(textWithWhitespace, font);
+
+      assertEquals("Line 1\nLine 2   with spaces", result);
+    }
+
+    @Test
+    void shouldHandleMultipleReplacementsInOneString() {
+      final var font = new PDType1Font(FontName.HELVETICA);
+      final var complexText = "Text\u2013with\u2014different\u2212dashes\u2192and\u2190arrows";
+
+      final var result = TextUtil.normalizePrintableCharacters(complexText, font);
+
+      assertEquals("Text-with-different-dashes->and<-arrows", result);
+    }
+
+    @Test
+    void shouldHandleNumericText() {
+      final var font = new PDType1Font(FontName.HELVETICA);
+      final var numericText = "123.456";
+
+      final var result = TextUtil.normalizePrintableCharacters(numericText, font);
+
+      assertEquals("123.456", result);
+    }
+
+    @Test
+    void shouldReplaceLeftRightArrowCorrectly() {
+      final var font = new PDType1Font(FontName.HELVETICA);
+      final var textWithBidirectionalArrow = "A\u2194B";
+
+      final var result = TextUtil.normalizePrintableCharacters(textWithBidirectionalArrow, font);
+
+      assertEquals("A<->B", result);
+    }
+
+    @Test
+    void shouldHandleConsecutiveUnsupportedCharacters() {
+      final var font = new PDType1Font(FontName.HELVETICA);
+      final var consecutiveUnsupported = "Hello\u2665\u2666\u2663World";
+
+      final var result = TextUtil.normalizePrintableCharacters(consecutiveUnsupported, font);
+
+      assertEquals("Hello   World", result);
+    }
+
+    @Test
+    void shouldHandleTextWithSpecialPunctuation() {
+      final var font = new PDType1Font(FontName.HELVETICA);
+      final var textWithPunctuation = "Hello, World! How are you?";
+
+      final var result = TextUtil.normalizePrintableCharacters(textWithPunctuation, font);
+
+      assertEquals("Hello, World! How are you?", result);
+    }
+
+    @Test
+    void shouldNormalizeEnDashAndEmDash() {
+      final var font = new PDType1Font(FontName.HELVETICA);
+      final var textWithDashes = "Range: 2010\u20132020, Note\u2014important";
+
+      final var result = TextUtil.normalizePrintableCharacters(textWithDashes, font);
+
+      assertEquals("Range: 2010-2020, Note-important", result);
+    }
+
+    @Test
+    void shouldHandleNonBreakingHyphen() {
+      final var font = new PDType1Font(FontName.HELVETICA);
+      final var textWithNonBreakingHyphen = "well\u2011known";
+
+      final var result = TextUtil.normalizePrintableCharacters(textWithNonBreakingHyphen, font);
+
+      assertEquals("well-known", result);
+    }
+
+    @Test
+    void shouldHandleFigureDash() {
+      final var font = new PDType1Font(FontName.HELVETICA);
+      final var textWithFigureDash = "Phone: 555\u20121234";
+
+      final var result = TextUtil.normalizePrintableCharacters(textWithFigureDash, font);
+
+      assertEquals("Phone: 555-1234", result);
+    }
+
+    @Test
+    void shouldHandleHorizontalBar() {
+      final var font = new PDType1Font(FontName.HELVETICA);
+      final var textWithHorizontalBar = "Section\u2015Break";
+
+      final var result = TextUtil.normalizePrintableCharacters(textWithHorizontalBar, font);
+
+      assertEquals("Section-Break", result);
+    }
+  }
 }
