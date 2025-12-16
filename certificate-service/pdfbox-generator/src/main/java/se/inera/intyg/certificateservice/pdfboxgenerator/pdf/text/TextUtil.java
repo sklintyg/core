@@ -12,19 +12,12 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 
 @Component
 @Slf4j
 public class TextUtil {
-
-  @Value("classpath:fonts/verdana.ttf")
-  Resource fontVerdana;
-  @Value("classpath:fonts/arialmt.ttf")
-  Resource fontArialMT;
 
   private static final Map<String, String> PROBLEM_CHARACTERS_MAPPING = Map.of(
       "\u2010", "-", // hyphen
@@ -121,7 +114,7 @@ public class TextUtil {
     return normalizePrintableCharacters(sanitizedText, font);
   }
 
-  public String normalizePrintableCharacters(String sanitizedText, PDFont font) {
+  public static String normalizePrintableCharacters(String sanitizedText, PDFont font) {
     final var normalizedChars = PROBLEM_CHARACTERS_MAPPING.entrySet().stream()
         .reduce(sanitizedText,
             (result, entry) -> result.replace(entry.getKey(), entry.getValue()),

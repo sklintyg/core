@@ -216,7 +216,7 @@ public class CertificatePdfFillService {
     try {
       field.setValue(
           fields.stream()
-              .map(pdfField -> textUtil.normalizePrintableCharacters(pdfField.getValue(), font))
+              .map(pdfField -> TextUtil.normalizePrintableCharacters(pdfField.getValue(), font))
               .collect(Collectors.joining("\n"))
       );
     } catch (IOException e) {
@@ -430,7 +430,7 @@ public class CertificatePdfFillService {
         textAppearance.adjustFieldHeight(field.getOffset());
       }
 
-      extractedField.setValue(textUtil.normalizePrintableCharacters(field.getValue(),
+      extractedField.setValue(TextUtil.normalizePrintableCharacters(field.getValue(),
           extractFont(extractedField, acroForm)));
     }
   }
