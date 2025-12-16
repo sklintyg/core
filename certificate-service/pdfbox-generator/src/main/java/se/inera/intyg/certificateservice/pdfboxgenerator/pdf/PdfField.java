@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.With;
+import org.apache.pdfbox.pdmodel.font.PDFont;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.TextUtil;
 
 @Getter
@@ -16,14 +18,16 @@ public class PdfField {
   String value;
   @Builder.Default
   Boolean append = false;
+  @With
   String appearance;
-  Integer offset;
+  @Builder.Default
+  Integer offset = 0;
 
-  public String sanitizedValue() {
+  public String sanitizedValue(PDFont font) {
     if (this.value == null || this.value.isEmpty()) {
       return "";
     }
-    
-    return TextUtil.normalizePrintableCharacters(value);
+
+    return TextUtil.normalizePrintableCharacters(value, font);
   }
 }

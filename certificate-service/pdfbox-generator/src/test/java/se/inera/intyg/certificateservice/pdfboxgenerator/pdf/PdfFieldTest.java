@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Map;
 import java.util.stream.Stream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -26,7 +28,7 @@ class PdfFieldTest {
           .value("text" + problemHyphen + "text")
           .build();
 
-      final var result = pdfField.sanitizedValue();
+      final var result = pdfField.sanitizedValue(new PDType1Font(FontName.HELVETICA));
 
       assertEquals("text" + replacement + "text", result);
     }
@@ -54,7 +56,7 @@ class PdfFieldTest {
           .value(inputValue)
           .build();
 
-      final var result = pdfField.sanitizedValue();
+      final var result = pdfField.sanitizedValue(new PDType1Font(FontName.HELVETICA));
 
       assertEquals(expectedValue, result);
     }
@@ -76,7 +78,7 @@ class PdfFieldTest {
           .value(null)
           .build();
 
-      assertEquals("", pdfField.sanitizedValue());
+      assertEquals("", pdfField.sanitizedValue(new PDType1Font(FontName.HELVETICA)));
     }
   }
 }
