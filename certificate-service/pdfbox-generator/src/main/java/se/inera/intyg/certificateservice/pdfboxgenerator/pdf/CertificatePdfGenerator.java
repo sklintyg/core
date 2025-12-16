@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf;
 
-import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import lombok.RequiredArgsConstructor;
@@ -9,34 +8,40 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Pdf;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGenerator;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGeneratorOptions;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.TemplatePdfSpecification;
 
 @Component("certificatePdfGenerator")
 @RequiredArgsConstructor
 public class CertificatePdfGenerator implements PdfGenerator {
 
   private final CertificatePdfFillService certificatePdfFillService;
+  private final CertificatePdfContextFactory certificatePdfContextFactory;
 
   @Override
   public Pdf generate(Certificate certificate, PdfGeneratorOptions options) {
+
+    if (!(certificate.certificateModel()
+        .pdfSpecification() instanceof TemplatePdfSpecification templatePdfSpecification)) {
+      throw new IllegalArgumentException(
+          "CertificatePdfFillService can only process TemplatePdfSpecification");
+    }
 
     if (options.hiddenElements() != null && !options.hiddenElements().isEmpty()) {
       throw new IllegalArgumentException("Cannot hide elements for template printing");
     }
 
-    try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
-      final var filledPdf = certificatePdfFillService.fillDocument(
-          certificate,
-          options.additionalInfoText(),
-          options.citizenFormat()
-      );
+    try (final var context = certificatePdfContextFactory.create(certificate, options,
+        templatePdfSpecification)) {
 
-      filledPdf.getDocumentInformation().setTitle(getFileName(certificate));
-      filledPdf.getDocumentCatalog().getAcroForm().flatten();
-      filledPdf.setAllSecurityToBeRemoved(true);
-      filledPdf.save(byteArrayOutputStream);
-      filledPdf.close();
+      certificatePdfFillService.fillDocument(context);
 
-      return new Pdf(byteArrayOutputStream.toByteArray(), getFileName(certificate));
+      final var document = context.getDocument();
+
+      document.getDocumentInformation().setTitle(getFileName(certificate));
+      document.getDocumentCatalog().getAcroForm().flatten();
+      document.setAllSecurityToBeRemoved(true);
+
+      return new Pdf(context.toByteArray(), getFileName(certificate));
 
     } catch (Exception e) {
       throw new IllegalStateException("Could not create Pdf", e);

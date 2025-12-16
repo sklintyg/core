@@ -4,11 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7210CertificateBuilder;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate.fk7472CertificateBuilder;
+import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertificateModel.fk7210certificateModelBuilder;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -28,6 +29,8 @@ import se.inera.intyg.certificateservice.domain.certificate.service.PdfGenerator
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
+import se.inera.intyg.certificateservice.domain.certificatemodel.model.GeneralPdfSpecification;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -37,59 +40,127 @@ class CertificatePdfGeneratorTest {
 
   @Mock
   CertificatePdfFillService certificatePdfFillService;
+  @Mock
+  CertificatePdfContextFactory certificatePdfContextFactory;
 
   private PDDocument document;
 
   CertificatePdfGenerator certificatePdfGenerator;
 
   @BeforeEach
-  void setup() {
+  void setup() throws IOException {
     final var classloader = getClass().getClassLoader();
-    final var inputStream = classloader.getResourceAsStream("fk7210/pdf/fk7210_v1.pdf");
-
-    try {
+    try (final var inputStream = classloader.getResourceAsStream("fk7210/pdf/fk7210_v1.pdf")) {
+      if (inputStream == null) {
+        throw new IllegalStateException("Could not load test PDF");
+      }
       document = Loader.loadPDF(inputStream.readAllBytes());
-    } catch (IOException e) {
-      throw new RuntimeException(e);
     }
 
-    certificatePdfGenerator = new CertificatePdfGenerator(certificatePdfFillService);
+    certificatePdfGenerator = new CertificatePdfGenerator(certificatePdfFillService,
+        certificatePdfContextFactory);
   }
 
-  @Test
-  void shouldThrowErrorIfNoPdfGeneratorForCertificateType() {
-    final var certificate = MedicalCertificate.builder()
-        .certificateModel(
-            CertificateModel.builder()
-                .id(
-                    CertificateModelId.builder()
-                        .type(new CertificateType("NOT_IT"))
-                        .build()
-                )
-                .build()
-        )
-        .build();
+  @Nested
+  class PdfExceptions {
 
-    final var options = PdfGeneratorOptions.builder()
-        .additionalInfoText(ADDITIONAL_INFO_TEXT)
-        .citizenFormat(false)
-        .hiddenElements(Collections.emptyList())
-        .build();
+    @Test
+    void shouldThrowErrorIfNoPdfGeneratorForCertificateType() {
+      final var certificate = MedicalCertificate.builder()
+          .certificateModel(
+              CertificateModel.builder()
+                  .id(
+                      CertificateModelId.builder()
+                          .type(new CertificateType("NOT_IT"))
+                          .build()
+                  )
+                  .build()
+          )
+          .build();
 
-    assertThrows(
-        IllegalStateException.class,
-        () -> certificatePdfGenerator.generate(certificate, options)
-    );
+      final var options = PdfGeneratorOptions.builder()
+          .additionalInfoText(ADDITIONAL_INFO_TEXT)
+          .citizenFormat(false)
+          .hiddenElements(Collections.emptyList())
+          .build();
+
+      assertThrows(
+          IllegalArgumentException.class,
+          () -> certificatePdfGenerator.generate(certificate, options)
+      );
+    }
+
+    @Test
+    void shouldThrowErrorIfPdfSpecificationIsWrong() {
+      final var certificateModel = fk7210certificateModelBuilder()
+          .pdfSpecification(GeneralPdfSpecification.builder().build()).build();
+
+      final var certificate = fk7210CertificateBuilder()
+          .certificateModel(certificateModel)
+          .build();
+
+      final var options = PdfGeneratorOptions.builder()
+          .additionalInfoText(ADDITIONAL_INFO_TEXT)
+          .citizenFormat(false)
+          .hiddenElements(Collections.emptyList())
+          .build();
+
+      assertThrows(IllegalArgumentException.class,
+          () -> certificatePdfGenerator.generate(certificate, options));
+    }
+
+    @Test
+    void shouldThrowErrorIfHidingElementsInTemplatePdf() {
+      final var options = PdfGeneratorOptions.builder()
+          .additionalInfoText(ADDITIONAL_INFO_TEXT)
+          .citizenFormat(false)
+          .hiddenElements(
+              Collections.singletonList(new ElementId("1234"))
+          )
+          .build();
+
+      assertThrows(IllegalArgumentException.class,
+          () -> certificatePdfGenerator.generate(
+              buildFK7210Certificate(),
+              options
+          ));
+    }
+
+    @Test
+    void shouldThrowErrorIfPdfFillingFails() {
+      when(certificatePdfContextFactory.create(any(), any(), any())).thenThrow(
+          new IllegalStateException("Creation failed"));
+
+      final var options = PdfGeneratorOptions.builder()
+          .additionalInfoText(ADDITIONAL_INFO_TEXT)
+          .citizenFormat(false)
+          .hiddenElements(Collections.emptyList())
+          .build();
+
+      assertThrows(IllegalStateException.class,
+          () -> certificatePdfGenerator.generate(
+              buildFK7210Certificate(),
+              options
+          ));
+    }
   }
 
   @Nested
   class PdfData {
 
     @BeforeEach
-    void setup() {
-      when(
-          certificatePdfFillService.fillDocument(any(MedicalCertificate.class), anyString(),
-              anyBoolean()))
+    void setup() throws IOException {
+      final var mockContext = mock(CertificatePdfContext.class);
+      when(mockContext.getDocument()).thenReturn(document);
+      when(mockContext.toByteArray()).thenAnswer(invocation -> {
+        try (var outputStream = new java.io.ByteArrayOutputStream()) {
+          document.save(outputStream);
+          return outputStream.toByteArray();
+        }
+      });
+      doNothing().when(mockContext).close();
+      when(certificatePdfContextFactory.create(any(), any(), any())).thenReturn(mockContext);
+      when(certificatePdfFillService.fillDocument(any(CertificatePdfContext.class)))
           .thenReturn(document);
     }
 
