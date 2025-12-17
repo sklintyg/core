@@ -18,6 +18,8 @@ public class PdfField {
   String value;
   @Builder.Default
   Boolean append = false;
+  @Builder.Default
+  Boolean patientField = false;
   @With
   String appearance;
   @Builder.Default
@@ -29,5 +31,9 @@ public class PdfField {
     }
 
     return TextUtil.normalizePrintableCharacters(value, font);
+  }
+
+  public boolean isPatientField() {
+    return Boolean.TRUE.equals(patientField);
   }
 }
