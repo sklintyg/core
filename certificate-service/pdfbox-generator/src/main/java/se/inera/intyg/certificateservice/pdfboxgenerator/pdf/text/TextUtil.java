@@ -140,8 +140,9 @@ public class TextUtil {
       return s;
     } catch (IOException | IllegalArgumentException e) {
       log.warn(
-          "Character '%s' cannot be encoded in font '%s', replacing with space.".formatted(s,
-              font.getName()), e
+          "Character '%s' with unicode 'U+%s' cannot be encoded in font '%s', replacing with space.".formatted(
+              s, Integer.toHexString(cp).toUpperCase(),
+              font.getName())
       );
       return " ";
     }
