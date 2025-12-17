@@ -18,13 +18,10 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDTextField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDVariableText;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
@@ -53,8 +50,6 @@ public class CertificatePdfFillService {
   private final PdfAdditionalInformationTextGenerator pdfAdditionalInformationTextGenerator;
   private final PdfElementValueGenerator pdfElementValueGenerator;
   private final TextUtil textUtil;
-  @Value("classpath:fonts/verdana.ttf")
-  Resource fontResource;
 
 
   public PDDocument fillDocument(Certificate certificate, String additionalInfoText,
@@ -162,10 +157,11 @@ public class CertificatePdfFillService {
     final var acroForm = document.getDocumentCatalog().getAcroForm();
     final var overflowField = acroForm.getField(appendedFields.getFirst().getId());
     final var rectangle = overflowField.getWidgets().getFirst().getRectangle();
-    final var fontSize = new TextFieldAppearance((PDVariableText) overflowField).getFontSize();
+    final var textFieldAppearance = new TextFieldAppearance((PDVariableText) overflowField);
+    final var fontSize = textFieldAppearance.getFontSize();
+    final var font = textFieldAppearance.getFont(acroForm.getDefaultResources());
     int start = 0;
     int count = 0;
-    final var font = PDType0Font.load(document, fontResource.getInputStream());
     var appendedFieldsMutable = new ArrayList<>(appendedFields);
 
     while (count < appendedFieldsMutable.size()) {
@@ -202,11 +198,11 @@ public class CertificatePdfFillService {
   private void fillFieldsOnPage(PDDocument document, int overFlowPageIndex,
       List<PdfField> appendedFields,
       PdfField patientIdField, int start, int count, PDAcroForm acroForm, float fontSize,
-      PDType0Font font, PDRectangle rectangle, AtomicInteger mcid,
+      PDFont font, PDRectangle rectangle, AtomicInteger mcid,
       TemplatePdfSpecification templatePdfSpecification)
       throws IOException {
     if (start == 0) {
-      fillOverflowPage(appendedFields.subList(start, count), acroForm);
+      fillOverflowPage(appendedFields.subList(start, count), acroForm, font);
     } else {
       addAndFillOverflowPage(document, overFlowPageIndex, appendedFields.subList(start, count),
           acroForm,
@@ -214,18 +210,31 @@ public class CertificatePdfFillService {
     }
   }
 
-  private static void fillOverflowPage(List<PdfField> fields, PDAcroForm acroForm) {
+  private void fillOverflowPage(List<PdfField> fields, PDAcroForm acroForm, PDFont font) {
     final var field = acroForm.getField(fields.getFirst().getId());
     try {
       field.setValue(
           fields.stream()
-              .map(PdfField::sanitizedValue)
+              .map(pdfField -> TextUtil.normalizePrintableCharacters(pdfField.getValue(), font))
               .collect(Collectors.joining("\n"))
       );
     } catch (IOException e) {
       throw new IllegalStateException(e);
     }
   }
+
+  private PDFont extractFontFromAcroForm(PDAcroForm acroForm) {
+    final var defaultResources = acroForm.getDefaultResources();
+    final var fontNames = defaultResources.getFontNames().iterator().next();
+    try {
+      return defaultResources.getFont(fontNames);
+    } catch (IOException e) {
+      log.warn("Could not extract font from acroform resources", e);
+    }
+
+    return null;
+  }
+
 
   private void addAndFillOverflowPage(PDDocument document,
       int overFlowPageIndex, List<PdfField> fields,
@@ -394,8 +403,8 @@ public class CertificatePdfFillService {
     return signedDate.getWidgets().getFirst().getRectangle();
   }
 
-  private void setFieldValue(PDAcroForm acroForm, PdfField field)
-      throws IOException {
+  private void setFieldValue(PDAcroForm acroForm, PdfField field) throws IOException {
+
     if (field.getValue() != null) {
       final var extractedField = acroForm.getField(field.getId());
       validateField(field.getId(), extractedField);
@@ -411,8 +420,21 @@ public class CertificatePdfFillService {
         textAppearance.adjustFieldHeight(field.getOffset());
       }
 
-      extractedField.setValue(field.sanitizedValue());
+      extractedField.setValue(TextUtil.normalizePrintableCharacters(field.getValue(),
+          extractFont(extractedField, acroForm)));
     }
+  }
+
+  private PDFont extractFont(PDField extractedField, PDAcroForm acroForm) {
+    if (extractedField instanceof PDTextField textField) {
+      final var textFieldAppearance = new TextFieldAppearance(textField);
+      return textFieldAppearance.getFont(acroForm.getDefaultResources());
+    } else if (extractedField instanceof PDVariableText textField) {
+      final var textAppearance = new TextFieldAppearance(textField);
+      return textAppearance.getFont(acroForm.getDefaultResources());
+    }
+    
+    return extractFontFromAcroForm(acroForm);
   }
 
 

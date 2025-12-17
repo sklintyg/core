@@ -9,12 +9,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 
 @Component
+@Slf4j
 public class TextUtil {
 
   private static final Map<String, String> PROBLEM_CHARACTERS_MAPPING = Map.of(
@@ -48,7 +50,7 @@ public class TextUtil {
   public List<String> wrapLine(String line, float width, float fontSize, PDFont font) {
     List<String> wrappedLines = new ArrayList<>();
 
-    var sanitizedLine = sanitizeText(line);
+    var sanitizedLine = sanitizeText(line, font);
     final float lineWidth = fontSize * getWidthOfString(sanitizedLine, font) / 1000;
 
     // If the line fits, no need to wrap it
@@ -101,7 +103,7 @@ public class TextUtil {
     }
   }
 
-  private String sanitizeText(String text) {
+  private String sanitizeText(String text, PDFont font) {
     if (text == null) {
       return "";
     }
@@ -109,14 +111,41 @@ public class TextUtil {
     final var sanitizedText = text.replaceAll(
         "[\\t\\r\\f\\v\\x00-\\x08\\x0B-\\x0C\\x0E-\\x1F\\x7F]", " ");
 
-    return normalizePrintableCharacters(sanitizedText);
+    return normalizePrintableCharacters(sanitizedText, font);
   }
 
-  public static String normalizePrintableCharacters(String sanitizedText) {
-    return PROBLEM_CHARACTERS_MAPPING.entrySet().stream()
+  public static String normalizePrintableCharacters(String sanitizedText, PDFont font) {
+    final var normalizedChars = PROBLEM_CHARACTERS_MAPPING.entrySet().stream()
         .reduce(sanitizedText,
             (result, entry) -> result.replace(entry.getKey(), entry.getValue()),
             (s1, s2) -> s2);
+
+    return filterUnsupportedFontCharacters(font, normalizedChars);
+  }
+
+  private static String filterUnsupportedFontCharacters(PDFont font, String text) {
+    return text.codePoints()
+        .mapToObj(cp -> getSupportedString(font, cp))
+        .collect(Collectors.joining());
+  }
+
+  private static String getSupportedString(PDFont font, int cp) {
+    if (Character.isISOControl(cp)) {
+      return new String(Character.toChars(cp));
+    }
+
+    final var s = new String(Character.toChars(cp));
+    try {
+      font.encode(s);
+      return s;
+    } catch (IOException | IllegalArgumentException e) {
+      log.warn(
+          "Character '%s' with unicode 'U+%s' cannot be encoded in font '%s', replacing with space.".formatted(
+              s, Integer.toHexString(cp).toUpperCase(),
+              font.getName())
+      );
+      return " ";
+    }
   }
 
   public Optional<OverFlowLineSplit> getOverflowingLines(List<PdfField> currentFields,
