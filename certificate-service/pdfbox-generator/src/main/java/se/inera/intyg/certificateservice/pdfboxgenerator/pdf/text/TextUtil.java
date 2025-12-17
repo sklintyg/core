@@ -129,9 +129,13 @@ public class TextUtil {
         .collect(Collectors.joining());
   }
 
+  private static boolean isAllowedControl(int cp) {
+    return cp == '\n' || cp == '\r' || cp == '\t';
+  }
+
   private static String getSupportedString(PDFont font, int cp) {
     if (Character.isISOControl(cp)) {
-      return new String(Character.toChars(cp));
+      return isAllowedControl(cp) ? new String(Character.toChars(cp)) : "";
     }
 
     final var s = new String(Character.toChars(cp));
