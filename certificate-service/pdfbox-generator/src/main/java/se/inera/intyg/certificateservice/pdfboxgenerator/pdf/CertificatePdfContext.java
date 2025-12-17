@@ -46,13 +46,7 @@ public class CertificatePdfContext implements AutoCloseable {
 
     pdfFields.replaceAll(pdfField -> {
       if (pdfField.getAppearance() == null || pdfField.getAppearance().isEmpty()) {
-        return PdfField.builder()
-            .id(pdfField.getId())
-            .value(pdfField.getValue())
-            .append(pdfField.getAppend())
-            .appearance(defaultAppearance)
-            .offset(pdfField.getOffset())
-            .build();
+        return pdfField.withAppearance(defaultAppearance);
       }
       return pdfField;
     });
@@ -61,4 +55,13 @@ public class CertificatePdfContext implements AutoCloseable {
   public void sanatizePdfFields() {
     pdfFields.forEach(field -> field.setValue(field.sanitizedValue(font)));
   }
+
+  public float getFontSize() {
+    return Float.parseFloat(getDefaultAppearanceParts()[1]);
+  }
+
+  private String[] getDefaultAppearanceParts() {
+    return defaultAppearance.split("\\s+");
+  }
+
 }
