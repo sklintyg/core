@@ -24,13 +24,10 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagIndex;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.TemplatePdfSpecification;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.service.PdfFieldGenerator;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAccessibilityUtil;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAdditionalInformationTextGenerator;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.TextUtil;
-import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfElementValueGenerator;
-import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfPatientValueGenerator;
-import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfSignatureValueGenerator;
-import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfUnitValueGenerator;
 
 
 @Service
@@ -40,12 +37,8 @@ public class CertificatePdfFillService {
 
   public static final int SIGNATURE_X_PADDING = 60;
   public static final int SIGNATURE_Y_PADDING = 2;
-
-  private final PdfUnitValueGenerator pdfUnitValueGenerator;
-  private final PdfPatientValueGenerator pdfPatientValueGenerator;
-  private final PdfSignatureValueGenerator pdfSignatureValueGenerator;
+  private final PdfFieldGenerator pdfFieldGenerator;
   private final PdfAdditionalInformationTextGenerator pdfAdditionalInformationTextGenerator;
-  private final PdfElementValueGenerator pdfElementValueGenerator;
   private final TextUtil textUtil;
 
 
@@ -77,23 +70,11 @@ public class CertificatePdfFillService {
   }
 
   private void setFields(CertificatePdfContext context) {
-    final var certificate = context.getCertificate();
     final var document = context.getDocument();
     final var templatePdfSpecification = context.getTemplatePdfSpecification();
 
-    final var signatureFields = getSignatureFields(certificate);
-    final var pdfFields = pdfElementValueGenerator.generate(certificate);
-    final var unitFields = pdfUnitValueGenerator.generate(certificate);
-    final var patientFields = pdfPatientValueGenerator.generate(certificate,
-        templatePdfSpecification.patientIdFieldIds());
-
-    context.getPdfFields().addAll(signatureFields);
-    context.getPdfFields().addAll(pdfFields);
-    context.getPdfFields().addAll(unitFields);
-    context.getPdfFields().addAll(patientFields);
-
+    context.getPdfFields().addAll(pdfFieldGenerator.generatePdfFields(context));
     context.addDefaultAppearanceToPdfFields();
-
     context.sanatizePdfFields();
 
     final var appendedFields = context.getPdfFields().stream()
@@ -110,12 +91,6 @@ public class CertificatePdfFillService {
             .filter(field -> !field.getAppend())
             .toList()
     );
-  }
-
-  private List<PdfField> getSignatureFields(Certificate certificate) {
-    return certificate.status() == Status.SIGNED
-        ? pdfSignatureValueGenerator.generate(certificate)
-        : List.of();
   }
 
   private void setFieldValuesAppendix(CertificatePdfContext context,
