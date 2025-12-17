@@ -95,24 +95,20 @@ public class CertificatePdfFillService {
 
   private void setFieldValuesAppendix(CertificatePdfContext context,
       List<PdfField> appendedFields) {
-    final var templatePdfSpecification = context.getTemplatePdfSpecification();
 
-    if (templatePdfSpecification.overFlowPageIndex() == null || appendedFields.isEmpty()) {
+    if (context.getTemplatePdfSpecification().overFlowPageIndex() == null
+        || appendedFields.isEmpty()) {
       return;
     }
 
     try {
-      final var certificate = context.getCertificate();
-      final var patientField = PdfField.builder()
-          .id(templatePdfSpecification.patientIdFieldIds().getLast().id())
-          .value(certificate.getMetadataForPrint().patient().id().idWithoutDash())
-          .build();
-
-      context.getPdfFields().add(patientField);
-      patientField.setValue(patientField.sanitizedValue(context.getFont()));
+      final var patientField = context.getPdfFields().stream()
+          .filter(PdfField::isPatientField)
+          .findFirst()
+          .orElseThrow(() -> new IllegalStateException(
+              "Patient field is required when using appendix overflow"));
 
       setFieldValuesAppendix(context,
-          templatePdfSpecification.overFlowPageIndex().value(),
           appendedFields,
           patientField);
     } catch (IOException e) {
@@ -120,15 +116,15 @@ public class CertificatePdfFillService {
     }
   }
 
-  private void setFieldValuesAppendix(CertificatePdfContext context,
-      int overFlowPageIndex, List<PdfField> appendedFields, PdfField patientIdField)
+  private void setFieldValuesAppendix(CertificatePdfContext context, List<PdfField> appendedFields,
+      PdfField patientIdField)
       throws IOException {
     final var document = context.getDocument();
     final var font = context.getFont();
     final var acroForm = document.getDocumentCatalog().getAcroForm();
     final var overflowField = acroForm.getField(appendedFields.getFirst().getId());
     final var rectangle = overflowField.getWidgets().getFirst().getRectangle();
-    final var fontSize = new TextFieldAppearance((PDVariableText) overflowField).getFontSize();
+    final var fontSize = context.getFontSize();
     int start = 0;
     int count = 0;
     var appendedFieldsMutable = new ArrayList<>(appendedFields);
@@ -161,25 +157,25 @@ public class CertificatePdfFillService {
           count++;
         }
 
-        fillFieldsOnPage(context, overFlowPageIndex, appendedFieldsMutable, patientIdField, start,
+        fillFieldsOnPage(context, appendedFieldsMutable, patientIdField, start,
             count, acroForm, fontSize, rectangle);
         start = count;
       }
       count++;
     }
 
-    fillFieldsOnPage(context, overFlowPageIndex, appendedFieldsMutable, patientIdField, start,
+    fillFieldsOnPage(context, appendedFieldsMutable, patientIdField, start,
         count, acroForm, fontSize, rectangle);
   }
 
-  private void fillFieldsOnPage(CertificatePdfContext context, int overFlowPageIndex,
+  private void fillFieldsOnPage(CertificatePdfContext context,
       List<PdfField> appendedFields, PdfField patientIdField, int start, int count,
       PDAcroForm acroForm, float fontSize, PDRectangle rectangle)
       throws IOException {
     if (start == 0) {
       fillOverflowPage(appendedFields.subList(start, count), acroForm);
     } else {
-      addAndFillOverflowPage(context, overFlowPageIndex, appendedFields.subList(start, count),
+      addAndFillOverflowPage(context, appendedFields.subList(start, count),
           acroForm, patientIdField, fontSize, rectangle);
     }
   }
@@ -197,15 +193,15 @@ public class CertificatePdfFillService {
     }
   }
 
-  private void addAndFillOverflowPage(CertificatePdfContext context,
-      int overFlowPageIndex, List<PdfField> fields,
+  private void addAndFillOverflowPage(CertificatePdfContext context, List<PdfField> fields,
       PDAcroForm acroForm, PdfField patientIdField, float fontSize, PDRectangle rectangle)
       throws IOException {
     final var document = context.getDocument();
     final var font = context.getFont();
     final var templatePdfSpecification = context.getTemplatePdfSpecification();
 
-    final var pageToClone = document.getPage(overFlowPageIndex);
+    final var pageToClone = document.getPage(
+        context.getTemplatePdfSpecification().overFlowPageIndex().value());
     COSDictionary pageDict = pageToClone.getCOSObject();
     COSDictionary newPageDict = new COSDictionary(pageDict);
 
