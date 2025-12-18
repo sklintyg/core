@@ -11,6 +11,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSp
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationDiagnoses;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.TextSplitRenderSpec;
 
 @Component
 public class PdfDiagnosisListValueGenerator implements PdfElementValue<ElementValueDiagnosisList> {
@@ -67,8 +68,12 @@ public class PdfDiagnosisListValueGenerator implements PdfElementValue<ElementVa
       ElementValueDiagnosis diagnosis, String pdfFieldId) {
     if (pdfConfiguration.maxLength() != null && isDiagnosisDescriptionOverflowing(pdfConfiguration,
         diagnosis)) {
-      final var splitText = PdfValueGeneratorUtil.splitByLimit(pdfConfiguration.maxLength(),
-          diagnosis.description(), "...");
+      final var splitText = PdfValueGeneratorUtil.splitByLimit(
+          TextSplitRenderSpec.builder()
+              .limit(pdfConfiguration.maxLength())
+              .informationMessage("...")
+              .fieldText(diagnosis.description())
+              .build());
       if (hasOverflowSheet(pdfConfiguration)) {
         return getFieldsWithOverFlowSheet(pdfConfiguration, diagnosis, pdfFieldId, splitText);
       }

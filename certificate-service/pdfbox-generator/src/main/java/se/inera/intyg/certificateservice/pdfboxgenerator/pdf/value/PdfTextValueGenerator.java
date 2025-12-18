@@ -7,6 +7,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueTe
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.TextSplitRenderSpec;
 
 @Component
 public class PdfTextValueGenerator implements PdfElementValue<ElementValueText> {
@@ -25,8 +26,11 @@ public class PdfTextValueGenerator implements PdfElementValue<ElementValueText> 
 
     final var pdfConfiguration = (PdfConfigurationText) elementSpecification.pdfConfiguration();
     if (hasOverflow(elementValueText, pdfConfiguration)) {
-      final var splitText = PdfValueGeneratorUtil.splitByLimit(pdfConfiguration.maxLength(),
-          elementValueText.text());
+      final var splitText = PdfValueGeneratorUtil.splitByLimit(
+          TextSplitRenderSpec.builder()
+              .fieldText(elementValueText.text())
+              .limit(pdfConfiguration.maxLength())
+              .build());
       if (hasOverFlowSheet(pdfConfiguration)) {
         return getFieldsWithOverflowSheet(elementSpecification, pdfConfiguration, splitText);
       }
@@ -55,7 +59,11 @@ public class PdfTextValueGenerator implements PdfElementValue<ElementValueText> 
             .id(pdfConfiguration.pdfFieldId().id())
             .value(
                 PdfValueGeneratorUtil.splitByLimit(
-                    pdfConfiguration.maxLength(), elementValueText.text(), "...").getFirst()
+                    TextSplitRenderSpec.builder()
+                        .limit(pdfConfiguration.maxLength())
+                        .fieldText(elementValueText.text())
+                        .informationMessage("...")
+                        .build()).getFirst()
             )
             .build()
     );
