@@ -1,6 +1,7 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value;
 
 import java.util.List;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.TextSplitRenderSpec;
 
 public class PdfValueGeneratorUtil {
 
@@ -11,22 +12,16 @@ public class PdfValueGeneratorUtil {
     throw new IllegalStateException("Utility class");
   }
 
-  public static List<String> splitByLimit(Integer limit, String s) {
-    return splitByLimit(limit, s, null, true);
-  }
+  public static List<String> splitByLimit(TextSplitRenderSpec textSplitRenderSpec) {
+    final var informationText = textSplitRenderSpec.getInformationMessage() != null
+        ? textSplitRenderSpec.getInformationMessage()
+        : getInformationText(textSplitRenderSpec.getLimit());
 
-  public static List<String> splitByLimit(Integer limit, String s, String message) {
-    return splitByLimit(limit, s, message, true);
-  }
-
-  public static List<String> splitByLimit(Integer limit, String s, String message,
-      boolean shouldRemoveLineBreaks) {
-    final var informationText = message != null
-        ? message
-        : getInformationText(limit);
-
-    final var updatedLimit = limit - informationText.length();
-    final var noLineBreak = shouldRemoveLineBreaks ? s.replace("\n", "") : s;
+    final var updatedLimit = textSplitRenderSpec.getLimit() - informationText.length();
+    final var noLineBreak =
+        textSplitRenderSpec.isShouldRemoveLineBreaks() ? textSplitRenderSpec.getFieldText()
+            .replace("\n", "")
+            : textSplitRenderSpec.getFieldText();
     final var words = noLineBreak.split(" ");
 
     final var firstPart = new StringBuilder();
