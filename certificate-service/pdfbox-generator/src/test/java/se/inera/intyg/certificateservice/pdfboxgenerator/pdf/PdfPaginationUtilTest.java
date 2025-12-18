@@ -286,8 +286,8 @@ class PdfPaginationUtilTest {
         () -> assertEquals(2, result.size(), "Should create 2 pages"),
         () -> assertEquals(2, result.getFirst().size(),
             "First page should have 2 fields (field1 and part one of field2)"),
-        () -> assertEquals(1, result.get(1).size(),
-            "Second page should have 1 field (part two of field2 and field3 on next page)")
+        () -> assertEquals(2, result.get(1).size(),
+            "Second page should have 2 fields (part two of field2 and field3 on next page)")
     );
   }
 
