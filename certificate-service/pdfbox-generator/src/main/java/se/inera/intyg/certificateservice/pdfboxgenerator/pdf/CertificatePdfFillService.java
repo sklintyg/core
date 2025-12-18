@@ -10,8 +10,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.pdfbox.cos.COSDictionary;
-import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
@@ -40,6 +38,7 @@ public class CertificatePdfFillService {
   private final PdfFieldGenerator pdfFieldGenerator;
   private final PdfAdditionalInformationTextGenerator pdfAdditionalInformationTextGenerator;
   private final PdfPaginationUtil pdfPaginationUtil;
+  private final PdfOverflowPageFactory pdfOverflowPageFactory;
   private final TextUtil textUtil;
 
 
@@ -112,10 +111,11 @@ public class CertificatePdfFillService {
         .skip(1)
         .forEach(field -> {
           try {
-            addAndFillOverflowPage(context, field,
-                context.getFontSize(),
+            addAndFillOverflowPage(
+                context,
+                field,
                 overFlowPageField.getWidgets().getFirst().getRectangle(),
-                context.getPdfField(PdfField::isPatientField)
+                pdfOverflowPageFactory.create(context)
             );
           } catch (IOException e) {
             throw new IllegalStateException(e);
@@ -137,20 +137,11 @@ public class CertificatePdfFillService {
   }
 
   private void addAndFillOverflowPage(CertificatePdfContext context, List<PdfField> fields,
-      float fontSize, PDRectangle rectangle, PdfField patientIdField)
+      PDRectangle rectangle, PDPage newPage)
       throws IOException {
-    final var document = context.getDocument();
+    final var fontSize = context.getFontSize();
     final var font = context.getFont();
-    final var templatePdfSpecification = context.getTemplatePdfSpecification();
-
-    final var pageToClone = document.getPage(
-        context.getTemplatePdfSpecification().overFlowPageIndex().value());
-    COSDictionary pageDict = pageToClone.getCOSObject();
-    COSDictionary newPageDict = new COSDictionary(pageDict);
-
-    newPageDict.removeItem(COSName.ANNOTS);
-
-    PDPage clonedPage = new PDPage(newPageDict);
+    final var document = context.getDocument();
 
     String allText = fields.stream()
         .map(pdfField -> pdfField.sanitizedValue(font))
@@ -161,8 +152,9 @@ public class CertificatePdfFillService {
       lines.addAll(textUtil.wrapLine(line, rectangle.getWidth(), fontSize, font));
     }
 
-    document.addPage(clonedPage);
-    PdfAccessibilityUtil.createNewOverflowPageTag(document, clonedPage, templatePdfSpecification);
+    document.addPage(newPage);
+    PdfAccessibilityUtil.createNewOverflowPageTag(document, newPage,
+        context.getTemplatePdfSpecification());
 
     float startX = rectangle.getLowerLeftX() + X_MARGIN_APPENDIX_PAGE;
     float startY = rectangle.getUpperRightY() - Y_MARGIN_APPENDIX_PAGE;
@@ -170,7 +162,7 @@ public class CertificatePdfFillService {
         document.getNumberOfPages() - 1, lines, startX, startY, fontSize, font,
         context.nextMcid());
 
-    addPatientId(context, patientIdField);
+    addPatientId(context, context.getPdfField(PdfField::isPatientField));
   }
 
   private void addPatientId(CertificatePdfContext context, PdfField patientIdField)
