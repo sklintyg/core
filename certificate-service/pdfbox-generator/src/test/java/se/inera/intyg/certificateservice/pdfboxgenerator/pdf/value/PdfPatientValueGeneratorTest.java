@@ -30,6 +30,7 @@ class PdfPatientValueGeneratorTest {
     final var expected = List.of(PdfField.builder()
         .id(FIELD_ID)
         .value(CERTIFICATE_META_DATA.patient().id().idWithoutDash())
+        .patientField(true)
         .build()
     );
 
@@ -47,10 +48,12 @@ class PdfPatientValueGeneratorTest {
         PdfField.builder()
             .id(FIELD_ID)
             .value(CERTIFICATE_META_DATA.patient().id().idWithoutDash())
+            .patientField(true)
             .build(),
         PdfField.builder()
             .id(FIELD_ID_2)
             .value(CERTIFICATE_META_DATA.patient().id().idWithoutDash())
+            .patientField(true)
             .build()
     );
 

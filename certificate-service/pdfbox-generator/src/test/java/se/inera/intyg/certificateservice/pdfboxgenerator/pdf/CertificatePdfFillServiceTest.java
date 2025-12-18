@@ -7,7 +7,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyFloat;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -37,18 +36,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
-import se.inera.intyg.certificateservice.domain.certificate.model.MedicalCertificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.TemplatePdfSpecification;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.service.PdfFieldGenerator;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAdditionalInformationTextGenerator;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.TextUtil;
-import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfElementValueGenerator;
-import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfPatientValueGenerator;
-import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfSignatureValueGenerator;
-import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfUnitValueGenerator;
 
 @ExtendWith(MockitoExtension.class)
 class CertificatePdfFillServiceTest {
@@ -92,42 +86,20 @@ class CertificatePdfFillServiceTest {
 
   @Mock
   TextUtil textUtil;
-  
-  @Mock
-  PdfUnitValueGenerator pdfUnitValueGenerator;
-
-  @Mock
-  PdfPatientValueGenerator pdfPatientValueGenerator;
-
-  @Mock
-  PdfSignatureValueGenerator pdfSignatureValueGenerator;
 
   @Mock
   PdfAdditionalInformationTextGenerator pdfAdditionalInformationTextGenerator;
 
   @Mock
-  private PdfElementValueGenerator pdfElementValueGenerator;
+  PdfFieldGenerator pdfFieldGenerator;
 
   @InjectMocks
   CertificatePdfFillService certificatePdfFillService;
 
-  private Certificate certificate;
-
   @Nested
   class SinglePagePdf {
 
-    @BeforeEach
-    void setup() {
-      when(pdfPatientValueGenerator.generate(any(MedicalCertificate.class),
-          eq(List.of(new PdfFieldId(PATIENT_ID_FIELD_ID)))))
-          .thenReturn(List.of(PATIENT_FIELD));
-
-      when(pdfUnitValueGenerator.generate(any(MedicalCertificate.class)))
-          .thenReturn(List.of(UNIT_FIELD));
-
-      when(pdfElementValueGenerator.generate(any(MedicalCertificate.class)))
-          .thenReturn(List.of(SYMPTOM_FIELD));
-    }
+    private Certificate certificate;
 
     @Nested
     class NotSignedCertificate {
@@ -135,6 +107,8 @@ class CertificatePdfFillServiceTest {
       @BeforeEach
       void setup() {
         certificate = getDraft();
+        when(pdfFieldGenerator.generatePdfFields(any(CertificatePdfContext.class)))
+            .thenReturn(List.of(PATIENT_FIELD, UNIT_FIELD, SYMPTOM_FIELD));
       }
 
       @Test
@@ -235,8 +209,8 @@ class CertificatePdfFillServiceTest {
       @BeforeEach
       void setup() {
         certificate = getCertificate();
-        when(pdfSignatureValueGenerator.generate(any(MedicalCertificate.class)))
-            .thenReturn(List.of(SIGNED_DATE_FIELD));
+        when(pdfFieldGenerator.generatePdfFields(any(CertificatePdfContext.class)))
+            .thenReturn(List.of(PATIENT_FIELD, UNIT_FIELD, SYMPTOM_FIELD, SIGNED_DATE_FIELD));
       }
 
       @Test
@@ -349,8 +323,8 @@ class CertificatePdfFillServiceTest {
       @BeforeEach
       void setup() {
         certificate = getSentCertificate();
-        when(pdfSignatureValueGenerator.generate(any(MedicalCertificate.class)))
-            .thenReturn(List.of(SIGNED_DATE_FIELD));
+        when(pdfFieldGenerator.generatePdfFields(any(CertificatePdfContext.class)))
+            .thenReturn(List.of(PATIENT_FIELD, UNIT_FIELD, SYMPTOM_FIELD, SIGNED_DATE_FIELD));
       }
 
       @Test
@@ -461,10 +435,12 @@ class CertificatePdfFillServiceTest {
   @Nested
   class AppearanceExists {
 
+    private Certificate certificate;
+
     @BeforeEach
     void setup() {
       certificate = getfk7809Certificate();
-      when(pdfElementValueGenerator.generate(any(MedicalCertificate.class)))
+      when(pdfFieldGenerator.generatePdfFields(any(CertificatePdfContext.class)))
           .thenReturn(List.of(DIAGNOSE_DESCRIPTION_1, DIAGNOSE_DESCRIPTION_2));
     }
 
@@ -492,10 +468,12 @@ class CertificatePdfFillServiceTest {
   @Nested
   class MultiplePagesPdf {
 
+    private Certificate certificate;
+
     @BeforeEach
     void setup() {
       certificate = getCertificateWithSeveralPages();
-      when(pdfSignatureValueGenerator.generate(any(MedicalCertificate.class)))
+      when(pdfFieldGenerator.generatePdfFields(any(CertificatePdfContext.class)))
           .thenReturn(Collections.emptyList());
     }
 
@@ -570,8 +548,7 @@ class CertificatePdfFillServiceTest {
     return textStripper.getText(document);
   }
 
-  private CertificatePdfContext createContext(Certificate certificate,
-      boolean citizenFormat) {
+  private CertificatePdfContext createContext(Certificate certificate, boolean citizenFormat) {
     final var templatePdfSpec = (TemplatePdfSpecification) certificate.certificateModel()
         .pdfSpecification();
     final var template = getTemplatePath(certificate, citizenFormat, templatePdfSpec);
@@ -582,7 +559,7 @@ class CertificatePdfFillServiceTest {
       }
 
       final var document = Loader.loadPDF(in.readAllBytes());
-      final var fontStream = getClass().getClassLoader().getResourceAsStream("fonts/verdana.ttf");
+      final var fontStream = getClass().getClassLoader().getResourceAsStream("fonts/arialmt.ttf");
       final var font = PDType0Font.load(document, fontStream);
 
       return CertificatePdfContext.builder()
