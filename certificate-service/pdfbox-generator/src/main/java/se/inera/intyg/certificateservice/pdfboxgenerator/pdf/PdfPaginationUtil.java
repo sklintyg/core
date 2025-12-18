@@ -48,6 +48,11 @@ public class PdfPaginationUtil {
         currentPage.add(split.second());
       }
     }
+    
+    if (!currentPage.isEmpty()) {
+      pages.add(currentPage);
+    }
+
     return pages;
   }
 
