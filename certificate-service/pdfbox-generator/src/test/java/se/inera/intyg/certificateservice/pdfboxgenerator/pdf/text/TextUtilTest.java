@@ -428,6 +428,21 @@ class TextUtilTest {
 
       assertEquals(2 * FONT_SIZE * LINE_HEIGHT, actualHeight);
     }
+
+    @Test
+    void shouldFilterOutCharactersNotSupportedByFont() {
+      final var textWithUnsupportedChars = "Normal text \uD83D\uDE00 with emoji";
+
+      final var wrappedLines = textUtil.wrapLine(
+          textWithUnsupportedChars,
+          450,
+          FONT_SIZE,
+          new PDType1Font(FontName.HELVETICA)
+      );
+
+      assertEquals(1, wrappedLines.size());
+      assertEquals("Normal text   with emoji", wrappedLines.getFirst());
+    }
   }
 
   @Nested

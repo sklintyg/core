@@ -121,7 +121,6 @@ public class TextUtil {
             (s1, s2) -> s2);
 
     return filterUnsupportedFontCharacters(font, normalizedChars);
-
   }
 
   private static String filterUnsupportedFontCharacters(PDFont font, String text) {
@@ -130,19 +129,24 @@ public class TextUtil {
         .collect(Collectors.joining());
   }
 
+  private static boolean isAllowedControl(int cp) {
+    return cp == '\n' || cp == '\r' || cp == '\t';
+  }
+
   private static String getSupportedString(PDFont font, int cp) {
     if (Character.isISOControl(cp)) {
-      return new String(Character.toChars(cp));
+      return isAllowedControl(cp) ? new String(Character.toChars(cp)) : "";
     }
 
-    String s = new String(Character.toChars(cp));
+    final var s = new String(Character.toChars(cp));
     try {
       font.encode(s);
       return s;
     } catch (IOException | IllegalArgumentException e) {
-      log.info(
-          "Character '{}' cannot be encoded in font '{}', replacing with space.",
-          s, font.getName()
+      log.warn(
+          "Character '%s' with unicode 'U+%s' cannot be encoded in font '%s', replacing with space.".formatted(
+              s, Integer.toHexString(cp).toUpperCase(),
+              font.getName())
       );
       return " ";
     }

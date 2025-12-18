@@ -1,9 +1,14 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf;
 
+import lombok.extern.slf4j.Slf4j;
+import org.apache.pdfbox.cos.COSName;
+import org.apache.pdfbox.pdmodel.PDResources;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationWidget;
 import org.apache.pdfbox.pdmodel.interactive.form.PDVariableText;
 
+@Slf4j
 public class TextFieldAppearance {
 
   private final PDVariableText field;
@@ -35,5 +40,17 @@ public class TextFieldAppearance {
   private String[] getAppearanceParts() {
     final var appearance = field.getDefaultAppearance();
     return appearance.split("\\s+");
+  }
+
+  private String getFontName() {
+    return getAppearanceParts()[0].substring(1);
+  }
+
+  public PDFont getFont(PDResources resources) {
+    try {
+      return resources.getFont(COSName.getPDFName(getFontName()));
+    } catch (Exception e) {
+      throw new IllegalStateException("Missing font resource in template", e);
+    }
   }
 }
