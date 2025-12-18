@@ -39,6 +39,7 @@ public class CertificatePdfFillService {
   public static final int SIGNATURE_Y_PADDING = 2;
   private final PdfFieldGenerator pdfFieldGenerator;
   private final PdfAdditionalInformationTextGenerator pdfAdditionalInformationTextGenerator;
+  private final PdfPaginationUtil pdfPaginationUtil;
   private final TextUtil textUtil;
 
 
@@ -75,7 +76,6 @@ public class CertificatePdfFillService {
 
     context.getPdfFields().addAll(pdfFieldGenerator.generatePdfFields(context));
     context.addDefaultAppearanceToPdfFields();
-    context.sanatizePdfFields();
 
     final var appendedFields = context.getPdfFields().stream()
         .filter(PdfField::getAppend)
@@ -91,6 +91,7 @@ public class CertificatePdfFillService {
             .filter(field -> !field.getAppend())
             .toList()
     );
+    context.sanatizePdfFields();
   }
 
   private void setFieldValuesAppendix(CertificatePdfContext context,
@@ -100,84 +101,26 @@ public class CertificatePdfFillService {
         || appendedFields.isEmpty()) {
       return;
     }
+    final var acroForm = context.getDocument().getDocumentCatalog().getAcroForm();
+    final var overFlowPageField = acroForm.getField(appendedFields.getFirst().getId());
 
-    try {
-      final var patientField = context.getPdfFields().stream()
-          .filter(PdfField::isPatientField)
-          .findFirst()
-          .orElseThrow(() -> new IllegalStateException(
-              "Patient field is required when using appendix overflow"));
+    final var pages = pdfPaginationUtil.paginateFields(context, appendedFields, overFlowPageField);
 
-      setFieldValuesAppendix(context,
-          appendedFields,
-          patientField);
-    } catch (IOException e) {
-      throw new IllegalStateException(e);
-    }
-  }
+    fillOverflowPage(pages.getFirst(), acroForm);
 
-  private void setFieldValuesAppendix(CertificatePdfContext context, List<PdfField> appendedFields,
-      PdfField patientIdField)
-      throws IOException {
-    final var document = context.getDocument();
-    final var font = context.getFont();
-    final var acroForm = document.getDocumentCatalog().getAcroForm();
-    final var overflowField = acroForm.getField(appendedFields.getFirst().getId());
-    final var rectangle = overflowField.getWidgets().getFirst().getRectangle();
-    final var fontSize = context.getFontSize();
-    int start = 0;
-    int count = 0;
-    var appendedFieldsMutable = new ArrayList<>(appendedFields);
-
-    while (count < appendedFieldsMutable.size()) {
-
-      var overFlowLines = textUtil.getOverflowingLines(appendedFieldsMutable.subList(start, count),
-          appendedFieldsMutable.get(count),
-          rectangle, fontSize, font);
-
-      if (overFlowLines.isPresent()) {
-        var parts = overFlowLines.get();
-
-        if (parts.partOne() != null) {
-          appendedFieldsMutable.get(count).setValue(parts.partOne());
-        }
-
-        if (parts.partTwo() != null) {
-          final var part2 = PdfField.builder()
-              .id(appendedFieldsMutable.get(count).getId())
-              .value(parts.partTwo())
-              .appearance(context.getDefaultAppearance())
-              .append(true)
-              .build();
-
-          context.getPdfFields().add(part2);
-          part2.setValue(part2.sanitizedValue(context.getFont()));
-
-          appendedFieldsMutable.add(count + 1, part2);
-          count++;
-        }
-
-        fillFieldsOnPage(context, appendedFieldsMutable, patientIdField, start,
-            count, acroForm, fontSize, rectangle);
-        start = count;
-      }
-      count++;
-    }
-
-    fillFieldsOnPage(context, appendedFieldsMutable, patientIdField, start,
-        count, acroForm, fontSize, rectangle);
-  }
-
-  private void fillFieldsOnPage(CertificatePdfContext context,
-      List<PdfField> appendedFields, PdfField patientIdField, int start, int count,
-      PDAcroForm acroForm, float fontSize, PDRectangle rectangle)
-      throws IOException {
-    if (start == 0) {
-      fillOverflowPage(appendedFields.subList(start, count), acroForm);
-    } else {
-      addAndFillOverflowPage(context, appendedFields.subList(start, count),
-          acroForm, patientIdField, fontSize, rectangle);
-    }
+    pages.stream()
+        .skip(1)
+        .forEach(field -> {
+          try {
+            addAndFillOverflowPage(context, field,
+                context.getFontSize(),
+                overFlowPageField.getWidgets().getFirst().getRectangle(),
+                context.getPdfField(PdfField::isPatientField)
+            );
+          } catch (IOException e) {
+            throw new IllegalStateException(e);
+          }
+        });
   }
 
   private static void fillOverflowPage(List<PdfField> fields, PDAcroForm acroForm) {
@@ -194,7 +137,7 @@ public class CertificatePdfFillService {
   }
 
   private void addAndFillOverflowPage(CertificatePdfContext context, List<PdfField> fields,
-      PDAcroForm acroForm, PdfField patientIdField, float fontSize, PDRectangle rectangle)
+      float fontSize, PDRectangle rectangle, PdfField patientIdField)
       throws IOException {
     final var document = context.getDocument();
     final var font = context.getFont();
@@ -227,19 +170,17 @@ public class CertificatePdfFillService {
         document.getNumberOfPages() - 1, lines, startX, startY, fontSize, font,
         context.nextMcid());
 
-    addPatientId(document, document.getNumberOfPages() - 1, patientIdField, acroForm, fontSize,
-        context.nextMcid());
+    addPatientId(context, patientIdField);
   }
 
-  private void addPatientId(PDDocument document, int pageIndex,
-      PdfField patientIdField,
-      PDAcroForm acroForm, float fontSize, int mcid) throws IOException {
-    final var patientIdRect = acroForm.getField(patientIdField.getId()).getWidgets().getFirst()
-        .getRectangle();
+  private void addPatientId(CertificatePdfContext context, PdfField patientIdField)
+      throws IOException {
+    final var patientIdRect = context.getPatientIdRectangleForOverflow();
+    final var document = context.getDocument();
     final var marginY = 6;
-    pdfAdditionalInformationTextGenerator.addPatientId(document, pageIndex,
+    pdfAdditionalInformationTextGenerator.addPatientId(document, document.getNumberOfPages() - 1,
         patientIdRect.getLowerLeftX(), patientIdRect.getLowerLeftY() + marginY,
-        patientIdField.getValue(), fontSize, mcid);
+        patientIdField.getValue(), context.getFontSize(), context.nextMcid());
 
   }
 

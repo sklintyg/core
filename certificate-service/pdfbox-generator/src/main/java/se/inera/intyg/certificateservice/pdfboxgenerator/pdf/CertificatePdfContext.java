@@ -4,10 +4,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 import lombok.Builder;
 import lombok.Getter;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.TemplatePdfSpecification;
 
@@ -60,8 +63,24 @@ public class CertificatePdfContext implements AutoCloseable {
     return Float.parseFloat(getDefaultAppearanceParts()[1]);
   }
 
+  public PdfField getPdfField(Function<PdfField, Boolean> predicate) {
+    return pdfFields.stream()
+        .filter(predicate::apply)
+        .findFirst()
+        .orElseThrow(() -> new IllegalArgumentException("PdfField not found"));
+  }
+
   private String[] getDefaultAppearanceParts() {
     return defaultAppearance.split("\\s+");
   }
 
+  public PDAcroForm getAcroForm() {
+    return document.getDocumentCatalog().getAcroForm();
+  }
+
+  public PDRectangle getPatientIdRectangleForOverflow() {
+    final var fieldId = templatePdfSpecification.patientIdFieldIds().getLast().id();
+
+    return getAcroForm().getField(fieldId).getWidgets().getFirst().getRectangle();
+  }
 }

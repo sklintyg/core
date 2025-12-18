@@ -15,6 +15,7 @@ public class PdfField {
 
   String id;
   @Setter
+  @With
   String value;
   @Builder.Default
   Boolean append = false;
