@@ -63,9 +63,9 @@ public class CertificatePdfContext implements AutoCloseable {
     return Float.parseFloat(getDefaultAppearanceParts()[1]);
   }
 
-  public PdfField getPdfField(Function<PdfField, Boolean> predicate) {
+  public PdfField getPdfField(Function<PdfField, Boolean> findFieldPredicate) {
     return pdfFields.stream()
-        .filter(predicate::apply)
+        .filter(findFieldPredicate::apply)
         .findFirst()
         .orElseThrow(() -> new IllegalArgumentException("PdfField not found"));
   }

@@ -76,6 +76,7 @@ public class CertificatePdfFillService {
 
     context.getPdfFields().addAll(pdfFieldGenerator.generatePdfFields(context));
     context.addDefaultAppearanceToPdfFields();
+    context.sanatizePdfFields();
 
     final var appendedFields = context.getPdfFields().stream()
         .filter(PdfField::getAppend)
@@ -91,7 +92,6 @@ public class CertificatePdfFillService {
             .filter(field -> !field.getAppend())
             .toList()
     );
-    context.sanatizePdfFields();
   }
 
   private void setFieldValuesAppendix(CertificatePdfContext context,
@@ -106,7 +106,7 @@ public class CertificatePdfFillService {
 
     final var pages = pdfPaginationUtil.paginateFields(context, appendedFields, overFlowPageField);
 
-    fillOverflowPage(pages.getFirst(), acroForm);
+    fillOverflowPage(pages.getFirst(), context);
 
     pages.stream()
         .skip(1)
@@ -123,12 +123,12 @@ public class CertificatePdfFillService {
         });
   }
 
-  private static void fillOverflowPage(List<PdfField> fields, PDAcroForm acroForm) {
-    final var field = acroForm.getField(fields.getFirst().getId());
+  private static void fillOverflowPage(List<PdfField> fields, CertificatePdfContext context) {
+    final var field = context.getAcroForm().getField(fields.getFirst().getId());
     try {
       field.setValue(
           fields.stream()
-              .map(PdfField::getValue)
+              .map(pdfField -> pdfField.sanitizedValue(context.getFont()))
               .collect(Collectors.joining("\n"))
       );
     } catch (IOException e) {
@@ -153,7 +153,7 @@ public class CertificatePdfFillService {
     PDPage clonedPage = new PDPage(newPageDict);
 
     String allText = fields.stream()
-        .map(PdfField::getValue)
+        .map(pdfField -> pdfField.sanitizedValue(font))
         .collect(Collectors.joining("\n"));
 
     List<String> lines = new ArrayList<>();
