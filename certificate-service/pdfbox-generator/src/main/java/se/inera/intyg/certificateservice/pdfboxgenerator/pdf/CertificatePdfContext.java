@@ -9,7 +9,6 @@ import lombok.Builder;
 import lombok.Getter;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.TemplatePdfSpecification;
@@ -19,8 +18,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.TemplateP
 public class CertificatePdfContext implements AutoCloseable {
 
   private final PDDocument document;
-  private final PDFont font;
-  private final String defaultAppearance;
   private final AtomicInteger mcid;
   private final Certificate certificate;
   private final TemplatePdfSpecification templatePdfSpecification;
@@ -45,30 +42,11 @@ public class CertificatePdfContext implements AutoCloseable {
     }
   }
 
-  public void addDefaultAppearanceToPdfFields() {
-
-    pdfFields.replaceAll(pdfField -> {
-      if (pdfField.getAppearance() == null || pdfField.getAppearance().isEmpty()) {
-        return pdfField.withAppearance(defaultAppearance);
-      }
-      return pdfField;
+  public void sanatizePdfFields(PdfFontResolver fontResolver, PdfFieldSanitizer fieldSanitizer) {
+    pdfFields.forEach(field -> {
+      final var font = fontResolver.resolveFont(field);
+      fieldSanitizer.sanitize(field, font);
     });
-  }
-
-  public void sanatizePdfFields() {
-    pdfFields.forEach(this::getSanatizedField);
-  }
-
-  private void getSanatizedField(PdfField field) {
-    if (field.getAppend() || field.getUnitField()) {
-      field.setValue(field.normalizedValue(font));
-    } else {
-      field.setValue(field.sanitizedValue(font));
-    }
-  }
-
-  public float getFontSize() {
-    return Float.parseFloat(getDefaultAppearanceParts()[1]);
   }
 
   public PdfField getPdfField(Function<PdfField, Boolean> findFieldPredicate) {
@@ -76,10 +54,6 @@ public class CertificatePdfContext implements AutoCloseable {
         .filter(findFieldPredicate::apply)
         .findFirst()
         .orElseThrow(() -> new IllegalArgumentException("PdfField not found"));
-  }
-
-  private String[] getDefaultAppearanceParts() {
-    return defaultAppearance.split("\\s+");
   }
 
   public PDAcroForm getAcroForm() {
