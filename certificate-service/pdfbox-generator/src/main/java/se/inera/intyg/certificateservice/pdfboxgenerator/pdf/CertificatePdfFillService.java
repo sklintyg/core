@@ -128,7 +128,7 @@ public class CertificatePdfFillService {
     try {
       field.setValue(
           fields.stream()
-              .map(pdfField -> pdfField.sanitizedValue(context.getFont()))
+              .map(pdfField -> pdfField.normalizedValue(context.getFont()))
               .collect(Collectors.joining("\n"))
       );
     } catch (IOException e) {
@@ -144,7 +144,7 @@ public class CertificatePdfFillService {
     final var document = context.getDocument();
 
     String allText = fields.stream()
-        .map(pdfField -> pdfField.sanitizedValue(font))
+        .map(pdfField -> pdfField.normalizedValue(font))
         .collect(Collectors.joining("\n"));
 
     List<String> lines = new ArrayList<>();
