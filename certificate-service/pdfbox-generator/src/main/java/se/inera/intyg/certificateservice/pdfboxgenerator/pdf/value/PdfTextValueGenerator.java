@@ -30,6 +30,7 @@ public class PdfTextValueGenerator implements PdfElementValue<ElementValueText> 
           TextSplitRenderSpec.builder()
               .fieldText(elementValueText.text())
               .limit(pdfConfiguration.maxLength())
+              .shouldRemoveLineBreaks(false)
               .build());
       if (hasOverFlowSheet(pdfConfiguration)) {
         return getFieldsWithOverflowSheet(elementSpecification, pdfConfiguration, splitText);
