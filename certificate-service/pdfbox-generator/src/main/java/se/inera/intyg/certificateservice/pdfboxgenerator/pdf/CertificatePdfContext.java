@@ -56,7 +56,16 @@ public class CertificatePdfContext implements AutoCloseable {
   }
 
   public void sanatizePdfFields() {
-    pdfFields.forEach(field -> field.setValue(field.sanitizedValue(font)));
+    pdfFields.forEach(this::getSanatizedField);
+  }
+
+  private void getSanatizedField(PdfField field) {
+    if (field.getAppend()) {
+      System.out.println(field.getValue());
+      field.setValue(field.normalizedValue(font));
+    } else {
+      field.setValue(field.sanitizedValue(font));
+    }
   }
 
   public float getFontSize() {
