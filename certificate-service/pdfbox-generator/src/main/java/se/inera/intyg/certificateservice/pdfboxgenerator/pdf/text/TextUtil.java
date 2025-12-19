@@ -103,7 +103,7 @@ public class TextUtil {
     }
   }
 
-  private String sanitizeText(String text, PDFont font) {
+  public static String sanitizeText(String text, PDFont font) {
     if (text == null) {
       return "";
     }
@@ -175,7 +175,7 @@ public class TextUtil {
 
     if (wrappedLines.size() > availableLineSpaces) {
       var overFlowInfo = new OverFlowLineSplit(
-          String.join(" ", wrappedLines.subList(0, availableLineSpaces)), String.join(" ",
+          String.join("\n", wrappedLines.subList(0, availableLineSpaces)), String.join("\n",
           wrappedLines.subList(availableLineSpaces, wrappedLines.size())) + "\n");
       return Optional.of(overFlowInfo);
     } else {
