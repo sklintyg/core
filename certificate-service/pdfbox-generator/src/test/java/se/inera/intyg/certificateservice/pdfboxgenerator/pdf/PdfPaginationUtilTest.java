@@ -20,7 +20,7 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationWidget;
-import org.apache.pdfbox.pdmodel.interactive.form.PDField;
+import org.apache.pdfbox.pdmodel.interactive.form.PDVariableText;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,7 +37,7 @@ class PdfPaginationUtilTest {
   @Mock
   private CertificatePdfContext context;
   @Mock
-  private PDField overflowField;
+  private PDVariableText overflowField;
 
   private PdfPaginationUtil pdfPaginationUtil;
   private PDFont font;
@@ -52,7 +52,6 @@ class PdfPaginationUtilTest {
 
   @Test
   void shouldReturnEmptyListWhenNoFieldsProvided() {
-
     final var result = pdfPaginationUtil.paginateFields(context, List.of(), overflowField);
 
     assertTrue(result.isEmpty());
@@ -380,10 +379,20 @@ class PdfPaginationUtilTest {
     final var mockWidget = mock(PDAnnotationWidget.class);
     when(overflowField.getWidgets()).thenReturn(List.of(mockWidget));
     when(mockWidget.getRectangle()).thenReturn(rectangle);
+    when(overflowField.getDefaultAppearance()).thenReturn(DEFAULT_APPEARANCE);
   }
 
   private void setupContext() {
-    when(context.getFont()).thenReturn(font);
-    when(context.getFontSize()).thenReturn(FONT_SIZE);
+    final var mockAcroForm = mock(org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm.class);
+    final var mockResources = mock(org.apache.pdfbox.pdmodel.PDResources.class);
+
+    when(context.getAcroForm()).thenReturn(mockAcroForm);
+    when(mockAcroForm.getDefaultResources()).thenReturn(mockResources);
+
+    try {
+      when(mockResources.getFont(any(org.apache.pdfbox.cos.COSName.class))).thenReturn(font);
+    } catch (java.io.IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 }

@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDTextField;
 import org.apache.pdfbox.text.PDFTextStripper;
@@ -560,7 +559,6 @@ class CertificatePdfFillServiceTest {
 
       final var document = Loader.loadPDF(in.readAllBytes());
       final var fontStream = getClass().getClassLoader().getResourceAsStream("fonts/arialmt.ttf");
-      final var font = PDType0Font.load(document, fontStream);
 
       return CertificatePdfContext.builder()
           .document(document)
@@ -568,7 +566,6 @@ class CertificatePdfFillServiceTest {
           .templatePdfSpecification(templatePdfSpec)
           .citizenFormat(citizenFormat)
           .additionalInfoText(CertificatePdfFillServiceTest.TEXT)
-          .font(font)
           .mcid(new AtomicInteger(templatePdfSpec.pdfMcid().value()))
           .build();
     } catch (Exception e) {
