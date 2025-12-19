@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
+import org.apache.pdfbox.pdmodel.interactive.form.PDVariableText;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.OverFlowLineSplit;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.TextUtil;
@@ -19,6 +20,8 @@ public class PdfPaginationUtil {
   public List<List<PdfField>> paginateFields(CertificatePdfContext context,
       List<PdfField> appendedFields, PDField overflowField) {
 
+    final var textFieldAppearance = new TextFieldAppearance((PDVariableText) overflowField);
+
     List<List<PdfField>> pages = new ArrayList<>();
     List<PdfField> currentPage = new ArrayList<>();
 
@@ -28,8 +31,8 @@ public class PdfPaginationUtil {
           currentPage,
           field,
           overflowField.getWidgets().getFirst().getRectangle(),
-          context.getFontSize(),
-          context.getFont()
+          textFieldAppearance.getFontSize(),
+          textFieldAppearance.getFont(context.getAcroForm().getDefaultResources())
       );
 
       if (overflow.isEmpty()) {
@@ -48,7 +51,7 @@ public class PdfPaginationUtil {
         currentPage.add(split.second());
       }
     }
-    
+
     if (!currentPage.isEmpty()) {
       pages.add(currentPage);
     }
