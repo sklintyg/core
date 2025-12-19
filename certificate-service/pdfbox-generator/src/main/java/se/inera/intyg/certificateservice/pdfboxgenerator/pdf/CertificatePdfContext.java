@@ -60,8 +60,7 @@ public class CertificatePdfContext implements AutoCloseable {
   }
 
   private void getSanatizedField(PdfField field) {
-    if (field.getAppend()) {
-      System.out.println(field.getValue());
+    if (field.getAppend() || field.getUnitField()) {
       field.setValue(field.normalizedValue(font));
     } else {
       field.setValue(field.sanitizedValue(font));
