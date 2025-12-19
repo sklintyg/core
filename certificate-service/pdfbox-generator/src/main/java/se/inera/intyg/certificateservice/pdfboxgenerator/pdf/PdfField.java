@@ -21,6 +21,8 @@ public class PdfField {
   Boolean append = false;
   @Builder.Default
   Boolean patientField = false;
+  @Builder.Default
+  Boolean unitField = false;
   @With
   String appearance;
   @Builder.Default
