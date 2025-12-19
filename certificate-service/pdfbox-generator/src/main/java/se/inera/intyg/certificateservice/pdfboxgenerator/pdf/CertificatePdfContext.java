@@ -42,7 +42,7 @@ public class CertificatePdfContext implements AutoCloseable {
     }
   }
 
-  public void sanatizePdfFields(PdfFontResolver fontResolver, PdfFieldSanitizer fieldSanitizer) {
+  public void sanitizePdfFields(PdfFontResolver fontResolver, PdfFieldSanitizer fieldSanitizer) {
     pdfFields.forEach(field -> {
       final var font = fontResolver.resolveFont(field);
       fieldSanitizer.sanitize(field, font);
