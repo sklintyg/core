@@ -31,6 +31,14 @@ public class PdfField {
       return "";
     }
 
+    return TextUtil.sanitizeText(value, font);
+  }
+
+  public String normalizedValue(PDFont font) {
+    if (this.value == null || this.value.isEmpty()) {
+      return "";
+    }
+
     return TextUtil.normalizePrintableCharacters(value, font);
   }
 
