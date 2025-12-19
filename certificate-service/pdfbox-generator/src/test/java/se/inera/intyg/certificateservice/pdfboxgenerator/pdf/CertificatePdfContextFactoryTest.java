@@ -9,8 +9,6 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataCertific
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.test.util.ReflectionTestUtils;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGeneratorOptions;
@@ -26,9 +24,6 @@ class CertificatePdfContextFactoryTest {
   @BeforeEach
   void setUp() {
     factory = new CertificatePdfContextFactory();
-
-    ReflectionTestUtils.setField(factory, "fontResource",
-        new ClassPathResource("fonts/arialmt.ttf"));
 
     certificate = fk7472CertificateBuilder().build();
     options = PdfGeneratorOptions.builder()
@@ -89,17 +84,6 @@ class CertificatePdfContextFactoryTest {
     void shouldCreateContextWithAdditionalInfoText() {
       try (final var context = factory.create(certificate, options, templatePdfSpecification)) {
         assertEquals("Additional info", context.getAdditionalInfoText());
-      } catch (Exception e) {
-        throw new RuntimeException(e);
-      }
-    }
-
-    @Test
-    void shouldCreateContextWithDefaultAppearance() {
-      try (final var context = factory.create(certificate, options, templatePdfSpecification)) {
-        assertNotNull(context.getDefaultAppearance());
-        assertTrue(context.getDefaultAppearance().contains("ArialMT"));
-        assertTrue(context.getDefaultAppearance().contains("10.00 Tf 0 g"));
       } catch (Exception e) {
         throw new RuntimeException(e);
       }
