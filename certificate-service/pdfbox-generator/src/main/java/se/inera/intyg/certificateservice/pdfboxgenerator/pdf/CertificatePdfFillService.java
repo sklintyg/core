@@ -74,8 +74,10 @@ public class CertificatePdfFillService {
     final var templatePdfSpecification = context.getTemplatePdfSpecification();
 
     context.getPdfFields().addAll(pdfFieldGenerator.generatePdfFields(context));
-    context.addDefaultAppearanceToPdfFields();
-    context.sanatizePdfFields();
+    context.sanitizePdfFields(
+        new PdfFontResolver(context.getAcroForm()),
+        new PdfFieldSanitizer()
+    );
 
     final var appendedFields = context.getPdfFields().stream()
         .filter(PdfField::getAppend)
@@ -114,7 +116,7 @@ public class CertificatePdfFillService {
             addAndFillOverflowPage(
                 context,
                 field,
-                overFlowPageField.getWidgets().getFirst().getRectangle(),
+                overFlowPageField,
                 pdfOverflowPageFactory.create(context)
             );
           } catch (IOException e) {
@@ -128,7 +130,8 @@ public class CertificatePdfFillService {
     try {
       field.setValue(
           fields.stream()
-              .map(pdfField -> pdfField.normalizedValue(context.getFont()))
+              .map(pdfField -> pdfField.normalizedValue(
+                  new PdfFontResolver(context.getAcroForm()).resolveFont(pdfField)))
               .collect(Collectors.joining("\n"))
       );
     } catch (IOException e) {
@@ -137,10 +140,14 @@ public class CertificatePdfFillService {
   }
 
   private void addAndFillOverflowPage(CertificatePdfContext context, List<PdfField> fields,
-      PDRectangle rectangle, PDPage newPage)
+      PDField pdField, PDPage newPage)
       throws IOException {
-    final var fontSize = context.getFontSize();
-    final var font = context.getFont();
+    final var rectangle = pdField.getWidgets().getFirst().getRectangle();
+
+    final var textFieldAppearance = new TextFieldAppearance((PDVariableText) pdField);
+    final var fontSize = textFieldAppearance.getFontSize();
+    final var font = textFieldAppearance.getFont(context.getAcroForm().getDefaultResources());
+
     final var document = context.getDocument();
 
     String allText = fields.stream()
@@ -162,17 +169,17 @@ public class CertificatePdfFillService {
         document.getNumberOfPages() - 1, lines, startX, startY, fontSize, font,
         context.nextMcid());
 
-    addPatientId(context, context.getPdfField(PdfField::isPatientField));
+    addPatientId(context, context.getPdfField(PdfField::isPatientField), fontSize);
   }
 
-  private void addPatientId(CertificatePdfContext context, PdfField patientIdField)
+  private void addPatientId(CertificatePdfContext context, PdfField patientIdField, float fontSize)
       throws IOException {
     final var patientIdRect = context.getPatientIdRectangleForOverflow();
     final var document = context.getDocument();
     final var marginY = 6;
     pdfAdditionalInformationTextGenerator.addPatientId(document, document.getNumberOfPages() - 1,
         patientIdRect.getLowerLeftX(), patientIdRect.getLowerLeftY() + marginY,
-        patientIdField.getValue(), context.getFontSize(), context.nextMcid());
+        patientIdField.getValue(), fontSize, context.nextMcid());
 
   }
 
