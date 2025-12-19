@@ -5,10 +5,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import lombok.RequiredArgsConstructor;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.font.PDType0Font;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGeneratorOptions;
@@ -17,9 +13,6 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.TemplateP
 @Component
 @RequiredArgsConstructor
 public class CertificatePdfContextFactory {
-
-  @Value("classpath:fonts/arialmt.ttf")
-  private Resource fontResource;
 
   public CertificatePdfContext create(Certificate certificate, PdfGeneratorOptions options,
       TemplatePdfSpecification templatePdfSpecification) {
@@ -32,7 +25,6 @@ public class CertificatePdfContextFactory {
       }
 
       PDDocument document = Loader.loadPDF(in.readAllBytes());
-      PDFont font = PDType0Font.load(document, fontResource.getInputStream());
 
       return CertificatePdfContext.builder()
           .document(document)
@@ -40,8 +32,6 @@ public class CertificatePdfContextFactory {
           .templatePdfSpecification(templatePdfSpecification)
           .citizenFormat(options.citizenFormat())
           .additionalInfoText(options.additionalInfoText())
-          .font(font)
-          .defaultAppearance("/" + font.getName() + " 10.00 Tf 0 g")
           .mcid(new AtomicInteger(templatePdfSpecification.pdfMcid().value()))
           .build();
     } catch (IOException e) {

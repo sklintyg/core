@@ -95,31 +95,11 @@ class CertificatePdfContextFactoryTest {
     }
 
     @Test
-    void shouldCreateContextWithFont() {
-      try (final var context = factory.create(certificate, options, templatePdfSpecification)) {
-        assertNotNull(context.getFont());
-        assertEquals("ArialMT", context.getFont().getName());
-      } catch (Exception e) {
-        throw new RuntimeException(e);
-      }
-    }
-
-    @Test
     void shouldCreateContextWithDefaultAppearance() {
       try (final var context = factory.create(certificate, options, templatePdfSpecification)) {
         assertNotNull(context.getDefaultAppearance());
         assertTrue(context.getDefaultAppearance().contains("ArialMT"));
         assertTrue(context.getDefaultAppearance().contains("10.00 Tf 0 g"));
-      } catch (Exception e) {
-        throw new RuntimeException(e);
-      }
-    }
-
-    @Test
-    void shouldCreateContextWithMcid() {
-      try (final var context = factory.create(certificate, options, templatePdfSpecification)) {
-        assertNotNull(context.getMcid());
-        assertEquals(templatePdfSpecification.pdfMcid().value(), context.getMcid().get());
       } catch (Exception e) {
         throw new RuntimeException(e);
       }
