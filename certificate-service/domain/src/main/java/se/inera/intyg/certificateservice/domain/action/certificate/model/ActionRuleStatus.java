@@ -18,4 +18,11 @@ public class ActionRuleStatus implements ActionRule {
       Optional<ActionEvaluation> actionEvaluation) {
     return certificate.filter(value -> status.contains(value.status())).isPresent();
   }
+
+  @Override
+  public String getReasonForPermissionDenied() {
+    return "För att genomföra den begärda åtgärden behöver intygets status vara %s".formatted(
+        status.toString()
+    );
+  }
 }
