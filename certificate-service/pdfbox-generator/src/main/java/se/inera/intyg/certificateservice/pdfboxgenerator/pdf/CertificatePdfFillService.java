@@ -74,10 +74,7 @@ public class CertificatePdfFillService {
     final var templatePdfSpecification = context.getTemplatePdfSpecification();
 
     context.getPdfFields().addAll(pdfFieldGenerator.generatePdfFields(context));
-    context.sanitizePdfFields(
-        new PdfFontResolver(context.getAcroForm()),
-        new PdfFieldSanitizer()
-    );
+    context.sanitizePdfFields();
 
     final var appendedFields = context.getPdfFields().stream()
         .filter(PdfField::getAppend)
@@ -131,7 +128,7 @@ public class CertificatePdfFillService {
       field.setValue(
           fields.stream()
               .map(pdfField -> pdfField.normalizedValue(
-                  new PdfFontResolver(context.getAcroForm()).resolveFont(pdfField)))
+                  context.getFontResolver().resolveFont(pdfField)))
               .collect(Collectors.joining("\n"))
       );
     } catch (IOException e) {

@@ -13,7 +13,7 @@ public class PdfFontResolver {
   private final PDAcroForm acroForm;
 
   public PDFont resolveFont(PdfField field) {
-    var extractedField = acroForm.getField(field.getId());
+    final var extractedField = acroForm.getField(field.getId());
 
     if (extractedField instanceof PDTextField textField) {
       return new TextFieldAppearance(textField)

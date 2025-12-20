@@ -26,6 +26,9 @@ public class CertificatePdfContext implements AutoCloseable {
   @Builder.Default
   private final List<PdfField> pdfFields = new ArrayList<>();
 
+  private final PdfFontResolver fontResolver;
+  private final PdfFieldSanitizer fieldSanitizer;
+
   public int nextMcid() {
     return mcid.incrementAndGet();
   }
@@ -42,11 +45,13 @@ public class CertificatePdfContext implements AutoCloseable {
     }
   }
 
-  public void sanitizePdfFields(PdfFontResolver fontResolver, PdfFieldSanitizer fieldSanitizer) {
-    pdfFields.forEach(field -> {
-      final var font = fontResolver.resolveFont(field);
-      fieldSanitizer.sanitize(field, font);
-    });
+  public void sanitizePdfFields() {
+    pdfFields.forEach(this::sanitizePdfField);
+  }
+
+  public void sanitizePdfField(PdfField field) {
+    final var font = fontResolver.resolveFont(field);
+    fieldSanitizer.sanitize(field, font);
   }
 
   public PdfField getPdfField(Function<PdfField, Boolean> findFieldPredicate) {
