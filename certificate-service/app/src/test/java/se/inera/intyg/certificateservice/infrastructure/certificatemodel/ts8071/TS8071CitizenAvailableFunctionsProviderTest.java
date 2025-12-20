@@ -24,7 +24,6 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateModelId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersion;
-import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateVersionAndModel;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenAvailableFunction;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CitizenAvailableFunctionType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.DefaultCitizenAvailableFunctionsProvider;
@@ -164,7 +163,7 @@ class TS8071CitizenAvailableFunctionsProviderTest {
 
 
   private static MedicalCertificate getNotLatestMajorVersionCertificate() {
-    final var model = CertificateModel.builder()
+    final var inactiveModel = CertificateModel.builder()
         .id(
             CertificateModelId.builder()
                 .version(new CertificateVersion("2.0"))
@@ -173,9 +172,16 @@ class TS8071CitizenAvailableFunctionsProviderTest {
         .activeFrom(LocalDateTime.now().plusDays(1))
         .build();
 
-    final var certificateModel = model.withCertificateVersions(
-        List.of(new CertificateVersionAndModel("3.0", model))
-    );
+    final var activeModel = CertificateModel.builder()
+        .id(
+            CertificateModelId.builder()
+                .version(new CertificateVersion("3.0"))
+                .build()
+        )
+        .activeFrom(LocalDateTime.now().minusDays(1))
+        .build();
+
+    final var certificateModel = inactiveModel.withVersions(List.of(inactiveModel, activeModel));
 
     return ag7804CertificateBuilder()
         .certificateModel(certificateModel)
@@ -192,9 +198,7 @@ class TS8071CitizenAvailableFunctionsProviderTest {
         .activeFrom(LocalDateTime.now().plusDays(1))
         .build();
 
-    final var certificateModel = model.withCertificateVersions(
-        List.of(new CertificateVersionAndModel("2.0", model))
-    );
+    final var certificateModel = model.withVersions(List.of(model));
 
     return ag7804CertificateBuilder()
         .certificateModel(certificateModel)
