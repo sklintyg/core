@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.domain.action.certificate.model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataAction.ACTION_EVALUATION;
@@ -12,6 +13,14 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.testdata.TestDataCertificate;
 
 class ActionRuleSentTest {
+
+  @Test
+  void shouldReturnCustomGetReasonForPermissionDenied() {
+    final var expected =
+        "För att genomföra den begärda åtgärden behöver intyget vara skickat till en intygsmottagare.";
+    final var reasonForPermissionDenied = new ActionRuleSent(true).getReasonForPermissionDenied();
+    assertEquals(expected, reasonForPermissionDenied);
+  }
 
   @Nested
   class TestActionRuleSentTrue {
