@@ -16,4 +16,9 @@ public class ActionRuleSent implements ActionRule {
       Optional<ActionEvaluation> actionEvaluation) {
     return certificate.filter(value -> sent == (value.sent() != null)).isPresent();
   }
+
+  @Override
+  public String getReasonForPermissionDenied() {
+    return "För att genomföra den begärda åtgärden behöver intyget vara skickat till en intygsmottagare.";
+  }
 }

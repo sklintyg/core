@@ -27,7 +27,7 @@ public class GlobalExceptionHandlerController {
   @ExceptionHandler(CertificateActionForbidden.class)
   public ResponseEntity<ApiError> handleCertificateActionForbidden(
       CertificateActionForbidden exception) {
-    log.warn("Forbidden", exception);
+    log.warn("Forbidden - %s".formatted(String.join(" - ", exception.reason())), exception);
 
     return ResponseEntity
         .status(HttpStatus.FORBIDDEN)

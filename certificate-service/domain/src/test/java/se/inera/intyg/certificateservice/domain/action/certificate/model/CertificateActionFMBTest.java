@@ -73,8 +73,7 @@ class CertificateActionFMBTest {
 
   @Test
   void shallReturnReasonNotAllowed() {
-    assertEquals("Du saknar behörighet för den begärda åtgärden."
-            + " För att utföra denna uppgift krävs särskilda rättigheter eller en specifik befattning.",
+    assertEquals("För att genomföra den begärda åtgärden behöver intygets status vara [DRAFT]",
         certificateActionFMB.reasonNotAllowed(
                 Optional.of(certificateBuilder.status(Status.SIGNED).build()),
                 Optional.of(actionEvaluationBuilder.build())
