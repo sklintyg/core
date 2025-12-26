@@ -6,28 +6,28 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Value;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.TemplatePdfSpecification;
 
-@Getter
+@Value
 @Builder
 public class CertificatePdfContext implements AutoCloseable {
 
-  private final PDDocument document;
-  private final AtomicInteger mcid;
-  private final Certificate certificate;
-  private final TemplatePdfSpecification templatePdfSpecification;
-  private final String additionalInfoText;
-  private final boolean citizenFormat;
+  PDDocument document;
+  AtomicInteger mcid;
+  Certificate certificate;
+  TemplatePdfSpecification templatePdfSpecification;
+  String additionalInfoText;
+  boolean citizenFormat;
   @Builder.Default
-  private final List<PdfField> pdfFields = new ArrayList<>();
+  List<PdfField> pdfFields = new ArrayList<>();
 
-  private final PdfFontResolver fontResolver;
-  private final PdfFieldSanitizer fieldSanitizer;
+  PdfFontResolver fontResolver;
+  PdfFieldSanitizer fieldSanitizer;
 
   public int nextMcid() {
     return mcid.incrementAndGet();
