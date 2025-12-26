@@ -558,7 +558,6 @@ class CertificatePdfFillServiceTest {
       }
 
       final var document = Loader.loadPDF(in.readAllBytes());
-      final var fontStream = getClass().getClassLoader().getResourceAsStream("fonts/arialmt.ttf");
 
       return CertificatePdfContext.builder()
           .document(document)
@@ -567,6 +566,8 @@ class CertificatePdfFillServiceTest {
           .citizenFormat(citizenFormat)
           .additionalInfoText(CertificatePdfFillServiceTest.TEXT)
           .mcid(new AtomicInteger(templatePdfSpec.pdfMcid().value()))
+          .fontResolver(new PdfFontResolver(document.getDocumentCatalog().getAcroForm()))
+          .fieldSanitizer(new PdfFieldSanitizer())
           .build();
     } catch (Exception e) {
       throw new IllegalStateException("Could not create context", e);
