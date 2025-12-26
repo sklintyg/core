@@ -54,11 +54,10 @@ public class CertificatePdfContext implements AutoCloseable {
     fieldSanitizer.sanitize(field, font);
   }
 
-  public PdfField getPdfField(Function<PdfField, Boolean> findFieldPredicate) {
+  public List<PdfField> getPdfFields(Function<PdfField, Boolean> findFieldPredicate) {
     return pdfFields.stream()
         .filter(findFieldPredicate::apply)
-        .findFirst()
-        .orElseThrow(() -> new IllegalArgumentException("PdfField not found"));
+        .toList();
   }
 
   public PDAcroForm getAcroForm() {

@@ -76,19 +76,14 @@ public class CertificatePdfFillService {
     context.getPdfFields().addAll(pdfFieldGenerator.generatePdfFields(context));
     context.sanitizePdfFields();
 
-    final var appendedFields = context.getPdfFields().stream()
-        .filter(PdfField::getAppend)
-        .toList();
+    final var appendedFields = context.getPdfFields(PdfField::getAppend);
 
     if (templatePdfSpecification.overFlowPageIndex() != null && appendedFields.isEmpty()) {
       document.removePage(document.getPage(templatePdfSpecification.overFlowPageIndex().value()));
     }
 
     setFieldValuesAppendix(context, appendedFields);
-    setFieldValues(document,
-        context.getPdfFields().stream()
-            .filter(field -> !field.getAppend())
-            .toList()
+    setFieldValues(document, context.getPdfFields(field -> !field.getAppend())
     );
   }
 
@@ -166,7 +161,7 @@ public class CertificatePdfFillService {
         document.getNumberOfPages() - 1, lines, startX, startY, fontSize, font,
         context.nextMcid());
 
-    addPatientId(context, context.getPdfField(PdfField::isPatientField), fontSize);
+    addPatientId(context, context.getPdfFields(PdfField::isPatientField).getFirst(), fontSize);
   }
 
   private void addPatientId(CertificatePdfContext context, PdfField patientIdField, float fontSize)
