@@ -2,7 +2,6 @@ package se.inera.intyg.certificateservice.pdfboxgenerator.pdf;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
-import lombok.RequiredArgsConstructor;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.springframework.stereotype.Component;
@@ -11,7 +10,6 @@ import se.inera.intyg.certificateservice.domain.certificate.service.PdfGenerator
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.TemplatePdfSpecification;
 
 @Component
-@RequiredArgsConstructor
 public class CertificatePdfContextFactory {
 
   public CertificatePdfContext create(Certificate certificate, PdfGeneratorOptions options,
