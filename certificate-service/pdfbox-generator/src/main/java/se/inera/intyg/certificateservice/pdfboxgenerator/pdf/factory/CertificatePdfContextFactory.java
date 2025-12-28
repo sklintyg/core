@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.pdfboxgenerator.pdf;
+package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.factory;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component;
 import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGeneratorOptions;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.TemplatePdfSpecification;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.CertificatePdfContext;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfFieldSanitizer;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfFontResolver;
 
 @Component
 public class CertificatePdfContextFactory {

@@ -1,9 +1,10 @@
-package se.inera.intyg.certificateservice.pdfboxgenerator.pdf;
+package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.factory;
 
 import org.apache.pdfbox.cos.COSDictionary;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.springframework.stereotype.Component;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.CertificatePdfContext;
 
 @Component
 public class PdfOverflowPageFactory {
