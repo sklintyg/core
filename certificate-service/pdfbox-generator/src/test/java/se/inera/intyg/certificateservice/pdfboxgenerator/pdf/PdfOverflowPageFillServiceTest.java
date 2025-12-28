@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyFloat;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
@@ -55,7 +56,13 @@ class PdfOverflowPageFillServiceTest {
 
   @Test
   void shouldReturnWhenNoOverflowPageIndex() {
-    final var context = CertificatePdfContext.builder().build();
+    final var context = CertificatePdfContext.builder()
+        .templatePdfSpecification(
+            TemplatePdfSpecification.builder()
+                .overFlowPageIndex(null)
+                .build()
+        )
+        .build();
 
     pdfOverflowPageFillService.setFieldValuesAppendix(context, List.of(mock(PdfField.class)));
 
@@ -148,6 +155,50 @@ class PdfOverflowPageFillServiceTest {
             any(), anyInt());
   }
 
+  @Test
+  void shouldAddPatientIdToNewOverflowPages() throws IOException {
+    final var context = mockContext();
+
+    final var pdfField = PdfField.builder()
+        .id("overflowField")
+        .value("Some long text that causes overflow")
+        .append(true)
+        .build();
+
+    when(pdfPaginationUtil.paginateFields(any(), anyList(), any()))
+        .thenReturn(List.of(
+            List.of(pdfField),
+            List.of(pdfField)
+        ));
+
+    when(context.getFontResolver().resolveFont(any()))
+        .thenReturn(new PDType1Font(FontName.HELVETICA));
+
+    when(pdfOverflowPageFactory.create(context))
+        .thenReturn(new PDPage());
+
+    try (var mocked =
+        mockStatic(PdfAccessibilityUtil.class)) {
+
+      mocked.when(() ->
+          PdfAccessibilityUtil.createNewOverflowPageTag(any(), any(), any())
+      ).thenReturn(null);
+
+      pdfOverflowPageFillService.setFieldValuesAppendix(context, List.of(pdfField));
+    }
+
+    verify(pdfAdditionalInformationTextGenerator, times(1))
+        .addPatientId(
+            any(),
+            anyInt(),
+            anyFloat(),
+            anyFloat(),
+            anyString(),
+            anyFloat(),
+            anyInt()
+        );
+  }
+
   private CertificatePdfContext mockContext() {
     PDDocument document = new PDDocument();
     PDAcroForm acroForm = new PDAcroForm(document);
@@ -167,6 +218,7 @@ class PdfOverflowPageFillServiceTest {
         .pdfFields(
             List.of(
                 PdfField.builder()
+                    .value("191212-1212")
                     .patientField(true)
                     .build()
             )
