@@ -91,6 +91,8 @@ class CertificatePdfFillServiceTest {
 
   @Mock
   PdfFieldGenerator pdfFieldGenerator;
+  @Mock
+  PdfOverflowPageFillService pdfOverflowPageFillService;
 
   @InjectMocks
   CertificatePdfFillService certificatePdfFillService;
