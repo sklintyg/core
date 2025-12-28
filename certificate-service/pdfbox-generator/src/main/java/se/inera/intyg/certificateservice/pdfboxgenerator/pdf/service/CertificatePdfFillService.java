@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.pdfboxgenerator.pdf;
+package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.service;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,7 +16,9 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Certificate;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfTagIndex;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.TemplatePdfSpecification;
-import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.service.PdfFieldGenerator;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.CertificatePdfContext;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.TextFieldAppearance;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAdditionalInformationTextGenerator;
 
 

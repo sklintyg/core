@@ -1,4 +1,4 @@
-package se.inera.intyg.certificateservice.pdfboxgenerator.pdf;
+package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.service;
 
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.X_MARGIN_APPENDIX_PAGE;
 import static se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfConstants.Y_MARGIN_APPENDIX_PAGE;
@@ -12,6 +12,11 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDVariableText;
 import org.springframework.stereotype.Service;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.CertificatePdfContext;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfOverflowPageFactory;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfPaginationUtil;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.TextFieldAppearance;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAccessibilityUtil;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAdditionalInformationTextGenerator;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.TextUtil;

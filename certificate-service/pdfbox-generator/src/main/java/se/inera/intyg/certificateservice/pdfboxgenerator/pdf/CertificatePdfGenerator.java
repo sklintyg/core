@@ -9,6 +9,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Pdf;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGenerator;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGeneratorOptions;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.TemplatePdfSpecification;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.service.CertificatePdfFillService;
 
 @Component("certificatePdfGenerator")
 @RequiredArgsConstructor

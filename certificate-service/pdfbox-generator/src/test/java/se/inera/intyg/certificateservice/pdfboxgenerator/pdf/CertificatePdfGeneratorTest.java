@@ -31,6 +31,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.Certifica
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.CertificateType;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.GeneralPdfSpecification;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.service.CertificatePdfFillService;
 
 
 @ExtendWith(MockitoExtension.class)
