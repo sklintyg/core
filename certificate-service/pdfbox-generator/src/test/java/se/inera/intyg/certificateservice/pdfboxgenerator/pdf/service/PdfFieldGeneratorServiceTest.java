@@ -27,7 +27,7 @@ import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfSignatureV
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfUnitValueGenerator;
 
 @ExtendWith(MockitoExtension.class)
-class PdfFieldGeneratorTest {
+class PdfFieldGeneratorServiceTest {
 
   @Mock
   private PdfUnitValueGenerator pdfUnitValueGenerator;
@@ -39,7 +39,7 @@ class PdfFieldGeneratorTest {
   private PdfElementValueGenerator pdfElementValueGenerator;
 
   @InjectMocks
-  private PdfFieldGenerator pdfFieldGenerator;
+  private PdfFieldGeneratorService pdfFieldGeneratorService;
 
   private CertificatePdfContext context;
   private Certificate certificate;
@@ -100,7 +100,7 @@ class PdfFieldGeneratorTest {
       when(pdfElementValueGenerator.generate(certificate))
           .thenReturn(List.of(ELEMENT_FIELD));
 
-      final var result = pdfFieldGenerator.generatePdfFields(context);
+      final var result = pdfFieldGeneratorService.generatePdfFields(context);
 
       assertAll(
           () -> assertEquals(3, result.size()),
@@ -132,7 +132,7 @@ class PdfFieldGeneratorTest {
       when(pdfElementValueGenerator.generate(signedCertificate))
           .thenReturn(List.of(ELEMENT_FIELD));
 
-      final var result = pdfFieldGenerator.generatePdfFields(signedContext);
+      final var result = pdfFieldGeneratorService.generatePdfFields(signedContext);
 
       assertAll(
           () -> assertEquals(4, result.size()),
@@ -163,7 +163,7 @@ class PdfFieldGeneratorTest {
       when(pdfElementValueGenerator.generate(lockedDraftCertificate))
           .thenReturn(List.of(ELEMENT_FIELD));
 
-      final var result = pdfFieldGenerator.generatePdfFields(lockedDraftContext);
+      final var result = pdfFieldGeneratorService.generatePdfFields(lockedDraftContext);
 
       assertAll(
           () -> assertEquals(3, result.size()),
@@ -193,7 +193,7 @@ class PdfFieldGeneratorTest {
       when(pdfElementValueGenerator.generate(revokedCertificate))
           .thenReturn(List.of(ELEMENT_FIELD));
 
-      final var result = pdfFieldGenerator.generatePdfFields(revokedContext);
+      final var result = pdfFieldGeneratorService.generatePdfFields(revokedContext);
 
       assertEquals(3, result.size());
       assertTrue(result.contains(UNIT_FIELD));
@@ -211,7 +211,7 @@ class PdfFieldGeneratorTest {
       when(pdfElementValueGenerator.generate(certificate))
           .thenReturn(List.of(ELEMENT_FIELD));
 
-      pdfFieldGenerator.generatePdfFields(context);
+      pdfFieldGeneratorService.generatePdfFields(context);
 
       verify(pdfUnitValueGenerator).generate(certificate);
       verify(pdfPatientValueGenerator).generate(certificate,
@@ -229,7 +229,7 @@ class PdfFieldGeneratorTest {
       when(pdfElementValueGenerator.generate(certificate))
           .thenReturn(List.of());
 
-      final var result = pdfFieldGenerator.generatePdfFields(context);
+      final var result = pdfFieldGeneratorService.generatePdfFields(context);
 
       assertTrue(result.isEmpty());
     }
@@ -251,7 +251,7 @@ class PdfFieldGeneratorTest {
       when(pdfElementValueGenerator.generate(certificate))
           .thenReturn(List.of(elementField1, elementField2));
 
-      final var result = pdfFieldGenerator.generatePdfFields(context);
+      final var result = pdfFieldGeneratorService.generatePdfFields(context);
 
       assertEquals(6, result.size());
       assertTrue(result.containsAll(

@@ -29,7 +29,7 @@ public class CertificatePdfFillService {
 
   public static final int SIGNATURE_X_PADDING = 60;
   public static final int SIGNATURE_Y_PADDING = 2;
-  private final PdfFieldGenerator pdfFieldGenerator;
+  private final PdfFieldGeneratorService pdfFieldGeneratorService;
   private final PdfAdditionalInformationTextGenerator pdfAdditionalInformationTextGenerator;
   private final PdfOverflowPageFillService pdfOverflowPageFillService;
 
@@ -67,7 +67,7 @@ public class CertificatePdfFillService {
 
     context.getPdfFields()
         .addAll(
-            context.sanitizePdfFields(pdfFieldGenerator.generatePdfFields(context))
+            context.sanitizePdfFields(pdfFieldGeneratorService.generatePdfFields(context))
         );
 
     final var appendedFields = context.getPdfFields(PdfField::getAppend);

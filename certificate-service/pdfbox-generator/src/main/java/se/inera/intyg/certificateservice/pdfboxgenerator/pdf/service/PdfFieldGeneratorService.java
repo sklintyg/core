@@ -16,7 +16,7 @@ import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.value.PdfUnitValueG
 
 @RequiredArgsConstructor
 @Service
-public class PdfFieldGenerator {
+public class PdfFieldGeneratorService {
 
   private final PdfUnitValueGenerator pdfUnitValueGenerator;
   private final PdfPatientValueGenerator pdfPatientValueGenerator;

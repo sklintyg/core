@@ -40,7 +40,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.TemplatePdfSpecification;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.service.CertificatePdfFillService;
-import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.service.PdfFieldGenerator;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.service.PdfFieldGeneratorService;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.service.PdfOverflowPageFillService;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAdditionalInformationTextGenerator;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.TextUtil;
@@ -92,7 +92,7 @@ class CertificatePdfFillServiceTest {
   PdfAdditionalInformationTextGenerator pdfAdditionalInformationTextGenerator;
 
   @Mock
-  PdfFieldGenerator pdfFieldGenerator;
+  PdfFieldGeneratorService pdfFieldGeneratorService;
   @Mock
   PdfOverflowPageFillService pdfOverflowPageFillService;
 
@@ -110,7 +110,7 @@ class CertificatePdfFillServiceTest {
       @BeforeEach
       void setup() {
         certificate = getDraft();
-        when(pdfFieldGenerator.generatePdfFields(any(CertificatePdfContext.class)))
+        when(pdfFieldGeneratorService.generatePdfFields(any(CertificatePdfContext.class)))
             .thenReturn(List.of(PATIENT_FIELD, UNIT_FIELD, SYMPTOM_FIELD));
       }
 
@@ -212,7 +212,7 @@ class CertificatePdfFillServiceTest {
       @BeforeEach
       void setup() {
         certificate = getCertificate();
-        when(pdfFieldGenerator.generatePdfFields(any(CertificatePdfContext.class)))
+        when(pdfFieldGeneratorService.generatePdfFields(any(CertificatePdfContext.class)))
             .thenReturn(List.of(PATIENT_FIELD, UNIT_FIELD, SYMPTOM_FIELD, SIGNED_DATE_FIELD));
       }
 
@@ -326,7 +326,7 @@ class CertificatePdfFillServiceTest {
       @BeforeEach
       void setup() {
         certificate = getSentCertificate();
-        when(pdfFieldGenerator.generatePdfFields(any(CertificatePdfContext.class)))
+        when(pdfFieldGeneratorService.generatePdfFields(any(CertificatePdfContext.class)))
             .thenReturn(List.of(PATIENT_FIELD, UNIT_FIELD, SYMPTOM_FIELD, SIGNED_DATE_FIELD));
       }
 
@@ -443,7 +443,7 @@ class CertificatePdfFillServiceTest {
     @BeforeEach
     void setup() {
       certificate = getfk7809Certificate();
-      when(pdfFieldGenerator.generatePdfFields(any(CertificatePdfContext.class)))
+      when(pdfFieldGeneratorService.generatePdfFields(any(CertificatePdfContext.class)))
           .thenReturn(List.of(DIAGNOSE_DESCRIPTION_1, DIAGNOSE_DESCRIPTION_2));
     }
 
@@ -476,7 +476,7 @@ class CertificatePdfFillServiceTest {
     @BeforeEach
     void setup() {
       certificate = getCertificateWithSeveralPages();
-      when(pdfFieldGenerator.generatePdfFields(any(CertificatePdfContext.class)))
+      when(pdfFieldGeneratorService.generatePdfFields(any(CertificatePdfContext.class)))
           .thenReturn(Collections.emptyList());
     }
 
