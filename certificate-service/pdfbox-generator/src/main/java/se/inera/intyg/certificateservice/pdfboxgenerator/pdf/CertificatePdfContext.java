@@ -45,13 +45,13 @@ public class CertificatePdfContext implements AutoCloseable {
     }
   }
 
-  public void sanitizePdfFields() {
-    pdfFields.forEach(this::sanitizePdfField);
+  public List<PdfField> sanitizePdfFields(List<PdfField> pdfFields) {
+    return pdfFields.stream().map(this::sanitizePdfField).toList();
   }
 
-  public void sanitizePdfField(PdfField field) {
+  private PdfField sanitizePdfField(PdfField field) {
     final var font = fontResolver.resolveFont(field);
-    fieldSanitizer.sanitize(field, font);
+    return fieldSanitizer.sanitize(field, font);
   }
 
   public List<PdfField> getPdfFields(Function<PdfField, Boolean> findFieldPredicate) {
