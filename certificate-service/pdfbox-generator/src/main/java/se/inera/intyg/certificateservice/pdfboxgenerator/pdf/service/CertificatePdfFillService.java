@@ -65,8 +65,10 @@ public class CertificatePdfFillService {
     final var document = context.getDocument();
     final var templatePdfSpecification = context.getTemplatePdfSpecification();
 
-    context.getPdfFields().addAll(pdfFieldGenerator.generatePdfFields(context));
-    context.sanitizePdfFields();
+    context.getPdfFields()
+        .addAll(
+            context.sanitizePdfFields(pdfFieldGenerator.generatePdfFields(context))
+        );
 
     final var appendedFields = context.getPdfFields(PdfField::getAppend);
 
