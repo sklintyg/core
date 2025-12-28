@@ -1,20 +1,16 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf;
 
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Value;
 import lombok.With;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.TextUtil;
 
-@Getter
+@Value
 @Builder
-@EqualsAndHashCode
 public class PdfField {
 
   String id;
-  @Setter
   @With
   String value;
   @Builder.Default
