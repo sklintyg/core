@@ -12,14 +12,18 @@ class PdfFieldSanitizerTest {
   void shouldSanitizePdfFieldsCorrectly() {
     var sanitizer = new PdfFieldSanitizer();
 
-    var field = PdfField.builder()
+    final var originalField = PdfField.builder()
         .value("text\u2013with\u2014dashes")
+        .build();
+
+    final var sanatizedField = PdfField.builder()
+        .value("text-with-dashes")
         .build();
 
     PDFont mockFont = mock(PDFont.class);
 
-    sanitizer.sanitize(field, mockFont);
+    final var actual = sanitizer.sanitize(originalField, mockFont);
 
-    assertEquals("text-with-dashes", field.getValue());
+    assertEquals(sanatizedField, actual);
   }
 }
