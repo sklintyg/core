@@ -50,7 +50,7 @@ public class PdfOverflowPageFillService {
                 pdfOverflowPageFactory.create(context)
             );
           } catch (IOException e) {
-            throw new IllegalStateException(e);
+            throw new IllegalStateException("Unable to add and fill overflow page", e);
           }
         });
   }
@@ -65,7 +65,7 @@ public class PdfOverflowPageFillService {
               .collect(Collectors.joining("\n"))
       );
     } catch (IOException e) {
-      throw new IllegalStateException(e);
+      throw new IllegalStateException("Unable to set value for overflow field", e);
     }
   }
 
