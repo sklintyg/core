@@ -4,28 +4,19 @@ import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
-import org.apache.pdfbox.pdmodel.interactive.form.PDTextField;
-import org.apache.pdfbox.pdmodel.interactive.form.PDVariableText;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.factory.TextFieldAppearanceFactory;
 
 @RequiredArgsConstructor
 public class PdfFontResolver {
 
   private final PDAcroForm acroForm;
+  private final TextFieldAppearanceFactory textFieldAppearanceFactory;
 
   public PDFont resolveFont(PdfField field) {
-    final var extractedField = acroForm.getField(field.getId());
 
-    if (extractedField instanceof PDTextField textField) {
-      return new TextFieldAppearance(textField)
-          .getFont(acroForm.getDefaultResources());
-    }
-
-    if (extractedField instanceof PDVariableText variableText) {
-      return new TextFieldAppearance(variableText)
-          .getFont(acroForm.getDefaultResources());
-    }
-
-    return extractFallbackFont();
+    return textFieldAppearanceFactory.create(acroForm.getField(field.getId()))
+        .map(appearance -> appearance.getFont(acroForm.getDefaultResources()))
+        .orElseGet(this::extractFallbackFont);
   }
 
   private PDFont extractFallbackFont() {
