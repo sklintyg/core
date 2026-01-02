@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,7 @@ public class CertificatePdfContext implements AutoCloseable {
   }
 
   public byte[] toByteArray() throws IOException {
-    try (var outputStream = new java.io.ByteArrayOutputStream()) {
+    try (var outputStream = new ByteArrayOutputStream()) {
       document.save(outputStream);
       return outputStream.toByteArray();
     }
