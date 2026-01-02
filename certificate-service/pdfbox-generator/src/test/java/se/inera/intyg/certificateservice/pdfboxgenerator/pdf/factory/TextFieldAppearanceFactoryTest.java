@@ -28,9 +28,9 @@ class TextFieldAppearanceFactoryTest {
 
   @Test
   void shouldReturnEmptyForNonTextField() {
-    final var pdComboBox = new PDCheckBox(mock(PDAcroForm.class));
+    final var pdCheckBox = new PDCheckBox(mock(PDAcroForm.class));
 
-    final var actual = new TextFieldAppearanceFactory().create(pdComboBox);
+    final var actual = new TextFieldAppearanceFactory().create(pdCheckBox);
 
     assertFalse(actual.isPresent());
   }
