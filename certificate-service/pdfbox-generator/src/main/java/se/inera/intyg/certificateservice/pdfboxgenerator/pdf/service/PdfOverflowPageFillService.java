@@ -10,13 +10,12 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
-import org.apache.pdfbox.pdmodel.interactive.form.PDVariableText;
 import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.CertificatePdfContext;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfPaginationUtil;
-import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.TextFieldAppearance;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.factory.PdfOverflowPageFactory;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.factory.TextFieldAppearanceFactory;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAccessibilityUtil;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAdditionalInformationTextGenerator;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.TextUtil;
@@ -29,6 +28,8 @@ public class PdfOverflowPageFillService {
   private final PdfOverflowPageFactory pdfOverflowPageFactory;
   private final PdfAdditionalInformationTextGenerator pdfAdditionalInformationTextGenerator;
   private final TextUtil textUtil;
+  private final TextFieldAppearanceFactory textFieldAppearanceFactory;
+
 
   public void setFieldValuesAppendix(CertificatePdfContext context,
       List<PdfField> appendedFields) {
@@ -79,7 +80,11 @@ public class PdfOverflowPageFillService {
       throws IOException {
     final var rectangle = pdField.getWidgets().getFirst().getRectangle();
 
-    final var textFieldAppearance = new TextFieldAppearance((PDVariableText) pdField);
+    final var textFieldAppearance = textFieldAppearanceFactory.create(pdField)
+        .orElseThrow(() -> new IllegalStateException(
+            "Overflow field is not a variable text field: "
+                + pdField.getFullyQualifiedName()));
+
     final var fontSize = textFieldAppearance.getFontSize();
     final var font = textFieldAppearance.getFont(context.getAcroForm().getDefaultResources());
 
