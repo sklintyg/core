@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf;
 
+import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDResources;
@@ -9,9 +10,10 @@ import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationWidget;
 import org.apache.pdfbox.pdmodel.interactive.form.PDVariableText;
 
 @Slf4j
+@EqualsAndHashCode
 public class TextFieldAppearance {
 
-  private final PDVariableText field;
+  PDVariableText field;
 
   public TextFieldAppearance(PDVariableText field) {
     this.field = field;
