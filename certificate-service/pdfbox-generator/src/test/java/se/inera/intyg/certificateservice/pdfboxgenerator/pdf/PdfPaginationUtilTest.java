@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyFloat;
@@ -26,6 +27,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.factory.TextFieldAppearanceFactory;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.OverFlowLineSplit;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.TextUtil;
 
@@ -34,6 +36,8 @@ class PdfPaginationUtilTest {
 
   @Mock
   private TextUtil textUtil;
+  @Mock
+  private TextFieldAppearanceFactory textFieldAppearanceFactory;
   @Mock
   private CertificatePdfContext context;
   @Mock
@@ -46,8 +50,10 @@ class PdfPaginationUtilTest {
 
   @BeforeEach
   void setUp() {
-    pdfPaginationUtil = new PdfPaginationUtil(textUtil);
+    pdfPaginationUtil = new PdfPaginationUtil(textUtil, textFieldAppearanceFactory);
     font = new PDType1Font(FontName.HELVETICA);
+    when(textFieldAppearanceFactory.create(any())).thenReturn(
+        Optional.of(new TextFieldAppearance(overflowField)));
   }
 
   @Test
@@ -373,6 +379,15 @@ class PdfPaginationUtilTest {
         () -> assertEquals("overflow part", result.get(1).getFirst().getValue(),
             "Second page should have partTwo value")
     );
+  }
+
+  @Test
+  void shouldThrowExceptionIfOverflowFieldIsNotVariableText() {
+
+    when(textFieldAppearanceFactory.create(any())).thenReturn(Optional.empty());
+
+    assertThrows(IllegalStateException.class,
+        () -> pdfPaginationUtil.paginateFields(context, List.of(), overflowField));
   }
 
   private void setupOverflowField(PDRectangle rectangle) {

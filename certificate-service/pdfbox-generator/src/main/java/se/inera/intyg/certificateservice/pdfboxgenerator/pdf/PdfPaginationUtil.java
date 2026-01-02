@@ -5,8 +5,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
-import org.apache.pdfbox.pdmodel.interactive.form.PDVariableText;
 import org.springframework.stereotype.Component;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.factory.TextFieldAppearanceFactory;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.OverFlowLineSplit;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.TextUtil;
 
@@ -17,10 +17,15 @@ public class PdfPaginationUtil {
 
   private final TextUtil textUtil;
 
+  private final TextFieldAppearanceFactory textFieldAppearanceFactory;
+
   public List<List<PdfField>> paginateFields(CertificatePdfContext context,
       List<PdfField> appendedFields, PDField overflowField) {
 
-    final var textFieldAppearance = new TextFieldAppearance((PDVariableText) overflowField);
+    final var textFieldAppearance = textFieldAppearanceFactory.create(overflowField)
+        .orElseThrow(() -> new IllegalStateException(
+            "Overflow field is not a variable text field: "
+                + overflowField.getFullyQualifiedName()));
 
     List<List<PdfField>> pages = new ArrayList<>();
     List<PdfField> currentPage = new ArrayList<>();
