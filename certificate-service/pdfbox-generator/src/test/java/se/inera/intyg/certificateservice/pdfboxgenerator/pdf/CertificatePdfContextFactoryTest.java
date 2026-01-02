@@ -14,6 +14,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.service.PdfGeneratorOptions;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.TemplatePdfSpecification;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.factory.CertificatePdfContextFactory;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.factory.TextFieldAppearanceFactory;
 
 class CertificatePdfContextFactoryTest {
 
@@ -24,7 +25,7 @@ class CertificatePdfContextFactoryTest {
 
   @BeforeEach
   void setUp() {
-    factory = new CertificatePdfContextFactory();
+    factory = new CertificatePdfContextFactory(new TextFieldAppearanceFactory());
 
     certificate = fk7472CertificateBuilder().build();
     options = PdfGeneratorOptions.builder()

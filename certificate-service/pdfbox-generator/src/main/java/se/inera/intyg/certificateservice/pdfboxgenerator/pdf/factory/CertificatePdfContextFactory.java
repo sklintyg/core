@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.factory;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
+import lombok.RequiredArgsConstructor;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.springframework.stereotype.Component;
@@ -13,7 +14,10 @@ import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfFieldSanitizer;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfFontResolver;
 
 @Component
+@RequiredArgsConstructor
 public class CertificatePdfContextFactory {
+
+  private final TextFieldAppearanceFactory textFieldAppearanceFactory;
 
   public CertificatePdfContext create(Certificate certificate, PdfGeneratorOptions options,
       TemplatePdfSpecification templatePdfSpecification) {
@@ -37,7 +41,7 @@ public class CertificatePdfContextFactory {
           .fieldSanitizer(new PdfFieldSanitizer())
           .fontResolver(new PdfFontResolver(
               document.getDocumentCatalog().getAcroForm(),
-              new TextFieldAppearanceFactory()))
+              textFieldAppearanceFactory))
           .build();
     } catch (IOException e) {
       throw new IllegalStateException("Could not load pdf template from path: " + template, e);
