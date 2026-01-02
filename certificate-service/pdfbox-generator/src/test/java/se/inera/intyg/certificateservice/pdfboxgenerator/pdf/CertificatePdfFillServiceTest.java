@@ -39,6 +39,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.Sent;
 import se.inera.intyg.certificateservice.domain.certificate.model.Status;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.TemplatePdfSpecification;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.factory.TextFieldAppearanceFactory;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.service.CertificatePdfFillService;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.service.PdfFieldGeneratorService;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.service.PdfOverflowPageFillService;
@@ -570,7 +571,9 @@ class CertificatePdfFillServiceTest {
           .citizenFormat(citizenFormat)
           .additionalInfoText(CertificatePdfFillServiceTest.TEXT)
           .mcid(new AtomicInteger(templatePdfSpec.pdfMcid().value()))
-          .fontResolver(new PdfFontResolver(document.getDocumentCatalog().getAcroForm()))
+          .fontResolver(new PdfFontResolver(
+              document.getDocumentCatalog().getAcroForm(),
+              new TextFieldAppearanceFactory()))
           .fieldSanitizer(new PdfFieldSanitizer())
           .build();
     } catch (Exception e) {
