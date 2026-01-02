@@ -35,7 +35,9 @@ public class CertificatePdfContextFactory {
           .additionalInfoText(options.additionalInfoText())
           .mcid(new AtomicInteger(templatePdfSpecification.pdfMcid().value()))
           .fieldSanitizer(new PdfFieldSanitizer())
-          .fontResolver(new PdfFontResolver(document.getDocumentCatalog().getAcroForm()))
+          .fontResolver(new PdfFontResolver(
+              document.getDocumentCatalog().getAcroForm(),
+              new TextFieldAppearanceFactory()))
           .build();
     } catch (IOException e) {
       throw new IllegalStateException("Could not load pdf template from path: " + template, e);
