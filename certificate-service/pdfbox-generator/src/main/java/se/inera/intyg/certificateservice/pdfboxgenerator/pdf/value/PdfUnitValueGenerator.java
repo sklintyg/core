@@ -30,6 +30,7 @@ public class PdfUnitValueGenerator {
         PdfField.builder()
             .id(templateSpec.signature().contactInformation().id())
             .value(contactInfo)
+            .unitField(true)
             .build()
     );
   }

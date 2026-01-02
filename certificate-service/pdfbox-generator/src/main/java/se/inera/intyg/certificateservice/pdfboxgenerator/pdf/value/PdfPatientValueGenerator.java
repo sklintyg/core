@@ -16,6 +16,7 @@ public class PdfPatientValueGenerator {
             PdfField.builder()
                 .id(id.id())
                 .value(patientId)
+                .patientField(true)
                 .build())
         .toList();
   }

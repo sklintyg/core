@@ -8,6 +8,7 @@ import se.inera.intyg.certificateservice.domain.certificate.model.ElementValueIc
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.ElementSpecification;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfConfigurationText;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.PdfField;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.TextSplitRenderSpec;
 
 @Component
 public class PdfIcfValueGenerator implements PdfElementValue<ElementValueIcf> {
@@ -32,8 +33,12 @@ public class PdfIcfValueGenerator implements PdfElementValue<ElementValueIcf> {
     final var simplifiedValueText = (ElementSimplifiedValueText) simplifiedValue.get();
 
     if (hasOverflow(simplifiedValueText, pdfConfiguration)) {
-      final var splitIcf = PdfValueGeneratorUtil.splitByLimit(pdfConfiguration.maxLength(),
-          simplifiedValueText.text(), null, false);
+      final var splitIcf = PdfValueGeneratorUtil.splitByLimit(
+          TextSplitRenderSpec.builder()
+              .limit(pdfConfiguration.maxLength())
+              .fieldText(simplifiedValueText.text())
+              .shouldRemoveLineBreaks(false)
+              .build());
       if (hasOverFlowSheet(pdfConfiguration)) {
         return getFieldsWithOverflowSheet(elementSpecification, pdfConfiguration, splitIcf);
       }
@@ -62,7 +67,12 @@ public class PdfIcfValueGenerator implements PdfElementValue<ElementValueIcf> {
             .id(pdfConfiguration.pdfFieldId().id())
             .value(
                 PdfValueGeneratorUtil.splitByLimit(
-                        pdfConfiguration.maxLength(), elementSimplifiedValueText.text(), "...", false)
+                        TextSplitRenderSpec.builder()
+                            .limit(pdfConfiguration.maxLength())
+                            .fieldText(elementSimplifiedValueText.text())
+                            .shouldRemoveLineBreaks(false)
+                            .informationMessage("...")
+                            .build())
                     .getFirst()
             )
             .build()
