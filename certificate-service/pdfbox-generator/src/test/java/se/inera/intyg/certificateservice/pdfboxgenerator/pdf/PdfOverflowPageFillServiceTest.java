@@ -257,8 +257,10 @@ class PdfOverflowPageFillServiceTest {
           PdfAccessibilityUtil.createNewOverflowPageTag(any(), any(), any())
       ).thenReturn(null);
 
+      final var pdfFieldList = List.of(pdfField1);
+
       assertThrows(IllegalStateException.class, () ->
-          pdfOverflowPageFillService.setFieldValuesAppendix(context, List.of(pdfField1))
+          pdfOverflowPageFillService.setFieldValuesAppendix(context, pdfFieldList)
       );
     }
   }
