@@ -386,8 +386,10 @@ class PdfPaginationUtilTest {
 
     when(textFieldAppearanceFactory.create(any())).thenReturn(Optional.empty());
 
+    final List<PdfField> emptyList = List.of();
+
     assertThrows(IllegalStateException.class,
-        () -> pdfPaginationUtil.paginateFields(context, List.of(), overflowField));
+        () -> pdfPaginationUtil.paginateFields(context, emptyList, overflowField));
   }
 
   private void setupOverflowField(PDRectangle rectangle) {
