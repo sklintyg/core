@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.TextSplitRenderSpec;
 
 class PdfValueGeneratorUtilTest {
 
@@ -13,7 +14,12 @@ class PdfValueGeneratorUtilTest {
     final var expected = List.of("This is ... Se fortsättningsblad!",
         "... the value if was planning on testing for splitting text.");
 
-    assertEquals(expected, PdfValueGeneratorUtil.splitByLimit(35, value));
+    assertEquals(expected, PdfValueGeneratorUtil.splitByLimit(
+        TextSplitRenderSpec.builder()
+            .limit(35)
+            .fieldText(value)
+            .build()
+    ));
   }
 
   @Test
@@ -22,7 +28,12 @@ class PdfValueGeneratorUtilTest {
     final var expected = List.of("This is ...",
         "... the value if was planning on testing for splitting text.");
 
-    assertEquals(expected, PdfValueGeneratorUtil.splitByLimit(10, value));
+    assertEquals(expected, PdfValueGeneratorUtil.splitByLimit(
+        TextSplitRenderSpec.builder()
+            .limit(10)
+            .fieldText(value)
+            .build()
+    ));
   }
 
   @Test
@@ -32,6 +43,12 @@ class PdfValueGeneratorUtilTest {
     final var expected = List.of("This is xxx",
         "... the value if was planning on testing for splitting text.");
 
-    assertEquals(expected, PdfValueGeneratorUtil.splitByLimit(10, value, message));
+    assertEquals(expected, PdfValueGeneratorUtil.splitByLimit(
+        TextSplitRenderSpec.builder()
+            .limit(10)
+            .fieldText(value)
+            .informationMessage(message)
+            .build()
+    ));
   }
 }

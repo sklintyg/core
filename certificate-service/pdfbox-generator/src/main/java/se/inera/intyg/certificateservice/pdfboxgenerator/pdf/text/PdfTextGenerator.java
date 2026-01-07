@@ -27,6 +27,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PdfTextGenerator {
 
+  // TODO: Refactor this method overload approach, maybe use a builder pattern instead?
   private void addText(PDDocument pdf, String text, int fontSize, Matrix matrix,
       Color strokingColor,
       int mcid, PDStructureElement section)
