@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
+import java.util.function.Predicate;
 import lombok.Builder;
 import lombok.Value;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -55,9 +55,9 @@ public class CertificatePdfContext implements AutoCloseable {
     return fieldSanitizer.sanitize(field, font);
   }
 
-  public List<PdfField> getPdfFields(Function<PdfField, Boolean> findFieldPredicate) {
+  public List<PdfField> getPdfFields(Predicate<PdfField> findFieldPredicate) {
     return pdfFields.stream()
-        .filter(findFieldPredicate::apply)
+        .filter(findFieldPredicate)
         .toList();
   }
 
