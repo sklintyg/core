@@ -120,10 +120,11 @@ class CertificatePdfGeneratorTest {
               Collections.singletonList(new ElementId("1234"))
           )
           .build();
+      final var certificate = buildFK7210Certificate();
 
       assertThrows(IllegalArgumentException.class,
           () -> certificatePdfGenerator.generate(
-              buildFK7210Certificate(),
+              certificate,
               options
           ));
     }
@@ -139,9 +140,11 @@ class CertificatePdfGeneratorTest {
           .hiddenElements(Collections.emptyList())
           .build();
 
+      final var certificate = buildFK7210Certificate();
+
       assertThrows(IllegalStateException.class,
           () -> certificatePdfGenerator.generate(
-              buildFK7210Certificate(),
+              certificate,
               options
           ));
     }
