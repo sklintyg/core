@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyFloat;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -16,6 +17,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -35,6 +37,7 @@ import se.inera.intyg.certificateservice.domain.certificatemodel.model.OverflowP
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.PdfFieldId;
 import se.inera.intyg.certificateservice.domain.certificatemodel.model.TemplatePdfSpecification;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.factory.PdfOverflowPageFactory;
+import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.factory.TextFieldAppearanceFactory;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.service.PdfOverflowPageFillService;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAccessibilityUtil;
 import se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text.PdfAdditionalInformationTextGenerator;
@@ -51,6 +54,8 @@ class PdfOverflowPageFillServiceTest {
   private PdfAdditionalInformationTextGenerator pdfAdditionalInformationTextGenerator;
   @Mock
   private TextUtil textUtil;
+  @Mock
+  private TextFieldAppearanceFactory textFieldAppearanceFactory;
 
   @InjectMocks
   private PdfOverflowPageFillService pdfOverflowPageFillService;
@@ -140,6 +145,12 @@ class PdfOverflowPageFillServiceTest {
     when(pdfOverflowPageFactory.create(context))
         .thenReturn(new PDPage());
 
+    final var textFieldAppearance = mock(TextFieldAppearance.class);
+    when(textFieldAppearance.getFontSize()).thenReturn(12.0f);
+    when(textFieldAppearance.getFont(any())).thenReturn(new PDType1Font(FontName.HELVETICA));
+    when(textFieldAppearanceFactory.create(any(PDField.class)))
+        .thenReturn(Optional.of(textFieldAppearance));
+
     try (var mocked =
         mockStatic(PdfAccessibilityUtil.class)) {
 
@@ -179,6 +190,15 @@ class PdfOverflowPageFillServiceTest {
     when(pdfOverflowPageFactory.create(context))
         .thenReturn(new PDPage());
 
+    final var textFieldAppearance = mock(TextFieldAppearance.class);
+    when(textFieldAppearance.getFontSize()).thenReturn(12.0f);
+    when(textFieldAppearance.getFont(any())).thenReturn(new PDType1Font(FontName.HELVETICA));
+    when(textFieldAppearanceFactory.create(any(PDField.class)))
+        .thenReturn(Optional.of(textFieldAppearance));
+
+    when(textUtil.wrapLine(anyString(), anyFloat(), anyFloat(), any()))
+        .thenReturn(List.of("wrapped line"));
+
     try (var mocked =
         mockStatic(PdfAccessibilityUtil.class)) {
 
@@ -199,6 +219,48 @@ class PdfOverflowPageFillServiceTest {
             anyFloat(),
             anyInt()
         );
+  }
+
+  @Test
+  void shouldThrowExceptionWhenOverflowFieldIsNotVariableTextField() {
+    final var context = mockContext();
+
+    final var pdfField1 = PdfField.builder()
+        .id("overflowField")
+        .value("Some long text")
+        .append(true)
+        .build();
+
+    final var pdfField2 = PdfField.builder()
+        .id("overflowField")
+        .value("Some more long text")
+        .append(true)
+        .build();
+
+    when(pdfPaginationUtil.paginateFields(any(), anyList(), any()))
+        .thenReturn(List.of(
+            List.of(pdfField1),
+            List.of(pdfField2)
+        ));
+
+    when(context.getFontResolver().resolveFont(any()))
+        .thenReturn(new PDType1Font(FontName.HELVETICA));
+
+    when(pdfOverflowPageFactory.create(context))
+        .thenReturn(new PDPage());
+
+    when(textFieldAppearanceFactory.create(any(PDField.class)))
+        .thenReturn(Optional.empty());
+
+    try (var mocked = mockStatic(PdfAccessibilityUtil.class)) {
+      mocked.when(() ->
+          PdfAccessibilityUtil.createNewOverflowPageTag(any(), any(), any())
+      ).thenReturn(null);
+
+      assertThrows(IllegalStateException.class, () ->
+          pdfOverflowPageFillService.setFieldValuesAppendix(context, List.of(pdfField1))
+      );
+    }
   }
 
   private CertificatePdfContext mockContext() {
