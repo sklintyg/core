@@ -109,7 +109,7 @@ public class TextUtil {
     }
 
     final var sanitizedText = text.replaceAll(
-        "[\\t\\r\\x00-\\x08\\x0B-\\x0C\\x0E-\\x1F\\x7F]", " ");
+        "[\\t\\r\\v\\x00-\\x08\\x0B-\\x0C\\x0E-\\x1F\\x7F]", " ");
 
     return normalizePrintableCharacters(sanitizedText, font);
   }
