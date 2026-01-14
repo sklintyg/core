@@ -18,7 +18,7 @@ public interface CertificateEntityRepository extends CrudRepository<CertificateE
 
 
   @Query("SELECT c FROM CertificateEntity c WHERE c.certificateId = :certificateId AND c.placeholder != true")
-  Optional<CertificateEntity> findByCertificateId(String certificateId);
+  Optional<CertificateEntity> findByCertificateId(@Param("certificateId") String certificateId);
 
   List<CertificateEntity> findCertificateEntitiesByCertificateIdIn(
       List<String> certificateId);
@@ -38,7 +38,8 @@ public interface CertificateEntityRepository extends CrudRepository<CertificateE
       @Param("careProviderHsaId") String careProviderHsaId);
 
   @Query("SELECT c FROM CertificateEntity c WHERE c.certificateId = :certificateId AND c.placeholder = true")
-  Optional<CertificateEntity> findPlaceholderByCertificateId(String certificateId);
+  Optional<CertificateEntity> findPlaceholderByCertificateId(
+      @Param("certificateId") String certificateId);
 
   @Query("""
         SELECT c.certificateId
