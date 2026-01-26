@@ -138,8 +138,8 @@ public abstract class GetCertificateIT extends BaseIntegrationIT {
 
 
   @Test
-  @DisplayName("Om intyget är utfärdat på en patient som har skyddade personuppgifter skall felkod 403 (FORBIDDEN) returneras om användaren har rätt roll med är inloggad på fel enhet")
-  void shallReturn403IfPatientIsProtectedPersonAndUserHasCorrectRoleButWrongUnit() {
+  @DisplayName("Om intyget är utfärdat på en patient som har skyddade personuppgifter och användaren har rätt roll och är inloggad på överliggande enheht ska intyget returneras")
+  void shallReturnCertificateIfPatientIsProtectedPersonAndUserHasCorrectRoleAndWithinCareUnit() {
     final var testCertificates = testabilityApi().addCertificates(
         customTestabilityCertificateRequest(type(), typeVersion())
             .patient(ANONYMA_REACT_ATTILA_DTO)
@@ -153,7 +153,10 @@ public abstract class GetCertificateIT extends BaseIntegrationIT {
         certificateId(testCertificates)
     );
 
-    assertEquals(403, response.getStatusCode().value());
+    assertNotNull(
+        certificate(response.getBody()),
+        "Should return certificate when exists!"
+    );
   }
 
   @ParameterizedTest
