@@ -153,7 +153,10 @@ public abstract class GetCertificateIT extends BaseIntegrationIT {
         certificateId(testCertificates)
     );
 
-    assertEquals(403, response.getStatusCode().value());
+    assertNotNull(
+        certificate(response.getBody()),
+        "Should return certificate when exists!"
+    );
   }
 
   @ParameterizedTest
