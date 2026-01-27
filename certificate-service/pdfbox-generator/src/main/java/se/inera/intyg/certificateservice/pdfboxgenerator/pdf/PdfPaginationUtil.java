@@ -32,7 +32,7 @@ public class PdfPaginationUtil {
 
     for (PdfField field : appendedFields) {
 
-      final var overflow = textUtil.getOverflowingLines(
+      final var overflows = textUtil.getOverflowingLines(
           currentPage,
           field,
           overflowField.getWidgets().getFirst().getRectangle(),
@@ -40,20 +40,33 @@ public class PdfPaginationUtil {
           textFieldAppearance.getFont(context.getAcroForm().getDefaultResources())
       );
 
-      if (overflow.isEmpty()) {
+      if (overflows.isEmpty()) {
         currentPage.add(field);
         continue;
       }
 
-      FieldSplit split = splitField(field, overflow.get());
-      currentPage.add(split.first());
-
+      final var firstSplit = splitField(field, overflows.getFirst());
+      currentPage.add(firstSplit.first());
       pages.add(currentPage);
-
       currentPage = new ArrayList<>();
 
-      if (split.second() != null) {
-        currentPage.add(split.second());
+      if (firstSplit.second() != null) {
+        currentPage.add(firstSplit.second());
+      }
+
+      for (int i = 1; i < overflows.size(); i++) {
+        final var additionalSplit = splitField(field, overflows.get(i));
+
+        if (additionalSplit.first() != null && !additionalSplit.first().getValue().isEmpty()) {
+          currentPage.add(additionalSplit.first());
+        }
+
+        pages.add(currentPage);
+        currentPage = new ArrayList<>();
+
+        if (additionalSplit.second() != null) {
+          currentPage.add(additionalSplit.second());
+        }
       }
     }
 
