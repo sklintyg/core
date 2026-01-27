@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
@@ -152,7 +151,7 @@ public class TextUtil {
     }
   }
 
-  public Optional<OverFlowLineSplit> getOverflowingLines(List<PdfField> currentFields,
+  public List<OverFlowLineSplit> getOverflowingLines(List<PdfField> currentFields,
       PdfField newTextField,
       PDRectangle rectangle, float fontSize, PDFont font) {
     final var currentText = currentFields.stream()
@@ -173,13 +172,35 @@ public class TextUtil {
       wrappedLines.addAll(wrapLine(line, rectangle.getWidth(), fontSize, font));
     }
 
-    if (wrappedLines.size() > availableLineSpaces) {
-      var overFlowInfo = new OverFlowLineSplit(
-          String.join("\n", wrappedLines.subList(0, availableLineSpaces)), String.join("\n",
-          wrappedLines.subList(availableLineSpaces, wrappedLines.size())) + "\n");
-      return Optional.of(overFlowInfo);
-    } else {
-      return Optional.empty();
+    if (wrappedLines.size() <= availableLineSpaces) {
+      return List.of();
     }
+
+    final var result = new ArrayList<OverFlowLineSplit>();
+    final var maxLinesPerPage = (int) Math.max(Math.floor(
+        (rectangle.getHeight() - Y_MARGIN_APPENDIX_PAGE) / lineHeight), 1);
+
+    var currentIndex = 0;
+
+    final var firstPageText = String.join("\n", wrappedLines.subList(0, availableLineSpaces));
+    currentIndex = availableLineSpaces;
+
+    if (currentIndex < wrappedLines.size()) {
+      final var nextPageEndIndex = Math.min(currentIndex + maxLinesPerPage, wrappedLines.size());
+      final var nextPageText = String.join("\n",
+          wrappedLines.subList(currentIndex, nextPageEndIndex)) + "\n";
+      result.add(new OverFlowLineSplit(firstPageText, nextPageText));
+      currentIndex = nextPageEndIndex;
+    }
+
+    while (currentIndex < wrappedLines.size()) {
+      final var pageEndIndex = Math.min(currentIndex + maxLinesPerPage, wrappedLines.size());
+      final var pageText = String.join("\n",
+          wrappedLines.subList(currentIndex, pageEndIndex)) + "\n";
+      result.add(new OverFlowLineSplit("", pageText));
+      currentIndex = pageEndIndex;
+    }
+
+    return result;
   }
 }
