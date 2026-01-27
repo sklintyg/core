@@ -111,7 +111,7 @@ class TextUtilTest {
           new PDType1Font(FontName.HELVETICA)
       );
 
-      assertTrue(response.isPresent());
+      assertFalse(response.isEmpty());
     }
 
     @Test
@@ -125,7 +125,7 @@ class TextUtilTest {
           new PDType1Font(FontName.HELVETICA)
       );
 
-      assertTrue(response.isPresent());
+      assertFalse(response.isEmpty());
     }
 
     @Test
@@ -138,7 +138,7 @@ class TextUtilTest {
           new PDType1Font(FontName.HELVETICA)
       );
 
-      assertFalse(response.isPresent());
+      assertTrue(response.isEmpty());
     }
 
     @Test
@@ -151,7 +151,102 @@ class TextUtilTest {
           new PDType1Font(FontName.HELVETICA)
       );
 
-      assertTrue(response.isPresent());
+      assertFalse(response.isEmpty());
+    }
+
+    @Test
+    void shouldReturnMultipleOverflowSplitsForVeryLongText() {
+      final var veryLongText = TEXT_LONGER_THAN_100_40.repeat(10);
+      final var veryLongField = PdfField.builder()
+          .value(veryLongText)
+          .id("VERY_LONG")
+          .build();
+
+      final var response = textUtil.getOverflowingLines(
+          List.of(),
+          veryLongField,
+          RECTANGLE_100_40,
+          FONT_SIZE,
+          new PDType1Font(FontName.HELVETICA)
+      );
+
+      assertTrue(response.size() > 1);
+    }
+
+    @Test
+    void shouldHaveContentInFirstSplitPartOne() {
+      final var veryLongText = TEXT_LONGER_THAN_100_40.repeat(10);
+      final var veryLongField = PdfField.builder()
+          .value(veryLongText)
+          .id("VERY_LONG")
+          .build();
+
+      final var response = textUtil.getOverflowingLines(
+          List.of(),
+          veryLongField,
+          RECTANGLE_100_40,
+          FONT_SIZE,
+          new PDType1Font(FontName.HELVETICA)
+      );
+
+      assertFalse(response.getFirst().partOne().isEmpty());
+    }
+
+    @Test
+    void shouldHaveContentInFirstSplitPartTwo() {
+      final var veryLongText = TEXT_LONGER_THAN_100_40.repeat(10);
+      final var veryLongField = PdfField.builder()
+          .value(veryLongText)
+          .id("VERY_LONG")
+          .build();
+
+      final var response = textUtil.getOverflowingLines(
+          List.of(),
+          veryLongField,
+          RECTANGLE_100_40,
+          FONT_SIZE,
+          new PDType1Font(FontName.HELVETICA)
+      );
+
+      assertFalse(response.getFirst().partTwo().isEmpty());
+    }
+
+    @Test
+    void shouldHaveEmptyPartOneInSecondSplit() {
+      final var veryLongText = TEXT_LONGER_THAN_100_40.repeat(10);
+      final var veryLongField = PdfField.builder()
+          .value(veryLongText)
+          .id("VERY_LONG")
+          .build();
+
+      final var response = textUtil.getOverflowingLines(
+          List.of(),
+          veryLongField,
+          RECTANGLE_100_40,
+          FONT_SIZE,
+          new PDType1Font(FontName.HELVETICA)
+      );
+
+      assertTrue(response.get(1).partOne().isEmpty());
+    }
+
+    @Test
+    void shouldHaveContentInSecondSplitPartTwo() {
+      final var veryLongText = TEXT_LONGER_THAN_100_40.repeat(10);
+      final var veryLongField = PdfField.builder()
+          .value(veryLongText)
+          .id("VERY_LONG")
+          .build();
+
+      final var response = textUtil.getOverflowingLines(
+          List.of(),
+          veryLongField,
+          RECTANGLE_100_40,
+          FONT_SIZE,
+          new PDType1Font(FontName.HELVETICA)
+      );
+
+      assertFalse(response.get(1).partTwo().isEmpty());
     }
   }
 
@@ -170,7 +265,7 @@ class TextUtilTest {
           new PDType1Font(FontName.HELVETICA)
       );
 
-      assertTrue(response.isPresent());
+      assertFalse(response.isEmpty());
     }
 
     @Test
@@ -184,7 +279,7 @@ class TextUtilTest {
           new PDType1Font(FontName.HELVETICA)
       );
 
-      assertTrue(response.isPresent());
+      assertFalse(response.isEmpty());
     }
 
     @Test
@@ -197,7 +292,7 @@ class TextUtilTest {
           new PDType1Font(FontName.HELVETICA)
       );
 
-      assertFalse(response.isPresent());
+      assertTrue(response.isEmpty());
     }
 
     @Test
@@ -210,7 +305,7 @@ class TextUtilTest {
           new PDType1Font(FontName.HELVETICA)
       );
 
-      assertTrue(response.isPresent());
+      assertFalse(response.isEmpty());
     }
 
     @Test
