@@ -80,10 +80,10 @@ class PdfPaginationUtilTest {
 
     when(textUtil.getOverflowingLines(anyList(), eq(field1), any(PDRectangle.class), anyFloat(),
         any(PDFont.class)))
-        .thenReturn(Optional.empty());
+        .thenReturn(List.of());
     when(textUtil.getOverflowingLines(anyList(), eq(field2), any(PDRectangle.class), anyFloat(),
         any(PDFont.class)))
-        .thenReturn(Optional.empty());
+        .thenReturn(List.of());
 
     final var result = pdfPaginationUtil.paginateFields(context, fields, overflowField);
 
@@ -115,10 +115,10 @@ class PdfPaginationUtilTest {
 
     when(textUtil.getOverflowingLines(anyList(), eq(field1), any(PDRectangle.class), anyFloat(),
         any(PDFont.class)))
-        .thenReturn(Optional.empty());
+        .thenReturn(List.of());
     when(textUtil.getOverflowingLines(anyList(), eq(field2), any(PDRectangle.class), anyFloat(),
         any(PDFont.class)))
-        .thenReturn(Optional.of(overflow));
+        .thenReturn(List.of(overflow));
 
     final var result = pdfPaginationUtil.paginateFields(context, fields, overflowField);
 
@@ -151,7 +151,7 @@ class PdfPaginationUtilTest {
 
     when(textUtil.getOverflowingLines(anyList(), any(PdfField.class), any(PDRectangle.class),
         anyFloat(), any(PDFont.class)))
-        .thenReturn(Optional.of(overflow));
+        .thenReturn(List.of(overflow));
 
     final var result = pdfPaginationUtil.paginateFields(context, fields, overflowField);
 
@@ -183,7 +183,7 @@ class PdfPaginationUtilTest {
 
     when(textUtil.getOverflowingLines(anyList(), any(PdfField.class), any(PDRectangle.class),
         anyFloat(), any(PDFont.class)))
-        .thenReturn(Optional.of(overflow));
+        .thenReturn(List.of(overflow));
 
     final var result = pdfPaginationUtil.paginateFields(context, fields, overflowField);
 
@@ -212,7 +212,7 @@ class PdfPaginationUtilTest {
 
     when(textUtil.getOverflowingLines(anyList(), any(PdfField.class), any(PDRectangle.class),
         anyFloat(), any(PDFont.class)))
-        .thenReturn(Optional.of(overflow));
+        .thenReturn(List.of(overflow));
 
     final var result = pdfPaginationUtil.paginateFields(context, fields, overflowField);
 
@@ -242,7 +242,7 @@ class PdfPaginationUtilTest {
 
     when(textUtil.getOverflowingLines(anyList(), any(PdfField.class), any(PDRectangle.class),
         anyFloat(), any(PDFont.class)))
-        .thenReturn(Optional.of(overflow));
+        .thenReturn(List.of(overflow));
 
     final var result = pdfPaginationUtil.paginateFields(context, fields, overflowField);
 
@@ -277,13 +277,13 @@ class PdfPaginationUtilTest {
 
     when(textUtil.getOverflowingLines(anyList(), eq(field1), any(PDRectangle.class), anyFloat(),
         any(PDFont.class)))
-        .thenReturn(Optional.empty());
+        .thenReturn(List.of());
     when(textUtil.getOverflowingLines(anyList(), eq(field2), any(PDRectangle.class), anyFloat(),
         any(PDFont.class)))
-        .thenReturn(Optional.of(overflow));
+        .thenReturn(List.of(overflow));
     when(textUtil.getOverflowingLines(anyList(), eq(field3), any(PDRectangle.class), anyFloat(),
         any(PDFont.class)))
-        .thenReturn(Optional.empty());
+        .thenReturn(List.of());
 
     final var result = pdfPaginationUtil.paginateFields(context, fields, overflowField);
 
@@ -313,7 +313,7 @@ class PdfPaginationUtilTest {
 
     when(textUtil.getOverflowingLines(anyList(), any(PdfField.class), any(PDRectangle.class),
         anyFloat(), any(PDFont.class)))
-        .thenReturn(Optional.of(overflow));
+        .thenReturn(List.of(overflow));
 
     final var result = pdfPaginationUtil.paginateFields(context, fields, overflowField);
 
@@ -339,7 +339,7 @@ class PdfPaginationUtilTest {
 
     when(textUtil.getOverflowingLines(anyList(), any(PdfField.class), any(PDRectangle.class),
         anyFloat(), any(PDFont.class)))
-        .thenReturn(Optional.empty());
+        .thenReturn(List.of());
 
     pdfPaginationUtil.paginateFields(context, fields, overflowField);
 
@@ -364,7 +364,7 @@ class PdfPaginationUtilTest {
 
     when(textUtil.getOverflowingLines(anyList(), any(PdfField.class), any(PDRectangle.class),
         anyFloat(), any(PDFont.class)))
-        .thenReturn(Optional.of(overflow));
+        .thenReturn(List.of(overflow));
 
     final var result = pdfPaginationUtil.paginateFields(context, fields, overflowField);
 
