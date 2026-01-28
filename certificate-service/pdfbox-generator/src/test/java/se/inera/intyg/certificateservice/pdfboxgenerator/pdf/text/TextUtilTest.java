@@ -374,6 +374,21 @@ class TextUtilTest {
     }
 
     @Test
+    void shouldSanitizeMultipleConsecutiveControlCharacters() {
+      final var textWithConsecutive = "A\t\t\t\tB\r\rC\f\fD\u0000\u0000E";
+
+      final var wrappedLines = textUtil.wrapLine(
+          textWithConsecutive,
+          450,
+          FONT_SIZE,
+          new PDType1Font(FontName.HELVETICA)
+      );
+
+      assertEquals(1, wrappedLines.size());
+      assertEquals("A B C D E", wrappedLines.getFirst());
+    }
+
+    @Test
     void shouldHandleEmptyString() {
       final var wrappedLines = textUtil.wrapLine(
           "",
