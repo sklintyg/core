@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.domain.message.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.common.model.MessagesRequest;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
@@ -16,4 +17,7 @@ public interface MessageRepository {
   Message findById(MessageId messageId);
 
   List<Message> findByMessagesRequest(MessagesRequest messagesRequest);
+
+  List<Message> findMessagesByCertificateKeyAndStatusSentAndCreatedAfter(
+      Long patientId, LocalDateTime createdAfter);
 }

@@ -1,6 +1,8 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -125,6 +127,21 @@ public class JpaMessageRepository implements TestabilityMessageRepository {
     return messageEntityRepository.findAll(specification).stream()
         .map(messageEntityMapper::toDomain)
         .filter(message -> !messageIsValidType(message))
+        .toList();
+  }
+
+  @Override
+  public List<Message> findMessagesByCertificateKeyAndStatusSentAndCreatedAfter(Long certificateKey,
+      LocalDateTime createdAfter) {
+    if (Objects.isNull(certificateKey)) {
+      throw new IllegalArgumentException("Cannot get messages if certificateKey is null");
+    }
+
+    final var messageEntities = messageEntityRepository
+        .findMessageEntitiesByCertificate_KeyAndCreatedAfter(certificateKey, createdAfter);
+
+    return messageEntities.stream()
+        .map(messageEntityMapper::toDomain)
         .toList();
   }
 
