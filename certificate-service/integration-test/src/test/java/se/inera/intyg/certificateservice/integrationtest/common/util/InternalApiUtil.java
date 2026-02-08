@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import se.inera.intyg.certificateservice.application.GetUnansweredCommunicationInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalResponse;
@@ -20,6 +21,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetCertific
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetSickLeaveCertificatesInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetSickLeaveCertificatesInternalResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetUnansweredCommunicationInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ListObsoleteDraftsRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ListObsoleteDraftsResponse;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageInternalResponse;
@@ -208,6 +210,25 @@ public class InternalApiUtil {
     return this.restTemplate.exchange(
         requestUrl,
         HttpMethod.DELETE,
+        new HttpEntity<>(request, headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyMap()
+    );
+  }
+
+  public ResponseEntity<GetUnansweredCommunicationInternalResponse> getUnansweredCommunicationMessages(
+      GetUnansweredCommunicationInternalRequest request) {
+    final var requestUrl = "http://localhost:%s/internalapi/message/unaswered-communication".formatted(
+        port
+    );
+
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    return this.restTemplate.exchange(
+        requestUrl,
+        HttpMethod.POST,
         new HttpEntity<>(request, headers),
         new ParameterizedTypeReference<>() {
         },
