@@ -200,7 +200,7 @@ public class TextUtil {
             i -> i + avaiableLinesEmptyPage)
         .mapToObj(start -> {
           final var end = Math.min(start + avaiableLinesEmptyPage, wrappedLines.size());
-          return String.join("\n", wrappedLines.subList(start, end));
+          return String.join("\n", wrappedLines.subList(start, end)) + "\n";
         })
         .toList();
   }
