@@ -50,10 +50,14 @@ public class PdfPaginationUtil {
 
       pages.add(currentPage);
 
-      currentPage = new ArrayList<>();
+      final var overflows = split.overflows();
 
-      if (split.second() != null) {
-        currentPage.add(split.second());
+      if (overflows.isEmpty()) {
+        currentPage = new ArrayList<>();
+      } else {
+        pages.addAll(overflows.subList(0, overflows.size() - 1));
+
+        currentPage = new ArrayList<>(overflows.getLast());
       }
     }
 
@@ -68,21 +72,20 @@ public class PdfPaginationUtil {
   private FieldSplit splitField(PdfField original, OverFlowLineSplit parts) {
 
     PdfField first = null;
-    PdfField second = null;
 
     if (parts.partOne() != null) {
       first = original.withValue(parts.partOne());
     }
 
-    if (parts.partTwo() != null) {
-      second = PdfField.builder()
-          .id(original.getId())
-          .value(parts.partTwo())
-          .appearance(original.getAppearance())
-          .append(true)
-          .build();
-    }
+    final var overflowingFields = parts.overflowPages().stream().map(text -> PdfField.builder()
+            .id(original.getId())
+            .value(text)
+            .appearance(original.getAppearance())
+            .append(true)
+            .build())
+        .map(List::of)
+        .toList();
 
-    return new FieldSplit(first, second);
+    return new FieldSplit(first, overflowingFields);
   }
 }
