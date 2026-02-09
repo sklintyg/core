@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -132,13 +131,14 @@ public class JpaMessageRepository implements TestabilityMessageRepository {
 
   @Override
   public List<Message> findMessagesByCertificateKeyAndStatusSentAndCreatedAfter(Long certificateKey,
-      LocalDateTime createdAfter) {
+      Integer maxDaysOfUnansweredCommunication) {
     if (Objects.isNull(certificateKey)) {
       throw new IllegalArgumentException("Cannot get messages if certificateKey is null");
     }
 
     final var messageEntities = messageEntityRepository
-        .findMessageEntitiesByCertificate_KeyAndCreatedAfter(certificateKey, createdAfter);
+        .findMessageEntitiesByCertificate_KeyAndCreatedAfter(certificateKey,
+            maxDaysOfUnansweredCommunication);
 
     return messageEntities.stream()
         .map(messageEntityMapper::toDomain)

@@ -1,6 +1,5 @@
 package se.inera.intyg.certificateservice.application.message.service;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,7 +57,6 @@ public class GetUnansweredMessageInternalService {
 
   private void processPatientMessages(String patientId, Map<String, UnansweredQAs> messages,
       Integer maxDaysOfUnansweredCommunication) {
-    final var cutoffDate = LocalDateTime.now().minusDays(maxDaysOfUnansweredCommunication);
 
     final var patientEntity = patientEntityRepository.findById(patientId)
         .orElseThrow(() -> new IllegalArgumentException(
@@ -71,7 +69,7 @@ public class GetUnansweredMessageInternalService {
 
     certificateEntitys.forEach(certificateEntity -> {
       final var messageList = messageRepository.findMessagesByCertificateKeyAndStatusSentAndCreatedAfter(
-          certificateEntity.getKey(), cutoffDate);
+          certificateEntity.getKey(), maxDaysOfUnansweredCommunication);
 
       final var messageCount = messageList.size();
 
