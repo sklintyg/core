@@ -5,18 +5,18 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import java.util.Map;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.certificateservice.application.GetUnansweredCommunicationInternalResponse.GetUnansweredCommunicationInternalResponseBuilder;
+import se.inera.intyg.certificateservice.application.GetSentInternalResponse.GetSentInternalResponseBuilder;
 import se.inera.intyg.certificateservice.domain.message.model.UnansweredQAs;
 
-@JsonDeserialize(builder = GetUnansweredCommunicationInternalResponseBuilder.class)
+@JsonDeserialize(builder = GetSentInternalResponseBuilder.class)
 @Value
 @Builder
-public class GetUnansweredCommunicationInternalResponse {
+public class GetSentInternalResponse {
 
   Map<String, UnansweredQAs> messages;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class GetUnansweredCommunicationInternalResponseBuilder {
+  public static class GetSentInternalResponseBuilder {
 
   }
 

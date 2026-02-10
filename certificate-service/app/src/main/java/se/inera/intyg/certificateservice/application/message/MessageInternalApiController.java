@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import se.inera.intyg.certificateservice.application.GetUnansweredCommunicationInternalResponse;
-import se.inera.intyg.certificateservice.application.certificate.dto.GetUnansweredCommunicationInternalRequest;
+import se.inera.intyg.certificateservice.application.GetSentInternalResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetSentInternalRequest;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageInternalResponse;
 import se.inera.intyg.certificateservice.application.message.dto.GetMessageInternalXmlResponse;
 import se.inera.intyg.certificateservice.application.message.service.GetCertificateMessageInternalService;
 import se.inera.intyg.certificateservice.application.message.service.GetMessageInternalXmlService;
-import se.inera.intyg.certificateservice.application.message.service.GetUnansweredMessageInternalService;
+import se.inera.intyg.certificateservice.application.message.service.GetSentMessageInternalService;
 import se.inera.intyg.certificateservice.logging.PerformanceLogging;
 
 @RequiredArgsConstructor
@@ -24,7 +24,7 @@ public class MessageInternalApiController {
 
   private final GetMessageInternalXmlService getMessageInternalXmlService;
   private final GetCertificateMessageInternalService getCertificateMessageInternalService;
-  private final GetUnansweredMessageInternalService getUnansweredMessageInternalService;
+  private final GetSentMessageInternalService getSentMessageInternalService;
 
   @PostMapping("/{messageId}/xml")
   @PerformanceLogging(eventAction = "internal-retrieve-message-xml", eventType = EVENT_TYPE_ACCESSED)
@@ -39,11 +39,11 @@ public class MessageInternalApiController {
     return getCertificateMessageInternalService.get(certificateId);
   }
 
-  @PostMapping("/unanswered-communication")
-  @PerformanceLogging(eventAction = "internal-retrieve-unanswered-communication-messages", eventType = EVENT_TYPE_ACCESSED)
-  GetUnansweredCommunicationInternalResponse getUnansweredCommunicationMessages(
-      @RequestBody GetUnansweredCommunicationInternalRequest request) {
-    return getUnansweredMessageInternalService.get(request.getPatientId(),
+  @PostMapping("/sent")
+  @PerformanceLogging(eventAction = "internal-retrieve-sent-messages", eventType = EVENT_TYPE_ACCESSED)
+  GetSentInternalResponse getSentMessages(
+      @RequestBody GetSentInternalRequest request) {
+    return getSentMessageInternalService.get(request.getPatientId(),
         request.getMaxDaysOfUnansweredCommunication());
   }
 }

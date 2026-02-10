@@ -1,20 +1,18 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence;
 
-import static java.time.LocalDateTime.now;
-import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntitySpecification.equalsPatientKey;
-
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import se.inera.intyg.certificateservice.domain.common.model.MessagesRequest;
+import se.inera.intyg.certificateservice.domain.message.model.CertificateMessageCount;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.MessageEntityMapper;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateMessageCountRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntitySpecificationFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageRelationEntityRepository;
@@ -25,9 +23,8 @@ import se.inera.intyg.certificateservice.testability.certificate.service.reposit
 @RequiredArgsConstructor
 public class JpaMessageRepository implements TestabilityMessageRepository {
 
-  public static final String SENT = "SENT";
-  public static final String FK = "FK";
   private final MessageEntityRepository messageEntityRepository;
+  private final CertificateMessageCountRepository certificateMessageCountRepository;
   private final MessageEntityMapper messageEntityMapper;
   private final MessageRelationRepository messageRelationRepository;
   private final MessageRelationEntityRepository messageRelationEntityRepository;
@@ -134,28 +131,22 @@ public class JpaMessageRepository implements TestabilityMessageRepository {
         .toList();
   }
 
+
   @Override
-  public List<Message> findMessagesByPatientKeyAndStatusSentAndCreatedAfter(Integer patientKey,
-      Integer maxDaysOfUnansweredCommunication) {
-    if (Objects.isNull(patientKey)) {
-      throw new IllegalArgumentException("Cannot get messages if patientKey is null");
-    }
+  public List<CertificateMessageCount> findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
+      List<String> patientIds, Integer maxDaysOfUnansweredCommunication) {
 
-    final var cutoffDate = now().minusDays(maxDaysOfUnansweredCommunication);
+    final var certificateMessageCounts = certificateMessageCountRepository.getMessageCountForCertificates(
+        patientIds, maxDaysOfUnansweredCommunication);
 
-    final var specification = equalsPatientKey(patientKey)
-        .and((root, query, criteriaBuilder) ->
-            criteriaBuilder.equal(root.get("status").get("status"), SENT))
-        .and((root, query, criteriaBuilder) ->
-            criteriaBuilder.equal(root.get("author"), FK))
-        .and((root, query, criteriaBuilder) ->
-            criteriaBuilder.greaterThanOrEqualTo(root.get("created"), cutoffDate));
-
-    final var messageEntities = messageEntityRepository.findAll(specification);
-
-    return messageEntities.stream()
-        .map(messageEntityMapper::toDomain)
-        .toList();
+    return certificateMessageCounts.isPresent()
+        ? certificateMessageCounts.get().stream()
+        .map(certificateMessageCount ->
+            CertificateMessageCount.builder()
+                .certificateId(certificateMessageCount.getCertificateId())
+                .messageCount(certificateMessageCount.getMessageCount())
+                .build()).toList()
+        : List.of();
   }
 
   private boolean messageIsValidType(Message message) {

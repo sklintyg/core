@@ -16,7 +16,7 @@ import static se.inera.intyg.certificateservice.integrationtest.common.util.Cert
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import se.inera.intyg.certificateservice.application.certificate.dto.GetUnansweredCommunicationInternalRequest;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetSentInternalRequest;
 import se.inera.intyg.certificateservice.integrationtest.common.setup.BaseIntegrationIT;
 
 public abstract class InternalApiMessagesIT extends BaseIntegrationIT {
@@ -75,7 +75,7 @@ public abstract class InternalApiMessagesIT extends BaseIntegrationIT {
             .build()
     );
 
-    final var request = GetUnansweredCommunicationInternalRequest.builder()
+    final var request = GetSentInternalRequest.builder()
         .patientId(List.of(ATHENA_REACT_ANDERSSON_DTO.getId().getId()))
         .maxDaysOfUnansweredCommunication(7)
         .build();

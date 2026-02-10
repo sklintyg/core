@@ -6,18 +6,18 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import java.util.List;
 import lombok.Builder;
 import lombok.Value;
-import se.inera.intyg.certificateservice.application.certificate.dto.GetUnansweredCommunicationInternalRequest.GetUnansweredCommunicationInternalRequestBuilder;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetSentInternalRequest.GetSentInternalRequestBuilder;
 
-@JsonDeserialize(builder = GetUnansweredCommunicationInternalRequestBuilder.class)
+@JsonDeserialize(builder = GetSentInternalRequestBuilder.class)
 @Value
 @Builder
-public class GetUnansweredCommunicationInternalRequest {
+public class GetSentInternalRequest {
 
   List<String> patientId;
   Integer maxDaysOfUnansweredCommunication;
 
   @JsonPOJOBuilder(withPrefix = "")
-  public static class GetUnansweredCommunicationInternalRequestBuilder {
+  public static class GetSentInternalRequestBuilder {
 
   }
 

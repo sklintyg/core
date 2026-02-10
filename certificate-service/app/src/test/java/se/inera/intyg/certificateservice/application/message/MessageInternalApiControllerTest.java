@@ -12,14 +12,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.application.GetUnansweredCommunicationInternalResponse;
-import se.inera.intyg.certificateservice.application.certificate.dto.GetUnansweredCommunicationInternalRequest;
+import se.inera.intyg.certificateservice.application.GetSentInternalResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetSentInternalRequest;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageInternalResponse;
 import se.inera.intyg.certificateservice.application.message.dto.GetMessageInternalXmlResponse;
 import se.inera.intyg.certificateservice.application.message.dto.QuestionDTO;
 import se.inera.intyg.certificateservice.application.message.service.GetCertificateMessageInternalService;
 import se.inera.intyg.certificateservice.application.message.service.GetMessageInternalXmlService;
-import se.inera.intyg.certificateservice.application.message.service.GetUnansweredMessageInternalService;
+import se.inera.intyg.certificateservice.application.message.service.GetSentMessageInternalService;
 import se.inera.intyg.certificateservice.domain.message.model.UnansweredQAs;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,7 +30,7 @@ class MessageInternalApiControllerTest {
   @Mock
   private GetCertificateMessageInternalService getCertificateMessageInternalService;
   @Mock
-  private GetUnansweredMessageInternalService getUnansweredMessageInternalService;
+  private GetSentMessageInternalService getSentMessageInternalService;
   @InjectMocks
   private MessageInternalApiController messageInternalApiController;
 
@@ -66,19 +66,18 @@ class MessageInternalApiControllerTest {
   void shallReturnGetUnansweredCommunicationInternalResponse() {
     final var patientIds = List.of("patient-1", "patient-2");
     final var maxDays = 7;
-    final var request = GetUnansweredCommunicationInternalRequest.builder()
+    final var request = GetSentInternalRequest.builder()
         .patientId(patientIds)
         .maxDaysOfUnansweredCommunication(maxDays)
         .build();
 
-    final var expectedResult = GetUnansweredCommunicationInternalResponse.builder()
+    final var expectedResult = GetSentInternalResponse.builder()
         .messages(Map.of("certificateId", UnansweredQAs.builder().complement(1).build()))
         .build();
 
-    doReturn(expectedResult).when(getUnansweredMessageInternalService).get(patientIds, maxDays);
+    doReturn(expectedResult).when(getSentMessageInternalService).get(patientIds, maxDays);
 
-    final var actualResult = messageInternalApiController.getUnansweredCommunicationMessages(
-        request);
+    final var actualResult = messageInternalApiController.getSentMessages(request);
 
     assertEquals(expectedResult, actualResult);
   }

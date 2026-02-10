@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -36,6 +35,8 @@ import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageRelationEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.MessageEntityMapper;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateMessageCountEntity;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateMessageCountRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntitySpecificationFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageRelationEntityRepository;
@@ -57,7 +58,10 @@ class JpaMessageRepositoryTest {
   private MessageEntityRepository messageEntityRepository;
 
   @Mock
-  MessageEntitySpecificationFactory messageEntitySpecificationFactory;
+  private MessageEntitySpecificationFactory messageEntitySpecificationFactory;
+
+  @Mock
+  private CertificateMessageCountRepository certificateMessageCountRepository;
 
   @InjectMocks
   private JpaMessageRepository jpaMessageRepository;
@@ -372,101 +376,67 @@ class JpaMessageRepositoryTest {
   @Nested
   class FindMessagesByPatientKeyAndStatusSentAndCreatedAfter {
 
-    private static final Integer PATIENT_KEY = 100;
+    private static final String PATIENT_ID = "100";
     private static final Integer MAX_DAYS = 7;
 
     @Test
-    void shallThrowExceptionWhenPatientKeyIsNull() {
-      final var exception = assertThrows(IllegalArgumentException.class,
-          () -> jpaMessageRepository.findMessagesByPatientKeyAndStatusSentAndCreatedAfter(null,
-              MAX_DAYS));
-
-      assertEquals("Cannot get messages if patientKey is null", exception.getMessage());
-    }
-
-    @Test
     void shallReturnEmptyListWhenNoMessagesFound() {
-      when(messageEntityRepository.findAll(any(Specification.class)))
-          .thenReturn(Collections.emptyList());
+      when(certificateMessageCountRepository.getMessageCountForCertificates(
+          List.of(PATIENT_ID), MAX_DAYS))
+          .thenReturn(Optional.empty());
 
-      final var result = jpaMessageRepository.findMessagesByPatientKeyAndStatusSentAndCreatedAfter(
-          PATIENT_KEY, MAX_DAYS);
+      final var result = jpaMessageRepository.findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
+          List.of(PATIENT_ID), MAX_DAYS);
 
       assertEquals(Collections.emptyList(), result);
     }
 
     @Test
     void shallReturnMessageWhenOneMessageFound() {
-      final var messageEntity = MessageEntity.builder().build();
-      final var expectedMessage = complementMessageBuilder().build();
+      final var entity = new CertificateMessageCountEntity("cert123", 5);
 
-      when(messageEntityRepository.findAll(any(Specification.class)))
-          .thenReturn(List.of(messageEntity));
-      when(messageEntityMapper.toDomain(messageEntity))
-          .thenReturn(expectedMessage);
+      when(certificateMessageCountRepository.getMessageCountForCertificates(
+          List.of(PATIENT_ID), MAX_DAYS))
+          .thenReturn(Optional.of(List.of(entity)));
 
-      final var result = jpaMessageRepository.findMessagesByPatientKeyAndStatusSentAndCreatedAfter(
-          PATIENT_KEY, MAX_DAYS);
+      final var result = jpaMessageRepository.findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
+          List.of(PATIENT_ID), MAX_DAYS);
 
-      assertEquals(List.of(expectedMessage), result);
+      assertEquals(1, result.size());
+      assertEquals("cert123", result.get(0).certificateId());
+      assertEquals(5, result.get(0).messageCount());
     }
 
     @Test
     void shallReturnMultipleMessagesWhenMultipleMessagesFound() {
-      final var messageEntity1 = MessageEntity.builder().build();
-      final var messageEntity2 = MessageEntity.builder().build();
-      final var messageEntity3 = MessageEntity.builder().build();
+      final var entity1 = new CertificateMessageCountEntity("cert123", 5);
+      final var entity2 = new CertificateMessageCountEntity("cert456", 3);
 
-      final var expectedMessage1 = complementMessageBuilder().build();
-      final var expectedMessage2 = complementMessageBuilder().build();
-      final var expectedMessage3 = complementMessageBuilder().build();
+      when(certificateMessageCountRepository.getMessageCountForCertificates(
+          List.of(PATIENT_ID), MAX_DAYS))
+          .thenReturn(Optional.of(List.of(entity1, entity2)));
 
-      when(messageEntityRepository.findAll(any(Specification.class)))
-          .thenReturn(List.of(messageEntity1, messageEntity2, messageEntity3));
-      when(messageEntityMapper.toDomain(messageEntity1))
-          .thenReturn(expectedMessage1);
-      when(messageEntityMapper.toDomain(messageEntity2))
-          .thenReturn(expectedMessage2);
-      when(messageEntityMapper.toDomain(messageEntity3))
-          .thenReturn(expectedMessage3);
+      final var result = jpaMessageRepository.findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
+          List.of(PATIENT_ID), MAX_DAYS);
 
-      final var result = jpaMessageRepository.findMessagesByPatientKeyAndStatusSentAndCreatedAfter(
-          PATIENT_KEY, MAX_DAYS);
-
-      assertEquals(List.of(expectedMessage1, expectedMessage2, expectedMessage3), result);
+      assertEquals(2, result.size());
+      assertEquals("cert123", result.get(0).certificateId());
+      assertEquals(5, result.get(0).messageCount());
+      assertEquals("cert456", result.get(1).certificateId());
+      assertEquals(3, result.get(1).messageCount());
     }
 
     @Test
     void shallCallRepositoryWithCorrectParameters() {
-      when(messageEntityRepository.findAll(any(Specification.class)))
-          .thenReturn(Collections.emptyList());
+      when(certificateMessageCountRepository.getMessageCountForCertificates(
+          List.of(PATIENT_ID), MAX_DAYS))
+          .thenReturn(Optional.empty());
 
-      jpaMessageRepository.findMessagesByPatientKeyAndStatusSentAndCreatedAfter(
-          PATIENT_KEY, MAX_DAYS);
+      jpaMessageRepository.findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
+          List.of(PATIENT_ID), MAX_DAYS);
 
-      verify(messageEntityRepository).findAll(any(Specification.class));
-    }
-
-    @Test
-    void shallMapAllReturnedEntitiesToDomain() {
-      final var messageEntity1 = MessageEntity.builder().key(1).build();
-      final var messageEntity2 = MessageEntity.builder().key(2).build();
-      final var expectedMessage1 = complementMessageBuilder().build();
-      final var expectedMessage2 = complementMessageBuilder().build();
-
-      when(messageEntityRepository.findAll(any(Specification.class)))
-          .thenReturn(List.of(messageEntity1, messageEntity2));
-      when(messageEntityMapper.toDomain(messageEntity1))
-          .thenReturn(expectedMessage1);
-      when(messageEntityMapper.toDomain(messageEntity2))
-          .thenReturn(expectedMessage2);
-
-      final var result = jpaMessageRepository.findMessagesByPatientKeyAndStatusSentAndCreatedAfter(
-          PATIENT_KEY, MAX_DAYS);
-
-      verify(messageEntityMapper).toDomain(messageEntity1);
-      verify(messageEntityMapper).toDomain(messageEntity2);
-      assertEquals(List.of(expectedMessage1, expectedMessage2), result);
+      verify(certificateMessageCountRepository).getMessageCountForCertificates(
+          List.of(PATIENT_ID), MAX_DAYS);
     }
   }
 }

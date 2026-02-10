@@ -277,25 +277,4 @@ class MessageEntitySpecificationFactoryTest {
       specification.verifyNoInteractions();
     }
   }
-
-  @Test
-  void shallTestEqualsPatientKey() {
-    final var patientKey = 123;
-    try (
-        MockedStatic<MessageEntitySpecification> specification = mockStatic(
-            MessageEntitySpecification.class)
-    ) {
-      specification.when(
-              () -> MessageEntitySpecification.equalsPatientKey(patientKey))
-          .thenReturn(mock(Specification.class));
-
-      final var result = MessageEntitySpecification.equalsPatientKey(patientKey);
-
-      assertNotNull(result);
-
-      specification.verify(
-          () -> MessageEntitySpecification.equalsPatientKey(patientKey)
-      );
-    }
-  }
 }

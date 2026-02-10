@@ -10,7 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import se.inera.intyg.certificateservice.application.GetUnansweredCommunicationInternalResponse;
+import se.inera.intyg.certificateservice.application.GetSentInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalResponse;
@@ -19,9 +19,9 @@ import se.inera.intyg.certificateservice.application.certificate.dto.DisposeObso
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetSentInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetSickLeaveCertificatesInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetSickLeaveCertificatesInternalResponse;
-import se.inera.intyg.certificateservice.application.certificate.dto.GetUnansweredCommunicationInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ListObsoleteDraftsRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ListObsoleteDraftsResponse;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageInternalResponse;
@@ -217,8 +217,8 @@ public class InternalApiUtil {
     );
   }
 
-  public ResponseEntity<GetUnansweredCommunicationInternalResponse> getUnansweredCommunicationMessages(
-      GetUnansweredCommunicationInternalRequest request) {
+  public ResponseEntity<GetSentInternalResponse> getUnansweredCommunicationMessages(
+      GetSentInternalRequest request) {
     final var requestUrl = "http://localhost:%s/internalapi/message/unaswered-communication".formatted(
         port
     );
