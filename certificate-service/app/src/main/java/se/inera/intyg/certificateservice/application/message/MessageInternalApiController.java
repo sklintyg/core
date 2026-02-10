@@ -39,7 +39,7 @@ public class MessageInternalApiController {
     return getCertificateMessageInternalService.get(certificateId);
   }
 
-  @PostMapping("/unaswered-communication")
+  @PostMapping("/unanswered-communication")
   @PerformanceLogging(eventAction = "internal-retrieve-unanswered-communication-messages", eventType = EVENT_TYPE_ACCESSED)
   GetUnansweredCommunicationInternalResponse getUnansweredCommunicationMessages(
       @RequestBody GetUnansweredCommunicationInternalRequest request) {
