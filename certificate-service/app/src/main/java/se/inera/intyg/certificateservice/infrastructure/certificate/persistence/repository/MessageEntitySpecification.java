@@ -31,4 +31,12 @@ public class MessageEntitySpecification {
     return (root, query, criteriaBuilder) ->
         criteriaBuilder.equal(root.get("author"), author.author());
   }
+
+  public static Specification<MessageEntity> equalsPatientKey(Integer patientKey) {
+    return (root, query, criteriaBuilder) -> {
+      final var certificateJoin = root.join("certificate");
+      final var patientJoin = certificateJoin.join("patient");
+      return criteriaBuilder.equal(patientJoin.get("key"), patientKey);
+    };
+  }
 }

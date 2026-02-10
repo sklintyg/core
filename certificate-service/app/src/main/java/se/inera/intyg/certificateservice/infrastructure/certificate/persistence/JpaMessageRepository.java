@@ -1,5 +1,8 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence;
 
+import static java.time.LocalDateTime.now;
+import static se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntitySpecification.equalsPatientKey;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -22,6 +25,8 @@ import se.inera.intyg.certificateservice.testability.certificate.service.reposit
 @RequiredArgsConstructor
 public class JpaMessageRepository implements TestabilityMessageRepository {
 
+  public static final String SENT = "SENT";
+  public static final String FK = "FK";
   private final MessageEntityRepository messageEntityRepository;
   private final MessageEntityMapper messageEntityMapper;
   private final MessageRelationRepository messageRelationRepository;
@@ -130,15 +135,23 @@ public class JpaMessageRepository implements TestabilityMessageRepository {
   }
 
   @Override
-  public List<Message> findMessagesByCertificateKeyAndStatusSentAndCreatedAfter(Long certificateKey,
+  public List<Message> findMessagesByPatientKeyAndStatusSentAndCreatedAfter(Integer patientKey,
       Integer maxDaysOfUnansweredCommunication) {
-    if (Objects.isNull(certificateKey)) {
-      throw new IllegalArgumentException("Cannot get messages if certificateKey is null");
+    if (Objects.isNull(patientKey)) {
+      throw new IllegalArgumentException("Cannot get messages if patientKey is null");
     }
 
-    final var messageEntities = messageEntityRepository
-        .findMessageEntitiesByCertificate_KeyAndCreatedAfter(certificateKey,
-            maxDaysOfUnansweredCommunication);
+    final var cutoffDate = now().minusDays(maxDaysOfUnansweredCommunication);
+
+    final var specification = equalsPatientKey(patientKey)
+        .and((root, query, criteriaBuilder) ->
+            criteriaBuilder.equal(root.get("status").get("status"), SENT))
+        .and((root, query, criteriaBuilder) ->
+            criteriaBuilder.equal(root.get("author"), FK))
+        .and((root, query, criteriaBuilder) ->
+            criteriaBuilder.greaterThanOrEqualTo(root.get("created"), cutoffDate));
+
+    final var messageEntities = messageEntityRepository.findAll(specification);
 
     return messageEntities.stream()
         .map(messageEntityMapper::toDomain)

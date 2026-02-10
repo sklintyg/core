@@ -17,6 +17,6 @@ public interface MessageRepository {
 
   List<Message> findByMessagesRequest(MessagesRequest messagesRequest);
 
-  List<Message> findMessagesByCertificateKeyAndStatusSentAndCreatedAfter(
-      Long patientId, Integer maxDaysOfUnansweredCommunication);
+  List<Message> findMessagesByPatientKeyAndStatusSentAndCreatedAfter(
+      Integer patientId, Integer maxDaysOfUnansweredCommunication);
 }

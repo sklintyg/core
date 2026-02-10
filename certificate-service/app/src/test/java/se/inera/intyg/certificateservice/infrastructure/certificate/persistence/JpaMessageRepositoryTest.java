@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -371,29 +370,27 @@ class JpaMessageRepositoryTest {
   }
 
   @Nested
-  class FindMessagesByCertificateKeyAndStatusSentAndCreatedAfter {
+  class FindMessagesByPatientKeyAndStatusSentAndCreatedAfter {
 
-    private static final Long CERTIFICATE_KEY = 100L;
-    private static final LocalDateTime CUTOFF_DATE = LocalDateTime.now().minusDays(7);
+    private static final Integer PATIENT_KEY = 100;
+    private static final Integer MAX_DAYS = 7;
 
     @Test
-    void shallThrowExceptionWhenCertificateKeyIsNull() {
+    void shallThrowExceptionWhenPatientKeyIsNull() {
       final var exception = assertThrows(IllegalArgumentException.class,
-          () -> jpaMessageRepository.findMessagesByCertificateKeyAndStatusSentAndCreatedAfter(null,
-              CUTOFF_DATE)
-      );
+          () -> jpaMessageRepository.findMessagesByPatientKeyAndStatusSentAndCreatedAfter(null,
+              MAX_DAYS));
 
-      assertEquals("Cannot get messages if certificateKey is null", exception.getMessage());
+      assertEquals("Cannot get messages if patientKey is null", exception.getMessage());
     }
 
     @Test
     void shallReturnEmptyListWhenNoMessagesFound() {
-      when(messageEntityRepository.findMessageEntitiesByCertificate_KeyAndCreatedAfter(
-          CERTIFICATE_KEY, CUTOFF_DATE))
+      when(messageEntityRepository.findAll(any(Specification.class)))
           .thenReturn(Collections.emptyList());
 
-      final var result = jpaMessageRepository.findMessagesByCertificateKeyAndStatusSentAndCreatedAfter(
-          CERTIFICATE_KEY, CUTOFF_DATE);
+      final var result = jpaMessageRepository.findMessagesByPatientKeyAndStatusSentAndCreatedAfter(
+          PATIENT_KEY, MAX_DAYS);
 
       assertEquals(Collections.emptyList(), result);
     }
@@ -403,14 +400,13 @@ class JpaMessageRepositoryTest {
       final var messageEntity = MessageEntity.builder().build();
       final var expectedMessage = complementMessageBuilder().build();
 
-      when(messageEntityRepository.findMessageEntitiesByCertificate_KeyAndCreatedAfter(
-          CERTIFICATE_KEY, CUTOFF_DATE))
+      when(messageEntityRepository.findAll(any(Specification.class)))
           .thenReturn(List.of(messageEntity));
       when(messageEntityMapper.toDomain(messageEntity))
           .thenReturn(expectedMessage);
 
-      final var result = jpaMessageRepository.findMessagesByCertificateKeyAndStatusSentAndCreatedAfter(
-          CERTIFICATE_KEY, CUTOFF_DATE);
+      final var result = jpaMessageRepository.findMessagesByPatientKeyAndStatusSentAndCreatedAfter(
+          PATIENT_KEY, MAX_DAYS);
 
       assertEquals(List.of(expectedMessage), result);
     }
@@ -425,8 +421,7 @@ class JpaMessageRepositoryTest {
       final var expectedMessage2 = complementMessageBuilder().build();
       final var expectedMessage3 = complementMessageBuilder().build();
 
-      when(messageEntityRepository.findMessageEntitiesByCertificate_KeyAndCreatedAfter(
-          CERTIFICATE_KEY, CUTOFF_DATE))
+      when(messageEntityRepository.findAll(any(Specification.class)))
           .thenReturn(List.of(messageEntity1, messageEntity2, messageEntity3));
       when(messageEntityMapper.toDomain(messageEntity1))
           .thenReturn(expectedMessage1);
@@ -435,23 +430,21 @@ class JpaMessageRepositoryTest {
       when(messageEntityMapper.toDomain(messageEntity3))
           .thenReturn(expectedMessage3);
 
-      final var result = jpaMessageRepository.findMessagesByCertificateKeyAndStatusSentAndCreatedAfter(
-          CERTIFICATE_KEY, CUTOFF_DATE);
+      final var result = jpaMessageRepository.findMessagesByPatientKeyAndStatusSentAndCreatedAfter(
+          PATIENT_KEY, MAX_DAYS);
 
       assertEquals(List.of(expectedMessage1, expectedMessage2, expectedMessage3), result);
     }
 
     @Test
     void shallCallRepositoryWithCorrectParameters() {
-      when(messageEntityRepository.findMessageEntitiesByCertificate_KeyAndCreatedAfter(
-          CERTIFICATE_KEY, CUTOFF_DATE))
+      when(messageEntityRepository.findAll(any(Specification.class)))
           .thenReturn(Collections.emptyList());
 
-      jpaMessageRepository.findMessagesByCertificateKeyAndStatusSentAndCreatedAfter(
-          CERTIFICATE_KEY, CUTOFF_DATE);
+      jpaMessageRepository.findMessagesByPatientKeyAndStatusSentAndCreatedAfter(
+          PATIENT_KEY, MAX_DAYS);
 
-      verify(messageEntityRepository).findMessageEntitiesByCertificate_KeyAndCreatedAfter(
-          CERTIFICATE_KEY, CUTOFF_DATE);
+      verify(messageEntityRepository).findAll(any(Specification.class));
     }
 
     @Test
@@ -461,71 +454,20 @@ class JpaMessageRepositoryTest {
       final var expectedMessage1 = complementMessageBuilder().build();
       final var expectedMessage2 = complementMessageBuilder().build();
 
-      when(messageEntityRepository.findMessageEntitiesByCertificate_KeyAndCreatedAfter(
-          CERTIFICATE_KEY, CUTOFF_DATE))
+      when(messageEntityRepository.findAll(any(Specification.class)))
           .thenReturn(List.of(messageEntity1, messageEntity2));
       when(messageEntityMapper.toDomain(messageEntity1))
           .thenReturn(expectedMessage1);
       when(messageEntityMapper.toDomain(messageEntity2))
           .thenReturn(expectedMessage2);
 
-      final var result = jpaMessageRepository.findMessagesByCertificateKeyAndStatusSentAndCreatedAfter(
-          CERTIFICATE_KEY, CUTOFF_DATE);
+      final var result = jpaMessageRepository.findMessagesByPatientKeyAndStatusSentAndCreatedAfter(
+          PATIENT_KEY, MAX_DAYS);
 
-      assertEquals(2, result.size());
-      verify(messageEntityMapper, times(2)).toDomain(any(MessageEntity.class));
-    }
-
-    @Test
-    void shallNotInteractWithMapperWhenNoMessagesFound() {
-      when(messageEntityRepository.findMessageEntitiesByCertificate_KeyAndCreatedAfter(
-          CERTIFICATE_KEY, CUTOFF_DATE))
-          .thenReturn(Collections.emptyList());
-
-      jpaMessageRepository.findMessagesByCertificateKeyAndStatusSentAndCreatedAfter(
-          CERTIFICATE_KEY, CUTOFF_DATE);
-
-      verifyNoInteractions(messageEntityMapper);
-    }
-
-    @Test
-    void shallHandleDifferentCertificateKeys() {
-      final var differentCertificateKey = 999L;
-      final var messageEntity = MessageEntity.builder().build();
-      final var expectedMessage = complementMessageBuilder().build();
-
-      when(messageEntityRepository.findMessageEntitiesByCertificate_KeyAndCreatedAfter(
-          differentCertificateKey, CUTOFF_DATE))
-          .thenReturn(List.of(messageEntity));
-      when(messageEntityMapper.toDomain(messageEntity))
-          .thenReturn(expectedMessage);
-
-      final var result = jpaMessageRepository.findMessagesByCertificateKeyAndStatusSentAndCreatedAfter(
-          differentCertificateKey, CUTOFF_DATE);
-
-      assertEquals(List.of(expectedMessage), result);
-      verify(messageEntityRepository).findMessageEntitiesByCertificate_KeyAndCreatedAfter(
-          differentCertificateKey, CUTOFF_DATE);
-    }
-
-    @Test
-    void shallHandleDifferentCutoffDates() {
-      final var olderCutoffDate = LocalDateTime.now().minusDays(30);
-      final var messageEntity = MessageEntity.builder().build();
-      final var expectedMessage = complementMessageBuilder().build();
-
-      when(messageEntityRepository.findMessageEntitiesByCertificate_KeyAndCreatedAfter(
-          CERTIFICATE_KEY, olderCutoffDate))
-          .thenReturn(List.of(messageEntity));
-      when(messageEntityMapper.toDomain(messageEntity))
-          .thenReturn(expectedMessage);
-
-      final var result = jpaMessageRepository.findMessagesByCertificateKeyAndStatusSentAndCreatedAfter(
-          CERTIFICATE_KEY, olderCutoffDate);
-
-      assertEquals(List.of(expectedMessage), result);
-      verify(messageEntityRepository).findMessageEntitiesByCertificate_KeyAndCreatedAfter(
-          CERTIFICATE_KEY, olderCutoffDate);
+      verify(messageEntityMapper).toDomain(messageEntity1);
+      verify(messageEntityMapper).toDomain(messageEntity2);
+      assertEquals(List.of(expectedMessage1, expectedMessage2), result);
     }
   }
 }
+

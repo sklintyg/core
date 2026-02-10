@@ -1,5 +1,8 @@
 package se.inera.intyg.certificateservice.application.message.service;
 
+import static java.util.stream.Collectors.counting;
+import static java.util.stream.Collectors.groupingBy;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,22 +65,19 @@ public class GetUnansweredMessageInternalService {
         .orElseThrow(() -> new IllegalArgumentException(
             "Patient with id " + patientId + " does not exist"));
 
-    final var certificateEntitys = certificateEntityRepository.findCertificateEntitiesByPatient_Key(
-            patientEntity.getKey())
-        .orElseThrow(() -> new IllegalArgumentException(
-            "Patient with id " + patientId + " does not have a certificate"));
+    final var messageList = messageRepository.findMessagesByPatientKeyAndStatusSentAndCreatedAfter(
+        patientEntity.getKey(), maxDaysOfUnansweredCommunication);
 
-    certificateEntitys.forEach(certificateEntity -> {
-      final var messageList = messageRepository.findMessagesByCertificateKeyAndStatusSentAndCreatedAfter(
-          certificateEntity.getKey(), maxDaysOfUnansweredCommunication);
-
-      final var messageCount = messageList.size();
-
-      final var unansweredQAs = UnansweredQAs.builder()
-          .complement(messageCount)
-          .build();
-
-      messages.put(certificateEntity.getCertificateId(), unansweredQAs);
-    });
+    messageList.stream()
+        .collect(
+            groupingBy(message -> message.certificateId().id(),
+                counting()
+            ))
+        .forEach((certificateId, messageCount) -> {
+          final var unansweredQAs = UnansweredQAs.builder()
+              .complement(messageCount.intValue())
+              .build();
+          messages.put(certificateId, unansweredQAs);
+        });
   }
 }
