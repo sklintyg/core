@@ -77,7 +77,8 @@ public class PdfPaginationUtil {
       first = original.withValue(parts.partOne());
     }
 
-    final var overflowingFields = parts.overflowPages().stream().map(text -> PdfField.builder()
+    final var overflowingFields = parts.overflowPages().stream()
+        .map(text -> PdfField.builder()
             .id(original.getId())
             .value(text)
             .appearance(original.getAppearance())
