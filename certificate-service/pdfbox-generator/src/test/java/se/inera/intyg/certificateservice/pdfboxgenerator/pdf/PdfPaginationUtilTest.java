@@ -14,6 +14,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
@@ -111,7 +112,8 @@ class PdfPaginationUtilTest {
 
     final var fields = List.of(field1, field2);
 
-    final var overflow = new OverFlowLineSplit("Very long text that", "needs to be split");
+    final var overflow = new OverFlowLineSplit("Very long text that",
+        Collections.singletonList("needs to be split"));
 
     when(textUtil.getOverflowingLines(anyList(), eq(field1), any(PDRectangle.class), anyFloat(),
         any(PDFont.class)))
@@ -147,7 +149,7 @@ class PdfPaginationUtilTest {
     final var fields = List.of(field);
 
     final var overflow = new OverFlowLineSplit("Very long text that",
-        "needs to be split into multiple parts");
+        Collections.singletonList("needs to be split into multiple parts"));
 
     when(textUtil.getOverflowingLines(anyList(), any(PdfField.class), any(PDRectangle.class),
         anyFloat(), any(PDFont.class)))
@@ -160,7 +162,7 @@ class PdfPaginationUtilTest {
         () -> assertEquals(overflow.partOne(), result.getFirst().getFirst().getValue(),
             "First page should have part one"),
         () -> assertEquals(
-            overflow.partTwo(),
+            overflow.overflowPages().getFirst(),
             result.get(1).getFirst().getValue(),
             "Second page should have 1 field")
     );
@@ -179,7 +181,7 @@ class PdfPaginationUtilTest {
 
     final var fields = List.of(field);
 
-    final var overflow = new OverFlowLineSplit("Text", "to split");
+    final var overflow = new OverFlowLineSplit("Text", Collections.singletonList("to split"));
 
     when(textUtil.getOverflowingLines(anyList(), any(PdfField.class), any(PDRectangle.class),
         anyFloat(), any(PDFont.class)))
@@ -208,7 +210,7 @@ class PdfPaginationUtilTest {
 
     final var fields = List.of(field);
 
-    final var overflow = new OverFlowLineSplit("Text", "to split");
+    final var overflow = new OverFlowLineSplit("Text", Collections.singletonList("to split"));
 
     when(textUtil.getOverflowingLines(anyList(), any(PdfField.class), any(PDRectangle.class),
         anyFloat(), any(PDFont.class)))
@@ -238,7 +240,7 @@ class PdfPaginationUtilTest {
 
     final var fields = List.of(field);
 
-    final var overflow = new OverFlowLineSplit("Text", "to split");
+    final var overflow = new OverFlowLineSplit("Text", Collections.singletonList("to split"));
 
     when(textUtil.getOverflowingLines(anyList(), any(PdfField.class), any(PDRectangle.class),
         anyFloat(), any(PDFont.class)))
@@ -273,7 +275,8 @@ class PdfPaginationUtilTest {
 
     final var fields = List.of(field1, field2, field3);
 
-    final var overflow = new OverFlowLineSplit("Second field", "with overflow");
+    final var overflow = new OverFlowLineSplit("Second field",
+        Collections.singletonList("with overflow"));
 
     when(textUtil.getOverflowingLines(anyList(), eq(field1), any(PDRectangle.class), anyFloat(),
         any(PDFont.class)))
@@ -309,7 +312,7 @@ class PdfPaginationUtilTest {
 
     final var fields = List.of(field);
 
-    final var overflow = new OverFlowLineSplit("Text with only part one", null);
+    final var overflow = new OverFlowLineSplit("Text with only part one", List.of());
 
     when(textUtil.getOverflowingLines(anyList(), any(PdfField.class), any(PDRectangle.class),
         anyFloat(), any(PDFont.class)))
@@ -360,7 +363,7 @@ class PdfPaginationUtilTest {
 
     final var fields = List.of(field);
 
-    final var overflow = new OverFlowLineSplit(null, "overflow part");
+    final var overflow = new OverFlowLineSplit(null, Collections.singletonList("overflow part"));
 
     when(textUtil.getOverflowingLines(anyList(), any(PdfField.class), any(PDRectangle.class),
         anyFloat(), any(PDFont.class)))
@@ -378,6 +381,36 @@ class PdfPaginationUtilTest {
             "Second page field should have original ID"),
         () -> assertEquals("overflow part", result.get(1).getFirst().getValue(),
             "Second page should have partTwo value")
+    );
+  }
+
+  @Test
+  void shouldReturnMultiplePagesWhenFieldOverflowsMultipleTimes() {
+    setupOverflowField(new PDRectangle(100, 100));
+    setupContext();
+
+    final var field = PdfField.builder()
+        .id("field1")
+        .value("Text that overflows multiple times and needs to be split into several pages")
+        .appearance(DEFAULT_APPEARANCE)
+        .build();
+
+    when(textUtil.getOverflowingLines(anyList(), any(PdfField.class), any(PDRectangle.class),
+        anyFloat(), any(PDFont.class)))
+        .thenReturn(Optional.of(new OverFlowLineSplit("Text that overflows multiple times",
+            List.of("and needs to be split", "into several pages"))));
+
+    final var result = pdfPaginationUtil.paginateFields(context, List.of(field), overflowField);
+
+    assertAll(
+        () -> assertEquals(3, result.size(), "Should create 3 pages"),
+        () -> assertEquals("Text that overflows multiple times",
+            result.getFirst().getFirst().getValue(),
+            "First page should have part one"),
+        () -> assertEquals("and needs to be split", result.get(1).getFirst().getValue(),
+            "Second page should have part two"),
+        () -> assertEquals("into several pages", result.get(2).getFirst().getValue(),
+            "Third page should have part three")
     );
   }
 

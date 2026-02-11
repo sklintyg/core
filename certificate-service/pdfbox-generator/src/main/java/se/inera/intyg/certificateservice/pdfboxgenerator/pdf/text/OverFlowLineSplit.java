@@ -1,5 +1,7 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text;
 
-public record OverFlowLineSplit(String partOne, String partTwo) {
+import java.util.List;
+
+public record OverFlowLineSplit(String partOne, List<String> overflowPages) {
 
 }

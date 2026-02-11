@@ -3,6 +3,7 @@ package se.inera.intyg.certificateservice.pdfboxgenerator.pdf.text;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
@@ -101,12 +102,11 @@ class TextUtilTest {
 
     @Test
     void shouldReturnTrueIfOverflowingTextAndTryingToAddMore() {
-      final var rectangle = new PDRectangle(FONT_SIZE, FONT_SIZE);
 
       final var response = textUtil.getOverflowingLines(
           List.of(LONG_FIELD),
           SHORT_FIELD,
-          rectangle,
+          RECTANGLE_100_40,
           12,
           new PDType1Font(FontName.HELVETICA)
       );
@@ -153,6 +153,40 @@ class TextUtilTest {
 
       assertTrue(response.isPresent());
     }
+
+    @Test
+    void shouldReturnMultipleElementsIfOverflowingOverSeveralPages() {
+      final var veryLongText = TEXT_LONGER_THAN_100_40.repeat(10);
+      final var longField = PdfField.builder()
+          .value(veryLongText)
+          .id("ID5")
+          .build();
+
+      final var response = textUtil.getOverflowingLines(
+          List.of(longField),
+          LONG_FIELD,
+          RECTANGLE_100_40,
+          12,
+          new PDType1Font(FontName.HELVETICA)
+      ).orElseThrow();
+
+      assertTrue(response.overflowPages().size() > 1);
+    }
+
+    @Test
+    void shouldThrowExceptionIfAvailableLinesIsNegative() {
+      final var fields = List.of(LONG_FIELD);
+      final var rectangle = new PDRectangle(FONT_SIZE, FONT_SIZE);
+      final var font = new PDType1Font(FontName.HELVETICA);
+
+      assertThrows(IllegalStateException.class, () -> textUtil.getOverflowingLines(
+          fields,
+          LONG_FIELD,
+          rectangle,
+          12,
+          font
+      ));
+    }
   }
 
   @Nested
@@ -160,12 +194,11 @@ class TextUtilTest {
 
     @Test
     void shouldReturnTrueIfOverflowingTextAndTryingToAddMore() {
-      final var rectangle = new PDRectangle(FONT_SIZE, FONT_SIZE);
 
       final var response = textUtil.getOverflowingLines(
           List.of(LONG_FIELD_WITH_TAB),
           SHORT_FIELD,
-          rectangle,
+          RECTANGLE_100_40,
           12,
           new PDType1Font(FontName.HELVETICA)
       );
