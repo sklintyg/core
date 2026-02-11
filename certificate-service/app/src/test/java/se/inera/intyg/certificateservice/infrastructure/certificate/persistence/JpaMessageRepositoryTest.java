@@ -403,8 +403,8 @@ class JpaMessageRepositoryTest {
           List.of(PATIENT_ID), MAX_DAYS);
 
       assertEquals(1, result.size());
-      assertEquals("cert123", result.get(0).certificateId());
-      assertEquals(5, result.get(0).messageCount());
+      assertEquals("cert123", result.getFirst().certificateId());
+      assertEquals(5, result.getFirst().messageCount());
     }
 
     @Test

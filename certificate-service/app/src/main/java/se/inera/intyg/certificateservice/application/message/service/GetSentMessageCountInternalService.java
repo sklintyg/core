@@ -10,22 +10,18 @@ import org.springframework.stereotype.Service;
 import se.inera.intyg.certificateservice.application.GetSentInternalResponse;
 import se.inera.intyg.certificateservice.domain.message.model.UnansweredQAs;
 import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateEntityRepository;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.PatientEntityRepository;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class GetSentMessageInternalService {
+public class GetSentMessageCountInternalService {
 
   private final MessageRepository messageRepository;
-  private final PatientEntityRepository patientEntityRepository;
-  private final CertificateEntityRepository certificateEntityRepository;
 
   public GetSentInternalResponse get(List<String> patientIds,
       Integer maxDaysOfUnansweredCommunication) {
-    if (patientIds == null || patientIds.isEmpty()) {
-      log.warn("No patient IDs provided for sent communication lookup");
+    if (Objects.isNull(patientIds) || patientIds.isEmpty()) {
+      log.warn("No patient IDs provided for sent message count lookup");
       return GetSentInternalResponse.builder()
           .messages(Map.of())
           .build();
@@ -46,9 +42,8 @@ public class GetSentMessageInternalService {
     try {
       processPatientMessages(sanitisedPatientIds, messages, maxDaysOfUnansweredCommunication);
     } catch (IllegalArgumentException e) {
-      log.warn("Failed to process messages for patients" + e.getMessage());
+      log.warn("Failed to process messages for patients{}", e.getMessage());
     }
-    ;
 
     return GetSentInternalResponse.builder()
         .messages(messages)
@@ -61,7 +56,7 @@ public class GetSentMessageInternalService {
     final var messageList = messageRepository.findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
         patientIds, maxDaysOfUnansweredCommunication);
 
-    messageList.stream().forEach(message -> {
+    messageList.forEach(message -> {
       messages.put(
           message.certificateId(),
           UnansweredQAs.builder()

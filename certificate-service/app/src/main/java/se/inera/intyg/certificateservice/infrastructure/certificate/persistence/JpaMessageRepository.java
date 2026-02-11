@@ -139,14 +139,13 @@ public class JpaMessageRepository implements TestabilityMessageRepository {
     final var certificateMessageCounts = certificateMessageCountRepository.getMessageCountForCertificates(
         patientIds, maxDaysOfUnansweredCommunication);
 
-    return certificateMessageCounts.isPresent()
-        ? certificateMessageCounts.get().stream()
-        .map(certificateMessageCount ->
-            CertificateMessageCount.builder()
-                .certificateId(certificateMessageCount.getCertificateId())
-                .messageCount(certificateMessageCount.getMessageCount())
-                .build()).toList()
-        : List.of();
+    return certificateMessageCounts.map(
+        certificateMessageCountEntities -> certificateMessageCountEntities.stream()
+            .map(certificateMessageCount ->
+                CertificateMessageCount.builder()
+                    .certificateId(certificateMessageCount.getCertificateId())
+                    .messageCount(certificateMessageCount.getMessageCount())
+                    .build()).toList()).orElseGet(List::of);
   }
 
   private boolean messageIsValidType(Message message) {

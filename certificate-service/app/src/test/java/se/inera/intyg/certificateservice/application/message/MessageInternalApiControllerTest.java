@@ -19,7 +19,7 @@ import se.inera.intyg.certificateservice.application.message.dto.GetMessageInter
 import se.inera.intyg.certificateservice.application.message.dto.QuestionDTO;
 import se.inera.intyg.certificateservice.application.message.service.GetCertificateMessageInternalService;
 import se.inera.intyg.certificateservice.application.message.service.GetMessageInternalXmlService;
-import se.inera.intyg.certificateservice.application.message.service.GetSentMessageInternalService;
+import se.inera.intyg.certificateservice.application.message.service.GetSentMessageCountInternalService;
 import se.inera.intyg.certificateservice.domain.message.model.UnansweredQAs;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,7 +30,7 @@ class MessageInternalApiControllerTest {
   @Mock
   private GetCertificateMessageInternalService getCertificateMessageInternalService;
   @Mock
-  private GetSentMessageInternalService getSentMessageInternalService;
+  private GetSentMessageCountInternalService getSentMessageCountInternalService;
   @InjectMocks
   private MessageInternalApiController messageInternalApiController;
 
@@ -63,7 +63,7 @@ class MessageInternalApiControllerTest {
   }
 
   @Test
-  void shallReturnGetUnansweredCommunicationInternalResponse() {
+  void shallReturnGetSentInternalResponse() {
     final var patientIds = List.of("patient-1", "patient-2");
     final var maxDays = 7;
     final var request = GetSentInternalRequest.builder()
@@ -75,7 +75,7 @@ class MessageInternalApiControllerTest {
         .messages(Map.of("certificateId", UnansweredQAs.builder().complement(1).build()))
         .build();
 
-    doReturn(expectedResult).when(getSentMessageInternalService).get(patientIds, maxDays);
+    doReturn(expectedResult).when(getSentMessageCountInternalService).get(patientIds, maxDays);
 
     final var actualResult = messageInternalApiController.getSentMessages(request);
 

@@ -14,7 +14,7 @@ import se.inera.intyg.certificateservice.application.message.dto.GetCertificateM
 import se.inera.intyg.certificateservice.application.message.dto.GetMessageInternalXmlResponse;
 import se.inera.intyg.certificateservice.application.message.service.GetCertificateMessageInternalService;
 import se.inera.intyg.certificateservice.application.message.service.GetMessageInternalXmlService;
-import se.inera.intyg.certificateservice.application.message.service.GetSentMessageInternalService;
+import se.inera.intyg.certificateservice.application.message.service.GetSentMessageCountInternalService;
 import se.inera.intyg.certificateservice.logging.PerformanceLogging;
 
 @RequiredArgsConstructor
@@ -24,7 +24,7 @@ public class MessageInternalApiController {
 
   private final GetMessageInternalXmlService getMessageInternalXmlService;
   private final GetCertificateMessageInternalService getCertificateMessageInternalService;
-  private final GetSentMessageInternalService getSentMessageInternalService;
+  private final GetSentMessageCountInternalService getSentMessageCountInternalService;
 
   @PostMapping("/{messageId}/xml")
   @PerformanceLogging(eventAction = "internal-retrieve-message-xml", eventType = EVENT_TYPE_ACCESSED)
@@ -40,10 +40,10 @@ public class MessageInternalApiController {
   }
 
   @PostMapping("/sent")
-  @PerformanceLogging(eventAction = "internal-retrieve-sent-messages", eventType = EVENT_TYPE_ACCESSED)
+  @PerformanceLogging(eventAction = "internal-retrieve-sent-message-count", eventType = EVENT_TYPE_ACCESSED)
   GetSentInternalResponse getSentMessages(
       @RequestBody GetSentInternalRequest request) {
-    return getSentMessageInternalService.get(request.getPatientId(),
+    return getSentMessageCountInternalService.get(request.getPatientId(),
         request.getMaxDaysOfUnansweredCommunication());
   }
 }
