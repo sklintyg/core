@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
@@ -170,17 +171,37 @@ public class TextUtil {
     var availableLineSpaces = (int) Math.max(Math.floor(
         (rectangle.getHeight() - Y_MARGIN_APPENDIX_PAGE - currentTextHeight) / lineHeight), 0);
 
+    final var avaiableLinesEmptyPage = (int) Math.max(Math.floor(
+        (rectangle.getHeight() - Y_MARGIN_APPENDIX_PAGE) / lineHeight), 0);
+
+    if (avaiableLinesEmptyPage <= 0) {
+      throw new IllegalStateException(
+          "Not enough space to add any text to the page. Available lines on empty page: %s".formatted(
+              avaiableLinesEmptyPage));
+    }
     for (String line : lines) {
       wrappedLines.addAll(wrapLine(line, rectangle.getWidth(), fontSize, font));
     }
 
     if (wrappedLines.size() > availableLineSpaces) {
       var overFlowInfo = new OverFlowLineSplit(
-          String.join("\n", wrappedLines.subList(0, availableLineSpaces)), String.join("\n",
-          wrappedLines.subList(availableLineSpaces, wrappedLines.size())) + "\n");
+          String.join("\n", wrappedLines.subList(0, availableLineSpaces)),
+          getOverflowPages(availableLineSpaces, wrappedLines, avaiableLinesEmptyPage));
       return Optional.of(overFlowInfo);
     } else {
       return Optional.empty();
     }
+  }
+
+  private List<String> getOverflowPages(int availableLineSpaces,
+      List<String> wrappedLines, int avaiableLinesEmptyPage) {
+    return IntStream
+        .iterate(availableLineSpaces, i -> i < wrappedLines.size(),
+            i -> i + avaiableLinesEmptyPage)
+        .mapToObj(start -> {
+          final var end = Math.min(start + avaiableLinesEmptyPage, wrappedLines.size());
+          return String.join("\n", wrappedLines.subList(start, end)) + "\n";
+        })
+        .toList();
   }
 }

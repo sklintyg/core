@@ -1,5 +1,8 @@
 package se.inera.intyg.certificateservice.pdfboxgenerator.pdf;
 
-public record FieldSplit(PdfField first, PdfField second) {
+import java.util.List;
+
+public record FieldSplit(PdfField first, List<List<PdfField>> overflows) {
+
 
 }
