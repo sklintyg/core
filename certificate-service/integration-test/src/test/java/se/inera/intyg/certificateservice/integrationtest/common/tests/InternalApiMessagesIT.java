@@ -50,7 +50,7 @@ public abstract class InternalApiMessagesIT extends BaseIntegrationIT {
 
     assertAll(
         () -> assertEquals(1, messages.size()),
-        () -> assertEquals(certificateId(testCertificates), messages.get(0).getCertificateId())
+        () -> assertEquals(certificateId(testCertificates), messages.getFirst().getCertificateId())
     );
   }
 
@@ -76,8 +76,8 @@ public abstract class InternalApiMessagesIT extends BaseIntegrationIT {
     );
 
     final var request = GetSentInternalRequest.builder()
-        .patientId(List.of(ATHENA_REACT_ANDERSSON_DTO.getId().getId()))
-        .maxDaysOfUnansweredCommunication(7)
+        .patientIdList(List.of(ATHENA_REACT_ANDERSSON_DTO.getId().getId()))
+        .maxDays(7)
         .build();
 
     final var response = internalApi().getUnansweredCommunicationMessages(request);

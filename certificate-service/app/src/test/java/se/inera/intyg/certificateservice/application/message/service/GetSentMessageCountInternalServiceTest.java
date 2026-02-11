@@ -64,9 +64,10 @@ class GetSentMessageCountInternalServiceTest {
 
     @Test
     void shallSkipNullPatientId() {
+      final var INVALID_PATIENT_ID = "9999-9999-9999-9999";
       final var patientIds = new ArrayList<String>();
       patientIds.add(ATHENA_REACT_ANDERSSON_ID);
-      patientIds.add(null);
+      patientIds.add(INVALID_PATIENT_ID);
       final var certId = "certA";
       doReturn(List.of(
           se.inera.intyg.certificateservice.domain.message.model.CertificateMessageCount.builder()
@@ -204,8 +205,8 @@ class GetSentMessageCountInternalServiceTest {
       final var result = getSentMessageCountInternalService.get(patientIds, MAX_DAYS);
 
       assertEquals(1, result.getMessages().size());
-      assertTrue(result.getMessages().containsKey(messages.get(0).certificateId()));
-      assertEquals(2, result.getMessages().get(messages.get(0).certificateId()).complement());
+      assertTrue(result.getMessages().containsKey(messages.getFirst().certificateId()));
+      assertEquals(2, result.getMessages().get(messages.getFirst().certificateId()).complement());
     }
 
     @Test

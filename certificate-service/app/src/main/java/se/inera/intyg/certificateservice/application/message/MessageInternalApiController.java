@@ -43,7 +43,7 @@ public class MessageInternalApiController {
   @PerformanceLogging(eventAction = "internal-retrieve-sent-message-count", eventType = EVENT_TYPE_ACCESSED)
   GetSentInternalResponse getSentMessages(
       @RequestBody GetSentInternalRequest request) {
-    return getSentMessageCountInternalService.get(request.getPatientId(),
-        request.getMaxDaysOfUnansweredCommunication());
+    return getSentMessageCountInternalService.get(request.getPatientIdList(),
+        request.getMaxDays());
   }
 }

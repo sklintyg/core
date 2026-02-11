@@ -13,8 +13,8 @@ import se.inera.intyg.certificateservice.application.certificate.dto.GetSentInte
 @Builder
 public class GetSentInternalRequest {
 
-  List<String> patientId;
-  Integer maxDaysOfUnansweredCommunication;
+  List<String> patientIdList;
+  int maxDays;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class GetSentInternalRequestBuilder {

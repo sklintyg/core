@@ -67,8 +67,8 @@ class MessageInternalApiControllerTest {
     final var patientIds = List.of("patient-1", "patient-2");
     final var maxDays = 7;
     final var request = GetSentInternalRequest.builder()
-        .patientId(patientIds)
-        .maxDaysOfUnansweredCommunication(maxDays)
+        .patientIdList(patientIds)
+        .maxDays(maxDays)
         .build();
 
     final var expectedResult = GetSentInternalResponse.builder()

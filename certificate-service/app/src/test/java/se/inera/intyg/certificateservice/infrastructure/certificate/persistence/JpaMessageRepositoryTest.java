@@ -36,7 +36,6 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageRelationEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.MessageEntityMapper;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateMessageCountEntity;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateMessageCountRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntitySpecificationFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageRelationEntityRepository;
@@ -59,9 +58,6 @@ class JpaMessageRepositoryTest {
 
   @Mock
   private MessageEntitySpecificationFactory messageEntitySpecificationFactory;
-
-  @Mock
-  private CertificateMessageCountRepository certificateMessageCountRepository;
 
   @InjectMocks
   private JpaMessageRepository jpaMessageRepository;
@@ -381,9 +377,9 @@ class JpaMessageRepositoryTest {
 
     @Test
     void shallReturnEmptyListWhenNoMessagesFound() {
-      when(certificateMessageCountRepository.getMessageCountForCertificates(
+      when(messageEntityRepository.getMessageCountForCertificates(
           List.of(PATIENT_ID), MAX_DAYS))
-          .thenReturn(Optional.empty());
+          .thenReturn(List.of());
 
       final var result = jpaMessageRepository.findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
           List.of(PATIENT_ID), MAX_DAYS);
@@ -393,11 +389,21 @@ class JpaMessageRepositoryTest {
 
     @Test
     void shallReturnMessageWhenOneMessageFound() {
-      final var entity = new CertificateMessageCountEntity("cert123", 5);
+      final var entity = new CertificateMessageCountEntity() {
+        @Override
+        public String getCertificateId() {
+          return "cert123";
+        }
 
-      when(certificateMessageCountRepository.getMessageCountForCertificates(
+        @Override
+        public Integer getMessageCount() {
+          return 5;
+        }
+      };
+
+      when(messageEntityRepository.getMessageCountForCertificates(
           List.of(PATIENT_ID), MAX_DAYS))
-          .thenReturn(Optional.of(List.of(entity)));
+          .thenReturn(List.of(entity));
 
       final var result = jpaMessageRepository.findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
           List.of(PATIENT_ID), MAX_DAYS);
@@ -409,12 +415,33 @@ class JpaMessageRepositoryTest {
 
     @Test
     void shallReturnMultipleMessagesWhenMultipleMessagesFound() {
-      final var entity1 = new CertificateMessageCountEntity("cert123", 5);
-      final var entity2 = new CertificateMessageCountEntity("cert456", 3);
+      final var entity1 = new CertificateMessageCountEntity() {
+        @Override
+        public String getCertificateId() {
+          return "cert123";
+        }
 
-      when(certificateMessageCountRepository.getMessageCountForCertificates(
+        @Override
+        public Integer getMessageCount() {
+          return 5;
+        }
+      };
+
+      final var entity2 = new CertificateMessageCountEntity() {
+        @Override
+        public String getCertificateId() {
+          return "cert456";
+        }
+
+        @Override
+        public Integer getMessageCount() {
+          return 3;
+        }
+      };
+
+      when(messageEntityRepository.getMessageCountForCertificates(
           List.of(PATIENT_ID), MAX_DAYS))
-          .thenReturn(Optional.of(List.of(entity1, entity2)));
+          .thenReturn(List.of(entity1, entity2));
 
       final var result = jpaMessageRepository.findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
           List.of(PATIENT_ID), MAX_DAYS);
@@ -428,14 +455,14 @@ class JpaMessageRepositoryTest {
 
     @Test
     void shallCallRepositoryWithCorrectParameters() {
-      when(certificateMessageCountRepository.getMessageCountForCertificates(
+      when(messageEntityRepository.getMessageCountForCertificates(
           List.of(PATIENT_ID), MAX_DAYS))
-          .thenReturn(Optional.empty());
+          .thenReturn(List.of());
 
       jpaMessageRepository.findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
           List.of(PATIENT_ID), MAX_DAYS);
 
-      verify(certificateMessageCountRepository).getMessageCountForCertificates(
+      verify(messageEntityRepository).getMessageCountForCertificates(
           List.of(PATIENT_ID), MAX_DAYS);
     }
   }

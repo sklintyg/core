@@ -12,7 +12,6 @@ import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.MessageEntityMapper;
-import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateMessageCountRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntitySpecificationFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageRelationEntityRepository;
@@ -24,7 +23,6 @@ import se.inera.intyg.certificateservice.testability.certificate.service.reposit
 public class JpaMessageRepository implements TestabilityMessageRepository {
 
   private final MessageEntityRepository messageEntityRepository;
-  private final CertificateMessageCountRepository certificateMessageCountRepository;
   private final MessageEntityMapper messageEntityMapper;
   private final MessageRelationRepository messageRelationRepository;
   private final MessageRelationEntityRepository messageRelationEntityRepository;
@@ -134,18 +132,18 @@ public class JpaMessageRepository implements TestabilityMessageRepository {
 
   @Override
   public List<CertificateMessageCount> findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
-      List<String> patientIds, Integer maxDaysOfUnansweredCommunication) {
+      List<String> patientIds, int maxDays) {
 
-    final var certificateMessageCounts = certificateMessageCountRepository.getMessageCountForCertificates(
-        patientIds, maxDaysOfUnansweredCommunication);
+    final var certificateMessageCounts = messageEntityRepository.getMessageCountForCertificates(
+        patientIds, maxDays);
 
-    return certificateMessageCounts.map(
-        certificateMessageCountEntities -> certificateMessageCountEntities.stream()
-            .map(certificateMessageCount ->
-                CertificateMessageCount.builder()
-                    .certificateId(certificateMessageCount.getCertificateId())
-                    .messageCount(certificateMessageCount.getMessageCount())
-                    .build()).toList()).orElseGet(List::of);
+    return certificateMessageCounts.stream().map(certificateMessageCount ->
+        CertificateMessageCount.builder()
+            .certificateId(certificateMessageCount.getCertificateId())
+            .messageCount(certificateMessageCount.getMessageCount())
+            .build()
+    ).toList();
+
   }
 
   private boolean messageIsValidType(Message message) {
