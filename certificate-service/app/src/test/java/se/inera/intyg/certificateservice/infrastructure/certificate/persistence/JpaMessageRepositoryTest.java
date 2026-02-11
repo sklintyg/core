@@ -396,8 +396,13 @@ class JpaMessageRepositoryTest {
         }
 
         @Override
-        public Integer getMessageCount() {
+        public Integer getComplementsCount() {
           return 5;
+        }
+
+        @Override
+        public Integer getOthersCount() {
+          return 1;
         }
       };
 
@@ -410,7 +415,8 @@ class JpaMessageRepositoryTest {
 
       assertEquals(1, result.size());
       assertEquals("cert123", result.getFirst().certificateId());
-      assertEquals(5, result.getFirst().messageCount());
+      assertEquals(5, result.getFirst().complementsCount());
+      assertEquals(1, result.getFirst().othersCount());
     }
 
     @Test
@@ -422,8 +428,13 @@ class JpaMessageRepositoryTest {
         }
 
         @Override
-        public Integer getMessageCount() {
+        public Integer getComplementsCount() {
           return 5;
+        }
+
+        @Override
+        public Integer getOthersCount() {
+          return 1;
         }
       };
 
@@ -434,8 +445,13 @@ class JpaMessageRepositoryTest {
         }
 
         @Override
-        public Integer getMessageCount() {
+        public Integer getComplementsCount() {
           return 3;
+        }
+
+        @Override
+        public Integer getOthersCount() {
+          return 2;
         }
       };
 
@@ -448,9 +464,11 @@ class JpaMessageRepositoryTest {
 
       assertEquals(2, result.size());
       assertEquals("cert123", result.get(0).certificateId());
-      assertEquals(5, result.get(0).messageCount());
+      assertEquals(5, result.get(0).complementsCount());
+      assertEquals(1, result.get(0).othersCount());
       assertEquals("cert456", result.get(1).certificateId());
-      assertEquals(3, result.get(1).messageCount());
+      assertEquals(3, result.get(1).complementsCount());
+      assertEquals(2, result.get(1).othersCount());
     }
 
     @Test

@@ -60,7 +60,8 @@ public class GetSentMessageCountInternalService {
     messageList.forEach(message -> messages.put(
         message.certificateId(),
         UnansweredQAs.builder()
-            .complement(message.messageCount())
+            .complement(message.complementsCount())
+            .others(message.othersCount())
             .build()));
   }
 }

@@ -19,12 +19,16 @@ public interface MessageEntityRepository extends CrudRepository<MessageEntity, L
 
   void deleteAllByIdIn(List<String> messageIds);
 
-  @Query(value = "SELECT c.certificate_id AS certificateId, COUNT(m.message_id) AS messageCount " +
+  @Query(value = "SELECT c.certificate_id AS certificateId, " +
+      "SUM(CASE WHEN mt.type = 'COMPLEMENT' THEN 1 ELSE 0 END) AS complementsCount, " +
+      "SUM(CASE WHEN mt.type IN ('OTHER', 'CONTACT', 'COORDINATION', 'ANSWER') THEN 1 ELSE 0 END) AS othersCount "
+      +
       "FROM certificate c " +
       "JOIN message m ON m.certificate_key = c.key " +
+      "JOIN message_type mt ON m.message_type_key = mt.key " +
       "JOIN patient p ON c.patient_key = p.key " +
       "JOIN message_status ms ON m.message_status_key = ms.key " +
-      "WHERE p.patient_id IN :patientIds AND m.created >= :maxDays AND m.author = 'FK' AND ms.status = 'SENT' "
+      "WHERE p.patient_id IN :patientIds AND m.created >= DATE_SUB(NOW(), INTERVAL :maxDays DAY) AND m.author = 'FK' AND ms.status = 'SENT' "
       +
       "GROUP BY c.certificate_id", nativeQuery = true)
   List<CertificateMessageCountEntity> getMessageCountForCertificates(

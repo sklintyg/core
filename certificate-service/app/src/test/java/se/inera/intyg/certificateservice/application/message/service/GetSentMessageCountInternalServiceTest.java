@@ -71,7 +71,7 @@ class GetSentMessageCountInternalServiceTest {
       final var certId = "certA";
       doReturn(List.of(
           se.inera.intyg.certificateservice.domain.message.model.CertificateMessageCount.builder()
-              .certificateId(certId).messageCount(1).build()
+              .certificateId(certId).complementsCount(1).othersCount(1).build()
       )).when(messageRepository)
           .findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
               List.of(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH),
@@ -89,7 +89,7 @@ class GetSentMessageCountInternalServiceTest {
       final var certId = "certB";
       doReturn(List.of(
           se.inera.intyg.certificateservice.domain.message.model.CertificateMessageCount.builder()
-              .certificateId(certId).messageCount(1).build()
+              .certificateId(certId).complementsCount(1).othersCount(1).build()
       )).when(messageRepository)
           .findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
               List.of(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH),
@@ -128,7 +128,7 @@ class GetSentMessageCountInternalServiceTest {
 
       doReturn(List.of(
           se.inera.intyg.certificateservice.domain.message.model.CertificateMessageCount.builder()
-              .certificateId(certId).messageCount(1).build()
+              .certificateId(certId).complementsCount(1).othersCount(1).build()
       )).when(messageRepository)
           .findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
               List.of(validPatientId, invalidPatientId),
@@ -148,9 +148,9 @@ class GetSentMessageCountInternalServiceTest {
 
       doReturn(List.of(
           se.inera.intyg.certificateservice.domain.message.model.CertificateMessageCount.builder()
-              .certificateId("cert1").messageCount(1).build(),
+              .certificateId("cert1").complementsCount(1).othersCount(1).build(),
           se.inera.intyg.certificateservice.domain.message.model.CertificateMessageCount.builder()
-              .certificateId("cert2").messageCount(2).build()
+              .certificateId("cert2").complementsCount(2).othersCount(1).build()
       )).when(messageRepository)
           .findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
               List.of(patientId1, patientId2),
@@ -170,7 +170,7 @@ class GetSentMessageCountInternalServiceTest {
       final var patientIds = List.of(ATHENA_REACT_ANDERSSON_ID);
 
       final var message1 = se.inera.intyg.certificateservice.domain.message.model.CertificateMessageCount.builder()
-          .certificateId("certX").messageCount(1).build();
+          .certificateId("certX").complementsCount(1).othersCount(1).build();
       doReturn(List.of(message1)).when(messageRepository)
           .findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
               List.of(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH),
@@ -192,9 +192,9 @@ class GetSentMessageCountInternalServiceTest {
       final var patientIds = List.of(ATHENA_REACT_ANDERSSON_ID);
       final var messages = List.of(
           se.inera.intyg.certificateservice.domain.message.model.CertificateMessageCount.builder()
-              .certificateId("certY").messageCount(2).build(),
+              .certificateId("certY").complementsCount(2).othersCount(1).build(),
           se.inera.intyg.certificateservice.domain.message.model.CertificateMessageCount.builder()
-              .certificateId("certY").messageCount(2).build()
+              .certificateId("certY").complementsCount(2).othersCount(1).build()
       );
 
       doReturn(messages).when(messageRepository)
@@ -214,11 +214,11 @@ class GetSentMessageCountInternalServiceTest {
       final var patientIds = List.of(ATHENA_REACT_ANDERSSON_ID);
 
       final var message1 = se.inera.intyg.certificateservice.domain.message.model.CertificateMessageCount.builder()
-          .certificateId("certZ").messageCount(3).build();
+          .certificateId("certZ").complementsCount(3).othersCount(1).build();
       final var message2 = se.inera.intyg.certificateservice.domain.message.model.CertificateMessageCount.builder()
-          .certificateId("certZ").messageCount(3).build();
+          .certificateId("certZ").complementsCount(3).othersCount(1).build();
       final var message3 = se.inera.intyg.certificateservice.domain.message.model.CertificateMessageCount.builder()
-          .certificateId("certZ").messageCount(3).build();
+          .certificateId("certZ").complementsCount(3).othersCount(1).build();
       doReturn(List.of(message1, message2, message3)).when(messageRepository)
           .findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
               List.of(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH),

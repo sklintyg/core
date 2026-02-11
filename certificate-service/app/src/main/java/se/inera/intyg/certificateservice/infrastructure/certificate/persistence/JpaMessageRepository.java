@@ -140,7 +140,8 @@ public class JpaMessageRepository implements TestabilityMessageRepository {
     return certificateMessageCounts.stream().map(certificateMessageCount ->
         CertificateMessageCount.builder()
             .certificateId(certificateMessageCount.getCertificateId())
-            .messageCount(certificateMessageCount.getMessageCount())
+            .complementsCount(certificateMessageCount.getComplementsCount())
+            .othersCount(certificateMessageCount.getOthersCount())
             .build()
     ).toList();
 

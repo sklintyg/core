@@ -14,6 +14,8 @@ public class UnansweredQAs {
 
   @JsonProperty("complement")
   int complement;
+  @JsonProperty("others")
+  int others;
 
   @JsonPOJOBuilder(withPrefix = "")
   public static class UnansweredQAsBuilder {
