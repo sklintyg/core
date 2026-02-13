@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.MessageEntityMapper;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateMessageCountEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntitySpecificationFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageRelationEntityRepository;
@@ -22,6 +24,7 @@ import se.inera.intyg.certificateservice.testability.certificate.service.reposit
 @RequiredArgsConstructor
 public class JpaMessageRepository implements TestabilityMessageRepository {
 
+  private static final int BATCH_SIZE = 1000;
   private final MessageEntityRepository messageEntityRepository;
   private final MessageEntityMapper messageEntityMapper;
   private final MessageRelationRepository messageRelationRepository;
@@ -134,10 +137,15 @@ public class JpaMessageRepository implements TestabilityMessageRepository {
   public List<CertificateMessageCount> findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
       List<String> patientIds, int maxDays) {
 
-    final var certificateMessageCounts = messageEntityRepository.getMessageCountForCertificates(
-        patientIds, maxDays);
+    final var results = new ArrayList<CertificateMessageCountEntity>();
 
-    return certificateMessageCounts.stream().map(certificateMessageCount ->
+    for (int i = 0; i < patientIds.size(); i += BATCH_SIZE) {
+      List<String> batch = patientIds.subList(i,
+          Math.min(i + BATCH_SIZE, patientIds.size()));
+      results.addAll(messageEntityRepository.getMessageCountForCertificates(batch, maxDays));
+    }
+
+    return results.stream().map(certificateMessageCount ->
         CertificateMessageCount.builder()
             .certificateId(certificateMessageCount.getCertificateId())
             .complementsCount(certificateMessageCount.getComplementsCount())

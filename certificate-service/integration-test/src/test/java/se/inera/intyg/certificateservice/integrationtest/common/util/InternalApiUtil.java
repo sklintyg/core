@@ -219,9 +219,7 @@ public class InternalApiUtil {
 
   public ResponseEntity<GetSentInternalResponse> getUnansweredCommunicationMessages(
       GetSentInternalRequest request) {
-    final var requestUrl = "http://localhost:%s/internalapi/message/unaswered-communication".formatted(
-        port
-    );
+    final var requestUrl = "http://localhost:%s/internalapi/message/sent".formatted(port);
 
     final var headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
