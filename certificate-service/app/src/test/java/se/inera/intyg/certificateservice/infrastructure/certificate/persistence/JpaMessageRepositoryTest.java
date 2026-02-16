@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -17,6 +18,7 @@ import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessage.
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataMessageConstants.MESSAGE_ID;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +30,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.jpa.domain.Specification;
 import se.inera.intyg.certificateservice.domain.common.model.MessagesRequest;
+import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
@@ -35,6 +38,7 @@ import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageRelationEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.MessageEntityMapper;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateMessageCountEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntitySpecificationFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageRelationEntityRepository;
@@ -56,7 +60,7 @@ class JpaMessageRepositoryTest {
   private MessageEntityRepository messageEntityRepository;
 
   @Mock
-  MessageEntitySpecificationFactory messageEntitySpecificationFactory;
+  private MessageEntitySpecificationFactory messageEntitySpecificationFactory;
 
   @InjectMocks
   private JpaMessageRepository jpaMessageRepository;
@@ -365,6 +369,146 @@ class JpaMessageRepositoryTest {
       final var response = jpaMessageRepository.findByMessagesRequest(request);
 
       assertEquals(List.of(expectedMessage), response);
+    }
+  }
+
+  @Nested
+  class FindMessagesByPatientKeyAndStatusSentAndCreatedAfter {
+
+    private static final String PATIENT_ID = "191212121212";
+    private static final Integer MAX_DAYS = 7;
+
+    private static CertificateMessageCountEntity createEntity(String certificateId, int complements,
+        int others) {
+      return new CertificateMessageCountEntity() {
+        @Override
+        public String getCertificateId() {
+          return certificateId;
+        }
+
+        @Override
+        public int getComplementsCount() {
+          return complements;
+        }
+
+        @Override
+        public int getOthersCount() {
+          return others;
+        }
+      };
+    }
+
+    @Test
+    void shallReturnEmptyListWhenNoMessagesFound() {
+      when(messageEntityRepository.getMessageCountForCertificates(
+          List.of(PATIENT_ID), MAX_DAYS))
+          .thenReturn(List.of());
+
+      final var result = jpaMessageRepository.findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
+          List.of(PersonId.builder().id(PATIENT_ID).build()), MAX_DAYS);
+
+      assertEquals(Collections.emptyList(), result);
+    }
+
+    @Test
+    void shallReturnMessageWhenOneMessageFound() {
+      final var entity = createEntity("cert123", 5, 1);
+
+      when(messageEntityRepository.getMessageCountForCertificates(
+          List.of(PATIENT_ID), MAX_DAYS))
+          .thenReturn(List.of(entity));
+
+      final var result = jpaMessageRepository.findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
+          List.of(PersonId.builder().id(PATIENT_ID).build()), MAX_DAYS);
+
+      assertEquals(1, result.size());
+      assertEquals("cert123", result.getFirst().certificateId().id());
+      assertEquals(5, result.getFirst().complementsCount());
+      assertEquals(1, result.getFirst().othersCount());
+    }
+
+    @Test
+    void shallReturnMultipleMessagesWhenMultipleMessagesFound() {
+      final var entity1 = createEntity("cert123", 5, 1);
+      final var entity2 = createEntity("cert456", 3, 2);
+
+      when(messageEntityRepository.getMessageCountForCertificates(
+          List.of(PATIENT_ID), MAX_DAYS))
+          .thenReturn(List.of(entity1, entity2));
+
+      final var result = jpaMessageRepository.findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
+          List.of(PersonId.builder().id(PATIENT_ID).build()), MAX_DAYS);
+
+      assertEquals(2, result.size());
+      assertEquals("cert123", result.getFirst().certificateId().id());
+      assertEquals(5, result.getFirst().complementsCount());
+      assertEquals(1, result.getFirst().othersCount());
+      assertEquals("cert456", result.get(1).certificateId().id());
+      assertEquals(3, result.get(1).complementsCount());
+      assertEquals(2, result.get(1).othersCount());
+    }
+
+    @Test
+    void shallCallRepositoryWithCorrectParameters() {
+      when(messageEntityRepository.getMessageCountForCertificates(
+          List.of(PATIENT_ID), MAX_DAYS))
+          .thenReturn(List.of());
+
+      jpaMessageRepository.findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
+          List.of(PersonId.builder().id(PATIENT_ID).build()), MAX_DAYS);
+
+      verify(messageEntityRepository).getMessageCountForCertificates(
+          List.of(PATIENT_ID), MAX_DAYS);
+    }
+
+    @Test
+    void shallHandleBatchingWhenPatientIdsLessThanBatchSize() {
+      final var patientIds = List.of("1", "2", "3", "4", "5");
+      final var entity = createEntity("cert123", 1, 1);
+
+      when(messageEntityRepository.getMessageCountForCertificates(
+          patientIds, MAX_DAYS))
+          .thenReturn(List.of(entity));
+
+      final var result = jpaMessageRepository.findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
+          patientIds.stream().map(p -> PersonId.builder().id(p).build()).toList(), MAX_DAYS);
+
+      assertEquals(1, result.size());
+      verify(messageEntityRepository, times(1)).getMessageCountForCertificates(
+          patientIds, MAX_DAYS);
+    }
+
+    @Test
+    void shallHandleBatchingWithMultipleFullBatches() {
+      final var patientIds = new ArrayList<String>();
+      for (int i = 1; i <= 2001; i++) {
+        patientIds.add(String.valueOf(i));
+      }
+
+      final var entity1 = createEntity("cert123", 1, 1);
+      final var entity2 = createEntity("cert456", 2, 2);
+      final var entity3 = createEntity("cert1001", 2, 6);
+
+      when(messageEntityRepository.getMessageCountForCertificates(
+          patientIds.subList(0, 1000), MAX_DAYS))
+          .thenReturn(List.of(entity1));
+      when(messageEntityRepository.getMessageCountForCertificates(
+          patientIds.subList(1000, 2000), MAX_DAYS))
+          .thenReturn(List.of(entity2));
+      when(messageEntityRepository.getMessageCountForCertificates(
+          patientIds.subList(2000, 2001), MAX_DAYS))
+          .thenReturn(List.of(entity3));
+
+      final var result = jpaMessageRepository.findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
+          patientIds.stream().map(p -> PersonId.builder().id(p).build()).toList(), MAX_DAYS);
+
+      assertEquals(3, result.size());
+      verify(messageEntityRepository, times(1)).getMessageCountForCertificates(
+          patientIds.subList(0, 1000), MAX_DAYS);
+      verify(messageEntityRepository, times(1)).getMessageCountForCertificates(
+          patientIds.subList(1000, 2000), MAX_DAYS);
+      verify(messageEntityRepository, times(1)).getMessageCountForCertificates(
+          patientIds.subList(2000, 2001), MAX_DAYS);
     }
   }
 }

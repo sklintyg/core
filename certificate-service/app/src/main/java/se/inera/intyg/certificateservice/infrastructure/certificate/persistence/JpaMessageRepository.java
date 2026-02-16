@@ -1,16 +1,21 @@
 package se.inera.intyg.certificateservice.infrastructure.certificate.persistence;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.common.model.MessagesRequest;
+import se.inera.intyg.certificateservice.domain.common.model.PersonId;
+import se.inera.intyg.certificateservice.domain.message.model.CertificateMessageCount;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
 import se.inera.intyg.certificateservice.domain.message.model.MessageType;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.MessageEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.entity.mapper.MessageEntityMapper;
+import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.CertificateMessageCountEntity;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntityRepository;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageEntitySpecificationFactory;
 import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.repository.MessageRelationEntityRepository;
@@ -21,6 +26,7 @@ import se.inera.intyg.certificateservice.testability.certificate.service.reposit
 @RequiredArgsConstructor
 public class JpaMessageRepository implements TestabilityMessageRepository {
 
+  private static final int BATCH_SIZE = 1000;
   private final MessageEntityRepository messageEntityRepository;
   private final MessageEntityMapper messageEntityMapper;
   private final MessageRelationRepository messageRelationRepository;
@@ -126,6 +132,32 @@ public class JpaMessageRepository implements TestabilityMessageRepository {
         .map(messageEntityMapper::toDomain)
         .filter(message -> !messageIsValidType(message))
         .toList();
+  }
+
+
+  @Override
+  public List<CertificateMessageCount> findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
+      List<PersonId> patientIds, int maxDays) {
+
+    final var results = new ArrayList<CertificateMessageCountEntity>();
+
+    for (int i = 0; i < patientIds.size(); i += BATCH_SIZE) {
+      List<String> batch = patientIds.subList(i,
+              Math.min(i + BATCH_SIZE, patientIds.size()))
+          .stream()
+          .map(PersonId::idWithoutDash)
+          .toList();
+      results.addAll(messageEntityRepository.getMessageCountForCertificates(batch, maxDays));
+    }
+
+    return results.stream().map(certificateMessageCount ->
+            new CertificateMessageCount(
+                new CertificateId(certificateMessageCount.getCertificateId()),
+                certificateMessageCount.getComplementsCount(),
+                certificateMessageCount.getOthersCount()
+            ))
+        .toList();
+
   }
 
   private boolean messageIsValidType(Message message) {

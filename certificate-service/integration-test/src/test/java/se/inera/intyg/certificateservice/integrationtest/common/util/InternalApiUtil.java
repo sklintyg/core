@@ -18,12 +18,14 @@ import se.inera.intyg.certificateservice.application.certificate.dto.DisposeObso
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalMetadataResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetCertificateInternalXmlResponse;
+import se.inera.intyg.certificateservice.application.certificate.dto.GetSentInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetSickLeaveCertificatesInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetSickLeaveCertificatesInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.ListObsoleteDraftsRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.ListObsoleteDraftsResponse;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageInternalResponse;
 import se.inera.intyg.certificateservice.application.message.dto.GetMessageInternalXmlResponse;
+import se.inera.intyg.certificateservice.application.message.dto.GetSentMessagesCountResponse;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -208,6 +210,23 @@ public class InternalApiUtil {
     return this.restTemplate.exchange(
         requestUrl,
         HttpMethod.DELETE,
+        new HttpEntity<>(request, headers),
+        new ParameterizedTypeReference<>() {
+        },
+        Collections.emptyMap()
+    );
+  }
+
+  public ResponseEntity<GetSentMessagesCountResponse> getUnansweredCommunicationMessages(
+      GetSentInternalRequest request) {
+    final var requestUrl = "http://localhost:%s/internalapi/message/sent".formatted(port);
+
+    final var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    return this.restTemplate.exchange(
+        requestUrl,
+        HttpMethod.POST,
         new HttpEntity<>(request, headers),
         new ParameterizedTypeReference<>() {
         },

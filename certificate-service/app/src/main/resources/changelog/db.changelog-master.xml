@@ -863,4 +863,13 @@
       </column>
     </addColumn>
   </changeSet>
+
+  <changeSet id="9" author="ar">
+    <createIndex indexName="idx_message_combined" tableName="message">
+      <column name="certificate_key"/>
+      <column name="author"/>
+      <column name="message_status_key"/>
+      <column name="created"/>
+    </createIndex>
+  </changeSet>
 </databaseChangeLog>
