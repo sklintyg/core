@@ -2,6 +2,7 @@ package se.inera.intyg.certificateservice.domain.message.repository;
 
 import java.util.List;
 import se.inera.intyg.certificateservice.domain.common.model.MessagesRequest;
+import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.message.model.CertificateMessageCount;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
@@ -19,5 +20,5 @@ public interface MessageRepository {
   List<Message> findByMessagesRequest(MessagesRequest messagesRequest);
 
   List<CertificateMessageCount> findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
-      List<String> patientIds, int maxDays);
+      List<PersonId> patientIds, int maxDays);
 }

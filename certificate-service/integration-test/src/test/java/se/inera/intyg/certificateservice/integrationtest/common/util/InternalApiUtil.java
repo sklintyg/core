@@ -10,7 +10,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import se.inera.intyg.certificateservice.application.GetSentInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificateExistsResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalRequest;
 import se.inera.intyg.certificateservice.application.certificate.dto.CertificatesWithQAInternalResponse;
@@ -26,6 +25,7 @@ import se.inera.intyg.certificateservice.application.certificate.dto.ListObsolet
 import se.inera.intyg.certificateservice.application.certificate.dto.ListObsoleteDraftsResponse;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageInternalResponse;
 import se.inera.intyg.certificateservice.application.message.dto.GetMessageInternalXmlResponse;
+import se.inera.intyg.certificateservice.application.message.dto.GetSentMessagesCountResponse;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -217,7 +217,7 @@ public class InternalApiUtil {
     );
   }
 
-  public ResponseEntity<GetSentInternalResponse> getUnansweredCommunicationMessages(
+  public ResponseEntity<GetSentMessagesCountResponse> getUnansweredCommunicationMessages(
       GetSentInternalRequest request) {
     final var requestUrl = "http://localhost:%s/internalapi/message/sent".formatted(port);
 

@@ -12,15 +12,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import se.inera.intyg.certificateservice.application.GetSentInternalResponse;
 import se.inera.intyg.certificateservice.application.certificate.dto.GetSentInternalRequest;
 import se.inera.intyg.certificateservice.application.message.dto.GetCertificateMessageInternalResponse;
 import se.inera.intyg.certificateservice.application.message.dto.GetMessageInternalXmlResponse;
+import se.inera.intyg.certificateservice.application.message.dto.GetSentMessagesCountResponse;
+import se.inera.intyg.certificateservice.application.message.dto.MessageCount;
 import se.inera.intyg.certificateservice.application.message.dto.QuestionDTO;
 import se.inera.intyg.certificateservice.application.message.service.GetCertificateMessageInternalService;
 import se.inera.intyg.certificateservice.application.message.service.GetMessageInternalXmlService;
 import se.inera.intyg.certificateservice.application.message.service.GetSentMessageCountInternalService;
-import se.inera.intyg.certificateservice.domain.message.model.UnansweredQAs;
 
 @ExtendWith(MockitoExtension.class)
 class MessageInternalApiControllerTest {
@@ -71,13 +71,12 @@ class MessageInternalApiControllerTest {
         .maxDays(maxDays)
         .build();
 
-    final var expectedResult = GetSentInternalResponse.builder()
-        .messages(Map.of("certificateId", UnansweredQAs.builder().complement(1).build()))
-        .build();
+    final var expectedResult = new GetSentMessagesCountResponse(
+        Map.of("certificateId", new MessageCount(1, 0)));
 
     doReturn(expectedResult).when(getSentMessageCountInternalService).get(patientIds, maxDays);
 
-    final var actualResult = messageInternalApiController.getSentMessages(request);
+    final var actualResult = messageInternalApiController.getSentMessagesCount(request);
 
     assertEquals(expectedResult, actualResult);
   }

@@ -84,12 +84,12 @@ public abstract class InternalApiMessagesIT extends BaseIntegrationIT {
 
     assertAll(
         () -> assertNotNull(response.getBody()),
-        () -> assertNotNull(response.getBody().getMessages()),
-        () -> assertEquals(1, response.getBody().getMessages().size()),
+        () -> assertNotNull(response.getBody().messages()),
+        () -> assertEquals(1, response.getBody().messages().size()),
         () -> assertTrue(
-            response.getBody().getMessages().containsKey(certificateId(testCertificates))),
+            response.getBody().messages().containsKey(certificateId(testCertificates))),
         () -> assertEquals(1,
-            response.getBody().getMessages().get(certificateId(testCertificates)).complement())
+            response.getBody().messages().get(certificateId(testCertificates)).complement())
     );
   }
 

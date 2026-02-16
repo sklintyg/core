@@ -30,6 +30,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.jpa.domain.Specification;
 import se.inera.intyg.certificateservice.domain.common.model.MessagesRequest;
+import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
 import se.inera.intyg.certificateservice.domain.message.model.MessageStatus;
@@ -386,12 +387,12 @@ class JpaMessageRepositoryTest {
         }
 
         @Override
-        public Integer getComplementsCount() {
+        public int getComplementsCount() {
           return complements;
         }
 
         @Override
-        public Integer getOthersCount() {
+        public int getOthersCount() {
           return others;
         }
       };
@@ -404,7 +405,7 @@ class JpaMessageRepositoryTest {
           .thenReturn(List.of());
 
       final var result = jpaMessageRepository.findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
-          List.of(PATIENT_ID), MAX_DAYS);
+          List.of(PersonId.builder().id(PATIENT_ID).build()), MAX_DAYS);
 
       assertEquals(Collections.emptyList(), result);
     }
@@ -418,10 +419,10 @@ class JpaMessageRepositoryTest {
           .thenReturn(List.of(entity));
 
       final var result = jpaMessageRepository.findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
-          List.of(PATIENT_ID), MAX_DAYS);
+          List.of(PersonId.builder().id(PATIENT_ID).build()), MAX_DAYS);
 
       assertEquals(1, result.size());
-      assertEquals("cert123", result.getFirst().certificateId());
+      assertEquals("cert123", result.getFirst().certificateId().id());
       assertEquals(5, result.getFirst().complementsCount());
       assertEquals(1, result.getFirst().othersCount());
     }
@@ -436,13 +437,13 @@ class JpaMessageRepositoryTest {
           .thenReturn(List.of(entity1, entity2));
 
       final var result = jpaMessageRepository.findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
-          List.of(PATIENT_ID), MAX_DAYS);
+          List.of(PersonId.builder().id(PATIENT_ID).build()), MAX_DAYS);
 
       assertEquals(2, result.size());
-      assertEquals("cert123", result.getFirst().certificateId());
+      assertEquals("cert123", result.getFirst().certificateId().id());
       assertEquals(5, result.getFirst().complementsCount());
       assertEquals(1, result.getFirst().othersCount());
-      assertEquals("cert456", result.get(1).certificateId());
+      assertEquals("cert456", result.get(1).certificateId().id());
       assertEquals(3, result.get(1).complementsCount());
       assertEquals(2, result.get(1).othersCount());
     }
@@ -454,7 +455,7 @@ class JpaMessageRepositoryTest {
           .thenReturn(List.of());
 
       jpaMessageRepository.findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
-          List.of(PATIENT_ID), MAX_DAYS);
+          List.of(PersonId.builder().id(PATIENT_ID).build()), MAX_DAYS);
 
       verify(messageEntityRepository).getMessageCountForCertificates(
           List.of(PATIENT_ID), MAX_DAYS);
@@ -470,7 +471,7 @@ class JpaMessageRepositoryTest {
           .thenReturn(List.of(entity));
 
       final var result = jpaMessageRepository.findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
-          patientIds, MAX_DAYS);
+          patientIds.stream().map(p -> PersonId.builder().id(p).build()).toList(), MAX_DAYS);
 
       assertEquals(1, result.size());
       verify(messageEntityRepository, times(1)).getMessageCountForCertificates(
@@ -499,7 +500,7 @@ class JpaMessageRepositoryTest {
           .thenReturn(List.of(entity3));
 
       final var result = jpaMessageRepository.findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
-          patientIds, MAX_DAYS);
+          patientIds.stream().map(p -> PersonId.builder().id(p).build()).toList(), MAX_DAYS);
 
       assertEquals(3, result.size());
       verify(messageEntityRepository, times(1)).getMessageCountForCertificates(

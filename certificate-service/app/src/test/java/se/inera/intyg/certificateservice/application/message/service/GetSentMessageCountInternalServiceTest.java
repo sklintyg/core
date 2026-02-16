@@ -10,7 +10,6 @@ import static org.mockito.Mockito.verify;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_ID;
 import static se.inera.intyg.certificateservice.domain.testdata.TestDataPatientConstants.ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +19,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
+import se.inera.intyg.certificateservice.domain.common.model.PersonId;
+import se.inera.intyg.certificateservice.domain.message.model.CertificateMessageCount;
 import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -39,14 +41,14 @@ class GetSentMessageCountInternalServiceTest {
     void shallReturnEmptyMapWhenPatientIdsIsNull() {
       final var result = getSentMessageCountInternalService.get(null, MAX_DAYS);
 
-      assertEquals(Map.of(), result.getMessages());
+      assertEquals(Map.of(), result.messages());
     }
 
     @Test
     void shallReturnEmptyMapWhenPatientIdsIsEmpty() {
       final var result = getSentMessageCountInternalService.get(Collections.emptyList(), MAX_DAYS);
 
-      assertEquals(Map.of(), result.getMessages());
+      assertEquals(Map.of(), result.messages());
     }
 
     @Test
@@ -63,56 +65,17 @@ class GetSentMessageCountInternalServiceTest {
   class InvalidPatientIds {
 
     @Test
-    void shallSkipNullPatientId() {
-      final var INVALID_PATIENT_ID = "9999-9999-9999-9999";
-      final var patientIds = new ArrayList<String>();
-      patientIds.add(ATHENA_REACT_ANDERSSON_ID);
-      patientIds.add(INVALID_PATIENT_ID);
-      final var certId = "certA";
-      doReturn(List.of(
-          se.inera.intyg.certificateservice.domain.message.model.CertificateMessageCount.builder()
-              .certificateId(certId).complementsCount(1).othersCount(1).build()
-      )).when(messageRepository)
-          .findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
-              List.of(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH),
-              MAX_DAYS);
-
-      final var result = getSentMessageCountInternalService.get(patientIds, MAX_DAYS);
-
-      assertEquals(1, result.getMessages().size());
-      assertTrue(result.getMessages().containsKey(certId));
-    }
-
-    @Test
-    void shallSkipBlankPatientId() {
-      final var patientIds = List.of(ATHENA_REACT_ANDERSSON_ID, "   ");
-      final var certId = "certB";
-      doReturn(List.of(
-          se.inera.intyg.certificateservice.domain.message.model.CertificateMessageCount.builder()
-              .certificateId(certId).complementsCount(1).othersCount(1).build()
-      )).when(messageRepository)
-          .findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
-              List.of(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH),
-              MAX_DAYS);
-
-      final var result = getSentMessageCountInternalService.get(patientIds, MAX_DAYS);
-
-      assertEquals(1, result.getMessages().size());
-      assertTrue(result.getMessages().containsKey(certId));
-    }
-
-    @Test
     void shallReturnEmptyMapWhenPatientNotFound() {
       final var patientIds = List.of(ATHENA_REACT_ANDERSSON_ID);
 
       doReturn(Collections.emptyList()).when(messageRepository)
           .findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
-              List.of(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH),
+              List.of(PersonId.builder().id(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH).build()),
               MAX_DAYS);
 
       final var result = getSentMessageCountInternalService.get(patientIds, MAX_DAYS);
 
-      assertEquals(Map.of(), result.getMessages());
+      assertEquals(Map.of(), result.messages());
     }
   }
 
@@ -121,14 +84,13 @@ class GetSentMessageCountInternalServiceTest {
 
     @Test
     void shallHandleExceptionWhenPatientNotFoundAndContinueProcessing() {
-      final var validPatientId = "191212121212";
-      final var invalidPatientId = "999999999999";
-      final var patientIds = List.of(validPatientId, invalidPatientId);
+      final var validPatientId = PersonId.builder().id("191212121212").build();
+      final var invalidPatientId = PersonId.builder().id("999999999999").build();
+      final var patientIds = List.of(validPatientId.id(), invalidPatientId.id());
       final var certId = "certC";
 
       doReturn(List.of(
-          se.inera.intyg.certificateservice.domain.message.model.CertificateMessageCount.builder()
-              .certificateId(certId).complementsCount(1).othersCount(1).build()
+          new CertificateMessageCount(new CertificateId(certId), 1, 1)
       )).when(messageRepository)
           .findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
               List.of(validPatientId, invalidPatientId),
@@ -136,21 +98,19 @@ class GetSentMessageCountInternalServiceTest {
 
       final var result = getSentMessageCountInternalService.get(patientIds, MAX_DAYS);
 
-      assertEquals(1, result.getMessages().size());
-      assertTrue(result.getMessages().containsKey(certId));
+      assertEquals(1, result.messages().size());
+      assertTrue(result.messages().containsKey(certId));
     }
 
     @Test
     void shallProcessMultiplePatientsSuccessfully() {
-      final var patientId1 = "191212121212";
-      final var patientId2 = "181818181818";
-      final var patientIds = List.of(patientId1, patientId2);
+      final var patientId1 = PersonId.builder().id("191212121212").build();
+      final var patientId2 = PersonId.builder().id("181818181818").build();
+      final var patientIds = List.of(patientId1.id(), patientId2.id());
 
       doReturn(List.of(
-          se.inera.intyg.certificateservice.domain.message.model.CertificateMessageCount.builder()
-              .certificateId("cert1").complementsCount(1).othersCount(1).build(),
-          se.inera.intyg.certificateservice.domain.message.model.CertificateMessageCount.builder()
-              .certificateId("cert2").complementsCount(2).othersCount(1).build()
+          new CertificateMessageCount(new CertificateId("cert1"), 1, 1),
+          new CertificateMessageCount(new CertificateId("cert2"), 2, 1)
       )).when(messageRepository)
           .findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
               List.of(patientId1, patientId2),
@@ -158,29 +118,28 @@ class GetSentMessageCountInternalServiceTest {
 
       final var result = getSentMessageCountInternalService.get(patientIds, MAX_DAYS);
 
-      assertEquals(2, result.getMessages().size());
-      assertTrue(result.getMessages().containsKey("cert1"));
-      assertTrue(result.getMessages().containsKey("cert2"));
-      assertEquals(1, result.getMessages().get("cert1").complement());
-      assertEquals(2, result.getMessages().get("cert2").complement());
+      assertEquals(2, result.messages().size());
+      assertTrue(result.messages().containsKey("cert1"));
+      assertTrue(result.messages().containsKey("cert2"));
+      assertEquals(1, result.messages().get("cert1").complement());
+      assertEquals(2, result.messages().get("cert2").complement());
     }
 
     @Test
     void shallPopulateMessagesMapWithCorrectCertificateIds() {
       final var patientIds = List.of(ATHENA_REACT_ANDERSSON_ID);
 
-      final var message1 = se.inera.intyg.certificateservice.domain.message.model.CertificateMessageCount.builder()
-          .certificateId("certX").complementsCount(1).othersCount(1).build();
+      final var message1 = new CertificateMessageCount(new CertificateId("certX"), 1, 1);
       doReturn(List.of(message1)).when(messageRepository)
           .findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
-              List.of(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH),
+              List.of(PersonId.builder().id(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH).build()),
               MAX_DAYS);
 
       final var result = getSentMessageCountInternalService.get(patientIds, MAX_DAYS);
 
-      assertEquals(1, result.getMessages().size());
-      assertTrue(result.getMessages().containsKey("certX"));
-      assertEquals(1, result.getMessages().get("certX").complement());
+      assertEquals(1, result.messages().size());
+      assertTrue(result.messages().containsKey("certX"));
+      assertEquals(1, result.messages().get("certX").complement());
     }
   }
 
@@ -191,44 +150,39 @@ class GetSentMessageCountInternalServiceTest {
     void shallReturnMessagesForSinglePatient() {
       final var patientIds = List.of(ATHENA_REACT_ANDERSSON_ID);
       final var messages = List.of(
-          se.inera.intyg.certificateservice.domain.message.model.CertificateMessageCount.builder()
-              .certificateId("certY").complementsCount(2).othersCount(1).build(),
-          se.inera.intyg.certificateservice.domain.message.model.CertificateMessageCount.builder()
-              .certificateId("certY").complementsCount(2).othersCount(1).build()
+          new CertificateMessageCount(new CertificateId("certY"), 2, 1),
+          new CertificateMessageCount(new CertificateId("certY"), 2, 1)
       );
 
       doReturn(messages).when(messageRepository)
           .findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
-              List.of(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH),
+              List.of(PersonId.builder().id(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH).build()),
               MAX_DAYS);
 
       final var result = getSentMessageCountInternalService.get(patientIds, MAX_DAYS);
 
-      assertEquals(1, result.getMessages().size());
-      assertTrue(result.getMessages().containsKey(messages.getFirst().certificateId()));
-      assertEquals(2, result.getMessages().get(messages.getFirst().certificateId()).complement());
+      assertEquals(1, result.messages().size());
+      assertTrue(result.messages().containsKey(messages.getFirst().certificateId().id()));
+      assertEquals(2, result.messages().get(messages.getFirst().certificateId().id()).complement());
     }
 
     @Test
     void shallReturnMessagesForMultipleCertificates() {
       final var patientIds = List.of(ATHENA_REACT_ANDERSSON_ID);
 
-      final var message1 = se.inera.intyg.certificateservice.domain.message.model.CertificateMessageCount.builder()
-          .certificateId("certZ").complementsCount(3).othersCount(1).build();
-      final var message2 = se.inera.intyg.certificateservice.domain.message.model.CertificateMessageCount.builder()
-          .certificateId("certZ").complementsCount(3).othersCount(1).build();
-      final var message3 = se.inera.intyg.certificateservice.domain.message.model.CertificateMessageCount.builder()
-          .certificateId("certZ").complementsCount(3).othersCount(1).build();
+      final var message1 = new CertificateMessageCount(new CertificateId("certZ"), 3, 1);
+      final var message2 = new CertificateMessageCount(new CertificateId("certZ"), 3, 1);
+      final var message3 = new CertificateMessageCount(new CertificateId("certZ"), 3, 1);
       doReturn(List.of(message1, message2, message3)).when(messageRepository)
           .findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
-              List.of(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH),
+              List.of(PersonId.builder().id(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH).build()),
               MAX_DAYS);
 
       final var result = getSentMessageCountInternalService.get(patientIds, MAX_DAYS);
 
-      assertEquals(1, result.getMessages().size());
-      assertTrue(result.getMessages().containsKey("certZ"));
-      assertEquals(3, result.getMessages().get("certZ").complement());
+      assertEquals(1, result.messages().size());
+      assertTrue(result.messages().containsKey("certZ"));
+      assertEquals(3, result.messages().get("certZ").complement());
     }
 
     @Test
@@ -237,12 +191,12 @@ class GetSentMessageCountInternalServiceTest {
 
       doReturn(Collections.emptyList()).when(messageRepository)
           .findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
-              List.of(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH),
+              List.of(PersonId.builder().id(ATHENA_REACT_ANDERSSON_ID_WITHOUT_DASH).build()),
               MAX_DAYS);
 
       final var result = getSentMessageCountInternalService.get(patientIds, MAX_DAYS);
 
-      assertEquals(0, result.getMessages().size());
+      assertEquals(0, result.messages().size());
     }
   }
 }

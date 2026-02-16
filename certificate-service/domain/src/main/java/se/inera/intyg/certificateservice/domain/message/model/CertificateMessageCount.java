@@ -1,9 +1,8 @@
 package se.inera.intyg.certificateservice.domain.message.model;
 
-import lombok.Builder;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 
-@Builder
-public record CertificateMessageCount(String certificateId, Integer complementsCount,
-                                      Integer othersCount) {
+public record CertificateMessageCount(CertificateId certificateId, int complementsCount,
+                                      int othersCount) {
 
 }

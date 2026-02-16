@@ -3,12 +3,13 @@ package se.inera.intyg.certificateservice.application.message.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import se.inera.intyg.certificateservice.application.GetSentInternalResponse;
-import se.inera.intyg.certificateservice.domain.message.model.UnansweredQAs;
+import org.springframework.util.CollectionUtils;
+import se.inera.intyg.certificateservice.application.message.dto.GetSentMessagesCountResponse;
+import se.inera.intyg.certificateservice.application.message.dto.MessageCount;
+import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.message.repository.MessageRepository;
 
 @Slf4j
@@ -18,50 +19,38 @@ public class GetSentMessageCountInternalService {
 
   private final MessageRepository messageRepository;
 
-  public GetSentInternalResponse get(List<String> patientIds,
-      int maxDays) {
-    if (Objects.isNull(patientIds) || patientIds.isEmpty()) {
+  public GetSentMessagesCountResponse get(List<String> patientIds, int maxDays) {
+    if (CollectionUtils.isEmpty(patientIds)) {
       log.warn("No patient IDs provided for sent message count lookup");
-      return GetSentInternalResponse.builder()
-          .messages(Map.of())
-          .build();
+      return new GetSentMessagesCountResponse(Map.of());
     }
-
-    final var messages = new HashMap<String, UnansweredQAs>();
-
-    final var sanitisedPatientIds = patientIds.stream()
-        .map(patientId -> patientId.replace("-", ""))
-        .filter(patientId -> {
-          if (patientId.isBlank() || patientId.length() != 12) {
-            log.warn("Skipping blank or invalid patient ID");
-            return false;
-          }
-          return true;
-        })
-        .toList();
 
     try {
-      processPatientMessages(sanitisedPatientIds, messages, maxDays);
+      return new GetSentMessagesCountResponse(
+          processPatientMessages(convertPatientIds(patientIds), maxDays));
     } catch (IllegalArgumentException e) {
       log.warn("Failed to process messages for patients {}", e.getMessage());
-    }
+      return new GetSentMessagesCountResponse(Map.of());
 
-    return GetSentInternalResponse.builder()
-        .messages(messages)
-        .build();
+    }
   }
 
-  private void processPatientMessages(List<String> patientIds, Map<String, UnansweredQAs> messages,
-      int maxDays) {
+  private static List<PersonId> convertPatientIds(List<String> patientIds) {
+    return patientIds.stream()
+        .map(p -> PersonId.builder().id(p).build())
+        .toList();
+  }
 
+  private Map<String, MessageCount> processPatientMessages(List<PersonId> patientIds,
+      int maxDays) {
+    final var map = new HashMap<String, MessageCount>();
     final var messageList = messageRepository.findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
         patientIds, maxDays);
 
-    messageList.forEach(message -> messages.put(
-        message.certificateId(),
-        UnansweredQAs.builder()
-            .complement(message.complementsCount())
-            .others(message.othersCount())
-            .build()));
+    messageList.forEach(message -> map.put(
+        message.certificateId().id(),
+        new MessageCount(message.complementsCount(), message.othersCount())
+    ));
+    return map;
   }
 }

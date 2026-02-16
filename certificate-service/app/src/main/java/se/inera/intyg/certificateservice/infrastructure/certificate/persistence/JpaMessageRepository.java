@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import se.inera.intyg.certificateservice.domain.certificate.model.CertificateId;
 import se.inera.intyg.certificateservice.domain.common.model.MessagesRequest;
+import se.inera.intyg.certificateservice.domain.common.model.PersonId;
 import se.inera.intyg.certificateservice.domain.message.model.CertificateMessageCount;
 import se.inera.intyg.certificateservice.domain.message.model.Message;
 import se.inera.intyg.certificateservice.domain.message.model.MessageId;
@@ -135,23 +137,26 @@ public class JpaMessageRepository implements TestabilityMessageRepository {
 
   @Override
   public List<CertificateMessageCount> findCertificateMessageCountByPatientKeyAndStatusSentAndCreatedAfter(
-      List<String> patientIds, int maxDays) {
+      List<PersonId> patientIds, int maxDays) {
 
     final var results = new ArrayList<CertificateMessageCountEntity>();
 
     for (int i = 0; i < patientIds.size(); i += BATCH_SIZE) {
       List<String> batch = patientIds.subList(i,
-          Math.min(i + BATCH_SIZE, patientIds.size()));
+              Math.min(i + BATCH_SIZE, patientIds.size()))
+          .stream()
+          .map(PersonId::idWithoutDash)
+          .toList();
       results.addAll(messageEntityRepository.getMessageCountForCertificates(batch, maxDays));
     }
 
     return results.stream().map(certificateMessageCount ->
-        CertificateMessageCount.builder()
-            .certificateId(certificateMessageCount.getCertificateId())
-            .complementsCount(certificateMessageCount.getComplementsCount())
-            .othersCount(certificateMessageCount.getOthersCount())
-            .build()
-    ).toList();
+            new CertificateMessageCount(
+                new CertificateId(certificateMessageCount.getCertificateId()),
+                certificateMessageCount.getComplementsCount(),
+                certificateMessageCount.getOthersCount()
+            ))
+        .toList();
 
   }
 

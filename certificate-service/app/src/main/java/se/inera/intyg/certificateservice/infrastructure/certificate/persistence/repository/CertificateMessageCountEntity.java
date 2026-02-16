@@ -4,7 +4,7 @@ public interface CertificateMessageCountEntity {
 
   String getCertificateId();
 
-  Integer getComplementsCount();
+  int getComplementsCount();
 
-  Integer getOthersCount();
+  int getOthersCount();
 }
