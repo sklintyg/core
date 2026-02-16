@@ -60,4 +60,6 @@ public interface CertificateEntityRepository extends CrudRepository<CertificateE
   List<String> findCertificateIdsByCreatedBeforeAndStatusIn(
       @Param("createdTo") LocalDateTime createdTo,
       @Param("statuses") List<Integer> statuses);
+
+  Optional<List<CertificateEntity>> findCertificateEntitiesByPatient_Key(Integer patientKey);
 }
