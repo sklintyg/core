@@ -149,3 +149,64 @@ the developer has not missed some of these rules.
 - **Configuration Management**: Store configuration securely avoid hardcoding sensitive
   configurations.
 - **Scalability**: Design services to scale horizontally to handle increased load efficiently.
+
+## Copilot Concepts
+If user writes `/concepts` list the concepts in an easy-to-read format.
+
+- **SPEC**: A specification is a summary of requirements for a feature or a task.
+- **GUIDE**: A guide is a detailed step-by-step instruction set that Copilot can follow to implement a feature or task. It combines the information from a specification with additional context from the codebase to create a clear implementation plan.
+- **ANALYSIS**: An analysis is a detailed examination of a specific aspect of the codebase or requirements to inform decision-making during implementation. It helps identify patterns, differences, or areas for improvement.
+- **INSTRUCTION**: An instruction is a set of guidelines or rules that Copilot should follow when generating code. Instructions are written for reoccurring tasks to ensure consistency and adherence to best practices. Each instruction is linked to a tool. When the tool is called the instruction is invoked. Each instruction needs a specification with requirements.
+- **AGENT**: An agent is a specialized role that focuses on a specific aspect of the development process. Each agent has a defined responsibility and set of skills to contribute to the overall implementation of features or tasks. Agents work together to complete complex tasks by leveraging their unique expertise. Agents can be called using `@name`.
+- **TOOL**: A tool is a command that a user can invoke to apply specialized instructions for specific tasks. Each tool is linked to an instruction file that contains guidelines for Copilot to follow when generating code related to that task. Tools help ensure that Copilot adheres to best practices and coding standards for particular areas of development. A tool can be called using `/name`.
+
+## Available Copilot Tools
+
+When working on specific tasks, you can invoke the following tools to apply specialized instructions. When a user invokes a tool (e.g., by typing "/certificate"), the agent should:
+
+1. Mention which file regulates the tool.
+2. Ask if the user wants to proceed with applying those instructions.
+3. If the user wants to proceed then the agent should go in the instruction and apply the relevant guidelines to the task at hand.
+4. If it is a listing tool like /tools and /agents you should just list the available tools or agents instead.
+
+Available tools:
+
+- `/certificate`: Regulated by `.github/instructions/certificate-copilot-instructions.instructions.md`. Applies certificate-specific instructions for creating, modifying, and versioning certificate models, elements, configurations, rules, and testing.
+When the `/certificate` tool is invoked, start with a general message to the user like: "Hi! I'll assist with certificate-specific instructions for creating, modifying, and versioning certificate models, elements, configurations, rules, and testing. Should we proceed?"
+
+- `/certificate-version-analysis`: Regulated by `.github/instructions/major-version-analysis.instructions.md`. Applies instructions for analyzing differences between certificate versions to identify common and unique elements.
+When the `/certificate-version-analysis` tool is invoked, start with a general message to the user like: "Hi! I'll help analyze differences between certificate versions to identify common and unique elements. Should we proceed?"
+
+- `/certificate-pdf`: Regulated by `.github/instructions/pdf-copilot-instructions.instructions.md`. Applies guidelines for mapping certificate data to PDF configurations and ensuring proper PDF generation.
+When the `/certificate-pdf` tool is invoked, start with a general message to the user like: "Hi! I'll guide you on mapping certificate data to PDF configurations and ensuring proper PDF generation. Should we proceed?"
+
+- `/integration-test`: Regulated by `.github/instructions/integration-test-copilot-instructions.instructions.md`. Applies guidelines for creating and maintaining integration tests, including test structure, setup, and best practices.
+When the `/integration-test` tool is invoked, start with a general message to the user like: "Hi! I'll assist with creating and maintaining integration tests, including test structure, setup, and best practices. Should we proceed?"
+
+- `/feature`: Regulated by `.github/instructions/feature-copilot-instructions.instructions.md`. Orchestrates the creation of a complete feature using multiple agents.
+When the `/feature` tool is invoked, start with a general message to the user like: "Hi! I'll help you implement a new feature. The process will go: [Gather requirements] -> [Create specification] -> [Create implementation guide]  -> [Implement feature] -> [Create tests] -> [Final validation]. Should we start with step 1?"
+
+- `/template`: Creates a spec or guide from a template. It asks the user for the kind of template (spec or guide), the task it should be created for, and then depending on the kind, either requirements (for spec) or a spec file (for guide).
+When the `/template` tool is invoked, start with a general message to the user like: "Hi! I'll help you create a spec or guide from a template. Should we proceed?"
+
+To list all available tools, use the command `/tools`, mention name of tool and short summary but not instruction file.
+
+To list all available agents, use the command `/agents`.
+
+Do not read any context if you receive a /xxx command where xxx is a word. You need to go fast so only look in this file if you find the tool. Otherwise, ask user, are you looking for a tool? Here are the tools available: list tools. 
+When receiving a tool command, always start with the welcome message. After user has confirmed it wants to invoke tool then you go on to reading the instructions file. If the user does not invoke any specific tool, but the task relates to one of the above areas, the agent should suggest using the relevant tool to ensure the appropriate instructions are applied.
+
+# Copilot agents
+
+Agents are specialized roles that focus on specific aspects of the development process. Each agent has a defined responsibility and set of skills to contribute to the overall implementation of features or tasks. Agents work together to complete complex tasks by leveraging their unique expertise. Agents can be called using @name.
+
+Available agents
+- `CodeArchitect`: Designs high-level structure and architecture.
+- `FeatureImplementer`: Writes functional code based on requirements.
+- `DocWriter`: Creates documentation and code comments.
+- `TestCreator`: Generates unit and integration tests.
+- `RefactorBot`: Improves code quality and maintainability.
+- `SpecCreator`: Creates specifications using templates and requirements.
+- `RequirementsGatherer`: Gathers and structures requirements.
+- `FeatureGuideCreator`: Creates feature implementation guides.
+- Roles are defined in `.github/copilot-agent-index.md`.
