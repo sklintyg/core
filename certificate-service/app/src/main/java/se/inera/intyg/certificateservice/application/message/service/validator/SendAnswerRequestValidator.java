@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.application.message.service.validator;
 
+import static se.inera.intyg.certificateservice.application.common.validator.ValidationUtil.validateMessageContent;
 import static se.inera.intyg.certificateservice.application.common.validator.ValidationUtil.validateMessageId;
 import static se.inera.intyg.certificateservice.application.common.validator.ValidationUtil.validatePatient;
 import static se.inera.intyg.certificateservice.application.common.validator.ValidationUtil.validateUnit;
@@ -20,5 +21,6 @@ public class SendAnswerRequestValidator {
     validateUnit(sendMessageRequest.getCareProvider(), "CareProvider");
     validateMessageId(messageId);
     validatePatient(sendMessageRequest.getPatient());
+    validateMessageContent(sendMessageRequest.getContent());
   }
 }

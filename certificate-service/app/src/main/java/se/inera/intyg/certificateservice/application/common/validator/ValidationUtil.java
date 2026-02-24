@@ -14,6 +14,8 @@ import se.inera.intyg.certificateservice.infrastructure.certificate.persistence.
 
 public class ValidationUtil {
 
+  public static final int MAX_NUMBER_OF_ALLOWED_CHARACTERS = 4999;
+
   private ValidationUtil() {
     throw new IllegalStateException("Utility class");
   }
@@ -123,6 +125,17 @@ public class ValidationUtil {
   public static void validateMessage(String message) {
     if (message == null || message.isBlank()) {
       throw new IllegalArgumentException("Required parameter missing: message");
+    }
+  }
+
+  public static void validateMessageContent(String message) {
+    if (message == null || message.isBlank()) {
+      throw new IllegalArgumentException("Required parameter missing: message");
+    }
+    if (message.length() > MAX_NUMBER_OF_ALLOWED_CHARACTERS) {
+      throw new IllegalArgumentException(
+          "Message exceeds maximum number of allowed characters: %d".formatted(
+              MAX_NUMBER_OF_ALLOWED_CHARACTERS));
     }
   }
 

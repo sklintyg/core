@@ -1,5 +1,6 @@
 package se.inera.intyg.certificateservice.application.message.service.validator;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static se.inera.intyg.certificateservice.application.testdata.TestDataCommonPatientDTO.ATHENA_REACT_ANDERSSON_DTO;
@@ -23,6 +24,7 @@ import se.inera.intyg.certificateservice.application.message.dto.SendAnswerReque
 class SendAnswerRequestValidatorTest {
 
   private static final String MESSAGE_ID = "messageId";
+  private static final String CONTENT = "content";
   private SendAnswerRequestValidator requestValidator;
   private SendAnswerRequest.SendAnswerRequestBuilder requestBuilder;
 
@@ -34,6 +36,7 @@ class SendAnswerRequestValidatorTest {
         .patient(ATHENA_REACT_ANDERSSON_DTO)
         .unit(ALFA_ALLERGIMOTTAGNINGEN_DTO)
         .careUnit(ALFA_MEDICINCENTRUM_DTO)
+        .content(CONTENT)
         .careProvider(ALFA_REGIONEN_DTO);
   }
 
@@ -548,6 +551,62 @@ class SendAnswerRequestValidatorTest {
 
       assertEquals("Required parameter missing: Patient.id.type",
           illegalArgumentException.getMessage());
+    }
+  }
+
+  @Nested
+  class MessageContentValidation {
+
+    @Test
+    void shallThrowIfMessageContentIsNull() {
+      final var request = requestBuilder
+          .content(null)
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> requestValidator.validate(request, MESSAGE_ID));
+
+      assertEquals("Required parameter missing: message",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowIfMessageContentIsBlank() {
+      final var request = requestBuilder
+          .content("")
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> requestValidator.validate(request, MESSAGE_ID));
+
+      assertEquals("Required parameter missing: message",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallThrowIfMessageContentIsExceededTheLimit() {
+      final var content = "W".repeat(5000);
+
+      final var request = requestBuilder
+          .content(content)
+          .build();
+
+      final var illegalArgumentException = assertThrows(IllegalArgumentException.class,
+          () -> requestValidator.validate(request, MESSAGE_ID));
+
+      assertEquals("Message exceeds maximum number of allowed characters: 4999",
+          illegalArgumentException.getMessage());
+    }
+
+    @Test
+    void shallNotThrowIfMessageContentEqualsTheLimit() {
+      final var content = "W".repeat(4999);
+
+      final var request = requestBuilder
+          .content(content)
+          .build();
+
+      assertDoesNotThrow(() -> requestValidator.validate(request, MESSAGE_ID));
     }
   }
 }
